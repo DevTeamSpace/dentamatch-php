@@ -15,3 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/aboutus', function () {
+    return view('about');
+});
+
+Route::get('user-activation/{code}','Api\UserApiController@getActivatejobseeker');
+
