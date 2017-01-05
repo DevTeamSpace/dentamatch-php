@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
    
-        <title>Payix</title>
+        <title>DentaMatch</title>
         <style>
             body{background-color:rgb(240,240,240);padding:0 10px;}
             p{color:rgb(62,57,53);}
