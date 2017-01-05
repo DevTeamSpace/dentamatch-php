@@ -27,7 +27,7 @@ class UserApiController extends Controller {
                 'lastName' => 'required',
                 'email' => 'required',
                 'password' => 'required',
-                'prefferedLocation' => 'required',
+                'preferedLocation' => 'required',
                 'latitude' => 'required',
                 'longitude' => 'required',
                 'zipCode' => 'required',
@@ -56,6 +56,10 @@ class UserApiController extends Controller {
             $userProfileModel->user_id = $user_details->id;
             $userProfileModel->first_name = $reqData['firstName'];
             $userProfileModel->last_name = $reqData['lastName'];
+            $userProfileModel->zipcode = $reqData['zipCode'];
+            $userProfileModel->preferred_job_location = $reqData['preferedLocation'];
+            $userProfileModel->lat = $reqData['lat'];
+            $userProfileModel->lng = $reqData['lng'];
             $userProfileModel->save();
             
             $deviceModel =  new Device();
@@ -104,10 +108,10 @@ class UserApiController extends Controller {
         if($user_id > 0){
             $user_data = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
-                        ->select('user_groups.*', 'users.*','jobseeker_profiles.*')
+                        ->select('user_groups.group_id', 'users.email','jobseeker_profiles.first_name','jobseeker_profiles.last_name','jobseeker_profiles.zipcode','jobseeker_profiles.preferred_job_location')
                         ->where('users.id', $user_id)
                         ->first();
-            
+            //dd($user_data);
             if($user_data['group_id'] == 3){
                 $device = Device::where('user_id', $user_id)->orWhere('device_id', $reqData['deviceId'])->first();
                 $reqData['deviceOs'] = isset($reqData['deviceOs'])?$reqData['deviceOs']:'';
@@ -116,13 +120,21 @@ class UserApiController extends Controller {
                     Device::where('device_id', $device->device_id)->orWhere('user_id', $user_id)->delete();
                     $deviceModel = new Device();
                     $user_token = $deviceModel->register_device($reqData['deviceId'], $user_id, $reqData['deviceToken'], $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']);
-                    $user_data->userToken = $user_token;
+                    
                 } else {
                     $deviceModel = new Device();
                     $user_token = $deviceModel->register_device($reqData['deviceId'], $user_id, $reqData['deviceToken'], $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']);
-                    $user_data->userToken = $user_token;
+                    
                 }
-                $user_array['userDetails'] = (array)$user_data;
+                $user_array['userDetails'] = array(
+                    'groupId' => $user_data['group_id'],
+                    'email' => $user_data['email'],
+                    'firstName' => $user_data['first_name'],
+                    'lastName' => $user_data['last_name'],
+                    'zipCode' => $user_data['zipcode'],
+                    'preferredJobLocation' => $user_data['preferred_job_location'],
+                    'userToken' => $user_token,
+                );
                 $response = $this->customJsonResponse(1, 200, "User loggedin successfully",$user_array); 
             }else{
                 $response = $this->customJsonResponse(0, 201, "Invalid login credentials"); 
