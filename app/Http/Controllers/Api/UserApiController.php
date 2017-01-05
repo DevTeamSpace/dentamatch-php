@@ -53,13 +53,15 @@ class UserApiController extends Controller {
             $userGroupModel->save();
             
             $userProfileModel = new UserProfile();
+            $verification_code = mt_rand(1000000000, 9999999999);
             $userProfileModel->user_id = $user_details->id;
             $userProfileModel->first_name = $reqData['firstName'];
             $userProfileModel->last_name = $reqData['lastName'];
             $userProfileModel->zipcode = $reqData['zipCode'];
             $userProfileModel->preferred_job_location = $reqData['preferedLocation'];
-            $userProfileModel->lat = $reqData['lat'];
-            $userProfileModel->lng = $reqData['lng'];
+            $userProfileModel->lat = $reqData['latitude'];
+            $userProfileModel->lng = $reqData['longitude'];
+            $userProfileModel->verification_code = $verification_code;
             $userProfileModel->save();
             
             $deviceModel =  new Device();
@@ -73,9 +75,13 @@ class UserApiController extends Controller {
                     $reqData['deviceOs'],
                     $reqData['appVersion']);
             
-            /*Mail::queue('email.resetPasswordToken', ['name' => $reqData['firstName'], 'url' => url('user-activation', ['token' => md5($reqData['email'] . time())]), 'email' => $reqData['email']], function($message)  {
-                    $message->to($user->email, $user->first_name)->subject('Reset Password Request ');
-                });*/
+            $url = url('user-activation', ['token' => $verification_code]);
+            $name = $reqData['firstName'];
+            $email = $reqData['email'];
+            $fname = $reqData['firstName'];
+            Mail::queue('email.userActivation', ['name' => $name, 'url' => $url, 'email' => $reqData['email']], function($message ) use($email,$fname) {
+                    $message->to($email, $fname)->subject('Activation Email');
+                });
             
             $response = $this->customJsonResponse(1, 200, "User registered successfully"); 
         }
@@ -197,6 +203,23 @@ class UserApiController extends Controller {
             $response['result'] = (object) $data;
         }
         return json_encode($response);
+    }   
+    public  function getActivatejobseeker($confirmation_code) { 
+        $is_verified = 0;
+        $profile_details = UserProfile::where('verification_code', $confirmation_code)->first();
+        if($profile_details){
+            if($profile_details->is_verified == 0){
+                $update_profile = UserProfile::find($profile_details->id);
+                $update_profile->is_verified = 1;
+                $update_profile->save();
+                $is_verified = 1;
+            }else{
+                $is_verified = 0;
+            }
+        }else{
+            $is_verified = 0;
+        }
+        return view('welcome')->with('verifyUser', $is_verified);
     }
     
 }
