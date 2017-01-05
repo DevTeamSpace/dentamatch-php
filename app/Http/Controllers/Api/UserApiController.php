@@ -101,7 +101,6 @@ class UserApiController extends Controller {
                 'deviceType' => 'required',
                 'email' => 'required|email',
                 'password' => 'required', 
-                'userType' => 'required',
                 'deviceToken' => 'required',
             ]);
         } catch (ValidationException $e) {
@@ -133,7 +132,6 @@ class UserApiController extends Controller {
                     
                 }
                 $user_array['userDetails'] = array(
-                    'groupId' => $user_data['group_id'],
                     'email' => $user_data['email'],
                     'firstName' => $user_data['first_name'],
                     'lastName' => $user_data['last_name'],
@@ -219,7 +217,7 @@ class UserApiController extends Controller {
         }else{
             $is_verified = 0;
         }
-        return view('welcome')->with('verifyUser', $is_verified);
+        return view('verifyUser')->with('verifyUser', $is_verified);
     }
     
 }
