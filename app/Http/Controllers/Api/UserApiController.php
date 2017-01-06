@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\Device;
 use App\Models\UserProfile;
+use App\Models\PasswordReset;
 use Mail;
 use Auth;
 class UserApiController extends Controller {
@@ -93,7 +94,6 @@ class UserApiController extends Controller {
      * @return type
      */
     public function postSignIn(Request $request) {
-        
         try {
             $this->validate($request, [
                 'deviceId' => 'required',
@@ -122,7 +122,6 @@ class UserApiController extends Controller {
                                 )
                         ->where('users.id', $user_id)
                         ->first();
-            //dd($user_data);
             if($user_data['group_id'] == 3){
                 if($user_data['is_verified'] == 1){
                         $device = Device::where('user_id', $user_id)->orWhere('device_id', $reqData['deviceId'])->first();
@@ -228,6 +227,60 @@ class UserApiController extends Controller {
             $is_verified = 0;
         }
         return view('verifyUser')->with('verifyUser', $is_verified);
+    }
+    
+    /**
+     * Method to make forgot password  request
+     * @param Request $request
+     * @return type
+     */
+    public function putForgotPassword(Request $request) {
+        try {
+            $this->validate($request, [
+                'email' => 'required|email',
+            ]);
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return $this->responseError("Request validation failed.", ["data" => $messages]);
+        }
+        try {
+            $reqData = $request->all();
+            $user = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+                        ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->select(
+                                'users.id',
+                                'user_groups.group_id', 
+                                'users.email',
+                                'jobseeker_profiles.first_name',
+                                'jobseeker_profiles.last_name',
+                                'jobseeker_profiles.is_verified'
+                                )
+                        ->where('users.email', $reqData['email'])
+                        ->where('user_groups.group_id' , 3)
+                        ->first();
+            if ($user) {
+                if($user->is_verified == 1){
+                    $passwordModel = PasswordReset::firstOrNew(array('user_id' => $user->id, 'email' => $user->email));
+                    $passwordModel->fill(['token' =>md5($user->email . time())]);
+                    $passwordModel->save();
+                
+                    Mail::queue('email.resetPasswordToken', ['name' => $user->first_name, 'url' => url('resetPassword', ['token' => md5($user->email . time())]), 'email' => $user->email], function($message) use ($user) {
+                        $message->to($user->email, $user->first_name)->subject('Reset Password Request ');
+                    });
+                    $response = $this->customJsonResponse(1, 200, "Please check your mailbox");
+                }else{
+                    $response = $this->customJsonResponse(0, 202, "Your account is not activated yet"); 
+                }
+                
+            }else{
+                $response = $this->customJsonResponse(1, 201, "Email does not exists");
+            }
+            return $response;
+        } catch (\Exception $ex) {
+            $message = $ex->getMessage();
+            return $this->responseError("Some error occoured", ["data" => $messages]);
+        }
+        
     }
     
 }
