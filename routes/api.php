@@ -22,3 +22,4 @@ Route::post('users/sign-in','Api\UserApiController@postSignIn');
 Route::get('privacy-policy','Api\UserApiController@getPrivacypolicy');
 Route::get('term-condition','Api\UserApiController@getTermsAndCondition');
 Route::put('users/forgot-password', 'api\UserApiController@putForgotPassword');
+Route::put('users/reset-password', 'api\UserApiController@putForgotPassword');

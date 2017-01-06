@@ -273,12 +273,12 @@ class UserApiController extends Controller {
                 }
                 
             }else{
-                $response = $this->customJsonResponse(1, 201, "Email does not exists");
+                $response = $this->customJsonResponse(0, 201, "Email does not exists");
             }
             return $response;
         } catch (\Exception $ex) {
             $message = $ex->getMessage();
-            return $this->responseError("Some error occoured", ["data" => $messages]);
+            return $this->responseError("Some error occoured", ["data" => $message]);
         }
         
     }
