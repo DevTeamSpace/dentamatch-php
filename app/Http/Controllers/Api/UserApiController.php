@@ -111,33 +111,45 @@ class UserApiController extends Controller {
         if($user_id > 0){
             $user_data = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
-                        ->select('user_groups.group_id', 'users.email','jobseeker_profiles.first_name','jobseeker_profiles.last_name','jobseeker_profiles.zipcode','jobseeker_profiles.preferred_job_location')
+                        ->select(
+                                'user_groups.group_id', 
+                                'users.email',
+                                'jobseeker_profiles.first_name',
+                                'jobseeker_profiles.last_name',
+                                'jobseeker_profiles.zipcode',
+                                'jobseeker_profiles.preferred_job_location',
+                                'jobseeker_profiles.is_verified',
+                                )
                         ->where('users.id', $user_id)
                         ->first();
             //dd($user_data);
             if($user_data['group_id'] == 3){
-                $device = Device::where('user_id', $user_id)->orWhere('device_id', $reqData['deviceId'])->first();
-                $reqData['deviceOs'] = isset($reqData['deviceOs'])?$reqData['deviceOs']:'';
-                $reqData['appVersion'] = isset($reqData['appVersion'])?$reqData['appVersion']:'';
-                 if (is_object($device) && ($device->device_id != $reqData['deviceId'] || $device->user_id != $user_id)) {
-                    Device::where('device_id', $device->device_id)->orWhere('user_id', $user_id)->delete();
-                    $deviceModel = new Device();
-                    $user_token = $deviceModel->register_device($reqData['deviceId'], $user_id, $reqData['deviceToken'], $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']);
-                    
-                } else {
-                    $deviceModel = new Device();
-                    $user_token = $deviceModel->register_device($reqData['deviceId'], $user_id, $reqData['deviceToken'], $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']);
-                    
+                if($user_data['is_verified'] == 1){
+                        $device = Device::where('user_id', $user_id)->orWhere('device_id', $reqData['deviceId'])->first();
+                        $reqData['deviceOs'] = isset($reqData['deviceOs'])?$reqData['deviceOs']:'';
+                        $reqData['appVersion'] = isset($reqData['appVersion'])?$reqData['appVersion']:'';
+                         if (is_object($device) && ($device->device_id != $reqData['deviceId'] || $device->user_id != $user_id)) {
+                            Device::where('device_id', $device->device_id)->orWhere('user_id', $user_id)->delete();
+                            $deviceModel = new Device();
+                            $user_token = $deviceModel->register_device($reqData['deviceId'], $user_id, $reqData['deviceToken'], $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']);
+
+                        } else {
+                            $deviceModel = new Device();
+                            $user_token = $deviceModel->register_device($reqData['deviceId'], $user_id, $reqData['deviceToken'], $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']);
+
+                        }
+                        $user_array['userDetails'] = array(
+                            'email' => $user_data['email'],
+                            'firstName' => $user_data['first_name'],
+                            'lastName' => $user_data['last_name'],
+                            'zipCode' => $user_data['zipcode'],
+                            'preferredJobLocation' => $user_data['preferred_job_location'],
+                            'userToken' => $user_token,
+                        );
+                        $response = $this->customJsonResponse(1, 200, "User loggedin successfully",$user_array);
+                }else{
+                    $response = $this->customJsonResponse(0, 202, "Your account is not activated yet"); 
                 }
-                $user_array['userDetails'] = array(
-                    'email' => $user_data['email'],
-                    'firstName' => $user_data['first_name'],
-                    'lastName' => $user_data['last_name'],
-                    'zipCode' => $user_data['zipcode'],
-                    'preferredJobLocation' => $user_data['preferred_job_location'],
-                    'userToken' => $user_token,
-                );
-                $response = $this->customJsonResponse(1, 200, "User loggedin successfully",$user_array); 
             }else{
                 $response = $this->customJsonResponse(0, 201, "Invalid login credentials"); 
             }
