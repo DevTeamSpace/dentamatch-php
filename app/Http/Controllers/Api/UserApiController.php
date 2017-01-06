@@ -118,7 +118,7 @@ class UserApiController extends Controller {
                                 'jobseeker_profiles.last_name',
                                 'jobseeker_profiles.zipcode',
                                 'jobseeker_profiles.preferred_job_location',
-                                'jobseeker_profiles.is_verified',
+                                'jobseeker_profiles.is_verified'
                                 )
                         ->where('users.id', $user_id)
                         ->first();
