@@ -22,7 +22,6 @@ class UserApiController extends Controller {
             $this->validate($request, [
                 'deviceId' => 'required',
                 'deviceType' => 'required',
-                'deviceToken' => 'required',
                 'firstName' => 'required',
                 'lastName' => 'required',
                 'email' => 'required',
@@ -101,7 +100,6 @@ class UserApiController extends Controller {
                 'deviceType' => 'required',
                 'email' => 'required|email',
                 'password' => 'required', 
-                'deviceToken' => 'required',
             ]);
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
