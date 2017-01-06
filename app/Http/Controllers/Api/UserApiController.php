@@ -58,8 +58,8 @@ class UserApiController extends Controller {
             $userProfileModel->last_name = $reqData['lastName'];
             $userProfileModel->zipcode = $reqData['zipCode'];
             $userProfileModel->preferred_job_location = $reqData['preferedLocation'];
-            $userProfileModel->lat = $reqData['latitude'];
-            $userProfileModel->lng = $reqData['longitude'];
+            $userProfileModel->latitude = $reqData['latitude'];
+            $userProfileModel->longitude = $reqData['longitude'];
             $userProfileModel->verification_code = $verification_code;
             $userProfileModel->save();
             
