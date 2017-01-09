@@ -13,14 +13,14 @@ class apiResponse {
         if (!empty($key)) {
             $response[$key] = (object) $data[$key];
         }
-        return $this->convertToCamelCase($response);
+        return self::convertToCamelCase($response);
     }
     
     public static function convertToCamelCase($array) {
         $converted_array = [];
         foreach ($array as $old_key => $value) {
             if (is_array($value)) {
-                $value = $this->convertToCamelCase($value);
+                $value = self::convertToCamelCase($value);
             } else if (is_object($value)) {
                 if (method_exists($value, 'toArray')) {
                     $value = $value->toArray();
@@ -29,7 +29,7 @@ class apiResponse {
                 }
 
 
-                $value = $this->convertToCamelCase($value);
+                $value = self::convertToCamelCase($value);
             }
             $converted_array[camel_case($old_key)] = $value;
         }
