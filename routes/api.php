@@ -29,4 +29,6 @@ Route::get('skillList','Api\MasterApiController@getSkilllists');
 
 Route::post('users/upload-image', 'api\UserProfileApiController@postUploadImage');
 Route::put('users/update-license', 'api\UserProfileApiController@putUpdateLicense');
+Route::post('users/work-experince', 'api\UserProfileApiController@postWorkExperince');
+Route::delete('users/work-experince/{id}', 'api\UserProfileApiController@deleteWorkExperince');
 
