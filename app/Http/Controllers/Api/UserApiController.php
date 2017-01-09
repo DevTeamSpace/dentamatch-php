@@ -237,7 +237,7 @@ class UserApiController extends Controller {
             return $response;
         } catch (\Exception $ex) {
             $message = $ex->getMessage();
-            return $this->responseError("Some error occoured", ["data" => $message]);
+            return apiResponse::responseError("Some error occoured", ["data" => $message]);
         }
         
     }

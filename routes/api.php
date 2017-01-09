@@ -23,6 +23,8 @@ Route::get('privacy-policy','Api\UserApiController@getPrivacypolicy');
 Route::get('term-condition','Api\UserApiController@getTermsAndCondition');
 Route::put('users/forgot-password', 'api\UserApiController@putForgotPassword');
 Route::put('users/reset-password', 'api\UserApiController@putForgotPassword');
+Route::post('users/change-password','Api\UserProfileApiController@postChangePassword');
+Route::get('list-jobtitle','Api\MasterApiController@getSkilllists');
 Route::get('skillList','Api\MasterApiController@getSkilllists');
 
 Route::post('users/upload-image', 'api\UserProfileApiController@postUploadImage');

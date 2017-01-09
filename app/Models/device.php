@@ -19,7 +19,7 @@ class Device extends Model  {
        return true;
     }
     public function register_device($device_id, $user_id, $device_token, $device_type,$deviceOs='',$appVersion='') {
-        $user_token = md5($device_id);
+        $user_token = md5($device_id.$user_id);
         $data = array(
             'device_id' => $device_id,
             'user_id' => $user_id,
