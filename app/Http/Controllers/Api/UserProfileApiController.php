@@ -50,4 +50,24 @@ class UserProfileApiController extends Controller {
         }
     }
 
+    public function putUpdateLicense(Request $request) {
+        try {
+            $this->validate($request, [
+                'license' => 'required',
+                'state' => 'required'
+            ]);
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        }
+        try {
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            UserProfile::where('user_id', $userId)->update(['license_number' => $request->license, 'state' => $request->state]);
+            return apiResponse::customJsonResponse(1, 200, "data Saved successfully");
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        }
+    }
+
 }

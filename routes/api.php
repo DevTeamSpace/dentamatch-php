@@ -25,5 +25,6 @@ Route::put('users/forgot-password', 'api\UserApiController@putForgotPassword');
 Route::put('users/reset-password', 'api\UserApiController@putForgotPassword');
 Route::get('skillList','Api\MasterApiController@getSkilllists');
 
-Route::post('users/upload-image', 'api\UserProfileApiController@uploadImage');
+Route::post('users/upload-image', 'api\UserProfileApiController@postUploadImage');
+Route::put('users/update-license', 'api\UserProfileApiController@putUpdateLicense');
 
