@@ -10,14 +10,15 @@ use App\Models\UserGroup;
 use App\Models\Device;
 use App\Models\UserProfile;
 use App\Models\PasswordReset;
+use App\Models\JobTitles;
 use Mail;
 use Auth;
+use App\Helpers\apiResponse;
 class UserApiController extends Controller {
     
     public function __construct() {
         
     }
-    
     public function postSignup(Request $request){
         try {
             $this->validate($request, [
@@ -34,12 +35,12 @@ class UserApiController extends Controller {
             ]);
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return $this->responseError("Request validation failed.", ["data" => $messages]);
+            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
         }
         $reqData = $request->all();
         $userExists = User::where('email', $reqData['email'])->first();
         if($userExists){
-            $response = $this->customJsonResponse(0, 201, "User already exists with this email");      
+            $response = apiResponse::customJsonResponse(0, 201, "User already exists with this email");      
         }else{
             $user =  array(
                 'email' => $reqData['email'],
@@ -83,7 +84,7 @@ class UserApiController extends Controller {
                     $message->to($email, $fname)->subject('Activation Email');
                 });
             
-            $response = $this->customJsonResponse(1, 200, "User registered successfully"); 
+            $response = apiResponse::customJsonResponse(1, 200, "User registered successfully"); 
         }
         return $response;
     }
@@ -103,7 +104,7 @@ class UserApiController extends Controller {
             ]);
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return $this->responseError("Request validation failed.", ["data" => $messages]);
+            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
         }
         $reqData = $request->all();
         $userAttempt = Auth::attempt(['email' => $reqData['email'], 'password' => $reqData['password']]);
@@ -143,17 +144,17 @@ class UserApiController extends Controller {
                             'lastName' => $user_data['last_name'],
                             'zipCode' => $user_data['zipcode'],
                             'preferredJobLocation' => $user_data['preferred_job_location'],
-                            'userToken' => $user_token,
+                            'accessToken' => $user_token,
                         );
-                        $response = $this->customJsonResponse(1, 200, "User loggedin successfully",$user_array);
+                        $response = apiResponse::customJsonResponse(1, 200, "User loggedin successfully",$user_array);
                 }else{
-                    $response = $this->customJsonResponse(0, 202, "Your account is not activated yet"); 
+                    $response = apiResponse::customJsonResponse(0, 202, "Your account is not activated yet"); 
                 }
             }else{
-                $response = $this->customJsonResponse(0, 201, "Invalid login credentials"); 
+                $response = apiResponse::customJsonResponse(0, 201, "Invalid login credentials"); 
             }
         }else{
-            $response = $this->customJsonResponse(0, 201, "Invalid login credentials"); 
+            $response = apiResponse::customJsonResponse(0, 201, "Invalid login credentials"); 
         }
         return $response;
     }
@@ -166,51 +167,6 @@ class UserApiController extends Controller {
         return view('privacy-policy');   
     }
 
-
-    public function responseError($message = '', $data = array()) {
-        $key = !empty($data) ? key($data) : '';
-        $response = array(
-            'status' => 0,
-            'message' => $message
-        );
-        if (!empty($key)) {
-            $response[$key] = (object) $data[$key];
-        }
-        return $this->convertToCamelCase($response);
-    }
-    
-    protected function convertToCamelCase($array) {
-        $converted_array = [];
-        foreach ($array as $old_key => $value) {
-            if (is_array($value)) {
-                $value = $this->convertToCamelCase($value);
-            } else if (is_object($value)) {
-                if (method_exists($value, 'toArray')) {
-                    $value = $value->toArray();
-                } else {
-                    $value = (array) $value;
-                }
-
-
-                $value = $this->convertToCamelCase($value);
-            }
-            $converted_array[camel_case($old_key)] = $value;
-        }
-
-        return $converted_array;
-    }
-    
-    public function customJsonResponse($status, $statusCode, $message = '', $data = array()) {
-        $response = array(
-            'status' => $status,
-            'statusCode' => $statusCode,
-            'message' => $message,
-        );
-        if(is_array($data) && count($data) > 0){
-            $response['result'] = (object) $data;
-        }
-        return json_encode($response);
-    }   
     public  function getActivatejobseeker($confirmation_code) { 
         $is_verified = 0;
         $profile_details = UserProfile::where('verification_code', $confirmation_code)->first();
@@ -241,7 +197,7 @@ class UserApiController extends Controller {
             ]);
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return $this->responseError("Request validation failed.", ["data" => $messages]);
+            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
         }
         try {
             $reqData = $request->all();
@@ -270,13 +226,13 @@ class UserApiController extends Controller {
                     Mail::queue('email.resetPasswordToken', ['name' => $user->first_name, 'url' => url('resetPassword', ['token' => md5($user->email . time())]), 'email' => $user->email], function($message) use ($user) {
                         $message->to($user->email, $user->first_name)->subject('Reset Password Request ');
                     });
-                    $response = $this->customJsonResponse(1, 200, "Please check your mailbox");
+                    $response = apiResponse::customJsonResponse(1, 200, "Please check your mailbox");
                 }else{
-                    $response = $this->customJsonResponse(0, 202, "Your account is not activated yet"); 
+                    $response = apiResponse::customJsonResponse(0, 202, "Your account is not activated yet"); 
                 }
                 
             }else{
-                $response = $this->customJsonResponse(0, 201, "Email does not exists");
+                $response = apiResponse::customJsonResponse(0, 201, "Email does not exists");
             }
             return $response;
         } catch (\Exception $ex) {
@@ -285,5 +241,7 @@ class UserApiController extends Controller {
         }
         
     }
+    
+    
     
 }
