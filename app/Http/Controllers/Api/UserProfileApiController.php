@@ -137,7 +137,7 @@ class UserProfileApiController extends Controller {
             $workExp->reference2_email = $request->reference2_email;
             $workExp->deleted_at = null;
             $workExp->save();
-            return apiResponse::customJsonResponse(1, 200, "data Saved successfully", $workExp);
+            return apiResponse::customJsonResponse(1, 200, "data Saved successfully");
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
@@ -146,7 +146,7 @@ class UserProfileApiController extends Controller {
 
     public function deleteWorkExperince(Request $request) {
         try {
-            UserProfile::where('id', $request->id)->update(['deleted_at' => date('Y-m-d')]);
+            \App\Models\WorkExperience::where('id', $request->id)->update(['deleted_at' => date('Y-m-d')]);
             return apiResponse::customJsonResponse(1, 200, "Deleted successfully");
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
