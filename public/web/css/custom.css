@@ -1,0 +1,472 @@
+
+/*---------General Css----------*/
+* {
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	-webkit-tap-highlight-color: transparent; /* For some Androids */
+}
+::-webkit-input-placeholder {
+	color: #686868;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+	color:  #686868; 
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+	color:  #686868; 
+}
+
+:-ms-input-placeholder {  
+	color:  #686868; 
+}
+:hover, :focus, a:focus, button:focus, input[type="submit"],select:focus{outline: none;}
+button, select, input, textarea{	  
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none; 
+}
+
+
+.error{color:#f00;}
+.bootstrap-select .btn:focus{outline: none !important;}
+
+html,
+body {
+	min-height: 100%
+}
+
+body {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-family: 'Roboto', sans-serif;
+	
+	overflow-x: hidden;
+	overflow-y: auto;
+	position:relative;
+
+}
+label{font-weight: normal;}
+ul{
+	margin:0;
+	padding:0; 
+	list-style: none;
+}
+textarea{resize: none;}
+button,.btn{font-family: 'Roboto', sans-serif; }
+.btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus{
+	outline:0;
+}
+input[type="text"], input[type="email"], input[type="search"], input[type="password"],
+input[type="number"], input[type="tel"] {
+	-webkit-appearance: none;
+	-moz-appearance: none; /* mobile firefox too! */
+}
+h1,h2,h3,h4,h5,h6{font-weight: normal; font-family: 'Roboto', sans-serif;}
+.pos-rel{position: relative;}
+.bg-white{background:#fff;}
+.nopadding {
+	padding: 0 !important;
+	margin: 0 !important;
+}
+.btn-link{color:#0470c0;}
+
+
+/*-------------------------*/
+.denta-access-bg{
+	background-image:url('../images/denta_bg.jpg');
+	background-size:cover;
+	min-height: 100vh;
+
+}
+.frm-cred-access-box{
+	
+	width: 684px;
+	height: 415px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	
+	-webkit-box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.24);
+	-moz-box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.24);
+	box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.24);
+	
+	
+}
+.denta-logo-box{
+	-webkit-background-image: linear-gradient(to bottom, #223472, #0f183e);
+	-moz-background-image: linear-gradient(to bottom, #223472, #0f183e);
+	background-image: linear-gradient(to bottom, #223472, #0f183e);
+	min-height: 300px;
+	-webkit-border-radius:8px 0 0 8px;
+	-moz-border-radius:8px 0 0 8px;
+	border-radius:8px 0 0 8px;
+	padding-top:80px;
+	
+
+}
+.frm-inr-credbox{
+	padding:52px 30px;
+	min-height: 300px;
+	background:#fff;
+	-webkit-border-radius:0  8px 8px 0;
+	-moz-border-radius:0  8px 8px 0;
+	border-radius:0  8px 8px 0;
+}
+
+.frm-inr-credbox .nav > li:last-child{margin-left:24px;}
+.frm-inr-credbox .tab-content{padding:30px 0;}
+.frm-inr-credbox .nav-pills>li>a{padding:0; border-radius:0; font-size: 18px;
+	font-weight: 300;
+	color: #383838;}
+	.frm-inr-credbox .nav > li > a:hover, 
+	.frm-inr-credbox .nav > li > a:focus{background:transparent;}
+	.frm-inr-credbox .nav-pills>li.active>a, 
+	.frm-inr-credbox .nav-pills>li.active>a:focus, 
+	.frm-inr-credbox .nav-pills>li.active>a:hover{color: #0470c0; 
+		background:transparent; border-bottom:2px solid #0470c0; font-weight: 400;}
+
+		/*--------floating labels----------*/
+		.floating-label .form-group {
+			display: flex;
+			height: 52px;
+		}
+
+		.floating-label .control-label {
+			font-size: 12px;
+			font-weight: 400;
+			opacity: 0.5;
+			pointer-events: none;
+			position: absolute;
+			transform: translate3d(16px, 18px, 0) scale(1);
+			transform-origin: left top;
+			transition: 240ms;
+			margin-bottom:0;
+		}
+		.floating-label > p{font-weight: 300;}
+		.floating-label .form-group.focused .control-label {
+			opacity: 1;
+			font-size:13px;
+			transform: scale(0.75);
+			color:#0470c0;
+			padding:9px 15px 5px;
+			margin-bottom:0;
+		}
+
+		.floating-label .form-control {
+			border-width: 1px 1px 0 1px;
+			border-style: solid;
+			border-color: #d7d7d7;
+
+			/* border:1px solid #d7d7d7; */
+			border-radius:0;
+			font-size: 12px;
+			color: #c9c9c9;
+			font-weight: 400;
+			height:52px;
+		}
+		.floating-label .form-group:last-child .form-control{ border:1px solid #d7d7d7; }
+		/* .floating-label .form-control + .floating-label .form-control{
+			border-top-width: 0;
+			} */
+			.floating-label .form-group:first-child .form-control{
+				border-top-left-radius: 4px;
+				border-top-right-radius: 4px;
+			}
+			.floating-label .form-group:last-child .form-control{
+				border-bottom-left-radius: 4px ;
+				border-bottom-right-radius: 4px ;
+			}
+
+			.floating-label .form-group{margin-bottom:0.3px; position: relative; }
+
+
+			.floating-label .form-group .parsley-errors-list.filled{position: absolute; right:3px; bottom:2px; font-size:10px;}
+
+
+
+			.floating-label .form-group.focused .form-control:focus{box-shadow: none; border:1px solid  #0470c0;}
+
+
+			.floating-label .form-control::-webkit-input-placeholder {
+				color: transparent;
+				transition: 240ms;
+			}
+
+			.floating-label .form-control:focus::-webkit-input-placeholder {
+				transition: none;
+			}
+
+			.floating-label .form-group.focused .form-control::-webkit-input-placeholder {
+				color: #bbb;
+			}
+			.btn-denta-sm{
+				font-size: 14px;
+				font-weight: 500;
+				text-align: center;
+				color: #ffffff;
+				height: 38px;
+				border-radius: 4px;
+				display: block;
+				/* width:282px; */
+			}
+			.frm-title{
+				font-weight: 400;
+				font-size: 18px;
+				color: #383838;
+			}
+
+			#signup-frm .btn-link{font-size:12px;}
+			/*-----------Forgot password------*/
+			#forgot-frm .form-control{-webkit-border-radius:4px !important; -moz-border-radius:4px !important; border-radius:4px !important; }
+
+			/*---------Terms-box----*/
+			.frm-cred-access-box.terms-box-outer{height:auto;}
+			.terms-box{padding:27px 27px 0;}
+			.scrollable_div {
+				height: 415px;
+				max-height: 415px;
+				overflow: hidden;
+				width: 100%;
+				z-index: 1000;
+				padding-bottom:35px;
+			}
+			.child_scrollable_div {
+				height: 100%;
+				margin-top: -25px;
+				overflow: auto;
+				width: 102%;
+				z-index: 999;
+			}
+			.child_scrollable_div >ul>li{margin-bottom: 15px;}
+			
+			.pd-0 {
+				padding: 0 !important;
+			}
+			.terms-btn{padding:10px 27px; 
+				-webkit-box-shadow: 0 0 14px 0 rgba(0, 0, 0, 0.23);
+				-moz-box-shadow: 0 0 14px 0 rgba(0, 0, 0, 0.23);
+				box-shadow: 0 0 14px 0 rgba(0, 0, 0, 0.23);}
+
+				
+				
+
+				/*--------Onboard Screen--------*/
+				#onboardView .modal-header{
+					height:157px;
+					background-color: #1e2e66;
+					border-top-left-radius: 8px;
+					border-top-right-radius: 8px;
+				}
+				.onboard-title{
+					font-size: 30px;
+					font-weight: 500;
+					letter-spacing: 0.5px;
+					text-align: center;
+					color: #333333;
+					margin-top: 45px;
+				}
+				#onboardView .modal-content{border-radius:8px; border:none;}
+				#onboardView .close {
+					margin-top:0;
+					font-size: 14px;
+					font-weight: 400;
+					line-height: 1;
+					color: #fff;
+					text-shadow:none;
+					filter: alpha(opacity=100);
+					opacity: 1;
+				}
+				#onboardView .carousel-indicators li{margin:1px 3px;}
+				.modal-backdrop.in{opacity: 0.7;}
+
+
+
+				
+				/*-------------------------------*/
+				/*    Carousel Fade Transition   */
+				/*-------------------------------*/
+
+				
+				#fade-quote-carousel.carousel .carousel-inner{top:-85px;}
+				#fade-quote-carousel.carousel .carousel-inner .item {
+					opacity: 1;
+					-webkit-transition-property: opacity;
+					-ms-transition-property: opacity;
+					transition-property: opacity;
+					text-align: center;
+				}
+				#fade-quote-carousel.carousel .carousel-inner .active {
+					opacity: 1;
+					-webkit-transition-property: opacity;
+					-ms-transition-property: opacity;
+					transition-property: opacity;
+				}
+				#fade-quote-carousel.carousel .carousel-indicators {
+					bottom: 5px;
+				}
+				#fade-quote-carousel.carousel .carousel-indicators .active{margin:1px; background-color: #0470c0;}
+				#fade-quote-carousel.carousel .carousel-indicators > li {
+
+					border: none;
+					width: 10px;
+					height: 10px;
+					background-color: #eeeeee;
+				}
+				#fade-quote-carousel blockquote {
+					text-align: center;
+					border: none;
+					font-size: 14px;
+					font-weight: 400;
+				}
+				#fade-quote-carousel .onboard-img {
+					width: 123px;
+					height: 123px;
+					margin: 0 auto;
+					border-radius: 50%;
+					background-color: #ffffff;
+					border: solid 2px #b6b9b9;
+					text-align: center;
+					position: relative;
+				}
+				#fade-quote-carousel .onboard-img img{
+					position: absolute;
+					content: '';
+					top:0;
+					bottom: 0;
+					right:0;
+					left:0;
+					margin:auto;
+
+
+				}
+
+				/*----------Subscription section-------------*/
+				.subscription-box{background:#fff; height:auto; padding:30px;}
+				.subscription-box > .frm-title{margin:0; letter-spacing: -0.1px;}
+				.subs-holder{ margin-top:35px; }
+				.subscription-type{
+					padding:30px 30px 18px;
+				}
+				.subscription-inr-box{
+					border-radius: 8px;
+					background-color: #ffffff;
+					border: solid 1px #e9e9e9;
+					width: 214px;
+					text-align: center;
+					display: inline-block;
+				}
+				.subscription-inr-box + .subscription-inr-box{
+					margin:0 0 0 20px;
+				}
+				.subscription-desc{
+					background-color: #fafafc;
+					padding:20px 10px;
+				}
+				.price-symbol{position: absolute; content: ''; top:0; left:10px; font-size: 16px;}
+				.price{	font-size: 64px;
+					font-weight: 500;
+					letter-spacing: -0.4px;
+					line-height: 64px;
+					color: #0063bb;}
+					.subcription-price >p{color: #0063bb;}
+
+					/*-----------calendar part-------------*/
+					.custom-modal .modal-content{
+						border: medium none;
+						border-radius: 8px;
+					}
+					.custom-modal .modal-header{padding:18px 29px;
+						border-bottom: 0; background-color: #1e2e66;
+						border-top-left-radius: 8px;
+						border-top-right-radius: 8px;
+					}
+					.custom-modal .modal-header .modal-title{
+						font-size: 18px;
+						letter-spacing: -0.1px;
+						color: #ffffff;
+					}
+					.custom-modal .modal-header .close{
+						color: #fff;
+						opacity: 1;
+						font-size: 30px;
+						font-weight: 400;
+						text-shadow: none;
+					}
+					.custom-modal .modal-body{padding:25px  !important;}
+
+					.custom-modal .panel{
+						border-radius: 4px;
+						background-color: #f7f7f7;
+					}
+
+
+
+
+
+
+					@media only screen and (min-width: 768px){
+						.frm-cred-access-box{
+							position: absolute;
+							top:50%;
+							left:50%;
+							transform: translate(-50%, -50%);
+
+						}
+						.denta-logo-box{
+							padding-top:138px;
+							min-height: 415px;
+						}
+						.frm-inr-credbox{
+							min-height: 415px;
+						}
+						.child_scrollable_div{width:102%;}
+
+						#onboardView .modal-dialog {
+							width: 664px;
+							margin: 30px auto
+						}
+						#onboardView .modal-body{
+							height:342px;
+						}
+						.subscription-box{height:522px;}
+
+
+					}
+
+					@media only screen and (max-width: 767px){
+						.frm-cred-access-box{
+							width:100%;
+							margin-top:112px;
+						}
+						.denta-logo-box{
+							-webkit-border-radius:8px 8px 0 0;
+							-moz-border-radius:8px 8px 0 0;
+							border-radius:8px 8px 0 0;
+						}
+						.frm-inr-credbox{
+							-webkit-border-radius:0  0 8px 8px;
+							-moz-border-radius:0  0 8px 8px;
+							border-radius:0  0 8px 8px;
+						}
+					}
+					@media only screen and (max-width: 520px){
+						.subscription-inr-box + .subscription-inr-box{
+							margin:15px 0 0;
+						}
+
+
+					}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

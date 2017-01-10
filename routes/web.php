@@ -11,9 +11,17 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'web\SignupController@getLogin');
+
+Route::get('signup', 'web\SignupController@getLogin');
+Route::post('signup', 'web\SignupController@postSignUp');
+
+Route::post('login', 'web\SignupController@postLogin');
+Route::get('login', 'web\SignupController@getLogin');
+
+Route::get('terms-conditions', 'web\SignupController@getTermsAndCondition');
+Route::get('logout', 'web\SignupController@logout');
+Route::get('dashboard', 'web\SignupController@dashboard');
 
 Route::get('/aboutus', function () {
     return view('about');
