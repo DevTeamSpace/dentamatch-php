@@ -34,17 +34,21 @@ class UserProfileApiController extends Controller {
         try {
             $reqData = $request->all();
             $userId = apiResponse::loginUserId($request->header('accessToken'));
-            dd($userId);
-            $userModel = User::where('id', $userId)->first();
-            if(!Hash::check($reqData['oldPassword'], $userModel->password)) {
-                $response = apiResponse::customJsonResponse(0, 201, "Incorrect old password"); 
-            }else if ($reqData['newPassword'] !== $reqData['confirmNewPassword']) {
-                $response = apiResponse::customJsonResponse(0, 202, "Mismatch password and confirm password"); 
-            } else if (!empty($userModel)) {
-                $userModel->password = bcrypt($reqData['newPassword']);
-                $userModel->save();
-                $response = apiResponse::customJsonResponse(1, 200, "Password updated successfully"); 
-            } else {
+            
+            if(isset($userId) && $userId > 0){
+                $userModel = User::where('id', $userId)->first();
+                if(!Hash::check($reqData['oldPassword'], $userModel->password)) {
+                    $response = apiResponse::customJsonResponse(0, 201, "Incorrect old password"); 
+                }else if ($reqData['newPassword'] !== $reqData['confirmNewPassword']) {
+                    $response = apiResponse::customJsonResponse(0, 202, "Mismatch password and confirm password"); 
+                } else if (!empty($userModel)) {
+                    $userModel->password = bcrypt($reqData['newPassword']);
+                    $userModel->save();
+                    $response = apiResponse::customJsonResponse(1, 200, "Password updated successfully"); 
+                } else {
+                    $response = apiResponse::customJsonResponse(0, 204, "Token is invalid");
+                }
+            }else{
                 $response = apiResponse::customJsonResponse(0, 204, "Token is invalid");
             }
             return $response;

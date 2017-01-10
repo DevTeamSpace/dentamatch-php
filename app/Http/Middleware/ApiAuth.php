@@ -31,7 +31,7 @@ class ApiAuth {
     public function handle($request, Closure $next) {
         try {
             $user = Device::getUserByDeviceToken($request->header('accessToken'));
-            if (!is_object($user)) {
+            if (!$user) {
                 $response = apiResponse::customJsonResponse(1, 204, "Token is invalid");
             }
             
