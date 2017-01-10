@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\web;
 use App\Models\User;
+use App\Models\UserGroup;
 use App\Models\Group;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -86,9 +87,45 @@ use AuthenticatesUsers;
     
     public function postSignUp(Request $request)
     {
-        return redirect('login#signup');
-        //echo "<pre>"; print_r($request->all()); die;
-        
+        $redirect = 'login';
+        try {
+            
+            $validation_rules = array('email' => 'required|email', 'password' => 'required');
+            $validator = Validator::make($request->all(), $validation_rules);
+            if ($validator->fails()) {
+                Session::flash('message',"Validation Failure");
+            }
+            
+            $reqData = $request->all();
+            
+            $userExists = User::where('email', $reqData['email'])->first();
+            if($userExists){
+                Session::flash('message',"Email already registered");
+            } 
+            else if($reqData['password']!==$reqData['confirmPassword'])
+            {
+                Session::flash('message',"Password and confirm password do not match");
+            }
+            else 
+            {
+                $user =  array(
+                    'email' => $reqData['email'],
+                    'password' => bcrypt($reqData['password']),
+                );
+                $user_details = User::create($user);
+
+                $userGroupModel = new UserGroup();
+                $userGroupModel->group_id = 2;
+                $userGroupModel->user_id = $user_details->id;
+                $userGroupModel->save();
+
+                Session::flash('message',"User registered successfully"); 
+            }
+            
+        } catch (\Exception $e) {
+            Session::flash('message',$e->getMessage());
+        }
+        return redirect($redirect);
     }
     
 }
