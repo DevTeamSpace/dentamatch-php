@@ -26,3 +26,9 @@ Route::put('users/reset-password', 'api\UserApiController@putForgotPassword');
 Route::post('users/change-password','Api\UserProfileApiController@postChangePassword');
 Route::get('list-jobtitle','Api\MasterApiController@getJobTitlelists');
 Route::get('list-skills','Api\MasterApiController@getSkilllists');
+
+Route::post('users/upload-image', 'api\UserProfileApiController@postUploadImage');
+Route::put('users/update-license', 'api\UserProfileApiController@putUpdateLicense');
+Route::post('users/work-experince', 'api\UserProfileApiController@postWorkExperince');
+Route::delete('users/work-experince/{id}', 'api\UserProfileApiController@deleteWorkExperince');
+
