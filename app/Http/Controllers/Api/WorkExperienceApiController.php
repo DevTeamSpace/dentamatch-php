@@ -8,13 +8,25 @@ use Illuminate\Validation\ValidationException;
 use App\Models\WorkExperience;
 use App\Helpers\apiResponse;
 use Auth;
+use App\Models\JobTitles;
 
 class WorkExperienceApiController extends Controller {
 
     public function __construct() {
         $this->middleware('ApiAuth');
     }
-
+    /**
+     * Description : Get joblisting
+     * Method : getJobTitlelists
+     * formMethod : Get
+     * @param 
+     * @return type
+     */
+    public function getJobTitlelists(){
+        $job_title = JobTitles::where('is_active',1)->get()->toArray();
+        $response = apiResponse::customJsonResponseObject(1, 200, "Jobtitle list",'joblists',$job_title);
+        return $response;
+    }
     /**
      * Description : To add work experience
      * Method : postWorkExperince
