@@ -61,13 +61,13 @@ class WorkExperienceApiController extends Controller {
             $workExp->save();
             
             $data['list'] = $workExp->toArray();
-            return apiResponse::customJsonResponse(1, 200, "data Saved successfully", $data);
+            return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_added"), $data);
             
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            return apiResponse::responseError("Request validation failed.", ["data" => trans("messages.something_wrong")]);
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         
         
@@ -84,10 +84,12 @@ class WorkExperienceApiController extends Controller {
     public function deleteWorkExperince(Request $request) {
         try {
             WorkExperience::where('id', $request->id)->update(['deleted_at' => date('Y-m-d H:i:s')]);
-            return apiResponse::customJsonResponse(1, 200, "Deleted successfully");
+            return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_removed"));
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+        } catch (\Exception $e) {
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
     }
     
@@ -110,10 +112,12 @@ class WorkExperienceApiController extends Controller {
             $query['start'] = $start;
             $query['limit'] = $limit;
             
-            return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_added"), $query);
+            return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_list"), $query);
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        } catch (\Exception $e) {
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
     }
 
