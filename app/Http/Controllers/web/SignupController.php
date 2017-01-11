@@ -57,7 +57,7 @@ use AuthenticatesUsers;
                     $redirect = 'terms-conditions';
                     if($user->remember_token)
                     {
-                        $redirect = 'dashboard';
+                        $redirect = 'home';
                     }
                 }
             }

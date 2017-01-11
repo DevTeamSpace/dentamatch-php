@@ -27,7 +27,7 @@ class Authenticate
         $user = Auth::user();
         
         if(isset($user) && $user->userGroup->group_id==1){
-            return redirect("dashboard");
+            return redirect("home");
         }else{
             return $next($request);
         }

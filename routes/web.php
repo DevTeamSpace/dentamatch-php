@@ -21,11 +21,16 @@ Route::get('login', 'web\SignupController@getLogin');
 
 Route::get('terms-conditions', 'web\SignupController@getTermsAndCondition');
 Route::get('logout', 'web\SignupController@logout');
-Route::get('dashboard', 'web\SignupController@dashboard');
+Route::get('home', 'web\SignupController@dashboard');
 
 Route::get('/aboutus', function () {
     return view('about');
 });
+
+Route::post('password/email','Auth\ForgotPasswordController@sendResetLinkEmail');
+Route::get('password/reset','Auth\ForgotPasswordController@showLinkRequestForm');
+Route::post('password/reset','Auth\ResetPasswordController@reset');
+Route::get('password/reset/{token}','Auth\ResetPasswordController@showResetForm');
 
 Route::get('user-activation/{code}','Api\UserApiController@getActivatejobseeker');
 

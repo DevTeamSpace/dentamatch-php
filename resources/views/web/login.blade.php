@@ -55,7 +55,7 @@
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-denta-sm btn-primary btn-block mr-t-20">Login</button>
-                                    <a href="forgot_password.html"  class="btn-link btn center-block mr-t-15">Forgot Password?</a>
+                                    <a href="{{url('password/reset')}}"  class="btn-link btn center-block mr-t-15">Forgot Password?</a>
                             </form>
                         </div>
                     </div>
