@@ -85,7 +85,13 @@ class WorkExperienceApiController extends Controller {
      */
     public function deleteWorkExperince(Request $request) {
         try {
-            WorkExperience::where('id', $request->id)->update(['deleted_at' => date('Y-m-d H:i:s')]);
+            $this->validate($request, [
+                'id'=>'required|integer'
+            ]);
+            
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            
+            WorkExperience::where('id', $request->id)->where('user_id',$userId)->update(['deleted_at' => date('Y-m-d H:i:s')]);
             return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_removed"));
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);

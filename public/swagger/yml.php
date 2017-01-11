@@ -104,3 +104,30 @@ paths:
           
       tags:
         - Work Experience
+        
+  /users/work-experience:
+    post:
+      summary: Work Experience
+      description: Api to list work experience based on access token
+      responses: 
+          200:
+            description: List of added work experience 
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          required: true
+          description: access token
+          type: string
+        - name: id
+          in: formData
+          required: true
+          description: work experience id
+          type: integer
+          
+      tags:
+        - Work Experience
