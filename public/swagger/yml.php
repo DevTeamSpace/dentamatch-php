@@ -101,14 +101,22 @@ paths:
           in: header
           description: access token
           type: string
+        - name: start
+          in: formData
+          description: starting point for pagination (Optional)
+          type: string
+        - name: limit
+          in: formData
+          description: limit for number of records (Optional)
+          type: string
           
       tags:
         - Work Experience
         
-  /users/work-experience:
+  /users/work-experience-delete:
     post:
       summary: Work Experience
-      description: Api to list work experience based on access token
+      description: Api to delete work experience based on access token and id
       responses: 
           200:
             description: List of added work experience 
@@ -128,14 +136,6 @@ paths:
           required: true
           description: work experience id
           type: integer
-        - name: start
-          in: formData
-          description: starting point for pagination (Optional)
-          type: string
-        - name: limit
-          in: formData
-          description: limit for number of records (Optional)
-          type: string
           
       tags:
         - Work Experience
