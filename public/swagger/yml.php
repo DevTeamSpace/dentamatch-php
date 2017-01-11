@@ -128,6 +128,14 @@ paths:
           required: true
           description: work experience id
           type: integer
+        - name: start
+          in: formData
+          description: starting point for pagination (Optional)
+          type: string
+        - name: limit
+          in: formData
+          description: limit for number of records (Optional)
+          type: string
           
       tags:
         - Work Experience
