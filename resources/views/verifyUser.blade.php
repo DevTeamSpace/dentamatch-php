@@ -11,8 +11,6 @@
         <link href="//fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
         <link rel="shortcut icon" href="img/favicon.ico" sizes="16x16" type="image/x-icon">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-   
         <title>DentaMatch</title>
         <style>
             body{background-color:rgb(240,240,240);padding:0 10px;}
@@ -29,10 +27,6 @@
             @else
             <p style=""><h4>Invalid token</h4></p>
             @endif
-
-            
-
-
         </div>
     </body>
 </html>

@@ -24,7 +24,7 @@ class UserProfileApiController extends Controller {
     use FileRepositoryS3;
 
     public function __construct() {
-        $this->middleware('ApiAuth')->except([]);
+       // $this->middleware('ApiAuth')->except([]);
     }
 
     public function postChangePassword(Request $request) {
@@ -92,7 +92,8 @@ class UserProfileApiController extends Controller {
         try {
             $this->validate($request, [
                 'license' => 'required',
-                'state' => 'required'
+                'state' => 'required',
+                'jobTitleId' => 'required'
             ]);
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
@@ -100,8 +101,12 @@ class UserProfileApiController extends Controller {
         }
         try {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
-            UserProfile::where('user_id', $userId)->update(['license_number' => $request->license, 'state' => $request->state]);
-            return apiResponse::customJsonResponse(1, 200, "data Saved successfully");
+            if($userId > 0){
+                UserProfile::where('user_id', $userId)->update(['license_number' => $request->license, 'state' => $request->state]);
+                return apiResponse::customJsonResponse(1, 200, "data Saved successfully");
+            }else{
+                return apiResponse::customJsonResponse(0, 204, "invalid user token");
+            }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);

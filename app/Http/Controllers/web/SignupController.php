@@ -51,7 +51,7 @@ use AuthenticatesUsers;
         $redirect = 'login';
         if (Auth::validate($credentials)) {
             $user = User::where('email', $credentials['email'])->first();
-            if ($user->userGroup->group_id == 1) {
+            if ($user->userGroup->group_id == 2) {
                 if (Auth::attempt($credentials, $request->remember)) {
                     $message = "Successfully Login";
                     $redirect = 'terms-conditions';
