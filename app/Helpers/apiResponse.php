@@ -63,7 +63,11 @@ class apiResponse {
     
     public static function loginUserId($accesstoken = '') {
         $user = Device::getUserByDeviceToken($accesstoken);
-        return $user->user_id;
+        if($user){
+            return $user->user_id;
+        }else{
+            return 0;
+        }
     }
 }
 
