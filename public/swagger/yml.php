@@ -6,7 +6,7 @@ info:
   description: Move your app forward with the DentaMatch APIs
   version: "1.0.0"
 # the domain of the service
-host: <?php echo $_SERVER['SERVER_NAME']; ?>/api
+host: <?php echo $_SERVER['HTTP_HOST']; ?>/api
 # array of all schemes that your API supports
 schemes:
   - http
