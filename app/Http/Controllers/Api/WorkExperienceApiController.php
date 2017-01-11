@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use App\Models\WorkExperience;
+use App\Models\Schooling;
 use App\Helpers\apiResponse;
 use Auth;
 
@@ -32,16 +33,17 @@ class WorkExperienceApiController extends Controller {
                 'city' => 'required',
                 'reference1Name'=>'sometimes',
                 'reference1Mobile'=>'required_with:reference1Name',
-                'reference1Email' => 'required_with:reference1Name',
+                'reference1Email' => 'required_with:reference1Name|email',
                 'reference2Name'=>'sometimes',
                 'reference2Mobile'=>'required_with:reference2Name',
-                'reference2Email' => 'required_with:reference2Name',
-                
+                'reference2Email' => 'required_with:reference2Name|email',
+                'action' =>'required|in:add,edit',
+                'id'=>'integer|required_if:action,edit'
             ]);
             
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             $workExp = new WorkExperience();
-            if (isset($request->id) && !empty($request->id)) {
+            if ($request->action=="edit" && !empty($request->id)) {
                 $workExp = WorkExperience::find($request->id);
             }
             
@@ -112,7 +114,28 @@ class WorkExperienceApiController extends Controller {
             $query['start'] = $start;
             $query['limit'] = $limit;
             
-            return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_list"), $query);
+            return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_list"), apiResponse::convertToCamelCase($query));
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        } catch (\Exception $e) {
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+    }
+    
+    public function postSchoolingCertificationList(Request $request)
+    {
+         try {
+            // test
+            $start = (int) isset($request->start) ? $request->start : 0;
+            $limit = (int) isset($request->limit) ? $request->limit : config('app.defaul_product_per_page');
+            
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $query = Schooling::getScoolingCertificateList($userId, $start, $limit);
+            $query['start'] = $start;
+            $query['limit'] = $limit;
+            
+            return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_list"), apiResponse::convertToCamelCase($query));;
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
