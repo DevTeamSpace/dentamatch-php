@@ -65,7 +65,7 @@ class UserProfileApiController extends Controller {
         }
     }
 
-    public function uploadImage(Request $request) {
+    public function postUploadImage(Request $request) {
         try {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             $filename = $this->generateFilename($userId, $request->type);
