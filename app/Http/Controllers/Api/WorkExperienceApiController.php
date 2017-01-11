@@ -35,7 +35,7 @@ class WorkExperienceApiController extends Controller {
      * @param Request $request
      * @return type
      */
-    public function postWorkExperince(Request $request) {
+    public function postWorkExperience(Request $request) {
         try {
             $this->validate($request, [
                 'jobTitleId' => 'required|integer',
@@ -95,7 +95,7 @@ class WorkExperienceApiController extends Controller {
      * @param Request $request
      * @return type
      */
-    public function deleteWorkExperince(Request $request) {
+    public function deleteWorkExperience(Request $request) {
         try {
             $this->validate($request, [
                 'id'=>'required|integer'

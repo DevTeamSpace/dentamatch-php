@@ -30,8 +30,8 @@ Route::post('users/update-skill','Api\SkillApiController@postUpdateSkills');
 
 Route::post('users/upload-image', 'api\UserProfileApiController@postUploadImage');
 Route::put('users/update-license', 'api\UserProfileApiController@putUpdateLicense');
-Route::post('users/work-experience-save', 'api\WorkExperienceApiController@postWorkExperince');
-Route::delete('users/work-experience/{id}', 'api\WorkExperienceApiController@deleteWorkExperince');
+Route::post('users/work-experience-save', 'api\WorkExperienceApiController@postWorkExperience');
+Route::delete('users/work-experience-delete', 'api\WorkExperienceApiController@deleteWorkExperience');
 Route::post('users/work-experience-list', 'api\WorkExperienceApiController@postListWorkExperience');
 Route::post('users/schooling-certification', 'api\WorkExperienceApiController@postSchoolingCertificationList');
 
