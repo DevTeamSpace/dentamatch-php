@@ -138,4 +138,41 @@ paths:
           type: string
           
       tags:
-        - Work Experience
+        - Work Experience  
+        
+  /users/signIn:
+    post:
+      summary: Work Experienceaaa
+      description: Api to list work experience based on access token
+      responses: 
+          200:
+            description: List of added work experience 
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          required: true
+          description: access token
+          type: string
+        - name: id
+          in: formData
+          required: true
+          description: work experience id
+          type: integer
+        - name: start
+          in: formData
+          description: starting point for pagination (Optional)
+          type: string
+        - name: limit
+          in: formData
+          description: limit for number of records (Optional)
+          type: string
+          
+      tags:
+        - Users
+        
+      

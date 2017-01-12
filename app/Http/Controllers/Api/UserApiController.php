@@ -143,7 +143,7 @@ class UserApiController extends Controller {
                             'preferredJobLocation' => $user_data['preferred_job_location'],
                             'accessToken' => $user_token,
                         );
-                        $response = apiResponse::customJsonResponse(1, 200, "User loggedin successfully",$user_array);
+                        $response = apiResponse::customJsonResponse(1, 200, "User logged in successfully",$user_array);
                 }else{
                     $response = apiResponse::customJsonResponse(0, 202, "Your account is not activated yet"); 
                 }

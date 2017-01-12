@@ -7,6 +7,7 @@ use DB;
 use App\Models\JobTitles;
 use App\Helpers\apiResponse;
 use App\Models\Skills;
+use App\Models\JobSeekerSkills;
 
 class SkillApiController extends Controller {
     
@@ -31,21 +32,27 @@ class SkillApiController extends Controller {
                 if(is_array($skill['children']) && count($skill['children']) > 0){
                     $child_skill = array();
                     foreach($skill['children'] as $subskills){
+                        $skill_exists = JobSeekerSkills::where('user_id',$userId)->where('skill_id',$subskills['id'])->get()->toArray();
+                        if($skill_exists){
+                            $userSkill = 1;
+                        }else{
+                            $userSkill = 0;
+                        }
                         $child_skill[] = array(
                             'id' => $subskills['id'],
                             'parent_id' => $subskills['parent_id'],
                             'skill_name' => $subskills['skill_name'],
-                            'user_skill'=> 0,
+                            'user_skill'=> $userSkill,
                         );
                     }
                 }
                 $update_skills[$key] = array('id' => $skill['id'],'parent_id' => $skill['parent_id'],'skill_name' => $skill['skill_name'],'children' => $child_skill);
             }
             
-            $response = apiResponse::customJsonResponseObject(1, 200, "Skill list",'skillList',  apiResponse::convertToCamelCase($update_skills));
+            $response = apiResponse::customJsonResponseObject(1, 200, "Skill list",'list',  apiResponse::convertToCamelCase($update_skills));
             return $response;
         }else{
-            return apiResponse::customJsonResponse(0, 204, "invalid user token");
+            return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
         }
     }
     /**
@@ -58,37 +65,32 @@ class SkillApiController extends Controller {
     public function postUpdateSkills(Request $request) {
         try {
             $this->validate($request, [
-                'skills' => 'required',
-                'other' => 'required',
+                'skills' => 'sometimes',
+                'other' => 'sometimes',
             ]);
             $reqData = $request->all();
-            
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
-               
-            if (isset($request->id) && !empty($request->id)) {
-                
-            }
-            
-            $workExp->user_id = $userId;
-            $workExp->job_title_id = $request->jobTitleId;
-            $workExp->months_of_expereince = $request->monthsOfExpereince;
-            $workExp->office_name = $request->officeName;
-            $workExp->office_address = $request->officeAddress;
-            $workExp->city = $request->city;
-            $workExp->reference1_name = $request->reference1Name;
-            $workExp->reference1_mobile = $request->reference1Mobile;
-            $workExp->reference1_email = $request->reference1Email;
-            $workExp->reference2_name = $request->reference2Name;
-            $workExp->reference2_mobile = $request->reference2Mobile;
-            $workExp->reference2_email = $request->reference2Email;
-            $workExp->deleted_at = null;
-            $workExp->save();
-            
-            $data['list'] = $workExp->toArray();
-            return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_added"), $data); 
+                $deletePreviousSkills = JobSeekerSkills::where('user_id', '=', $userId)->forceDelete();
+                $jobSeekerSkillModel = new JobSeekerSkills();
+                if(is_array($reqData['skills']) && count($reqData['skills']) > 0){
+                    foreach($reqData['skills'] as $skills){
+                        $jobSeekerSkillModel->user_id = $userId;
+                        $jobSeekerSkillModel->skill_id = $userId;
+                        $jobSeekerSkillModel->save();
+                    }
+                }
+                if(is_array($reqData['other']) && count($reqData['other']) > 0){
+                    foreach($reqData['other'] as $otherSkill){
+                        $jobSeekerSkillModel->user_id = $userId;
+                        $jobSeekerSkillModel->skill_id = $otherSkill['id'];
+                        $jobSeekerSkillModel->other_skill = $otherSkill['value'];
+                        $jobSeekerSkillModel->save();
+                    }
+                }
+                return apiResponse::customJsonResponse(1, 200, trans("messages.skill_add_success")); 
             }else{
-                return apiResponse::customJsonResponse(0, 204, "invalid user token"); 
+                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
             
             
