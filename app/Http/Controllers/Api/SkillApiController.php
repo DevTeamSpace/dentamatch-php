@@ -74,9 +74,10 @@ class SkillApiController extends Controller {
                 $deletePreviousSkills = JobSeekerSkills::where('user_id', '=', $userId)->forceDelete();
                 $jobSeekerSkillModel = new JobSeekerSkills();
                 if(is_array($reqData['skills']) && count($reqData['skills']) > 0){
-                    foreach($reqData['skills'] as $skills){
+                    foreach($reqData['skills'] as $skill){
                         $jobSeekerSkillModel->user_id = $userId;
-                        $jobSeekerSkillModel->skill_id = $userId;
+                        $jobSeekerSkillModel->skill_id = $skill;
+                        $jobSeekerSkillModel->other_skill = '';
                         $jobSeekerSkillModel->save();
                     }
                 }

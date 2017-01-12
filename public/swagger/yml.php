@@ -146,7 +146,7 @@ paths:
         
   /users/sign-up:
     post:
-      summary: Work Experienceaaa
+      summary: User Onboarding
       description: Api to list work experience based on access token
       responses: 
           200:
@@ -204,7 +204,7 @@ paths:
         
   /users/sign-in:
     post:
-      summary: Work Experienceaaa
+      summary: User Onboarding
       description: Api to list work experience based on access token
       responses: 
           200:
@@ -237,5 +237,56 @@ paths:
           type: string  
       tags:
         - Users onboarding
+        
+        
+  /list-skills:
+    post:
+      summary: Skill Apis
+      description: Api to list skills based on access token
+      responses: 
+          200:
+            description: Skill list
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          required: true
+          description: access token
+          type: string
+      tags:
+        - User Skills
+        
+  /users/update-skill:
+    post:
+      summary: Update Skill Apis
+      description: Api to update skills  based on access token
+      responses: 
+          200:
+            description: Skill Update
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          required: true
+          description: access token
+          type: string
+         - name: skills
+          in: formData
+          description: provide skill ids in json array
+          type: string
+        - name: other
+          in: formData
+          description: provide other skill ids  with values json array
+          type: string
+      tags:
+        - User Skills
         
       
