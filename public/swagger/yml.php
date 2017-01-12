@@ -44,6 +44,10 @@ paths:
           in: formData
           description: Office Name
           type: string
+        - name: officeAddress
+          in: formData
+          description: Office Name
+          type: string
         - name: city
           in: formData
           description: City Name
@@ -101,14 +105,22 @@ paths:
           in: header
           description: access token
           type: string
+        - name: start
+          in: formData
+          description: starting point for pagination (Optional)
+          type: string
+        - name: limit
+          in: formData
+          description: limit for number of records (Optional)
+          type: string
           
       tags:
         - Work Experience
         
-  /users/work-experience:
-    post:
+  /users/work-experience-delete:
+    delete:
       summary: Work Experience
-      description: Api to list work experience based on access token
+      description: Api to delete work experience based on access token and id
       responses: 
           200:
             description: List of added work experience 
@@ -128,14 +140,6 @@ paths:
           required: true
           description: work experience id
           type: integer
-        - name: start
-          in: formData
-          description: starting point for pagination (Optional)
-          type: string
-        - name: limit
-          in: formData
-          description: limit for number of records (Optional)
-          type: string
           
       tags:
         - Work Experience  
