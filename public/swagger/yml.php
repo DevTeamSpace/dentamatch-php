@@ -114,7 +114,7 @@ paths:
         - Work Experience
         
   /users/work-experience-delete:
-    post:
+    delete:
       summary: Work Experience
       description: Api to delete work experience based on access token and id
       responses: 
