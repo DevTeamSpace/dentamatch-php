@@ -48,7 +48,7 @@ class SignupController extends Controller {
         if ($validator->fails()) {
             Session::flash('message', "Validation Failure");
         }
-        $credentials = ['email' => $request->email, 'password' => $request->password, 'is_active' => 1];
+        $credentials = ['email' => $request->email, 'password' => $request->password, 'is_verified' => 1];
         $message = "Invalid username or password or not active yet.";
         $redirect = 'login';
         if (Auth::validate($credentials)) {
@@ -133,7 +133,7 @@ class SignupController extends Controller {
         $user = User::where('verification_code', $code)->first();
         try {
             if (isset($user) && !empty($user)) {
-                User::where('verification_code', $code)->update(['is_active' => 1]);
+                User::where('verification_code', $code)->update(['is_verified' => 1]);
                 Session::flash('success', "User verified successfully. You can login.");
             } else {
                 Session::flash('message', "Problem in verification process. Please contact admin.");
