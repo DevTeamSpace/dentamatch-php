@@ -18,6 +18,7 @@ Route::post('signup', 'web\SignupController@postSignUp');
 
 Route::post('login', 'web\SignupController@postLogin');
 Route::get('login', 'web\SignupController@getLogin');
+Route::get('verification-code/{code}', 'web\SignupController@getVerificationCode');
 
 Route::get('terms-conditions', 'web\SignupController@getTermsAndCondition');
 Route::get('logout', 'web\SignupController@logout');
