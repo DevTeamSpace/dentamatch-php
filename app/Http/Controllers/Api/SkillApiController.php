@@ -3,11 +3,10 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use DB;
-use App\Models\JobTitles;
 use App\Helpers\apiResponse;
 use App\Models\Skills;
 use App\Models\JobSeekerSkills;
+use App\Models\Certifications;
 
 class SkillApiController extends Controller {
     
@@ -23,7 +22,6 @@ class SkillApiController extends Controller {
      */
     public function getSkilllists(Request $request){
         $userId = apiResponse::loginUserId($request->header('accessToken'));
-        $userId = 10;
         if($userId > 0){
             $skill_lists = Skills::where('parent_id',0)->with('children')->get()->toArray();
             $update_skills = array();
@@ -101,9 +99,20 @@ class SkillApiController extends Controller {
         } catch (\Exception $e) {
             return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
-        
-        
-        
+    }
+    /**
+     * Description : Get Certification Listing
+     * Method : postUpdateUserSkills
+     * formMethod : GET
+     * @param 
+     * @return type
+     */
+    
+    public function getCertificationListing(){
+        $certificationList = Certifications::get()->toArray();
+        $result = apiResponse::convertToCamelCase($certificationList);
+        $response = apiResponse::customJsonResponseObject(1, 200, "Certificate list",'list',$result);
+        return $response;
     }
     
 }
