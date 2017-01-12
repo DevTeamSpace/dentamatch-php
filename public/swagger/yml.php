@@ -144,39 +144,98 @@ paths:
       tags:
         - Work Experience  
         
-  /users/signIn:
+  /users/sign-up:
     post:
       summary: Work Experienceaaa
       description: Api to list work experience based on access token
       responses: 
           200:
-            description: List of added work experience 
+            description: User signup process
           default:
             description: Unexpected error
             schema:
              $ref: '#/definitions/Error'
              
       parameters:
-        - name: accessToken
-          in: header
-          required: true
-          description: access token
-          type: string
-        - name: id
+        - name: deviceId
           in: formData
           required: true
-          description: work experience id
-          type: integer
-        - name: start
-          in: formData
-          description: starting point for pagination (Optional)
+          description: device  id
           type: string
-        - name: limit
+        - name: deviceType
           in: formData
-          description: limit for number of records (Optional)
+          description: Type of device (ex. iOS or Android)
+          type: string
+        - name: deviceToken
+          in: formData
+          description: Token for that particular devide(Optional)
+          type: string
+        - name: firstName
+          in: formData
+          description: Firstname of the user
+          type: string
+        - name: email
+          in: formData
+          description: Email  of the user
+          type: string
+        - name: password
+          in: formData
+          description: Password  of the user
+          type: string
+        - name: preferedLocation
+          in: formData
+          description: Preffered location of the user
+          type: string
+        - name: latitude
+          in: formData
+          description: Latitude of user location
+          type: string
+        - name: longitude
+          in: formData
+          description: Longitude of user location
+          type: string
+        - name: zipCode
+          in: formData
+          description: Zipcode  of user location
           type: string
           
       tags:
-        - Users
+        - Users onboarding
+        
+  /users/sign-in:
+    post:
+      summary: Work Experienceaaa
+      description: Api to list work experience based on access token
+      responses: 
+          200:
+            description: User sign in  process
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: deviceId
+          in: formData
+          description: device  id
+          type: string
+        - name: deviceType
+          in: formData
+          description: Type of device (ex. iOS or Android)
+          type: string
+        - name: deviceToken
+          in: formData
+          description: Token for that particular devide(Optional)
+          type: string
+        - name: email
+          in: formData
+          description: Email  of the user
+          type: string
+        - name: password
+          in: formData
+          description: Password  of the user
+          type: string  
+      tags:
+        - Users onboarding
         
       
