@@ -58,11 +58,11 @@ paths:
           type: string
         - name: reference1Mobile
           in: formData
-          description: Reference User 1 mobile no (Required when key reference1Name is filled)
+          description: Reference User 1 mobile no (Optional)
           type: string
         - name: reference1Email
           in: formData
-          description: Reference User 1 email id (Required when key reference1Name is filled)
+          description: Reference User 1 email id (Optional)
           type: string
         - name: reference2Name
           in: formData
@@ -70,11 +70,11 @@ paths:
           type: string
         - name: reference2Mobile
           in: formData
-          description: Reference User 2 mobile no (Required when key reference2Name is filled)
+          description: Reference User 2 mobile no (Optional)
           type: string
         - name: reference2Email
           in: formData
-          description: Reference User 2 email id (Required when key reference2Name is filled)
+          description: Reference User 2 email id (Optional)
           type: string
         - name: action
           in: formData
