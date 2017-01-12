@@ -45,11 +45,11 @@ class WorkExperienceApiController extends Controller {
                 'officeAddress' => 'required',
                 'city' => 'required',
                 'reference1Name'=>'sometimes',
-                'reference1Mobile'=>'required_with:reference1Name',
-                'reference1Email' => 'required_with:reference1Name|email',
+                'reference1Mobile'=>'sometimes',
+                'reference1Email' => 'sometimes|email',
                 'reference2Name'=>'sometimes',
-                'reference2Mobile'=>'required_with:reference2Name',
-                'reference2Email' => 'required_with:reference2Name|email',
+                'reference2Mobile'=>'sometimes',
+                'reference2Email' => 'sometimes|email',
                 'action' =>'required|in:add,edit',
                 'id'=>'integer|required_if:action,edit'
             ]);
