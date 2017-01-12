@@ -288,6 +288,21 @@ paths:
           type: string
       tags:
         - User Skills
+  /list-certifications:
+    get:
+      summary: Certification listing 
+      description: Api for  listing certificatopn 
+      responses: 
+          200:
+            description: Certification list
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+     
+      tags:
+        - User Certification
         
   /users/schooling:
     get:
