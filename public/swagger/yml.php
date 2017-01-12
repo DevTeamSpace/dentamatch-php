@@ -289,4 +289,23 @@ paths:
       tags:
         - User Skills
         
-      
+  /users/schooling:
+    get:
+      summary: Schooling
+      description: Api to list Schooling data for a user
+      responses: 
+          200:
+            description: Api to list Schooling data for a user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+          
+      tags:
+        - Schooling
