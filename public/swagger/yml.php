@@ -324,3 +324,28 @@ paths:
           
       tags:
         - Schooling
+        
+  users/school-add:
+    post:
+      summary: School List
+      description: Api to add School data for a user
+      responses: 
+          200:
+            description: Api to add Schoo data for a user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: schoolDataArray
+          in: formData
+          description: school selected data as array
+          type: array
+          
+      tags:
+        - Schooling

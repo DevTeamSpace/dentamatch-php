@@ -171,7 +171,7 @@ class WorkExperienceApiController extends Controller {
             
             $return['list'] = array_values($data);
             
-            return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_list"), apiResponse::convertToCamelCase($return));
+            return apiResponse::customJsonResponse(1, 200, trans("messages.school_list_success"), apiResponse::convertToCamelCase($return));
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
@@ -183,7 +183,7 @@ class WorkExperienceApiController extends Controller {
     public function postSchoolSaveUpdate(Request $request) {
         try {
             $this->validate($request, [
-                'schoolDataArray' => 'sometimes',
+                'schoolDataArray' => 'required',
                 'other' => 'sometimes',
             ]);
             
@@ -194,9 +194,13 @@ class WorkExperienceApiController extends Controller {
             if($userId > 0){
                 $deletePreviousSchool = JobSeekerSchooling::where('user_id', '=', $userId)->forceDelete();
                 if(!empty($reqData['schoolDataArray']) && is_array($reqData['schoolDataArray'])){
-                    foreach($reqData['schoolDataArray'] as $key=>$value){
-                        $jobSeekerData[$key] = $value;
-                        $jobSeekerData[$key]['userId'] = $userId;
+                    foreach($reqData['schoolDataArray'] as $key=>$value) {
+                        if(!empty($value['schoolingChildId'])) {
+                            $jobSeekerData[$key]['schooling_id'] = $value['schoolingChildId'];
+                            $jobSeekerData[$key]['other_schooling'] = $value['otherSchooling'];
+                            $jobSeekerData[$key]['year_of_graduation'] = $value['yearOfGraduation'];
+                            $jobSeekerData[$key]['user_id'] = $userId;
+                        }
                     }
                 }
                 
@@ -205,12 +209,10 @@ class WorkExperienceApiController extends Controller {
                     JobSeekerSchooling::insert($jobSeekerData);
                 }
                 
-                return apiResponse::customJsonResponse(1, 200, trans("messages.skill_add_success")); 
+                return apiResponse::customJsonResponse(1, 200, trans("messages.school_add_success")); 
             }else{
                 return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
-            
-            
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);

@@ -36,5 +36,5 @@ Route::post('users/work-experience-save', 'Api\WorkExperienceApiController@postW
 Route::delete('users/work-experience-delete', 'Api\WorkExperienceApiController@deleteWorkExperience');
 Route::post('users/work-experience-list', 'Api\WorkExperienceApiController@postListWorkExperience');
 Route::get('users/school-list', 'Api\WorkExperienceApiController@getSchoolList');
-Route::post('users/schooling-add', 'Api\WorkExperienceApiController@postSchoolSaveUpdate');
+Route::post('users/school-add', 'Api\WorkExperienceApiController@postSchoolSaveUpdate');
 

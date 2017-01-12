@@ -9,5 +9,7 @@ return [
     'work_exp_removed' => 'Work experience successfully removed',
     'invalid_token' => 'Invalid user token',
     'skill_add_success' => 'Skills added successfully',
+    'school_add_success' => 'School added successfully',
+    'school_list_success' => 'School list successfully',
     
 ];
