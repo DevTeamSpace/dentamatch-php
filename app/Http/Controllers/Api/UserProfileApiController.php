@@ -24,7 +24,7 @@ class UserProfileApiController extends Controller {
     use FileRepositoryS3;
 
     public function __construct() {
-        $this->middleware('ApiAuth')->except([]);
+       // $this->middleware('ApiAuth')->except([]);
     }
 
     public function postChangePassword(Request $request) {
@@ -65,22 +65,26 @@ class UserProfileApiController extends Controller {
         }
     }
 
-    public function uploadImage(Request $request) {
+    public function postUploadImage(Request $request) {
         try {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
-            $filename = $this->generateFilename($userId, $request->type);
-            $response = $this->uploadFileToAWS($request, $filename);
-            if ($response['res']) {
-                $file = str_replace($request->type . '/', '', $response['file']);
-                if ($request->type == 'profile_pic') {
-                    UserProfile::where('user_id', $userId)->update(['profile_pic' => $file]);
+            if($userId > 0){
+                $filename = $this->generateFilename($userId, $request->type);
+                $response = $this->uploadFileToAWS($request, $filename);
+                if ($response['res']) {
+                    $file = str_replace($request->type . '/', '', $response['file']);
+                    if ($request->type == 'profile_pic') {
+                        UserProfile::where('user_id', $userId)->update(['profile_pic' => $file]);
+                    } else {
+                        UserProfile::where('user_id', $userId)->update(['dental_state_board' => $file]);
+                    }
+                    $url['img_url'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $response['file'];
+                    return apiResponse::customJsonResponse(1, 200, "Image Saved successfully", $url);
                 } else {
-                    UserProfile::where('user_id', $userId)->update(['dental_state_board' => $file]);
+                    return apiResponse::responseError("Problem in uploading image.");
                 }
-                $url['img_url'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $response['file'];
-                return apiResponse::customJsonResponse(1, 200, "Image Saved successfully", $url);
-            } else {
-                return apiResponse::responseError("Problem in uploading image.");
+            }else{
+                return apiResponse::customJsonResponse(0, 204, "invalid user token");
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
@@ -92,7 +96,8 @@ class UserProfileApiController extends Controller {
         try {
             $this->validate($request, [
                 'license' => 'required',
-                'state' => 'required'
+                'state' => 'required',
+                'jobTitleId' => 'required'
             ]);
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
@@ -100,8 +105,12 @@ class UserProfileApiController extends Controller {
         }
         try {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
-            UserProfile::where('user_id', $userId)->update(['license_number' => $request->license, 'state' => $request->state]);
-            return apiResponse::customJsonResponse(1, 200, "data Saved successfully");
+            if($userId > 0){
+                UserProfile::where('user_id', $userId)->update(['license_number' => $request->license, 'state' => $request->state]);
+                return apiResponse::customJsonResponse(1, 200, "data Saved successfully");
+            }else{
+                return apiResponse::customJsonResponse(0, 204, "invalid user token");
+            }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);

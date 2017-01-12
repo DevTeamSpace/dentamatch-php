@@ -3,14 +3,11 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use DB;
-use Hash;
 use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\Device;
 use App\Models\UserProfile;
 use App\Models\PasswordReset;
-use App\Models\JobTitles;
 use Mail;
 use Auth;
 use App\Helpers\apiResponse;
@@ -146,7 +143,7 @@ class UserApiController extends Controller {
                             'preferredJobLocation' => $user_data['preferred_job_location'],
                             'accessToken' => $user_token,
                         );
-                        $response = apiResponse::customJsonResponse(1, 200, "User loggedin successfully",$user_array);
+                        $response = apiResponse::customJsonResponse(1, 200, "User logged in successfully",$user_array);
                 }else{
                     $response = apiResponse::customJsonResponse(0, 202, "Your account is not activated yet"); 
                 }
@@ -241,7 +238,4 @@ class UserApiController extends Controller {
         }
         
     }
-    
-    
-    
 }

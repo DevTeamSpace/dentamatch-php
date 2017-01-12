@@ -61,9 +61,13 @@ class apiResponse {
         return json_encode($response);
     }
     
-    public static function loginUserId($accesstoken = '') {
-        $user = Device::getUserByDeviceToken($accesstoken);
-        return $user->user_id;
+    public static function loginUserId($accesstoken) {
+        $user = Device::select('user_id')->where('user_token',$accesstoken)->first();
+        if($user){
+            return $user->user_id;
+        }else{
+            return 0;
+        }
     }
 }
 

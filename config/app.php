@@ -228,5 +228,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'ApiResponse' => App\Helpers\rapidConnect::class,
     ],
-
+    
+    'defaul_product_per_page' => 20,
 ];
