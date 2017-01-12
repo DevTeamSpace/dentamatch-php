@@ -142,7 +142,7 @@ class WorkExperienceApiController extends Controller {
         }
     }
     
-    public function getSchoolingList(Request $request)
+    public function getSchoolList(Request $request)
     {
          try {
             $data = [];
@@ -175,6 +175,45 @@ class WorkExperienceApiController extends Controller {
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        } catch (\Exception $e) {
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+    }
+    
+    public function postSchoolSaveUpdate(Request $request) {
+        try {
+            $this->validate($request, [
+                'schoolDataArray' => 'sometimes',
+                'other' => 'sometimes',
+            ]);
+            
+            $reqData = $request->all();
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $jobSeekerData = [];
+            
+            if($userId > 0){
+                $deletePreviousSchool = JobSeekerSchooling::where('user_id', '=', $userId)->forceDelete();
+                if(!empty($reqData['schoolDataArray']) && is_array($reqData['schoolDataArray'])){
+                    foreach($reqData['schoolDataArray'] as $key=>$value){
+                        $jobSeekerData[$key] = $value;
+                        $jobSeekerData[$key]['userId'] = $userId;
+                    }
+                }
+                
+                if(!empty($jobSeekerData))
+                {
+                    JobSeekerSchooling::insert($jobSeekerData);
+                }
+                
+                return apiResponse::customJsonResponse(1, 200, trans("messages.skill_add_success")); 
+            }else{
+                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+            }
+            
+            
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
             return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }

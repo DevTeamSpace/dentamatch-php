@@ -304,10 +304,10 @@ paths:
       tags:
         - User Certification
         
-  /users/schooling:
+  /users/school-list:
     get:
-      summary: Schooling
-      description: Api to list Schooling data for a user
+      summary: School List
+      description: Api to list School data for a user
       responses: 
           200:
             description: Api to list Schooling data for a user
