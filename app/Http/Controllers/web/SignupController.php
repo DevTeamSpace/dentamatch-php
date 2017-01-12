@@ -54,12 +54,11 @@ class SignupController extends Controller {
         if (Auth::validate($credentials)) {
             $user = User::where('email', $credentials['email'])->first();
             if ($user->userGroup->group_id == 2) {
-                if (Auth::attempt($credentials, $request->remember)) {
-                    $message = "Successfully Login";
+                if (Auth::attempt($credentials)) {
                     $redirect = 'terms-conditions';
-                    if ($user->remember_token) {
-                        $redirect = 'home';
-                    }
+//                    if ($user->remember_token) {
+//                        $redirect = 'home';
+//                    }
                 }
             }
         }
@@ -142,6 +141,15 @@ class SignupController extends Controller {
             Session::flash('message', "Problem in verification process. Please contact admin.");
         }
         return redirect('login');
+    }
+
+    public function getTutorial() {
+        try {
+             \App\Models\RecruiterProfile::create(['user_id' => Auth::user()->id, 'accept_term' => 1]);
+            return view('web.dashboard');
+        } catch (\Exception $e) {
+            return redirect('terms-conditions');
+        }
     }
 
 }
