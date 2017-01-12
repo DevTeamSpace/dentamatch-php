@@ -44,6 +44,10 @@ paths:
           in: formData
           description: Office Name
           type: string
+        - name: officeAddress
+          in: formData
+          description: Office Name
+          type: string
         - name: city
           in: formData
           description: City Name
