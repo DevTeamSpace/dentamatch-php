@@ -278,7 +278,7 @@ paths:
           required: true
           description: access token
           type: string
-         - name: skills
+        - name: skills
           in: formData
           description: provide skill ids in json array
           type: string
