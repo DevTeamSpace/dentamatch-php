@@ -21,17 +21,17 @@ Route::post('users/sign-up','Api\UserApiController@postSignup');
 Route::post('users/sign-in','Api\UserApiController@postSignIn');
 Route::get('privacy-policy','Api\UserApiController@getPrivacypolicy');
 Route::get('term-condition','Api\UserApiController@getTermsAndCondition');
-Route::put('users/forgot-password', 'api\UserApiController@putForgotPassword');
-Route::put('users/reset-password', 'api\UserApiController@putForgotPassword');
+Route::put('users/forgot-password', 'Api\UserApiController@putForgotPassword');
+Route::put('users/reset-password', 'Api\UserApiController@putForgotPassword');
 Route::post('users/change-password','Api\UserProfileApiController@postChangePassword');
 Route::get('list-jobtitle','Api\WorkExperienceApiController@getJobTitlelists');
 Route::get('list-skills','Api\SkillApiController@getSkilllists');
 Route::post('users/update-skill','Api\SkillApiController@postUpdateSkills');
 
-Route::post('users/upload-image', 'api\UserProfileApiController@postUploadImage');
-Route::put('users/update-license', 'api\UserProfileApiController@putUpdateLicense');
-Route::post('users/work-experience-save', 'api\WorkExperienceApiController@postWorkExperience');
-Route::delete('users/work-experience-delete', 'api\WorkExperienceApiController@deleteWorkExperience');
-Route::post('users/work-experience-list', 'api\WorkExperienceApiController@postListWorkExperience');
-Route::post('users/schooling-certification', 'api\WorkExperienceApiController@postSchoolingCertificationList');
+Route::post('users/upload-image', 'Api\UserProfileApiController@postUploadImage');
+Route::put('users/update-license', 'Api\UserProfileApiController@putUpdateLicense');
+Route::post('users/work-experience-save', 'Api\WorkExperienceApiController@postWorkExperience');
+Route::delete('users/work-experience-delete', 'Api\WorkExperienceApiController@deleteWorkExperience');
+Route::post('users/work-experience-list', 'Api\WorkExperienceApiController@postListWorkExperience');
+Route::get('users/schooling-certification', 'Api\WorkExperienceApiController@getSchoolingCertificationList');
 
