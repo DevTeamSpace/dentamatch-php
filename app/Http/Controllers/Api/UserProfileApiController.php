@@ -133,6 +133,8 @@ class UserProfileApiController extends Controller {
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        } catch (\Exception $e) {
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
     }
     
@@ -143,13 +145,15 @@ class UserProfileApiController extends Controller {
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
                 $data['list']['aboutMe'] = $userProfileModel->about_me;
                 
-                return apiResponse::customJsonResponse(1, 200, apiResponse::convertToCamelCase($data));
+                return apiResponse::customJsonResponse(1, 200, trans("messages.about_me_list"), apiResponse::convertToCamelCase($data));
             }else{
                 return apiResponse::customJsonResponse(0, 204, "invalid user token");
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        } catch (\Exception $e) {
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
     }
 }
