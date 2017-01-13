@@ -24,64 +24,69 @@ class SkillApiController extends Controller {
      * @return type
      */
     public function getSkilllists(Request $request){
-        $userId = apiResponse::loginUserId($request->header('accessToken'));
-        if($userId > 0){
-            $skillArray = array();
-            $jobseekerSkills  = JobSeekerSkills::where('user_id',$userId)->get();
-            if($jobseekerSkills){
-                $skillArray = $jobseekerSkills->toArray();
-                
-                $userSkills = array_map(function ($value) {
-                    return  $value['skill_id'];
-                }, $skillArray);
-            }
-            $skill_lists = Skills::where('parent_id',0)->with('children')->get()->toArray();
-            $update_skills = array();
-            foreach($skill_lists as $key => $skill){
-                if($skill['skill_name'] != 'Other'){
-                    $subskills = array();
-                    if(is_array($skill['children']) && count($skill['children']) > 0){
-                        $child_skill = array();
-                        foreach($skill['children'] as $subskills){
-                            if(in_array($subskills['id'],$userSkills)){
-                                $userSkill = 1;
-                            }else{
-                                $userSkill = 0;
-                            }
-                            $subSkills = array(
-                                'id' => $subskills['id'],
-                                'parent_id' => $subskills['parent_id'],
-                                'skill_name' => $subskills['skill_name'],
-                                'user_skill'=> $userSkill,
-                            );
-                            if($subskills['skill_name'] == 'Other'){
-                                $subSkills['other_skill'] = '';
-                                if($userSkill == 1){
-                                    $skillKey = array_search($subSkills['skill_id'], array_column($skillArray, 'skill_id'));
-                                    if($skillKey && $skillKey >= 0){
-                                        $subSkills['other_skill'] = $jobseekerSkills[$skillKey]['other_skill'];
+        try {
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            if($userId > 0){
+                $skillArray = array();
+                $jobseekerSkills  = JobSeekerSkills::where('user_id',$userId)->get();
+                if($jobseekerSkills){
+                    $skillArray = $jobseekerSkills->toArray();
+
+                    $userSkills = array_map(function ($value) {
+                        return  $value['skill_id'];
+                    }, $skillArray);
+                }
+                $skill_lists = Skills::where('parent_id',0)->with('children')->get()->toArray();
+                $update_skills = array();
+                foreach($skill_lists as $key => $skill){
+                    if($skill['skill_name'] != 'Other'){
+                        $subskills = array();
+                        if(is_array($skill['children']) && count($skill['children']) > 0){
+                            $child_skill = array();
+                            foreach($skill['children'] as $subskills){
+                                if(in_array($subskills['id'],$userSkills)){
+                                    $userSkill = 1;
+                                }else{
+                                    $userSkill = 0;
+                                }
+                                $subSkills = array(
+                                    'id' => $subskills['id'],
+                                    'parent_id' => $subskills['parent_id'],
+                                    'skill_name' => $subskills['skill_name'],
+                                    'user_skill'=> $userSkill,
+                                );
+                                if($subskills['skill_name'] == 'Other'){
+                                    $subSkills['other_skill'] = '';
+                                    if($userSkill == 1){
+                                        $skillKey = array_search($subSkills['skill_id'], array_column($skillArray, 'skill_id'));
+                                        if($skillKey && $skillKey >= 0){
+                                            $subSkills['other_skill'] = $jobseekerSkills[$skillKey]['other_skill'];
+                                        }
                                     }
                                 }
+                                $child_skill[] = $subSkills;
                             }
-                            $child_skill[] = $subSkills;
                         }
-                    }
-                    $update_skills[$key] = array('id' => $skill['id'],'parent_id' => $skill['parent_id'],'skill_name' => $skill['skill_name'],'children' => $child_skill);
-                }else{
-                     $otherSkill = "";
-                     $skillKey = array_search($skill['id'], array_column($skillArray, 'skill_id'));
-                        if($skillKey && $skillKey >= 0){
-                            $otherSkill = $jobseekerSkills[$skillKey]['other_skill'];
-                        }
-                    $update_skills[$key] = array('id' => $skill['id'],'parent_id' => $skill['parent_id'],'skill_name' => $skill['skill_name'],'other_skill' => $otherSkill,'children' => array());
+                        $update_skills[$key] = array('id' => $skill['id'],'parent_id' => $skill['parent_id'],'skill_name' => $skill['skill_name'],'children' => $child_skill);
+                    }else{
+                         $otherSkill = "";
+                         $skillKey = array_search($skill['id'], array_column($skillArray, 'skill_id'));
+                            if($skillKey && $skillKey >= 0){
+                                $otherSkill = $jobseekerSkills[$skillKey]['other_skill'];
+                            }
+                        $update_skills[$key] = array('id' => $skill['id'],'parent_id' => $skill['parent_id'],'skill_name' => $skill['skill_name'],'other_skill' => $otherSkill,'children' => array());
+                    } 
                 }
-                
+                $response = apiResponse::customJsonResponseObject(1, 200, "Skill list",'list',  apiResponse::convertToCamelCase($update_skills));
+                return $response;
+            }else{
+                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
-            
-            $response = apiResponse::customJsonResponseObject(1, 200, "Skill list",'list',  apiResponse::convertToCamelCase($update_skills));
-            return $response;
-        }else{
-            return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+        } catch (\Exception $e) {
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
     }
     /**
@@ -139,11 +144,34 @@ class SkillApiController extends Controller {
      * @return type
      */
     
-    public function getCertificationListing(){
-        $certificationList = Certifications::get()->toArray();
-        $result = apiResponse::convertToCamelCase($certificationList);
-        $response = apiResponse::customJsonResponseObject(1, 200, "Certificate list",'list',$result);
-        return $response;
+    public function getCertificationListing(Request $request){
+        try{
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            if($userId > 0){
+                $userCertification = JobseekerCertificates::where('user_id', '=', $userId)->get();
+                $certificationList = Certifications::get()->toArray();
+                
+                if(is_array($certificationList) && count($certificationList) > 0){
+                    $userCertificate = array_map(function ($value) {
+                        return  $value['certificate_id'];
+                    }, $userCertification->toArray());
+                }
+                $certificationArray = array();
+                foreach($certificationList as $certificate){
+                    $certificateKey = array_search($certificate['id'], array_column($userCertificate, 'certificate_id'));
+                    $certificationArray[] = array('id' => $certificate['id'],'certificateName' => strtoupper($certificate['certificate_name']),'image' => '','validity_date' => '') ;
+                }
+                //$result = apiResponse::convertToCamelCase($certificationList);
+                return  apiResponse::customJsonResponseObject(1, 200, "Certificate list",'list',$certificationArray);
+            }else{
+                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+            }
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+        } catch (\Exception $e) {
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
     }
     /**
      * Description : Update certifications
