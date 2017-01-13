@@ -29,6 +29,7 @@ Route::get('list-skills','Api\SkillApiController@getSkilllists');
 Route::get('list-skills','Api\SkillApiController@getSkilllists');
 Route::post('users/update-skill','Api\SkillApiController@postUpdateSkills');
 Route::get('list-certifications','Api\SkillApiController@getCertificationListing');
+Route::post('users/update-certificate','Api\SkillApiController@postUpdateCertifications');
 
 Route::post('users/upload-image', 'Api\UserProfileApiController@postUploadImage');
 Route::put('users/update-license', 'Api\UserProfileApiController@putUpdateLicense');

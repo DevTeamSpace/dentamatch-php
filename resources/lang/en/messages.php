@@ -11,5 +11,7 @@ return [
     'skill_add_success' => 'Skills added successfully',
     'school_add_success' => 'School added successfully',
     'school_list_success' => 'School list successfully',
+    'certificate_successful_update' => 'Certificate details updated successfully',
+    'upload_image_problem' => 'Problem in uploading image',
     
 ];

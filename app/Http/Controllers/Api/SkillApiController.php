@@ -9,9 +9,10 @@ use App\Models\JobSeekerSkills;
 use App\Models\Certifications;
 use App\Services\UploadsManager;
 use App\Repositories\File\FileRepositoryS3;
+use App\Models\JobseekerCertificates;
 
 class SkillApiController extends Controller {
-    
+    use FileRepositoryS3;
     public function __construct() {
         
     }
@@ -25,6 +26,7 @@ class SkillApiController extends Controller {
     public function getSkilllists(Request $request){
         $userId = apiResponse::loginUserId($request->header('accessToken'));
         if($userId > 0){
+            
             $skill_lists = Skills::where('parent_id',0)->with('children')->get()->toArray();
             $update_skills = array();
             foreach($skill_lists as $key => $skill){
@@ -127,28 +129,21 @@ class SkillApiController extends Controller {
         try {
             $this->validate($request, [
                 'certificateId' => 'required|integer',
-                'image' => 'required|integer',
-                'validityDate' => 'required|mimes:jpeg,jpg,png|max:102400',
+                'validityDate' => 'required',
+                'image' => 'required|mimes:jpeg,jpg,png|max:102400',
             ]);
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $filename = $this->generateFilename($userId, 'certificate');
                 $response = $this->uploadFileToAWS($request, $filename);
                 if ($response['res']) {
-                    $flight = App\Flight::updateOrCreate(
-                            ['departure' => 'Oakland', 'destination' => 'San Diego'],
-                            ['price' => 99]
+                    $uploadImage  = JobseekerCertificates::updateOrCreate(
+                            ['user_id' => $userId, 'certificate_id' => $request->certificateId],
+                            ['image_path' => $response['file'] ,'validity_date' => $request->validityDate]
                     );
-                    /*$file = str_replace($request->type . '/', '', $response['file']);
-                    if ($request->type == 'profile_pic') {
-                        UserProfile::where('user_id', $userId)->update(['profile_pic' => $file]);
-                    } else {
-                        UserProfile::where('user_id', $userId)->update(['dental_state_board' => $file]);
-                    }
-                    $url['img_url'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $response['file'];*/
-                    return apiResponse::customJsonResponse(1, 200, "Image Saved successfully", $url);
+                    return apiResponse::customJsonResponse(1, 200, trans("message.certificate_successful_update"));
                 } else {
-                    return apiResponse::responseError("Problem in uploading image.");
+                    return apiResponse::responseError(trans("message.upload_image_problem"));
                 }
             }else{
                 return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
@@ -159,9 +154,6 @@ class SkillApiController extends Controller {
         } catch (\Exception $e) {
             return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
-        
-        
-        
     }
     
 }
