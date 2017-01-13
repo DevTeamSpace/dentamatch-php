@@ -58,11 +58,11 @@ paths:
           type: string
         - name: reference1Mobile
           in: formData
-          description: Reference User 1 mobile no (Required when key reference1Name is filled)
+          description: Reference User 1 mobile no (Optional)
           type: string
         - name: reference1Email
           in: formData
-          description: Reference User 1 email id (Required when key reference1Name is filled)
+          description: Reference User 1 email id (Optional)
           type: string
         - name: reference2Name
           in: formData
@@ -70,11 +70,11 @@ paths:
           type: string
         - name: reference2Mobile
           in: formData
-          description: Reference User 2 mobile no (Required when key reference2Name is filled)
+          description: Reference User 2 mobile no (Optional)
           type: string
         - name: reference2Email
           in: formData
-          description: Reference User 2 email id (Required when key reference2Name is filled)
+          description: Reference User 2 email id (Optional)
           type: string
         - name: action
           in: formData
@@ -304,10 +304,10 @@ paths:
       tags:
         - User Certification
         
-  /users/schooling:
+  /users/school-list:
     get:
-      summary: Schooling
-      description: Api to list Schooling data for a user
+      summary: School List
+      description: Api to list School data for a user
       responses: 
           200:
             description: Api to list Schooling data for a user
@@ -321,6 +321,31 @@ paths:
           in: header
           description: access token
           type: string
+          
+      tags:
+        - Schooling
+        
+  users/school-add:
+    post:
+      summary: School List
+      description: Api to add School data for a user
+      responses: 
+          200:
+            description: Api to add Schoo data for a user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: schoolDataArray
+          in: formData
+          description: school selected data as array
+          type: array
           
       tags:
         - Schooling

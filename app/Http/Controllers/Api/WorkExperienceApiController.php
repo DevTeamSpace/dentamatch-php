@@ -45,11 +45,11 @@ class WorkExperienceApiController extends Controller {
                 'officeAddress' => 'required',
                 'city' => 'required',
                 'reference1Name'=>'sometimes',
-                'reference1Mobile'=>'required_with:reference1Name',
-                'reference1Email' => 'required_with:reference1Name|email',
+                'reference1Mobile'=>'sometimes',
+                'reference1Email' => 'sometimes|email',
                 'reference2Name'=>'sometimes',
-                'reference2Mobile'=>'required_with:reference2Name',
-                'reference2Email' => 'required_with:reference2Name|email',
+                'reference2Mobile'=>'sometimes',
+                'reference2Email' => 'sometimes|email',
                 'action' =>'required|in:add,edit',
                 'id'=>'integer|required_if:action,edit'
             ]);
@@ -142,7 +142,7 @@ class WorkExperienceApiController extends Controller {
         }
     }
     
-    public function getSchoolingList(Request $request)
+    public function getSchoolList(Request $request)
     {
          try {
             $data = [];
@@ -171,10 +171,51 @@ class WorkExperienceApiController extends Controller {
             
             $return['list'] = array_values($data);
             
-            return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_list"), apiResponse::convertToCamelCase($return));
+            return apiResponse::customJsonResponse(1, 200, trans("messages.school_list_success"), apiResponse::convertToCamelCase($return));
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        } catch (\Exception $e) {
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+    }
+    
+    public function postSchoolSaveUpdate(Request $request) {
+        try {
+            $this->validate($request, [
+                'schoolDataArray' => 'required',
+                'other' => 'sometimes',
+            ]);
+            
+            $reqData = $request->all();
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $jobSeekerData = [];
+            
+            if($userId > 0){
+                $deletePreviousSchool = JobSeekerSchooling::where('user_id', '=', $userId)->forceDelete();
+                if(!empty($reqData['schoolDataArray']) && is_array($reqData['schoolDataArray'])){
+                    foreach($reqData['schoolDataArray'] as $key=>$value) {
+                        if(!empty($value['schoolingChildId'])) {
+                            $jobSeekerData[$key]['schooling_id'] = $value['schoolingChildId'];
+                            $jobSeekerData[$key]['other_schooling'] = $value['otherSchooling'];
+                            $jobSeekerData[$key]['year_of_graduation'] = $value['yearOfGraduation'];
+                            $jobSeekerData[$key]['user_id'] = $userId;
+                        }
+                    }
+                }
+                
+                if(!empty($jobSeekerData))
+                {
+                    JobSeekerSchooling::insert($jobSeekerData);
+                }
+                
+                return apiResponse::customJsonResponse(1, 200, trans("messages.school_add_success")); 
+            }else{
+                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+            }
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
             return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }

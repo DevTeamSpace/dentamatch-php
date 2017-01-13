@@ -35,5 +35,6 @@ Route::put('users/update-license', 'Api\UserProfileApiController@putUpdateLicens
 Route::post('users/work-experience-save', 'Api\WorkExperienceApiController@postWorkExperience');
 Route::delete('users/work-experience-delete', 'Api\WorkExperienceApiController@deleteWorkExperience');
 Route::post('users/work-experience-list', 'Api\WorkExperienceApiController@postListWorkExperience');
-Route::get('users/schooling', 'Api\WorkExperienceApiController@getSchoolingList');
+Route::get('users/school-list', 'Api\WorkExperienceApiController@getSchoolList');
+Route::post('users/school-add', 'Api\WorkExperienceApiController@postSchoolSaveUpdate');
 
