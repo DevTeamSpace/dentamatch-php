@@ -399,3 +399,49 @@ paths:
           
       tags:
         - Affiliations
+        
+  /users/about-me-save:
+    post:
+      summary: About Me
+      description: Api to add about me
+      responses: 
+          200:
+            description: Api to add about me
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: aboutMe
+          in: formData
+          description: About Me string
+          type: string
+          
+      tags:
+        - User Profile
+        
+  /users/about-me-list:
+    get:
+      summary: About Me
+      description: Api to fetch About Me
+      responses: 
+          200:
+            description: Api to fetch About Me
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+          
+      tags:
+        - User Profile
