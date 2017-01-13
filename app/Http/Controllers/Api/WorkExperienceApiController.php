@@ -75,7 +75,7 @@ class WorkExperienceApiController extends Controller {
             $workExp->deleted_at = null;
             $workExp->save();
             
-            $data['list'] = $workExp->toArray();
+            $data['list'][] = $workExp;
             return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_added"), apiResponse::convertToCamelCase($data));
             
         } catch (ValidationException $e) {
