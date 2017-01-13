@@ -7,6 +7,8 @@ use App\Helpers\apiResponse;
 use App\Models\Skills;
 use App\Models\JobSeekerSkills;
 use App\Models\Certifications;
+use App\Services\UploadsManager;
+use App\Repositories\File\FileRepositoryS3;
 
 class SkillApiController extends Controller {
     
@@ -113,6 +115,53 @@ class SkillApiController extends Controller {
         $result = apiResponse::convertToCamelCase($certificationList);
         $response = apiResponse::customJsonResponseObject(1, 200, "Certificate list",'list',$result);
         return $response;
+    }
+    /**
+     * Description : Update certifications
+     * Method : postUpdateCertifications
+     * formMethod : POST
+     * @param 
+     * @return type
+     */
+    public function postUpdateCertifications(Request $request) {
+        try {
+            $this->validate($request, [
+                'certificateId' => 'required|integer',
+                'image' => 'required|integer',
+                'validityDate' => 'required|mimes:jpeg,jpg,png|max:102400',
+            ]);
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            if($userId > 0){
+                $filename = $this->generateFilename($userId, 'certificate');
+                $response = $this->uploadFileToAWS($request, $filename);
+                if ($response['res']) {
+                    $flight = App\Flight::updateOrCreate(
+                            ['departure' => 'Oakland', 'destination' => 'San Diego'],
+                            ['price' => 99]
+                    );
+                    /*$file = str_replace($request->type . '/', '', $response['file']);
+                    if ($request->type == 'profile_pic') {
+                        UserProfile::where('user_id', $userId)->update(['profile_pic' => $file]);
+                    } else {
+                        UserProfile::where('user_id', $userId)->update(['dental_state_board' => $file]);
+                    }
+                    $url['img_url'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $response['file'];*/
+                    return apiResponse::customJsonResponse(1, 200, "Image Saved successfully", $url);
+                } else {
+                    return apiResponse::responseError("Problem in uploading image.");
+                }
+            }else{
+                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+            }
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+        } catch (\Exception $e) {
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+        
+        
+        
     }
     
 }

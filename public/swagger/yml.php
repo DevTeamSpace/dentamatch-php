@@ -240,7 +240,7 @@ paths:
         
         
   /list-skills:
-    post:
+    get:
       summary: Skill Apis
       description: Api to list skills based on access token
       responses: 
