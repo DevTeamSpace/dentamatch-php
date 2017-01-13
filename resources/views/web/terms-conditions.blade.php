@@ -16,8 +16,9 @@
             </div>
         </div>
         <div class="terms-btn text-right">
-            <button type="button" class="btn btn-link mr-r-40">Decline</button>
-            <button type="button" class="btn btn-primary pd-l-30 pd-r-30">Accept</button>
+<!--            <button type="button" class="btn btn-link mr-r-40">Decline</button>-->
+
+<a href="tutorial" class="btn btn-primary pd-l-30 pd-r-30">Accept</a>
         </div>
     </div>
 </div>

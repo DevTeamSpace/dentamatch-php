@@ -61,12 +61,12 @@ h6,
 .btn-default:focus,
 .btn-default.focus {
   color: #333;
-  background-color: #e6e6e6;
+  background-color: #fff;
   border-color: #8c8c8c;
 }
 .btn-default:hover {
   color: #333;
-  background-color: #e6e6e6;
+  background-color: #fff;
   border-color: #adadad;
 }
 
@@ -526,7 +526,7 @@ h6,
 .mr-r-55{
   margin-right: 55px;
 }
-mr-r-60{
+.mr-r-60{
   margin-right: 60px;
 }
 
