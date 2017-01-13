@@ -53,5 +53,14 @@ Route::group(['middleware' => 'web', 'prefix' => 'cms/'], function () {
         Route::get('changePassword', 'cms\UserController@changePassword');
         Route::post('updatePassword', 'cms\UserController@updatePassword');
     });
+    
+    Route::group(['prefix' => 'location/'], function() {
+        Route::get('index', 'Cms\LocationController@index');
+        Route::get('list', 'Cms\LocationController@locationsList');
+        Route::delete('{id}/delete', 'Cms\LocationController@delete');
+        Route::get('{id}/edit', 'Cms\LocationController@edit');
+        Route::get('create', 'Cms\LocationController@create');
+        Route::post('store', 'Cms\LocationController@store');
+    });
 });
 
