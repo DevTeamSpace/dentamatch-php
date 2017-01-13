@@ -38,4 +38,6 @@ Route::delete('users/work-experience-delete', 'Api\WorkExperienceApiController@d
 Route::post('users/work-experience-list', 'Api\WorkExperienceApiController@postListWorkExperience');
 Route::get('users/school-list', 'Api\WorkExperienceApiController@getSchoolList');
 Route::post('users/school-add', 'Api\WorkExperienceApiController@postSchoolSaveUpdate');
+Route::get('users/affiliation-list', 'Api\AffiliationsApiController@getAffiliationList');
+Route::post('users/affiliation-save', 'Api\AffiliationsApiController@postAffiliationSaveUpdate');
 
