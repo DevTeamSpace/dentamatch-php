@@ -116,55 +116,40 @@ class UserProfileApiController extends Controller {
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
         }
     }
-
-    public function postWorkExperince(Request $request) {
+    
+    public function postAboutMe(Request $request) {
         try {
             $this->validate($request, [
-                'job_title_id' => 'required',
-                'months_of_expereince' => 'required',
-                'office_name' => 'required',
-                'office_address' => 'required',
-                'city' => 'required',
+                'aboutMe' => 'required',
             ]);
+            
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            if($userId > 0){
+                UserProfile::where('user_id', $userId)->update(['about_me' => $request->aboutMe]);
+                return apiResponse::customJsonResponse(1, 200, "About Me Updated Successfully");
+            }else{
+                return apiResponse::customJsonResponse(0, 204, "invalid user token");
+            }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
         }
+    }
+    
+    public function getAboutMe(Request $request) {
         try {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
-            $workExp = new \App\Models\WorkExperience();
-            if (isset($request->id) && !empty($request->id)) {
-                $workExp = \App\Models\WorkExperience::find($request->id);
+            if($userId > 0){
+                $userProfileModel = UserProfile::where('user_id', $userId)->first();
+                $data['list']['aboutMe'] = $userProfileModel->about_me;
+                
+                return apiResponse::customJsonResponse(1, 200, apiResponse::convertToCamelCase($data));
+            }else{
+                return apiResponse::customJsonResponse(0, 204, "invalid user token");
             }
-            $workExp->user_id = $userId;
-            $workExp->job_title_id = $request->job_title_id;
-            $workExp->months_of_expereince = $request->months_of_expereince;
-            $workExp->office_name = $request->office_name;
-            $workExp->office_address = $request->office_address;
-            $workExp->city = $request->city;
-            $workExp->reference1_name = $request->reference1_name;
-            $workExp->reference1_mobile = $request->reference1_mobile;
-            $workExp->reference1_email = $request->reference1_email;
-            $workExp->reference2_name = $request->reference2_name;
-            $workExp->reference2_mobile = $request->reference2_mobile;
-            $workExp->reference2_email = $request->reference2_email;
-            $workExp->deleted_at = null;
-            $workExp->save();
-            return apiResponse::customJsonResponse(1, 200, "data Saved successfully");
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
         }
     }
-
-    public function deleteWorkExperince(Request $request) {
-        try {
-            \App\Models\WorkExperience::where('id', $request->id)->update(['deleted_at' => date('Y-m-d')]);
-            return apiResponse::customJsonResponse(1, 200, "Deleted successfully");
-        } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
-        }
-    }
-
 }
