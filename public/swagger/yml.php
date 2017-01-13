@@ -350,7 +350,7 @@ paths:
       tags:
         - Schooling
 
-  users/affiliation-list:
+  /users/affiliation-list:
     get:
       summary: Affiliation List
       description: Api to list Affiliation data for a user
@@ -371,7 +371,7 @@ paths:
       tags:
         - Affiliations
         
-  users/affiliation-save:
+  /users/affiliation-save:
     post:
       summary: Affiliation Save Edit
       description: Api to add and edit Affiliation data for a user
