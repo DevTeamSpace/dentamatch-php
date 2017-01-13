@@ -75,7 +75,7 @@ class WorkExperienceApiController extends Controller {
             $workExp->deleted_at = null;
             $workExp->save();
             
-            $data['list'] = $workExp->toArray();
+            $data['list'][] = $workExp;
             return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_added"), apiResponse::convertToCamelCase($data));
             
         } catch (ValidationException $e) {
@@ -100,9 +100,12 @@ class WorkExperienceApiController extends Controller {
             ]);
             
             $userId = apiResponse::loginUserId($request->header('accessToken'));
-            
-            WorkExperience::where('id', $request->id)->where('user_id',$userId)->update(['deleted_at' => date('Y-m-d H:i:s')]);
-            return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_removed"));
+            if($userId>0) {
+                WorkExperience::where('id', $request->id)->where('user_id',$userId)->update(['deleted_at' => date('Y-m-d H:i:s')]);
+                return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_removed"));
+            } else {
+                    return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+            }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
@@ -126,11 +129,15 @@ class WorkExperienceApiController extends Controller {
             $limit = (int) isset($request->limit) ? $request->limit : config('app.defaul_product_per_page');
             
             $userId = apiResponse::loginUserId($request->header('accessToken'));
-            $query = WorkExperience::getWorkExperienceList($userId, $start, $limit);
-            $query['start'] = $start;
-            $query['limit'] = $limit;
-            
-            return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_list"), apiResponse::convertToCamelCase($query));
+            if($userId>0) {
+                $query = WorkExperience::getWorkExperienceList($userId, $start, $limit);
+                $query['start'] = $start;
+                $query['limit'] = $limit;
+
+                return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_list"), apiResponse::convertToCamelCase($query));
+            } else {
+                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+            }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
@@ -145,30 +152,34 @@ class WorkExperienceApiController extends Controller {
             $data = [];
             $jobSeekerData=[];
             $userId = apiResponse::loginUserId($request->header('accessToken'));
-            $schoolingList = Schooling::getScoolingList();
-            $jobseekerSchooling = JobSeekerSchooling::getUserSchoolingList($userId);
-            
-            if(!empty($jobseekerSchooling)) {
-                foreach($jobseekerSchooling as $key=>$value) {
-                    $jobSeekerData[$value['schooling_id']] = [ 'schoolingId' => $value['schooling_id'], 'otherSchooling' => $value['other_schooling'],'yearOfGraduation' => $value['year_of_graduation']];
+            if($userId>0) {
+                $schoolingList = Schooling::getScoolingList();
+                $jobseekerSchooling = JobSeekerSchooling::getUserSchoolingList($userId);
+
+                if(!empty($jobseekerSchooling)) {
+                    foreach($jobseekerSchooling as $key=>$value) {
+                        $jobSeekerData[$value['schooling_id']] = [ 'schoolingId' => $value['schooling_id'], 'otherSchooling' => $value['other_schooling'],'yearOfGraduation' => $value['year_of_graduation']];
+                    }
                 }
-            }
-            
-            if(!empty($schoolingList)) {
-                foreach($schoolingList as $key=>$value) {
-                    $data[$value['parentId']]['schoolingId'] = $value['parentId'];
-                    $data[$value['parentId']]['schoolName'] = $value['schoolName'];
-                    $data[$value['parentId']]['schoolCategory'][] = ['schoolingId' => $value['parentId'], 'schoolingChildId' => $value['childId'],
-                                    'schoolChildName' => $value['schoolChildName'], 'jobSeekerStatus' => !empty($jobSeekerData[$value['childId']]) ? 1 : 0,
-                                    'otherSchooling' => !empty($jobSeekerData[$value['childId']]) ? $jobSeekerData[$value['childId']]['otherSchooling'] : null,
-                                    'yearOfGraduation' => !empty($jobSeekerData[$value['childId']]) ? $jobSeekerData[$value['childId']]['yearOfGraduation'] : null
-                                ]; 
+
+                if(!empty($schoolingList)) {
+                    foreach($schoolingList as $key=>$value) {
+                        $data[$value['parentId']]['schoolingId'] = $value['parentId'];
+                        $data[$value['parentId']]['schoolName'] = $value['schoolName'];
+                        $data[$value['parentId']]['schoolCategory'][] = ['schoolingId' => $value['parentId'], 'schoolingChildId' => $value['childId'],
+                                        'schoolChildName' => $value['schoolChildName'], 'jobSeekerStatus' => !empty($jobSeekerData[$value['childId']]) ? 1 : 0,
+                                        'otherSchooling' => !empty($jobSeekerData[$value['childId']]) ? $jobSeekerData[$value['childId']]['otherSchooling'] : null,
+                                        'yearOfGraduation' => !empty($jobSeekerData[$value['childId']]) ? $jobSeekerData[$value['childId']]['yearOfGraduation'] : null
+                                    ]; 
+                    }
                 }
+
+                $return['list'] = array_values($data);
+
+                return apiResponse::customJsonResponse(1, 200, trans("messages.school_list_success"), apiResponse::convertToCamelCase($return));
+            } else {
+                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
-            
-            $return['list'] = array_values($data);
-            
-            return apiResponse::customJsonResponse(1, 200, trans("messages.school_list_success"), apiResponse::convertToCamelCase($return));
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);

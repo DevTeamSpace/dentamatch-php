@@ -11,6 +11,15 @@ class WorkExperience extends Model {
     protected $fillable = ['user_id', 'job_title_id', 'months_of_expereince', 'office_name', 'office_address', 'city', 'reference1_name', 'reference1_mobile', 'reference1_email', 'reference2_name', 'reference2_mobile', 'reference2_email'];
     
     /**
+    * The attributes that should be hidden for arrays.
+    *
+    * @var array
+    */
+    protected $hidden = [
+       'updated_at', 'deleted_at'
+    ];
+    
+    /**
      * Method to return the list of experiences with pagination
      * @param type $userId
      * @param type $start
