@@ -56,5 +56,6 @@ class Kernel extends HttpKernel
         'ApiAuth'=> \App\Http\Middleware\ApiAuth::class,
         'termCondition'=> \App\Http\Middleware\TermConditions::class,
         'recruiter'=> \App\Http\Middleware\Recruiter::class,
+        'acceptedTerms'=> \App\Http\Middleware\AcceptedTerms::class,
     ];
 }

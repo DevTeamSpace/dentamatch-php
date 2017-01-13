@@ -33,10 +33,13 @@ Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm
 
 Route::group(['middleware' => 'auth'], function () {
     Route::group(['middleware' => 'recruiter'], function () {
-        Route::get('home', 'web\SignupController@dashboard');
-        Route::get('tutorial', 'web\SignupController@getTutorial');
+        Route::group(['middleware' => 'acceptedTerms'], function () {
+            Route::get('home', 'web\SignupController@dashboard');
+        });
+
         Route::group(['middleware' => 'termCondition'], function () {
             Route::get('terms-conditions', 'web\SignupController@getTermsAndCondition');
+            Route::get('tutorial', 'web\SignupController@getTutorial');
         });
     });
 });
