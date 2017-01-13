@@ -82,7 +82,7 @@ h1,h2,h3,h4,h5,h6{font-weight: normal; font-family: 'Roboto', sans-serif;}
 
 /*-------------------------*/
 .denta-access-bg{
-	background-image:url('../img/denta_bg.jpg');
+	background-image:url('../images/denta_bg.jpg');
 	background-size:cover;
 	min-height: 100vh;
 
