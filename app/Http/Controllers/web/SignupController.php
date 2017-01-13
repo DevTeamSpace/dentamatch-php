@@ -147,7 +147,7 @@ class SignupController extends Controller {
     public function getTutorial() {
         try {
              \App\Models\RecruiterProfile::create(['user_id' => Auth::user()->id, 'accept_term' => 1]);
-            return view('web.dashboard');
+            return view('web.dashboard')->with('modal',1);
         } catch (\Exception $e) {
             return redirect('terms-conditions');
         }

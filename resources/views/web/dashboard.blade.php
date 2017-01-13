@@ -173,7 +173,7 @@
     </div>
 </form>
 
-
+@if(isset($modal))
 <!-- Modal -->
 <div id="onboardView" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -240,6 +240,7 @@
         </div>
     </div>
 </div>
+@endif
 <script>
     $('.carousel').carousel();
 </script>
