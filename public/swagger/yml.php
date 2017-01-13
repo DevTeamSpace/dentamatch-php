@@ -299,7 +299,12 @@ paths:
             description: Unexpected error
             schema:
              $ref: '#/definitions/Error'
-             
+      parameters:
+        - name: accessToken
+          in: header
+          required: true
+          description: access token
+          type: string     
      
       tags:
         - User Certification
