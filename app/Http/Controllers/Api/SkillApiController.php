@@ -26,29 +26,56 @@ class SkillApiController extends Controller {
     public function getSkilllists(Request $request){
         $userId = apiResponse::loginUserId($request->header('accessToken'));
         if($userId > 0){
-            
+            $skillArray = array();
+            $jobseekerSkills  = JobSeekerSkills::where('user_id',$userId)->get();
+            if($jobseekerSkills){
+                $skillArray = $jobseekerSkills->toArray();
+                
+                $userSkills = array_map(function ($value) {
+                    return  $value['skill_id'];
+                }, $skillArray);
+            }
             $skill_lists = Skills::where('parent_id',0)->with('children')->get()->toArray();
             $update_skills = array();
             foreach($skill_lists as $key => $skill){
-                $subskills = array();
-                if(is_array($skill['children']) && count($skill['children']) > 0){
-                    $child_skill = array();
-                    foreach($skill['children'] as $subskills){
-                        $skill_exists = JobSeekerSkills::where('user_id',$userId)->where('skill_id',$subskills['id'])->get()->toArray();
-                        if($skill_exists){
-                            $userSkill = 1;
-                        }else{
-                            $userSkill = 0;
+                if($skill['skill_name'] != 'Other'){
+                    $subskills = array();
+                    if(is_array($skill['children']) && count($skill['children']) > 0){
+                        $child_skill = array();
+                        foreach($skill['children'] as $subskills){
+                            if(in_array($subskills['id'],$userSkills)){
+                                $userSkill = 1;
+                            }else{
+                                $userSkill = 0;
+                            }
+                            $subSkills = array(
+                                'id' => $subskills['id'],
+                                'parent_id' => $subskills['parent_id'],
+                                'skill_name' => $subskills['skill_name'],
+                                'user_skill'=> $userSkill,
+                            );
+                            if($subskills['skill_name'] == 'Other'){
+                                $subSkills['other_skill'] = '';
+                                if($userSkill == 1){
+                                    $skillKey = array_search($subSkills['skill_id'], array_column($skillArray, 'skill_id'));
+                                    if($skillKey && $skillKey >= 0){
+                                        $subSkills['other_skill'] = $jobseekerSkills[$skillKey]['other_skill'];
+                                    }
+                                }
+                            }
+                            $child_skill[] = $subSkills;
                         }
-                        $child_skill[] = array(
-                            'id' => $subskills['id'],
-                            'parent_id' => $subskills['parent_id'],
-                            'skill_name' => $subskills['skill_name'],
-                            'user_skill'=> $userSkill,
-                        );
                     }
+                    $update_skills[$key] = array('id' => $skill['id'],'parent_id' => $skill['parent_id'],'skill_name' => $skill['skill_name'],'children' => $child_skill);
+                }else{
+                     $otherSkill = "";
+                     $skillKey = array_search($skill['id'], array_column($skillArray, 'skill_id'));
+                        if($skillKey && $skillKey >= 0){
+                            $otherSkill = $jobseekerSkills[$skillKey]['other_skill'];
+                        }
+                    $update_skills[$key] = array('id' => $skill['id'],'parent_id' => $skill['parent_id'],'skill_name' => $skill['skill_name'],'other_skill' => $otherSkill,'children' => array());
                 }
-                $update_skills[$key] = array('id' => $skill['id'],'parent_id' => $skill['parent_id'],'skill_name' => $skill['skill_name'],'children' => $child_skill);
+                
             }
             
             $response = apiResponse::customJsonResponseObject(1, 200, "Skill list",'list',  apiResponse::convertToCamelCase($update_skills));
