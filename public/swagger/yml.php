@@ -349,3 +349,53 @@ paths:
           
       tags:
         - Schooling
+
+  users/affiliation-list:
+    post:
+      summary: Affiliation List
+      description: Api to list Affiliation data for a user
+      responses: 
+          200:
+            description: Api to list Affiliation data for a user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+          
+      tags:
+        - Affiliations
+        
+  users/affiliation-save:
+    post:
+      summary: Affiliation Save Edit
+      description: Api to add and edit Affiliation data for a user
+      responses: 
+          200:
+            description: Api to add and edit Affiliation data for a user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: affiliationDataArray
+          in: formData
+          description: affiliation selected data as array
+          type: array
+        - name: other
+          in: formData
+          description: other selected data as array with text
+          type: array
+          
+      tags:
+        - Affiliations
