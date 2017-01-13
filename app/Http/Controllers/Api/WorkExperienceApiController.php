@@ -76,7 +76,7 @@ class WorkExperienceApiController extends Controller {
             $workExp->save();
             
             $data['list'] = $workExp->toArray();
-            return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_added"), $data);
+            return apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_added"), apiResponse::convertToCamelCase($data));
             
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
@@ -84,9 +84,6 @@ class WorkExperienceApiController extends Controller {
         } catch (\Exception $e) {
             return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
-        
-        
-        
     }
 
     /**
@@ -144,7 +141,7 @@ class WorkExperienceApiController extends Controller {
     
     public function getSchoolList(Request $request)
     {
-         try {
+        try {
             $data = [];
             $jobSeekerData=[];
             $userId = apiResponse::loginUserId($request->header('accessToken'));
@@ -192,8 +189,9 @@ class WorkExperienceApiController extends Controller {
             $jobSeekerData = [];
             
             if($userId > 0){
-                $deletePreviousSchool = JobSeekerSchooling::where('user_id', '=', $userId)->forceDelete();
                 if(!empty($reqData['schoolDataArray']) && is_array($reqData['schoolDataArray'])){
+                    $deletePreviousSchool = JobSeekerSchooling::where('user_id', '=', $userId)->forceDelete();
+                    
                     foreach($reqData['schoolDataArray'] as $key=>$value) {
                         if(!empty($value['schoolingChildId'])) {
                             $jobSeekerData[$key]['schooling_id'] = $value['schoolingChildId'];
@@ -204,13 +202,12 @@ class WorkExperienceApiController extends Controller {
                     }
                 }
                 
-                if(!empty($jobSeekerData))
-                {
+                if(!empty($jobSeekerData)) {
                     JobSeekerSchooling::insert($jobSeekerData);
                 }
                 
                 return apiResponse::customJsonResponse(1, 200, trans("messages.school_add_success")); 
-            }else{
+            } else {
                 return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
         } catch (ValidationException $e) {
