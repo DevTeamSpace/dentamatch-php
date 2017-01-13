@@ -351,7 +351,7 @@ paths:
         - Schooling
 
   users/affiliation-list:
-    post:
+    get:
       summary: Affiliation List
       description: Api to list Affiliation data for a user
       responses: 
