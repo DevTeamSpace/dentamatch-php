@@ -18,4 +18,5 @@ return [
     'location_deleted'=>'Successfully deleted location zipcode!',
     'location_added'=>'Successfully added location zipcode!',
     'location_updated'=>'Successfully updated location zipcode!',
+    'about_me_list' => "AboutMe Successfully Retrieved",
 ];

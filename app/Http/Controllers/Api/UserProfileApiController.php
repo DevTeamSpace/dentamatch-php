@@ -145,7 +145,7 @@ class UserProfileApiController extends Controller {
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
                 $data['list']['aboutMe'] = $userProfileModel->about_me;
                 
-                return apiResponse::customJsonResponse(1, 200, apiResponse::convertToCamelCase($data));
+                return apiResponse::customJsonResponse(1, 200, trans("messages.about_me_list"), apiResponse::convertToCamelCase($data));
             }else{
                 return apiResponse::customJsonResponse(0, 204, "invalid user token");
             }
