@@ -58,11 +58,11 @@ paths:
           type: string
         - name: reference1Mobile
           in: formData
-          description: Reference User 1 mobile no (Required when key reference1Name is filled)
+          description: Reference User 1 mobile no (Optional)
           type: string
         - name: reference1Email
           in: formData
-          description: Reference User 1 email id (Required when key reference1Name is filled)
+          description: Reference User 1 email id (Optional)
           type: string
         - name: reference2Name
           in: formData
@@ -70,11 +70,11 @@ paths:
           type: string
         - name: reference2Mobile
           in: formData
-          description: Reference User 2 mobile no (Required when key reference2Name is filled)
+          description: Reference User 2 mobile no (Optional)
           type: string
         - name: reference2Email
           in: formData
-          description: Reference User 2 email id (Required when key reference2Name is filled)
+          description: Reference User 2 email id (Optional)
           type: string
         - name: action
           in: formData
@@ -144,13 +144,108 @@ paths:
       tags:
         - Work Experience  
         
-  /users/signIn:
+  /users/sign-up:
     post:
-      summary: Work Experienceaaa
+      summary: User Onboarding
       description: Api to list work experience based on access token
       responses: 
           200:
-            description: List of added work experience 
+            description: User signup process
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: deviceId
+          in: formData
+          required: true
+          description: device  id
+          type: string
+        - name: deviceType
+          in: formData
+          description: Type of device (ex. iOS or Android)
+          type: string
+        - name: deviceToken
+          in: formData
+          description: Token for that particular devide(Optional)
+          type: string
+        - name: firstName
+          in: formData
+          description: Firstname of the user
+          type: string
+        - name: email
+          in: formData
+          description: Email  of the user
+          type: string
+        - name: password
+          in: formData
+          description: Password  of the user
+          type: string
+        - name: preferedLocation
+          in: formData
+          description: Preffered location of the user
+          type: string
+        - name: latitude
+          in: formData
+          description: Latitude of user location
+          type: string
+        - name: longitude
+          in: formData
+          description: Longitude of user location
+          type: string
+        - name: zipCode
+          in: formData
+          description: Zipcode  of user location
+          type: string
+          
+      tags:
+        - Users onboarding
+        
+  /users/sign-in:
+    post:
+      summary: User Onboarding
+      description: Api to list work experience based on access token
+      responses: 
+          200:
+            description: User sign in  process
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: deviceId
+          in: formData
+          description: device  id
+          type: string
+        - name: deviceType
+          in: formData
+          description: Type of device (ex. iOS or Android)
+          type: string
+        - name: deviceToken
+          in: formData
+          description: Token for that particular devide(Optional)
+          type: string
+        - name: email
+          in: formData
+          description: Email  of the user
+          type: string
+        - name: password
+          in: formData
+          description: Password  of the user
+          type: string  
+      tags:
+        - Users onboarding
+        
+        
+  /list-skills:
+    get:
+      summary: Skill Apis
+      description: Api to list skills based on access token
+      responses: 
+          200:
+            description: Skill list
           default:
             description: Unexpected error
             schema:
@@ -162,21 +257,191 @@ paths:
           required: true
           description: access token
           type: string
-        - name: id
-          in: formData
+      tags:
+        - User Skills
+        
+  /users/update-skill:
+    post:
+      summary: Update Skill Apis
+      description: Api to update skills  based on access token
+      responses: 
+          200:
+            description: Skill Update
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
           required: true
-          description: work experience id
-          type: integer
-        - name: start
-          in: formData
-          description: starting point for pagination (Optional)
+          description: access token
           type: string
-        - name: limit
+        - name: skills
           in: formData
-          description: limit for number of records (Optional)
+          description: provide skill ids in json array
+          type: string
+        - name: other
+          in: formData
+          description: provide other skill ids  with values json array
+          type: string
+      tags:
+        - User Skills
+  /list-certifications:
+    get:
+      summary: Certification listing 
+      description: Api for  listing certificatopn 
+      responses: 
+          200:
+            description: Certification list
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+     
+      tags:
+        - User Certification
+        
+  /users/school-list:
+    get:
+      summary: School List
+      description: Api to list School data for a user
+      responses: 
+          200:
+            description: Api to list Schooling data for a user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
           type: string
           
       tags:
-        - Users
+        - Schooling
         
-      
+  users/school-add:
+    post:
+      summary: School List
+      description: Api to add School data for a user
+      responses: 
+          200:
+            description: Api to add Schoo data for a user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: schoolDataArray
+          in: formData
+          description: school selected data as array
+          type: array
+          
+      tags:
+        - Schooling
+
+  /users/affiliation-list:
+    get:
+      summary: Affiliation List
+      description: Api to list Affiliation data for a user
+      responses: 
+          200:
+            description: Api to list Affiliation data for a user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+          
+      tags:
+        - Affiliations
+        
+  /users/affiliation-save:
+    post:
+      summary: Affiliation Save Edit
+      description: Api to add and edit Affiliation data for a user
+      responses: 
+          200:
+            description: Api to add and edit Affiliation data for a user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: affiliationDataArray
+          in: formData
+          description: affiliation selected data as array
+          type: array
+        - name: other
+          in: formData
+          description: other selected data as array with text
+          type: array
+          
+      tags:
+        - Affiliations
+        
+  /users/about-me-save:
+    post:
+      summary: About Me
+      description: Api to add about me
+      responses: 
+          200:
+            description: Api to add about me
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: aboutMe
+          in: formData
+          description: About Me string
+          type: string
+          
+      tags:
+        - User Profile
+        
+  /users/about-me-list:
+    get:
+      summary: About Me
+      description: Api to fetch About Me
+      responses: 
+          200:
+            description: Api to fetch About Me
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+          
+      tags:
+        - User Profile

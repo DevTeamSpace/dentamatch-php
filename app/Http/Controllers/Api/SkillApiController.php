@@ -3,14 +3,16 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use DB;
-use App\Models\JobTitles;
 use App\Helpers\apiResponse;
 use App\Models\Skills;
 use App\Models\JobSeekerSkills;
+use App\Models\Certifications;
+use App\Services\UploadsManager;
+use App\Repositories\File\FileRepositoryS3;
+use App\Models\JobseekerCertificates;
 
 class SkillApiController extends Controller {
-    
+    use FileRepositoryS3;
     public function __construct() {
         
     }
@@ -23,8 +25,8 @@ class SkillApiController extends Controller {
      */
     public function getSkilllists(Request $request){
         $userId = apiResponse::loginUserId($request->header('accessToken'));
-        $userId = 10;
         if($userId > 0){
+            
             $skill_lists = Skills::where('parent_id',0)->with('children')->get()->toArray();
             $update_skills = array();
             foreach($skill_lists as $key => $skill){
@@ -74,9 +76,10 @@ class SkillApiController extends Controller {
                 $deletePreviousSkills = JobSeekerSkills::where('user_id', '=', $userId)->forceDelete();
                 $jobSeekerSkillModel = new JobSeekerSkills();
                 if(is_array($reqData['skills']) && count($reqData['skills']) > 0){
-                    foreach($reqData['skills'] as $skills){
+                    foreach($reqData['skills'] as $skill){
                         $jobSeekerSkillModel->user_id = $userId;
-                        $jobSeekerSkillModel->skill_id = $userId;
+                        $jobSeekerSkillModel->skill_id = $skill;
+                        $jobSeekerSkillModel->other_skill = '';
                         $jobSeekerSkillModel->save();
                     }
                 }
@@ -100,9 +103,57 @@ class SkillApiController extends Controller {
         } catch (\Exception $e) {
             return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
-        
-        
-        
+    }
+    /**
+     * Description : Get Certification Listing
+     * Method : postUpdateUserSkills
+     * formMethod : GET
+     * @param 
+     * @return type
+     */
+    
+    public function getCertificationListing(){
+        $certificationList = Certifications::get()->toArray();
+        $result = apiResponse::convertToCamelCase($certificationList);
+        $response = apiResponse::customJsonResponseObject(1, 200, "Certificate list",'list',$result);
+        return $response;
+    }
+    /**
+     * Description : Update certifications
+     * Method : postUpdateCertifications
+     * formMethod : POST
+     * @param 
+     * @return type
+     */
+    public function postUpdateCertifications(Request $request) {
+        try {
+            $this->validate($request, [
+                'certificateId' => 'required|integer',
+                'validityDate' => 'required',
+                'image' => 'required|mimes:jpeg,jpg,png|max:102400',
+            ]);
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            if($userId > 0){
+                $filename = $this->generateFilename($userId, 'certificate');
+                $response = $this->uploadFileToAWS($request, $filename);
+                if ($response['res']) {
+                    $uploadImage  = JobseekerCertificates::updateOrCreate(
+                            ['user_id' => $userId, 'certificate_id' => $request->certificateId],
+                            ['image_path' => $response['file'] ,'validity_date' => $request->validityDate]
+                    );
+                    return apiResponse::customJsonResponse(1, 200, trans("message.certificate_successful_update"));
+                } else {
+                    return apiResponse::responseError(trans("message.upload_image_problem"));
+                }
+            }else{
+                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+            }
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+        } catch (\Exception $e) {
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
     }
     
 }

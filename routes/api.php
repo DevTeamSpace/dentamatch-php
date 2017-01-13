@@ -26,12 +26,20 @@ Route::put('users/reset-password', 'Api\UserApiController@putForgotPassword');
 Route::post('users/change-password','Api\UserProfileApiController@postChangePassword');
 Route::get('list-jobtitle','Api\WorkExperienceApiController@getJobTitlelists');
 Route::get('list-skills','Api\SkillApiController@getSkilllists');
+Route::get('list-skills','Api\SkillApiController@getSkilllists');
 Route::post('users/update-skill','Api\SkillApiController@postUpdateSkills');
+Route::get('list-certifications','Api\SkillApiController@getCertificationListing');
+Route::post('users/update-certificate','Api\SkillApiController@postUpdateCertifications');
 
 Route::post('users/upload-image', 'Api\UserProfileApiController@postUploadImage');
 Route::put('users/update-license', 'Api\UserProfileApiController@putUpdateLicense');
 Route::post('users/work-experience-save', 'Api\WorkExperienceApiController@postWorkExperience');
 Route::delete('users/work-experience-delete', 'Api\WorkExperienceApiController@deleteWorkExperience');
 Route::post('users/work-experience-list', 'Api\WorkExperienceApiController@postListWorkExperience');
-Route::get('users/schooling-certification', 'Api\WorkExperienceApiController@getSchoolingCertificationList');
+Route::get('users/school-list', 'Api\WorkExperienceApiController@getSchoolList');
+Route::post('users/school-add', 'Api\WorkExperienceApiController@postSchoolSaveUpdate');
+Route::get('users/affiliation-list', 'Api\AffiliationsApiController@getAffiliationList');
+Route::post('users/affiliation-save', 'Api\AffiliationsApiController@postAffiliationSaveUpdate');
+Route::post('users/about-me-save', 'Api\UserProfileApiController@postAboutMe');
+Route::get('users/about-me-list', 'Api\UserProfileApiController@getAboutMe');
 

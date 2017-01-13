@@ -9,5 +9,13 @@ return [
     'work_exp_removed' => 'Work experience successfully removed',
     'invalid_token' => 'Invalid user token',
     'skill_add_success' => 'Skills added successfully',
-    
+    'school_add_success' => 'School added successfully',
+    'school_list_success' => 'School list successfully',
+    'affiliation_list_success' => 'Affiliation List Successfully Retrieved',
+    'affiliation_add_success' => 'Affiliations Added Successfully',
+    'certificate_successful_update' => 'Certificate details updated successfully',
+    'upload_image_problem' => 'Problem in uploading image',
+    'location_deleted'=>'Successfully deleted location zipcode!',
+    'location_added'=>'Successfully added location zipcode!',
+    'location_updated'=>'Successfully updated location zipcode!',
 ];
