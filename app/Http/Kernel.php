@@ -54,5 +54,7 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'ApiAuth'=> \App\Http\Middleware\ApiAuth::class,
+        'termCondition'=> \App\Http\Middleware\TermConditions::class,
+        'recruiter'=> \App\Http\Middleware\Recruiter::class,
     ];
 }

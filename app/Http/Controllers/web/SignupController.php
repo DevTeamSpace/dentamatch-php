@@ -56,9 +56,10 @@ class SignupController extends Controller {
             if ($user->userGroup->group_id == 2) {
                 if (Auth::attempt($credentials)) {
                     $redirect = 'terms-conditions';
-//                    if ($user->remember_token) {
-//                        $redirect = 'home';
-//                    }
+                    $term = \App\Models\RecruiterProfile::where('user_id',Auth::user()->id)->first();
+                    if(!empty($term) && isset($term)){
+                         $redirect = 'home';
+                    }
                 }
             }
         }

@@ -20,7 +20,6 @@ Route::post('login', 'web\SignupController@postLogin');
 Route::get('login', 'web\SignupController@getLogin');
 Route::get('verification-code/{code}', 'web\SignupController@getVerificationCode');
 
-Route::get('terms-conditions', 'web\SignupController@getTermsAndCondition');
 Route::get('logout', 'web\SignupController@logout');
 
 Route::get('/aboutus', function () {
@@ -32,10 +31,14 @@ Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm'
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
 
-
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('home', 'web\SignupController@dashboard');
-    Route::get('tutorial', 'web\SignupController@getTutorial');
+    Route::group(['middleware' => 'recruiter'], function () {
+        Route::get('home', 'web\SignupController@dashboard');
+        Route::get('tutorial', 'web\SignupController@getTutorial');
+        Route::group(['middleware' => 'termCondition'], function () {
+            Route::get('terms-conditions', 'web\SignupController@getTermsAndCondition');
+        });
+    });
 });
 
 Route::group(['middleware' => 'web', 'prefix' => 'cms/'], function () {
