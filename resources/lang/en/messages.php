@@ -13,5 +13,7 @@ return [
     'school_list_success' => 'School list successfully',
     'certificate_successful_update' => 'Certificate details updated successfully',
     'upload_image_problem' => 'Problem in uploading image',
-    
+    'location_deleted'=>'Successfully deleted location zipcode!',
+    'location_added'=>'Successfully added location zipcode!',
+    'location_updated'=>'Successfully updated location zipcode!',
 ];
