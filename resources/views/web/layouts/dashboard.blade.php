@@ -96,13 +96,13 @@
         @yield('content')
 
         <script src="{{asset('web/scripts/jQuery-2.2.0.min.js')}}"></script>
-
         <!-- Bootstrap 3.3.6 -->
         <script src="{{asset('web/scripts/bootstrap.min.js')}}"></script>
         <script src="{{asset('web/scripts/bootstrap-multiselect.js')}}"></script>
         <script src="{{asset('web/plugins/parsley/js/parsley.js')}}"></script>
         <script src ="{{asset('web/scripts/main.js')}}"></script>
 
+        
         @yield('js')
 
     </body>

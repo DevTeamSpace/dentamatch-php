@@ -241,15 +241,16 @@
     </div>
 </div>
 @endif
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
+@section('js')
 <script>
     $('.carousel').carousel();
 </script>
-<script>
+        <script>
+$('.ddlCars').multiselect({
+    numberDisplayed: 3,
+});
 
-    $('.ddlCars').multiselect({
-        numberDisplayed: 3,
-    });
-
-</script>
-
+        </script>
+@endsection
 @endsection
