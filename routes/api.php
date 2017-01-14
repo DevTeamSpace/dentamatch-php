@@ -21,6 +21,7 @@ Route::post('users/sign-up','Api\UserApiController@postSignup');
 Route::post('users/sign-in','Api\UserApiController@postSignIn');
 Route::get('privacy-policy','Api\UserApiController@getPrivacypolicy');
 Route::get('term-condition','Api\UserApiController@getTermsAndCondition');
+Route::get('user-activation/{code}', 'Api\UserApiController@getActivatejobseeker');
 Route::put('users/forgot-password', 'Api\UserApiController@putForgotPassword');
 Route::put('users/reset-password', 'Api\UserApiController@putForgotPassword');
 Route::post('users/change-password','Api\UserProfileApiController@postChangePassword');
