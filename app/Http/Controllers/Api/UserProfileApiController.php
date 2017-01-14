@@ -98,11 +98,6 @@ class UserProfileApiController extends Controller {
                 'state' => 'required',
                 'jobTitleId' => 'required'
             ]);
-        } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
-        }
-        try {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 UserProfile::where('user_id', $userId)->update(['license_number' => $request->license, 'state' => $request->state]);
@@ -110,6 +105,9 @@ class UserProfileApiController extends Controller {
             }else{
                 return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
+         } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
