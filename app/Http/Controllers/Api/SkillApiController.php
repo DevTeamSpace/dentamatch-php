@@ -31,7 +31,6 @@ class SkillApiController extends Controller {
                 $jobseekerSkills  = JobSeekerSkills::where('user_id',$userId)->get();
                 if($jobseekerSkills){
                     $skillArray = $jobseekerSkills->toArray();
-
                     $userSkills = array_map(function ($value) {
                         return  $value['skill_id'];
                     }, $skillArray);
@@ -150,23 +149,30 @@ class SkillApiController extends Controller {
             if($userId > 0){
                 $userCertification = JobseekerCertificates::where('user_id', '=', $userId)->get();
                 $certificationList = Certifications::get()->toArray();
+                $userCertificationData=[];
                 
-                if(is_array($certificationList) && count($certificationList) > 0){
-                    $userCertificate = array_map(function ($value) {
-                        return  $value['certificate_id'];
-                    }, $userCertification->toArray());
+                if($userCertification) {
+                    $userCertificationArray = $userCertification->toArray();
+                    foreach($userCertificationArray as $key=>$value) {
+                        $userCertificationData[$value['certificate_id']] = ['certificate_id' => $value['certificate_id'], 'validity_date' => $value['validity_date'] , 'image_path' => $value['image_path']];
+                    }
                 }
+                
                 $certificationArray = array();
-                foreach($certificationList as $certificate){
-                    $certificateKey = array_search($certificate['id'], array_column($userCertificate, 'certificate_id'));
-                    $certificationArray[] = array('id' => $certificate['id'],'certificateName' => strtoupper($certificate['certificate_name']),'image' => '','validity_date' => '') ;
+                foreach($certificationList as $key => $certificate){
+                    $array = array('id' => $certificate['id'] , 'certificateName' => $certificate['certificate_name'] , 'validityDate' => '' , 'imagePath' => '') ;
+                    if(!empty($userCertificationData[$certificate['id']])){
+                        $array['validityDate'] = $userCertificationData[$certificate['id']]['validity_date'];
+                        $array['imagePath'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $userCertificationData[$certificate['id']]['image_path'];
+                    }
+                    
+                    $certificationArray[] = $array;
                 }
-                //$result = apiResponse::convertToCamelCase($certificationList);
                 return  apiResponse::customJsonResponseObject(1, 200, "Certificate list",'list',$certificationArray);
             }else{
                 return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
-        } catch (ValidationException $e) {
+       } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
