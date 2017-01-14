@@ -29,11 +29,15 @@ class SkillApiController extends Controller {
             if($userId > 0){
                 $skillArray = array();
                 $jobseekerSkills  = JobSeekerSkills::where('user_id',$userId)->get();
+                $UpdatedJobseekerSkills = array();
                 if($jobseekerSkills){
                     $skillArray = $jobseekerSkills->toArray();
                     $userSkills = array_map(function ($value) {
                         return  $value['skill_id'];
                     }, $skillArray);
+                    foreach($skillArray as $skill){
+                        $UpdatedJobseekerSkills[$skill['skill_id']] = array('skill_id' => $skill['skill_id'] , 'other_skill' => $skill['other_skill']); 
+                    }
                 }
                 $skill_lists = Skills::where('parent_id',0)->with('children')->get()->toArray();
                 $update_skills = array();
@@ -57,9 +61,8 @@ class SkillApiController extends Controller {
                                 if($subskills['skill_name'] == 'Other'){
                                     $subSkills['other_skill'] = '';
                                     if($userSkill == 1){
-                                        $skillKey = array_search($subSkills['skill_id'], array_column($skillArray, 'skill_id'));
-                                        if($skillKey && $skillKey >= 0){
-                                            $subSkills['other_skill'] = $jobseekerSkills[$skillKey]['other_skill'];
+                                        if(!empty($UpdatedJobseekerSkills[$subskills['id']])){
+                                            $subSkills['other_skill'] = $UpdatedJobseekerSkills[$subskills['id']]['other_skill'];
                                         }
                                     }
                                 }
@@ -69,10 +72,13 @@ class SkillApiController extends Controller {
                         $update_skills[$key] = array('id' => $skill['id'],'parent_id' => $skill['parent_id'],'skill_name' => $skill['skill_name'],'children' => $child_skill);
                     }else{
                          $otherSkill = "";
-                         $skillKey = array_search($skill['id'], array_column($skillArray, 'skill_id'));
+                         if(!empty($UpdatedJobseekerSkills[$skill['id']])){
+                            $otherSkill = $UpdatedJobseekerSkills[$skill['id']]['other_skill'];
+                         }
+                         /*$skillKey = array_search($skill['id'], array_column($skillArray, 'skill_id'));
                             if($skillKey && $skillKey >= 0){
                                 $otherSkill = $jobseekerSkills[$skillKey]['other_skill'];
-                            }
+                            }*/
                         $update_skills[$key] = array('id' => $skill['id'],'parent_id' => $skill['parent_id'],'skill_name' => $skill['skill_name'],'other_skill' => $otherSkill,'children' => array());
                     } 
                 }
