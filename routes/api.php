@@ -26,7 +26,6 @@ Route::put('users/reset-password', 'Api\UserApiController@putForgotPassword');
 Route::post('users/change-password','Api\UserProfileApiController@postChangePassword');
 Route::get('list-jobtitle','Api\WorkExperienceApiController@getJobTitlelists');
 Route::get('list-skills','Api\SkillApiController@getSkilllists');
-Route::get('list-skills','Api\SkillApiController@getSkilllists');
 Route::post('users/update-skill','Api\SkillApiController@postUpdateSkills');
 Route::get('list-certifications','Api\SkillApiController@getCertificationListing');
 Route::post('users/update-certificate','Api\SkillApiController@postUpdateCertifications');
