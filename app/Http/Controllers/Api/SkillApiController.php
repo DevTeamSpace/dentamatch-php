@@ -39,9 +39,9 @@ class SkillApiController extends Controller {
                         $UpdatedJobseekerSkills[$skill['skill_id']] = array('skill_id' => $skill['skill_id'] , 'other_skill' => $skill['other_skill']); 
                     }
                 }
-                $skill_lists = Skills::where('parent_id',0)->with('children')->get()->toArray();
+                $skillLists = Skills::where('parent_id',0)->with('children')->get()->toArray();
                 $update_skills = array();
-                foreach($skill_lists as $key => $skill){
+                foreach($skillLists as $key => $skill){
                     if($skill['skill_name'] != 'Other'){
                         $subskills = array();
                         if(is_array($skill['children']) && count($skill['children']) > 0){
@@ -111,22 +111,29 @@ class SkillApiController extends Controller {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $deletePreviousSkills = JobSeekerSkills::where('user_id', '=', $userId)->forceDelete();
-                $jobSeekerSkillModel = new JobSeekerSkills();
+                //$jobSeekerSkillModel = new JobSeekerSkills();
+                $jobseekerSkills = array();
+                $jobseekerOtherSkills = array();
                 if(is_array($reqData['skills']) && count($reqData['skills']) > 0){
                     foreach($reqData['skills'] as $skill){
-                        $jobSeekerSkillModel->user_id = $userId;
+                        $jobseekerSkills[] = array('user_id' => $userId , 'skill_id' => $skill ,'other_skill' => '' ); 
+                        /*$jobSeekerSkillModel->user_id = $userId;
                         $jobSeekerSkillModel->skill_id = $skill;
                         $jobSeekerSkillModel->other_skill = '';
-                        $jobSeekerSkillModel->save();
+                        $jobSeekerSkillModel->save();*/
                     }
+                    JobSeekerSkills::insert($jobseekerSkills);
                 }
+                
                 if(is_array($reqData['other']) && count($reqData['other']) > 0){
                     foreach($reqData['other'] as $otherSkill){
-                        $jobSeekerSkillModel->user_id = $userId;
+                        $jobseekerOtherSkills[] = array('user_id' => $userId , 'skill_id' => $otherSkill['id'] ,'other_skill' => $otherSkill['value'] ); 
+                        /*$jobSeekerSkillModel->user_id = $userId;
                         $jobSeekerSkillModel->skill_id = $otherSkill['id'];
                         $jobSeekerSkillModel->other_skill = $otherSkill['value'];
-                        $jobSeekerSkillModel->save();
+                        $jobSeekerSkillModel->save();*/
                     }
+                    JobSeekerSkills::insert($jobseekerOtherSkills);
                 }
                 return apiResponse::customJsonResponse(1, 200, trans("messages.skill_add_success")); 
             }else{

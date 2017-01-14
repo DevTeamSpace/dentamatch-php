@@ -237,6 +237,26 @@ paths:
           type: string  
       tags:
         - Users onboarding
+  /users/forgot-password:
+    put:
+      summary: User Onboarding
+      description: Api for forgot password
+      responses: 
+          200:
+            description: Forgot password  process
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: email
+          in: formData
+          description: Email  of the user
+          type: string
+        
+      tags:
+        - Users onboarding
         
         
   /list-skills:
