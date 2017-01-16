@@ -300,11 +300,11 @@ paths:
           type: string
         - name: skills
           in: formData
-          description: provide skill ids in json array
+          description: provide skill ids in json array ex ("skills":[1,2,3,6])
           type: string
         - name: other
           in: formData
-          description: provide other skill ids  with values json array
+          description: provide other skill ids  with values json array ex ("other":[{"id":1,"value":"abc"}])
           type: string
       tags:
         - User Skills
