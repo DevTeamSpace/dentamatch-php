@@ -48,16 +48,18 @@ class AffiliationsApiController extends Controller {
 
                 $return['list'] = array_values($data);
 
-                return apiResponse::customJsonResponse(1, 200, trans("messages.affiliation_list_success"), apiResponse::convertToCamelCase($return));
+                $returnResponse =  apiResponse::customJsonResponse(1, 200, trans("messages.affiliation_list_success"), apiResponse::convertToCamelCase($return));
             } else {
-                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            $returnResponse = apiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $e) {
-            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
+        
+        return $returnResponse;
     }
     
     /**
@@ -108,15 +110,17 @@ class AffiliationsApiController extends Controller {
                     JobSeekerAffiliation::insert($jobSeekerData);
                 }
                 
-                return apiResponse::customJsonResponse(1, 200, trans("messages.affiliation_add_success")); 
+                $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.affiliation_add_success")); 
             } else {
-                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $returnResponse = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
+        
+        return $returnResponse;
     }
 }
