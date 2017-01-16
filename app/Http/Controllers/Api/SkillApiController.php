@@ -77,16 +77,17 @@ class SkillApiController extends Controller {
                     } 
                 }
                 $response = apiResponse::customJsonResponseObject(1, 200, "Skill list",'list',  apiResponse::convertToCamelCase($update_skills));
-                return $response;
+                
             }else{
-                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
+        return $response;
     }
     /**
      * Description : Update user skills
@@ -113,25 +114,23 @@ class SkillApiController extends Controller {
                     }
                     JobSeekerSkills::insert($jobseekerSkills);
                 }
-                
                 if(is_array($reqData['other']) && count($reqData['other']) > 0){
                     foreach($reqData['other'] as $otherSkill){
                         $jobseekerOtherSkills[] = array('user_id' => $userId , 'skill_id' => $otherSkill['id'] ,'other_skill' => $otherSkill['value'] );
                     }
                     JobSeekerSkills::insert($jobseekerOtherSkills);
                 }
-                return apiResponse::customJsonResponse(1, 200, trans("messages.skill_add_success")); 
+                $response = apiResponse::customJsonResponse(1, 200, trans("messages.skill_add_success")); 
             }else{
-                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
-            
-            
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
+        return $response;
     }
     /**
      * Description : Get Certification Listing
@@ -165,16 +164,17 @@ class SkillApiController extends Controller {
                     
                     $certificationArray[] = $array;
                 }
-                return  apiResponse::customJsonResponseObject(1, 200, "Certificate list",'list',$certificationArray);
+                $response =  apiResponse::customJsonResponseObject(1, 200, "Certificate list",'list',$certificationArray);
             }else{
-                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
        } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
+        return $response;
     }
     /**
      * Description : Update certifications
@@ -199,19 +199,20 @@ class SkillApiController extends Controller {
                             ['image_path' => $response['file']]
                     );
                     $url['imgUrl'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $response['file'];
-                    return apiResponse::customJsonResponse(1, 200, trans("message.certificate_successful_update"),$url);
+                    $response = apiResponse::customJsonResponse(1, 200, trans("message.certificate_successful_update"),$url);
                 } else {
-                    return apiResponse::responseError(trans("message.upload_image_problem"));
+                    $response = apiResponse::responseError(trans("message.upload_image_problem"));
                 }
             }else{
-                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
+        return $response;
     }
     
     /**
