@@ -41,7 +41,7 @@ class AffiliationsApiController extends Controller {
                     foreach($affiliationList as $key=>$value) {
                         $data[$key]['affiliationId']= $value['affiliationId'];
                         $data[$key]['affiliationName'] = $value['affiliationName'];
-                        $data[$key]['otherAffiliation'] = $value['otherAffiliation'];
+                        $data[$key]['otherAffiliation'] = !empty($jobSeekerAffiliationData[$value['affiliationId']]['otherAffiliation']) ? $jobSeekerAffiliationData[$value['affiliationId']]['otherAffiliation'] : null;
                         $data[$key]['jobSeekerAffiliationStatus'] = !empty($jobSeekerAffiliationData[$value['affiliationId']]) ? 1 : 0; 
                     }
                 }
@@ -81,7 +81,7 @@ class AffiliationsApiController extends Controller {
             
             if($userId > 0){
                 if((!empty($reqData['affiliationDataArray']) && is_array($reqData['affiliationDataArray'])) || (!empty($reqData['other']) && is_array($reqData['other']))){
-                    $deletePreviousAffiliations = JobSeekerAffiliation::where('user_id', '=', $userId)->forceDelete();
+                    JobSeekerAffiliation::where('user_id', '=', $userId)->forceDelete();
                 }
                 
                 if(!empty($reqData['affiliationDataArray']) && is_array($reqData['affiliationDataArray'])){
