@@ -79,10 +79,18 @@
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Calendar</a></li>
-                        <li><a href="#">Job Listing</a></li>
-                        <li><a href="#">Favorite Jobseeker</a></li>
-                        <li><a href="#">Template</a></li>
+                        <li class="{{ ($navActive=='calendar')?'active':''}}">
+                            <a href="#">Calendar</a>
+                        </li>
+                        <li class="{{ ($navActive=='joblisting')?'active':''}}">
+                            <a href="#">Job Listing</a>
+                        </li>
+                        <li class="{{ ($navActive=='favseeker')?'active':''}}">
+                            <a href="#">Favorite Jobseeker</a>
+                        </li>
+                        <li class="{{ ($navActive=='template')?'active':''}}">
+                            <a href="{{ url('jobtemplates') }}">Template</a>
+                        </li>
 
                     </ul>
 
