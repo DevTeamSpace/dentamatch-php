@@ -328,6 +328,41 @@ paths:
      
       tags:
         - User Certification
+  /users/update-certificate:
+    post:
+      summary: Certification listing 
+      description: Api for  updating certificatopn 
+      responses: 
+          200:
+            description: Certification update
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+      parameters:
+        - name: accessToken
+          in: header
+          required: true
+          description: access token
+          type: string
+        - name: certificateId
+          in: formData
+          required: true
+          description: Certificate id 
+          type: integer 
+        - name: validityDate
+          in: formData
+          required: true
+          description: Validity date of certificate (YYYY-mm-dd)
+          type: string
+        - name: image
+          in: formData
+          required: true
+          description: Image to be updated 
+          type: file 
+     
+      tags:
+        - User Certification
         
   /users/school-list:
     get:
