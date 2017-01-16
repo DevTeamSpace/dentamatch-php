@@ -44,7 +44,7 @@ class UserProfileApiController extends Controller {
             }
             
         } catch (ValidationException $e) {
-            $response = json_decode($e->getResponse()->content(), true);
+            $messages = json_decode($e->getResponse()->content(), true);
             return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $ex) {
             $message = $ex->getMessage();
@@ -57,7 +57,7 @@ class UserProfileApiController extends Controller {
         try {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
-                $filename = $this->generateFilename($userId, $request->type);
+                $filename = $this->generateFilename($request->type);
                 $response = $this->uploadFileToAWS($request, $filename);
                 if ($response['res']) {
                     $file = str_replace($request->type . '/', '', $response['file']);
@@ -147,6 +147,6 @@ class UserProfileApiController extends Controller {
         } catch (\Exception $e) {
             $response =  apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
-        return $response
+        return $response;
     }
 }

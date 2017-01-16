@@ -13,7 +13,7 @@ trait FileRepositoryS3 {
         $this->awsObj = Storage::disk('s3');
     }
 
-    public function generateFilename($userId, $imageType) {
+    public function generateFilename($imageType) {
         return $imageType . '/' . uniqid(TRUE);
     }
 

@@ -191,7 +191,7 @@ class SkillApiController extends Controller {
             ]);
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
-                $filename = $this->generateFilename($userId, 'certificate');
+                $filename = $this->generateFilename('certificate');
                 $response = $this->uploadFileToAWS($request, $filename);
                 if ($response['res']) {
                     JobseekerCertificates::updateOrCreate(
