@@ -25,8 +25,7 @@ class Affiliation extends Model
     {
         $list = [];
         $affiliationModel = static::select('affiliations.id as affiliationId', 'affiliation_name as affiliationName', 
-                                        'jobseeker_affiliations.other_affiliation as otherAffiliation','affiliations.is_active as isActive', 'affiliations.created_at as createdAt')
-                                ->leftjoin('jobseeker_affiliations','jobseeker_affiliations.affiliation_id', '=', 'affiliations.id')
+                                        'affiliations.is_active as isActive', 'affiliations.created_at as createdAt')
                                 ->where('affiliations.is_active',1)->orderBy('affiliations.id')->get();
         
         if($affiliationModel) {

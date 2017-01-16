@@ -201,7 +201,7 @@ class WorkExperienceApiController extends Controller {
             
             if($userId > 0){
                 if(!empty($reqData['schoolDataArray']) && is_array($reqData['schoolDataArray'])){
-                    $deletePreviousSchool = JobSeekerSchooling::where('user_id', '=', $userId)->forceDelete();
+                    JobSeekerSchooling::where('user_id', '=', $userId)->forceDelete();
                     
                     foreach($reqData['schoolDataArray'] as $key=>$value) {
                         if(!empty($value['schoolingChildId'])) {

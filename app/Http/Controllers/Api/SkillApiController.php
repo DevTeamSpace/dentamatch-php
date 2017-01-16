@@ -60,10 +60,8 @@ class SkillApiController extends Controller {
                                 );
                                 if($subskills['skill_name'] == 'Other'){
                                     $subSkills['other_skill'] = '';
-                                    if($userSkill == 1){
-                                        if(!empty($UpdatedJobseekerSkills[$subskills['id']])){
+                                    if($userSkill==1 && !empty($UpdatedJobseekerSkills[$subskills['id']])){
                                             $subSkills['other_skill'] = $UpdatedJobseekerSkills[$subskills['id']]['other_skill'];
-                                        }
                                     }
                                 }
                                 $child_skill[] = $subSkills;
@@ -106,19 +104,19 @@ class SkillApiController extends Controller {
             $reqData = $request->all();
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
-                $deletePreviousSkills = JobSeekerSkills::where('user_id', '=', $userId)->forceDelete();
+                JobSeekerSkills::where('user_id', '=', $userId)->forceDelete();
                 $jobseekerSkills = array();
                 $jobseekerOtherSkills = array();
                 if(is_array($reqData['skills']) && count($reqData['skills']) > 0){
                     foreach($reqData['skills'] as $skill){
-                        $jobseekerSkills[] = array('user_id' => $userId , 'skill_id' => $skill ,'other_skill' => '' ); 
+                        $jobseekerSkills[] = array('user_id' => $userId , 'skill_id' => $skill ,'other_skill' => '' );
                     }
                     JobSeekerSkills::insert($jobseekerSkills);
                 }
                 
                 if(is_array($reqData['other']) && count($reqData['other']) > 0){
                     foreach($reqData['other'] as $otherSkill){
-                        $jobseekerOtherSkills[] = array('user_id' => $userId , 'skill_id' => $otherSkill['id'] ,'other_skill' => $otherSkill['value'] ); 
+                        $jobseekerOtherSkills[] = array('user_id' => $userId , 'skill_id' => $otherSkill['id'] ,'other_skill' => $otherSkill['value'] );
                     }
                     JobSeekerSkills::insert($jobseekerOtherSkills);
                 }
@@ -196,7 +194,7 @@ class SkillApiController extends Controller {
                 $filename = $this->generateFilename($userId, 'certificate');
                 $response = $this->uploadFileToAWS($request, $filename);
                 if ($response['res']) {
-                    $uploadImage  = JobseekerCertificates::updateOrCreate(
+                    JobseekerCertificates::updateOrCreate(
                             ['user_id' => $userId, 'certificate_id' => $request->certificateId],
                             ['image_path' => $response['file']]
                     );

@@ -17,7 +17,7 @@ trait FileRepositoryS3 {
         return $imageType . '/' . uniqid(TRUE);
     }
 
-    public function uploadFileToAWS(Request $request, &$filename, $losslessCompress = 0) {
+    public function uploadFileToAWS(Request $request, &$filename) {
         $file = file_get_contents($request->file('image')->getRealPath());
         $check = getimagesize($request->file('image')->getRealPath());
         $res = 0;
@@ -32,10 +32,10 @@ trait FileRepositoryS3 {
         }
     }
 
-    protected function createCompressedImage(Request $request, $filename, $fileExt) {
+    protected function createCompressedImage($filename, $fileExt) {
         $compressFile = '/usr/share/nginx/html/compressImage/' . uniqid(TRUE) . str_replace("image/", ".", $fileExt);
         $command = 'ffmpeg -i ' . $this->awsObj->url($filename) . ' -vframes 1 -compression_level 0 ' . $compressFile . ' > storage/logs/ffmpeglog.log';
-        $res = passthru($command);
+        passthru($command);
         $this->awsObj->put('compress/' . $filename, file_get_contents($compressFile), 'public');
         unlink($compressFile);
     }
@@ -82,54 +82,6 @@ trait FileRepositoryS3 {
             }
         }
         return array('image' => $filename, 'thumb' => $thumnail_name);
-    }
-
-    public function downloadAlbumFolder($localFolderPath, $bucketFolderPath, $bucketUploadPath, $eventAlbum) {
-        $result = 0;
-        $this->createObject();
-        //$files = Storage::allFiles($bucketFolderPath);
-
-        $zip = new \ZipArchive();
-
-        $zip->open($localFolderPath, \ZipArchive::CREATE);
-
-        foreach ($eventAlbum as $file) {
-            $fileName = substr(strrchr($file->photoUrl, "/"), 1);
-            $zip->addFromString($fileName, $this->awsObj->get($file->photoUrl));
-        }
-        $zip->close();
-
-        $result = $this->awsObj->put($bucketUploadPath, fopen($localFolderPath, 'r+'), 'public');
-
-        if ($result == 1) {
-            unlink($localFolderPath);
-        }
-
-        return $result;
-    }
-
-    public function downloadEnhancedPhotos($localFolderPath, $bucketUploadPath, $photoArray) {
-        $result = 0;
-        if (!empty($photoArray)) {
-            $this->createObject();
-            $files = $photoArray;
-            $zip = new \ZipArchive();
-
-            $zip->open($localFolderPath, \ZipArchive::CREATE);
-
-            foreach ($files as $file) {
-                $fileName = substr(strrchr($file, "/"), 1);
-                $zip->addFromString($fileName, $this->awsObj->get($file));
-            }
-            $zip->close();
-
-            $result = $this->awsObj->put($bucketUploadPath, fopen($localFolderPath, 'r+'), 'public');
-
-            if ($result == 1) {
-                unlink($localFolderPath);
-            }
-        }
-        return $result;
     }
 
 }

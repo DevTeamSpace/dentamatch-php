@@ -4,17 +4,13 @@ namespace App\Http\Controllers\web;
 
 use App\Models\User;
 use App\Models\UserGroup;
-use App\Models\Group;
+use App\Models\RecruiterProfile;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use DB;
 use Auth;
-use Config;
 use Session;
-use Redirect;
 use Mail;
 
 class SignupController extends Controller {
@@ -42,7 +38,6 @@ class SignupController extends Controller {
 
     protected function postLogin(\Illuminate\Http\Request $request) {
 
-        $response = array('success' => 0, 'message' => '', 'result' => []);
         $validation_rules = array('email' => 'required|email', 'password' => 'required');
         $validator = Validator::make($request->all(), $validation_rules);
         if ($validator->fails()) {
@@ -53,13 +48,11 @@ class SignupController extends Controller {
         $redirect = 'login';
         if (Auth::validate($credentials)) {
             $user = User::where('email', $credentials['email'])->first();
-            if ($user->userGroup->group_id == 2) {
-                if (Auth::attempt($credentials)) {
-                    $redirect = 'terms-conditions';
-                    $term = \App\Models\RecruiterProfile::where('user_id',Auth::user()->id)->first();
-                    if(!empty($term) && isset($term)){
-                         $redirect = 'home';
-                    }
+            if ($user->userGroup->group_id==2 && Auth::attempt($credentials)) {
+                $redirect = 'terms-conditions';
+                $term = RecruiterProfile::where('user_id',Auth::user()->id)->first();
+                if(!empty($term) && isset($term)){
+                     $redirect = 'home';
                 }
             }
         }
