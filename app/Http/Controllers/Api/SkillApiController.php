@@ -75,10 +75,6 @@ class SkillApiController extends Controller {
                          if(!empty($UpdatedJobseekerSkills[$skill['id']])){
                             $otherSkill = $UpdatedJobseekerSkills[$skill['id']]['other_skill'];
                          }
-                         /*$skillKey = array_search($skill['id'], array_column($skillArray, 'skill_id'));
-                            if($skillKey && $skillKey >= 0){
-                                $otherSkill = $jobseekerSkills[$skillKey]['other_skill'];
-                            }*/
                         $update_skills[$key] = array('id' => $skill['id'],'parent_id' => $skill['parent_id'],'skill_name' => $skill['skill_name'],'other_skill' => $otherSkill,'children' => array());
                     } 
                 }
@@ -111,16 +107,11 @@ class SkillApiController extends Controller {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $deletePreviousSkills = JobSeekerSkills::where('user_id', '=', $userId)->forceDelete();
-                //$jobSeekerSkillModel = new JobSeekerSkills();
                 $jobseekerSkills = array();
                 $jobseekerOtherSkills = array();
                 if(is_array($reqData['skills']) && count($reqData['skills']) > 0){
                     foreach($reqData['skills'] as $skill){
                         $jobseekerSkills[] = array('user_id' => $userId , 'skill_id' => $skill ,'other_skill' => '' ); 
-                        /*$jobSeekerSkillModel->user_id = $userId;
-                        $jobSeekerSkillModel->skill_id = $skill;
-                        $jobSeekerSkillModel->other_skill = '';
-                        $jobSeekerSkillModel->save();*/
                     }
                     JobSeekerSkills::insert($jobseekerSkills);
                 }
@@ -128,10 +119,6 @@ class SkillApiController extends Controller {
                 if(is_array($reqData['other']) && count($reqData['other']) > 0){
                     foreach($reqData['other'] as $otherSkill){
                         $jobseekerOtherSkills[] = array('user_id' => $userId , 'skill_id' => $otherSkill['id'] ,'other_skill' => $otherSkill['value'] ); 
-                        /*$jobSeekerSkillModel->user_id = $userId;
-                        $jobSeekerSkillModel->skill_id = $otherSkill['id'];
-                        $jobSeekerSkillModel->other_skill = $otherSkill['value'];
-                        $jobSeekerSkillModel->save();*/
                     }
                     JobSeekerSkills::insert($jobseekerOtherSkills);
                 }
@@ -203,7 +190,6 @@ class SkillApiController extends Controller {
         try {
             $this->validate($request, [
                 'certificateId' => 'required|integer',
-                'validityDate' => 'required',
                 'image' => 'required|mimes:jpeg,jpg,png|max:102400',
             ]);
             $userId = apiResponse::loginUserId($request->header('accessToken'));
