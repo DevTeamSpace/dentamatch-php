@@ -381,12 +381,6 @@ paths:
           required: true
           description: Certificate id with values json array ex ([{"id":1,"value":"abc"}])
           type: integer 
-        - name: image
-          in: formData
-          required: true
-          description: Image to be updated 
-          type: file 
-     
       tags:
         - User Certification
         
