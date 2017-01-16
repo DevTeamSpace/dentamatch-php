@@ -231,19 +231,19 @@ class SkillApiController extends Controller {
             $reqData = $request->all();
             if($userId > 0){
                 if(is_array($reqData['certificateValidition']) && count($reqData['certificateValidition']) > 0){
-                    foreach($reqData['certificateValidition'] as $key => $value){
+                    foreach($reqData['certificateValidition'] as  $value){
                         JobseekerCertificates::where('user_id',$userId)->where('certificate_id',$value['id'])->update(['validity_date' => $value['value']]);
                     }
                 }
-                return apiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"));
+                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"));
             }else{
-                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response =  apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response =  apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response =  apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
     }
     
