@@ -55,28 +55,32 @@ class WorkExperienceApiController extends Controller {
             ]);
             
             $userId = apiResponse::loginUserId($request->header('accessToken'));
-            $workExp = new WorkExperience();
-            if ($request->action=="edit" && !empty($request->id)) {
-                $workExp = WorkExperience::find($request->id);
+            if($userId>0) {
+                $workExp = new WorkExperience();
+                if ($request->action=="edit" && !empty($request->id)) {
+                    $workExp = WorkExperience::find($request->id);
+                }
+
+                $workExp->user_id = $userId;
+                $workExp->job_title_id = $request->jobTitleId;
+                $workExp->months_of_expereince = $request->monthsOfExpereince;
+                $workExp->office_name = $request->officeName;
+                $workExp->office_address = $request->officeAddress;
+                $workExp->city = $request->city;
+                $workExp->reference1_name = $request->reference1Name;
+                $workExp->reference1_mobile = $request->reference1Mobile;
+                $workExp->reference1_email = $request->reference1Email;
+                $workExp->reference2_name = $request->reference2Name;
+                $workExp->reference2_mobile = $request->reference2Mobile;
+                $workExp->reference2_email = $request->reference2Email;
+                $workExp->deleted_at = null;
+                $workExp->save();
+
+                $data['list'][] = $workExp;
+                $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_added"), apiResponse::convertToCamelCase($data));
+            } else {
+                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
-            
-            $workExp->user_id = $userId;
-            $workExp->job_title_id = $request->jobTitleId;
-            $workExp->months_of_expereince = $request->monthsOfExpereince;
-            $workExp->office_name = $request->officeName;
-            $workExp->office_address = $request->officeAddress;
-            $workExp->city = $request->city;
-            $workExp->reference1_name = $request->reference1Name;
-            $workExp->reference1_mobile = $request->reference1Mobile;
-            $workExp->reference1_email = $request->reference1Email;
-            $workExp->reference2_name = $request->reference2Name;
-            $workExp->reference2_mobile = $request->reference2Mobile;
-            $workExp->reference2_email = $request->reference2Email;
-            $workExp->deleted_at = null;
-            $workExp->save();
-            
-            $data['list'][] = $workExp;
-            $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_added"), apiResponse::convertToCamelCase($data));
             
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
