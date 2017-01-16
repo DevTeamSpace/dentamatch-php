@@ -245,6 +245,7 @@ class SkillApiController extends Controller {
         } catch (\Exception $e) {
             $response =  apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
+        return $response;
     }
     /**
      * Description : Search jobs
