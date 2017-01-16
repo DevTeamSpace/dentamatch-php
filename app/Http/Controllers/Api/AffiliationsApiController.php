@@ -86,22 +86,24 @@ class AffiliationsApiController extends Controller {
                 
                 if(!empty($reqData['affiliationDataArray']) && is_array($reqData['affiliationDataArray'])){
                     foreach($reqData['affiliationDataArray'] as $key=>$value) {
-                        if(!empty($value['affiliationId'])) {
-                            $jobSeekerData[$key]['affiliation_id'] = $value['affiliationId'];
+                        if(!empty($value)) {
+                            $jobSeekerData[$key]['affiliation_id'] = $value;
                             $jobSeekerData[$key]['user_id'] = $userId;
+                            $jobSeekerData[$key]['other_affiliation'] = null;
                         }
-                        $keyCount+=$key;
+                        $keyCount=$key+1;
                     }
                 }
                 
                 if(!empty($reqData['other']) && is_array($reqData['other'])){
-                    foreach($reqData['other'] as $otherAffiliation){
-                        $jobSeekerData[$keyCount]['affiliation_id'] = $otherAffiliation['affiliationId'];
-                        $jobSeekerData[$keyCount]['user_id'] = $userId;
-                        $jobSeekerData[$keyCount]['other_affiliation'] = $otherAffiliation['otherAffiliation'];
+                    foreach($reqData['other'] as $otherAffiliation) {
+                        if(!empty($otherAffiliation['affiliationId'])) {
+                            $jobSeekerData[$keyCount]['affiliation_id'] = $otherAffiliation['affiliationId'];
+                            $jobSeekerData[$keyCount]['user_id'] = $userId;
+                            $jobSeekerData[$keyCount]['other_affiliation'] = $otherAffiliation['otherAffiliation'];
+                        }
                     }
                 }
-                
                 if(!empty($jobSeekerData)) {
                     JobSeekerAffiliation::insert($jobSeekerData);
                 }
