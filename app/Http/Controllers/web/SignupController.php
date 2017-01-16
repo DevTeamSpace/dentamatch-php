@@ -43,7 +43,7 @@ class SignupController extends Controller {
         if ($validator->fails()) {
             Session::flash('message', "Validation Failure");
         }
-        $credentials = ['email' => $request->email, 'password' => $request->password, 'is_verified' => 1];
+        $credentials = ['email' => $request->email, 'password' => $request->password, 'is_verified' => 1, 'is_active' => 1];
         $message = "Invalid username or password or not active yet.";
         $redirect = 'login';
         if (Auth::validate($credentials)) {
@@ -75,7 +75,8 @@ class SignupController extends Controller {
     }
 
     public function dashboard() {
-        return view('web.dashboard');
+        $officeType = \App\Models\OfficeType::all();
+        return view('web.dashboard')->with('officeType', $officeType);
     }
 
     public function postSignUp(Request $request) {
@@ -139,8 +140,9 @@ class SignupController extends Controller {
 
     public function getTutorial() {
         try {
-             \App\Models\RecruiterProfile::create(['user_id' => Auth::user()->id, 'accept_term' => 1]);
-            return view('web.dashboard')->with('modal',1);
+            $officeType = \App\Models\OfficeType::all();
+            \App\Models\RecruiterProfile::create(['user_id' => Auth::user()->id, 'accept_term' => 1]);
+            return view('web.dashboard')->with('modal', 1)->with('officeType', $officeType);
         } catch (\Exception $e) {
             return redirect('terms-conditions');
         }
