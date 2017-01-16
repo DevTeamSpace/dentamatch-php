@@ -199,7 +199,7 @@ class SkillApiController extends Controller {
                 if ($response['res']) {
                     $uploadImage  = JobseekerCertificates::updateOrCreate(
                             ['user_id' => $userId, 'certificate_id' => $request->certificateId],
-                            ['image_path' => $response['file'] ,'validity_date' => $request->validityDate]
+                            ['image_path' => $response['file']]
                     );
                     return apiResponse::customJsonResponse(1, 200, trans("message.certificate_successful_update"));
                 } else {

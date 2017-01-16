@@ -350,11 +350,6 @@ paths:
           required: true
           description: Certificate id 
           type: integer 
-        - name: validityDate
-          in: formData
-          required: true
-          description: Validity date of certificate (YYYY-mm-dd)
-          type: string
         - name: image
           in: formData
           required: true
