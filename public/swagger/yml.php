@@ -359,6 +359,37 @@ paths:
       tags:
         - User Certification
         
+  /users/update-certificate-validity:
+    post:
+      summary: Certification listing 
+      description: Api for  updating certification validity 
+      responses: 
+          200:
+            description: Certification update
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+      parameters:
+        - name: accessToken
+          in: header
+          required: true
+          description: access token
+          type: string
+        - name: certificateValidition
+          in: formData
+          required: true
+          description: Certificate id with values json array ex ([{"id":1,"value":"abc"}])
+          type: integer 
+        - name: image
+          in: formData
+          required: true
+          description: Image to be updated 
+          type: file 
+     
+      tags:
+        - User Certification
+        
   /users/school-list:
     get:
       summary: School List

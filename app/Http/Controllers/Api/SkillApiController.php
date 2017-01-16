@@ -157,7 +157,6 @@ class SkillApiController extends Controller {
                         $userCertificationData[$value['certificate_id']] = ['certificate_id' => $value['certificate_id'], 'validity_date' => $value['validity_date'] , 'image_path' => $value['image_path']];
                     }
                 }
-                
                 $certificationArray = array();
                 foreach($certificationList as $key => $certificate){
                     $array = array('id' => $certificate['id'] , 'certificateName' => $certificate['certificate_name'] , 'validityDate' => '' , 'imagePath' => '') ;
@@ -227,12 +226,17 @@ class SkillApiController extends Controller {
     public function postUpdateCertificationsValidity(Request $request) {
         try {
             $this->validate($request, [
-                'certificateId' => 'required|integer',
-                'validityDate' => 'required',
+                'certificateValidition' => 'required',
             ]);
             $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $reqData = $request->all();
             if($userId > 0){
-                //JobseekerCertificates::where('user_id', '=', $userId)->where('certificate_id')
+                if(is_array($reqData['certificateValidition']) && count($reqData['certificateValidition']) > 0){
+                    foreach($reqData['certificateValidition'] as $key => $value){
+                        JobseekerCertificates::where('user_id',$userId)->where('certificate_id',$value['id'])->update(['validity_date' => $value['value']]);
+                    }
+                }
+                return apiResponse::customJsonResponse(1, 200, trans("message.data_saved_success"));
             }else{
                 return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
