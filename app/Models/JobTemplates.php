@@ -30,8 +30,7 @@ class JobTemplates extends Model
      /**
      * Get the skiild for the blog post.
      */
-    public function templateSkills()
-    {
+    public function templateSkills(){
         return $this->hasMany(TemplateSkills::class,'job_template_id');
     }
     
@@ -45,8 +44,13 @@ class JobTemplates extends Model
         return encrypt($value);
     }
     
+    public static function getIdDecrypt($value){
+        return decrypt($value);
+    }
+    
     public static function findById($id){
-        return JobTemplates::where('id',$id)->first();
+        $templateId = self::getIdDecrypt($id);
+        return JobTemplates::where('id',$templateId)->first();
     }
     
     public static function getAllUserTemplates($userId){

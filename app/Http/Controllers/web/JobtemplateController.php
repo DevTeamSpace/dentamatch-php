@@ -27,7 +27,7 @@ class JobtemplateController extends Controller
     public function listJobTemplates(){
         try{
             $this->viewData['jobTemplates'] = JobTemplates::getAllUserTemplates(Auth::user()->id);
-            //dd($this->viewData);
+            
             return $this->returnView('list');
         } catch (\Exception $e) {
             return view('web.error.',["message" => $e->getMessage()]);

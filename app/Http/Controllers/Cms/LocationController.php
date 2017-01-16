@@ -68,7 +68,7 @@ class LocationController extends Controller
         );
         
         if(isset($request->id)){
-            $rules['zipcode'] = 'Required|Between:5,6|Unique:locations,zipcode,'.$request->id;
+            $rules['zipcode'] = "Required|Between:5,6|regex:/[0-9]/|Unique:locations,zipcode,".$request->id;
             $location = Location::find($request->id);  
             $msg = trans('messages.location_updated');
         }
