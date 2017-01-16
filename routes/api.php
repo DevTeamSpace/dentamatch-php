@@ -43,3 +43,8 @@ Route::post('users/affiliation-save', 'Api\AffiliationsApiController@postAffilia
 Route::post('users/about-me-save', 'Api\UserProfileApiController@postAboutMe');
 Route::get('users/about-me-list', 'Api\UserProfileApiController@getAboutMe');
 
+
+Route::get('users/search-job', 'Api\SkillApiController@getJobSearch');
+
+
+
