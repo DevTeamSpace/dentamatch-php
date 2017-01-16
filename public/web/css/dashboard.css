@@ -137,7 +137,7 @@ label{color:#686868;}
 .info-block-text { color: #0470c0; font-size: 16px; font-weight: bold;}
 .info-block-rec-text { color: #383838; font-size: 16px; font-weight: bold;}
 .info-block-dental-text { color: #383838; font-size: 14px;}
-.offset30 {margin-right: 30px; margin-bottom: 30px;}
+.offset30 {margin-right: 30px !important; margin-bottom: 30px !important;}
 .icon-upload-ctn { float: right; margin: 10px 0px 0 0; position: absolute; top: 0; right: 0;}
 .icon-upload-ctn1 { float: right; margin: 0px; position: relative; top: 0; right: 0;}
 .icon-upload-detail { z-index: 2; cursor: pointer; font-size: 35px; height: 10px; width: 22px; display: inline-block; border-radius: 6px; }
