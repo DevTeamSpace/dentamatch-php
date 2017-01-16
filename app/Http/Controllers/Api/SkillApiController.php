@@ -201,10 +201,38 @@ class SkillApiController extends Controller {
                             ['user_id' => $userId, 'certificate_id' => $request->certificateId],
                             ['image_path' => $response['file']]
                     );
-                    return apiResponse::customJsonResponse(1, 200, trans("message.certificate_successful_update"));
+                    $url['imgUrl'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $response['file'];
+                    return apiResponse::customJsonResponse(1, 200, trans("message.certificate_successful_update"),$url);
                 } else {
                     return apiResponse::responseError(trans("message.upload_image_problem"));
                 }
+            }else{
+                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+            }
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+        } catch (\Exception $e) {
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+    }
+    
+    /**
+     * Description : Update certifications validity date
+     * Method : postUpdateCertificationsValidity
+     * formMethod : POST
+     * @param 
+     * @return type
+     */
+    public function postUpdateCertificationsValidity(Request $request) {
+        try {
+            $this->validate($request, [
+                'certificateId' => 'required|integer',
+                'validityDate' => 'required',
+            ]);
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            if($userId > 0){
+                //JobseekerCertificates::where('user_id', '=', $userId)->where('certificate_id')
             }else{
                 return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
