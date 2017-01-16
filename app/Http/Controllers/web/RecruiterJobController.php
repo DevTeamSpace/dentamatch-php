@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\RecruiterJobs;
 use App\Models\JobTemplates;
 use App\Models\TempJobDates;
+use App\Models\RecruiterOffice;
 
 class RecruiterJobController extends Controller
 {
@@ -25,6 +26,7 @@ class RecruiterJobController extends Controller
     
     public function createJob($templateId){
         try{
+            $this->viewData['offices'] = RecruiterOffice::getAllRecruiterOffices(Auth::user()->id);
             $this->viewData['templateId'] = $templateId;
             $this->viewData['jobTemplates'] = JobTemplates::findById($templateId);;
             
