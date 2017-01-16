@@ -35,6 +35,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['middleware' => 'recruiter'], function () {
         Route::group(['middleware' => 'acceptedTerms'], function () {
             Route::get('home', 'web\SignupController@dashboard');
+            Route::post('create-profile', 'web\UserProfileController@createProfile');
         });
 
         Route::group(['middleware' => 'termCondition'], function () {
