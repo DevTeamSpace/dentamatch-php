@@ -35,6 +35,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['middleware' => 'recruiter'], function () {
         Route::group(['middleware' => 'acceptedTerms'], function () {
             Route::get('home', 'web\SignupController@dashboard');
+            Route::get('jobtemplates', 'web\JobtemplateController@listJobTemplates');
+            Route::get('jobtemplates/create', 'web\JobtemplateController@createJobTemplate');
+            Route::post('jobtemplates/saveOrUpdate', 'web\JobtemplateController@saveOrUpdate');
+            Route::get('createJob/{templateId}', 'web\RecruiterJobController@createJob');
+            Route::post('create-profile', 'web\UserProfileController@createProfile');
         });
 
         Route::group(['middleware' => 'termCondition'], function () {
