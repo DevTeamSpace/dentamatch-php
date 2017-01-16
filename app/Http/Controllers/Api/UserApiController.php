@@ -62,13 +62,10 @@ class UserApiController extends Controller {
             $deviceModel =  new Device();
             $reqData['deviceOs'] = isset($reqData['deviceOs'])?$reqData['deviceOs']:'';
             $reqData['appVersion'] = isset($reqData['appVersion'])?$reqData['appVersion']:'';
-            $userToken=$deviceModel->register_device(
-                    $reqData['deviceId'],
-                    $userDetails->id,
-                    $reqData['deviceToken'],
-                    $reqData['deviceType'],
-                    $reqData['deviceOs'],
-                    $reqData['appVersion']);
+            $deviceModel->register_device(
+                    $reqData['deviceId'], $userDetails->id, $reqData['deviceToken'],
+                    $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']
+                );
             
             $url = url('user-activation', ['token' => $verification_code]);
             $name = $reqData['firstName'];
@@ -214,9 +211,7 @@ class UserApiController extends Controller {
                         ->first();
             if ($user) {
                 if($user->is_verified == 1){
-                    $delete = PasswordReset::where('user_id' , $user->id)
-                                    ->where('email', $user->email)
-                                    ->delete();
+                    PasswordReset::where('user_id' , $user->id)->where('email', $user->email)->delete();
                     $passwordModel = PasswordReset::firstOrNew(array('user_id' => $user->id, 'email' => $user->email));
                     $passwordModel->fill(['token' =>md5($user->email . time())]);
                     $passwordModel->save();
