@@ -41,23 +41,25 @@ class AffiliationsApiController extends Controller {
                     foreach($affiliationList as $key=>$value) {
                         $data[$key]['affiliationId']= $value['affiliationId'];
                         $data[$key]['affiliationName'] = $value['affiliationName'];
-                        $data[$key]['otherAffiliation'] = $value['otherAffiliation'];
+                        $data[$key]['otherAffiliation'] = !empty($jobSeekerAffiliationData[$value['affiliationId']]['otherAffiliation']) ? $jobSeekerAffiliationData[$value['affiliationId']]['otherAffiliation'] : null;
                         $data[$key]['jobSeekerAffiliationStatus'] = !empty($jobSeekerAffiliationData[$value['affiliationId']]) ? 1 : 0; 
                     }
                 }
 
                 $return['list'] = array_values($data);
 
-                return apiResponse::customJsonResponse(1, 200, trans("messages.affiliation_list_success"), apiResponse::convertToCamelCase($return));
+                $returnResponse =  apiResponse::customJsonResponse(1, 200, trans("messages.affiliation_list_success"), apiResponse::convertToCamelCase($return));
             } else {
-                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            $returnResponse = apiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $e) {
-            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
+        
+        return $returnResponse;
     }
     
     /**
@@ -81,40 +83,44 @@ class AffiliationsApiController extends Controller {
             
             if($userId > 0){
                 if((!empty($reqData['affiliationDataArray']) && is_array($reqData['affiliationDataArray'])) || (!empty($reqData['other']) && is_array($reqData['other']))){
-                    $deletePreviousAffiliations = JobSeekerAffiliation::where('user_id', '=', $userId)->forceDelete();
+                    JobSeekerAffiliation::where('user_id', '=', $userId)->forceDelete();
                 }
                 
                 if(!empty($reqData['affiliationDataArray']) && is_array($reqData['affiliationDataArray'])){
                     foreach($reqData['affiliationDataArray'] as $key=>$value) {
-                        if(!empty($value['affiliationId'])) {
-                            $jobSeekerData[$key]['affiliation_id'] = $value['affiliationId'];
+                        if(!empty($value)) {
+                            $jobSeekerData[$key]['affiliation_id'] = $value;
                             $jobSeekerData[$key]['user_id'] = $userId;
+                            $jobSeekerData[$key]['other_affiliation'] = null;
                         }
-                        $keyCount+=$key;
+                        $keyCount=$key+1;
                     }
                 }
                 
                 if(!empty($reqData['other']) && is_array($reqData['other'])){
-                    foreach($reqData['other'] as $otherAffiliation){
-                        $jobSeekerData[$keyCount]['affiliation_id'] = $otherAffiliation['affiliationId'];
-                        $jobSeekerData[$keyCount]['user_id'] = $userId;
-                        $jobSeekerData[$keyCount]['other_affiliation'] = $otherAffiliation['otherAffiliation'];
+                    foreach($reqData['other'] as $otherAffiliation) {
+                        if(!empty($otherAffiliation['affiliationId'])) {
+                            $jobSeekerData[$keyCount]['affiliation_id'] = $otherAffiliation['affiliationId'];
+                            $jobSeekerData[$keyCount]['user_id'] = $userId;
+                            $jobSeekerData[$keyCount]['other_affiliation'] = $otherAffiliation['otherAffiliation'];
+                        }
                     }
                 }
-                
                 if(!empty($jobSeekerData)) {
                     JobSeekerAffiliation::insert($jobSeekerData);
                 }
                 
-                return apiResponse::customJsonResponse(1, 200, trans("messages.affiliation_add_success")); 
+                $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.affiliation_add_success")); 
             } else {
-                return apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $returnResponse = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
+        
+        return $returnResponse;
     }
 }

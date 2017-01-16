@@ -30,29 +30,26 @@ class UserApiController extends Controller {
                 'longitude' => 'required',
                 'zipCode' => 'required',
             ]);
-        } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
-        }
+        
         $reqData = $request->all();
         $userExists = User::where('email', $reqData['email'])->first();
         if($userExists){
-            $response = apiResponse::customJsonResponse(0, 201, "User already exists with this email");      
+            $response = apiResponse::customJsonResponse(0, 201, trans("messages.user_exist_same_email"));      
         }else{
             $user =  array(
                 'email' => $reqData['email'],
                 'password' => bcrypt($reqData['password']),
             );
-            $user_details = User::create($user);
+            $userDetails = User::create($user);
             
             $userGroupModel = new UserGroup();
             $userGroupModel->group_id = 3;
-            $userGroupModel->user_id = $user_details->id;
+            $userGroupModel->user_id = $userDetails->id;
             $userGroupModel->save();
             
             $userProfileModel = new UserProfile();
             $verification_code = mt_rand(1000000000, 9999999999);
-            $userProfileModel->user_id = $user_details->id;
+            $userProfileModel->user_id = $userDetails->id;
             $userProfileModel->first_name = $reqData['firstName'];
             $userProfileModel->last_name = $reqData['lastName'];
             $userProfileModel->zipcode = $reqData['zipCode'];
@@ -65,13 +62,10 @@ class UserApiController extends Controller {
             $deviceModel =  new Device();
             $reqData['deviceOs'] = isset($reqData['deviceOs'])?$reqData['deviceOs']:'';
             $reqData['appVersion'] = isset($reqData['appVersion'])?$reqData['appVersion']:'';
-            $user_token=$deviceModel->register_device(
-                    $reqData['deviceId'],
-                    $user_details->id,
-                    $reqData['deviceToken'],
-                    $reqData['deviceType'],
-                    $reqData['deviceOs'],
-                    $reqData['appVersion']);
+            $deviceModel->register_device(
+                    $reqData['deviceId'], $userDetails->id, $reqData['deviceToken'],
+                    $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']
+                );
             
             $url = url('user-activation', ['token' => $verification_code]);
             $name = $reqData['firstName'];
@@ -81,9 +75,15 @@ class UserApiController extends Controller {
                     $message->to($email, $fname)->subject('Activation Email');
                 });
             
-            $response = apiResponse::customJsonResponse(1, 200, "User registered successfully"); 
+            $response = apiResponse::customJsonResponse(1, 200, trans("messages.user_registration_successful")); 
         }
         return $response;
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        }catch (\Exception $e) {
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
     }
     
     /**
@@ -99,15 +99,12 @@ class UserApiController extends Controller {
                 'email' => 'required|email',
                 'password' => 'required', 
             ]);
-        } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
-        }
+        
         $reqData = $request->all();
         $userAttempt = Auth::attempt(['email' => $reqData['email'], 'password' => $reqData['password']]);
-        $user_id = ($userAttempt==true) ? Auth::user()->id : null;
-        if($user_id > 0){
-            $user_data = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+        $userId = ($userAttempt==true) ? Auth::user()->id : null;
+        if($userId > 0){
+            $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                         ->select(
                                 'user_groups.group_id', 
@@ -118,42 +115,48 @@ class UserApiController extends Controller {
                                 'jobseeker_profiles.preferred_job_location',
                                 'jobseeker_profiles.is_verified'
                                 )
-                        ->where('users.id', $user_id)
+                        ->where('users.id', $userId)
                         ->first();
-            if($user_data['group_id'] == 3){
-                if($user_data['is_verified'] == 1){
-                        $device = Device::where('user_id', $user_id)->orWhere('device_id', $reqData['deviceId'])->first();
+            if($userData['group_id'] == 3){
+                if($userData['is_verified'] == 1){
+                        $device = Device::where('user_id', $userId)->orWhere('device_id', $reqData['deviceId'])->first();
                         $reqData['deviceOs'] = isset($reqData['deviceOs'])?$reqData['deviceOs']:'';
                         $reqData['appVersion'] = isset($reqData['appVersion'])?$reqData['appVersion']:'';
-                         if (is_object($device) && ($device->device_id != $reqData['deviceId'] || $device->user_id != $user_id)) {
-                            Device::where('device_id', $device->device_id)->orWhere('user_id', $user_id)->delete();
+                         if (is_object($device) && ($device->device_id != $reqData['deviceId'] || $device->user_id != $userId)) {
+                            Device::where('device_id', $device->device_id)->orWhere('user_id', $userId)->delete();
                             $deviceModel = new Device();
-                            $user_token = $deviceModel->register_device($reqData['deviceId'], $user_id, $reqData['deviceToken'], $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']);
+                            $userToken = $deviceModel->register_device($reqData['deviceId'], $userId, $reqData['deviceToken'], $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']);
 
                         } else {
                             $deviceModel = new Device();
-                            $user_token = $deviceModel->register_device($reqData['deviceId'], $user_id, $reqData['deviceToken'], $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']);
+                            $userToken = $deviceModel->register_device($reqData['deviceId'], $userId, $reqData['deviceToken'], $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']);
 
                         }
-                        $user_array['userDetails'] = array(
-                            'email' => $user_data['email'],
-                            'firstName' => $user_data['first_name'],
-                            'lastName' => $user_data['last_name'],
-                            'zipCode' => $user_data['zipcode'],
-                            'preferredJobLocation' => $user_data['preferred_job_location'],
-                            'accessToken' => $user_token,
+                        $userArray['userDetails'] = array(
+                            'email' => $userData['email'],
+                            'firstName' => $userData['first_name'],
+                            'lastName' => $userData['last_name'],
+                            'zipCode' => $userData['zipcode'],
+                            'preferredJobLocation' => $userData['preferred_job_location'],
+                            'accessToken' => $userToken,
                         );
-                        $response = apiResponse::customJsonResponse(1, 200, "User logged in successfully",$user_array);
+                        $response = apiResponse::customJsonResponse(1, 200, trans("messages.user_logged_successful"),$userArray);
                 }else{
-                    $response = apiResponse::customJsonResponse(0, 202, "Your account is not activated yet"); 
+                    $response = apiResponse::customJsonResponse(0, 202, trans("messages.user_account_not_active")); 
                 }
             }else{
-                $response = apiResponse::customJsonResponse(0, 201, "Invalid login credentials"); 
+                $response = apiResponse::customJsonResponse(0, 201, trans("messages.invalid_login_credentials")); 
             }
         }else{
-            $response = apiResponse::customJsonResponse(0, 201, "Invalid login credentials"); 
+            $response = apiResponse::customJsonResponse(0, 201,trans("messages.invalid_login_credentials")); 
         }
-        return $response;
+           return $response;
+         } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        }catch (\Exception $e) {
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
     }
     
     public function getTermsAndCondition() {
@@ -192,11 +195,6 @@ class UserApiController extends Controller {
             $this->validate($request, [
                 'email' => 'required|email',
             ]);
-        } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
-        }
-        try {
             $reqData = $request->all();
             $user = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
@@ -213,9 +211,7 @@ class UserApiController extends Controller {
                         ->first();
             if ($user) {
                 if($user->is_verified == 1){
-                    $delete = PasswordReset::where('user_id' , $user->id)
-                                    ->where('email', $user->email)
-                                    ->delete();
+                    PasswordReset::where('user_id' , $user->id)->where('email', $user->email)->delete();
                     $passwordModel = PasswordReset::firstOrNew(array('user_id' => $user->id, 'email' => $user->email));
                     $passwordModel->fill(['token' =>md5($user->email . time())]);
                     $passwordModel->save();
@@ -223,15 +219,18 @@ class UserApiController extends Controller {
                     Mail::queue('email.resetPasswordToken', ['name' => $user->first_name, 'url' => url('resetPassword', ['token' => md5($user->email . time())]), 'email' => $user->email], function($message) use ($user) {
                         $message->to($user->email, $user->first_name)->subject('Reset Password Request ');
                     });
-                    $response = apiResponse::customJsonResponse(1, 200, "Please check your mailbox");
+                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.reset_pw_email_sent"));
                 }else{
-                    $response = apiResponse::customJsonResponse(0, 202, "Your account is not activated yet"); 
+                    $response = apiResponse::customJsonResponse(0, 202, trans("messages.user_account_not_active")); 
                 }
                 
             }else{
-                $response = apiResponse::customJsonResponse(0, 201, "Email does not exists");
+                $response = apiResponse::customJsonResponse(0, 201, trans("messages.email_not_exists"));
             }
             return $response;
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $ex) {
             $message = $ex->getMessage();
             return apiResponse::responseError("Some error occoured", ["data" => $message]);

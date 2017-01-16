@@ -13,6 +13,3 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/docs', function (Request $request) {
-    // return $request->docs();
-})->middleware('auth:api');

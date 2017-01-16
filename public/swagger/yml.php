@@ -237,6 +237,26 @@ paths:
           type: string  
       tags:
         - Users onboarding
+  /users/forgot-password:
+    put:
+      summary: User Onboarding
+      description: Api for forgot password
+      responses: 
+          200:
+            description: Forgot password  process
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: email
+          in: formData
+          description: Email  of the user
+          type: string
+        
+      tags:
+        - Users onboarding
         
         
   /list-skills:
@@ -280,11 +300,11 @@ paths:
           type: string
         - name: skills
           in: formData
-          description: provide skill ids in json array
+          description: provide skill ids in json array ex ("skills":[1,2,3,6])
           type: string
         - name: other
           in: formData
-          description: provide other skill ids  with values json array
+          description: provide other skill ids  with values json array ex ("other":[{"id":1,"value":"abc"}])
           type: string
       tags:
         - User Skills
@@ -299,8 +319,68 @@ paths:
             description: Unexpected error
             schema:
              $ref: '#/definitions/Error'
-             
+      parameters:
+        - name: accessToken
+          in: header
+          required: true
+          description: access token
+          type: string     
      
+      tags:
+        - User Certification
+  /users/update-certificate:
+    post:
+      summary: Certification listing 
+      description: Api for  updating certificatopn 
+      responses: 
+          200:
+            description: Certification update
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+      parameters:
+        - name: accessToken
+          in: header
+          required: true
+          description: access token
+          type: string
+        - name: certificateId
+          in: formData
+          required: true
+          description: Certificate id 
+          type: integer 
+        - name: image
+          in: formData
+          required: true
+          description: Image to be updated 
+          type: file 
+     
+      tags:
+        - User Certification
+        
+  /users/update-certificate-validity:
+    post:
+      summary: Certification listing 
+      description: Api for  updating certification validity 
+      responses: 
+          200:
+            description: Certification update
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+      parameters:
+        - name: accessToken
+          in: header
+          required: true
+          description: access token
+          type: string
+        - name: certificateValidition
+          in: formData
+          required: true
+          description: Certificate id with values json array ex ([{"id":1,"value":"abc"}])
+          type: integer 
       tags:
         - User Certification
         
