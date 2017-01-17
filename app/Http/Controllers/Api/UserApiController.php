@@ -205,7 +205,7 @@ class UserApiController extends Controller {
                                 'users.email',
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name',
-                                'jobseeker_profiles.is_verified'
+                                'users.is_verified'
                                 )
                         ->where('users.email', $reqData['email'])
                         ->where('user_groups.group_id' , 3)
@@ -213,11 +213,12 @@ class UserApiController extends Controller {
             if ($user) {
                 if($user->is_verified == 1){
                     PasswordReset::where('user_id' , $user->id)->where('email', $user->email)->delete();
+                    $token = md5($user->email . time());
                     $passwordModel = PasswordReset::firstOrNew(array('user_id' => $user->id, 'email' => $user->email));
-                    $passwordModel->fill(['token' =>md5($user->email . time())]);
+                    $passwordModel->fill(['token' => $token]);
                     $passwordModel->save();
                 
-                    Mail::queue('email.resetPasswordToken', ['name' => $user->first_name, 'url' => url('resetPassword', ['token' => md5($user->email . time())]), 'email' => $user->email], function($message) use ($user) {
+                    Mail::queue('email.resetPasswordToken', ['name' => $user->first_name, 'url' => url('password/reset', ['token' => $token]), 'email' => $user->email], function($message) use ($user) {
                         $message->to($user->email, $user->first_name)->subject('Reset Password Request ');
                     });
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.reset_pw_email_sent"));
