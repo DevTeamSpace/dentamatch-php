@@ -4,13 +4,13 @@
 <div class="container">
     <div class="frm-cred-access-box">
         <div class="row nopadding">
-            <div class="col-sm-6 nopadding">
-                <div class="denta-logo-box text-center">
+            <div class="col-sm-6 nopadding equal-vertbox">
+                <div class="denta-logo-box text-center ">
                         <img src="{{asset('web/images/dentamatch-logo.png')}}">
                 </div>
             </div>
-            <div class="col-sm-6 nopadding">
-                <div class="frm-inr-credbox bg-white">
+            <div class="col-sm-6 nopadding equal-vertbox">
+                <div class="frm-inr-credbox bg-white ">
                     <ul class="nav nav-pills">
                         <li><a data-toggle="pill" href="#signup">Sign up</a></li>
                         <li class="active">
