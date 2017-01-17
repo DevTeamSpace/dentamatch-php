@@ -31,9 +31,11 @@
                     <div class="title">
                         <p class="title-description">Dental Office Address</p>
                         <select name="dentalOfficeId" id="dentalOfficeId" class="selectpicker">
-                            <option value="Smiley">Smiley care, 910 South 17th Street, Newark, New York 07…</option>
-
+                            @foreach ($offices as $office)
+                            <option value="{{ $office['id'] }}">{{ $office['address'] }}</option>
+                            @endforeach
                         </select>
+                        <input type="hidden" value="{{ json_encode($offices) }}" id="officeJson">
                         <p class="error-div hide">Job cannot be currently created for this location. We will soon be available in your area.</p>
                     </div>
                 </div>  
@@ -156,6 +158,15 @@
             $(document).on('click', '.select-days-custom button', function (event) {
                 $(this).find('div').addClass('open');
                 $(this).parent().find('.ms-drop ').css('display', 'block');
+            });
+            $('#dentalOfficeId').change(function(){
+                var officeJson = $.parseJSON($('#officeJson').val());
+                var dentalOfficeId = $('#dentalOfficeId').val()
+                $.each(officeJson,function(index,value){
+                    if(dentalOfficeId==val.id && val.zipcode==''){
+                        
+                    }
+                });
             });
         </script> 
 @endsection
