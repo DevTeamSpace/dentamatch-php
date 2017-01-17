@@ -5,3 +5,7 @@
 Homestead.json
 Homestead.yaml
 .env
+.sonar/.sonar_lock
+.sonar/report-task.txt
+sonar-project.properties
+
