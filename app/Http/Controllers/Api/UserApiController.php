@@ -36,19 +36,20 @@ class UserApiController extends Controller {
         if($userExists){
             $response = apiResponse::customJsonResponse(0, 201, trans("messages.user_exist_same_email"));      
         }else{
+            $uniqueCode = uniqid();
             $user =  array(
                 'email' => $reqData['email'],
                 'password' => bcrypt($reqData['password']),
+                'verification_code' => $uniqueCode,
             );
             $userDetails = User::create($user);
-            
             $userGroupModel = new UserGroup();
             $userGroupModel->group_id = 3;
             $userGroupModel->user_id = $userDetails->id;
             $userGroupModel->save();
             
             $userProfileModel = new UserProfile();
-            $verification_code = mt_rand(1000000000, 9999999999);
+            
             $userProfileModel->user_id = $userDetails->id;
             $userProfileModel->first_name = $reqData['firstName'];
             $userProfileModel->last_name = $reqData['lastName'];
@@ -56,7 +57,7 @@ class UserApiController extends Controller {
             $userProfileModel->preferred_job_location = $reqData['preferedLocation'];
             $userProfileModel->latitude = $reqData['latitude'];
             $userProfileModel->longitude = $reqData['longitude'];
-            $userProfileModel->verification_code = $verification_code;
+            
             $userProfileModel->save();
             
             $deviceModel =  new Device();
@@ -67,7 +68,7 @@ class UserApiController extends Controller {
                     $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']
                 );
             
-            $url = url('user-activation', ['token' => $verification_code]);
+            $url = url("/verification-code/$uniqueCode");
             $name = $reqData['firstName'];
             $email = $reqData['email'];
             $fname = $reqData['firstName'];
@@ -113,7 +114,7 @@ class UserApiController extends Controller {
                                 'jobseeker_profiles.last_name',
                                 'jobseeker_profiles.zipcode',
                                 'jobseeker_profiles.preferred_job_location',
-                                'jobseeker_profiles.is_verified'
+                                'users.is_verified'
                                 )
                         ->where('users.id', $userId)
                         ->first();
