@@ -546,3 +546,24 @@ paths:
           
       tags:
         - User Profile
+        
+  /users/sign-out:
+    delete:
+      summary: Users Onboarding
+      description: Api to log out user
+      responses: 
+          200:
+            description: Api to log out user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+          
+      tags:
+        - Users onboarding
