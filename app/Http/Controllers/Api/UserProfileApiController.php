@@ -60,11 +60,11 @@ class UserProfileApiController extends Controller {
                 $filename = $this->generateFilename($request->type);
                 $response = $this->uploadFileToAWS($request, $filename);
                 if ($response['res']) {
-                    $file = str_replace($request->type . '/', '', $response['file']);
+                    //$file = str_replace($request->type . '/', '', $response['file']);
                     if ($request->type == 'profile_pic') {
-                        UserProfile::where('user_id', $userId)->update(['profile_pic' => $file]);
+                        UserProfile::where('user_id', $userId)->update(['profile_pic' => $response['file']]);
                     } else {
-                        UserProfile::where('user_id', $userId)->update(['dental_state_board' => $file]);
+                        UserProfile::where('user_id', $userId)->update(['dental_state_board' => $response['file']]);
                     }
                     $url['img_url'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $response['file'];
                     $response =  apiResponse::customJsonResponse(1, 200, trans("messages.image_upload_success"), $url);
