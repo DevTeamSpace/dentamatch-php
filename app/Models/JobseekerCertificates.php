@@ -17,7 +17,7 @@ class JobseekerCertificates extends Model
     {   
         $s3Url = env('AWS_URL');
         $s3Bucket = env('AWS_BUCKET');
-        $query = $query = static::select('certificate_name','certificate_id', 'image_path', 'validity_date')
+        $query = static::select('certificate_name','certificate_id', 'image_path', 'validity_date')
                             ->join('certifications', 'certifications.id', '=', 'jobseeker_certificates.certificate_id')
                             ->where('user_id',$userId)
                             ->where('certifications.is_active',1)
