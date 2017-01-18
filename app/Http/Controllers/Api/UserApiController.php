@@ -112,6 +112,7 @@ class UserApiController extends Controller {
                                 'users.email',
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name',
+                                'jobseeker_profiles.profile_pic',
                                 'jobseeker_profiles.zipcode',
                                 'jobseeker_profiles.preferred_job_location',
                                 'users.is_verified'
@@ -133,10 +134,15 @@ class UserApiController extends Controller {
                             $userToken = $deviceModel->register_device($reqData['deviceId'], $userId, $reqData['deviceToken'], $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']);
 
                         }
+                        $imgUrl = "";
+                        if(($userData['profile_pic'])){
+                            $imgUrl = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/profile_pic/' . $userData['profile_pic'];
+                        }
                         $userArray['userDetails'] = array(
                             'email' => $userData['email'],
                             'firstName' => $userData['first_name'],
                             'lastName' => $userData['last_name'],
+                            'imageUrl' => $imgUrl,
                             'zipCode' => $userData['zipcode'],
                             'preferredJobLocation' => $userData['preferred_job_location'],
                             'accessToken' => $userToken,
