@@ -245,4 +245,29 @@ class UserApiController extends Controller {
         }
         
     }
+    
+    /**
+     * Method to logout user from the system
+     * @param Request $request
+     * @return type
+     */
+    public function deleteSignOut(Request $request) {
+        
+        try {
+            
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            if($userId>0) {
+                Device::unRegister_all($userId);
+                $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.user_signout"));
+            } else {
+                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+            }
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            $returnResponse = apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        } catch (\Exception $e) {
+            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+        return $returnResponse;
+    }
 }
