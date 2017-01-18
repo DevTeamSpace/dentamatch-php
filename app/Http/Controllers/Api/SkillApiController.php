@@ -245,6 +245,48 @@ class SkillApiController extends Controller {
         } catch (\Exception $e) {
             $response =  apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
+        return $response;
     }
+    /**
+     * Description : Search jobs
+     * Method : postUpdateCertificationsValidity
+     * formMethod : POST
+     * @param jobTitle , jobType , currentLatitude , currentLongitude ,availability
+     * @return type
+     */
+    
+    public function getJobSearch(Request $request){
+        
+        $response[] = array(
+            'jobId' => 1,
+            'jobTitle' => 'Dental Hygienists',
+            'jobType' => 1,
+            'officeName' => 'Dr. Nicklaus Morton',
+            'officeAddress' => '628 Vermont Street San Francisco, CA 94107',
+            'distance' => '1.23',
+            'postedBefore' => 1,
+            );
+        $response[] = array(
+            'jobId' => 2,
+            'jobTitle' => 'Dental Hygienists',
+            'jobType' => 1,
+            'officeName' => 'Dr. Nicklaus Morton',
+            'officeAddress' => '628 Vermont Street San Francisco, CA 94107',
+            'distance' => '1.23',
+            'postedBefore' => 1,
+            );
+        $response[] = array(
+            'jobId' => 3,
+            'jobTitle' => 'Dental Hygienists',
+            'jobType' => 1,
+            'officeName' => 'Dr. Nicklaus Morton',
+            'officeAddress' => '628 Vermont Street San Francisco, CA 94107',
+            'distance' => '1.23',
+            'postedBefore' => 1,
+            );
+        $response =  apiResponse::customJsonResponseObject(1, 200, "Joblist",'list',$response);
+        return $response;
+    }
+    
     
 }

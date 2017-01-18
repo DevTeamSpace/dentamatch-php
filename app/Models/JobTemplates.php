@@ -41,11 +41,11 @@ class JobTemplates extends Model
      * @return string
      */
     public function getIdAttribute($value){
-        return encrypt($value);
+        return ($value);//encrypt
     }
     
     public static function getIdDecrypt($value){
-        return decrypt($value);
+        return ($value);//decrypt
     }
     
     public static function findById($id){

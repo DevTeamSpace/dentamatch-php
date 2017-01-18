@@ -1,0 +1,5 @@
+projectKey=Dentamatch-php
+serverUrl=http://54.152.88.149:9000/sonar
+dashboardUrl=http://54.152.88.149:9000/sonar/dashboard/index/Dentamatch-php
+ceTaskId=AVmmWMcCPk_dLK_RwwYf
+ceTaskUrl=http://54.152.88.149:9000/sonar/api/ce/task?id=AVmmWMcCPk_dLK_RwwYf
