@@ -12,6 +12,7 @@ use App\Models\WorkExperience;
 use App\Models\JobSeekerSchooling;
 use App\Models\JobSeekerSkills;
 use App\Models\JobSeekerAffiliation;
+use App\Models\JobseekerCertificates;
 
 class UserProfileApiController extends Controller {
 
@@ -196,19 +197,18 @@ class UserProfileApiController extends Controller {
                 $schooling = JobSeekerSchooling::getJobSeekerSchooling($userId);
                 $skills = JobSeekerSkills::getJobSeekerSkills($userId);
                 $affiliations = JobSeekerAffiliation::getJobSeekerAffiliation($userId);
+                $certifications = JobseekerCertificates::getJobSeekerCertificates($userId);
                 
                 $data['user'] = $userProfileModel;
-                $profilePic = $userProfileModel['profile_pic'];
-                $data['user']['profile_pic'] = !empty($profilePic) ? $s3Url.DIRECTORY_SEPARATOR.$s3Bucket.$profilePic : $profilePic;
-                
-                $dentalStateBoard = $userProfileModel['dental_state_board'];
-                $data['user']['dental_state_board'] = $data['dentalStateBoard']['imageUrl'] = !empty($dentalStateBoard) ? $s3Url.DIRECTORY_SEPARATOR.$s3Bucket.$dentalStateBoard : $dentalStateBoard;
+                $data['dentalStateBoard']['imageUrl'] = $userProfileModel['dental_state_board'];
                 
                 $licenceData = ['license_number' => $userProfileModel['license_number'], 'state' => $userProfileModel['state']];
                 $data['licence'] = $licenceData;
+                
                 $data['school'] = $schooling;
                 $data['skills'] = $skills;
                 $data['affiliations'] = $affiliations;
+                $data['certifications'] = $certifications;
                 $data['workExperience'] = $userWorkExperience;
                 
                 $response =  apiResponse::customJsonResponse(1, 200, trans("messages.user_profile_list"), apiResponse::convertToCamelCase($data));
