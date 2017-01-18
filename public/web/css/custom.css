@@ -173,6 +173,9 @@ h1,h2,h3,h4,h5,h6{font-weight: normal; font-family: 'Roboto', sans-serif;}
 			font-weight: 400;
 			height:52px;
 		}
+                .floating-label .form-group.focused .form-control{
+			color: #686868;
+		}
 		.floating-label .form-group:last-child .form-control{ border:1px solid #d7d7d7; }
 		/* .floating-label .form-control + .floating-label .form-control{
 			border-top-width: 0;

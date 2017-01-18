@@ -36,19 +36,20 @@ class UserApiController extends Controller {
         if($userExists){
             $response = apiResponse::customJsonResponse(0, 201, trans("messages.user_exist_same_email"));      
         }else{
+            $uniqueCode = uniqid();
             $user =  array(
                 'email' => $reqData['email'],
                 'password' => bcrypt($reqData['password']),
+                'verification_code' => $uniqueCode,
             );
             $userDetails = User::create($user);
-            
             $userGroupModel = new UserGroup();
             $userGroupModel->group_id = 3;
             $userGroupModel->user_id = $userDetails->id;
             $userGroupModel->save();
             
             $userProfileModel = new UserProfile();
-            $verification_code = mt_rand(1000000000, 9999999999);
+            
             $userProfileModel->user_id = $userDetails->id;
             $userProfileModel->first_name = $reqData['firstName'];
             $userProfileModel->last_name = $reqData['lastName'];
@@ -56,7 +57,7 @@ class UserApiController extends Controller {
             $userProfileModel->preferred_job_location = $reqData['preferedLocation'];
             $userProfileModel->latitude = $reqData['latitude'];
             $userProfileModel->longitude = $reqData['longitude'];
-            $userProfileModel->verification_code = $verification_code;
+            
             $userProfileModel->save();
             
             $deviceModel =  new Device();
@@ -67,7 +68,7 @@ class UserApiController extends Controller {
                     $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']
                 );
             
-            $url = url('user-activation', ['token' => $verification_code]);
+            $url = url("/verification-code/$uniqueCode");
             $name = $reqData['firstName'];
             $email = $reqData['email'];
             $fname = $reqData['firstName'];
@@ -111,9 +112,10 @@ class UserApiController extends Controller {
                                 'users.email',
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name',
+                                'jobseeker_profiles.profile_pic',
                                 'jobseeker_profiles.zipcode',
                                 'jobseeker_profiles.preferred_job_location',
-                                'jobseeker_profiles.is_verified'
+                                'users.is_verified'
                                 )
                         ->where('users.id', $userId)
                         ->first();
@@ -132,10 +134,15 @@ class UserApiController extends Controller {
                             $userToken = $deviceModel->register_device($reqData['deviceId'], $userId, $reqData['deviceToken'], $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']);
 
                         }
+                        $imgUrl = "";
+                        if(($userData['profile_pic'])){
+                            $imgUrl = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/profile_pic/' . $userData['profile_pic'];
+                        }
                         $userArray['userDetails'] = array(
                             'email' => $userData['email'],
                             'firstName' => $userData['first_name'],
                             'lastName' => $userData['last_name'],
+                            'imageUrl' => $imgUrl,
                             'zipCode' => $userData['zipcode'],
                             'preferredJobLocation' => $userData['preferred_job_location'],
                             'accessToken' => $userToken,
@@ -204,7 +211,7 @@ class UserApiController extends Controller {
                                 'users.email',
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name',
-                                'jobseeker_profiles.is_verified'
+                                'users.is_verified'
                                 )
                         ->where('users.email', $reqData['email'])
                         ->where('user_groups.group_id' , 3)
@@ -212,11 +219,12 @@ class UserApiController extends Controller {
             if ($user) {
                 if($user->is_verified == 1){
                     PasswordReset::where('user_id' , $user->id)->where('email', $user->email)->delete();
+                    $token = md5($user->email . time());
                     $passwordModel = PasswordReset::firstOrNew(array('user_id' => $user->id, 'email' => $user->email));
-                    $passwordModel->fill(['token' =>md5($user->email . time())]);
+                    $passwordModel->fill(['token' => $token]);
                     $passwordModel->save();
                 
-                    Mail::queue('email.resetPasswordToken', ['name' => $user->first_name, 'url' => url('resetPassword', ['token' => md5($user->email . time())]), 'email' => $user->email], function($message) use ($user) {
+                    Mail::queue('email.resetPasswordToken', ['name' => $user->first_name, 'url' => url('password/reset', ['token' => $token]), 'email' => $user->email], function($message) use ($user) {
                         $message->to($user->email, $user->first_name)->subject('Reset Password Request ');
                     });
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.reset_pw_email_sent"));

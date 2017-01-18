@@ -525,3 +525,24 @@ paths:
           
       tags:
         - User Profile
+        
+  /users/user-profile:
+    get:
+      summary: User Profile
+      description: Api to fetch User Profile Data
+      responses: 
+          200:
+            description: Api to fetch User Profile Data
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+          
+      tags:
+        - User Profile
