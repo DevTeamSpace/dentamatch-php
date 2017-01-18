@@ -9,6 +9,9 @@ use App\Models\UserProfile;
 use App\Helpers\apiResponse;
 use App\Repositories\File\FileRepositoryS3;
 use App\Models\WorkExperience;
+use App\Models\JobSeekerSchooling;
+use App\Models\JobSeekerSkills;
+use App\Models\JobSeekerAffiliation;
 
 class UserProfileApiController extends Controller {
 
@@ -190,6 +193,9 @@ class UserProfileApiController extends Controller {
             if($userId > 0){
                 $userProfileModel = UserProfile::getUserProfile($userId);
                 $userWorkExperience = WorkExperience::getWorkExperienceList($userId);
+                $schooling = JobSeekerSchooling::getJobSeekerSchooling($userId);
+                $skills = JobSeekerSkills::getJobSeekerSkills($userId);
+                $affiliations = JobSeekerAffiliation::getJobSeekerAffiliation($userId);
                 
                 $data['user'] = $userProfileModel;
                 $profilePic = $userProfileModel['profile_pic'];
@@ -200,6 +206,9 @@ class UserProfileApiController extends Controller {
                 
                 $licenceData = ['license_number' => $userProfileModel['license_number'], 'state' => $userProfileModel['state']];
                 $data['licence'] = $licenceData;
+                $data['school'] = $schooling;
+                $data['skills'] = $skills;
+                $data['affiliations'] = $affiliations;
                 $data['workExperience'] = $userWorkExperience;
                 
                 $response =  apiResponse::customJsonResponse(1, 200, trans("messages.user_profile_list"), apiResponse::convertToCamelCase($data));
