@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 
 Route::post('users/sign-up','Api\UserApiController@postSignup');
 Route::post('users/sign-in','Api\UserApiController@postSignIn');
+Route::delete('users/sign-out','Api\UserApiController@deleteSignOut');
 Route::get('privacy-policy','Api\UserApiController@getPrivacypolicy');
 Route::get('term-condition','Api\UserApiController@getTermsAndCondition');
 Route::put('users/forgot-password', 'Api\UserApiController@putForgotPassword');
@@ -48,4 +49,6 @@ Route::get('users/search-job', 'Api\SkillApiController@getJobSearch');
 Route::get('users/user-profile', 'Api\UserProfileApiController@getUserProfile');
 
 
+
+Route::post('users/update-availability', 'Api\CalendarApiController@postJobAvailability');
 

@@ -77,7 +77,12 @@ class WorkExperienceApiController extends Controller {
                 $workExp->save();
 
                 $data['list'][] = $workExp;
-                $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_added"), apiResponse::convertToCamelCase($data));
+                if($request->action=="edit"){
+                    $message = trans("messages.work_exp_updated");
+                }else{
+                    $message = trans("messages.work_exp_added");
+                }
+                $returnResponse = apiResponse::customJsonResponse(1, 200, $message, apiResponse::convertToCamelCase($data));
             } else {
                 $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }

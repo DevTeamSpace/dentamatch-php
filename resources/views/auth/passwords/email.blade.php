@@ -20,6 +20,7 @@
                             <div class="frm-title mr-b-25">Forgot Password</div>
                             @if (session('status'))
                             <div class="alert alert-success">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                 {{ session('status') }}
                             </div>
                             @endif
@@ -41,7 +42,7 @@
                         </div>
 
                         <button type="submit" class="btn btn-denta-sm btn-primary btn-block mr-t-20">Send</button>
-
+                        <a href="{{url('login')}}"  class="btn-link btn center-block mr-t-15">Cancel</a>
                     </form>
 
 

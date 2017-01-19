@@ -33,4 +33,17 @@ class JobSeekerAffiliation extends Model
         return $list;
     }
     
+    public static function getJobSeekerAffiliation($userId)
+    {   
+        $query = $query = static::select('affiliation_id as affiliationId', 'affiliations.affiliation_name as affiliationName', 'other_affiliation as otherAffiliation')
+                            ->join('affiliations', 'affiliations.id', '=', 'jobseeker_affiliations.affiliation_id')
+                            ->where('user_id',$userId)
+                            ->where('affiliations.is_active',1)
+                            ->orderBy('affiliation_id');
+        
+        $list = $query->get()->toArray();
+
+        return $list;
+    }
+    
 }

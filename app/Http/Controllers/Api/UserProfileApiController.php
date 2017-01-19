@@ -9,6 +9,10 @@ use App\Models\UserProfile;
 use App\Helpers\apiResponse;
 use App\Repositories\File\FileRepositoryS3;
 use App\Models\WorkExperience;
+use App\Models\JobSeekerSchooling;
+use App\Models\JobSeekerSkills;
+use App\Models\JobSeekerAffiliation;
+use App\Models\JobseekerCertificates;
 
 class UserProfileApiController extends Controller {
 
@@ -105,11 +109,13 @@ class UserProfileApiController extends Controller {
             $this->validate($request, [
                 'license' => 'required',
                 'state' => 'required',
-                'jobTitleId' => 'required'
             ]);
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 UserProfile::where('user_id', $userId)->update(['license_number' => $request->license, 'state' => $request->state]);
+                if(($request->jobTitleId != "") && ($request->jobTitleId > 0)){
+                    UserProfile::where('user_id', $userId)->update(['job_titile_id' => $request->jobTitleId]);
+                }
                 $response =  apiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"));
             }else{
                 $response =  apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
@@ -138,7 +144,7 @@ class UserProfileApiController extends Controller {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 UserProfile::where('user_id', $userId)->update(['about_me' => $request->aboutMe]);
-                $response =  apiResponse::customJsonResponse(1, 200, "About Me Updated Successfully");
+                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.profile_update_success"));
             }else{
                 $response =  apiResponse::customJsonResponse(0, 204, "invalid user token");
             }
@@ -190,16 +196,21 @@ class UserProfileApiController extends Controller {
             if($userId > 0){
                 $userProfileModel = UserProfile::getUserProfile($userId);
                 $userWorkExperience = WorkExperience::getWorkExperienceList($userId);
+                $schooling = JobSeekerSchooling::getJobSeekerSchooling($userId);
+                $skills = JobSeekerSkills::getJobSeekerSkills($userId);
+                $affiliations = JobSeekerAffiliation::getJobSeekerAffiliation($userId);
+                $certifications = JobseekerCertificates::getJobSeekerCertificates($userId);
                 
                 $data['user'] = $userProfileModel;
-                $profilePic = $userProfileModel['profile_pic'];
-                $data['user']['profile_pic'] = !empty($profilePic) ? $s3Url.DIRECTORY_SEPARATOR.$s3Bucket.$profilePic : $profilePic;
-                
-                $dentalStateBoard = $userProfileModel['dental_state_board'];
-                $data['user']['dental_state_board'] = $data['dentalStateBoard']['imageUrl'] = !empty($dentalStateBoard) ? $s3Url.DIRECTORY_SEPARATOR.$s3Bucket.$dentalStateBoard : $dentalStateBoard;
+                $data['dentalStateBoard']['imageUrl'] = $userProfileModel['dental_state_board'];
                 
                 $licenceData = ['license_number' => $userProfileModel['license_number'], 'state' => $userProfileModel['state']];
                 $data['licence'] = $licenceData;
+                
+                $data['school'] = $schooling;
+                $data['skills'] = $skills;
+                $data['affiliations'] = $affiliations;
+                $data['certifications'] = $certifications;
                 $data['workExperience'] = $userWorkExperience;
                 
                 $response =  apiResponse::customJsonResponse(1, 200, trans("messages.user_profile_list"), apiResponse::convertToCamelCase($data));

@@ -546,3 +546,122 @@ paths:
           
       tags:
         - User Profile
+        
+  /users/sign-out:
+    delete:
+      summary: Users Onboarding
+      description: Api to log out user
+      responses: 
+          200:
+            description: Api to log out user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+          
+      tags:
+        - Users onboarding
+        
+  /users/change-password:
+    post:
+      summary: Change user Password
+      description: Api to change password
+      responses: 
+          200:
+            description: Api to change user password
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+
+        - name: oldPassword
+          in: formData
+          description: old password for user
+          type: string
+        - name: newPassword
+          in: formData
+          description: new password for user
+          type: string
+        - name: confirmNewPassword
+          in: formData
+          description: confirm  password for user
+          type: string
+          
+      tags:
+        - User Profile
+        
+  /users/update-license:
+    post:
+      summary: Update lisence , state and jobtitle of user
+      description: Api to update lisence , state and jobtitle
+      responses: 
+          200:
+            description: Api to update lisence , state and jobtitle
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+
+        - name: license
+          in: formData
+          description: license for user
+          type: string
+        - name: state
+          in: formData
+          description: state for user
+          type: string
+        - name: jobTitleId
+          in: formData
+          description: jobtitle for user (optional) , leave blank for update
+          type: string
+          
+      tags:
+        - User Profile
+        
+  /users/update-availability:
+    post:
+      summary: Update user availability
+      description: Api to update user availability 
+      responses: 
+          200:
+            description: Api to update user availability
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+          
+      tags:
+        - Availability
+

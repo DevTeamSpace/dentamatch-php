@@ -5,7 +5,8 @@ return [
     'something_wrong' => 'Something went wrong',
     'validation_failure' => "Request validation failed.",
     'work_exp_list' =>"Work Experience List Retrieved",
-    'work_exp_added' => 'Work Experience Added Successfully',
+    'work_exp_added' => 'Work Experience Added successfully',
+    'work_exp_updated' => 'Work Experience Updated successfully',
     'work_exp_removed' => 'Work experience successfully removed',
     'invalid_token' => 'Invalid user token',
     'skill_add_success' => 'Skills added successfully',
@@ -40,4 +41,7 @@ return [
     'successfully_register'=>'User registered successfully. A Confirmation link is send on your mail.',
     'verified_user'=>'User verified successfully. You can login.',
     'verified_problem'=>'Problem in verification process. Please contact admin.',
+    'availability_add_success' => 'Availability updated successfully',
+    'user_signout' => "User successfully sign out",
+    'profile_update_success' => 'Your profile is successfully completed',
 ];

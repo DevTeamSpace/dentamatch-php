@@ -27,15 +27,26 @@
                 </div>  
             </div>    
             <div class="viewdentaltemplate padding-dentaltemplate">
+                @if (count($errors) > 0)
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div class="profile-div">
                     <div class="title">
                         <p class="title-description">Dental Office Address</p>
-                        <select name="dentalOfficeId" id="dentalOfficeId" class="selectpicker">
+                        <select data-parsley-required data-parsley-required-message= "Select dental office address" name="dentalOfficeId" id="dentalOfficeId" class="selectpicker">
+                            <option value="">Select dental office address</option>
                             @foreach ($offices as $office)
                             <option value="{{ $office['id'] }}">{{ $office['address'] }}</option>
                             @endforeach
                         </select>
                         <input type="hidden" value="{{ json_encode($offices) }}" id="officeJson">
+                        <input type="hidden" value="add" name="action">
                         <p class="error-div hide">Job cannot be currently created for this location. We will soon be available in your area.</p>
                     </div>
                 </div>  
@@ -56,7 +67,7 @@
                                 <label for="Part Time">
                                     Part Time
                                 </label>
-                                <select data-parsley-required="false" data-parsley-required-message="select days" name="partTimeDays" multiple="multiple" id="monthSelect" style="display: none;" class="select-days-custom">
+                                <select data-parsley-required="false" data-parsley-required-message="select days" name="partTimeDays[]" multiple="multiple" id="monthSelect" style="display: none;" class="select-days-custom">
                                     <option value="1">Monday</option>
                                     <option value="2">Tuesday</option>
                                     <option value="3">Wednesday</option>
@@ -160,11 +171,14 @@
                 $(this).parent().find('.ms-drop ').css('display', 'block');
             });
             $('#dentalOfficeId').change(function(){
+                $('.error-div').addClass('hide')
                 var officeJson = $.parseJSON($('#officeJson').val());
                 var dentalOfficeId = $('#dentalOfficeId').val()
                 $.each(officeJson,function(index,value){
-                    if(dentalOfficeId==val.id && val.zipcode==''){
-                        
+                    console.log(value);
+                    if(dentalOfficeId==value.id && value.zipcode==null){
+                        $('.error-div').removeClass('hide');
+                        $('#dentalOfficeId').val('');
                     }
                 });
             });
