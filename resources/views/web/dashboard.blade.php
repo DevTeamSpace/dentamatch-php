@@ -63,10 +63,6 @@
                     </tr>
                     <tr>
                         <td class="label">City</td>
-                        <!--         Note: Selection of address components in this example is typical.
-                                     You may need to adjust it for the locations relevant to your app. See
-                                     https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform
-                        -->
                         <td class="wideField" colspan="3"><input class="field" id="locality"
                                                                  disabled="true"></input></td>
                     </tr>

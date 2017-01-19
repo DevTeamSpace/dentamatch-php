@@ -60,7 +60,7 @@ class UserProfileController extends Controller {
 
     public function messages() {
         return [
-            'postal_code.required' => 'Address field should contain zip code.'
+            'postal_code.required' => trans("messages.address_zip_required")
         ];
     }
 

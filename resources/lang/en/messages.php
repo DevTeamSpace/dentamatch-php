@@ -33,4 +33,11 @@ return [
     'image_upload_success' => 'Image Saved successfully',
     'data_saved_success' => 'Data Saved successfully',
     'user_profile_list' => 'User Profile List',
+    
+    'address_zip_required' => 'Address field should contain zip code.',
+    'password_not_match_confirm'=>'Password and confirm password do not match.',
+    'validation_failure'=>'Validation failure.',
+    'successfully_register'=>'User registered successfully. A Confirmation link is send on your mail.',
+    'verified_user'=>'User verified successfully. You can login.',
+    'verified_problem'=>'Problem in verification process. Please contact admin.',
 ];
