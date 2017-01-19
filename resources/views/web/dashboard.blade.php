@@ -4,6 +4,9 @@
 
 <form data-parsley-validate method="post" action="{{url('create-profile')}}">
     {{ csrf_field() }}
+    <input type="hidden" name="lat" id="lat">
+    <input type="hidden" name="lng" id="lng">
+    <input type="hidden" name="full_address" id="full_address">
     <div class="customContainer center-block containerBottom">
         <div class="profieBox">
             <h3>Create Profile</h3>
@@ -49,12 +52,6 @@
                         <input onFocus="geolocate()" id="autocomplete" name="officeAddress" value="{{ old('officeAddress') }}" type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="office address required">
                     </div>
                 </div>
-                <div class="form-group">
-                    <input type="hidden" disabled="true" id="lat" name="lat"></div>
-                <div class="form-group">
-                    <input type="hidden" disabled="true" id="lng" name="lng"></div>
-                <div class="form-group">
-                    <input type="hidden" disabled="true" id="full_address" name="full_address"></div>
 
                 <table id="address" style="display: none;">
                     <tr>
@@ -79,7 +76,7 @@
                                                      id="administrative_area_level_1" disabled="true"></input></td>
                         <td class="label">Zip code</td>
                         <td class="wideField">                <div class="form-group">
-                                <input class="field" id="postal_code"
+                                <input class="field" id="postal_code" name="postal_code"
                                        disabled="true"></div> </input></td>
                     </tr>
                     <tr>
