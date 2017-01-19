@@ -5,7 +5,8 @@ return [
     'something_wrong' => 'Something went wrong',
     'validation_failure' => "Request validation failed.",
     'work_exp_list' =>"Work Experience List Retrieved",
-    'work_exp_added' => 'Work Experience Added Successfully',
+    'work_exp_added' => 'Work Experience Added successfully',
+    'work_exp_updated' => 'Work Experience Updated successfully',
     'work_exp_removed' => 'Work experience successfully removed',
     'invalid_token' => 'Invalid user token',
     'skill_add_success' => 'Skills added successfully',
@@ -34,5 +35,6 @@ return [
     'data_saved_success' => 'Data Saved successfully',
     'user_profile_list' => 'User Profile List',
     'availability_add_success' => 'Availability updated successfully',
-    'user_signout' => "User successfully sign out"
+    'user_signout' => "User successfully sign out",
+    'profile_update_success' => 'Your profile is successfully completed',
 ];
