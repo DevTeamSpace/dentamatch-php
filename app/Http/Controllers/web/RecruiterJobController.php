@@ -45,7 +45,7 @@ class RecruiterJobController extends Controller
                 'jobType' => 'required|in:1,2,3',
                 'partTimeDays'=>'required_if:jobType,2',
                 'tempDates'=>'required_if:jobType,3',
-                'noOfOpening'=>'required_if:jobType,3',
+                'noOfJobs'=>'required_if:jobType,3',
                 'action' =>'required|in:add,edit',
                 'id'=>'integer|required_if:action,edit'
             ]);
