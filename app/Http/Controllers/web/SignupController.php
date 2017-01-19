@@ -86,7 +86,7 @@ class SignupController extends Controller {
             $validation_rules = array('email' => 'required|email', 'password' => 'required');
             $validator = Validator::make($request->all(), $validation_rules);
             if ($validator->fails()) {
-                Session::flash('message', "Validation Failure");
+                Session::flash('message', trans("messages.validation_failure"));
             }
 
             $reqData = $request->all();
@@ -95,7 +95,7 @@ class SignupController extends Controller {
             if ($userExists) {
                 Session::flash('message', "Email already registered");
             } else if ($reqData['password'] !== $reqData['confirmPassword']) {
-                Session::flash('message', "Password and confirm password do not match");
+                Session::flash('message', trans("messages.password_not_match_confirm"));
             } else {
                 $uniqueCode = uniqid();
                 $user = array(
@@ -115,7 +115,7 @@ class SignupController extends Controller {
                             ->subject('Confirmation Link for new user.');
                 });
 
-                Session::flash('success', "User registered successfully. A Confirmation link is send on your mail.");
+                Session::flash('success', trans("messages.successfully_register"));
             }
         } catch (\Exception $e) {
             Session::flash('message', $e->getMessage());
@@ -128,12 +128,12 @@ class SignupController extends Controller {
         try {
             if (isset($user) && !empty($user)) {
                 User::where('verification_code', $code)->update(['is_verified' => 1]);
-                Session::flash('success', "User verified successfully. You can login.");
+                Session::flash('success', trans("messages.verified_user"));
             } else {
-                Session::flash('message', "Problem in verification process. Please contact admin.");
+                Session::flash('message', trans("messages.verified_problem"));
             }
         } catch (\Exception $e) {
-            Session::flash('message', "Problem in verification process. Please contact admin.");
+            Session::flash('message', trans("messages.verified_problem"));
         }
         return redirect('login');
     }

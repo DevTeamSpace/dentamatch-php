@@ -15,9 +15,10 @@ class UserProfileController extends Controller {
                         'officeName' => 'required',
                         'officeDescription' => 'required',
                         'officeType' => 'required',
+                        'postal_code' => 'required',
                         'officeAddress' => 'required',
                         'phoneNumber' => 'required|numeric|digits_between:9,10',
-            ]);
+            ], $this->messages());
 
             if ($validator->fails()) {
                 return redirect('home')
@@ -25,9 +26,13 @@ class UserProfileController extends Controller {
                                 ->withInput();
             }
 
+//            print_r($request->all());exit;
             \App\Models\RecruiterOffice::create([
                 'user_id' => Auth::user()->id,
                 'address' => $request->officeAddress,
+                'zipcode' => $request->postal_code,
+                'latitude' => $request->lat,
+                'longitude' => $request->lng,
                 'phone_no' => $request->phoneNumber,
                 'office_info' => $request->officeDescription,
                 'work_everyday_start' => $request->everydayStart,
@@ -51,6 +56,12 @@ class UserProfileController extends Controller {
         } catch (\Exception $e) {
             return view('web.dashboard.', ["message" => $e->getMessage()]);
         }
+    }
+
+    public function messages() {
+        return [
+            'postal_code.required' => trans("messages.address_zip_required")
+        ];
     }
 
 }
