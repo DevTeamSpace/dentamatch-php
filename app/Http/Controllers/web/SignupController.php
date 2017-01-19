@@ -127,7 +127,7 @@ class SignupController extends Controller {
         $user = User::where('verification_code', $code)->first();
         try {
             if (isset($user) && !empty($user)) {
-                User::where('verification_code', $code)->update(['is_verified' => 1]);
+                User::where('verification_code', $code)->update(['is_verified' => 1, 'is_active' => 1]);
                 Session::flash('success', "User verified successfully. You can login.");
             } else {
                 Session::flash('message', "Problem in verification process. Please contact admin.");

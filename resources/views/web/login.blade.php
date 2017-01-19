@@ -41,10 +41,14 @@
                         </div>
                         <div id="login" class="tab-pane fade in active">
                             @if(Session::has('message'))
-                                <h6 class="alert alert-danger">{{ Session::get('message') }}</h6>
+                                <h6 class="alert alert-danger">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    {{ Session::get('message') }}</h6>
                             @endif
                             @if(Session::has('success'))
-                                <h6 class="alert alert-success">{{ Session::get('success') }}</h6>
+                                <h6 class="alert alert-success">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    {{ Session::get('success') }}</h6>
                             @endif
                             <form id="signup-frm" method="post" action="login" name="loginform" autocomplete="off" data-parsley-validate="" >
                                 {{ csrf_field() }}
