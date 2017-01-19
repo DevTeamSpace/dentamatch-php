@@ -48,8 +48,7 @@ class JobtemplateController extends Controller
     }
     
     public function saveOrUpdate(Request $request){
-        try{
-            $this->validate($request, [
+        $this->validate($request, [
                 'jobTitleId' => 'required|integer',
                 'templateName' => 'required',
                 'templateDesc' => 'required',
@@ -57,6 +56,7 @@ class JobtemplateController extends Controller
                 'action' =>'required|in:add,edit',
                 'id'=>'integer|required_if:action,edit'
             ]);
+            try{
             
             $jobTemplate = new JobTemplates();
             if ($request->action=="edit" && !empty($request->id)) {

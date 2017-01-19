@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('jobtemplates/create', 'web\JobtemplateController@createJobTemplate');
             Route::post('jobtemplates/saveOrUpdate', 'web\JobtemplateController@saveOrUpdate');
             Route::get('createJob/{templateId}', 'web\RecruiterJobController@createJob');
+            Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
             Route::post('create-profile', 'web\UserProfileController@createProfile');
         });
 

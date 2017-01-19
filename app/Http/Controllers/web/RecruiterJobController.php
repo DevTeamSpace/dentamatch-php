@@ -9,6 +9,7 @@ use App\Models\RecruiterJobs;
 use App\Models\JobTemplates;
 use App\Models\TempJobDates;
 use App\Models\RecruiterOffice;
+use DB;
 
 class RecruiterJobController extends Controller
 {
@@ -38,18 +39,20 @@ class RecruiterJobController extends Controller
     }
     
     public function saveOrUpdate(Request $request){
-        try{
-            $this->validate($request, [
+        $this->validate($request, [
                 'templateId' => 'required',
                 'dentalOfficeId' => 'required|integer',
                 'jobType' => 'required|in:1,2,3',
-                'partTimeDays'=>'sometimes',
-                'tempDates'=>'sometimes',
-                'noOfOpening'=>'sometimes',
+                'partTimeDays'=>'required_if:jobType,2',
+                'tempDates'=>'required_if:jobType,3',
+                'noOfOpening'=>'required_if:jobType,3',
                 'action' =>'required|in:add,edit',
                 'id'=>'integer|required_if:action,edit'
             ]);
+            try{
             
+            dd($request->all());
+            DB::beginTransaction();
             $recruiterJobObj = new RecruiterJobs();
             if ($request->action=="edit" && !empty($request->id)) {
                 $recruiterJobObj = RecruiterJobs::findById($request->id);
@@ -58,7 +61,7 @@ class RecruiterJobController extends Controller
             $recruiterJobObj->job_template_id = $request->templateId;
             $recruiterJobObj->recruiter_office_id = $request->dentalOfficeId;
             $recruiterJobObj->job_type = $request->jobType;
-            $recruiterJobObj->no_of_jobs = $request->noOfJobs;
+            $recruiterJobObj->no_of_jobs = ($request->noOfJobs!='')?$request->noOfJobs:0;
             
             if($request->jobType==RecruiterJobs::PARTTIME){
                 $recruiterJobObj->is_monday = in_array('1',$request->partTimeDays);
@@ -71,18 +74,21 @@ class RecruiterJobController extends Controller
             }
             $recruiterJobObj->save();
             if($request->jobType==RecruiterJobs::TEMPORARY){
-                if(count($request->tempDates)>0){
+                $tempDates = explode(',',$request->tempDates);
+                if(count($tempDates)>0){
                     $tempDateArrObj = [];
-                    foreach($request->tempDates as $tempDate){
-                        $tempDateArrObj[] = new TempJobDates(['jobDate' => $tempDate]);
+                    foreach($tempDates as $tempDate){
+                        $tempDateArrObj[] = new TempJobDates(['jobDate' => date('Y-m-d',strtotime($tempDate))]);
                     }
                     $recruiterJobObj->tempJobDates()->saveMany($tempDateArrObj);
                     unset($tempDateArrObj);
                 }
             }
+            DB::commit();
             unset($recruiterJobObj);
             return redirect('jobtemplates');
         } catch (\Exception $e) {
+            DB::rollback();
             return view('web.error.',["message" => $e->getMessage()]);
         }
     }

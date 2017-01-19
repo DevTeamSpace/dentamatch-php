@@ -33,5 +33,6 @@ return [
     'image_upload_success' => 'Image Saved successfully',
     'data_saved_success' => 'Data Saved successfully',
     'user_profile_list' => 'User Profile List',
-    'availability_add_success' => 'Availability updated successfully'
+    'availability_add_success' => 'Availability updated successfully',
+    'user_signout' => "User successfully sign out"
 ];
