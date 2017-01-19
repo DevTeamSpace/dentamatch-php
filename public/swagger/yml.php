@@ -601,4 +601,67 @@ paths:
           
       tags:
         - User Profile
+        
+  /users/update-license:
+    post:
+      summary: Update lisence , state and jobtitle of user
+      description: Api to update lisence , state and jobtitle
+      responses: 
+          200:
+            description: Api to update lisence , state and jobtitle
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+
+        - name: license
+          in: formData
+          description: license for user
+          type: string
+        - name: state
+          in: formData
+          description: state for user
+          type: string
+        - name: jobTitleId
+          in: formData
+          description: jobtitle for user (optional) , leave blank for update
+          type: string
+          
+      tags:
+        - User Profile
+        
+  /users/update-availability:
+    post:
+      summary: Update user availability
+      description: Api to update user availability 
+      responses: 
+          200:
+            description: Api to update user availability
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+          
+      tags:
+        - Availability
 

@@ -109,11 +109,13 @@ class UserProfileApiController extends Controller {
             $this->validate($request, [
                 'license' => 'required',
                 'state' => 'required',
-                'jobTitleId' => 'required'
             ]);
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 UserProfile::where('user_id', $userId)->update(['license_number' => $request->license, 'state' => $request->state]);
+                if(($request->jobTitleId != "") && ($request->jobTitleId > 0)){
+                    UserProfile::where('user_id', $userId)->update(['job_titile_id' => $request->jobTitleId]);
+                }
                 $response =  apiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"));
             }else{
                 $response =  apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
