@@ -51,7 +51,6 @@ class RecruiterJobController extends Controller
             ]);
             try{
             
-            dd($request->all());
             DB::beginTransaction();
             $recruiterJobObj = new RecruiterJobs();
             if ($request->action=="edit" && !empty($request->id)) {

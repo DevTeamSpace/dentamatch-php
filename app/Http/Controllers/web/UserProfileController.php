@@ -52,7 +52,7 @@ class UserProfileController extends Controller {
                 'sunday_start' => $request->sundayStart,
                 'sunday_end' => $request->sundayEnd
             ]);
-            return redirect('home');
+            return redirect('jobtemplates');
         } catch (\Exception $e) {
             return view('web.dashboard.', ["message" => $e->getMessage()]);
         }
