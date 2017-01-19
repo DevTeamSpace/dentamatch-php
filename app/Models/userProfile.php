@@ -23,6 +23,7 @@ class UserProfile extends Model {
         
         $userModel = static::select('id', 'user_id', 'first_name', 'last_name', 
                         'profile_pic', 'dental_state_board', 'license_number', 'state', 'about_me')
+                    ->where('is_completed', 1)
                     ->where('user_id', $userId)
                     ->first();
         

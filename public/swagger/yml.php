@@ -567,3 +567,38 @@ paths:
           
       tags:
         - Users onboarding
+        
+  /users/change-password:
+    post:
+      summary: Change user Password
+      description: Api to change password
+      responses: 
+          200:
+            description: Api to change user password
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+
+        - name: oldPassword
+          in: formData
+          description: old password for user
+          type: string
+        - name: newPassword
+          in: formData
+          description: new password for user
+          type: string
+        - name: confirmNewPassword
+          in: formData
+          description: confirm  password for user
+          type: string
+          
+      tags:
+        - User Profile
+
