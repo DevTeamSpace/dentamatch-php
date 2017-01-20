@@ -536,8 +536,10 @@ h1,h2,h3,h4,h5,h6{font-weight: normal; font-family: 'Roboto', sans-serif;}
 									text-align: center;
 								}
 
-
+.denta-logo-box img{position: absolute;  top:0; left:0; bottom:0; right:0; margin:auto;}
 								@media only screen and (min-width: 768px){
+                                                                    .flex-block{display: flex;}
+									.flex-block .col{flex:1;}
 									.frm-cred-access-box{
 										position: absolute;
 										top:50%;

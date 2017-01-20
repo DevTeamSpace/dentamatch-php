@@ -23,7 +23,8 @@ class Xss
         $input = $request->all();
 
         array_walk_recursive($input, function(&$input) {
-            $input = htmlentities($input);
+            if(!array($input))
+                $input = htmlentities($input);
         });
 
         $request->merge($input);
