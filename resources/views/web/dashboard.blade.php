@@ -27,7 +27,7 @@
                 </div>
                 <div class="form-group">
                     <label  >Dental Office Description</label>
-                    <textarea class="form-control  txtHeight" value="{{ old('officeDescription') }}" name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" ></textarea>
+                    <textarea class="form-control  txtHeight"  name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" >{{ old('officeDescription') }}</textarea>
                 </div>
             </div>		
 
@@ -38,7 +38,7 @@
                     </div>
                     <label >Dental Office Type</label>
                     <div class="slt">
-                        <select name="officeType" value="{{ old('officeType') }}" class="ddlCars" multiple="multiple" data-parsley-required data-parsley-required-message="office type required">
+                        <select name="officeType[]" value="" class="ddlCars" multiple="multiple" data-parsley-required data-parsley-required-message="office type required">
                             @foreach($officeType as $office)
                             <option value="{{$office->id}}">{{$office->officetype_name}}</option>
                             @endforeach
@@ -72,7 +72,7 @@
                                                      id="administrative_area_level_1" disabled="true"></input></td>
                         <td class="label">Zip code</td>
                         <td class="wideField">                <div class="form-group">
-                                <input class="field" id="postal_code" name="postal_code"
+                                <input class="field" id="postal_code" name="postal_code" value="{{ old('postal_code') }}"
                                        disabled="true"></div> </input></td>
                     </tr>
                     <tr>
@@ -94,7 +94,7 @@
                     <div class="row dayBox EveryDayCheck">
                         <div class="col-sm-4">  
                             <p class="ckBox">
-                                <input type="checkbox" id="test2" name="everyday" value="{{ old('everyday') }}" />
+                                <input type="checkbox" id="test2" name="everyday" value="1"  @if (old('everyday') == "1") checked @endif />
                                 <label for="test2" class="ckColor"> Everyday</label>
                             </p>    
                         </div>
@@ -106,7 +106,7 @@
                         <div class="row dayBox">
                             <div class="col-sm-4">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="mon" name="monday" value="{{ old('monday') }}" />
+                                    <input type="checkbox" id="mon" name="monday" value="1"  @if (old('monday') == "1") checked @endif  />
                                     <label for="mon" class="ckColor"> Monday</label>
                                 </p>    
                             </div>
@@ -117,7 +117,7 @@
                         <div class="row dayBox">
                             <div class="col-sm-4">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="tue" name="tuesday" value="{{ old('tuesday') }}"  />
+                                    <input type="checkbox" id="tue" name="tuesday" value="1"  @if (old('tuesday') == "1") checked @endif   />
                                     <label for="tue" class="ckColor"> Tuesday</label>
                                 </p>    
                             </div>
@@ -128,7 +128,7 @@
                         <div class="row dayBox">
                             <div class="col-sm-4">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="wed" name="wednesday" value="{{ old('wednesday') }}" />
+                                    <input type="checkbox" id="wed" name="wednesday" value="1"  @if (old('wednesday') == "1") checked @endif  />
                                     <label for="wed" class="ckColor"> Wednesday</label>
                                 </p>    
                             </div>
@@ -139,7 +139,7 @@
                         <div class="row dayBox">
                             <div class="col-sm-4">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="thu" name="thrusday"  value="{{ old('thrusday') }}"  />
+                                    <input type="checkbox" id="thu" name="thrusday"  value="1"  @if (old('thrusday') == "1") checked @endif   />
                                     <label for="thu" class="ckColor"> Thursday</label>
                                 </p>    
                             </div>
@@ -150,7 +150,7 @@
                         <div class="row dayBox">
                             <div class="col-sm-4">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="fri" name="friday" value="{{ old('friday') }}" />
+                                    <input type="checkbox" id="fri" name="friday" value="1"  @if (old('friday') == "1") checked @endif  />
                                     <label for="fri" class="ckColor"> Friday</label>
                                 </p>    
                             </div>
@@ -161,7 +161,7 @@
                         <div class="row dayBox">
                             <div class="col-sm-4">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="sat" name="saturday" value="{{ old('saturday') }}" />
+                                    <input type="checkbox" id="sat" name="saturday" value="1"  @if (old('saturday') == "1") checked @endif  />
                                     <label for="sat" class="ckColor"> Saturday</label>
                                 </p>    
                             </div>
@@ -172,7 +172,7 @@
                         <div class="row dayBox">
                             <div class="col-sm-4">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="sun" name="sunday" value="{{ old('sunday') }}" />
+                                    <input type="checkbox" id="sun" name="sunday" value="1"  @if (old('sunday') == "1") checked @endif  />
                                     <label for="sun" class="ckColor"> Sunday</label>
                                 </p>    
                             </div>
@@ -183,7 +183,7 @@
                 </div>	
                 <div class="form-group">
                     <label>Office Location Information <i class="optional">(Optional)</i></label>
-                    <textarea class="form-control txtHeight"   data-parsley-required-message="location information required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" ></textarea>
+                    <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="location information required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" >{{ old('officeLocation') }}</textarea>
                 </div>	
             </div>			
         </div>
