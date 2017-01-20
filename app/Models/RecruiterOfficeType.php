@@ -10,4 +10,5 @@ class RecruiterOfficeType extends Model {
     protected $primaryKey = 'id';
     protected $fillable = ['recruiter_office_id', 'office_type_id'];
 
+
 }

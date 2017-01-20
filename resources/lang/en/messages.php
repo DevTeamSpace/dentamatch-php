@@ -36,7 +36,7 @@ return [
     'user_profile_list' => 'User Profile List',
     'job_search_list' => 'Job Search list',
     
-    'address_zip_required' => 'Address field should contain zip code.',
+    'address_zip_required' => 'Unable to find zip code from the address.',
     'password_not_match_confirm'=>'Password and confirm password do not match.',
     'validation_failure'=>'Validation failure.',
     'successfully_register'=>'User registered successfully. A Confirmation link is send on your mail.',

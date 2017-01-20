@@ -27,7 +27,7 @@
                 </div>
                 <div class="form-group">
                     <label  >Dental Office Description</label>
-                    <textarea class="form-control  txtHeight" value="{{ old('officeDescription') }}" name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" ></textarea>
+                    <textarea class="form-control  txtHeight"  name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" >{{ old('officeDescription') }}</textarea>
                 </div>
             </div>		
 
@@ -38,9 +38,9 @@
                     </div>
                     <label >Dental Office Type</label>
                     <div class="slt">
-                        <select name="officeType" value="{{ old('officeType') }}" class="ddlCars" multiple="multiple" data-parsley-required data-parsley-required-message="office type required">
+                        <select name="officeType[]" value="" class="ddlCars" multiple="multiple" data-parsley-required data-parsley-required-message="office type required">
                             @foreach($officeType as $office)
-                            <option value="{{$office->id}}">{{$office->officetype_name}}</option>
+                            <option value="{{$office->id}}" >{{$office->officetype_name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -72,7 +72,7 @@
                                                      id="administrative_area_level_1" disabled="true"></input></td>
                         <td class="label">Zip code</td>
                         <td class="wideField">                <div class="form-group">
-                                <input class="field" id="postal_code" name="postal_code"
+                                <input class="field" id="postal_code" name="postal_code" value="{{ old('postal_code') }}"
                                        disabled="true"></div> </input></td>
                     </tr>
                     <tr>
@@ -94,96 +94,106 @@
                     <div class="row dayBox EveryDayCheck">
                         <div class="col-sm-4">  
                             <p class="ckBox">
-                                <input type="checkbox" id="test2" name="everyday" value="{{ old('everyday') }}" />
-                                <label for="test2" class="ckColor"> Everyday</label>
+                                <input type="checkbox" id="test2" name="everyday" value="1"  @if (old('everyday') == "1") checked @endif />
+                                       <label for="test2" class="ckColor"> Everyday</label>
                             </p>    
                         </div>
-                        <div class="col-sm-4"><input value="{{ old('everydayStart') }}" name="everydayStart" type="text" class="form-control" placeholder="Opening Hours"  data-parsley-required-message="opening hours required"></div>
-                        <div class="col-sm-4"><input value="{{ old('everydayEnd') }}" name="everydayEnd" type="text" class="form-control" placeholder="Closing Hours"  data-parsley-required-message="closing hours required" ></div>
+                        @php
+                        $options = '<option value="">Opening Hours</option>
+                        <option value="00:00:00">00:00</option><option  value="00:30:00">00:30</option><option  value="01:00:00">01:00</option><option value="01:30:00">01:30</option><option value="02:00:00">02:00</option><option value="02:30:00">02:30</option><option value="03:00:00">03:00</option><option value="03:30:00">03:30</option><option value="04:00:00">04:00</option><option value="04:30:00">04:30</option>
+                        <option value="05:00:00">05:00</option><option value="05:30:00">05:30</option><option value="06:00:00">06:00</option><option value="06:30:00">06:30</option><option value="07:00:00">07:00</option><option value="07:30:00">07:30</option><option value="08:00:00">08:00</option><option value="08:30:00">08:30</option><option value="09:00:00">09:00</option><option value="09:30:00">09:30</option><option value="10:00:00">10:00</option>
+                        <option  value="10:30:00">10:30</option><option  value="11:00:00">11:00</option><option  value="11:30:00">11:30</option><option  value="12:00:00">12:00</option><option  value="12:30:00">12:30</option><option  value="13:00:00">13:00</option><option  value="13:30:00">13:30</option><option  value="14:00:00">14:00</option><option  value="14:30:00">14:30</option><option  value="15:00:00">15:00</option>
+                        <option  value="15:30:00">15:30</option><option  value="16:00:00">16:00</option><option  value="16:30:00">16:30</option><option  value="17:00:00">17:00</option><option  value="17:30:00">17:30</option><option  value="18:00:00">18:00</option><option  value="18:30:00">18:30</option><option  value="19:00:00">19:00</option><option  value="19:30:00">19:30</option><option  value="20:00:00">20:00</option><option  value="20:30:00">20:30</option>
+                        <option  value="21:00:00">21:00</option><option  value="21:30:00">21:30</option><option  value="22:00:00">22:00</option><option  value="22:30:00">22:30</option><option  value="23:00:00">23:00</option><option  value="23:30:00">23:30</option>';
+                        @endphp
+                        <div class="col-sm-4"><select name="everydayStart" class="form-control customsel"><?= $options ?></select></div>
+                        <div class="col-sm-4"><select name="everydayEnd" class="form-control customsel"><?= $options ?></select></div>
                     </div>
 
                     <div class="allDay">  
                         <div class="row dayBox">
                             <div class="col-sm-4">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="mon" name="monday" value="{{ old('monday') }}" />
-                                    <label for="mon" class="ckColor"> Monday</label>
+                                    <input type="checkbox" id="mon" name="monday" value="1"  @if (old('monday') == "1") checked @endif  />
+                                           <label for="mon" class="ckColor"> Monday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><input value="{{ old('mondayStart') }}" name="mondayStart" type="text" class="form-control" placeholder="Opening Hours"  data-parsley-required-message="opening hours required"></div>
-                            <div class="col-sm-4"><input value="{{ old('mondayEnd') }}" name="mondayEnd" type="text" class="form-control" placeholder="Closing Hours"  data-parsley-required-message="closing hours required" ></div>
+                            <div class="col-sm-4"><select name="mondayStart" class="form-control customsel"><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="mondayEnd" class="form-control customsel"><?= $options ?></select></div>
                         </div>
 
                         <div class="row dayBox">
                             <div class="col-sm-4">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="tue" name="tuesday" value="{{ old('tuesday') }}"  />
-                                    <label for="tue" class="ckColor"> Tuesday</label>
+                                    <input type="checkbox" id="tue" name="tuesday" value="1"  @if (old('tuesday') == "1") checked @endif   />
+                                           <label for="tue" class="ckColor"> Tuesday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><input value="{{ old('tuesdayStart') }}" name="tuesdayStart" type="text" class="form-control" placeholder="Opening Hours"  data-parsley-required-message="opening hours required"></div>
-                            <div class="col-sm-4"><input value="{{ old('tuesdayEnd') }}" name="tuesdayEnd" type="text" class="form-control" placeholder="Closing Hours"   data-parsley-required-message="closing hours required" ></div>
+                            <div class="col-sm-4"><select name="tuesdayStart" class="form-control customsel"><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="tuesdayEnd" class="form-control customsel"><?= $options ?></select></div>
+
                         </div>
 
                         <div class="row dayBox">
                             <div class="col-sm-4">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="wed" name="wednesday" value="{{ old('wednesday') }}" />
-                                    <label for="wed" class="ckColor"> Wednesday</label>
+                                    <input type="checkbox" id="wed" name="wednesday" value="1"  @if (old('wednesday') == "1") checked @endif  />
+                                           <label for="wed" class="ckColor"> Wednesday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><input value="{{ old('wednesdayStart') }}" name="wednesdayStart" type="text" class="form-control" placeholder="Opening Hours"  data-parsley-required-message="opening hours required"></div>
-                            <div class="col-sm-4"><input value="{{ old('wednesdayEnd') }}" name="wednesdayEnd" type="text" class="form-control" placeholder="Closing Hours"  data-parsley-required-message="closing hours required" ></div>
+                            <div class="col-sm-4"><select name="wednesdayStart" class="form-control customsel"><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="wednesdayEnd" class="form-control customsel"><?= $options ?></select></div>
+
                         </div>
 
                         <div class="row dayBox">
                             <div class="col-sm-4">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="thu" name="thrusday"  value="{{ old('thrusday') }}"  />
-                                    <label for="thu" class="ckColor"> Thursday</label>
+                                    <input type="checkbox" id="thu" name="thrusday"  value="1"  @if (old('thrusday') == "1") checked @endif   />
+                                           <label for="thu" class="ckColor"> Thursday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><input value="{{ old('thrusdayStart') }}" name="thrusdayStart" type="text" class="form-control" placeholder="Opening Hours"  data-parsley-required-message="opening hours required"></div>
-                            <div class="col-sm-4"><input value="{{ old('thrusdayEnd') }}" name="thrusdayEnd" type="text" class="form-control" placeholder="Closing Hours" data-parsley-required-message="closing hours required"  ></div>
+                            <div class="col-sm-4"><select name="thrusdayStart" class="form-control customsel"><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="thrusdayEnd" class="form-control customsel"><?= $options ?></select></div>
                         </div>
 
                         <div class="row dayBox">
                             <div class="col-sm-4">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="fri" name="friday" value="{{ old('friday') }}" />
-                                    <label for="fri" class="ckColor"> Friday</label>
+                                    <input type="checkbox" id="fri" name="friday" value="1"  @if (old('friday') == "1") checked @endif  />
+                                           <label for="fri" class="ckColor"> Friday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><input value="{{ old('fridayStart') }}" name="fridayStart" type="text" class="form-control" placeholder="Opening Hours"  data-parsley-required-message="opening hours required"></div>
-                            <div class="col-sm-4"><input value="{{ old('fridayEnd') }}" name="fridayEnd" type="text" class="form-control" placeholder="Closing Hours"  data-parsley-required-message="closing hours required" ></div>
+                            <div class="col-sm-4"><select name="fridayStart" class="form-control customsel"><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="fridayEnd" class="form-control customsel"><?= $options ?></select></div>
                         </div>
 
                         <div class="row dayBox">
                             <div class="col-sm-4">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="sat" name="saturday" value="{{ old('saturday') }}" />
-                                    <label for="sat" class="ckColor"> Saturday</label>
+                                    <input type="checkbox" id="sat" name="saturday" value="1"  @if (old('saturday') == "1") checked @endif  />
+                                           <label for="sat" class="ckColor"> Saturday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><input value="{{ old('saturdayStart') }}" name="saturdayStart" type="text" class="form-control" placeholder="Opening Hours"  data-parsley-required-message="opening hours required"></div>
-                            <div class="col-sm-4"><input value="{{ old('saturdayEnd') }}" name="saturdayEnd" type="text" class="form-control" placeholder="Closing Hours"  data-parsley-required-message="closing hours required" ></div>
+                            <div class="col-sm-4"><select name="saturdayStart" class="form-control customsel"><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="saturdayEnd" class="form-control customsel"><?= $options ?></select></div>
                         </div>
 
                         <div class="row dayBox">
                             <div class="col-sm-4">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="sun" name="sunday" value="{{ old('sunday') }}" />
-                                    <label for="sun" class="ckColor"> Sunday</label>
+                                    <input type="checkbox" id="sun" name="sunday" value="1"  @if (old('sunday') == "1") checked @endif  />
+                                           <label for="sun" class="ckColor"> Sunday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><input value="{{ old('sundayStart') }}" name="sundayStart" type="text" class="form-control" placeholder="Opening Hours"  data-parsley-required-message="opening hours required"></div>
-                            <div class="col-sm-4"><input value="{{ old('sundayEnd') }}" name="sundayEnd" type="text" class="form-control" placeholder="Closing Hours"  data-parsley-required-message="closing hours required" ></div>
+                            <div class="col-sm-4"><select name="sundayStart" class="form-control customsel"><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="sundayEnd" class="form-control customsel"><?= $options ?></select></div>
                         </div>
                     </div>
                 </div>	
                 <div class="form-group">
                     <label>Office Location Information <i class="optional">(Optional)</i></label>
-                    <textarea class="form-control txtHeight"   data-parsley-required-message="location information required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" ></textarea>
+                    <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="location information required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" >{{ old('officeLocation') }}</textarea>
                 </div>	
             </div>			
         </div>
