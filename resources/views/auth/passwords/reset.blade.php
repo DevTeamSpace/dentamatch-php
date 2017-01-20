@@ -4,13 +4,13 @@
 
 <div class="container">
     <div class="frm-cred-access-box">
-        <div class="row nopadding">
-            <div class="col-sm-6 nopadding">
-                <div class="denta-logo-box text-center">
+        <div class="row nopadding flex-block">
+            <div class="col-sm-6 nopadding denta-logo-box col">
+                <div class=" text-center">
                     <img src="{{asset('web/images/dentamatch-logo.png')}}">
                 </div>
             </div>
-            <div class="col-sm-6 nopadding">
+            <div class="col-sm-6 nopadding col">
                 <div class="frm-inr-credbox bg-white">
 
                     <form id="reset_pswd_frm" autocomplete="off" data-parsley-validate="" method="POST" action="{{ url('/password/reset') }}">

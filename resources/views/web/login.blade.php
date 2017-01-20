@@ -3,13 +3,13 @@
 @section('content')
 <div class="container">
     <div class="frm-cred-access-box">
-        <div class="row nopadding">
-            <div class="col-sm-6 nopadding equal-vertbox">
-                <div class="denta-logo-box text-center ">
+        <div class="row nopadding flex-block">
+            <div class="col-sm-6 nopadding denta-logo-box col">
+                <div class=" text-center ">
                         <img src="{{asset('web/images/dentamatch-logo.png')}}">
                 </div>
             </div>
-            <div class="col-sm-6 nopadding equal-vertbox">
+            <div class="col-sm-6 nopadding col">
                 <div class="frm-inr-credbox bg-white ">
                     <ul class="nav nav-pills">
                         <li><a data-toggle="pill" href="#signup">Sign up</a></li>
@@ -50,7 +50,7 @@
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                     {{ Session::get('success') }}</h6>
                             @endif
-                            <form id="signup-frm" method="post" action="login" name="loginform" autocomplete="off" data-parsley-validate="" >
+                            <form id="signin-frm" method="post" action="login" name="loginform" autocomplete="off" data-parsley-validate="" >
                                 {{ csrf_field() }}
                                 <div class="floating-label">
                                     <div class="form-group ">
