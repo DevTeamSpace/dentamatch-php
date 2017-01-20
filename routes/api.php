@@ -51,4 +51,5 @@ Route::get('users/user-profile', 'Api\UserProfileApiController@getUserProfile');
 
 
 Route::post('users/update-availability', 'Api\CalendarApiController@postJobAvailability');
+Route::post('users/search-jobs', 'Api\SearchApiController@postSearchjobs');
 

@@ -34,6 +34,7 @@ return [
     'image_upload_success' => 'Image Saved successfully',
     'data_saved_success' => 'Data Saved successfully',
     'user_profile_list' => 'User Profile List',
+    'job_search_list' => 'Job Search list',
     
     'address_zip_required' => 'Address field should contain zip code.',
     'password_not_match_confirm'=>'Password and confirm password do not match.',
@@ -44,4 +45,5 @@ return [
     'availability_add_success' => 'Availability updated successfully',
     'user_signout' => "User successfully sign out",
     'profile_update_success' => 'Your profile is successfully completed',
+    'no_data_found' => 'No records found',
 ];
