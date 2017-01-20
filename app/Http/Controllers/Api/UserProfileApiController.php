@@ -13,6 +13,7 @@ use App\Models\JobSeekerSchooling;
 use App\Models\JobSeekerSkills;
 use App\Models\JobSeekerAffiliation;
 use App\Models\JobseekerCertificates;
+use App\Models\Certifications;
 
 class UserProfileApiController extends Controller {
 
@@ -192,14 +193,34 @@ class UserProfileApiController extends Controller {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             $s3Url = env('AWS_URL');
             $s3Bucket = env('AWS_BUCKET');
-            
+            $certificationData = [];
+            $skillData = [];
             if($userId > 0){
                 $userProfileModel = UserProfile::getUserProfile($userId);
                 $userWorkExperience = WorkExperience::getWorkExperienceList($userId);
                 $schooling = JobSeekerSchooling::getJobSeekerSchooling($userId);
                 $skills = JobSeekerSkills::getJobSeekerSkills($userId);
+                if(!empty($skills)) {
+                    foreach($skills as $keySkill=>$skillValue) {
+                        $skillData[$skillValue['parentId']]['parentId'] = $skillValue['parentId'];
+                        $skillData[$skillValue['parentId']]['skillsName'] = $skillValue['skillsName'];
+                        $skillData[$skillValue['parentId']]['childSkills'][] = [
+                                                                        'childId' => $skillValue['childId'],
+                                                                        'skillsChildName' => $skillValue['skillsChildName'],
+                                                                        'otherSkills' => $skillValue['otherSkills']
+                                                                    ];
+                    }
+                }
+                
                 $affiliations = JobSeekerAffiliation::getJobSeekerAffiliation($userId);
-                $certifications = JobseekerCertificates::getJobSeekerCertificates($userId);
+                $jobSeekerCertifications = JobseekerCertificates::getJobSeekerCertificates($userId);
+                $allCertification = Certifications::getAllCertificates();
+                if(!empty($allCertification)) {
+                    foreach($allCertification as $key=>$value){
+                        $certificationData[$key] = $value;
+                        $certificationData[$key]['imageUrl'] = !empty($jobSeekerCertifications[$key]) ? $jobSeekerCertifications[$key]['image_path'] : null;
+                    }
+                }
                 
                 $data['user'] = $userProfileModel;
                 $data['dentalStateBoard']['imageUrl'] = $userProfileModel['dental_state_board'];
@@ -208,9 +229,9 @@ class UserProfileApiController extends Controller {
                 $data['licence'] = $licenceData;
                 
                 $data['school'] = $schooling;
-                $data['skills'] = $skills;
+                $data['skills'] = array_values($skillData);
                 $data['affiliations'] = $affiliations;
-                $data['certifications'] = $certifications;
+                $data['certifications'] = array_values($certificationData);
                 $data['workExperience'] = $userWorkExperience;
                 
                 $response =  apiResponse::customJsonResponse(1, 200, trans("messages.user_profile_list"), apiResponse::convertToCamelCase($data));
