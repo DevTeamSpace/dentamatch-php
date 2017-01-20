@@ -246,4 +246,46 @@ class UserProfileApiController extends Controller {
         }
         return $response;
     }
+    
+    public function updateUserProfile(Request $request) {
+        try {
+            $this->validate($request, [
+                'firstName' => 'required',
+                'lastName' => 'required',
+                'zipcode' => 'required|integer',
+                'latitude' => 'required',
+                'longitude' => 'required',
+                'preferredJobLocation'=>'required',
+                'jobTitileId'=>'required|integer',
+                'aboutMe' => 'required'
+            ]);
+            $reqData = $request->all();
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            if($userId>0) {
+                $userProfile = UserProfile::where('user_id', $userId)->first();
+                $userProfile->first_name = $reqData['firstName'];
+                $userProfile->last_name = $reqData['lastName'];
+                $userProfile->zipcode = $reqData['zipcode'];
+                $userProfile->latitude = $reqData['latitude'];
+                $userProfile->longitude = $reqData['longitude'];
+                $userProfile->preferred_job_location = $reqData['preferredJobLocation'];
+                $userProfile->job_titile_id = $reqData['jobTitileId'];
+                $userProfile->about_me = $reqData['aboutMe'];
+                $userProfile->save();
+                
+                $message = trans("messages.user_profile_updated");
+                $returnResponse = apiResponse::customJsonResponse(1, 200, $message);
+            } else {
+                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+            }
+            
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            $returnResponse = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+        } catch (\Exception $e) {
+            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+        
+        return $returnResponse;
+    }
 }

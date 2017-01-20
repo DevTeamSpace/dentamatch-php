@@ -21,11 +21,6 @@ class UserProfile extends Model {
         $s3Url = env('AWS_URL');
         $s3Bucket = env('AWS_BUCKET');
         
-        /*$userModel = static::select('id', 'user_id', 'first_name', 'last_name', 
-                        'profile_pic', 'dental_state_board', 'license_number', 'state', 'about_me')
-                    ->where('is_completed', 1)
-                    ->where('user_id', $userId)
-                    ->first();*/
         $userModel = static::select('id', 'user_id', 'first_name', 'last_name', 
                         'profile_pic', 'dental_state_board', 'license_number', 'state', 'about_me')
                     ->where('user_id', $userId)
@@ -40,5 +35,7 @@ class UserProfile extends Model {
         }
         return $return;
     }
+    
+    
 
 }

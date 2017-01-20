@@ -35,7 +35,7 @@ return [
     'data_saved_success' => 'Data Saved successfully',
     'user_profile_list' => 'User Profile List',
     'job_search_list' => 'Job Search list',
-    
+    'user_profile_updated' => "User Profile Updated Successfully",
     'address_zip_required' => 'Unable to find zip code from the address.',
     'password_not_match_confirm'=>'Password and confirm password do not match.',
     'validation_failure'=>'Validation failure.',

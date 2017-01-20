@@ -47,6 +47,7 @@ Route::get('users/about-me-list', 'Api\UserProfileApiController@getAboutMe');
 
 Route::get('users/search-job', 'Api\SkillApiController@getJobSearch');
 Route::get('users/user-profile', 'Api\UserProfileApiController@getUserProfile');
+Route::put('users/user-profile-update', 'Api\UserProfileApiController@updateUserProfile');
 
 
 
