@@ -21,8 +21,9 @@ class UserProfile extends Model {
         $s3Url = env('AWS_URL');
         $s3Bucket = env('AWS_BUCKET');
         
-        $userModel = static::select('id', 'user_id', 'first_name', 'last_name', 'zipcode', 'latitude', 'longitude', 'preferred_job_location', 
-                            'job_titile_id', 'profile_pic', 'dental_state_board', 'license_number', 'state', 'about_me')
+        $userModel = static::select('jobseeker_profiles.id', 'user_id', 'first_name', 'last_name', 'zipcode', 'latitude', 'longitude', 'preferred_job_location', 
+                            'job_titile_id', 'jobtitle_name as job_title', 'profile_pic', 'dental_state_board', 'license_number', 'state', 'about_me')
+                            ->join('job_titles', 'job_titles.id', '=', 'jobseeker_profiles.job_titile_id')
                     ->where('user_id', $userId)
                     ->first();
         
