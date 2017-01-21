@@ -218,7 +218,7 @@ class UserProfileApiController extends Controller {
                 if(!empty($allCertification)) {
                     foreach($allCertification as $key=>$value){
                         $certificationData[$key] = $value;
-                        $certificationData[$key]['imageUrl'] = !empty($jobSeekerCertifications[$key]) ? $jobSeekerCertifications[$key]['image_path'] : null;
+                        $certificationData[$key]['imagePath'] = !empty($jobSeekerCertifications[$key]) ? $jobSeekerCertifications[$key]['image_path'] : null;
                     }
                 }
                 
