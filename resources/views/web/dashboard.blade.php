@@ -227,7 +227,7 @@
                     <div class="carousel-inner">
                         <div class="item">
 
-                            <div class="onboard-img" ><img src="" alt=""></div>
+                            <div class="onboard-img" ><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
                             <h3 class="onboard-title">Lorem ipsum</h3>
                             <blockquote>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio .</p>
@@ -235,7 +235,7 @@
                         </div>
                         <div class="item">
 
-                            <div class="onboard-img"><img src="" alt=""></div>
+                            <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
                             <h3 class="onboard-title">Lorem ipsum</h3>
                             <blockquote>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio </p>
@@ -243,7 +243,7 @@
                         </div>
                         <div class=" item">
 
-                            <div class="onboard-img"><img src="" alt=""></div>
+                            <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
                             <h3 class="onboard-title">Lorem ipsum</h3>
                             <blockquote>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio doloremque laboriosam quas, quos eaque molestias odio aut eius animi. Impedit temporibus nisi accusamus.</p>
@@ -259,7 +259,7 @@
                         </div>
                         <div class="item">
 
-                            <div class="onboard-img"><img src="" alt=""></div>
+                            <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
                             <h3 class="onboard-title">Lorem ipsum</h3>
                             <blockquote>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio doloremque laboriosam quas, quos eaque molestias odio aut eius animi. Impedit temporibus nisi accusamus.</p>
