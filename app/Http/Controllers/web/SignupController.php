@@ -48,11 +48,11 @@ class SignupController extends Controller {
         $redirect = 'login';
         if (Auth::validate($credentials)) {
             $user = User::where('email', $credentials['email'])->first();
-            if ($user->userGroup->group_id==2 && Auth::attempt($credentials)) {
+            if ($user->userGroup->group_id == 2 && Auth::attempt($credentials)) {
                 $redirect = 'terms-conditions';
-                $term = RecruiterProfile::where('user_id',Auth::user()->id)->first();
-                if(!empty($term) && isset($term)){
-                     $redirect = 'home';
+                $term = RecruiterProfile::where('user_id', Auth::user()->id)->first();
+                if (!empty($term) && isset($term)) {
+                    $redirect = 'home';
                 }
             }
         }
@@ -91,9 +91,15 @@ class SignupController extends Controller {
 
             $reqData = $request->all();
 
-            $userExists = User::where('email', $reqData['email'])->first();
+            $userExists = User::with('userGroup')->where('email', $reqData['email'])->first();
             if ($userExists) {
-                Session::flash('message', "Email already registered");
+                if (isset($userExists->userGroup) && !empty($userExists->userGroup)) {
+                    if ($userExists->userGroup->group_id == 3) {
+                        Session::flash('message', "You are already registered as job seeker");
+                    } else {
+                        Session::flash('message', "Email already registered");
+                    }
+                }
             } else if ($reqData['password'] !== $reqData['confirmPassword']) {
                 Session::flash('message', trans("messages.password_not_match_confirm"));
             } else {

@@ -16,8 +16,8 @@ class UserProfileController extends Controller {
     public function createProfile(Request $request) {
 
         $validator = Validator::make($request->all(), [
-                    'officeName' => 'required',
-                    'officeDescription' => 'required',
+                    'officeName' => 'required|max:100',
+                    'officeDescription' => 'required|max:500',
                     'officeType' => 'required',
                     'postal_code' => 'required',
                     'officeAddress' => 'required',
