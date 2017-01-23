@@ -653,16 +653,62 @@ paths:
           in: header
           description: access token
           type: string
+          
+      tags:
+        - Availability
+        
+  /users/user-profile-update:
+    put:
+      summary: Update user profile
+      description: Api to update user availability 
+      responses: 
+          200:
+            description: Api to update user availability
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
         - name: accessToken
           in: header
           description: access token
           type: string
-        - name: accessToken
-          in: header
-          description: access token
+        - name: firstName
+          in: formData
+          description: First Name
+          type: string
+        - name: lastName
+          in: formData
+          description: Last Name
+          type: string
+        - name: zipcode
+          in: formData
+          description: Zipcode
+          type: integer
+        - name: latitude
+          in: formData
+          description: Latitude
+          type: string
+        - name: longitude
+          in: formData
+          description: Longitude
+          type: string
+        - name: preferredJobLocation
+          in: formData
+          description: Preffered job location
+          type: string
+        - name: jobTitileId
+          in: formData
+          description: Job title id
+          type: integer
+        - name: aboutMe
+          in: formData
+          description: About me
           type: string
           
       tags:
+
         - Availability
         
   /users/search-jobs:
@@ -717,4 +763,5 @@ paths:
           
       tags:
         - Job search
+
 
