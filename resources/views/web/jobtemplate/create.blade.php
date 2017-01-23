@@ -12,7 +12,7 @@
 
                 <div class="form-group">
                     <label >Template Name</label>
-                    <input name="templateName" type="text" class="form-control"  data-parsley-required data-parsley-required-message="templete name required">
+                    <input value="{{ (isset($templateData->templateName)?$templateData->templateName:'') }}" name="templateName" type="text" class="form-control"  data-parsley-required data-parsley-required-message="templete name required">
                 </div>
                 <div class="form-group">
                     <label >Job Title</label>
@@ -20,7 +20,7 @@
                     <div class="slt">
                         <select name="jobTitleId" class="ddlCars" data-parsley-required data-parsley-required-message="job title required">
                             @foreach ($jobTitleData as $jobTitle)
-                            <option value="{{ $jobTitle['id'] }}">{{ $jobTitle['jobtitle_name'] }}</option>
+                            <option {{ (isset($templateData->jobTitleId) && $templateData->jobTitleId==$jobTitle['id'])?'selected':'' }} value="{{ $jobTitle['id'] }}">{{ $jobTitle['jobtitle_name'] }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -28,7 +28,7 @@
                 </div>
                 <div class="form-group">
                     <label>Job Description</label>
-                    <textarea name="templateDesc" class="form-control txtHeight"  data-parsley-required data-parsley-required-message= "job description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" ></textarea>
+                    <textarea name="templateDesc" class="form-control txtHeight"  data-parsley-required data-parsley-required-message= "job description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" >{{ (isset($templateData->templateDesc)?$templateData->templateDesc:'') }}</textarea>
                 </div>
 
             </div>		
@@ -44,7 +44,7 @@
                     <label ><?=$key?></label>
                     <select class="my-select" name="skills[]" multiple="multiple">
                         @foreach ($skills as $skillData)
-                        <option value="{{ $skillData['id'] }}">{{ $skillData['skill_name'] }}</option>
+                        <option {{ (isset($skillData['sel_skill_id']) && $skillData['sel_skill_id']==$skillData['id'])?'selected':'' }} value="{{ $skillData['id'] }}">{{ $skillData['skill_name'] }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -53,7 +53,8 @@
         </div>
         <div class="pull-right text-right">
             {!! csrf_field() !!}
-            <input type="hidden" name="action" value="add">
+            <input type="hidden" name="action" value="{{ (isset($templateData->id)?'edit':'add') }}">
+            <input type="hidden" name="id" value="{{ (isset($templateData->id)?$templateData->id:'') }}">
             <button type="button" class="btn btn-link mr-r-10" style="font-weight:500">Cancel</button>
             <button type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
 
