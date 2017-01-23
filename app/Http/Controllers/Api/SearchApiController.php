@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use App\Helpers\apiResponse;
 use App\Models\RecruiterJobs;
-
+use App\Models\Location;
 
 class SearchApiController extends Controller {
     
@@ -22,14 +22,19 @@ class SearchApiController extends Controller {
                 'jobTitle' => 'required',
                 'isFulltime' => 'required',
                 'isParttime' => 'required',
-                'parttimeDays' => 'required'
+                
             ]);
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $reqData = $request->all();
-                $searchResult = RecruiterJobs::searchJob($reqData);
-                if(count($searchResult['list']) > 0){
-                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"),  apiResponse::convertToCamelCase($searchResult));
+                $location = Location::where('zipcode',$reqData['zipCode'])->get();
+                if($location){
+                    $searchResult = RecruiterJobs::searchJob($reqData);
+                    if(count($searchResult['list']) > 0){
+                        $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"),  apiResponse::convertToCamelCase($searchResult));
+                    }else{
+                        $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
+                    }
                 }else{
                     $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
                 }
