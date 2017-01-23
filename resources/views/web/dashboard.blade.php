@@ -23,11 +23,11 @@
             <div class="commonBox cboxbottom">
                 <div class="form-group">
                     <label >Dental Office Name</label>
-                    <input type="text" value="{{ old('officeName') }}" name="officeName" class="form-control"  data-parsley-required data-parsley-required-message="office name required">
+                    <input type="text" value="{{ old('officeName') }}" onclick="getOfficeName()" id="officeName" name="officeName" class="form-control"  data-parsley-required data-parsley-required-message="office name required">
                 </div>
                 <div class="form-group">
                     <label  >Dental Office Description</label>
-                    <textarea class="form-control  txtHeight"  name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" >{{ old('officeDescription') }}</textarea>
+                    <textarea class="form-control  txtHeight"  name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeDescription') }}</textarea>
                 </div>
             </div>		
 
@@ -86,7 +86,8 @@
                 </table>
                 <div class="form-group">
                     <label>Phone Number</label>
-                    <input name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits" >
+<!--                    <input name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits" >-->
+                    <input name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required"  data-parsley-trigger="keyup"  data-parsley-pattern="^\(?([0-9]{3})\)([0-9]{3})[-]([0-9]{4})$" data-parsley-pattern-message="pattern should be (123)456-7890" >
                 </div>
 
                 <div class="form-group">
@@ -193,12 +194,12 @@
                 </div>	
                 <div class="form-group">
                     <label>Office Location Information <i class="optional">(Optional)</i></label>
-                    <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="location information required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" >{{ old('officeLocation') }}</textarea>
+                    <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="location information required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
                 </div>	
             </div>			
         </div>
         <div class="pull-right text-right">
-            <div class="addBtn DynamicAdd"><span class="icon icon-plus"></span>Add total of 1 locations</div>
+<!--            <div class="addBtn DynamicAdd"><span class="icon icon-plus"></span>Add total of 1 locations</div>-->
             <button type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
         </div>
     </div>
@@ -294,7 +295,7 @@
     // parameter when you first load the API. For example:
     // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
-    var placeSearch, autocomplete;
+    var placeSearch, autocomplete, officeName;
     var componentForm = {
         street_number: 'short_name',
         route: 'long_name',
@@ -356,6 +357,19 @@
                 autocomplete.setBounds(circle.getBounds());
             });
         }
+    }
+
+    function getOfficeName() {
+        officeName = new google.maps.places.Autocomplete(
+                (document.getElementById('officeName')),
+                {types: ['geocode']});
+        officeName.addListener('place_changed', fillOfficeAddress);
+    }
+
+    function fillOfficeAddress() {
+        var addy = $('#officeName').val();
+        var offName = addy.substr(0, addy.indexOf(','));
+        document.getElementById('officeName').value = offName;
     }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsIYaIMo9hd5yEL7pChkVPKPWGX6rFcv8&libraries=places&callback=initAutocomplete"
