@@ -23,11 +23,11 @@
             <div class="commonBox cboxbottom">
                 <div class="form-group">
                     <label >Dental Office Name</label>
-                    <input type="text" value="{{ old('officeName') }}" name="officeName" class="form-control"  data-parsley-required data-parsley-required-message="office name required">
+                    <input type="text" value="{{ old('officeName') }}" onclick="getOfficeName()" id="officeName" name="officeName" class="form-control"  data-parsley-required data-parsley-required-message="office name required">
                 </div>
                 <div class="form-group">
                     <label  >Dental Office Description</label>
-                    <textarea class="form-control  txtHeight"  name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" >{{ old('officeDescription') }}</textarea>
+                    <textarea class="form-control  txtHeight"  name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeDescription') }}</textarea>
                 </div>
             </div>		
 
@@ -87,6 +87,7 @@
                 <div class="form-group">
                     <label>Phone Number</label>
                     <input name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits" >
+<!--                    <input name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required"  data-parsley-trigger="keyup"  data-parsley-pattern="^\(?([0-9]{3})\)([0-9]{3})[-]([0-9]{4})$" data-parsley-pattern-message="pattern should be (123)456-7890" >-->
                 </div>
 
                 <div class="form-group">
@@ -99,15 +100,15 @@
                             </p>    
                         </div>
                         @php
-                        $options = '<option value="">Opening Hours</option>
+                        $options = '
                         <option value="00:00:00">00:00</option><option  value="00:30:00">00:30</option><option  value="01:00:00">01:00</option><option value="01:30:00">01:30</option><option value="02:00:00">02:00</option><option value="02:30:00">02:30</option><option value="03:00:00">03:00</option><option value="03:30:00">03:30</option><option value="04:00:00">04:00</option><option value="04:30:00">04:30</option>
                         <option value="05:00:00">05:00</option><option value="05:30:00">05:30</option><option value="06:00:00">06:00</option><option value="06:30:00">06:30</option><option value="07:00:00">07:00</option><option value="07:30:00">07:30</option><option value="08:00:00">08:00</option><option value="08:30:00">08:30</option><option value="09:00:00">09:00</option><option value="09:30:00">09:30</option><option value="10:00:00">10:00</option>
                         <option  value="10:30:00">10:30</option><option  value="11:00:00">11:00</option><option  value="11:30:00">11:30</option><option  value="12:00:00">12:00</option><option  value="12:30:00">12:30</option><option  value="13:00:00">13:00</option><option  value="13:30:00">13:30</option><option  value="14:00:00">14:00</option><option  value="14:30:00">14:30</option><option  value="15:00:00">15:00</option>
                         <option  value="15:30:00">15:30</option><option  value="16:00:00">16:00</option><option  value="16:30:00">16:30</option><option  value="17:00:00">17:00</option><option  value="17:30:00">17:30</option><option  value="18:00:00">18:00</option><option  value="18:30:00">18:30</option><option  value="19:00:00">19:00</option><option  value="19:30:00">19:30</option><option  value="20:00:00">20:00</option><option  value="20:30:00">20:30</option>
                         <option  value="21:00:00">21:00</option><option  value="21:30:00">21:30</option><option  value="22:00:00">22:00</option><option  value="22:30:00">22:30</option><option  value="23:00:00">23:00</option><option  value="23:30:00">23:30</option>';
                         @endphp
-                        <div class="col-sm-4"><select name="everydayStart" class="form-control customsel"><?= $options ?></select></div>
-                        <div class="col-sm-4"><select name="everydayEnd" class="form-control customsel"><?= $options ?></select></div>
+                        <div class="col-sm-4"><select name="everydayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
+                        <div class="col-sm-4"><select name="everydayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>
                     </div>
 
                     <div class="allDay">  
@@ -118,8 +119,8 @@
                                            <label for="mon" class="ckColor"> Monday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><select name="mondayStart" class="form-control customsel"><?= $options ?></select></div>
-                            <div class="col-sm-4"><select name="mondayEnd" class="form-control customsel"><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="mondayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="mondayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>
                         </div>
 
                         <div class="row dayBox">
@@ -129,8 +130,8 @@
                                            <label for="tue" class="ckColor"> Tuesday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><select name="tuesdayStart" class="form-control customsel"><?= $options ?></select></div>
-                            <div class="col-sm-4"><select name="tuesdayEnd" class="form-control customsel"><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="tuesdayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="tuesdayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>
 
                         </div>
 
@@ -141,8 +142,8 @@
                                            <label for="wed" class="ckColor"> Wednesday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><select name="wednesdayStart" class="form-control customsel"><?= $options ?></select></div>
-                            <div class="col-sm-4"><select name="wednesdayEnd" class="form-control customsel"><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="wednesdayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="wednesdayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>
 
                         </div>
 
@@ -153,8 +154,8 @@
                                            <label for="thu" class="ckColor"> Thursday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><select name="thrusdayStart" class="form-control customsel"><?= $options ?></select></div>
-                            <div class="col-sm-4"><select name="thrusdayEnd" class="form-control customsel"><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="thrusdayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="thrusdayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>
                         </div>
 
                         <div class="row dayBox">
@@ -164,8 +165,8 @@
                                            <label for="fri" class="ckColor"> Friday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><select name="fridayStart" class="form-control customsel"><?= $options ?></select></div>
-                            <div class="col-sm-4"><select name="fridayEnd" class="form-control customsel"><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="fridayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="fridayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>
                         </div>
 
                         <div class="row dayBox">
@@ -175,8 +176,8 @@
                                            <label for="sat" class="ckColor"> Saturday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><select name="saturdayStart" class="form-control customsel"><?= $options ?></select></div>
-                            <div class="col-sm-4"><select name="saturdayEnd" class="form-control customsel"><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="saturdayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="saturdayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>
                         </div>
 
                         <div class="row dayBox">
@@ -186,19 +187,19 @@
                                            <label for="sun" class="ckColor"> Sunday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><select name="sundayStart" class="form-control customsel"><?= $options ?></select></div>
-                            <div class="col-sm-4"><select name="sundayEnd" class="form-control customsel"><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="sundayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="sundayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>
                         </div>
                     </div>
                 </div>	
                 <div class="form-group">
                     <label>Office Location Information <i class="optional">(Optional)</i></label>
-                    <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="location information required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" >{{ old('officeLocation') }}</textarea>
+                    <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="location information required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
                 </div>	
             </div>			
         </div>
         <div class="pull-right text-right">
-            <div class="addBtn DynamicAdd"><span class="icon icon-plus"></span>Add total of 1 locations</div>
+<!--            <div class="addBtn DynamicAdd"><span class="icon icon-plus"></span>Add total of 1 locations</div>-->
             <button type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
         </div>
     </div>
@@ -217,17 +218,17 @@
                 <div class="carousel slide " id="fade-quote-carousel" data-ride="carousel" data-interval="false">
                     <!-- Carousel indicators -->
                     <ol class="carousel-indicators">
-                        <li data-target="#fade-quote-carousel" data-slide-to="0"></li>
+                        <li data-target="#fade-quote-carousel" data-slide-to="0" class="active"></li>
                         <li data-target="#fade-quote-carousel" data-slide-to="1"></li>
                         <li data-target="#fade-quote-carousel" data-slide-to="2" ></li>
-                        <li data-target="#fade-quote-carousel" data-slide-to="3" class="active"></li>
+                        <li data-target="#fade-quote-carousel" data-slide-to="3" ></li>
                         <li data-target="#fade-quote-carousel" data-slide-to="4"></li>
                     </ol>
                     <!-- Carousel items -->
                     <div class="carousel-inner">
-                        <div class="item">
+                        <div class="active item">
 
-                            <div class="onboard-img" ><img src="" alt=""></div>
+                            <div class="onboard-img" ><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
                             <h3 class="onboard-title">Lorem ipsum</h3>
                             <blockquote>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio .</p>
@@ -235,7 +236,7 @@
                         </div>
                         <div class="item">
 
-                            <div class="onboard-img"><img src="" alt=""></div>
+                            <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
                             <h3 class="onboard-title">Lorem ipsum</h3>
                             <blockquote>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio </p>
@@ -243,13 +244,13 @@
                         </div>
                         <div class=" item">
 
-                            <div class="onboard-img"><img src="" alt=""></div>
+                            <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
                             <h3 class="onboard-title">Lorem ipsum</h3>
                             <blockquote>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio doloremque laboriosam quas, quos eaque molestias odio aut eius animi. Impedit temporibus nisi accusamus.</p>
                             </blockquote>
                         </div>
-                        <div class="active item">
+                        <div class=" item">
 
                             <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
                             <h3 class="onboard-title">Create Your Profile </h3>
@@ -259,13 +260,22 @@
                         </div>
                         <div class="item">
 
-                            <div class="onboard-img"><img src="" alt=""></div>
+                            <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
                             <h3 class="onboard-title">Lorem ipsum</h3>
                             <blockquote>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio doloremque laboriosam quas, quos eaque molestias odio aut eius animi. Impedit temporibus nisi accusamus.</p>
                             </blockquote>
                         </div>
                     </div>
+                    <!-- Controls -->
+                    <a class="left carousel-control" href="#fade-quote-carousel"  data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#fade-quote-carousel"  data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -275,9 +285,29 @@
 <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
 @section('js')
 <script>
-    $('.carousel').carousel();
-</script>
-<script>
+		$("#fade-quote-carousel").carousel({
+			interval: false,
+			wrap: false
+		});
+		var checkitem = function() {
+			var $this;
+			$this = $("#fade-quote-carousel");
+			if ($("#fade-quote-carousel .carousel-inner .item:first").hasClass("active")) {
+				$this.children(".left").hide();
+				$this.children(".right").show();
+			} else if ($("#fade-quote-carousel .carousel-inner .item:last").hasClass("active")) {
+				$this.children(".right").hide();
+				$this.children(".left").show();
+			} else {
+				$this.children(".carousel-control").show();
+			}
+		};
+
+		checkitem();
+
+		$("#fade-quote-carousel").on("slid.bs.carousel", "", checkitem);
+	</script>
+        <script>
     $('.ddlCars').multiselect({
         numberDisplayed: 3,
     });
@@ -294,7 +324,7 @@
     // parameter when you first load the API. For example:
     // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
-    var placeSearch, autocomplete;
+    var placeSearch, autocomplete, officeName;
     var componentForm = {
         street_number: 'short_name',
         route: 'long_name',
@@ -356,6 +386,19 @@
                 autocomplete.setBounds(circle.getBounds());
             });
         }
+    }
+
+    function getOfficeName() {
+        officeName = new google.maps.places.Autocomplete(
+                (document.getElementById('officeName')),
+                {types: ['geocode']});
+        officeName.addListener('place_changed', fillOfficeAddress);
+    }
+
+    function fillOfficeAddress() {
+        var addy = $('#officeName').val();
+        var offName = addy.substr(0, addy.indexOf(','));
+        document.getElementById('officeName').value = offName;
     }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsIYaIMo9hd5yEL7pChkVPKPWGX6rFcv8&libraries=places&callback=initAutocomplete"

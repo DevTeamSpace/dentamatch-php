@@ -19,11 +19,14 @@ Route::post('signup', 'web\SignupController@postSignUp');
 Route::post('login', 'web\SignupController@postLogin');
 Route::get('login', 'web\SignupController@getLogin');
 Route::get('verification-code/{code}', 'web\SignupController@getVerificationCode');
-Route::get('user-activation/{code}','Api\UserApiController@getActivatejobseeker');
+Route::get('user-activation/{code}', 'Api\UserApiController@getActivatejobseeker');
 Route::get('logout', 'web\SignupController@logout');
 
 Route::get('/aboutus', function () {
     return view('about');
+});
+Route::get('/success-register', function () {
+    return view('auth.passwords.successfully_reg');
 });
 
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
@@ -31,7 +34,7 @@ Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm'
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
 
-Route::group(['middleware' => ['auth','xss']], function () {
+Route::group(['middleware' => ['auth', 'xss']], function () {
     Route::group(['middleware' => 'recruiter'], function () {
         Route::group(['middleware' => 'acceptedTerms'], function () {
             Route::get('home', 'web\SignupController@dashboard');
@@ -50,7 +53,7 @@ Route::group(['middleware' => ['auth','xss']], function () {
     });
 });
 
-Route::group(['middleware' => ['web','xss'], 'prefix' => 'cms/'], function () {
+Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
 
     Route::get('login', 'Auth\LoginController@getLogin');
     Route::get('logout', 'Auth\LoginController@logout');
@@ -73,7 +76,7 @@ Route::group(['middleware' => ['web','xss'], 'prefix' => 'cms/'], function () {
         Route::get('changePassword', 'cms\UserController@changePassword');
         Route::post('updatePassword', 'cms\UserController@updatePassword');
     });
-    
+
     Route::group(['prefix' => 'location/'], function() {
         Route::get('index', 'Cms\LocationController@index');
         Route::get('list', 'Cms\LocationController@locationsList');

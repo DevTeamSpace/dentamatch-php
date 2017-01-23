@@ -348,10 +348,8 @@ h1,h2,h3,h4,h5,h6{font-weight: normal; font-family: 'Roboto', sans-serif;}
 					right:0;
 					left:0;
 					margin:auto;
-
-
 				}
-
+                            #fade-quote-carousel .carousel-control{width:30px; color:#0470c0;  background:transparent }
 				/*----------Subscription section-------------*/
 				.subscription-box{background:#fff; height:auto; padding:30px;}
 				.subscription-box > .frm-title{margin:0; letter-spacing: -0.1px;}
