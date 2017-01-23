@@ -218,15 +218,15 @@
                 <div class="carousel slide " id="fade-quote-carousel" data-ride="carousel" data-interval="false">
                     <!-- Carousel indicators -->
                     <ol class="carousel-indicators">
-                        <li data-target="#fade-quote-carousel" data-slide-to="0"></li>
+                        <li data-target="#fade-quote-carousel" data-slide-to="0" class="active"></li>
                         <li data-target="#fade-quote-carousel" data-slide-to="1"></li>
                         <li data-target="#fade-quote-carousel" data-slide-to="2" ></li>
-                        <li data-target="#fade-quote-carousel" data-slide-to="3" class="active"></li>
+                        <li data-target="#fade-quote-carousel" data-slide-to="3" ></li>
                         <li data-target="#fade-quote-carousel" data-slide-to="4"></li>
                     </ol>
                     <!-- Carousel items -->
                     <div class="carousel-inner">
-                        <div class="item">
+                        <div class="active item">
 
                             <div class="onboard-img" ><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
                             <h3 class="onboard-title">Lorem ipsum</h3>
@@ -250,7 +250,7 @@
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio doloremque laboriosam quas, quos eaque molestias odio aut eius animi. Impedit temporibus nisi accusamus.</p>
                             </blockquote>
                         </div>
-                        <div class="active item">
+                        <div class=" item">
 
                             <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
                             <h3 class="onboard-title">Create Your Profile </h3>
@@ -267,6 +267,15 @@
                             </blockquote>
                         </div>
                     </div>
+                    <!-- Controls -->
+                    <a class="left carousel-control" href="#fade-quote-carousel"  data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#fade-quote-carousel"  data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -276,9 +285,29 @@
 <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
 @section('js')
 <script>
-    $('.carousel').carousel();
-</script>
-<script>
+		$("#fade-quote-carousel").carousel({
+			interval: false,
+			wrap: false
+		});
+		var checkitem = function() {
+			var $this;
+			$this = $("#fade-quote-carousel");
+			if ($("#fade-quote-carousel .carousel-inner .item:first").hasClass("active")) {
+				$this.children(".left").hide();
+				$this.children(".right").show();
+			} else if ($("#fade-quote-carousel .carousel-inner .item:last").hasClass("active")) {
+				$this.children(".right").hide();
+				$this.children(".left").show();
+			} else {
+				$this.children(".carousel-control").show();
+			}
+		};
+
+		checkitem();
+
+		$("#fade-quote-carousel").on("slid.bs.carousel", "", checkitem);
+	</script>
+        <script>
     $('.ddlCars').multiselect({
         numberDisplayed: 3,
     });
