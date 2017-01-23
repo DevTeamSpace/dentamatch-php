@@ -199,9 +199,9 @@ class SkillApiController extends Controller {
                             ['image_path' => $response['file']]
                     );
                     $url['imgUrl'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $response['file'];
-                    $response = apiResponse::customJsonResponse(1, 200, trans("message.certificate_successful_update"),$url);
+                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.certificate_successful_update"),$url);
                 } else {
-                    $response = apiResponse::responseError(trans("message.upload_image_problem"));
+                    $response = apiResponse::responseError(trans("messages.upload_image_problem"));
                 }
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
