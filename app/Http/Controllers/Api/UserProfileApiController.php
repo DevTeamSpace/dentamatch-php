@@ -202,12 +202,12 @@ class UserProfileApiController extends Controller {
                 $skills = JobSeekerSkills::getJobSeekerSkills($userId);
                 if(!empty($skills)) {
                     foreach($skills as $keySkill=>$skillValue) {
-                        $skillData[$skillValue['parentId']]['parentId'] = $skillValue['parentId'];
+                        $skillData[$skillValue['parentId']]['id'] = $skillValue['parentId'];
                         $skillData[$skillValue['parentId']]['skillsName'] = $skillValue['skillsName'];
-                        $skillData[$skillValue['parentId']]['childSkills'][] = [
-                                                                        'childId' => $skillValue['childId'],
-                                                                        'skillsChildName' => $skillValue['skillsChildName'],
-                                                                        'otherSkills' => $skillValue['otherSkills']
+                        $skillData[$skillValue['parentId']]['children'][] = [
+                                                                        'id' => $skillValue['childId'],
+                                                                        'skillName' => $skillValue['skillsChildName'],
+                                                                        'otherSkill' => $skillValue['otherSkills']
                                                                     ];
                     }
                 }
@@ -219,6 +219,7 @@ class UserProfileApiController extends Controller {
                     foreach($allCertification as $key=>$value){
                         $certificationData[$key] = $value;
                         $certificationData[$key]['imagePath'] = !empty($jobSeekerCertifications[$key]) ? $jobSeekerCertifications[$key]['image_path'] : null;
+                        $certificationData[$key]['validityDate'] = !empty($jobSeekerCertifications[$key]) ? $jobSeekerCertifications[$key]['validity_date'] : null;
                     }
                 }
                 
