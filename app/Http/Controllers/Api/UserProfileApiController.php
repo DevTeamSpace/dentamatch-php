@@ -203,7 +203,7 @@ class UserProfileApiController extends Controller {
                 if(!empty($skills)) {
                     foreach($skills as $keySkill=>$skillValue) {
                         $skillData[$skillValue['parentId']]['id'] = $skillValue['parentId'];
-                        $skillData[$skillValue['parentId']]['skillsName'] = $skillValue['skillsName'];
+                        $skillData[$skillValue['parentId']]['skillName'] = $skillValue['skillsName'];
                         $skillData[$skillValue['parentId']]['children'][] = [
                                                                         'id' => $skillValue['childId'],
                                                                         'skillName' => $skillValue['skillsChildName'],
