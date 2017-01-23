@@ -664,4 +664,57 @@ paths:
           
       tags:
         - Availability
+        
+  /users/search-jobs:
+    post:
+      summary: Search jobs by user according to parameters
+      description: Api to search jobs
+      responses: 
+          200:
+            description: Api to search jobs
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: lat
+          in: formData
+          description: latitude provided by user
+          type: string
+        - name: lng
+          in: formData
+          description: longitude provided by user
+          type: string
+        - name: zipCode
+          in: formData
+          description: zipcode provided by user
+          type: string
+        - name: page
+          in: formData
+          description: Page number
+          type: numeric
+        - name: jobTitle
+          in: formData
+          description: send job title id in array that you want to search (ex.[1,2,3])
+          type: string
+        - name: isFulltime
+          in: formData
+          description: Send 1 if user is available for full time
+          type: numerical
+        - name: isParttime
+          in: formData
+          description: Send 1 if user is available for part time
+          type: numeric
+        - name: parttimeDays
+          in: formData
+          description: send days in array (ex. [sunday,monday,tuesday])
+          type: string
+          
+      tags:
+        - Job search
 
