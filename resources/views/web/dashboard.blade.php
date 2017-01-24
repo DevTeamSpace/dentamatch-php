@@ -86,7 +86,8 @@
                 </table>
                 <div class="form-group">
                     <label>Phone Number</label>
-                    <input name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits" >
+                    <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup"  data-parsley-type="digits" data-parsley-type-message="number should be digits" >
+<!--                    <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="13" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup"  >-->
 <!--                    <input name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required"  data-parsley-trigger="keyup"  data-parsley-pattern="^\(?([0-9]{3})\)([0-9]{3})[-]([0-9]{4})$" data-parsley-pattern-message="pattern should be (123)456-7890" >-->
                 </div>
 
@@ -284,6 +285,7 @@
 @endif
 <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
 @section('js')
+
 <script>
 		$("#fade-quote-carousel").carousel({
 			interval: false,
@@ -312,6 +314,9 @@
         numberDisplayed: 3,
     });
 
+//$("input[name='phoneNumber']").keyup(function() {
+//    $(this).val($(this).val().replace(/^(\d{3})(\d{3})(\d)+$/, "($1)$2-$3"));
+//});
 </script>
 
 
