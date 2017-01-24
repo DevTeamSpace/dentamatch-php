@@ -100,16 +100,28 @@
                                        <label for="test2" class="ckColor"> Everyday</label>
                             </p>    
                         </div>
-                        @php
+<!--                        @php
                         $options = '
                         <option value="00:00:00">00:00</option><option  value="00:30:00">00:30</option><option  value="01:00:00">01:00</option><option value="01:30:00">01:30</option><option value="02:00:00">02:00</option><option value="02:30:00">02:30</option><option value="03:00:00">03:00</option><option value="03:30:00">03:30</option><option value="04:00:00">04:00</option><option value="04:30:00">04:30</option>
                         <option value="05:00:00">05:00</option><option value="05:30:00">05:30</option><option value="06:00:00">06:00</option><option value="06:30:00">06:30</option><option value="07:00:00">07:00</option><option value="07:30:00">07:30</option><option value="08:00:00">08:00</option><option value="08:30:00">08:30</option><option value="09:00:00">09:00</option><option value="09:30:00">09:30</option><option value="10:00:00">10:00</option>
                         <option  value="10:30:00">10:30</option><option  value="11:00:00">11:00</option><option  value="11:30:00">11:30</option><option  value="12:00:00">12:00</option><option  value="12:30:00">12:30</option><option  value="13:00:00">13:00</option><option  value="13:30:00">13:30</option><option  value="14:00:00">14:00</option><option  value="14:30:00">14:30</option><option  value="15:00:00">15:00</option>
                         <option  value="15:30:00">15:30</option><option  value="16:00:00">16:00</option><option  value="16:30:00">16:30</option><option  value="17:00:00">17:00</option><option  value="17:30:00">17:30</option><option  value="18:00:00">18:00</option><option  value="18:30:00">18:30</option><option  value="19:00:00">19:00</option><option  value="19:30:00">19:30</option><option  value="20:00:00">20:00</option><option  value="20:30:00">20:30</option>
                         <option  value="21:00:00">21:00</option><option  value="21:30:00">21:30</option><option  value="22:00:00">22:00</option><option  value="22:30:00">22:30</option><option  value="23:00:00">23:00</option><option  value="23:30:00">23:30</option>';
-                        @endphp
-                        <div class="col-sm-4"><select name="everydayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
-                        <div class="col-sm-4"><select name="everydayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>
+                        @endphp-->
+<!--                        <div class="col-sm-4"><select name="everydayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
+                        <div class="col-sm-4"><select name="everydayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>-->
+                        <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
+                                <input type='text' name="everydayStart" class="form-control" disabled />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div></div>
+                        <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
+                                <input type='text' name="everydayEnd" class="form-control " disabled/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div></div>
                     </div>
 
                     <div class="allDay">  
@@ -120,8 +132,21 @@
                                            <label for="mon" class="ckColor"> Monday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><select name="mondayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
-                            <div class="col-sm-4"><select name="mondayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>
+<!--                            <div class="col-sm-4"><select name="mondayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="mondayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>-->
+                            
+                            <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
+                                <input type='text' name="mondayStart" class="form-control" disabled />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div></div>
+                        <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
+                                <input type='text' name="mondayEnd" class="form-control " disabled/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div></div>
                         </div>
 
                         <div class="row dayBox">
@@ -131,8 +156,20 @@
                                            <label for="tue" class="ckColor"> Tuesday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><select name="tuesdayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
-                            <div class="col-sm-4"><select name="tuesdayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>
+<!--                            <div class="col-sm-4"><select name="tuesdayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="tuesdayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>-->
+                            <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
+                                <input type='text' name="tuesdayStart" class="form-control" disabled />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div></div>
+                        <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
+                                <input type='text' name="tuesdayEnd" class="form-control " disabled/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div></div>
 
                         </div>
 
@@ -143,8 +180,20 @@
                                            <label for="wed" class="ckColor"> Wednesday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><select name="wednesdayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
-                            <div class="col-sm-4"><select name="wednesdayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>
+<!--                            <div class="col-sm-4"><select name="wednesdayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="wednesdayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>-->
+                            <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
+                                <input type='text' name="wednesdayStart" class="form-control" disabled />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div></div>
+                        <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
+                                <input type='text' name="wednesdayEnd" class="form-control " disabled/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div></div>
 
                         </div>
 
@@ -155,8 +204,20 @@
                                            <label for="thu" class="ckColor"> Thursday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><select name="thrusdayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
-                            <div class="col-sm-4"><select name="thrusdayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>
+<!--                            <div class="col-sm-4"><select name="thrusdayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="thrusdayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>-->
+                            <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
+                                <input type='text' name="thrusdayStart" class="form-control" disabled />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div></div>
+                        <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
+                                <input type='text' name="thrusdayEnd" class="form-control " disabled/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div></div>
                         </div>
 
                         <div class="row dayBox">
@@ -166,8 +227,20 @@
                                            <label for="fri" class="ckColor"> Friday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><select name="fridayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
-                            <div class="col-sm-4"><select name="fridayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>
+<!--                            <div class="col-sm-4"><select name="fridayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="fridayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>-->
+                            <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
+                                <input type='text' name="fridayStart" class="form-control" disabled />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div></div>
+                        <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
+                                <input type='text' name="fridayEnd" class="form-control " disabled/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div></div>
                         </div>
 
                         <div class="row dayBox">
@@ -177,8 +250,20 @@
                                            <label for="sat" class="ckColor"> Saturday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><select name="saturdayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
-                            <div class="col-sm-4"><select name="saturdayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>
+<!--                            <div class="col-sm-4"><select name="saturdayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="saturdayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>-->
+                            <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
+                                <input type='text' name="saturdayStart" class="form-control" disabled />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div></div>
+                        <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
+                                <input type='text' name="saturdayEnd" class="form-control " disabled/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div></div>
                         </div>
 
                         <div class="row dayBox">
@@ -188,14 +273,26 @@
                                            <label for="sun" class="ckColor"> Sunday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4"><select name="sundayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
-                            <div class="col-sm-4"><select name="sundayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>
+<!--                            <div class="col-sm-4"><select name="sundayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
+                            <div class="col-sm-4"><select name="sundayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>-->
+                            <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
+                                <input type='text' name="sundayStart" class="form-control" disabled />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div></div>
+                        <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
+                                <input type='text' name="sundayEnd" class="form-control " disabled/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div></div>
                         </div>
                     </div>
                 </div>	
                 <div class="form-group">
                     <label>Office Location Information <i class="optional">(Optional)</i></label>
-                    <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="location information required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
+                    <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="location information required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
                 </div>	
             </div>			
         </div>
@@ -317,6 +414,24 @@
 //$("input[name='phoneNumber']").keyup(function() {
 //    $(this).val($(this).val().replace(/^(\d{3})(\d{3})(\d)+$/, "($1)$2-$3"));
 //});
+</script>
+<script>
+
+    $(function () {
+        $('.datetimepicker1').datetimepicker({format: 'H:m:s'});
+        $('.datetimepicker2').datetimepicker({
+            useCurrent: false, //Important! See issue #1075
+            format: 'H:m:s'
+        });
+        $(".datetimepicker1").on("dp.change", function (e) {
+            $(this).closest('.row').find('.datetimepicker2').data("DateTimePicker").minDate(e.date);
+        });
+        $(".datetimepicker2").on("dp.change", function (e) {
+            $(this).closest('.row').find('.datetimepicker1').data("DateTimePicker").maxDate(e.date);
+        });
+    });
+
+
 </script>
 
 
