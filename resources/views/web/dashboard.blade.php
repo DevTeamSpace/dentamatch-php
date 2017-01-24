@@ -49,7 +49,7 @@
                 <div class="form-group">
                     <label>Dental Office Address</label>
                     <div id="locationField">
-                        <input onFocus="geolocate()" id="autocomplete" name="officeAddress" value="{{ old('officeAddress') }}" type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="office address required">
+                        <input  id="autocomplete" name="officeAddress" value="{{ old('officeAddress') }}" type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="office address required">
                     </div>
                 </div>
 
@@ -287,29 +287,29 @@
 @section('js')
 
 <script>
-		$("#fade-quote-carousel").carousel({
-			interval: false,
-			wrap: false
-		});
-		var checkitem = function() {
-			var $this;
-			$this = $("#fade-quote-carousel");
-			if ($("#fade-quote-carousel .carousel-inner .item:first").hasClass("active")) {
-				$this.children(".left").hide();
-				$this.children(".right").show();
-			} else if ($("#fade-quote-carousel .carousel-inner .item:last").hasClass("active")) {
-				$this.children(".right").hide();
-				$this.children(".left").show();
-			} else {
-				$this.children(".carousel-control").show();
-			}
-		};
+    $("#fade-quote-carousel").carousel({
+        interval: false,
+        wrap: false
+    });
+    var checkitem = function () {
+        var $this;
+        $this = $("#fade-quote-carousel");
+        if ($("#fade-quote-carousel .carousel-inner .item:first").hasClass("active")) {
+            $this.children(".left").hide();
+            $this.children(".right").show();
+        } else if ($("#fade-quote-carousel .carousel-inner .item:last").hasClass("active")) {
+            $this.children(".right").hide();
+            $this.children(".left").show();
+        } else {
+            $this.children(".carousel-control").show();
+        }
+    };
 
-		checkitem();
+    checkitem();
 
-		$("#fade-quote-carousel").on("slid.bs.carousel", "", checkitem);
-	</script>
-        <script>
+    $("#fade-quote-carousel").on("slid.bs.carousel", "", checkitem);
+</script>
+<script>
     $('.ddlCars').multiselect({
         numberDisplayed: 3,
     });
@@ -342,62 +342,46 @@
     function initAutocomplete() {
         // Create the autocomplete object, restricting the search to geographical
         // location types.
-        autocomplete = new google.maps.places.Autocomplete(
+        autocomplete = new google.maps.places.SearchBox(
                 /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
                 {types: ['geocode']});
-
+//console.log(autocomplete);
         // When the user selects an address from the dropdown, populate the address
         // fields in the form.
-        autocomplete.addListener('place_changed', fillInAddress);
+        autocomplete.addListener('places_changed', fillInAddress);
     }
 
     function fillInAddress() {
         // Get the place details from the autocomplete object.
-        var place = autocomplete.getPlace();
-//console.log(place);
-        for (var component in componentForm) {
-            document.getElementById(component).value = '';
-            document.getElementById(component).disabled = false;
-        }
-        // Get each component of the address from the place details
-        // and fill the corresponding field on the form.
-        for (var i = 0; i < place.address_components.length; i++) {
-            var addressType = place.address_components[i].types[0];
-            if (componentForm[addressType]) {
-                var val = place.address_components[i][componentForm[addressType]];
-                document.getElementById(addressType).value = val;
+        var allPlace = autocomplete.getPlaces();
+        allPlace.forEach(function (place) {
+            //console.log(place)
+
+            for (var component in componentForm) {
+                document.getElementById(component).value = '';
+                document.getElementById(component).disabled = false;
             }
-        }
+            // Get each component of the address from the place details
+            // and fill the corresponding field on the form.
+            for (var i = 0; i < place.address_components.length; i++) {
+                var addressType = place.address_components[i].types[0];
+                if (componentForm[addressType]) {
+                    var val = place.address_components[i][componentForm[addressType]];
+                    document.getElementById(addressType).value = val;
+                }
+            }
 
-        document.getElementById('full_address').value = place.formatted_address;
-        document.getElementById('lat').value = place.geometry.location.lat();
-        document.getElementById('lng').value = place.geometry.location.lng();
-
-    }
-
-    // Bias the autocomplete object to the user's geographical location,
-    // as supplied by the browser's 'navigator.geolocation' object.
-    function geolocate() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var geolocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                var circle = new google.maps.Circle({
-                    center: geolocation,
-                    radius: position.coords.accuracy
-                });
-                autocomplete.setBounds(circle.getBounds());
-            });
-        }
+            document.getElementById('full_address').value = place.formatted_address;
+            document.getElementById('lat').value = place.geometry.location.lat();
+            document.getElementById('lng').value = place.geometry.location.lng();
+        });
     }
 
     function getOfficeName() {
-        officeName = new google.maps.places.Autocomplete(
+        officeName = new google.maps.places.SearchBox(
                 (document.getElementById('officeName')),
                 {types: ['geocode']});
-        officeName.addListener('place_changed', fillOfficeAddress);
+        officeName.addListener('places_changed', fillOfficeAddress);
     }
 
     function fillOfficeAddress() {
