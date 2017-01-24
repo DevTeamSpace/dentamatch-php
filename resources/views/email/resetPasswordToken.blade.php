@@ -15,7 +15,7 @@
                         <div style="font-size:15px;">
                             <p style="line-height: 24px;">
                                 You have requested to reset your password.<br/><br/>
-                                Please visit the link below to create your new password.<br/>
+                                Please visit the link below to activate your account.<br/>
                                 <a href="{{ $url }}">Click to Reset</a>
                             </p>
                             <br/><p style="margin:20px 0 0 0; padding: 0;">Sincerely Captured</p>
