@@ -72,7 +72,7 @@
                             <li><a href="#">Action</a></li>
                             <li><a href="#">Another action</a></li>
                             <li><a href="#">Something else here</a></li>
-
+                            <li><a href="{{ url('logout') }}">Logout</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -91,7 +91,7 @@
                             <a href="#">Favorite Jobseeker</a>
                         </li>
                         <li class="{{ ($navActive=='template')?'active':''}}">
-                            <a href="{{ url('jobtemplates') }}">Template</a>
+                            <a href="#">Template</a>
                         </li>
 
                     </ul>
