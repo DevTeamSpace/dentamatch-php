@@ -709,7 +709,7 @@ paths:
           
       tags:
 
-        - Availability
+        - User Profile
         
   /users/search-jobs:
     post:
