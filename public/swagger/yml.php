@@ -424,7 +424,7 @@ paths:
           type: string
         - name: schoolDataArray
           in: formData
-          description: school selected data as array
+          description: school selected data as array ex (schoolDataArray:[{"schoolingChildId":1,"otherSchooling":"", "yearOfGraduation": 2004}]) 
           type: array
           
       tags:
