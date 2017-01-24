@@ -48,9 +48,15 @@ class JobTemplates extends Model
         return ($value);//decrypt
     }
     
-    public static function findById($id){
+    public static function findById($id,$userId=''){
         $templateId = self::getIdDecrypt($id);
-        return JobTemplates::where('id',$templateId)->first();
+        $tempObj = JobTemplates::where('job_templates.id',$templateId);
+        if($userId!=''){
+            $tempObj->where('user_id',$userId)
+                ->join('job_titles','job_templates.job_title_id','=','job_titles.id')
+                ->select('job_titles.jobtitle_name','job_templates.*');
+        }
+        return $tempObj->first();
     }
     
     public static function getAllUserTemplates($userId){

@@ -24,8 +24,8 @@ class Xss
 
         array_walk_recursive($input, function(&$input) {
             if(!array($input))
-                $input = htmlentities($input);
-        });
+                $input = htmlspecialchars($input);
+});
 
         $request->merge($input);
 

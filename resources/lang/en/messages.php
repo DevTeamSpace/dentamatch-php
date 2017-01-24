@@ -2,6 +2,7 @@
 
 return [
     'credentials_not_matched'=>'These credentials do not match our records.',
+    'not_admin_email'=>'Invalid email account',
     'something_wrong' => 'Something went wrong',
     'validation_failure' => "Request validation failed.",
     'work_exp_list' =>"Work Experience List Retrieved",
@@ -39,7 +40,7 @@ return [
     'address_zip_required' => 'Unable to find zip code from the address.',
     'password_not_match_confirm'=>'Password and confirm password do not match.',
     'validation_failure'=>'Validation failure.',
-    'successfully_register'=>'User registered successfully. A Confirmation link is send on your mail.',
+    'successfully_register'=>'User registered successfully. A Confirmation link is sent on your mail.',
     'verified_user'=>'User verified successfully. You can login.',
     'verified_problem'=>'Problem in verification process. Please contact admin.',
     'availability_add_success' => 'Availability updated successfully',

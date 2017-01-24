@@ -39,6 +39,9 @@ Route::group(['middleware' => ['auth', 'xss']], function () {
         Route::group(['middleware' => 'acceptedTerms'], function () {
             Route::get('home', 'web\SignupController@dashboard');
             Route::get('jobtemplates', 'web\JobtemplateController@listJobTemplates');
+            Route::get('jobtemplates/view/{templateId}', 'web\JobtemplateController@viewTemplate');
+            Route::get('jobtemplates/edit/{templateId}', 'web\JobtemplateController@editJobTemplate');
+            Route::delete('jobtemplates/delete', 'web\JobtemplateController@deleteJobTemplate');
             Route::get('jobtemplates/create', 'web\JobtemplateController@createJobTemplate');
             Route::post('jobtemplates/saveOrUpdate', 'web\JobtemplateController@saveOrUpdate');
             Route::get('createJob/{templateId}', 'web\RecruiterJobController@createJob');
