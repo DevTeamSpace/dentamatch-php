@@ -49,6 +49,7 @@ class RecruiterJobs extends Model
                         ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
                         ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
                         ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
+                        ->leftjoin('saved_jobs','saved_jobs.recruiter_job_id', '=', 'recruiter_jobs.id')
                         ->whereIn('job_titles.id', $reqData['jobTitle']);
                 if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 0){
                     $searchQueryObj->where('recruiter_jobs.job_type',1);
@@ -77,6 +78,7 @@ class RecruiterJobs extends Model
                                 'job_titles.jobtitle_name','recruiter_profiles.office_name',
                                 'recruiter_offices.address','recruiter_offices.zipcode',
                                 'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
+                                DB::raw("IF(saved_jobs.recruiter_job_id IS NULL,0,1) AS is_saved"),
                                 DB::raw("(
                     3959 * acos (
                       cos ( radians($latitude) )

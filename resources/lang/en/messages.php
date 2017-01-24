@@ -46,5 +46,7 @@ return [
     'user_signout' => "User successfully sign out",
     'profile_update_success' => 'Your profile is successfully completed',
     'no_data_found' => 'No records found',
-    'no_job_zipcode' => 'No job available for this zipcode'
+    'no_job_zipcode' => 'No job available for this zipcode',
+    'save_job_success' => 'Job saved successfully',
+    'unsave_job_success' => 'Job unsaved successfully'
 ];
