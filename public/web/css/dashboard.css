@@ -36,7 +36,7 @@ label{color:#686868;}
 }
 .customnavRight.nav>li>a{opacity:1;padding: 3px 6px;}
 .customNav .navbar-nav>li>a:focus, .customNav .navbar-nav>li>a:hover{color:white;}
-.navbar-brand{padding:27px 15px;}
+.navbar-brand{padding:26px 15px;}
 .customNav .navbar-nav>.open>a, .customNav .navbar-nav>.open>a:focus, .customNav .navbar-nav>.open>a:hover{background-color: transparent; color:white;}
 
 .customContainer{width:580px;}

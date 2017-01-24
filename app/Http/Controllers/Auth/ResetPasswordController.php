@@ -50,14 +50,14 @@ use ResetsPasswords;
             $this->resetPassword($user, $password);
         }
         );
-        
+
         if ($response == 'passwords.user') {
             $response = 'Token has been expired.';
         }
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
-        return $response == Password::PASSWORD_RESET ? $this->sendResetResponse($response) : $this->sendResetFailedResponse($request, $response);
+        return $response == Password::PASSWORD_RESET ? $this->sendResetResponse($request, $response) : $this->sendResetFailedResponse($request, $response);
     }
 
     /**
@@ -78,4 +78,18 @@ use ResetsPasswords;
         );
     }
 
+    protected function sendResetResponse($request, $response) {
+        //print_r($request['email']);exit;
+        $users = DB::table('users')
+                ->join('user_groups', 'users.id', '=', 'user_groups.user_id')
+                ->select('user_groups.group_id')
+                ->where('users.email', $request['email'])
+                ->first();
+        if ($users->group_id == 3) {
+            return redirect('/success-register');
+        } else {
+            return redirect($this->redirectPath())
+                            ->with('status', trans($response));
+        }
+    }
 }
