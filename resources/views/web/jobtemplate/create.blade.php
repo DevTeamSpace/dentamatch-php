@@ -12,7 +12,7 @@
 
                 <div class="form-group">
                     <label >Template Name</label>
-                    <input name="templateName" type="text" class="form-control"  data-parsley-required data-parsley-required-message="templete name required">
+                    <input value="{{ (isset($templateData->templateName)?$templateData->templateName:'') }}" name="templateName" type="text" class="form-control"  data-parsley-required data-parsley-required-message="templete name required">
                 </div>
                 <div class="form-group">
                     <label >Job Title</label>
@@ -20,7 +20,7 @@
                     <div class="slt">
                         <select name="jobTitleId" class="ddlCars" data-parsley-required data-parsley-required-message="job title required">
                             @foreach ($jobTitleData as $jobTitle)
-                            <option value="{{ $jobTitle['id'] }}">{{ $jobTitle['jobtitle_name'] }}</option>
+                            <option {{ (isset($templateData->jobTitleId) && $templateData->jobTitleId==$jobTitle['id'])?'selected':'' }} value="{{ $jobTitle['id'] }}">{{ $jobTitle['jobtitle_name'] }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -28,7 +28,7 @@
                 </div>
                 <div class="form-group">
                     <label>Job Description</label>
-                    <textarea name="templateDesc" class="form-control txtHeight"  data-parsley-required data-parsley-required-message= "job description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" ></textarea>
+                    <textarea name="templateDesc" class="form-control txtHeight"  data-parsley-required data-parsley-required-message= "job description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" >{{ (isset($templateData->templateDesc)?$templateData->templateDesc:'') }}</textarea>
                 </div>
 
             </div>		
@@ -44,7 +44,7 @@
                     <label ><?=$key?></label>
                     <select class="my-select" name="skills[]" multiple="multiple">
                         @foreach ($skills as $skillData)
-                        <option value="{{ $skillData['id'] }}">{{ $skillData['skill_name'] }}</option>
+                        <option {{ (isset($skillData['sel_skill_id']) && $skillData['sel_skill_id']==$skillData['id'])?'selected':'' }} value="{{ $skillData['id'] }}">{{ $skillData['skill_name'] }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -53,19 +53,52 @@
         </div>
         <div class="pull-right text-right">
             {!! csrf_field() !!}
-            <input type="hidden" name="action" value="add">
-            <button type="button" class="btn btn-link mr-r-10" style="font-weight:500">Cancel</button>
+            <input type="hidden" name="action" value="{{ (isset($templateData->id)?'edit':'add') }}">
+            <input type="hidden" name="id" value="{{ (isset($templateData->id)?$templateData->id:'') }}">
+            <button type="button" class="btn btn-link mr-r-10" data-toggle="modal" data-target="#discardTemplate">Cancel</button>
             <button type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
 
         </div>
     </div>
 </form>
+
+<div id="discardTemplate" class="modal fade" role="dialog" style="display: none;">
+		<div class="modal-dialog custom-modal popup-wd522">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h4 class="modal-title">Discard Template</h4>
+				</div>
+				<div class="modal-body text-center">
+					
+					<p>Do you want to discard the template ?</p>
+
+					<div class="mr-t-20 mr-b-30">
+						<button id="cancelButton" type="button" class="btn btn-link mr-r-5">Yes</button>
+                                                <button type="button" class="btn btn-primary pd-l-30 pd-r-30" data-dismiss="modal">No </button>
+					</div>
+
+
+
+
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
 @endsection
 
 @section('js')
 <script src="{{asset('web/scripts/optionDropDown.js')}}"></script>
 <script src="{{asset('web/scripts/custom.js')}}"></script>
 <script>
+    document.getElementById("cancelButton").onclick = function () {
+        location.href = "{{ url('jobtemplates') }}";
+    };
 $('.ddlCars').multiselect({
     numberDisplayed: 3,
 });

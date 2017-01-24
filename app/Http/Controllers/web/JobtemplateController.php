@@ -34,14 +34,48 @@ class JobtemplateController extends Controller
         }
     }
     
+    public function viewTemplate($templateId) {
+        try{
+            $this->viewData['templateId'] = $templateId;
+            $this->viewData['templateData'] = JobTemplates::findById($templateId,Auth::user()->id);
+            $this->viewData['templateSkillsData'] = TemplateSkills::getTemplateSkills($templateId);
+            
+            return $this->returnView('view');
+        } catch (\Exception $e) {
+            return view('web.error.',["message" => $e->getMessage()]);
+        }
+    }
+    
+    public function editJobTemplate($templateId){
+        try{
+            $this->viewData['templateData'] = JobTemplates::findById($templateId,Auth::user()->id);
+            $this->viewData['skillsData'] = Skills::getAllParentChildSkillList($templateId);
+            //dd($this->viewData['skillsData']);
+            $this->viewData['jobTitleData'] = JobTitles::getAll(JobTitles::ACTIVE);
+
+            return $this->returnView('create');
+        } catch (\Exception $e) {
+            return view('web.error.',["message" => $e->getMessage()]);
+        }
+    }
     
     public function createJobTemplate(){
         try{
             $this->viewData['skillsData'] = Skills::getAllParentChildSkillList();
-
+            
             $this->viewData['jobTitleData'] = JobTitles::getAll(JobTitles::ACTIVE);
 
             return $this->returnView('create');
+        } catch (\Exception $e) {
+            return view('web.error.',["message" => $e->getMessage()]);
+        }
+    }
+    
+    public function deleteJobTemplate(Request $request){
+        try{
+            
+            JobTemplates::where('id',$request->templateId)->where('user_id',Auth::user()->id)->delete();
+            return redirect('jobtemplates');
         } catch (\Exception $e) {
             return view('web.error.',["message" => $e->getMessage()]);
         }

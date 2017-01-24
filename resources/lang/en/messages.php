@@ -2,6 +2,7 @@
 
 return [
     'credentials_not_matched'=>'These credentials do not match our records.',
+    'not_admin_email'=>'Invalid email account',
     'something_wrong' => 'Something went wrong',
     'validation_failure' => "Request validation failed.",
     'work_exp_list' =>"Work Experience List Retrieved",

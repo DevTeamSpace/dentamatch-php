@@ -23,12 +23,17 @@
                         <span class="icon-upload-detail dropdown-toggle" data-toggle="dropdown"></span>
                         <ul class="actions text-left dropdown-menu">
                             <li class="text-center">
-                                <a href="{{ url('jobtemplates/delete/'.$template['id']) }}">
-                                <span class="delete-icon">
-                                    <img src="{{asset('web/images/dentamatch-delete.png')}}" alt="delta delete icon" width="10">
-                                </span>
-                                <span class="cancel">Delete</span>
-                                </a>
+                                <form method="post" action="{{ url('jobtemplates/delete/') }}">
+                                    {!! csrf_field() !!}
+                                    <input name="_method" type="hidden" value="DELETE">
+                                    <input name="templateId" type="hidden" value="{{ $template['id'] }}">
+                                    <button type="submit" class=" btn btn-link-noline">
+                                        <span class="delete-icon">
+                                            <img src="{{asset('web/images/dentamatch-delete.png')}}" alt="delta delete icon" width="10">
+                                        </span>
+                                        Delete
+                                    </button>
+                                </form>
                             </li>
                         </ul>
                     </div>
