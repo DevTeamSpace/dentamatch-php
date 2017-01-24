@@ -111,13 +111,13 @@
 <!--                        <div class="col-sm-4"><select name="everydayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
                         <div class="col-sm-4"><select name="everydayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>-->
                         <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
-                                <input type='text' name="everydayStart" class="form-control" disabled />
+                                <input type='text' value="{{ old('everydayStart') }}" name="everydayStart" class="form-control" disabled />
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div></div>
                         <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
-                                <input type='text' name="everydayEnd" class="form-control " disabled/>
+                                <input type='text' value="{{ old('everydayEnd') }}" name="everydayEnd" class="form-control " disabled/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -136,13 +136,13 @@
                             <div class="col-sm-4"><select name="mondayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>-->
                             
                             <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
-                                <input type='text' name="mondayStart" class="form-control" disabled />
+                                <input type='text' value="{{ old('mondayStart') }}" name="mondayStart" class="form-control" disabled />
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div></div>
                         <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
-                                <input type='text' name="mondayEnd" class="form-control " disabled/>
+                                <input type='text' value="{{ old('mondayEnd') }}" name="mondayEnd" class="form-control " disabled/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -159,13 +159,13 @@
 <!--                            <div class="col-sm-4"><select name="tuesdayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
                             <div class="col-sm-4"><select name="tuesdayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>-->
                             <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
-                                <input type='text' name="tuesdayStart" class="form-control" disabled />
+                                <input type='text' value="{{ old('tuesdayStart') }}" name="tuesdayStart" class="form-control" disabled />
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div></div>
                         <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
-                                <input type='text' name="tuesdayEnd" class="form-control " disabled/>
+                                <input type='text' value="{{ old('tuesdayEnd') }}" name="tuesdayEnd" class="form-control " disabled/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -183,13 +183,13 @@
 <!--                            <div class="col-sm-4"><select name="wednesdayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
                             <div class="col-sm-4"><select name="wednesdayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>-->
                             <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
-                                <input type='text' name="wednesdayStart" class="form-control" disabled />
+                                <input type='text' value="{{ old('wednesdayStart') }}" name="wednesdayStart" class="form-control" disabled />
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div></div>
                         <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
-                                <input type='text' name="wednesdayEnd" class="form-control " disabled/>
+                                <input type='text' value="{{ old('wednesdayEnd') }}" name="wednesdayEnd" class="form-control " disabled/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -207,13 +207,13 @@
 <!--                            <div class="col-sm-4"><select name="thrusdayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
                             <div class="col-sm-4"><select name="thrusdayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>-->
                             <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
-                                <input type='text' name="thrusdayStart" class="form-control" disabled />
+                                <input type='text' value="{{ old('thrusdayStart') }}" name="thrusdayStart" class="form-control" disabled />
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div></div>
                         <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
-                                <input type='text' name="thrusdayEnd" class="form-control " disabled/>
+                                <input type='text' value="{{ old('thrusdayEnd') }}" name="thrusdayEnd" class="form-control " disabled/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -230,13 +230,13 @@
 <!--                            <div class="col-sm-4"><select name="fridayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
                             <div class="col-sm-4"><select name="fridayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>-->
                             <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
-                                <input type='text' name="fridayStart" class="form-control" disabled />
+                                <input type='text' value="{{ old('fridayStart') }}" name="fridayStart" class="form-control" disabled />
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div></div>
                         <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
-                                <input type='text' name="fridayEnd" class="form-control " disabled/>
+                                <input type='text' value="{{ old('fridayEnd') }}" name="fridayEnd" class="form-control " disabled/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -253,13 +253,13 @@
 <!--                            <div class="col-sm-4"><select name="saturdayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
                             <div class="col-sm-4"><select name="saturdayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>-->
                             <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
-                                <input type='text' name="saturdayStart" class="form-control" disabled />
+                                <input type='text' value="{{ old('saturdayStart') }}" name="saturdayStart" class="form-control" disabled />
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div></div>
                         <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
-                                <input type='text' name="saturdayEnd" class="form-control " disabled/>
+                                <input type='text' value="{{ old('saturdayEnd') }}" name="saturdayEnd" class="form-control " disabled/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -276,13 +276,13 @@
 <!--                            <div class="col-sm-4"><select name="sundayStart" class="form-control customsel"><option value="">Opening Hours</option><?= $options ?></select></div>
                             <div class="col-sm-4"><select name="sundayEnd" class="form-control customsel"><option value="">Closing Hours</option><?= $options ?></select></div>-->
                             <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
-                                <input type='text' name="sundayStart" class="form-control" disabled />
+                                <input type='text' value="{{ old('sundayStart') }}" name="sundayStart" class="form-control" disabled />
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div></div>
                         <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
-                                <input type='text' name="sundayEnd" class="form-control " disabled/>
+                                <input type='text' value="{{ old('sundayEnd') }}" name="sundayEnd" class="form-control " disabled/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
