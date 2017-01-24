@@ -71,6 +71,16 @@ class JobtemplateController extends Controller
         }
     }
     
+    public function deleteJobTemplate(Request $request){
+        try{
+            
+            JobTemplates::where('id',$request->templateId)->where('user_id',Auth::user()->id)->delete();
+            return redirect('jobtemplates');
+        } catch (\Exception $e) {
+            return view('web.error.',["message" => $e->getMessage()]);
+        }
+    }
+    
     public function saveOrUpdate(Request $request){
         $this->validate($request, [
                 'jobTitleId' => 'required|integer',

@@ -55,18 +55,50 @@
             {!! csrf_field() !!}
             <input type="hidden" name="action" value="{{ (isset($templateData->id)?'edit':'add') }}">
             <input type="hidden" name="id" value="{{ (isset($templateData->id)?$templateData->id:'') }}">
-            <button type="button" class="btn btn-link mr-r-10" style="font-weight:500">Cancel</button>
+            <button type="button" class="btn btn-link mr-r-10" data-toggle="modal" data-target="#discardTemplate">Cancel</button>
             <button type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
 
         </div>
     </div>
 </form>
+
+<div id="discardTemplate" class="modal fade" role="dialog" style="display: none;">
+		<div class="modal-dialog custom-modal popup-wd522">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h4 class="modal-title">Discard Template</h4>
+				</div>
+				<div class="modal-body text-center">
+					
+					<p>Do you want to discard the template ?</p>
+
+					<div class="mr-t-20 mr-b-30">
+						<button id="cancelButton" type="button" class="btn btn-link mr-r-5">Yes</button>
+                                                <button type="button" class="btn btn-primary pd-l-30 pd-r-30" data-dismiss="modal">No </button>
+					</div>
+
+
+
+
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
 @endsection
 
 @section('js')
 <script src="{{asset('web/scripts/optionDropDown.js')}}"></script>
 <script src="{{asset('web/scripts/custom.js')}}"></script>
 <script>
+    document.getElementById("cancelButton").onclick = function () {
+        location.href = "{{ url('jobtemplates') }}";
+    };
 $('.ddlCars').multiselect({
     numberDisplayed: 3,
 });

@@ -70,7 +70,8 @@ h1,h2,h3,h4,h5,h6{font-weight: normal; font-family: 'Roboto', sans-serif;}
 	padding: 0 !important;
 	margin: 0 !important;
 }
-.btn-link{color:#0470c0;}
+.btn-link,.btn-link-noline{color:#0470c0; background:transparent}
+.btn-link-noline:hover, .btn-link-noline:focus, .btn-link-noline:active{text-decoration: none; color:#0470c0;}
 
 .text-success{color:#05c410;}
 

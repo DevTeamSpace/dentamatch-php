@@ -23,7 +23,7 @@ class Xss
         $input = $request->all();
 
         array_walk_recursive($input, function(&$input) {
-            $input = htmlentities($input);
+            $input = htmlspecialchars($input);
         });
 
         $request->merge($input);
