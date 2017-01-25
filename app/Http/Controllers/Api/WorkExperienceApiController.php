@@ -181,14 +181,32 @@ class WorkExperienceApiController extends Controller {
                     foreach($schoolingList as $key=>$value) {
                         $data[$value['parentId']]['schoolingId'] = $value['parentId'];
                         $data[$value['parentId']]['schoolName'] = $value['schoolName'];
-                        $data[$value['parentId']]['schoolCategory'][] = ['schoolingId' => $value['parentId'], 'schoolingChildId' => $value['childId'],
+                        if(!empty($value['childId'])) {
+                            $data[$value['parentId']]['schoolCategory'][] = ['schoolingId' => $value['parentId'], 'schoolingChildId' => $value['childId'],
                                         'schoolChildName' => $value['schoolChildName'], 'jobSeekerStatus' => !empty($jobSeekerData[$value['childId']]) ? 1 : 0,
                                         'otherSchooling' => !empty($jobSeekerData[$value['childId']]) ? $jobSeekerData[$value['childId']]['otherSchooling'] : null,
                                         'yearOfGraduation' => !empty($jobSeekerData[$value['childId']]) ? $jobSeekerData[$value['childId']]['yearOfGraduation'] : null
-                                    ]; 
+                                    ];
+                        } else {
+                            $data[$value['parentId']]['schoolCategory'] = [];
+                        }
                     }
                 }
-
+                
+                $jobseekerKeys = array_keys($jobSeekerData);
+                $schoolingKeys = array_keys($data);
+                $intersectData = array_intersect($jobseekerKeys, $schoolingKeys);
+                
+                
+                if(!empty($intersectData)) {
+                    foreach($intersectData as $value) {
+                        $data[$value]['other'][] = ['schoolingId' => $value, 'schoolingChildId' => $value,
+                                        'schoolChildName' => null, 'jobSeekerStatus' => 1,
+                                        'otherSchooling' => !empty($jobSeekerData[$value]) ? $jobSeekerData[$value]['otherSchooling'] : null,
+                                        'yearOfGraduation' => !empty($jobSeekerData[$value]) ? $jobSeekerData[$value]['yearOfGraduation'] : null
+                                    ];
+                    }
+                }
                 $return['list'] = array_values($data);
 
                 $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.school_list_success"), apiResponse::convertToCamelCase($return));

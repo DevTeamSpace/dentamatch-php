@@ -54,3 +54,4 @@ Route::put('users/user-profile-update', 'Api\UserProfileApiController@updateUser
 Route::post('users/update-availability', 'Api\CalendarApiController@postJobAvailability');
 Route::post('users/search-jobs', 'Api\SearchApiController@postSearchjobs');
 
+Route::post('users/save-job', 'Api\SearchApiController@postSaveUnsavejob');

@@ -40,12 +40,14 @@ return [
     'address_zip_required' => 'Unable to find zip code from the address.',
     'password_not_match_confirm'=>'Password and confirm password do not match.',
     'validation_failure'=>'Validation failure.',
-    'successfully_register'=>'User registered successfully. A Confirmation link is send on your mail.',
+    'successfully_register'=>'User registered successfully. A Confirmation link is sent on your mail.',
     'verified_user'=>'User verified successfully. You can login.',
     'verified_problem'=>'Problem in verification process. Please contact admin.',
     'availability_add_success' => 'Availability updated successfully',
     'user_signout' => "User successfully sign out",
     'profile_update_success' => 'Your profile is successfully completed',
     'no_data_found' => 'No records found',
-    'no_job_zipcode' => 'No job available for this zipcode'
+    'no_job_zipcode' => 'No job available for this zipcode',
+    'save_job_success' => 'Job saved successfully',
+    'unsave_job_success' => 'Job unsaved successfully'
 ];

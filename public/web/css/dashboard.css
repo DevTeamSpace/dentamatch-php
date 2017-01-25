@@ -122,7 +122,8 @@ label{color:#686868;}
 .smallSquare span{color:#272727;}
 .smallSquare{ font-size:16px;}
 .messageBoxTextArea{height:280px !important;}
-
+.filledPosition{    position: absolute;
+    bottom: -16px;}
 
 
 /*------------sagar Kapoor------------*/
