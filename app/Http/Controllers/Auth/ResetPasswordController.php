@@ -86,6 +86,7 @@ use ResetsPasswords;
                 ->where('users.email', $request['email'])
                 ->first();
         if ($users->group_id == 3) {
+            Auth::logout();
             return redirect('/success-register');
         } else {
             return redirect($this->redirectPath())
