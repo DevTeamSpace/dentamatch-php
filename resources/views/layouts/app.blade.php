@@ -69,7 +69,7 @@
                     @else
                         @if (Auth::user()->userGroup->group_id==1)
                             <li><a href="{{ url('cms/index') }}">Home</a></li>
-                            <li><a href="{{ url('cms/payments/index') }}">Payments</a></li>
+<!--                            <li><a href="{{ url('cms/payments/index') }}">Payments</a></li>
                             <li><a href="{{ url('cms/event/index') }}">Manage Events</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -95,13 +95,13 @@
                                     <li><a href="{{url('cms/config/1/updateConfig')}}"><i class="fa fa-btn"></i>Event Per 15 mins Charges</a></li>
                                     <li><a href="{{url('cms/config/2/updateConfig')}}"><i class="fa fa-btn"></i>Event Extension Charges</a></li>
                                     <li><a href="{{url('cms/config/3/updateConfig')}}"><i class="fa fa-btn"></i>Photo Enhancement Charges</a></li>
-                                    <!--li><a href="{{url('cms/config/4/updateConfig')}}"><i class="fa fa-btn"></i>Enhanced Free Photo Count</a></li-->
+                                    li><a href="{{url('cms/config/4/updateConfig')}}"><i class="fa fa-btn"></i>Enhanced Free Photo Count</a></li
                                     <li><a href="{{url('cms/config/4/updateConfig')}}"><i class="fa fa-btn"></i>Consumer Signup Referral Bonus</a></li>
                                     <li><a href="{{url('cms/config/5/updateConfig')}}"><i class="fa fa-btn"></i>Admin Share On Photographer Next Transaction</a></li>
                                     <li><a href="{{url('cms/config/6/updateConfig')}}"><i class="fa fa-btn"></i>Birthday Special Coupon</a></li>
                                     <li><a href="{{url('cms/config/7/updateConfig')}}"><i class="fa fa-btn"></i>Come Back Special Coupon</a></li>
                                 </ul>
-                            </li>
+                            </li>-->
                         @endif
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -109,7 +109,7 @@
                                 </a>
 
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{url('cms/user/changePassword')}}"><i class="fa fa-btn"></i>Change Password</a></li>
+                                <!--<li><a href="{{url('cms/user/changePassword')}}"><i class="fa fa-btn"></i>Change Password</a></li>-->
                                 <li><a href="{{url('cms/logout')}}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>
                         </li>

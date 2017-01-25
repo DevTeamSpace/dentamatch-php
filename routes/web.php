@@ -64,8 +64,8 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
     Route::get('login', 'Auth\LoginController@getLogin');
     Route::get('logout', 'Auth\LoginController@logout');
     Route::post('/login', 'Auth\LoginController@login');
-    Route::get('/', 'Cms\UserController@index');
-    Route::get('/home', 'cms\HomeController@index');
+    Route::get('/', 'Cms\LocationController@index');
+    Route::get('/home', 'cms\LocationController@index');
     Route::group(['prefix' => 'user/'], function() {
         Route::get('listPhotographer', 'cms\UserController@getPhotographerList');
         Route::get('listConsumer', 'cms\UserController@getConsumerList');
