@@ -19,6 +19,7 @@
         <link rel="stylesheet" href="{{asset('web/css/bootstrap-multiselect.css')}}">
         <link rel="stylesheet" href="{{asset('web/css/checkBox.css')}}">
         <link rel="stylesheet" href="{{asset('web/css/dentaIcon.css')}}">
+        <link rel="stylesheet" href="{{asset('web/css/bootstrap-datetimepicker.css')}}">
 
         @yield('css')
 
@@ -112,6 +113,8 @@
         <script src="{{asset('web/plugins/parsley/js/parsley.js')}}"></script>
         <script src="{{asset('web/scripts/custom.js')}}"></script>
         <script src ="{{asset('web/scripts/main.js')}}"></script>
+        <script src ="{{asset('web/scripts/moment.min.js')}}"></script>
+        <script src ="{{asset('web/scripts/bootstrap-datetimepicker.js')}}"></script>
 
         
         @yield('js')

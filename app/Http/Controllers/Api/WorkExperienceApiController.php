@@ -185,10 +185,24 @@ class WorkExperienceApiController extends Controller {
                                         'schoolChildName' => $value['schoolChildName'], 'jobSeekerStatus' => !empty($jobSeekerData[$value['childId']]) ? 1 : 0,
                                         'otherSchooling' => !empty($jobSeekerData[$value['childId']]) ? $jobSeekerData[$value['childId']]['otherSchooling'] : null,
                                         'yearOfGraduation' => !empty($jobSeekerData[$value['childId']]) ? $jobSeekerData[$value['childId']]['yearOfGraduation'] : null
-                                    ]; 
+                                    ];
                     }
                 }
-
+                
+                $jobseekerKeys = array_keys($jobSeekerData);
+                $schoolingKeys = array_keys($data);
+                $intersectData = array_intersect($jobseekerKeys, $schoolingKeys);
+                
+                
+                if(!empty($intersectData)) {
+                    foreach($intersectData as $value) {
+                        $data[$value]['other'][] = ['schoolingId' => $value, 'schoolingChildId' => $value,
+                                        'schoolChildName' => null, 'jobSeekerStatus' => 1,
+                                        'otherSchooling' => !empty($jobSeekerData[$value]) ? $jobSeekerData[$value]['otherSchooling'] : null,
+                                        'yearOfGraduation' => !empty($jobSeekerData[$value]) ? $jobSeekerData[$value]['yearOfGraduation'] : null
+                                    ];
+                    }
+                }
                 $return['list'] = array_values($data);
 
                 $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.school_list_success"), apiResponse::convertToCamelCase($return));

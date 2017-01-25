@@ -16,7 +16,7 @@
                         <div style="font-size:15px;">
                             <p style="line-height: 24px;">
                                 You have requested to activate your account.<br/><br/>
-                                Please visit the link below to create your new password.<br/>
+                                Please visit the link below to activate your account.<br/>
                                 <a href="{{ $url }}">Click to Activate</a>
                             </p>
                             <br/>
