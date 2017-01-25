@@ -181,11 +181,15 @@ class WorkExperienceApiController extends Controller {
                     foreach($schoolingList as $key=>$value) {
                         $data[$value['parentId']]['schoolingId'] = $value['parentId'];
                         $data[$value['parentId']]['schoolName'] = $value['schoolName'];
-                        $data[$value['parentId']]['schoolCategory'][] = ['schoolingId' => $value['parentId'], 'schoolingChildId' => $value['childId'],
+                        if(!empty($value['childId'])) {
+                            $data[$value['parentId']]['schoolCategory'][] = ['schoolingId' => $value['parentId'], 'schoolingChildId' => $value['childId'],
                                         'schoolChildName' => $value['schoolChildName'], 'jobSeekerStatus' => !empty($jobSeekerData[$value['childId']]) ? 1 : 0,
                                         'otherSchooling' => !empty($jobSeekerData[$value['childId']]) ? $jobSeekerData[$value['childId']]['otherSchooling'] : null,
                                         'yearOfGraduation' => !empty($jobSeekerData[$value['childId']]) ? $jobSeekerData[$value['childId']]['yearOfGraduation'] : null
                                     ];
+                        } else {
+                            $data[$value['parentId']]['schoolCategory'] = [];
+                        }
                     }
                 }
                 
