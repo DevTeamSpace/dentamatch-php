@@ -14,6 +14,7 @@ use App\Models\JobSeekerSkills;
 use App\Models\JobSeekerAffiliation;
 use App\Models\JobseekerCertificates;
 use App\Models\Certifications;
+use App\Models\JobTitles;
 
 class UserProfileApiController extends Controller {
 
@@ -214,7 +215,7 @@ class UserProfileApiController extends Controller {
                                                                     ];
                     }
                 }
-                
+                $jobTitle = JobTitles::where('is_active',1)->get()->toArray();
                 $affiliations = JobSeekerAffiliation::getJobSeekerAffiliation($userId);
                 $jobSeekerCertifications = JobseekerCertificates::getJobSeekerCertificates($userId);
                 $allCertification = Certifications::getAllCertificates();
@@ -237,6 +238,7 @@ class UserProfileApiController extends Controller {
                 $data['affiliations'] = $affiliations;
                 $data['certifications'] = array_values($certificationData);
                 $data['workExperience'] = $userWorkExperience;
+                $data['joblists'] = $jobTitle;
                 
                 $response =  apiResponse::customJsonResponse(1, 200, trans("messages.user_profile_list"), apiResponse::convertToCamelCase($data));
             }else{

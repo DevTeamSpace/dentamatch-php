@@ -23,7 +23,7 @@ class Schooling extends Model
     public static function getScoolingList()
     {
         $query = static::select('schoolings.id as parentId', 'schoolingsChild.id as childId', 'schoolings.school_name as schoolName', 'schoolingsChild.school_name as schoolChildName')
-                ->join('schoolings AS schoolingsChild','schoolingsChild.parent_id','=','schoolings.id')
+                ->leftjoin('schoolings AS schoolingsChild','schoolingsChild.parent_id','=','schoolings.id')
                 ->where('schoolings.is_active', 1)
                 ->whereNull('schoolings.parent_id')
                 ->orderBy('schoolings.id')
