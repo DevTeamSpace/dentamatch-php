@@ -297,7 +297,7 @@
             </div>			
         </div>
         <div class="pull-right text-right">
-<!--            <div class="addBtn DynamicAdd"><span class="icon icon-plus"></span>Add total of 1 locations</div>-->
+<!--            <div class="addBtn DynamicAddder"><span class="icon icon-plus"></span>Add total of 1 locations</div>-->
             <button disabled="disabled" type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
         </div>
     </div>
