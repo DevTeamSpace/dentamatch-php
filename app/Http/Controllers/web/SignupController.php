@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Auth;
 use Session;
 use Mail;
+use DB;
 
 class SignupController extends Controller {
 
@@ -130,18 +131,26 @@ class SignupController extends Controller {
     }
 
     public function getVerificationCode($code) {
-        $user = User::where('verification_code', $code)->first();
+        $user = DB::table('users')
+                ->join('user_groups', 'users.id', '=', 'user_groups.user_id')
+                ->select('user_groups.group_id')
+                ->where('users.verification_code', $code)
+                ->first();
+        $redirect = 'login';
         try {
             if (isset($user) && !empty($user)) {
                 User::where('verification_code', $code)->update(['is_verified' => 1, 'is_active' => 1]);
                 Session::flash('success', trans("messages.verified_user"));
+                if ($user->group_id == 3) {
+                    $redirect = 'success-active';
+                }
             } else {
                 Session::flash('message', trans("messages.verified_problem"));
             }
         } catch (\Exception $e) {
             Session::flash('message', trans("messages.verified_problem"));
         }
-        return redirect('login');
+        return redirect($redirect);
     }
 
     public function getTutorial() {
