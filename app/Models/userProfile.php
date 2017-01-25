@@ -29,9 +29,14 @@ class UserProfile extends Model {
         
         if($userModel) {
             $return = $userModel->toArray();
-            $profilePic = $return['profile_pic'];
+            $profilePic = "";
+            if($return['profile_pic'] != ""){
+                $width = 120;
+                $height = 120;
+                $profilePic  = url("image/" . $width . "/" . $height . "/?src=" .$return['profile_pic']);
+            }
             $dentalStateBoard = $return['dental_state_board'];
-            $return['profile_pic'] = !empty($profilePic) ? $s3Url.DIRECTORY_SEPARATOR.$profilePic : $profilePic;
+            $return['profile_pic'] = $profilePic;
             $return['dental_state_board'] = !empty($dentalStateBoard) ? $s3Url.DIRECTORY_SEPARATOR.$s3Bucket.DIRECTORY_SEPARATOR.$dentalStateBoard : $dentalStateBoard;
         }
         return $return;

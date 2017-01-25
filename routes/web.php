@@ -11,6 +11,9 @@
   |
  */
 
+Route::get('image/{w}/{h}/', function(League\Glide\Server $server, $w, $h) {
+    $server->outputImage($_GET['src'], ['w' => $w, 'h' => $h, 'fit' => 'crop']);
+});
 Route::get('/', 'web\SignupController@getLogin');
 
 Route::get('signup', 'web\SignupController@getLogin');

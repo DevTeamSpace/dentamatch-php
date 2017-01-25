@@ -82,7 +82,10 @@ class UserProfileApiController extends Controller {
                     } else {
                         UserProfile::where('user_id', $userId)->update(['dental_state_board' => $response['file']]);
                     }
-                    $url['img_url'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $response['file'];
+                    $img = '/' . $response['file'];
+                    $width = 120;
+                    $height = 120;
+                    $url['img_url'] = url("image/" . $width . "/" . $height . "/?src=" .$img);
                     $response =  apiResponse::customJsonResponse(1, 200, trans("messages.image_upload_success"), $url);
                 } else {
                     $response =  apiResponse::responseError(trans("messages.prob_upload_image"));
