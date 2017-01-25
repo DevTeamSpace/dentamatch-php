@@ -763,5 +763,35 @@ paths:
           
       tags:
         - Job search
+        
+  /users/save-job:
+    post:
+      summary: Save unsave job by user
+      description: Api to save unsave jobs
+      responses: 
+          200:
+            description: Api to save unsave jobs
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: jobId
+          in: formData
+          description: jobid provided by user
+          type: integer
+        - name: status
+          in: formData
+          description: status is 1 for saving job and 0 to unsave job
+          type: integer
+        
+          
+      tags:
+        - Job search
 
 
