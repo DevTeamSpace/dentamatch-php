@@ -653,6 +653,19 @@ paths:
           in: header
           description: access token
           type: string
+        - name: isFulltime
+          in: formData
+          description: value will be 1 if user is available for full time and 0 if user is not available fulltime.
+          type: integers
+        - name: partTimeDays
+          in: formData
+          description: provide days for which user is available in array ex ([monday,tuesday])
+          type: array
+        - name: tempdDates
+          in: formData
+          description: provide date for which user is available in array ex ([2107-01-20,2107-01-20])
+          type: array
+        
           
       tags:
         - Availability
