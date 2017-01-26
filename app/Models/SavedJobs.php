@@ -19,6 +19,8 @@ class SavedJobs extends Model
        'updated_at', 'created_at'
     ];
     
+    const LIMIT = 10;
+    
     public static function listSavedJobs($reqData){
         $searchQueryObj = SavedJobs::join('recruiter_jobs','saved_jobs.recruiter_job_id', '=', 'recruiter_jobs.id')
                         ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
@@ -27,7 +29,7 @@ class SavedJobs extends Model
                         ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
                         ->where('saved_jobs.seeker_id','=' ,$reqData['userId']);
         
-        $total = $searchQueryObj->count();
+                $total = $searchQueryObj->count();
                 $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
                                 'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
                                 'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
@@ -45,6 +47,20 @@ class SavedJobs extends Model
                       + sin ( radians($latitude) )
                       * sin( radians( recruiter_offices.latitude ) )
                      )) AS distance"));
+                
+                $page = $reqData['page'];
+                $limit = SavedJobs::LIMIT ;
+                $skip = 0;
+                if($page > 1){
+                    $skip = ($page-1)* $limit;
+                }
+                $searchResult = $searchQueryObj->skip($skip)->take($limit)->get();
+                $result = array();
+                if($searchResult){
+                    $result['list'] = $searchResult->toArray();
+                    $result['total'] = $total;
+                }
+                return $result;
     }
     
     

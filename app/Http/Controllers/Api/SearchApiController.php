@@ -94,7 +94,7 @@ class SearchApiController extends Controller {
                 if($jobExists){
                     $response = apiResponse::customJsonResponse(0, 201, trans("messages.job_already_applied"));
                 }else{
-                    $applyJobs = array('seeker_id' => $userId , 'recruiter_job_id' => $reqData['jobId'] , 'applied_status' => APPLIED);
+                    $applyJobs = array('seeker_id' => $userId , 'recruiter_job_id' => $reqData['jobId'] , 'applied_status' => JobLists::APPLIED);
                     JobLists::insert($applyJobs);
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
                 }
@@ -121,7 +121,7 @@ class SearchApiController extends Controller {
                 $reqData = $request->all();
                 $jobExists = JobLists::where('seeker_id','=',$userId)->where('recruiter_job_id','=',$reqData['jobId'])->where('applied_status','=', APPLIED)->get();
                 if($jobExists){
-                    $jobExists->applied_status = CANCELLED;
+                    $jobExists->applied_status = JobLists::CANCELLED;
                     $jobExists->cancel_reason = $reqData['cancelReason'];
                     $jobExists->save();
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_cancelled_success"));
@@ -151,9 +151,14 @@ class SearchApiController extends Controller {
                 $reqData = $request->all();
                 $reqData['userId'] = $userId;
                 if($reqData['type'] == 1){
-                    
+                    $searchResult = SavedJobs::listSavedJobs($reqData);
                 }else{
-                    
+                    $searchResult = JobLists::listJobsByStatus($reqData);
+                }
+                if(count($searchResult['list']) > 0){
+                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"),  apiResponse::convertToCamelCase($searchResult));
+                }else{
+                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
                 }
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
