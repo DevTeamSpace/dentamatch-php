@@ -29,7 +29,12 @@ class SavedJobs extends Model
                         ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
                         ->where('saved_jobs.seeker_id','=' ,$reqData['userId']);
         
-                $total = $searchQueryObj->count();
+                //$total = $searchQueryObj->count();
+                $total = 0;
+                if($searchQueryObj){
+                    $array = $searchQueryObj->toArray();
+                    $total = count($array);
+                }
                 $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
                                 'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
                                 'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
