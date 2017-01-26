@@ -177,5 +177,10 @@ class SearchApiController extends Controller {
         return $response;
     }
     
+    public function getJoblist(){
+        $data = JobLists::get();
+        return json_encode($data);
+    }
+    
     
 }
