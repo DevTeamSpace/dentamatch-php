@@ -55,3 +55,6 @@ Route::post('users/update-availability', 'Api\CalendarApiController@postJobAvail
 Route::post('users/search-jobs', 'Api\SearchApiController@postSearchjobs');
 
 Route::post('users/save-job', 'Api\SearchApiController@postSaveUnsavejob');
+Route::post('users/apply-job', 'Api\SearchApiController@postApplyJob');
+
+Route::get('users/job-list', 'Api\SearchApiController@postApplyJob');

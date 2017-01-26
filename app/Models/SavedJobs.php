@@ -19,7 +19,33 @@ class SavedJobs extends Model
        'updated_at', 'created_at'
     ];
     
-    
+    public static function listSavedJobs($reqData){
+        $searchQueryObj = SavedJobs::join('recruiter_jobs','saved_jobs.recruiter_job_id', '=', 'recruiter_jobs.id')
+                        ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+                        ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
+                        ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
+                        ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
+                        ->where('saved_jobs.seeker_id','=' ,$reqData['userId']);
+        
+        $total = $searchQueryObj->count();
+                $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
+                                'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
+                                'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
+                                'recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
+                                'job_titles.jobtitle_name','recruiter_profiles.office_name',
+                                'recruiter_offices.address','recruiter_offices.zipcode',
+                                'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
+                                DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
+                                DB::raw("IF(saved_jobs.recruiter_job_id IS NULL,0,1) AS is_saved"),
+                                DB::raw("(
+                    3959 * acos (
+                      cos ( radians($latitude) )
+                      * cos( radians( recruiter_offices.latitude) )
+                      * cos( radians( $longitude ) - radians(recruiter_offices.longitude) )
+                      + sin ( radians($latitude) )
+                      * sin( radians( recruiter_offices.latitude ) )
+                     )) AS distance"));
+    }
     
     
     

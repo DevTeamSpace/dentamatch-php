@@ -49,5 +49,9 @@ return [
     'no_data_found' => 'No records found',
     'no_job_zipcode' => 'No job available for this zipcode',
     'save_job_success' => 'Job saved successfully',
-    'unsave_job_success' => 'Job unsaved successfully'
+    'unsave_job_success' => 'Job unsaved successfully',
+    'job_already_applied' => 'You have already applied for this job',
+    'apply_job_success' => 'Successfully applied for this job',
+    'job_not_applied_by_you' => 'You have not applied for this job',
+    'job_cancelled_success' => 'Job has cancelled successfully'
 ];

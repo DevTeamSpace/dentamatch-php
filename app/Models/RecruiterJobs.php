@@ -14,6 +14,7 @@ class RecruiterJobs extends Model
     const FULLTIME = 1;
     const PARTTIME = 2;
     const TEMPORARY = 3;
+    const LIMIT = 10;
     
     protected $table = 'recruiter_jobs';
     protected $primaryKey = 'id';
@@ -78,6 +79,7 @@ class RecruiterJobs extends Model
                                 'job_titles.jobtitle_name','recruiter_profiles.office_name',
                                 'recruiter_offices.address','recruiter_offices.zipcode',
                                 'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
+                                DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
                                 DB::raw("IF(saved_jobs.recruiter_job_id IS NULL,0,1) AS is_saved"),
                                 DB::raw("(
                     3959 * acos (
@@ -88,10 +90,10 @@ class RecruiterJobs extends Model
                       * sin( radians( recruiter_offices.latitude ) )
                      )) AS distance"));
                 $page = $reqData['page'];
-                $limit = 10;
+                
                 $skip = 0;
                 if($page>1){
-                    $skip = ($page-1)*$limit;
+                    $skip = ($page-1)*LIMIT;
                 }
                 $searchResult = $searchQueryObj->skip($skip)->take($limit)->get();
                 $result = array();
