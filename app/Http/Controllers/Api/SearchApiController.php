@@ -145,6 +145,8 @@ class SearchApiController extends Controller {
             $this->validate($request, [
                 'type' => 'required',
                 'page' => 'required',
+                'lat' => 'required',
+                'lng' => 'required',
             ]);
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
