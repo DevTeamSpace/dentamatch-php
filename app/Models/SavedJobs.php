@@ -32,8 +32,8 @@ class SavedJobs extends Model
                 //$total = $searchQueryObj->count();
                 $total = 0;
                 if($searchQueryObj){
-                    $array = $searchQueryObj->toArray();
-                    $total = count($array);
+                    //$array = $searchQueryObj->toArray();
+                    $total = count($searchQueryObj);
                 }
                 $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
                                 'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
