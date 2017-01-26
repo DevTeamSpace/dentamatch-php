@@ -122,7 +122,7 @@ class SearchApiController extends Controller {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $reqData = $request->all();
-                $jobExists = JobLists::where('seeker_id','=',$userId)->where('recruiter_job_id','=',$reqData['jobId'])->where('applied_status','=', JobLists::APPLIED)->get();
+                $jobExists = JobLists::where('seeker_id','=',$userId)->where('recruiter_job_id','=',$reqData['jobId'])->get();
                 if($jobExists){
                     $jobExists->applied_status = JobLists::CANCELLED;
                     $jobExists->cancel_reason = $reqData['cancelReason'];
