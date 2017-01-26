@@ -63,7 +63,7 @@ class SearchApiController extends Controller {
                 $reqData = $request->all();
                 
                 if($reqData['status'] == 1){
-                    $saveJobs = array('recruiter_job_id' => $reqData['jobId'] , 'seeker_id' => $userId);
+                    $saveJobs = array('recruiter_job_id' => $reqData['jobId'] , 'seeker_id' => $userId );
                     SavedJobs::insert($saveJobs);
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.save_job_success"));
                 }else{
@@ -90,7 +90,10 @@ class SearchApiController extends Controller {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $reqData = $request->all();
-                $jobExists = JobLists::where('seeker_id','=',$userId)->where('recruiter_job_id','=',$reqData['jobId'])->get();
+                $jobExists = JobLists::where('seeker_id','=',$userId)
+                                ->where('recruiter_job_id','=',$reqData['jobId'])
+                                ->where('applied_status','=',JobLists::APPLIED)
+                                ->get();
                 if($jobExists){
                     $response = apiResponse::customJsonResponse(0, 201, trans("messages.job_already_applied"));
                 }else{
