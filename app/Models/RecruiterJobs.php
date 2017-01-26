@@ -90,10 +90,10 @@ class RecruiterJobs extends Model
                       * sin( radians( recruiter_offices.latitude ) )
                      )) AS distance"));
                 $page = $reqData['page'];
-                
+                $limit = LIMIT ;
                 $skip = 0;
                 if($page>1){
-                    $skip = ($page-1)*LIMIT;
+                    $skip = ($page-1)* $limit;
                 }
                 $searchResult = $searchQueryObj->skip($skip)->take($limit)->get();
                 $result = array();
