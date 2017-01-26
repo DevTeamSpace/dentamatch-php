@@ -23,6 +23,8 @@ class SavedJobs extends Model
     const LIMIT = 10;
     
     public static function listSavedJobs($reqData){
+        $latitude = $reqData['lat'];
+        $longitude = $reqData['lng'];
         $searchQueryObj = SavedJobs::join('recruiter_jobs','saved_jobs.recruiter_job_id', '=', 'recruiter_jobs.id')
                         ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                         ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
