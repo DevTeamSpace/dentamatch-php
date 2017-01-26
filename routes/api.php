@@ -56,5 +56,5 @@ Route::post('users/search-jobs', 'Api\SearchApiController@postSearchjobs');
 
 Route::post('users/save-job', 'Api\SearchApiController@postSaveUnsavejob');
 Route::post('users/apply-job', 'Api\SearchApiController@postApplyJob');
-
+Route::post('users/cancel-job', 'Api\SearchApiController@postCancelJob');
 Route::get('users/job-list', 'Api\SearchApiController@getJobList');
