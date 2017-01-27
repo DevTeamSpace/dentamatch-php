@@ -69,5 +69,17 @@ class JobLists extends Model
                 return $result;
     }
     
+    public static function isJobApplied($jobId,$userId)
+    {
+        $return = 0;
+        $jobExists = static::where('seeker_id','=',$userId)
+                                ->where('recruiter_job_id','=',$jobId)
+                                ->where('applied_status','=',JobLists::APPLIED)
+                                ->first();
+        if($jobExists) {
+            $return = 1;
+        }
+        return $return;
+    }
     
 }

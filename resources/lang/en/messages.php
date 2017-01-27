@@ -54,5 +54,6 @@ return [
     'apply_job_success' => 'Successfully applied for this job',
     'job_not_applied_by_you' => 'You have not applied for this job',
     'job_cancelled_success' => 'Job has cancelled successfully',
-    'profile_not_complete' => 'You ll need to fillout your profile before applying for this job'
+    'profile_not_complete' => 'You ll need to fillout your profile before applying for this job',
+    'job_detail_success' => 'Job detail retrieved successfully',
 ];

@@ -839,9 +839,32 @@ paths:
         - name: lng
           in: formData
           description: longitude of current user location
-          type: integer
+          type: integer  
+      tags:
+        - Job search
         
-          
+  /jobs/job-detail:
+    post:
+      summary: Get Job Detail
+      description: Api to job detail
+      responses: 
+          200:
+            description: Api to get job detail
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: jobId
+          in: formData
+          description: job id of job
+          type: integer
+         
       tags:
         - Job search
 
