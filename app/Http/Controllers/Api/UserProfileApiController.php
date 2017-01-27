@@ -149,7 +149,7 @@ class UserProfileApiController extends Controller {
             
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
-                UserProfile::where('user_id', $userId)->update(['about_me' => $request->aboutMe]);
+                UserProfile::where('user_id', $userId)->update(['about_me' => $request->aboutMe,'is_completed' => 1]);
                 $response =  apiResponse::customJsonResponse(1, 200, trans("messages.profile_update_success"));
             }else{
                 $response =  apiResponse::customJsonResponse(0, 204, "invalid user token");

@@ -8,6 +8,7 @@ use App\Models\RecruiterJobs;
 use App\Models\Location;
 use App\Models\SavedJobs;
 use App\Models\JobLists;
+use App\Models\UserProfile;
 
 class SearchApiController extends Controller {
     
@@ -90,16 +91,21 @@ class SearchApiController extends Controller {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $reqData = $request->all();
-                $jobExists = JobLists::where('seeker_id','=',$userId)
-                                ->where('recruiter_job_id','=',$reqData['jobId'])
-                                ->where('applied_status','=',JobLists::APPLIED)
-                                ->get();
-                if($jobExists->count() > 0){
-                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.job_already_applied"));
+                $profileComplete = UserProfile::select('is_completed')->where('user_id', $userId)->get()->first();
+                if($profileComplete->is_completed == 1){
+                    $jobExists = JobLists::where('seeker_id','=',$userId)
+                                    ->where('recruiter_job_id','=',$reqData['jobId'])
+                                    ->where('applied_status','=',JobLists::APPLIED)
+                                    ->get();
+                    if($jobExists->count() > 0){
+                        $response = apiResponse::customJsonResponse(0, 201, trans("messages.job_already_applied"));
+                    }else{
+                        $applyJobs = array('seeker_id' => $userId , 'recruiter_job_id' => $reqData['jobId'] , 'applied_status' => JobLists::APPLIED);
+                        JobLists::insert($applyJobs);
+                        $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
+                    }
                 }else{
-                    $applyJobs = array('seeker_id' => $userId , 'recruiter_job_id' => $reqData['jobId'] , 'applied_status' => JobLists::APPLIED);
-                    JobLists::insert($applyJobs);
-                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
+                    $response = apiResponse::customJsonResponse(0, 202, trans("messages.invalid_token"));
                 }
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
