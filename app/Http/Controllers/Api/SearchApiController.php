@@ -104,7 +104,7 @@ class SearchApiController extends Controller {
                         $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
                     }
                 }else{
-                    $response = apiResponse::customJsonResponse(0, 202, trans("messages.invalid_token"));
+                    $response = apiResponse::customJsonResponse(0, 202, trans("messages.profile_not_complete"));
                 }
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
