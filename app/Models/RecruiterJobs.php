@@ -122,7 +122,6 @@ class RecruiterJobs extends Model
                         ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
                         ->join('recruiter_office_types','recruiter_office_types.recruiter_office_id', '=' , 'recruiter_offices.id')
                         ->leftjoin('office_types','recruiter_office_types.office_type_id', '=' , 'office_types.id')
-                        ->leftjoin('saved_jobs','saved_jobs.recruiter_job_id', '=', 'recruiter_jobs.id')
                         ->where('recruiter_jobs.id', $jobId)
                         ->groupBy('recruiter_jobs.id');
         
@@ -142,7 +141,6 @@ class RecruiterJobs extends Model
                             'job_titles.jobtitle_name','recruiter_profiles.office_name',
                             'recruiter_offices.address','recruiter_offices.zipcode',
                             'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
-                            DB::raw("IF(saved_jobs.recruiter_job_id IS NULL,0,1) AS is_saved"),
                             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS job_posted_time_gap"),
                             DB::raw("GROUP_CONCAT(office_types.officetype_name) AS office_type_name"),
                             DB::raw("(3959 * acos (cos ( radians($latitude) )* cos( radians( recruiter_offices.latitude) ) * cos( radians( $longitude ) - radians(recruiter_offices.longitude) ) + sin ( radians($latitude) ) * sin( radians( recruiter_offices.latitude ) ) )) AS distance")
