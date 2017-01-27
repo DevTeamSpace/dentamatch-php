@@ -806,5 +806,43 @@ paths:
           
       tags:
         - Job search
+        
+  /users/job-list:
+    get:
+      summary: Get job list for saved jobs , applied jobs and cancelled jobs by user
+      description: Api to get list of save , applied and cancelled jobs
+      responses: 
+          200:
+            description: Api to get list of save , applied and cancelled jobs
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: type
+          in: formData
+          description: type = 1 for saved jobs , 2 for applied jobs and 3 for cancelled jobs
+          type: integer
+        - name: page
+          in: formData
+          description: send page number to show result
+          type: integer
+        - name: lat
+          in: formData
+          description: latitude of current user location
+          type: integer
+        - name: lng
+          in: formData
+          description: longitude of current user location
+          type: integer
+        
+          
+      tags:
+        - Job search
 
 

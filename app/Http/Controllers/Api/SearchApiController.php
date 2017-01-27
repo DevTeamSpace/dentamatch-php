@@ -94,7 +94,7 @@ class SearchApiController extends Controller {
                                 ->where('recruiter_job_id','=',$reqData['jobId'])
                                 ->where('applied_status','=',JobLists::APPLIED)
                                 ->get();
-                if($jobExists){
+                if($jobExists->count() > 0){
                     $response = apiResponse::customJsonResponse(0, 201, trans("messages.job_already_applied"));
                 }else{
                     $applyJobs = array('seeker_id' => $userId , 'recruiter_job_id' => $reqData['jobId'] , 'applied_status' => JobLists::APPLIED);
@@ -122,8 +122,8 @@ class SearchApiController extends Controller {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $reqData = $request->all();
-                $jobExists = JobLists::where('seeker_id','=',$userId)->where('recruiter_job_id','=',$reqData['jobId'])->get();
-                if($jobExists){
+                $jobExists = JobLists::select('id')->where('seeker_id','=',$userId)->where('recruiter_job_id','=',$reqData['jobId'])->get()->first();
+                if($jobExists->count() > 0){
                     $jobExists->applied_status = JobLists::CANCELLED;
                     $jobExists->cancel_reason = $reqData['cancelReason'];
                     $jobExists->save();
@@ -177,10 +177,7 @@ class SearchApiController extends Controller {
         return $response;
     }
     
-    public function getJoblist1(){
-        $data = JobLists::get();
-        return json_encode($data);
-    }
+    
     
     
 }
