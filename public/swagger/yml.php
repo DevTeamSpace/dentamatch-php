@@ -918,5 +918,30 @@ paths:
          
       tags:
         - Job search
+        
+  /jobs/hired-jobs:
+    post:
+      summary: Get Hired Jobs
+      description: Api to Hired Jobs
+      responses: 
+          200:
+            description: Api to get Hired Jobs
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: jobDate
+          in: formData
+          description: jobDate in YYYY-MM-DD format
+          type: string
+         
+      tags:
+        - Job search
 
 
