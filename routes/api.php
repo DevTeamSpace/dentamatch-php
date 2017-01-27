@@ -59,4 +59,4 @@ Route::post('users/apply-job', 'Api\SearchApiController@postApplyJob');
 Route::post('users/cancel-job', 'Api\SearchApiController@postCancelJob');
 Route::get('users/job-list', 'Api\SearchApiController@getJobList');
 Route::get('users/jobs', 'Api\SearchApiController@getJobList1');
-Route::post('job/job-detail', 'Api\SearchApiController@postJobDetail');
+Route::post('jobs/job-detail', 'Api\SearchApiController@postJobDetail');
