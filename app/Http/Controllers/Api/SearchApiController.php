@@ -61,9 +61,8 @@ class SearchApiController extends Controller {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $reqData = $request->all();
-                
                 if($reqData['status'] == 1){
-                    $saveJobs = array('recruiter_job_id' => $reqData['jobId'] , 'seeker_id' => $userId );
+                    $saveJobs = array('recruiter_job_id' => $reqData['jobId'] , 'seeker_id' => $userId);
                     SavedJobs::insert($saveJobs);
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.save_job_success"));
                 }else{
@@ -177,7 +176,34 @@ class SearchApiController extends Controller {
         return $response;
     }
     
-    
+    public function getJoblist1(){
+        $data = JobLists::get();
+        return json_encode($data);
+    }
+
+    public function postJobDetail(Request $request)
+    {
+        try{
+            $this->validate($request, [
+                'jobId' => 'required'
+            ]);
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            if($userId > 0){
+                $reqData = $request->all();
+                $jobId = $reqData['jobId'];
+                $data = RecruiterJobs::getJobDetail($jobId, $userId);
+                $returnResponse = apiResponse::customJsonResponse(1, 200, trans('messages.job_detail_success'), apiResponse::convertToCamelCase($data));
+            }else{
+                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+            }
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            $returnResponse = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+        } catch (\Exception $e) {
+            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+        return $returnResponse;
+    }
     
     
 }

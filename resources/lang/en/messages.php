@@ -53,5 +53,6 @@ return [
     'job_already_applied' => 'You have already applied for this job',
     'apply_job_success' => 'Successfully applied for this job',
     'job_not_applied_by_you' => 'You have not applied for this job',
-    'job_cancelled_success' => 'Job has cancelled successfully'
+    'job_cancelled_success' => 'Job has cancelled successfully',
+    'job_detail_success' => 'Job detail retrieved successfully',
 ];
