@@ -86,6 +86,7 @@ class JobLists extends Model
     public static function postJobCalendar($userId, $jobDate)
     {
         $result = [];
+        $jobTypeCount = [];
         $searchQueryObj = JobLists::join('recruiter_jobs','job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
                         ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                         ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
@@ -112,9 +113,12 @@ class JobLists extends Model
         if($searchResult){
             foreach($searchResult as $value) {
                 $value->job_type_string = static::$jobTypeName[$value->job_type];
+                $jobTypeCount[] = $value->job_type;
             }
+            $jobTypeCount = array_unique($jobTypeCount);
             $list = $searchResult->toArray();
             $result['list'] = $list;
+            $result['jobTypeCount'] = count($jobTypeCount);
             $result['total'] = $total;
         }
         return $result;
