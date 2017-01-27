@@ -28,7 +28,7 @@ return [
     'invalid_login_credentials' => 'Invalid login credentials',
     'email_not_exists' => 'Email does not exists',
     'reset_pw_email_sent' => 'Please check your mailbox',
-    'password_update_successful' => 'Password updated successfully',
+    'password_update_successful' => 'Your password has been successfully updated.',
     'incorrect_old_password' => 'Incorrect old password',
     'mismatch_pw_cpw' => 'Mismatch password and confirm password',
     'prob_upload_image' => 'Problem in uploading image',

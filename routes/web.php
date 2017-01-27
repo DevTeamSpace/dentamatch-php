@@ -31,6 +31,9 @@ Route::get('/aboutus', function () {
 Route::get('/success-register', function () {
     return view('auth.passwords.successfully_reg');
 });
+Route::get('/success-active', function () {
+    return view('auth.passwords.successfully_active');
+});
 
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm');

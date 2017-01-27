@@ -11,7 +11,7 @@
             </div>
             <div class="col-sm-6 nopadding col">
                 <div class="frm-inr-credbox bg-white ">
-                    Your passwrod is updated successfully.
+                    User verified successfully. You can login.
                 </div>
             </div>
         </div>
