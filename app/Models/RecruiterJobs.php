@@ -162,6 +162,7 @@ class RecruiterJobs extends Model
         {
             $searchResult['job_type_string'] = static::$jobTypeName[$searchResult['job_type']];
             $searchResult['job_type_dates'] = $tempJob;
+            $searchResult['job_posted_time_gap'] = ceil(abs(time() - strtotime($searchResult['created_at'])) / 86400);
         }
         
         return $searchResult;
