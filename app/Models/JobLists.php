@@ -14,6 +14,7 @@ class JobLists extends Model
     const HIRED = 4;
     const REJECTED = 5;
     const CANCELLED = 6;
+    static $jobTypeName = ['1'=>'Full Time', '2'=>'Part Time', '3'=>'Temp'];
     
     protected $table = 'job_lists';
     protected $primaryKey = 'id';
@@ -80,6 +81,43 @@ class JobLists extends Model
             $return = 1;
         }
         return $return;
+    }
+    
+    public static function postJobCalendar($userId, $jobDate)
+    {
+        $result = [];
+        $searchQueryObj = JobLists::join('recruiter_jobs','job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
+                        ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+                        ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
+                        ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
+                        ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
+                        ->where('job_lists.seeker_id','=' ,$userId)
+                        ->where('job_lists.applied_status', '=' , JobLists::HIRED)
+                        ->whereDate('job_lists.created_at', $jobDate);  
+        
+        
+        $total = $searchQueryObj->count();
+        $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
+                        'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
+                        'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
+                        'recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
+                        'job_titles.jobtitle_name','recruiter_profiles.office_name',
+                        'recruiter_offices.address','recruiter_offices.zipcode',
+                        'recruiter_offices.latitude','recruiter_offices.longitude',
+                        'recruiter_jobs.created_at as job_created_at', 'job_lists.created_at as job_applied_on',
+                        DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
+
+        $searchResult = $searchQueryObj->get();
+        
+        if($searchResult){
+            foreach($searchResult as $value) {
+                $value->job_type_string = static::$jobTypeName[$value->job_type];
+            }
+            $list = $searchResult->toArray();
+            $result['list'] = $list;
+            $result['total'] = $total;
+        }
+        return $result;
     }
     
 }

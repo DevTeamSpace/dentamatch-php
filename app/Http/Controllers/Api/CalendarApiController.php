@@ -6,6 +6,7 @@ use Illuminate\Validation\ValidationException;
 use App\Helpers\apiResponse;
 use App\Models\UserProfile;
 use App\Models\JobSeekerTempAvailability;
+use App\Models\JobLists;
 
 class CalendarApiController extends Controller {
     
@@ -35,6 +36,36 @@ class CalendarApiController extends Controller {
                     JobSeekerTempAvailability::insert($tempDateArray);
                 }
                 $response = apiResponse::customJsonResponse(1, 200, trans("messages.availability_add_success"));
+            }else{
+                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+            } 
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+        } catch (\Exception $e) {
+            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+        return $response;
+    }
+    
+    public function postHiredJobsByDate(Request $request)
+    {
+        try{
+            $this->validate($request, [
+                'jobDate' => 'required'
+            ]);
+            
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            if($userId > 0){
+                $reqData = $request->all();
+                $jobDate = $reqData['jobDate'];
+                $listHiredJobs = JobLists::postJobCalendar($userId, $jobDate);
+                if(count($listHiredJobs['list']) > 0){
+                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"),  apiResponse::convertToCamelCase($listHiredJobs));
+                }else{
+                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
+                }
+                
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             } 
