@@ -14,6 +14,11 @@ use App\Models\RecruiterOfficeType;
 class UserProfileController extends Controller {
 
     public function createProfile(Request $request) {
+        if (isset($request->phoneNumber) && !empty($request->phoneNumber)) {
+            $var = filter_var($request->phoneNumber, FILTER_SANITIZE_NUMBER_INT);
+            $newPhone = str_replace(array('+','-'), '', $var) ;
+            $request->merge(array('contactNumber' => $newPhone));
+        }
 
         $validator = Validator::make($request->all(), [
                     'officeName' => 'required|max:100',
@@ -37,7 +42,7 @@ class UserProfileController extends Controller {
                     'saturdayEnd' => 'required_if:saturday,1',
                     'sundayStart' => 'required_if:sunday,1',
                     'sundayEnd' => 'required_if:sunday,1',
-                    'phoneNumber' => 'required|numeric|digits_between:9,10',
+                    'contactNumber' => 'required|numeric|digits_between:9,10',
                         ], $this->messages());
         if ($validator->fails()) {
             return redirect('home')

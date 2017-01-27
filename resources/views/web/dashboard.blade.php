@@ -53,7 +53,7 @@
                     </div>
                 </div>
 
-                <table id="address" style="display: none;">
+                <table id="address" >
                     <tr>
                         <td class="label">Street address</td>
                         <td class="slimField"><input class="field" id="street_number"
@@ -86,7 +86,7 @@
                 </table>
                 <div class="form-group">
                     <label>Phone Number</label>
-                    <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup"  data-parsley-type="digits" data-parsley-type-message="number should be digits" >
+                    <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control phone-number" data-parsley-required data-parsley-required-message="phone number required"   data-parsley-trigger="keyup" data-parsley-minlength="14"   data-parsley-minlength-message="phone number should be 10 digit"   >
 <!--                    <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="13" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup"  >-->
 <!--                    <input name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required"  data-parsley-trigger="keyup"  data-parsley-pattern="^\(?([0-9]{3})\)([0-9]{3})[-]([0-9]{4})$" data-parsley-pattern-message="pattern should be (123)456-7890" >-->
                 </div>
@@ -297,8 +297,8 @@
             </div>			
         </div>
         <div class="pull-right text-right">
-<!--            <div class="addBtn DynamicAddder"><span class="icon icon-plus"></span>Add total of 1 locations</div>-->
-            <button disabled="disabled" type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
+            <div class="addBtn DynamicAddder"><span class="icon icon-plus"></span>Add total of 1 locations</div>
+            <button  type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
         </div>
     </div>
 </form>
@@ -411,40 +411,62 @@
         numberDisplayed: 3,
     });
 
-//$("input[name='phoneNumber']").keyup(function() {
-//    $(this).val($(this).val().replace(/^(\d{3})(\d{3})(\d)+$/, "($1)$2-$3"));
-//});
 </script>
 <script>
 
-    $(function () {
-        $('.datetimepicker1').datetimepicker({format: 'LT'});
-        $('.datetimepicker2').datetimepicker({
-            useCurrent: false, //Important! See issue #1075
-            format: 'LT'
-        });
-        $(".datetimepicker1").on("dp.change", function (e) {
-            $(this).closest('.row').find('.datetimepicker2').data("DateTimePicker").minDate(e.date);
-        });
-        $(".datetimepicker2").on("dp.change", function (e) {
-            $(this).closest('.row').find('.datetimepicker1').data("DateTimePicker").maxDate(e.date);
-        });
-    });
+$(function() {
 
+/*code for linked picker - curtainup and curtaindown*/
+	var $startTime1 = $('.datetimepicker1');
+	var $endTime1 = $('.datetimepicker2');
+	
+	$startTime1.datetimepicker({
+		format: 'hh:mm A',
+//		defaultDate: new Date(),
+		//ignoreReadonly: true,
+		minDate: moment().startOf('day'),
+		maxDate: moment().endOf('day')
+	});
+
+	$endTime1.datetimepicker({
+		format: 'hh:mm A',
+//		defaultDate: $startTime1.data("DateTimePicker").date().add(1, 'minutes'),
+//		useCurrent: false,
+		//ignoreReadonly: true,
+		minDate: moment().startOf('day'),
+		maxDate: moment().endOf('day')
+	});
+
+//	$startTime1.data("DateTimePicker").maxDate($endTime1.data("DateTimePicker").date().subtract(1, 'minutes'));
+//	$endTime1.data("DateTimePicker").minDate($startTime1.data("DateTimePicker").date().add(1, 'minutes'));
+//
+
+	
+	/*End of timepicker*/
+});
 
 </script>
 
-
+<script>
+	
+	$('.datetimepicker1').on("dp.change",function(){
+		
+				var date = $(this).data('date');
+		
+				$(this).parents(".row").find('.datetimepicker2').data('DateTimePicker').minDate(date);
+				console.log(date);
+			});
+			$('.datetimepicker2').on("dp.change",function(){
+				var date = $(this).data('date');
+				$(this).parents(".row").find('.datetimepicker1').data('DateTimePicker').maxDate(date);
+				console.log(date);
+			});
+	
+	
+	</script>
 
 <script>
-    // This example displays an address form, using the autocomplete feature
-    // of the Google Places API to help users fill in the information.
-
-    // This example requires the Places library. Include the libraries=places
-    // parameter when you first load the API. For example:
-    // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
-    var placeSearch, autocomplete, officeName;
+    var placeSearch, autocomplete,autocomplete1, officeName;
     var componentForm = {
         street_number: 'short_name',
         route: 'long_name',
@@ -470,7 +492,7 @@
         // Get the place details from the autocomplete object.
         var allPlace = autocomplete.getPlaces();
         allPlace.forEach(function (place) {
-            console.log(place)
+            console.log(place);
 
             for (var component in componentForm) {
                 document.getElementById(component).value = '';
