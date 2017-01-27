@@ -802,8 +802,59 @@ paths:
           in: formData
           description: status is 1 for saving job and 0 to unsave job
           type: integer
-        
           
+      tags:
+        - Job search
+          
+  /users/apply-job:
+    post:
+      summary: Apply  job by user
+      description: Api to apply job
+      responses: 
+          200:
+            description: Api to apply jobs
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: jobId
+          in: formData
+          description: jobid provided by user
+          type: integer 
+      tags:
+        - Job search
+     
+  /users/cancel-job:
+    post:
+      summary: Cancel applied   job by user
+      description: Api to cancel applied job by user
+      responses: 
+          200:
+            description: Cancel applied   job by user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: jobId
+          in: formData
+          description: jobid provided by user
+          type: integer
+        - name: cancelReason
+          in: formData
+          description: Reason for cancel job 
+          type: string 
       tags:
         - Job search
         
