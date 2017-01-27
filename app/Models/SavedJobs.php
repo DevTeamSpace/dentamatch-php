@@ -67,7 +67,18 @@ class SavedJobs extends Model
                 return $result;
     }
     
-    
+    public static function getJobSavedStatus($jobId, $userId)
+    {
+        $return = 0;
+        
+        $savedJobs = static::where('seeker_id', $userId)->where('recruiter_job_id', $jobId)->first();
+        
+        if($savedJobs) {
+            $return = 1;
+        }
+        return $return;
+        
+    }
     
 
 }
