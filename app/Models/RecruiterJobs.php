@@ -119,7 +119,7 @@ class RecruiterJobs extends Model
                         if((count($userSavedJobs) > 0) && (in_array($value['id'],$savedJobsArray))){
                             $isSaved = 1;
                         }
-                        $value['isSaved'] = 1;
+                        $value['isSaved'] = $isSaved;
                         $updatedResult[] = $value;
                     }
                     $result['list'] = $updatedResult;
