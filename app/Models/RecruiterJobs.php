@@ -59,7 +59,6 @@ class RecruiterJobs extends Model
                         return  $value['recruiter_job_id'];
                     }, $savedJobsArray);
                 }
-        print_r($userSavedJobs);exit();
         $latitude = $reqData['lat'];
         $longitude = $reqData['lng'];
                 $searchQueryObj = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
@@ -117,7 +116,7 @@ class RecruiterJobs extends Model
                     $resultArray = $searchResult->toArray();
                     foreach($resultArray as $value){
                         $isSaved = 0;
-                        if(in_array($value['id'],$savedJobsArray)){
+                        if((count($userSavedJobs) > 0) && (in_array($value['id'],$savedJobsArray))){
                             $isSaved = 1;
                         }
                         $value['isSaved'] = 1;
