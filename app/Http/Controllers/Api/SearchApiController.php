@@ -32,6 +32,7 @@ class SearchApiController extends Controller {
                 $reqData = $request->all();
                 $location = Location::where('zipcode',$reqData['zipCode'])->get();
                 if($location){
+                    $reqData['userId'] = $userId;
                     $searchResult = RecruiterJobs::searchJob($reqData);
                     if(count($searchResult['list']) > 0){
                         $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"),  apiResponse::convertToCamelCase($searchResult));

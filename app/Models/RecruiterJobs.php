@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
 use App\Models\UserProfile;
+use App\Models\SavedJobs;
 
 class RecruiterJobs extends Model
 {
@@ -50,6 +51,12 @@ class RecruiterJobs extends Model
     }
     
     public static function searchJob($reqData){
+        $savedJobsResult  = SavedJobs::select('recruiter_job_id')->where('seeker_id',$reqData[''])->get();
+        $savedJobsArray = array();
+        if($savedJobsResult){
+                    $savedJobsArray = $savedJobsResult->toArray();
+                }
+        
         $latitude = $reqData['lat'];
         $longitude = $reqData['lng'];
                 $searchQueryObj = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
@@ -86,7 +93,6 @@ class RecruiterJobs extends Model
                                 'recruiter_offices.address','recruiter_offices.zipcode',
                                 'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
                                 DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
-                                DB::raw("IF(saved_jobs.recruiter_job_id IS NULL,0,1) AS is_saved"),
                                 DB::raw("(
                     3959 * acos (
                       cos ( radians($latitude) )
@@ -103,8 +109,19 @@ class RecruiterJobs extends Model
                 }
                 $searchResult = $searchQueryObj->skip($skip)->take($limit)->get();
                 $result = array();
+                $updatedResult = array();
                 if($searchResult){
-                    $result['list'] = $searchResult->toArray();
+                    $resultArray = $searchResult->toArray();
+                    foreach($resultArray as $value){
+                        $isSaved = 0;
+                        if(in_array($value['id'],$savedJobsArray)){
+                            $isSaved = 1;
+                        }
+                        $value['isSaved'] = 1;
+                        $updatedResult[] = $value;
+                    }
+                    //$result['list'] = $searchResult->toArray();
+                    $result['list'] = $updatedResult;
                     $result['total'] = $total;
                 }
                 return $result;
