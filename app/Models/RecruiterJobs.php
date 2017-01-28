@@ -56,7 +56,7 @@ class RecruiterJobs extends Model
         if($savedJobsResult){
                     $savedJobsArray = $savedJobsResult->toArray();
                 }
-        
+        print_r($savedJobsArray);exit();
         $latitude = $reqData['lat'];
         $longitude = $reqData['lng'];
                 $searchQueryObj = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
