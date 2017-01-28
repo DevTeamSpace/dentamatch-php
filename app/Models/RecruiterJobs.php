@@ -51,7 +51,7 @@ class RecruiterJobs extends Model
     }
     
     public static function searchJob($reqData){
-        $savedJobsResult  = SavedJobs::select('recruiter_job_id')->where('seeker_id',$reqData[''])->get();
+        $savedJobsResult  = SavedJobs::select('recruiter_job_id')->where('seeker_id',$reqData['userId'])->get();
         $savedJobsArray = array();
         if($savedJobsResult){
                     $savedJobsArray = $savedJobsResult->toArray();
@@ -120,8 +120,9 @@ class RecruiterJobs extends Model
                         $value['isSaved'] = 1;
                         $updatedResult[] = $value;
                     }
-                    //$result['list'] = $searchResult->toArray();
                     $result['list'] = $updatedResult;
+                    //$result['list'] = $searchResult->toArray();
+                    
                     $result['total'] = $total;
                 }
                 return $result;
