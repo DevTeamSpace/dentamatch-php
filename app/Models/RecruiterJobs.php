@@ -52,11 +52,14 @@ class RecruiterJobs extends Model
     
     public static function searchJob($reqData){
         $savedJobsResult  = SavedJobs::select('recruiter_job_id')->where('seeker_id',$reqData['userId'])->get();
-        $savedJobsArray = array();
+        $userSavedJobs = array();
         if($savedJobsResult){
                     $savedJobsArray = $savedJobsResult->toArray();
+                    $userSavedJobs = array_map(function ($value) {
+                        return  $value['recruiter_job_id'];
+                    }, $savedJobsArray);
                 }
-        print_r($savedJobsArray);exit();
+        print_r($userSavedJobs);exit();
         $latitude = $reqData['lat'];
         $longitude = $reqData['lng'];
                 $searchQueryObj = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
