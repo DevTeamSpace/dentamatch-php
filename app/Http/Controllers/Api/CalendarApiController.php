@@ -13,6 +13,14 @@ class CalendarApiController extends Controller {
     public function __construct() {
         
     }
+    
+    /**
+     * Description : Post availability for job
+     * Method : postJobAvailability
+     * formMethod : POST
+     * @param Request $request
+     * @return type
+     */
     public function postJobAvailability(Request $request){
         try{
             $userId = apiResponse::loginUserId($request->header('accessToken'));
@@ -21,9 +29,9 @@ class CalendarApiController extends Controller {
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
                 $userProfileModel->is_fulltime = $reqData['isFulltime'];
                 if(is_array($reqData['partTimeDays']) && (count($reqData['partTimeDays']) > 0)){
-                    foreach($reqData['partTimeDays'] as $key => $value){
-                        $field = 'is_parttime_'.$key;
-                        $userProfileModel->$field = $value;
+                    foreach($reqData['partTimeDays'] as $value){
+                        $field = 'is_parttime_'.$value;
+                        $userProfileModel->$field = 1;
                     }
                 }
                 $userProfileModel->save();

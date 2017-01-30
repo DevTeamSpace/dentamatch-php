@@ -247,4 +247,5 @@ class SkillApiController extends Controller {
         }
         return $response;
     }
+
 }
