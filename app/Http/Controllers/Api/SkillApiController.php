@@ -235,7 +235,7 @@ class SkillApiController extends Controller {
                         JobseekerCertificates::where('user_id',$userId)->where('certificate_id',$value['id'])->update(['validity_date' => $value['value']]);
                     }
                 }
-                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"));
+                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.certificate_details_successful_update"));
             }else{
                 $response =  apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
