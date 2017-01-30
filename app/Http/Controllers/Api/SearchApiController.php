@@ -13,6 +13,14 @@ class SearchApiController extends Controller {
     public function __construct() {
         
     }
+    
+    /**
+     * Description : Search JObs
+     * Method : postSearchjobs
+     * formMethod : POST
+     * @param Request $request
+     * @return type
+     */
     public function postSearchjobs(Request $request){
         try{
             $this->validate($request, [
@@ -51,6 +59,13 @@ class SearchApiController extends Controller {
         return $response;
     }
     
+    /**
+     * Description : Saved Unsaved a particular job eith latest status
+     * Method : postSaveUnsavejob
+     * formMethod : POST
+     * @param Request $request
+     * @return type
+     */
     public function postSaveUnsavejob(Request $request){
         try{
             $this->validate($request, [
