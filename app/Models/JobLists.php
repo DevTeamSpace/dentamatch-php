@@ -45,7 +45,6 @@ class JobLists extends Model
                                 'recruiter_offices.address','recruiter_offices.zipcode',
                                 'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
                                 DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
-                                
                                 DB::raw("(
                     3959 * acos (
                       cos ( radians($latitude) )
