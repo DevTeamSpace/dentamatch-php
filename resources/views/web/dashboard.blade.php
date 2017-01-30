@@ -2,27 +2,23 @@
 
 @section('content')
 
-<form data-parsley-validate method="post" action="{{url('create-profile')}}">
-    {{ csrf_field() }}
-    <input type="text" name="lat" id="lat">
-    <input type="text" name="lng" id="lng">
-    <input type="text" name="full_address" id="full_address">
-    <input type="text" id="postal_code" name="postal_code" value="{{ old('postal_code') }}">
-    <input type="text" id="saveBox">
-                                       
-    <div class="customContainer center-block containerBottom">
-        <div class="profieBox">
-            <h3>Create Profile</h3>
-            @if (count($errors) > 0)
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-            @endif
 
+<div class="customContainer center-block containerBottom">
+    <div class="profieBox">
+        <h3>Create Profile</h3>
+        @if (count($errors) > 0)
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
+        <form data-parsley-validate method="post" id="createProfileForm" action="javascript:void(0);">
+            {{ csrf_field() }}
+            <div id="createForm-errors"></div>
             <div class="commonBox cboxbottom">
                 <div class="form-group">
                     <label >Dental Office Name</label>
@@ -32,7 +28,19 @@
                     <label  >Dental Office Description</label>
                     <textarea class="form-control  txtHeight"  name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeDescription') }}</textarea>
                 </div>
-            </div>		
+            </div>	
+            <div class="pull-right text-right">
+                <button onclick="createProfile()" id="createProfileButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
+            </div>
+        </form>
+
+        <form data-parsley-validate method="post" id="officeDetailForm" action="javascript:void(0);">
+            {{ csrf_field() }}
+            <div id="officeDetail-errors"></div>
+            <input type="hidden" name="lat" id="lat">
+            <input type="hidden" name="lng" id="lng">
+            <input type="hidden" name="full_address" id="full_address">
+            <input type="hidden" id="postal_code" name="postal_code" value="{{ old('postal_code') }}">
 
             <div class="commonBox cboxbottom masterBox">
                 <div class="form-group">
@@ -266,14 +274,14 @@
                     <label>Office Location Information <i class="optional">(Optional)</i></label>
                     <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="location information required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
                 </div>	
-            </div>			
-        </div>
-        <div class="pull-right text-right">
-            <div class="addBtn DynamicAddder"><span class="icon icon-plus"></span>Add total of 1 locations</div>
-            <button  type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
-        </div>
+            </div>
+            <div class="pull-right text-right">
+                <button onclick="officeDetail()" id="officeDetailButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40 formBtnAction">Save</button>
+            </div>
     </div>
 </form>
+</div>
+<div class="addBtn DynamicAddder"><span class="icon icon-plus"></span>Add total of 1 locations</div>
 
 @if(isset($modal))
 <!-- Modal -->
@@ -459,20 +467,20 @@
                 var allPlace = autocomplete[name].getPlaces();
                 console.log(name);
                 var indexField = name.split('autocomplete')[1];
-                allPlace.forEach(function (place) {                   
-                   
+                allPlace.forEach(function (place) {
+
                     for (var i = 0; i < place.address_components.length; i++) {
                         var addressType = place.address_components[i].types[0];
                         if (componentForm[addressType]) {
                             var val = place.address_components[i][componentForm[addressType]];
-                            
-                            document.getElementById(addressType+indexField).value = val;
+
+                            document.getElementById(addressType + indexField).value = val;
                         }
                     }
 
-                    document.getElementById('full_address'+indexField).value = place.formatted_address;
-                    document.getElementById('lat'+indexField).value = place.geometry.location.lat();
-                    document.getElementById('lng'+indexField).value = place.geometry.location.lng();
+                    document.getElementById('full_address' + indexField).value = place.formatted_address;
+                    document.getElementById('lat' + indexField).value = place.geometry.location.lat();
+                    document.getElementById('lng' + indexField).value = place.geometry.location.lng();
                     $('#' + name)[0].value = place.formatted_address;
                 });
             });

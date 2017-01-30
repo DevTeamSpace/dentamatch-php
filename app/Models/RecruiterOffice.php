@@ -30,7 +30,7 @@ class RecruiterOffice extends Model {
                     'latitude' => $request->lat,
                     'longitude' => $request->lng,
                     'phone_no' => $request->contactNumber,
-                    'office_info' => $request->officeDescription,
+                    'office_info' => $request->officeAddress,
                     'work_everyday_start' => date('H:i:s', strtotime($request->everydayStart)),
                     'work_everyday_end' => date('H:i:s', strtotime($request->everydayEnd)),
                     'monday_start' => date('H:i:s', strtotime($request->mondayStart)),

@@ -115,6 +115,7 @@ return [
         'saturdayEnd' => ['required_if' => 'Saturday end date is required.'],
         'sundayStart' => ['required_if' => 'Sunday start date is required.'],
         'sundayEnd' => ['required_if' => 'Sunday end date is required.'],
+        'postal_code' => ['required' => 'Unable to find zip code from the address.'],
     ],
     /*
       |--------------------------------------------------------------------------
