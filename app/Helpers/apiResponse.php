@@ -72,8 +72,8 @@ class apiResponse {
     public static function getThumbImage($image){
         $profilePic = "";
             if($image && $image != ""){
-                $width = 120;
-                $height = 120;
+                $width = 150;
+                $height = 150;
                 $profilePic  = url("image/" . $width . "/" . $height . "/?src=" .$image);
             }
         return $profilePic;
