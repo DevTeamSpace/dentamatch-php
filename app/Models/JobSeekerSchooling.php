@@ -45,5 +45,24 @@ class JobSeekerSchooling extends Model
 
         return $list;
     }
+    
+    public static function getJobseekerOtherSchooling($userId)
+    {
+        $schoolId = [];
+        $schoolingModel = Schooling::select('id')->whereNull('parent_id')->get()->toArray();
+        foreach($schoolingModel as $value) {
+            $schoolId[] = $value['id'];
+        }
+        
+        $query = static::select('jobseeker_schoolings.schooling_id as parentId', 'jobseeker_schoolings.schooling_id as childId', 
+                                'schoolings.school_name as schoolName', 'jobseeker_schoolings.other_schooling as schoolChildName',
+                                'jobseeker_schoolings.year_of_graduation as yearOfGraduation', 'jobseeker_schoolings.other_schooling as otherSchooling')
+                            ->join('schoolings', 'schoolings.id','=', 'jobseeker_schoolings.schooling_id')
+                            ->whereIn('schooling_id', $schoolId)
+                            ->where('user_id', $userId);
+        $list = $query->get()->toArray();
+
+        return $list;
+    }
 
 }

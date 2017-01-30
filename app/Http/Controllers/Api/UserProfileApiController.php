@@ -205,6 +205,8 @@ class UserProfileApiController extends Controller {
                 $userProfileModel = UserProfile::getUserProfile($userId);
                 $userWorkExperience = WorkExperience::getWorkExperienceList($userId);
                 $schooling = JobSeekerSchooling::getJobSeekerSchooling($userId);
+                $otherSchooling = JobSeekerSchooling::getJobseekerOtherSchooling($userId);
+                $schooling = array_merge($schooling, $otherSchooling);
                 $skills = JobSeekerSkills::getJobSeekerSkills($userId);
                 if(!empty($skills)) {
                     foreach($skills as $keySkill=>$skillValue) {
