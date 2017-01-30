@@ -33,6 +33,7 @@ $(function () {
     }
     function dynamicBox() {
         dynamicLength = $(".masterBox").length;
+        $('#saveBox').val(dynamicLength);
         var masterCLone, dynamicDiv, currentEvent;
         if ($(this).hasClass('DynamicAddder')) {
             currentEvent = $(this);

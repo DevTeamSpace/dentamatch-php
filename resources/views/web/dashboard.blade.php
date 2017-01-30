@@ -8,6 +8,7 @@
     <input type="text" name="lng" id="lng">
     <input type="text" name="full_address" id="full_address">
     <input type="text" id="postal_code" name="postal_code" value="{{ old('postal_code') }}">
+    <input type="text" id="saveBox">
                                        
     <div class="customContainer center-block containerBottom">
         <div class="profieBox">
