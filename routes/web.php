@@ -50,6 +50,9 @@ Route::group(['middleware' => ['auth', 'xss']], function () {
             Route::get('createJob/{templateId}', 'web\RecruiterJobController@createJob');
             Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
             Route::post('create-profile', 'web\UserProfileController@createProfile');
+
+            Route::get('change-password', 'web\UserProfileController@getChangePassword');
+            Route::post('change-password', 'web\UserProfileController@postChangePassword');
         });
 
         Route::group(['middleware' => 'termCondition'], function () {

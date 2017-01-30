@@ -10,13 +10,14 @@ use App\Models\RecruiterOffice;
 use DB;
 use App\Models\RecruiterProfile;
 use App\Models\RecruiterOfficeType;
+use Hash;
 
 class UserProfileController extends Controller {
 
     public function createProfile(Request $request) {
         if (isset($request->phoneNumber) && !empty($request->phoneNumber)) {
             $var = filter_var($request->phoneNumber, FILTER_SANITIZE_NUMBER_INT);
-            $newPhone = str_replace(array('+','-'), '', $var) ;
+            $newPhone = str_replace(array('+', '-'), '', $var);
             $request->merge(array('contactNumber' => $newPhone));
         }
 
@@ -66,6 +67,26 @@ class UserProfileController extends Controller {
         return [
             'postal_code.required' => trans("messages.address_zip_required")
         ];
+    }
+
+    public function getChangePassword() {
+        return view('web.change_password');
+    }
+
+    public function postChangePassword(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'oldPassword' => 'required',
+                    'password' => 'required|min:6|confirmed',
+                    'password_confirmation' => 'required|min:6',
+        ]);
+        if ($validator->fails()) {
+            return redirect('change-password')->withErrors($validator)->withInput();
+        }
+        if (Hash::check($request->oldPassword, Auth::user()->password)) {
+            \App\Models\User::where('id', Auth::user()->id)->update(['password' => Hash::make($request->password)]);
+            return redirect('change-password')->withErrors(['Changed Successfull.'])->withInput();
+        }
+        return redirect('change-password')->withErrors(['Old Password not matched.'])->withInput();
     }
 
 }
