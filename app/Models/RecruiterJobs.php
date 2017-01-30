@@ -65,7 +65,6 @@ class RecruiterJobs extends Model
                         ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
                         ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
                         ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
-                        ->leftjoin('saved_jobs','saved_jobs.recruiter_job_id', '=', 'recruiter_jobs.id')
                         ->whereIn('job_titles.id', $reqData['jobTitle']);
                 if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 0){
                     $searchQueryObj->where('recruiter_jobs.job_type',1);
@@ -116,7 +115,7 @@ class RecruiterJobs extends Model
                     $resultArray = $searchResult->toArray();
                     foreach($resultArray as $value){
                         $isSaved = 0;
-                        if((count($userSavedJobs) > 0) && (in_array($value['id'],$savedJobsArray))){
+                        if((count($userSavedJobs) > 0) && (in_array($value['id'],$userSavedJobs))){
                             $isSaved = 1;
                         }
                         $value['isSaved'] = $isSaved;
