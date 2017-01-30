@@ -13,6 +13,14 @@ class CalendarApiController extends Controller {
     public function __construct() {
         
     }
+    
+    /**
+     * Description : Post availability for job
+     * Method : postJobAvailability
+     * formMethod : POST
+     * @param Request $request
+     * @return type
+     */
     public function postJobAvailability(Request $request){
         try{
             $userId = apiResponse::loginUserId($request->header('accessToken'));

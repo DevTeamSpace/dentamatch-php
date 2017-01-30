@@ -249,9 +249,9 @@ class SkillApiController extends Controller {
     }
     /**
      * Description : Search jobs
-     * Method : postUpdateCertificationsValidity
+     * Method : getJobSearch
      * formMethod : POST
-     * @param jobTitle , jobType , currentLatitude , currentLongitude ,availability
+     * @param $request
      * @return type
      */
     

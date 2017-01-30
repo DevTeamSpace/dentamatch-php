@@ -161,6 +161,13 @@ class WorkExperienceApiController extends Controller {
         return $returnResponse;
     }
     
+    /**
+     * Description : Get School List with JobSeeker Status for selected School
+     * Method : getSchoolList
+     * formMethod : GEt
+     * @param Request $request
+     * @return type
+     */
     public function getSchoolList(Request $request)
     {
         try {
@@ -223,6 +230,13 @@ class WorkExperienceApiController extends Controller {
         return $returnResponse;
     }
     
+    /**
+     * Description : Update JobSeeker Schooling 
+     * Method : postSchoolSaveUpdate
+     * formMethod : POST
+     * @param Request $request, schoolDataArray as an array
+     * @return type
+     */
     public function postSchoolSaveUpdate(Request $request) {
         try {
             $this->validate($request, [

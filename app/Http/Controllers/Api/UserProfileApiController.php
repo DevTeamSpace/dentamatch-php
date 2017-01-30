@@ -257,6 +257,13 @@ class UserProfileApiController extends Controller {
         return $response;
     }
     
+    /**
+     * Description : Update Job Seeker Profile
+     * Method : updateUserProfile
+     * formMethod : PUT
+     * @param Request $request
+     * @return type
+     */
     public function updateUserProfile(Request $request) {
         try {
             $this->validate($request, [
