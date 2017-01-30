@@ -86,7 +86,7 @@
                             <a href="#">Calendar</a>
                         </li>
                         <li class="{{ ($navActive=='joblisting')?'active':''}}">
-                            <a href="#">Job Listing</a>
+                            <a href="{{ url('job/lists') }}">Job Listing</a>
                         </li>
                         <li class="{{ ($navActive=='favseeker')?'active':''}}">
                             <a href="#">Favorite Jobseeker</a>

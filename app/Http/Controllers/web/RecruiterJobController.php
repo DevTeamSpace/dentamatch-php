@@ -91,4 +91,36 @@ class RecruiterJobController extends Controller
             return view('web.error.',["message" => $e->getMessage()]);
         }
     }
+    
+    public function listJobs(Request $request) {
+        try{
+            $jobList = RecruiterJobs::getJobs();
+            //dd($jobList);
+            if ($request->ajax()) {
+                return view('web.recuriterJob.jobData', ['jobList' => $jobList])->render();  
+            }
+            
+            return view('web.recuriterJob.list', compact('jobList'));
+            //return $this->returnView('list');
+        } catch (\Exception $e) {
+            dd($e);
+            return view('web.error.',["message" => $e->getMessage()]);
+        }
+    }
+    
+    public function jobDetails(Request $request,$jobId) {
+        try{
+            $jobData = RecruiterJobs::getJobDetails($jobId);
+            dd($jobData);
+            if ($request->ajax()) {
+                return view('web.recuriterJob.jobData', ['jobList' => $jobList])->render();  
+            }
+            
+            return view('web.recuriterJob.list', compact('jobList'));
+            //return $this->returnView('list');
+        } catch (\Exception $e) {
+            dd($e);
+            return view('web.error.',["message" => $e->getMessage()]);
+        }
+    }
 }
