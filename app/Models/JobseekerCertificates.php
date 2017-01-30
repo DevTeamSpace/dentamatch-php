@@ -29,6 +29,7 @@ class JobseekerCertificates extends Model
                 $returnData[$value['certificate_id']] = $value;
                 //$returnData[$value['certificate_id']]['image_path'] = !empty($value['image_path']) ? $s3Url.DIRECTORY_SEPARATOR.$s3Bucket.DIRECTORY_SEPARATOR.$value['image_path'] : $value['image_path'];
                 $returnData[$value['certificate_id']]['image_path'] =  apiResponse::getThumbImage($value['image_path']);
+                
             }
         }
         return $returnData;
