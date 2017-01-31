@@ -94,7 +94,7 @@
                             <a href="#">Favorite Jobseeker</a>
                         </li>
                         <li class="{{ ($navActive=='template')?'active':''}}">
-                            <a href="#">Template</a>
+                            <a href="{{ url('jobtemplates') }}">Template</a>
                         </li>
 
                     </ul>

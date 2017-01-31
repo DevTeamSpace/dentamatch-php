@@ -7,7 +7,7 @@
                 <h4>{{ $job['jobtitle_name'] }}</h4>
             </div>
             <div class="template-job-information-right">
-                <span>Posted : {{ $job['days'] }} days ago</span>
+                <span>Posted : {{ $job['days'].' day'.(($job['days']>1)?'s':'') }} ago</span>
 
             </div> 
         </div>  
@@ -95,7 +95,8 @@
                 </ul>
             </div>
             <div class="col-sm-4 search-seeker">
-                <form method="post" action="{{ url('search/job') }}">
+                <form method="post" action="javascript:void(0);">
+                    <!--{{ url('search/job') }}-->
                     <input type="hidden" name="jobType" value="{{ $job['job_type'] }}">
                     <input type="hidden" name="jobTitle" value="{{ $job['job_title_id'] }}">
                     <button type="submit" class="btn btn-primary pd-l-30 pd-r-30 pull-right">Search Seekers</button>
