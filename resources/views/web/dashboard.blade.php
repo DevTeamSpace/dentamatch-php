@@ -2,24 +2,23 @@
 
 @section('content')
 
-<form data-parsley-validate method="post" action="{{url('create-profile')}}">
-    {{ csrf_field() }}
-    <input type="hidden" name="lat" id="lat">
-    <input type="hidden" name="lng" id="lng">
-    <input type="hidden" name="full_address" id="full_address">
-    <div class="customContainer center-block containerBottom">
-        <div class="profieBox">
-            <h3>Create Profile</h3>
-            @if (count($errors) > 0)
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-            @endif
 
+<div class="customContainer center-block containerBottom">
+    <div class="profieBox">
+        <h3>Create Profile</h3>
+        @if (count($errors) > 0)
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
+        <form data-parsley-validate method="post" id="createProfileForm" action="javascript:void(0);">
+            {{ csrf_field() }}
+            <div id="createForm-errors"></div>
             <div class="commonBox cboxbottom">
                 <div class="form-group">
                     <label >Dental Office Name</label>
@@ -29,7 +28,20 @@
                     <label  >Dental Office Description</label>
                     <textarea class="form-control  txtHeight"  name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeDescription') }}</textarea>
                 </div>
-            </div>		
+            </div>	
+            <div  class="pull-right text-right pd-b-20">
+                <button onclick="createProfile()" id="createProfileButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
+            </div>
+            <div class="clearfix"></div>
+        </form>
+
+        <form data-parsley-validate method="post" id="officeDetailForm" action="javascript:void(0);">
+            {{ csrf_field() }}
+            <div id="officeDetail-errors"></div>
+            <input type="hidden" name="lat" id="lat">
+            <input type="hidden" name="lng" id="lng">
+            <input type="hidden" name="full_address" id="full_address">
+            <input type="hidden" id="postal_code" name="postal_code" value="{{ old('postal_code') }}">
 
             <div class="commonBox cboxbottom masterBox">
                 <div class="form-group">
@@ -53,40 +65,9 @@
                     </div>
                 </div>
 
-                <table id="address" style="display: none;">
-                    <tr>
-                        <td class="label">Street address</td>
-                        <td class="slimField"><input class="field" id="street_number"
-                                                     disabled="true"></input></td>
-                        <td class="wideField" colspan="2"><input class="field" id="route"
-                                                                 disabled="true"></input></td>
-                    </tr>
-                    <tr>
-                        <td class="label">City</td>
-                        <td class="wideField" colspan="3"><input class="field" id="locality"
-                                                                 disabled="true"></input></td>
-                    </tr>
-                    <tr>
-                        <td class="label">State</td>
-                        <td class="slimField"><input class="field"
-                                                     id="administrative_area_level_1" disabled="true"></input></td>
-                        <td class="label">Zip code</td>
-                        <td class="wideField">                <div class="form-group">
-                                <input class="field" id="postal_code" name="postal_code" value="{{ old('postal_code') }}"
-                                       disabled="true"></div> </input></td>
-                    </tr>
-                    <tr>
-                        <td class="label">Country</td>
-                        <td class="wideField" colspan="1"><input class="field"
-                                                                 id="country" disabled="true"></input></td>
-                        <td>
-
-                        </td>
-                    </tr>
-                </table>
                 <div class="form-group">
                     <label>Phone Number</label>
-                    <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup"  data-parsley-type="digits" data-parsley-type-message="number should be digits" >
+                    <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control phone-number" data-parsley-required data-parsley-required-message="phone number required"   data-parsley-trigger="keyup" data-parsley-minlength="14"   data-parsley-minlength-message="phone number should be 10 digit"   >
 <!--                    <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="13" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup"  >-->
 <!--                    <input name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required"  data-parsley-trigger="keyup"  data-parsley-pattern="^\(?([0-9]{3})\)([0-9]{3})[-]([0-9]{4})$" data-parsley-pattern-message="pattern should be (123)456-7890" >-->
                 </div>
@@ -294,14 +275,17 @@
                     <label>Office Location Information <i class="optional">(Optional)</i></label>
                     <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="location information required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
                 </div>	
-            </div>			
-        </div>
-        <div class="pull-right text-right">
-<!--            <div class="addBtn DynamicAddder"><span class="icon icon-plus"></span>Add total of 1 locations</div>-->
-            <button disabled="disabled" type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
-        </div>
+            </div>
+            <div id="removeButton" class="pull-right text-right pd-b-15">
+                <button onclick="officeDetail()" id="officeDetailButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40 formBtnAction">Save</button>
+            </div>
+            <div class="clearfix"></div>
     </div>
 </form>
+        <div class="clearfix"></div>
+        <div class="addBtn DynamicAddder pull-right pd-t-10 "><span class="icon icon-plus"></span>Add total of 1 locations</div>
+
+</div>
 
 @if(isset($modal))
 <!-- Modal -->
@@ -411,88 +395,148 @@
         numberDisplayed: 3,
     });
 
-//$("input[name='phoneNumber']").keyup(function() {
-//    $(this).val($(this).val().replace(/^(\d{3})(\d{3})(\d)+$/, "($1)$2-$3"));
-//});
 </script>
 <script>
 
     $(function () {
-        $('.datetimepicker1').datetimepicker({format: 'LT'});
-        $('.datetimepicker2').datetimepicker({
-            useCurrent: false, //Important! See issue #1075
-            format: 'LT'
+
+        /*code for linked picker - curtainup and curtaindown*/
+        var $startTime1 = $('.datetimepicker1');
+        var $endTime1 = $('.datetimepicker2');
+
+        $startTime1.datetimepicker({
+            format: 'hh:mm A',
+//		defaultDate: new Date(),
+            //ignoreReadonly: true,
+            minDate: moment().startOf('day'),
+            maxDate: moment().endOf('day')
         });
-        $(".datetimepicker1").on("dp.change", function (e) {
-            $(this).closest('.row').find('.datetimepicker2').data("DateTimePicker").minDate(e.date);
+
+        $endTime1.datetimepicker({
+            format: 'hh:mm A',
+//		defaultDate: $startTime1.data("DateTimePicker").date().add(1, 'minutes'),
+//		useCurrent: false,
+            //ignoreReadonly: true,
+            minDate: moment().startOf('day'),
+            maxDate: moment().endOf('day')
         });
-        $(".datetimepicker2").on("dp.change", function (e) {
-            $(this).closest('.row').find('.datetimepicker1').data("DateTimePicker").maxDate(e.date);
-        });
+
+//	$startTime1.data("DateTimePicker").maxDate($endTime1.data("DateTimePicker").date().subtract(1, 'minutes'));
+//	$endTime1.data("DateTimePicker").minDate($startTime1.data("DateTimePicker").date().add(1, 'minutes'));
+//
+
+
+        /*End of timepicker*/
+    });
+
+</script>
+
+<script>
+
+    $('.datetimepicker1').on("dp.change", function () {
+
+        var date = $(this).data('date');
+
+        $(this).parents(".row").find('.datetimepicker2').data('DateTimePicker').minDate(date);
+        console.log(date);
+    });
+    $('.datetimepicker2').on("dp.change", function () {
+        var date = $(this).data('date');
+        $(this).parents(".row").find('.datetimepicker1').data('DateTimePicker').maxDate(date);
+        console.log(date);
     });
 
 
 </script>
 
 
-
 <script>
-    // This example displays an address form, using the autocomplete feature
-    // of the Google Places API to help users fill in the information.
-
-    // This example requires the Places library. Include the libraries=places
-    // parameter when you first load the API. For example:
-    // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
-    var placeSearch, autocomplete, officeName;
+    var placeSearch, autocomplete, autocomplete1, autocomplete2, officeName;
     var componentForm = {
-        street_number: 'short_name',
-        route: 'long_name',
-        locality: 'long_name',
-        administrative_area_level_1: 'short_name',
-        country: 'long_name',
         postal_code: 'short_name'
     };
 
-    function initAutocomplete() {
-        // Create the autocomplete object, restricting the search to geographical
-        // location types.
-        autocomplete = new google.maps.places.SearchBox(
-                /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
-                {types: ['geocode']});
-//console.log(autocomplete);
-        // When the user selects an address from the dropdown, populate the address
-        // fields in the form.
-        autocomplete.addListener('places_changed', fillInAddress);
-    }
+    var autocomplete = {};
+    var autocompletesWraps = ['autocomplete', 'autocomplete1', 'autocomplete2'];
 
-    function fillInAddress() {
-        // Get the place details from the autocomplete object.
-        var allPlace = autocomplete.getPlaces();
-        allPlace.forEach(function (place) {
-            console.log(place)
+    function initializeMap() {
 
-            for (var component in componentForm) {
-                document.getElementById(component).value = '';
-                document.getElementById(component).disabled = false;
-            }
-            // Get each component of the address from the place details
-            // and fill the corresponding field on the form.
-            for (var i = 0; i < place.address_components.length; i++) {
-                var addressType = place.address_components[i].types[0];
-                if (componentForm[addressType]) {
-                    var val = place.address_components[i][componentForm[addressType]];
-                    document.getElementById(addressType).value = val;
-                }
+        $.each(autocompletesWraps, function (index, name) {
+            if ($('#' + name).length == 0) {
+                return;
             }
 
-            document.getElementById('full_address').value = place.formatted_address;
-            document.getElementById('lat').value = place.geometry.location.lat();
-            document.getElementById('lng').value = place.geometry.location.lng();
-            document.getElementById('autocomplete').value = place.formatted_address;
+            autocomplete[name] = new google.maps.places.SearchBox($('#' + name)[0], {types: ['geocode']});
+            autocomplete[name].addListener('places_changed', function () {
+                var allPlace = autocomplete[name].getPlaces();
+                console.log(name);
+                var indexField = name.split('autocomplete')[1];
+                allPlace.forEach(function (place) {
 
+                    for (var i = 0; i < place.address_components.length; i++) {
+                        var addressType = place.address_components[i].types[0];
+                        if (componentForm[addressType]) {
+                            var val = place.address_components[i][componentForm[addressType]];
+
+                            document.getElementById(addressType + indexField).value = val;
+                        }
+                    }
+
+                    document.getElementById('full_address' + indexField).value = place.formatted_address;
+                    document.getElementById('lat' + indexField).value = place.geometry.location.lat();
+                    document.getElementById('lng' + indexField).value = place.geometry.location.lng();
+                    $('#' + name)[0].value = place.formatted_address;
+                });
+            });
         });
     }
+
+    $(window).load(function () {
+        initializeMap();
+    });
+
+//    function initAutocomplete() {
+//        // Create the autocomplete object, restricting the search to geographical
+//        // location types.
+//        autocomplete = new google.maps.places.SearchBox(
+//                /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+//                {types: ['geocode']});
+//
+////console.log(autocomplete);
+//        // When the user selects an address from the dropdown, populate the address
+//        // fields in the form.
+//        autocomplete.addListener('places_changed', fillInAddress);
+//        //autocomplete1.addListener('places_changed', fillInAddress);
+//        //autocomplete2.addListener('places_changed', fillInAddress);
+//    }
+//
+//    function fillInAddress() {
+//        // Get the place details from the autocomplete object.
+//        var allPlace = autocomplete.getPlaces();
+//        allPlace.forEach(function (place) {
+//            console.log(place);
+//
+//            for (var component in componentForm) {
+//                document.getElementById(component).value = '';
+//                document.getElementById(component).disabled = false;
+//            }
+//            // Get each component of the address from the place details
+//            // and fill the corresponding field on the form.
+//            for (var i = 0; i < place.address_components.length; i++) {
+//                var addressType = place.address_components[i].types[0];
+//                if (componentForm[addressType]) {
+//                    var val = place.address_components[i][componentForm[addressType]];
+//                    document.getElementById(addressType).value = val;
+//                }
+//            }
+//
+//            document.getElementById('full_address').value = place.formatted_address;
+//            document.getElementById('lat').value = place.geometry.location.lat();
+//            document.getElementById('lng').value = place.geometry.location.lng();
+//            document.getElementById('autocomplete').value = place.formatted_address;
+//
+//        });
+//    }
 
     function getOfficeName() {
         officeName = new google.maps.places.SearchBox(
@@ -507,8 +551,9 @@
         document.getElementById('officeName').value = offName;
     }
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsIYaIMo9hd5yEL7pChkVPKPWGX6rFcv8&libraries=places&callback=initAutocomplete"
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsIYaIMo9hd5yEL7pChkVPKPWGX6rFcv8&libraries=places"
 async defer></script>
 
+<!--&callback=initAutocomplete-->
 @endsection
 @endsection

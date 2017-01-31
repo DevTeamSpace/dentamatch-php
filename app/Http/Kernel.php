@@ -58,5 +58,6 @@ class Kernel extends HttpKernel
         'termCondition'=> \App\Http\Middleware\TermConditions::class,
         'recruiter'=> \App\Http\Middleware\Recruiter::class,
         'acceptedTerms'=> \App\Http\Middleware\AcceptedTerms::class,
+        'officeDetails'=> \App\Http\Middleware\OfficeDetails::class,
     ];
 }
