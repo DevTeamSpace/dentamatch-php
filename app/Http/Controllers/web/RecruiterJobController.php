@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\RecruiterJobs;
 use App\Models\JobTemplates;
 use App\Models\TempJobDates;
+use App\Models\TemplateSkills;
+use App\Models\JobLists;
 use App\Models\RecruiterOffice;
 use DB;
 
@@ -95,13 +97,13 @@ class RecruiterJobController extends Controller
     public function listJobs(Request $request) {
         try{
             $jobList = RecruiterJobs::getJobs();
-            //dd($jobList);
+            
             if ($request->ajax()) {
                 return view('web.recuriterJob.jobData', ['jobList' => $jobList])->render();  
             }
             
             return view('web.recuriterJob.list', compact('jobList'));
-            //return $this->returnView('list');
+            
         } catch (\Exception $e) {
             dd($e);
             return view('web.error.',["message" => $e->getMessage()]);
@@ -110,16 +112,12 @@ class RecruiterJobController extends Controller
     
     public function jobDetails(Request $request,$jobId) {
         try{
-            $jobData = RecruiterJobs::getJobDetails($jobId);
-            dd($jobData);
-            if ($request->ajax()) {
-                return view('web.recuriterJob.jobData', ['jobList' => $jobList])->render();  
-            }
-            
-            return view('web.recuriterJob.list', compact('jobList'));
-            //return $this->returnView('list');
+            $this->viewData['job'] = RecruiterJobs::getJobDetails($jobId);
+            $this->viewData['skills'] = TemplateSkills::getTemplateSkills($this->viewData['job']['job_template_id']);
+            $this->viewData['job'] = JobLists::getJobSeekerList($this->viewData['job']);
+            dd($this->viewData['job']);
+            return $this->returnView('view');
         } catch (\Exception $e) {
-            dd($e);
             return view('web.error.',["message" => $e->getMessage()]);
         }
     }
