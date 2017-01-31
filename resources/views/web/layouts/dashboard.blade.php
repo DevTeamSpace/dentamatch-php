@@ -71,6 +71,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Smiley Care <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">Action</a></li>
+                            <li><a href="{{ url('change-password') }}">Change Password</a></li>
                             <li><a href="#">Another action</a></li>
                             <li><a href="#">Something else here</a></li>
                             <li><a href="{{ url('logout') }}">Logout</a></li>
@@ -111,8 +112,9 @@
         <script src="{{asset('web/scripts/bootstrap.min.js')}}"></script>
         <script src="{{asset('web/scripts/bootstrap-multiselect.js')}}"></script>
         <script src="{{asset('web/plugins/parsley/js/parsley.js')}}"></script>
-        <script src="{{asset('web/scripts/custom.js')}}"></script>
+        <script src="{{asset('web/scripts/custom2.js')}}"></script>
         <script src ="{{asset('web/scripts/main.js')}}"></script>
+        <script src ="{{asset('web/scripts/web1.js')}}"></script>
         <script src ="{{asset('web/scripts/moment.min.js')}}"></script>
         <script src ="{{asset('web/scripts/bootstrap-datetimepicker.js')}}"></script>
 
