@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth', 'xss']], function () {
             Route::post('create-profile', 'web\UserProfileController@createProfile');
             Route::post('office-details', 'web\UserProfileController@officeDetails');
 
+            Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
             Route::get('subscription-detail', 'web\SubscriptionController@getSubscription');
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
             Route::post('change-password', 'web\UserProfileController@postChangePassword');

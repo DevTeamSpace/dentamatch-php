@@ -95,4 +95,8 @@ class UserProfileController extends Controller {
         return redirect('change-password')->withErrors(['Old Password not matched.'])->withInput();
     }
 
+    public function getEditProfile() {
+        return view('web.edit_profile');
+    }
+
 }
