@@ -203,7 +203,6 @@ class UserProfileApiController extends Controller {
             $skillData = [];
             if($userId > 0){
                 $userProfileModel = UserProfile::getUserProfile($userId);
-                print_r($userProfileModel);exit();
                 $userWorkExperience = WorkExperience::getWorkExperienceList($userId);
                 $schooling = JobSeekerSchooling::getJobSeekerSchooling($userId);
                 $otherSchooling = JobSeekerSchooling::getJobseekerOtherSchooling($userId);
