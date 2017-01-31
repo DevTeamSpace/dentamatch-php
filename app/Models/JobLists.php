@@ -123,4 +123,34 @@ class JobLists extends Model
         return $result;
     }
     
+    
+    public static function getJobSeekerList($job){
+        $obj = JobLists::join('recruiter_jobs','job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
+                ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+                ->join('jobseeker_profiles','jobseeker_profiles.user_id','=','job_lists.seeker_id')
+                ->join('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id')
+                ->where('job_lists.recruiter_job_id',$job->id)
+                ->whereIn('job_lists.applied_status',[ JobLists::INVITED, JobLists::APPLIED,JobLists::SHORTLISTED,JobLists::HIRED]);
+        if($job->job_type==RecruiterJobs::TEMPORARY){
+            $obj->leftjoin('jobseeker_temp_availability',function($query){
+                $query->on('jobseeker_temp_availability.user_id', '=', 'job_lists.seeker_id')
+                ->whereIn('jobseeker_temp_availability.temp_job_date',explode(',',$job->temp_job_dates));
+            });
+        }
+        $obj->select('job_lists.applied_status','jobseeker_profiles.first_name','jobseeker_profiles.last_name',
+                        'jobseeker_profiles.profile_pic','job_lists.seeker_id','job_titles.jobtitle_name',
+                        'recruiter_jobs.job_type',
+                        DB::raw("(
+                    3959 * acos (
+                      cos ( radians(recruiter_offices.latitude) )
+                      * cos( radians( jobseeker_profiles.latitude) )
+                      * cos( radians( recruiter_offices.longitude    ) - radians(jobseeker_profiles.longitude) )
+                      + sin ( radians(recruiter_offices.latitude) )
+                      * sin( radians( jobseeker_profiles.latitude ) )
+                     )) AS distance"))
+                ->orderby('job_lists.applied_status','desc')
+                ->orderby('distance','asc')
+                    ->get();
+      dd($obj->groupBy('applied_status')->toArray());  
+    }
 }
