@@ -79,8 +79,8 @@ class SearchApiController extends Controller {
             if($userId > 0){
                 $reqData = $request->all();
                 if($reqData['status'] == 1){
-                    $isSaved = SavedJobs::where('recruiter_job_id','=',$reqData['jobId'])->where('seeker_id','=',$userId);
-                    if($isSaved){
+                    $isSaved = SavedJobs::where('recruiter_job_id','=',$reqData['jobId'])->where('seeker_id','=',$userId)->count();
+                    if($isSaved > 0){
                         $response = apiResponse::customJsonResponse(1, 201, trans("messages.job_already_saved"));
                     }else{
                         $saveJobs = array('recruiter_job_id' => $reqData['jobId'] , 'seeker_id' => $userId);
