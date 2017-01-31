@@ -636,6 +636,43 @@ paths:
       tags:
         - User Profile
         
+  /users/user-location-update:
+    post:
+      summary: Update home location of user
+      description: Update home location of user
+      responses: 
+          200:
+            description: Api to update lisence , state and jobtitle
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: preferedLocation
+          in: formData
+          description: user preffered location
+          type: string
+        - name: latitude
+          in: formData
+          description: user latitude
+          type: string
+        - name: longitude
+          in: formData
+          description: user longitude
+          type: string
+        - name: zipCode
+          in: formData
+          description: Zipcode of user location
+          type: integers
+          
+      tags:
+        - User Profile
+        
   /users/update-availability:
     post:
       summary: Update user availability

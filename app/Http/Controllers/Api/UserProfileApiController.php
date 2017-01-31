@@ -305,4 +305,40 @@ class UserProfileApiController extends Controller {
         
         return $returnResponse;
     }
+    /**
+     * Description : Update Job Seeker location
+     * Method : updateUserLocationUpdate
+     * formMethod : POST
+     * @param Request $request
+     * @return type
+     */
+    public function updateUserLocationUpdate(Request $request){
+        try {
+            $this->validate($request, [
+                'preferedLocation' => 'required',
+                'latitude' => 'required',
+                'longitude' => 'required',
+                'zipCode' => 'required',
+            ]);
+            $reqData = $request->all();
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            if($userId>0) {
+                $userProfile = UserProfile::where('user_id', $userId)->first();
+                $userProfile->zipcode = $reqData['zipCode'];
+                $userProfile->latitude = $reqData['latitude'];
+                $userProfile->longitude = $reqData['longitude'];
+                $userProfile->preferred_job_location = $reqData['preferedLocation'];
+                $userProfile->save();
+                $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.location_update_success"));
+            } else {
+                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+            }
+            return $returnResponse;
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        }catch (\Exception $e) {
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+    }
 }
