@@ -39,8 +39,8 @@ function officeDetail() {
                 type: "POST",
                 data: form_data,
                 success: function (data) {
-                    console.log(data);
-                    $("#officeDetailButton").prop('disabled', true);
+                    $("#officeDetailButton").remove();
+                    $("#removeButton").append('<a id="countinueLink" href="/subscription-detail" class="btn btn-primary pd-l-40 pd-r-40">Continue</a>')
                     errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully.</li></ul></div>';
                     if (data == 1) {
                         errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully. But you will be not able to put job on tihs address.</li></ul></div>';
@@ -76,8 +76,9 @@ function officeDetail1() {
                 type: "POST",
                 data: form_data,
                 success: function (data) {
-                    console.log(data);
-                    $("#officeDetailButton1").prop('disabled', true);
+                    $("#officeDetailButton1").remove();
+                    $("#countinueLink").remove();
+                    $("#removeButton1").append('<a id="countinueLink1" href="/subscription-detail" class="btn btn-primary pd-l-40 pd-r-40">Continue</a>')
                     errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully.</li></ul></div>';
                     if (data == 1) {
                         errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully. But you will be not able to put job on tihs address.</li></ul></div>';
@@ -112,8 +113,9 @@ function officeDetail2() {
                 type: "POST",
                 data: form_data,
                 success: function (data) {
-                    console.log(data);
-                    $("#officeDetailButton2").prop('disabled', true);
+                    $("#officeDetailButton2").remove();
+                    $("#countinueLink1").remove();
+                    $("#removeButton2").append('<a id="countinueLink2" href="/subscription-detail" class="btn btn-primary pd-l-40 pd-r-40">Continue</a>')
                     errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully.</li></ul></div>';
                     if (data == 1) {
                         errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully. But you will be not able to put job on tihs address.</li></ul></div>';

@@ -29,7 +29,7 @@
                     <textarea class="form-control  txtHeight"  name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeDescription') }}</textarea>
                 </div>
             </div>	
-            <div class="pull-right text-right pd-b-20">
+            <div  class="pull-right text-right pd-b-20">
                 <button onclick="createProfile()" id="createProfileButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
             </div>
             <div class="clearfix"></div>
@@ -276,7 +276,7 @@
                     <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="location information required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
                 </div>	
             </div>
-            <div class="pull-right text-right pd-b-15">
+            <div id="removeButton" class="pull-right text-right pd-b-15">
                 <button onclick="officeDetail()" id="officeDetailButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40 formBtnAction">Save</button>
             </div>
             <div class="clearfix"></div>

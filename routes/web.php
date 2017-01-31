@@ -40,7 +40,7 @@ Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm
 Route::group(['middleware' => ['auth', 'xss']], function () {
     Route::group(['middleware' => 'recruiter'], function () {
         Route::group(['middleware' => 'acceptedTerms'], function () {
-            Route::get('home', 'web\SignupController@dashboard');
+            Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails');
             Route::get('jobtemplates', 'web\JobtemplateController@listJobTemplates');
             Route::get('jobtemplates/view/{templateId}', 'web\JobtemplateController@viewTemplate');
             Route::get('jobtemplates/edit/{templateId}', 'web\JobtemplateController@editJobTemplate');
@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth', 'xss']], function () {
             Route::post('create-profile', 'web\UserProfileController@createProfile');
             Route::post('office-details', 'web\UserProfileController@officeDetails');
 
+            Route::get('subscription-detail', 'web\SubscriptionController@getSubscription');
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
             Route::post('change-password', 'web\UserProfileController@postChangePassword');
         });
