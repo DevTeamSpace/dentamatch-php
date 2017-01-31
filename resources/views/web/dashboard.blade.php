@@ -29,9 +29,10 @@
                     <textarea class="form-control  txtHeight"  name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeDescription') }}</textarea>
                 </div>
             </div>	
-            <div class="pull-right text-right">
+            <div class="pull-right text-right pd-b-20">
                 <button onclick="createProfile()" id="createProfileButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
             </div>
+            <div class="clearfix"></div>
         </form>
 
         <form data-parsley-validate method="post" id="officeDetailForm" action="javascript:void(0);">
@@ -275,13 +276,16 @@
                     <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="location information required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
                 </div>	
             </div>
-            <div class="pull-right text-right">
+            <div class="pull-right text-right pd-b-15">
                 <button onclick="officeDetail()" id="officeDetailButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40 formBtnAction">Save</button>
             </div>
+            <div class="clearfix"></div>
     </div>
 </form>
+        <div class="clearfix"></div>
+        <div class="addBtn DynamicAddder pull-right pd-t-10 "><span class="icon icon-plus"></span>Add total of 1 locations</div>
+
 </div>
-<div class="addBtn DynamicAddder"><span class="icon icon-plus"></span>Add total of 1 locations</div>
 
 @if(isset($modal))
 <!-- Modal -->
