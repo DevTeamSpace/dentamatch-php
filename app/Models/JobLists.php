@@ -33,7 +33,7 @@ class JobLists extends Model
         if($reqData['type'] == 2){
                        $searchQueryObj->where('job_lists.applied_status', '=' , JobLists::APPLIED);       
         }else{
-                        $searchQueryObj->where('job_lists.applied_status', '=' , JobLists::CANCELLED); 
+                        $searchQueryObj->where('job_lists.applied_status', '=' , JobLists::SHORTLISTED); 
         }
         
                 $total = $searchQueryObj->count();
