@@ -38,11 +38,11 @@ class UserProfile extends Model {
             }
             $return['job_title'] = $title;
             $return['profile_pic'] = apiResponse::getThumbImage($return['profile_pic']);
-            /*if(($return['dental_state_board']) && $return['dental_state_board'] != ""){
+            if(($return['dental_state_board']) && $return['dental_state_board'] != ""){
                 $return['dental_state_board'] = apiResponse::getThumbImage($return['dental_state_board']);
             }else{
                 $return['dental_state_board'] = "";
-            }*/
+            }
             
         }
         return $return;
