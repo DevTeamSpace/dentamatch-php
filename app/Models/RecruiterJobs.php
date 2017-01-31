@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
+
 use App\Models\UserProfile;
 use App\Models\SavedJobs;
+use Auth;
 
 class RecruiterJobs extends Model
 {
@@ -14,7 +16,7 @@ class RecruiterJobs extends Model
     const FULLTIME = 1;
     const PARTTIME = 2;
     const TEMPORARY = 3;
-    const LIMIT = 10;
+    const LIMIT = 2;
     
     static $jobTypeName = ['1'=>'Full Time', '2'=>'Part Time', '3'=>'Temp'];
     
@@ -184,5 +186,66 @@ class RecruiterJobs extends Model
         
         return $searchResult;
     }
+    
+    
+    public static function getJobs(){
+        $jobObj = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+            ->join('job_templates',function($query){
+                $query->on('job_templates.id','=','recruiter_jobs.job_template_id')
+                ->where('job_templates.user_id',Auth::user()->id);
+            })
+            ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
+            ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id');
+        
+        $jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
+            ->leftJoin('job_lists',function($query){
+                $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
+                ->whereIn('job_lists.applied_status',[JobLists::INVITED,  JobLists::APPLIED]);
+            })
+            ->groupBy('recruiter_jobs.id','recruiter_profiles.office_name','recruiter_profiles.office_desc');
+        $jobObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
+            'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday','recruiter_jobs.is_thursday',
+            'recruiter_jobs.is_friday','recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
+            'recruiter_jobs.no_of_jobs','recruiter_jobs.created_at',
+            'recruiter_profiles.office_name','recruiter_profiles.office_desc',
+            'recruiter_offices.address','recruiter_offices.zipcode',
+            'job_templates.template_name','job_templates.template_desc','job_templates.job_title_id',
+            'job_titles.jobtitle_name',
+            DB::raw("group_concat(job_lists.applied_status) AS applied_status"),
+            DB::raw("group_concat(temp_job_dates.job_date) AS temp_job_dates"),
+            DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
+        
+        
+        return $jobObj->paginate(RecruiterJobs::LIMIT);
+        
+    }
+    
+    public static function getRecruiterJobDetails($jobId){
+        $jobObj = RecruiterJobs::where('recruiter_jobs.id',$jobId)
+            ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+            ->join('recruiter_office_types', 'recruiter_office_types.recruiter_office_id', '=', 'recruiter_offices.id')
+            ->join('office_types', 'recruiter_office_types.office_type_id', '=', 'office_types.id')
+            ->join('job_templates',function($query){
+                $query->on('job_templates.id','=','recruiter_jobs.job_template_id')
+                ->where('job_templates.user_id',Auth::user()->id);
+            })
+            ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
+            ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
+            ->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
+            ->groupBy('recruiter_jobs.id','recruiter_profiles.office_name','recruiter_profiles.office_desc','office_types.officetype_name')
+            ->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
+            'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday','recruiter_jobs.is_thursday',
+            'recruiter_jobs.is_friday','recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
+            'recruiter_jobs.no_of_jobs','recruiter_jobs.created_at','recruiter_jobs.job_template_id',
+            'recruiter_profiles.office_name','recruiter_profiles.office_desc',
+            'recruiter_offices.address','recruiter_offices.zipcode',
+            'job_templates.template_name','job_templates.template_desc','job_templates.job_title_id',
+            'job_titles.jobtitle_name',
+            DB::raw("group_concat(office_types.officetype_name) AS officetype_name"),
+            DB::raw("group_concat(temp_job_dates.job_date) AS temp_job_dates"),
+            DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
+        $jobData = $jobObj->first()->toArray();
+        return $jobObj->first();
+    } 
 }
     
