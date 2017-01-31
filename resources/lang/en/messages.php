@@ -57,4 +57,5 @@ return [
     'job_cancelled_success' => 'Job has cancelled successfully',
     'profile_not_complete' => 'You ll need to fillout your profile before applying for this job',
     'job_detail_success' => 'Job detail retrieved successfully',
+    'job_already_saved' => 'You have already saved this job before',
 ];
