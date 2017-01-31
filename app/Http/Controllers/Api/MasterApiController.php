@@ -14,6 +14,13 @@ class MasterApiController extends Controller {
         
     }
     
+    /**
+     * Description : Get skills list
+     * Method : getSkilllists
+     * formMethod : GET
+     * @param Request $request
+     * @return type
+     */
     public function getSkilllists(){
         $skill_lists = Skills::whereNull('parent_id')->with('children')->get();
         $response = apiResponse::customJsonResponseObject(1, 200, "Skill list",'skillList',  apiResponse::convertToCamelCase($skill_lists));

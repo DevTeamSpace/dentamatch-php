@@ -11,6 +11,9 @@
   |
  */
 
+Route::get('image/{w}/{h}/', function(League\Glide\Server $server, $w, $h) {
+    $server->outputImage($_GET['src'], ['w' => $w, 'h' => $h, 'fit' => 'crop']);
+});
 Route::get('/', 'web\SignupController@getLogin');
 
 Route::get('signup', 'web\SignupController@getLogin');
@@ -48,6 +51,8 @@ Route::group(['middleware' => ['auth', 'xss']], function () {
             Route::get('jobtemplates/create', 'web\JobtemplateController@createJobTemplate');
             Route::post('jobtemplates/saveOrUpdate', 'web\JobtemplateController@saveOrUpdate');
             Route::get('createJob/{templateId}', 'web\RecruiterJobController@createJob');
+            Route::get('job/lists', 'web\RecruiterJobController@listJobs');
+            Route::get('job/details/{jobId}', 'web\RecruiterJobController@jobDetails');
             Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
             Route::post('create-profile', 'web\UserProfileController@createProfile');
             Route::post('office-details', 'web\UserProfileController@officeDetails');
@@ -70,8 +75,8 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
     Route::get('login', 'Auth\LoginController@getLogin');
     Route::get('logout', 'Auth\LoginController@logout');
     Route::post('/login', 'Auth\LoginController@login');
-    Route::get('/', 'Cms\UserController@index');
-    Route::get('/home', 'cms\HomeController@index');
+    Route::get('/', 'Cms\LocationController@index');
+    Route::get('/home', 'cms\LocationController@index');
     Route::group(['prefix' => 'user/'], function() {
         Route::get('listPhotographer', 'cms\UserController@getPhotographerList');
         Route::get('listConsumer', 'cms\UserController@getConsumerList');

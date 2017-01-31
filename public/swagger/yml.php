@@ -653,6 +653,19 @@ paths:
           in: header
           description: access token
           type: string
+        - name: isFulltime
+          in: formData
+          description: value will be 1 if user is available for full time and 0 if user is not available fulltime.
+          type: integers
+        - name: partTimeDays
+          in: formData
+          description: provide days for which user is available in array ex ([monday,tuesday])
+          type: array
+        - name: tempdDates
+          in: formData
+          description: provide date for which user is available in array ex ([2107-01-20,2107-01-20])
+          type: array
+        
           
       tags:
         - Availability
@@ -761,6 +774,173 @@ paths:
           description: send days in array (ex. [sunday,monday,tuesday])
           type: string
           
+      tags:
+        - Job search
+        
+  /users/save-job:
+    post:
+      summary: Save unsave job by user
+      description: Api to save unsave jobs
+      responses: 
+          200:
+            description: Api to save unsave jobs
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: jobId
+          in: formData
+          description: jobid provided by user
+          type: integer
+        - name: status
+          in: formData
+          description: status is 1 for saving job and 0 to unsave job
+          type: integer
+          
+      tags:
+        - Job search
+          
+  /users/apply-job:
+    post:
+      summary: Apply  job by user
+      description: Api to apply job
+      responses: 
+          200:
+            description: Api to apply jobs
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: jobId
+          in: formData
+          description: jobid provided by user
+          type: integer 
+      tags:
+        - Job search
+     
+  /users/cancel-job:
+    post:
+      summary: Cancel applied   job by user
+      description: Api to cancel applied job by user
+      responses: 
+          200:
+            description: Cancel applied   job by user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: jobId
+          in: formData
+          description: jobid provided by user
+          type: integer
+        - name: cancelReason
+          in: formData
+          description: Reason for cancel job 
+          type: string 
+      tags:
+        - Job search
+        
+  /users/job-list:
+    get:
+      summary: Get job list for saved jobs , applied jobs and cancelled jobs by user
+      description: Api to get list of save , applied and cancelled jobs
+      responses: 
+          200:
+            description: Api to get list of save , applied and cancelled jobs
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: type
+          in: formData
+          description: type = 1 for saved jobs , 2 for applied jobs and 3 for cancelled jobs
+          type: integer
+        - name: page
+          in: formData
+          description: send page number to show result
+          type: integer
+        - name: lat
+          in: formData
+          description: latitude of current user location
+          type: integer
+        - name: lng
+          in: formData
+          description: longitude of current user location
+          type: integer  
+      tags:
+        - Job search
+        
+  /jobs/job-detail:
+    post:
+      summary: Get Job Detail
+      description: Api to job detail
+      responses: 
+          200:
+            description: Api to get job detail
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: jobId
+          in: formData
+          description: job id of job
+          type: integer
+         
+      tags:
+        - Job search
+        
+  /jobs/hired-jobs:
+    post:
+      summary: Get Hired Jobs
+      description: Api to Hired Jobs
+      responses: 
+          200:
+            description: Api to get Hired Jobs
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: jobDate
+          in: formData
+          description: jobDate in YYYY-MM-DD format
+          type: string
+         
       tags:
         - Job search
 

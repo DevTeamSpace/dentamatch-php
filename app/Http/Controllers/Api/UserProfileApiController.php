@@ -14,6 +14,7 @@ use App\Models\JobSeekerSkills;
 use App\Models\JobSeekerAffiliation;
 use App\Models\JobseekerCertificates;
 use App\Models\Certifications;
+use App\Models\JobTitles;
 
 class UserProfileApiController extends Controller {
 
@@ -82,7 +83,12 @@ class UserProfileApiController extends Controller {
                     } else {
                         UserProfile::where('user_id', $userId)->update(['dental_state_board' => $response['file']]);
                     }
-                    $url['img_url'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $response['file'];
+                    /*$img = '/' . $response['file'];
+                    $width = 120;
+                    $height = 120;
+                    $url['img_url'] = url("image/" . $width . "/" . $height . "/?src=" .$img);
+                    $url['img_url'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $response['file'];*/
+                    $url['img_url'] = apiResponse::getThumbImage($response['file']);
                     $response =  apiResponse::customJsonResponse(1, 200, trans("messages.image_upload_success"), $url);
                 } else {
                     $response =  apiResponse::responseError(trans("messages.prob_upload_image"));
@@ -144,7 +150,7 @@ class UserProfileApiController extends Controller {
             
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
-                UserProfile::where('user_id', $userId)->update(['about_me' => $request->aboutMe]);
+                UserProfile::where('user_id', $userId)->update(['about_me' => $request->aboutMe,'is_completed' => 1]);
                 $response =  apiResponse::customJsonResponse(1, 200, trans("messages.profile_update_success"));
             }else{
                 $response =  apiResponse::customJsonResponse(0, 204, "invalid user token");
@@ -199,6 +205,8 @@ class UserProfileApiController extends Controller {
                 $userProfileModel = UserProfile::getUserProfile($userId);
                 $userWorkExperience = WorkExperience::getWorkExperienceList($userId);
                 $schooling = JobSeekerSchooling::getJobSeekerSchooling($userId);
+                $otherSchooling = JobSeekerSchooling::getJobseekerOtherSchooling($userId);
+                $schooling = array_merge($schooling, $otherSchooling);
                 $skills = JobSeekerSkills::getJobSeekerSkills($userId);
                 if(!empty($skills)) {
                     foreach($skills as $keySkill=>$skillValue) {
@@ -211,7 +219,7 @@ class UserProfileApiController extends Controller {
                                                                     ];
                     }
                 }
-                
+                $jobTitle = JobTitles::where('is_active',1)->get()->toArray();
                 $affiliations = JobSeekerAffiliation::getJobSeekerAffiliation($userId);
                 $jobSeekerCertifications = JobseekerCertificates::getJobSeekerCertificates($userId);
                 $allCertification = Certifications::getAllCertificates();
@@ -234,6 +242,7 @@ class UserProfileApiController extends Controller {
                 $data['affiliations'] = $affiliations;
                 $data['certifications'] = array_values($certificationData);
                 $data['workExperience'] = $userWorkExperience;
+                $data['joblists'] = $jobTitle;
                 
                 $response =  apiResponse::customJsonResponse(1, 200, trans("messages.user_profile_list"), apiResponse::convertToCamelCase($data));
             }else{
@@ -248,6 +257,13 @@ class UserProfileApiController extends Controller {
         return $response;
     }
     
+    /**
+     * Description : Update Job Seeker Profile
+     * Method : updateUserProfile
+     * formMethod : PUT
+     * @param Request $request
+     * @return type
+     */
     public function updateUserProfile(Request $request) {
         try {
             $this->validate($request, [

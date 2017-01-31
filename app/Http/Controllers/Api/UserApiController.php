@@ -16,6 +16,14 @@ class UserApiController extends Controller {
     public function __construct() {
         
     }
+    
+    /**
+     * Description : Signup User
+     * Method : postSignup
+     * formMethod : POST
+     * @param Request $request
+     * @return type
+     */
     public function postSignup(Request $request){
         try {
             $this->validate($request, [
@@ -166,14 +174,29 @@ class UserApiController extends Controller {
         }
     }
     
+    /**
+     * Description : Get Terms and Conditions
+     * Method : getTermsAndCondition
+     * formMethod : GET
+     */
     public function getTermsAndCondition() {
         return view('terms-and-condition');   
     }
     
+    /**
+     * Description : Get Privacy Policy
+     * Method : getPrivacypolicy
+     * formMethod : GET
+     */
     public function getPrivacypolicy() {
         return view('privacy-policy');   
     }
 
+    /**
+     * Description : Get Activate Jobseeker
+     * Method : getActivatejobseeker
+     * formMethod : GET
+     */
     public  function getActivatejobseeker($confirmation_code) { 
         $is_verified = 0;
         $profile_details = UserProfile::where('verification_code', $confirmation_code)->first();

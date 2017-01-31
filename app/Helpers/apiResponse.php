@@ -69,5 +69,14 @@ class apiResponse {
             return 0;
         }
     }
+    public static function getThumbImage($image){
+        $profilePic = "";
+            if($image && $image != ""){
+                $width = 150;
+                $height = 150;
+                $profilePic  = url("image/" . $width . "/" . $height . "/?src=" .$image);
+            }
+        return $profilePic;
+    }
 }
 
