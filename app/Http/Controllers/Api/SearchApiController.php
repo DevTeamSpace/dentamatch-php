@@ -215,8 +215,10 @@ class SearchApiController extends Controller {
                 $reqData = $request->all();
                 $jobId = $reqData['jobId'];
                 $data = RecruiterJobs::getJobDetail($jobId, $userId);
-                $data['is_applied'] = JobLists::isJobApplied($jobId,$userId);
-                $data['is_saved'] = SavedJobs::getJobSavedStatus($jobId, $userId);
+                if(!empty($data)) {
+                    $data['is_applied'] = JobLists::isJobApplied($jobId,$userId);
+                    $data['is_saved'] = SavedJobs::getJobSavedStatus($jobId, $userId);
+                }
                 
                 $returnResponse = apiResponse::customJsonResponse(1, 200, trans('messages.job_detail_success'), apiResponse::convertToCamelCase($data));
             }else{
