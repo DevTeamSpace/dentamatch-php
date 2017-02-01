@@ -175,6 +175,10 @@ class UserProfileApiController extends Controller {
             if($userId > 0){
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
                 $data['list']['aboutMe'] = $userProfileModel->about_me;
+                $data['list']['dentalStateBoard']['imageUrl'] = !empty($userProfileModel->dental_state_board) ? apiResponse::getThumbImage($userProfileModel->dental_state_board) : null;
+                
+                $licenceData = ['license_number' => $userProfileModel->license_number, 'state' => $userProfileModel->state];
+                $data['list']['licence'] = $licenceData;
                 
                 $response =  apiResponse::customJsonResponse(1, 200, trans("messages.about_me_list"), apiResponse::convertToCamelCase($data));
             }else{
