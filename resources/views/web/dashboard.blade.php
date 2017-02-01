@@ -4,8 +4,8 @@
 
 <style>
     .pac-container:after{
-    content:none !important;
-}
+        content:none !important;
+    }
 </style>
 
 <div class="customContainer center-block containerBottom">
@@ -46,7 +46,7 @@
             <input type="hidden" name="lat" id="lat">
             <input type="hidden" name="lng" id="lng">
             <input type="hidden" name="full_address" id="full_address">
-            <input type="hidden" id="postal_code" name="postal_code" value="{{ old('postal_code') }}">
+            <input type="hidden" id="postal_code"  name="postal_code" value="{{ old('postal_code') }}">
 
             <div class="commonBox cboxbottom masterBox">
                 <div class="form-group">
@@ -69,6 +69,7 @@
                         <input  id="autocomplete" name="officeAddress" value="{{ old('officeAddress') }}" type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="office address required">
                     </div>
                 </div>
+                <div id="location-msg"></div>
 
                 <div class="form-group">
                     <label>Phone Number</label>
@@ -287,8 +288,8 @@
             <div class="clearfix"></div>
     </div>
 </form>
-        <div class="clearfix"></div>
-        <div class="addBtn DynamicAddder pull-right pd-t-10 "><span class="icon icon-plus"></span>Add total of 1 locations</div>
+<div class="clearfix"></div>
+<div class="addBtn DynamicAddder pull-right pd-t-10 "><span class="icon icon-plus"></span>Add total of 1 locations</div>
 
 </div>
 
@@ -478,11 +479,11 @@
                 var indexField = name.split('autocomplete')[1];
                 allPlace.forEach(function (place) {
 
+
                     for (var i = 0; i < place.address_components.length; i++) {
                         var addressType = place.address_components[i].types[0];
                         if (componentForm[addressType]) {
                             var val = place.address_components[i][componentForm[addressType]];
-
                             document.getElementById(addressType + indexField).value = val;
                         }
                     }
@@ -491,6 +492,8 @@
                     document.getElementById('lat' + indexField).value = place.geometry.location.lat();
                     document.getElementById('lng' + indexField).value = place.geometry.location.lng();
                     $('#' + name)[0].value = place.formatted_address;
+
+                    checkLocation($('#postal_code' + indexField).val(), indexField);
                 });
             });
         });
@@ -500,48 +503,6 @@
         initializeMap();
     });
 
-//    function initAutocomplete() {
-//        // Create the autocomplete object, restricting the search to geographical
-//        // location types.
-//        autocomplete = new google.maps.places.SearchBox(
-//                /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
-//                {types: ['geocode']});
-//
-////console.log(autocomplete);
-//        // When the user selects an address from the dropdown, populate the address
-//        // fields in the form.
-//        autocomplete.addListener('places_changed', fillInAddress);
-//        //autocomplete1.addListener('places_changed', fillInAddress);
-//        //autocomplete2.addListener('places_changed', fillInAddress);
-//    }
-//
-//    function fillInAddress() {
-//        // Get the place details from the autocomplete object.
-//        var allPlace = autocomplete.getPlaces();
-//        allPlace.forEach(function (place) {
-//            console.log(place);
-//
-//            for (var component in componentForm) {
-//                document.getElementById(component).value = '';
-//                document.getElementById(component).disabled = false;
-//            }
-//            // Get each component of the address from the place details
-//            // and fill the corresponding field on the form.
-//            for (var i = 0; i < place.address_components.length; i++) {
-//                var addressType = place.address_components[i].types[0];
-//                if (componentForm[addressType]) {
-//                    var val = place.address_components[i][componentForm[addressType]];
-//                    document.getElementById(addressType).value = val;
-//                }
-//            }
-//
-//            document.getElementById('full_address').value = place.formatted_address;
-//            document.getElementById('lat').value = place.geometry.location.lat();
-//            document.getElementById('lng').value = place.geometry.location.lng();
-//            document.getElementById('autocomplete').value = place.formatted_address;
-//
-//        });
-//    }
 
     function getOfficeName() {
         officeName = new google.maps.places.SearchBox(
