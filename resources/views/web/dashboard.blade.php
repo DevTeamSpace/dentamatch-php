@@ -46,7 +46,7 @@
             <input type="hidden" name="lat" id="lat">
             <input type="hidden" name="lng" id="lng">
             <input type="hidden" name="full_address" id="full_address">
-            <input type="hidden" id="postal_code"  name="postal_code" value="{{ old('postal_code') }}">
+            <input type="hidden" id="postal_code" data-parsley-required  name="postal_code">
 
             <div class="commonBox cboxbottom masterBox">
                 <div class="form-group">
