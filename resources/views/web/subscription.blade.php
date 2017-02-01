@@ -22,7 +22,7 @@
                     <p>Unlimited template creation,
                         job posting, searching jobseeker, message & reports</p>
                 </div>
-                <a href="#" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
+                <a href="{{url('/jobtemplates')}}" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
             </div>
 
 
@@ -40,7 +40,7 @@
                     <p>Unlimited template creation,
                         job posting, searching jobseeker, message & reports</p>
                 </div>
-                <a href="#" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
+                <a href="{{url('/jobtemplates')}}" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
             </div>
 
 

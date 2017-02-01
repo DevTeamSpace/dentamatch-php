@@ -43,7 +43,7 @@ function officeDetail() {
                     $("#removeButton").append('<a id="countinueLink" href="/subscription-detail" class="btn btn-primary pd-l-40 pd-r-40">Continue</a>')
                     errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully.</li></ul></div>';
                     if (data == 1) {
-                        errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully. But you will be not able to put job on tihs address.</li></ul></div>';
+                        errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully. But you will be not able to put job on this address.</li></ul></div>';
                     }
                     $('#officeDetail-errors').html(errorsHtml);
                 },
@@ -139,5 +139,31 @@ function officeDetail2() {
             });
     $('form').parsley().destroy();
     $('form').parsley();
+
+}
+
+function checkLocation(zip, indexField) {
+    var msg = "";
+    $('#location-msg' + indexField).html('');
+    $.ajax(
+            {
+                url: '/get-location/' + zip,
+                type: "GET",
+                success: function (data) {
+                    console.log(data);
+                    if (data == 0) {
+                        msg = 'Unable to find zip on this location.';
+                        $('#location-msg' + indexField).html(msg);
+                    } else if (data == 2) {
+                        msg = 'You will be not able to put job on this address.';
+                        $('#location-msg' + indexField).html(msg);
+                    }
+                },
+                error: function (data) {
+                    msg = 'Unable to find zip on this location.';
+                    $('#location-msg' + indexField).html(msg);
+                }
+            });
+
 
 }
