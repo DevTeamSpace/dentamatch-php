@@ -22,11 +22,11 @@
             <div class="commonBox cboxbottom">
                 <div class="form-group">
                     <label >Dental Office Name</label>
-                    <input type="text" value="{{ old('officeName') }}" onclick="getOfficeName()" id="officeName" name="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="office name required">
+                    <input type="text" value="{{ old('officeName') }}" onclick="getOfficeName()" id="officeName" name="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="required">
                 </div>
                 <div class="form-group">
                     <label  >Dental Office Description</label>
-                    <textarea class="form-control  txtHeight txtBtnDisable"  name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeDescription') }}</textarea>
+                    <textarea class="form-control  txtHeight txtBtnDisable"  name="officeDescription"  data-parsley-required data-parsley-required-message="required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeDescription') }}</textarea>
                 </div>
             </div>	
             <div  class="pull-right text-right pd-b-20">
@@ -34,7 +34,7 @@
             </div>
             <div class="clearfix"></div>
         </form>
-
+        <div class="mainMasterBox">
         <form data-parsley-validate method="post" id="officeDetailForm" action="javascript:void(0);">
             {{ csrf_field() }}
             <div id="officeDetail-errors"></div>
@@ -50,7 +50,7 @@
                     </div>
                     <label >Dental Office Type</label>
                     <div class="slt">
-                        <select name="officeType[]" value="" class="ddlCars" multiple="multiple" data-parsley-required data-parsley-required-message="office type required">
+                        <select name="officeType[]" value="" class="ddlCars" multiple="multiple" data-parsley-required data-parsley-required-message="required">
                             @foreach($officeType as $office)
                             <option value="{{$office->id}}" >{{$office->officetype_name}}</option>
                             @endforeach
@@ -61,13 +61,13 @@
                 <div class="form-group">
                     <label>Dental Office Address</label>
                     <div id="locationField">
-                        <input  id="autocomplete" name="officeAddress" value="{{ old('officeAddress') }}" type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="office address required">
+                        <input  id="autocomplete" name="officeAddress" value="{{ old('officeAddress') }}" type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="required">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Phone Number</label>
-                    <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control phone-number" data-parsley-required data-parsley-required-message="phone number required"   data-parsley-trigger="keyup" data-parsley-minlength="14"   data-parsley-minlength-message="phone number should be 10 digit"   >
+                    <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control phone-number" data-parsley-required data-parsley-required-message="required"   data-parsley-trigger="keyup" data-parsley-minlength="14"   data-parsley-minlength-message="phone number should be 10 digit"   >
 <!--                    <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="13" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup"  >-->
 <!--                    <input name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required"  data-parsley-trigger="keyup"  data-parsley-pattern="^\(?([0-9]{3})\)([0-9]{3})[-]([0-9]{4})$" data-parsley-pattern-message="pattern should be (123)456-7890" >-->
                 </div>
@@ -282,8 +282,9 @@
             <div class="clearfix"></div>
     </div>
 </form>
+		</div>
         <div class="clearfix"></div>
-        <div class="addBtn DynamicAddder pull-right pd-t-10 "><span class="icon icon-plus"></span>Add total of 1 locations</div>
+        <div class="addBtn DynamicAddder pull-right pd-t-10 "><span class="icon icon-plus"></span>You can add upto 2 more locations</div>
 
 </div>
 
