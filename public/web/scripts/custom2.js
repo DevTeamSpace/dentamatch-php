@@ -187,7 +187,12 @@ $(function () {
 		});
 	
 	
-	
+	//form button disabled//
+	$('.txtBtnDisable').on('focus',function(){
+		
+       $(this).closest("form").find("button").attr("disabled",false);
+		
+	})
 	
 
 $(document).on('keyup','.phone-number', function (e) {
