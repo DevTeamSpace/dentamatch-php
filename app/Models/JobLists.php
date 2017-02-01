@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
 
 class JobLists extends Model
 {
-    
+    use SoftDeletes;
     const INVITED = 1;
     const APPLIED = 2;
     const SHORTLISTED = 3;
@@ -20,6 +21,10 @@ class JobLists extends Model
     protected $primaryKey = 'id';
     
     const LIMIT = 10;
+    
+    public function tempJobDates() {
+        return $this->hasMany(TempJobDates::class,'recruiter_job_id', 'recruiter_job_id')->select('job_date','recruiter_job_id');
+    }
     
     public static function listJobsByStatus($reqData){
         $latitude = $reqData['lat'];
@@ -82,8 +87,10 @@ class JobLists extends Model
         return $return;
     }
     
-    public static function postJobCalendar($userId, $jobDate)
+    public static function postJobCalendar($userId, $jobStartDate, $jobEndDate)
     {
+        $startDate = $jobStartDate;
+        $endDate = $jobEndDate;
         $result = [];
         $jobTypeCount = [];
         $searchQueryObj = JobLists::join('recruiter_jobs','job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
@@ -93,11 +100,11 @@ class JobLists extends Model
                         ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
                         ->where('job_lists.seeker_id','=' ,$userId)
                         ->where('job_lists.applied_status', '=' , JobLists::HIRED)
-                        ->whereDate('job_lists.created_at', $jobDate);  
-        
+                        ->where(DB::raw("DATE_FORMAT(job_lists.created_at, '%Y-%m-%d')"), ">=",$startDate)
+                        ->where(DB::raw("DATE_FORMAT(job_lists.created_at, '%Y-%m-%d')"), "<=",$endDate);        
         
         $total = $searchQueryObj->count();
-        $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
+        $searchQueryObj->select('job_lists.recruiter_job_id','recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
                         'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
                         'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
                         'recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
@@ -105,19 +112,18 @@ class JobLists extends Model
                         'recruiter_offices.address','recruiter_offices.zipcode',
                         'recruiter_offices.latitude','recruiter_offices.longitude',
                         'recruiter_jobs.created_at as job_created_at', 'job_lists.created_at as job_applied_on',
-                        DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
+                        DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
+                        DB::raw("DATE_FORMAT(job_lists.created_at, '%Y-%m-%d') AS jobDate"));
 
-        $searchResult = $searchQueryObj->get();
+        $searchResult = $searchQueryObj->with('tempJobDates')->get();
         
         if($searchResult){
             foreach($searchResult as $value) {
                 $value->job_type_string = static::$jobTypeName[$value->job_type];
                 $jobTypeCount[] = $value->job_type;
             }
-            $jobTypeCount = array_unique($jobTypeCount);
             $list = $searchResult->toArray();
             $result['list'] = $list;
-            $result['jobTypeCount'] = count($jobTypeCount);
             $result['total'] = $total;
         }
         return $result;
