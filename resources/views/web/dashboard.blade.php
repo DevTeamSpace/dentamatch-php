@@ -16,7 +16,7 @@
         </div>
         @endif
 
-        <form data-parsley-validate method="post" id="createProfileForm" action="javascript:void(0);">
+        <form data-parsley-validate method="post" id="createProfileForm" class="globalForm" action="javascript:void(0);">
             {{ csrf_field() }}
             <div id="createForm-errors"></div>
             <div class="commonBox cboxbottom">
@@ -26,11 +26,11 @@
                 </div>
                 <div class="form-group">
                     <label  >Dental Office Description</label>
-                    <textarea class="form-control  txtHeight"  name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeDescription') }}</textarea>
+                    <textarea class="form-control  txtHeight"  name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeDescription') }}</textarea>
                 </div>
             </div>	
             <div  class="pull-right text-right pd-b-20">
-                <button onclick="createProfile()" id="createProfileButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
+                <button id="createProfileButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
             </div>
             <div class="clearfix"></div>
         </form>
@@ -277,7 +277,7 @@
                 </div>	
             </div>
             <div id="removeButton" class="pull-right text-right pd-b-15">
-                <button onclick="officeDetail()" id="officeDetailButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40 formBtnAction">Save</button>
+                <button  id="officeDetailButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40 formBtnAction">Save</button>
             </div>
             <div class="clearfix"></div>
     </div>
