@@ -73,8 +73,7 @@
             <div class="template-job-information-right j-i-m-r">
                 <div class="job-information-detail">
                     <div class="search-seeker">
-                        <button type="submit" class="btn btn-primary pd-l-30 pd-r-30 btn-block">Search Seekers</button>
-
+                        <a href="{{ url('search/job',[$job['job_type'],$job['job_title_id']]) }}" class="btn btn-primary pd-l-30 pd-r-30 btn-block">Search Seekers</a>
                     </div>
 
                 </div> 
