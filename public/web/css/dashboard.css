@@ -125,6 +125,8 @@ label{color:#686868;}
 .filledPosition{    position: absolute;
     bottom: -16px;}
 .parsley-errors-list.filled{ font-size: 10px;}
+.customsel .input-group-addon{visibility:hidden; display: block;}
+.customsel input{     border-top-right-radius:3px !important; border-bottom-right-radius:3px !important; width:400px;}
 
 
 /*------------sagar Kapoor------------*/

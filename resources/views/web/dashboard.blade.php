@@ -50,7 +50,7 @@
                     </div>
                     <label >Dental Office Type</label>
                     <div class="slt">
-                        <select name="officeType[]" value="" class="ddlCars" multiple="multiple" data-parsley-required data-parsley-required-message="required">
+                        <select style="display:none;" name="officeType[]" value="" class="ddlCars" multiple="multiple" data-parsley-required data-parsley-required-message="required">
                             @foreach($officeType as $office)
                             <option value="{{$office->id}}" >{{$office->officetype_name}}</option>
                             @endforeach
@@ -367,6 +367,13 @@
 @endif
 <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
 @section('js')
+<script type="text/javascript">
+		
+    $('.ddlCars').multiselect({
+        numberDisplayed: 3,
+
+	});
+</script>
 
 <script>
     $("#fade-quote-carousel").carousel({
@@ -391,12 +398,7 @@
 
     $("#fade-quote-carousel").on("slid.bs.carousel", "", checkitem);
 </script>
-<script>
-    $('.ddlCars').multiselect({
-        numberDisplayed: 3,
-    });
 
-</script>
 <script>
 
     $(function () {
@@ -407,6 +409,8 @@
 
         $startTime1.datetimepicker({
             format: 'hh:mm A',
+			'allowInputToggle' : true,
+			
 //		defaultDate: new Date(),
             //ignoreReadonly: true,
             minDate: moment().startOf('day'),
@@ -415,6 +419,7 @@
 
         $endTime1.datetimepicker({
             format: 'hh:mm A',
+			'allowInputToggle' : true,
 //		defaultDate: $startTime1.data("DateTimePicker").date().add(1, 'minutes'),
 //		useCurrent: false,
             //ignoreReadonly: true,
