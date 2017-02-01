@@ -60,17 +60,42 @@ $(function () {
             WeekOption();
             initializeMap();
 //-----datePicker---//
-            $('.datetimepicker1').datetimepicker({format: 'LT'});
-            $('.datetimepicker2').datetimepicker({
-                useCurrent: false, //Important! See issue #1075
-                format: 'LT'
-            });
-            $(".datetimepicker1").on("dp.change", function (e) {
-                $(this).closest('.row').find('.datetimepicker2').data("DateTimePicker").minDate(e.date);
-            });
-            $(".datetimepicker2").on("dp.change", function (e) {
-                $(this).closest('.row').find('.datetimepicker1').data("DateTimePicker").maxDate(e.date);
-            });
+			 var $startTime1 = $('.datetimepicker1');
+        var $endTime1 = $('.datetimepicker2');
+
+        $startTime1.datetimepicker({
+            format: 'hh:mm A',
+			'allowInputToggle' : true,
+//		defaultDate: new Date(),
+            //ignoreReadonly: true,
+            minDate: moment().startOf('day'),
+            maxDate: moment().endOf('day')
+        });
+
+        $endTime1.datetimepicker({
+            format: 'hh:mm A',
+			'allowInputToggle' : true,
+//		defaultDate: $startTime1.data("DateTimePicker").date().add(1, 'minutes'),
+//		useCurrent: false,
+            //ignoreReadonly: true,
+            minDate: moment().startOf('day'),
+            maxDate: moment().endOf('day')
+        });
+			
+			
+             $('.datetimepicker1').on("dp.change", function () {
+
+        var date = $(this).data('date');
+
+        $(this).parents(".row").find('.datetimepicker2').data('DateTimePicker').minDate(date);
+        console.log(date);
+    });
+    $('.datetimepicker2').on("dp.change", function () {
+        var date = $(this).data('date');
+        $(this).parents(".row").find('.datetimepicker1').data('DateTimePicker').maxDate(date);
+        console.log(date);
+    });
+
 
             //-----datePicker---//
         } else {
@@ -197,6 +222,17 @@ $(function () {
        $(this).closest("form").find("button").attr("disabled",false);
 		
 	})
+	
+
+	//==== all input stop action by clicking===//
+	$(document).on("keypress", 'form', function (e) {
+    var code = e.keyCode || e.which;
+    if (code == 13) {
+        e.preventDefault();
+        return false;
+    }
+});
+	//=== all input stop action by clicking===//
 	
 
 $(document).on('keyup','.phone-number', function (e) {
