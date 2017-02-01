@@ -124,6 +124,7 @@ label{color:#686868;}
 .messageBoxTextArea{height:280px !important;}
 .filledPosition{    position: absolute;
     bottom: -16px;}
+.parsley-errors-list.filled{ font-size: 10px;}
 
 
 /*------------sagar Kapoor------------*/
