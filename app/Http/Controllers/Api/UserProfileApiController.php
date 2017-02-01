@@ -208,6 +208,8 @@ class UserProfileApiController extends Controller {
                 $otherSchooling = JobSeekerSchooling::getJobseekerOtherSchooling($userId);
                 $schooling = array_merge($schooling, $otherSchooling);
                 $skills = JobSeekerSkills::getJobSeekerSkills($userId);
+                $otherSkills = JobSeekerSkills::getJobseekerOtherSkills($userId);
+                $skills = array_merge($skills, $otherSkills);
                 if(!empty($skills)) {
                     foreach($skills as $keySkill=>$skillValue) {
                         $skillData[$skillValue['parentId']]['id'] = $skillValue['parentId'];

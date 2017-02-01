@@ -33,4 +33,25 @@ class JobSeekerSkills extends Model
         return $list;
     }
     
+    public static function getJobseekerOtherSkills($userId)
+    {
+        $schoolId = [];
+        $killsModel = Skills::select('id')->where('parent_id',0)->get()->toArray();
+        foreach($killsModel as $value) {
+            $skillsId[] = $value['id'];
+        }
+        
+        $query = static::select('skills.id as parentId', 'skills.id as childId', 
+                    'skills.skill_name as skillsName', 'jobseeker_skills.other_skill as skillsChildName',
+                    'jobseeker_skills.other_skill as otherSkills')
+                ->join('skills', 'skills.id','=', 'jobseeker_skills.skill_id')
+                ->where('skills.is_active', static::ACTIVE)
+                ->where('jobseeker_skills.user_id', $userId)
+                ->whereIn('skill_id',$skillsId);
+        
+        $list = $query->get()->toArray();
+
+        return $list;
+    }
+    
 }
