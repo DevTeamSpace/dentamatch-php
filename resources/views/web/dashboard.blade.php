@@ -21,7 +21,7 @@
         </div>
         @endif
 
-        <form data-parsley-validate method="post" id="createProfileForm" action="javascript:void(0);">
+        <form data-parsley-validate method="post" id="createProfileForm" class="globalForm" action="javascript:void(0);">
             {{ csrf_field() }}
             <div id="createForm-errors"></div>
             <div class="commonBox cboxbottom">
@@ -35,7 +35,7 @@
                 </div>
             </div>	
             <div  class="pull-right text-right pd-b-20">
-                <button onclick="createProfile()" id="createProfileButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
+                <button id="createProfileButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
             </div>
             <div class="clearfix"></div>
         </form>
@@ -282,7 +282,7 @@
                 </div>	
             </div>
             <div id="removeButton" class="pull-right text-right pd-b-15">
-                <button onclick="officeDetail()" id="officeDetailButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40 formBtnAction">Save</button>
+                <button  id="officeDetailButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40 formBtnAction">Save</button>
             </div>
             <div class="clearfix"></div>
     </div>

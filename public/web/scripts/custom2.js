@@ -36,7 +36,7 @@ $(function () {
         var masterCLone, dynamicDiv, currentEvent;
         if ($(this).hasClass('DynamicAddder')) {
             currentEvent = $(this);
-            dynamicDiv = $(document.body).find(".profieBox").append('<div class="mainMasterBox"><form method="post" id="officeDetailForm'+dynamicLength+'" action="javascript:void(0);" data-parsley-validate><div class="commonBox cboxbottom masterBox"></div><div class="pull-right text-right " id="removeButton'+dynamicLength+'"><button onclick="officeDetail'+dynamicLength+'()" id="officeDetailButton'+dynamicLength+'" type="submit" class="btn btn-primary pd-l-40 pd-r-40 formBtnAction">Save</button></div><div class="clearfix"></div></form></div> ');
+            dynamicDiv = $(document.body).find(".profieBox").append('<div class="mainMasterBox"><form method="post" id="officeDetailForm'+dynamicLength+'" action="javascript:void(0);" data-parsley-validate><div class="commonBox cboxbottom masterBox"></div><div class="pull-right text-right " id="removeButton'+dynamicLength+'"><button  id="officeDetailButton'+dynamicLength+'" type="submit" class="btn btn-primary pd-l-40 pd-r-40 formBtnAction">Save</button></div><div class="clearfix"></div></form></div> ');
 //masterCLone = $(".masterBox:first").children().clone()
             var officeTypes = $.parseJSON($('#officeTypesJson').val());
             var options = "";
@@ -132,6 +132,63 @@ $(function () {
 		}
 	});
 //=====form action stop====//	
+	
+	
+	
+	$('#createProfileForm').on('submit', function() {
+	 var currentBtn=$(this);
+		  if (currentBtn.parsley().isValid()) {
+			  
+	 createProfile();
+			  
+		  }
+
+});
+	
+		$('#officeDetailForm').on('submit', function() {
+	 var currentBtn=$(this);
+		  if (currentBtn.parsley().isValid()) {
+			  
+		officeDetail();
+		}else{
+		
+			$(currentBtn).parsley().validate();
+			
+		}
+			
+		});
+	
+	
+		$(document).on('submit','#officeDetailForm1', function() {
+	 var currentBtn=$(this);
+			alert("sdffff");
+		  if (currentBtn.parsley().isValid()) {
+			  
+		officeDetail1();
+			  
+		  }else{
+			
+			$(currentBtn).parsley().validate();
+			
+		}
+		});
+	
+	
+	$(document).on('submit','#officeDetailForm2', function() {
+	 var currentBtn=$(this);
+		  if (currentBtn.parsley().isValid()) {
+			  
+		officeDetail2();
+			  
+		  }else{
+			$(currentBtn).parsley().validate();
+			
+		}
+		});
+	
+	
+	
+	
 
 $(document).on('keyup','.phone-number', function (e) {
   var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
