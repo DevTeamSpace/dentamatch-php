@@ -2,6 +2,11 @@
 
 @section('content')
 
+<style>
+    .pac-container:after{
+    content:none !important;
+}
+</style>
 
 <div class="customContainer center-block containerBottom">
     <div class="profieBox">
@@ -26,7 +31,7 @@
                 </div>
                 <div class="form-group">
                     <label  >Dental Office Description</label>
-                    <textarea class="form-control  txtHeight"  name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeDescription') }}</textarea>
+                    <textarea class="form-control  txtHeight"  name="officeDescription"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeDescription') }}</textarea>
                 </div>
             </div>	
             <div  class="pull-right text-right pd-b-20">

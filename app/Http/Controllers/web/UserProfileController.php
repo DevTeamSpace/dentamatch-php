@@ -48,9 +48,9 @@ class UserProfileController extends Controller {
         try {
             RecruiterOffice::createProfile($request);
             if (in_array($request->postal_code, \App\Models\Location::getList())) {
-                return 1;
+                return 'success';
             }
-            return 'success';
+            return 1;
         } catch (\Exception $e) {
             return 'fail';
         }
