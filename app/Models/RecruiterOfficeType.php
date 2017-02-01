@@ -10,5 +10,12 @@ class RecruiterOfficeType extends Model {
     protected $primaryKey = 'id';
     protected $fillable = ['recruiter_office_id', 'office_type_id'];
 
+    public function officeTypes() {
+        return $this->belongsTo(OfficeType::class, 'office_type_id');
+    }
+
+    public function recruiterOffice() {
+        return $this->belongsTo(RecruiterOffice::class, 'recruiter_office_id');
+    }
 
 }

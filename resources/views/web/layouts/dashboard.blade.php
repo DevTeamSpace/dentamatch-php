@@ -15,7 +15,8 @@
         <link rel="stylesheet" href="{{asset('web/css/bootstrap-custom-theme.css')}}">
 
         <link rel="stylesheet" href="{{asset('web/plugins/parsley/css/parsley.css')}}">
-        <link rel="stylesheet" href="{{asset('web/css/custom.css')}}">
+        <link rel="stylesheet" href="{{asset('web/css/dentaIcon.css')}}">
+        <!--<link rel="stylesheet" href="{{asset('web/css/custom.css')}}">-->
         <link rel="stylesheet" href="{{asset('web/css/dashboard.css')}}">
         <link rel="stylesheet" href="{{asset('web/css/bootstrap-multiselect.css')}}">
         <link rel="stylesheet" href="{{asset('web/css/checkBox.css')}}">
@@ -116,12 +117,13 @@
         
         <script src="{{asset('web/scripts/bootstrap-multiselect.js')}}"></script>
         <script src="{{asset('web/plugins/parsley/js/parsley.js')}}"></script>
-        <script src="{{asset('web/scripts/custom2.js')}}"></script>
-        <script src ="{{asset('web/scripts/web1.js')}}"></script>
+        <script src="{{asset('web/scripts/custom.js')}}"></script>
+        <script src ="{{asset('web/scripts/web.js')}}"></script>
         <script src ="{{asset('web/scripts/moment.min.js')}}"></script>
         <script src ="{{asset('web/scripts/bootstrap-datetimepicker.js')}}"></script>
 
         <script src ="{{asset('web/scripts/main.js')}}"></script>
+        <script src ="{{asset('web/scripts/tabScript1.js')}}"></script>
         
         @yield('js')
 

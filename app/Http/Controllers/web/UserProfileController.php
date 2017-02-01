@@ -96,7 +96,11 @@ class UserProfileController extends Controller {
     }
 
     public function getEditProfile() {
-        return view('web.edit_profile');
+        $user = RecruiterProfile::where('user_id', Auth::user()->id)->first();
+        $offices = RecruiterOffice::where('user_id', Auth::user()->id)->get();
+//        print_r($offices->officeTypes);exit;
+//        dd($offices->officeTypes);
+        return view('web.edit_profile', ['user' => $user, 'offices'=> $offices]);
     }
 
 }
