@@ -271,7 +271,7 @@ class UserProfileApiController extends Controller {
             $this->validate($request, [
                 'firstName' => 'required',
                 'lastName' => 'required',
-                'zipcode' => 'required|integer',
+                'zipcode' => 'required',
                 'latitude' => 'required',
                 'longitude' => 'required',
                 'preferredJobLocation'=>'required',
