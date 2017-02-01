@@ -60,14 +60,16 @@ class CalendarApiController extends Controller {
     {
         try{
             $this->validate($request, [
-                'jobDate' => 'required'
+                'jobStartDate' => 'required',
+                'jobEndDate' => 'required'
             ]);
             
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $reqData = $request->all();
-                $jobDate = $reqData['jobDate'];
-                $listHiredJobs = JobLists::postJobCalendar($userId, $jobDate);
+                $jobStartDate = $reqData['jobStartDate'];
+                $jobEndDate = $reqData['jobEndDate'];
+                $listHiredJobs = JobLists::postJobCalendar($userId, $jobStartDate, $jobEndDate);
                 if(count($listHiredJobs['list']) > 0){
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"),  apiResponse::convertToCamelCase($listHiredJobs));
                 }else{

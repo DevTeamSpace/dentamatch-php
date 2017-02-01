@@ -973,7 +973,11 @@ paths:
           in: header
           description: access token
           type: string
-        - name: jobDate
+        - name: jobStartDate
+          in: formData
+          description: jobDate in YYYY-MM-DD format
+          type: string
+        - name: jobEndDate
           in: formData
           description: jobDate in YYYY-MM-DD format
           type: string
