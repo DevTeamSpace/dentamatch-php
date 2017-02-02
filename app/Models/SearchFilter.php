@@ -32,5 +32,16 @@ class SearchFilter extends Model
         $searchFilterModel->save();
     }
     
+    public static function getFiltersOnLogin($userId)
+    {
+        $return = [];
+        $searchFilterModel = static::where('user_id', $userId)->first();
+        if($searchFilterModel)
+        {
+             $return = json_decode($searchFilterModel->search_filter);
+        }
+        return $return;
+    }
+    
 
 }
