@@ -97,9 +97,11 @@ class UserProfileController extends Controller {
 
     public function getEditProfile() {
         $user = RecruiterProfile::where('user_id', Auth::user()->id)->first();
-        $offices = RecruiterOffice::where('user_id', Auth::user()->id)->get();
-//        print_r($offices->officeTypes);exit;
-//        dd($offices->officeTypes);
+        $offices = RecruiterOffice::join('recruiter_office_types','recruiter_office_types.recruiter_office_id','=','recruiter_offices.id')
+            ->join('office_types','recruiter_office_types.office_type_id','=','office_types.id')
+            ->where('user_id', Auth::user()->id)
+            ->select('recruiter_offices.*',DB::raw('group_concat(office_types.officetype_name) as officetype_names'))
+            ->groupby('recruiter_offices.id')->get();
         return view('web.edit_profile', ['user' => $user, 'offices'=> $offices]);
     }
 
