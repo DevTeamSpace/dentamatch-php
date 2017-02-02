@@ -59,4 +59,5 @@ return [
     'job_detail_success' => 'Job detail retrieved successfully',
     'job_already_saved' => 'You have already saved this job before',
     'location_update_success' => 'Location details updated successfully',
+    'calendar_availability_list' => 'Calendar Availability List Retrieved'
 ];
