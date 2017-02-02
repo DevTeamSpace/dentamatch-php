@@ -68,7 +68,7 @@ class RecruiterJobs extends Model
                         ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
                         ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
                         ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
-                        ->whereIsNull('job_lists.id')
+                        ->whereNull('job_lists.id')
                         ->whereIn('job_titles.id', $reqData['jobTitle']);
                 if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 0){
                     $searchQueryObj->where('recruiter_jobs.job_type',1);
