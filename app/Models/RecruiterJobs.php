@@ -16,7 +16,7 @@ class RecruiterJobs extends Model
     const FULLTIME = 1;
     const PARTTIME = 2;
     const TEMPORARY = 3;
-    const LIMIT = 2;
+    const LIMIT = 10;
     
     static $jobTypeName = ['1'=>'Full Time', '2'=>'Part Time', '3'=>'Temp'];
     
