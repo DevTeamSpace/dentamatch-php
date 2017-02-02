@@ -36,10 +36,13 @@ class CalendarApiController extends Controller {
                 }
                 $userProfileModel->save();
                 if(is_array($reqData['tempdDates']) && count($reqData['tempdDates']) > 0){
-                    JobSeekerTempAvailability::where('user_id', '=', $userId)->forceDelete();
+                    //JobSeekerTempAvailability::where('user_id', '=', $userId)->forceDelete();
                     $tempDateArray = array();
                     foreach($reqData['tempdDates'] as $tempDate){
-                        $tempDateArray[] = array('user_id' => $userId , 'temp_job_date' => $tempDate);
+                        $availability = JobSeekerTempAvailability::where('user_id', '=', $userId)->where('temp_job_date','=',$tempDate)->get();
+                        if(!$availability){        
+                            $tempDateArray[] = array('user_id' => $userId , 'temp_job_date' => $tempDate);
+                        }
                     }
                     JobSeekerTempAvailability::insert($tempDateArray);
                 }
