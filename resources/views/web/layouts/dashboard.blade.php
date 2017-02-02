@@ -123,7 +123,7 @@
         <script src ="{{asset('web/scripts/bootstrap-datetimepicker.js')}}"></script>
 
         <script src ="{{asset('web/scripts/main.js')}}"></script>
-        <script src ="{{asset('web/scripts/tabScript.js')}}"></script>
+        <script src ="{{asset('web/scripts/tabScript1.js')}}"></script>
         
         @yield('js')
 
