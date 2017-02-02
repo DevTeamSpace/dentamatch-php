@@ -118,7 +118,7 @@ class RecruiterJobs extends Model
                 if($page>1){
                     $skip = ($page-1)* $limit;
                 }
-                $searchResult = $searchQueryObj->skip($skip)->take($limit)->get();
+                $searchResult = $searchQueryObj->skip($skip)->take($limit)->orderBy('distance', 'asc')->get();
                 $result = array();
                 $updatedResult = array();
                 if($searchResult){
