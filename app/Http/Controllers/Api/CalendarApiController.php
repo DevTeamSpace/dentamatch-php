@@ -110,7 +110,7 @@ class CalendarApiController extends Controller {
         try{
             $this->validate($request, [
                 'calendarMonth' => 'required',
-                'calendarYear' => 'required|integer'
+                'calendarYear' => 'required'
             ]);
             
             $userId = apiResponse::loginUserId($request->header('accessToken'));
