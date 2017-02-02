@@ -85,11 +85,12 @@ $(function () {
             if ($('#hiddensunday' + editId).val() == 1) {
                 checkedSun = 'checked';
             }
-console.log($('hiddenofficeTypeId'+editId).val());
             var officeTypes = $.parseJSON($('#hiddenofficeTypesJson').val());
             var options = "";
+            var selOffices = $('#hiddenofficeTypeId'+editId).val().split(',');
+           
             $.each(officeTypes, function (index, value) {
-                options += "<option value='" + value.id + "'>" + value.officetype_name + "</option>";
+                options += "<option  value='" + value.id + "'>" + value.officetype_name + "</option>";
             });
 
             var hiddenFields = '<input value="' + $('#hiddenzipcode' + editId).val() + '" type="text" id="postal_code' + editId + '" name="postal_code" ><input value="' + $('#hiddenlat' + editId).val() + '" type="text" name="lat" id="lat' + editId + '"><input value="' + $('#hiddenlng' + editId).val() + '" type="text" name="lng" id="lng' + editId + '"><input value="' + $('#hiddenofficeaddress' + editId).val() + '" type="text" name="full_address" id="full_address' + editId + '">';
@@ -100,8 +101,10 @@ console.log($('hiddenofficeTypeId'+editId).val());
             $('.ddlCars').multiselect({
                 numberDisplayed: 3,
             });
+            $('input[type="checkbox"]:checked').closest('.dayBox').find('.form-control').attr('disabled',false);
             WeekOption()
             $(".dropCheck").find("input").after("<div></div>");
+            
         }
         DynamicTickName()
     }

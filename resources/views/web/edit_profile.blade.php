@@ -42,7 +42,7 @@
                             </div>
                             <div class="descriptionBoxInner">
                                 <div class="viewProfileRightCard pd-b-25">
-                                    <input type="text" value="<?php print_r(explode(',', $office->officetype_id)); ?>" id="hiddenofficeTypeId{{$office->id}}">
+                                    <input type="text" value="{{ $office->officetype_id }}" id="hiddenofficeTypeId{{$office->id}}">
                                     <input type="hidden" value="{{ json_encode($officeType,true) }}" id="hiddenofficeTypesJson">
                                     <input type="hidden" value="{{$office->id}}" id="hiddenEditId">
                                     <div class="detailTitleBlock">
@@ -61,58 +61,82 @@
                                 </div>
                                 <div class="viewProfileRightCard pd-b-25">
                                     <h6>Phone Number</h6>	
-                                    <input type="hidden" value="{{ $office->phone_no }}" id="hiddenphone{{$office->id}}">
-                                    <p>{{$office->phone_no}}</p>	
+                                    <input type="hidden" value="{{ preg_replace('/^(\d{3})(\d{3})(\d{4})$/i', '($1) $2-$3', $office->phone_no) }}" id="hiddenphone{{$office->id}}">
+                                    <p>{{ preg_replace('/^(\d{3})(\d{3})(\d{4})$/i', '($1) $2-$3', $office->phone_no) }}</p>	
                                 </div>	
                                 <div class="viewProfileRightCard pd-b-25">
                                     <h6>Working Hours</h6>
-                                    @if($office->work_everyday_start!='00:00:00')
+                                    @if($office->work_everyday_start!=null)
                                     <input type="hidden" value="1" id="hiddeneveryday{{$office->id}}">
                                     <input type="hidden" value="{{date('h:i A', strtotime($office->work_everyday_start))}}" id="hiddeneverystart{{$office->id}}">
                                     <input type="hidden" value="{{date('h:i A', strtotime($office->work_everyday_end))}}" id="hiddeneveryend{{$office->id}}">
                                     <p>Eveyday : {{date('h:i A', strtotime($office->work_everyday_start))}} to {{date('h:i A', strtotime($office->work_everyday_end))}}</p>	
+                                    @else
+                                    <input type="hidden" value="" id="hiddeneverystart{{$office->id}}">
+                                    <input type="hidden" value="" id="hiddeneveryend{{$office->id}}">
                                     @endif
-                                    @if($office->monday_start!='00:00:00')
+                                    @if($office->monday_start!=NULL)
                                     <input type="hidden" value="1" id="hiddenmonday{{$office->id}}">
                                     <input type="hidden" value="{{date('h:i A', strtotime($office->monday_start))}}" id="hiddenmonstart{{$office->id}}">
                                     <input type="hidden" value="{{date('h:i A', strtotime($office->monday_end))}}" id="hiddenmonend{{$office->id}}">
                                     <p>Monday : {{date('h:i A', strtotime($office->monday_start))}} to {{date('h:i A', strtotime($office->monday_end))}}</p>	
+                                    @else
+                                    <input type="hidden" value="" id="hiddenmonstart{{$office->id}}">
+                                    <input type="hidden" value="" id="hiddenmonend{{$office->id}}">
                                     @endif
-                                    @if($office->tuesday_start!='00:00:00')
+                                    @if($office->tuesday_start!=NULL)
                                     <input type="hidden" value="1" id="hiddentuesday{{$office->id}}">
                                     <input type="hidden" value="{{date('h:i A', strtotime($office->tuesday_start))}}" id="hiddentuestart{{$office->id}}">
                                     <input type="hidden" value="{{date('h:i A', strtotime($office->tuesday_end))}}" id="hiddentueend{{$office->id}}">
                                     <p>Tuesday : {{date('h:i A', strtotime($office->tuesday_start))}} to {{date('h:i A', strtotime($office->tuesday_end))}}</p>	
+                                    @else
+                                    <input type="hidden" value="" id="hiddentuestart{{$office->id}}">
+                                    <input type="hidden" value="" id="hiddentueend{{$office->id}}">
                                     @endif
-                                    @if($office->wednesday_start!='00:00:00')
+                                    @if($office->wednesday_start!=NULL)
                                     <input type="hidden" value="1" id="hiddenwednesday{{$office->id}}">
                                     <input type="hidden" value="{{date('h:i A', strtotime($office->wednesday_start))}}" id="hiddenwedstart{{$office->id}}">
                                     <input type="hidden" value="{{date('h:i A', strtotime($office->wednesday_end))}}" id="hiddenwedend{{$office->id}}">
                                     <p>Wednesday : {{date('h:i A', strtotime($office->wednesday_start))}} to {{date('h:i A', strtotime($office->wednesday_end))}}</p>	
+                                    @else
+                                    <input type="hidden" value="" id="hiddenwedstart{{$office->id}}">
+                                    <input type="hidden" value="" id="hiddenwedend{{$office->id}}">
                                     @endif
-                                    @if($office->thursday_start!='00:00:00')
+                                    @if($office->thursday_start!=NULL)
                                     <input type="hidden" value="1" id="hiddenthursday{{$office->id}}">
                                     <input type="hidden" value="{{date('h:i A', strtotime($office->thursday_start))}}" id="hiddenthustart{{$office->id}}">
                                     <input type="hidden" value="{{date('h:i A', strtotime($office->thursday_end))}}" id="hiddenthuend{{$office->id}}">
                                     <p>Thursday : {{date('h:i A', strtotime($office->thursday_start))}} to {{date('h:i A', strtotime($office->thursday_end))}}</p>	
+                                    @else
+                                    <input type="hidden" value="" id="hiddenthustart{{$office->id}}">
+                                    <input type="hidden" value="" id="hiddenthuend{{$office->id}}">
                                     @endif
-                                    @if($office->friday_start!='00:00:00')
+                                    @if($office->friday_start!=NULL)
                                     <input type="hidden" value="1" id="hiddenfriday{{$office->id}}">
                                     <input type="hidden" value="{{date('h:i A', strtotime($office->friday_start))}}" id="hiddenfristart{{$office->id}}">
                                     <input type="hidden" value="{{date('h:i A', strtotime($office->friday_end))}}" id="hiddenfriend{{$office->id}}">
                                     <p>Friday : {{date('h:i A', strtotime($office->friday_start))}} to {{date('h:i A', strtotime($office->friday_end))}}</p>	
+                                    @else
+                                    <input type="hidden" value="" id="hiddenfristart{{$office->id}}">
+                                    <input type="hidden" value="" id="hiddenfriend{{$office->id}}">
                                     @endif
-                                    @if($office->saturday_start!='00:00:00')
+                                    @if($office->saturday_start!=NULL)
                                     <input type="hidden" value="1" id="hiddensaturday{{$office->id}}">
                                     <input type="hidden" value="{{date('h:i A', strtotime($office->saturday_start))}}" id="hiddensatstart{{$office->id}}">
                                     <input type="hidden" value="{{date('h:i A', strtotime($office->saturday_end))}}" id="hiddensatend{{$office->id}}">
                                     <p>Saturday : {{date('h:i A', strtotime($office->saturday_start))}} to {{date('h:i A', strtotime($office->saturday_end))}}</p>	
+                                    @else
+                                    <input type="hidden" value="" id="hiddensatstart{{$office->id}}">
+                                    <input type="hidden" value="" id="hiddensatend{{$office->id}}">
                                     @endif
-                                    @if($office->sunday_start!='00:00:00')
+                                    @if($office->sunday_start!=NULL)
                                     <input type="hidden" value="1" id="hiddensunday{{$office->id}}">
                                     <input type="hidden" value="{{date('h:i A', strtotime($office->sunday_start))}}" id="hiddensunstart{{$office->id}}">
                                     <input type="hidden" value="{{date('h:i A', strtotime($office->sunday_end))}}" id="hiddensunend{{$office->id}}">
                                     <p>Sunday : {{date('h:i A', strtotime($office->sunday_start))}} to {{date('h:i A', strtotime($office->sunday_end))}}</p>	
+                                    @else
+                                    <input type="hidden" value="" id="hiddensunstart{{$office->id}}">
+                                    <input type="hidden" value="" id="hiddensunend{{$office->id}}">
                                     @endif
                                 </div>					
                                 <div class="viewProfileRightCard pd-b-25">
