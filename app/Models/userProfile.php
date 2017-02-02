@@ -48,6 +48,27 @@ class UserProfile extends Model {
         return $return;
     }
     
-    
+    public static function getAvailability($userId, $calendarStartDate, $calendarEndDate)
+    {
+        $list = ['calendarAvailability'=>[], 'tempDatesAvailability'=>[]];
+        $jobSeekerModel = static::select('is_fulltime', 'is_parttime_monday', 'is_parttime_tuesday', 'is_parttime_wednesday',
+                                    'is_parttime_thursday', 'is_parttime_friday', 'is_parttime_saturday', 'is_parttime_sunday')
+                                ->where('user_id', $userId)->first();
+        
+        if($jobSeekerModel) {
+            $list['calendarAvailability'] = $jobSeekerModel->toArray();
+            $tempAvailability = JobSeekerTempAvailability::select('temp_job_date')
+                                    ->where('user_id', $userId)
+                                    ->whereBetween('temp_job_date', [$calendarStartDate, $calendarEndDate])
+                                    ->get();
+            if($tempAvailability) {
+                foreach($tempAvailability as $value) {
+                    $list['tempDatesAvailability'][] = $value['temp_job_date'];
+                }
+            }
+            
+        }
+        return $list;
+    }
 
 }

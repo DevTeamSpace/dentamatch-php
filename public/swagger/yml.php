@@ -985,4 +985,33 @@ paths:
       tags:
         - Job search
 
+  /users/availability-list:
+    post:
+      summary: Get Hired Jobs
+      description: Api to get availability of user
+      responses: 
+          200:
+            description: Api to get availability of user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: calendarStartDate
+          in: formData
+          description: jobDate in YYYY-MM-DD format
+          type: string
+        - name: calendarEndDate
+          in: formData
+          description: jobDate in YYYY-MM-DD format
+          type: string
+         
+      tags:
+        - Availability
+
 
