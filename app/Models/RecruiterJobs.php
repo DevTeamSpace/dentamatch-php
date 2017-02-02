@@ -80,21 +80,27 @@ class RecruiterJobs extends Model
                     $searchQueryObj->where('recruiter_jobs.job_type',1);
                 }
                 if($reqData['isFulltime'] == 0 && $reqData['isParttime'] == 1){
-                    $searchQueryObj->where('recruiter_jobs.job_type',2);
+                    //$searchQueryObj->where('recruiter_jobs.job_type',2);
                     if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
+                        //$daysArray = ['is_monday'=>0, 'is_tuesday'=>0, 'is_wednesday'=>0, 'is_thursday'=>0, 'is_friday'=>0, 'is_saturday'=>0, 'is_sunday'=>0];
                         foreach($reqData['parttimeDays'] as $key => $day){
+                            foreach($reqData['parttimeDays'] as $key => $day){
+                            //$searchQueryObj->orWhere('is_'.$day, 1);
                             if($key == 0){
                                 $searchQueryObj->Where('is_'.$day, 1);
                             }else{
                                 $searchQueryObj->orWhere('is_'.$day, 1);
                             }
                         }
+                        }
+                         $searchQueryObj->where($daysArray);
                     }
                 }
                 if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 1){
-                    $searchQueryObj->whereIn('recruiter_jobs.job_type',[1,2]);
+                    $searchQueryObj->where('recruiter_jobs.job_type',1);
                     if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
                         foreach($reqData['parttimeDays'] as $key => $day){
+                            //$searchQueryObj->orWhere('is_'.$day, 1);
                             if($key == 0){
                                 $searchQueryObj->Where('is_'.$day, 1);
                             }else{
