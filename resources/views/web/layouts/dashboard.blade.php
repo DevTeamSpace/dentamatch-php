@@ -97,13 +97,7 @@
                         <li class="{{ ($navActive=='template')?'active':''}}">
                             <a href="{{ url('jobtemplates') }}">Template</a>
                         </li>
-
                     </ul>
-
-
-
-
-
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
@@ -123,7 +117,7 @@
         <script src ="{{asset('web/scripts/bootstrap-datetimepicker.js')}}"></script>
 
         <script src ="{{asset('web/scripts/main.js')}}"></script>
-        <script src ="{{asset('web/scripts/tabScript.js')}}"></script>
+        <script src ="{{asset('web/scripts/tabScript1.js')}}"></script>
         
         @yield('js')
 

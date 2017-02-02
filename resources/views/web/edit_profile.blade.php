@@ -42,7 +42,7 @@
                             </div>
                             <div class="descriptionBoxInner">
                                 <div class="viewProfileRightCard pd-b-25">
-                                    <input type="text" value="{{ $office->officetype_id }}" id="hiddenofficeTypeId{{$office->id}}">
+                                    <input type="hidden" value="{{ $office->officetype_id }}" id="hiddenofficeTypeId{{$office->id}}">
                                     <input type="hidden" value="{{ json_encode($officeType,true) }}" id="hiddenofficeTypesJson">
                                     <input type="hidden" value="{{$office->id}}" id="hiddenEditId">
                                     <div class="detailTitleBlock">
