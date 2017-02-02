@@ -30,7 +30,7 @@ function createProfile() {
                 }
             });
 
-    $('form').parsley().destroy();
+
     $('form').parsley();
 
 }
