@@ -67,9 +67,10 @@
                     <label>Dental Office Address</label>
                     <div id="locationField">
                         <input  id="autocomplete" name="officeAddress" value="{{ old('officeAddress') }}" type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="required">
+						 <div id="location-msg"></div>
                     </div>
                 </div>
-                <div id="location-msg"></div>
+         
 
                 <div class="form-group">
                     <label>Phone Number</label>
