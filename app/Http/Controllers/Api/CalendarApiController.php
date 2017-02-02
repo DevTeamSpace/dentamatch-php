@@ -109,16 +109,16 @@ class CalendarApiController extends Controller {
     {
         try{
             $this->validate($request, [
-                'calendarStartDate' => 'required',
-                'calendarEndDate' => 'required'
+                'calendarMonth' => 'required',
+                'calendarYear' => 'required|integer'
             ]);
             
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $reqData = $request->all();
-                $calendarStartDate = $reqData['calendarStartDate'];
-                $calendarEndDate = $reqData['calendarEndDate'];
-                $listAvailability = UserProfile::getAvailability($userId, $calendarStartDate, $calendarEndDate);
+                $calendarMonth = $reqData['calendarMonth'];
+                $calendarYear = $reqData['calendarYear'];
+                $listAvailability = UserProfile::getAvailability($userId, $calendarMonth, $calendarYear);
                 if(count($listAvailability) > 0){
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.calendar_availability_list"),  apiResponse::convertToCamelCase($listAvailability));
                 }else{

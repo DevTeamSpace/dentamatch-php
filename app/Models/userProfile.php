@@ -48,7 +48,7 @@ class UserProfile extends Model {
         return $return;
     }
     
-    public static function getAvailability($userId, $calendarStartDate, $calendarEndDate)
+    public static function getAvailability($userId, $calendarMonth, $calendarYear)
     {
         $list = ['calendarAvailability'=>[], 'tempDatesAvailability'=>[]];
         $jobSeekerModel = static::select('is_fulltime', 'is_parttime_monday', 'is_parttime_tuesday', 'is_parttime_wednesday',
@@ -59,14 +59,14 @@ class UserProfile extends Model {
             $list['calendarAvailability'] = $jobSeekerModel->toArray();
             $tempAvailability = JobSeekerTempAvailability::select('temp_job_date')
                                     ->where('user_id', $userId)
-                                    ->whereBetween('temp_job_date', [$calendarStartDate, $calendarEndDate])
+                                    ->where(DB::raw("DATE_FORMAT(temp_job_date, '%m')"), "=",$calendarMonth)
+                                    ->where(DB::raw("DATE_FORMAT(temp_job_date, '%Y')"), "=",$calendarYear)
                                     ->get();
             if($tempAvailability) {
                 foreach($tempAvailability as $value) {
                     $list['tempDatesAvailability'][] = $value['temp_job_date'];
                 }
             }
-            
         }
         return $list;
     }
