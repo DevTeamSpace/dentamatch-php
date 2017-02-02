@@ -163,6 +163,17 @@ $(function () {
 	});
 //=====form action stop====//	
 	
+	//==500 character validation==//
+	$('.chacterValidtion').unbind('keyup change input paste').bind('keyup change input paste',function(e){
+    var $this = $(this);
+    var val = $this.val();
+    var valLength = val.length;
+    var maxCount = $this.attr('maxlength');
+    if(valLength>maxCount){
+        $this.val($this.val().substring(0,maxCount));
+    }
+}); 
+//==500 character validation==//
 	
 	
 	$('#createProfileForm').on('submit', function() {

@@ -31,7 +31,7 @@
                 </div>
                 <div class="form-group">
                     <label  >Dental Office Description</label>
-                    <textarea class="form-control  txtHeight txtBtnDisable"  name="officeDescription"  data-parsley-required data-parsley-required-message="required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeDescription') }}</textarea>
+                    <textarea class="form-control  txtHeight txtBtnDisable chacterValidtion"  name="officeDescription"  data-parsley-required data-parsley-required-message="required" maxlength=500 >{{ old('officeDescription') }}</textarea>
                 </div>
             </div>	
             <div  class="pull-right text-right pd-b-20">
