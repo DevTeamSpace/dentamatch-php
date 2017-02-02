@@ -59,4 +59,11 @@ return [
     'job_detail_success' => 'Job detail retrieved successfully',
     'job_already_saved' => 'You have already saved this job before',
     'location_update_success' => 'Location details updated successfully',
+    
+    'password_saved_successfully'=>'Password changed successfully',
+    'old_not_match'=>'Old Password not matched.',
+    'invalid_cred_or_not_active' => 'Please, provide valid credentials or not active yet.',
+    'already_register_as_seeker'=>'You are already registered as job seeker',
+    'email_already_regisered' => 'Email already registered',
+    'confirmation_link'=>'Confirmation Link for new user',
 ];
