@@ -51,41 +51,21 @@ class UserProfile extends Model {
     public static function getAvailability($userId, $calendarStartDate, $calendarEndDate)
     {
         $list = ['calendarAvailability'=>[], 'tempDatesAvailability'=>[]];
-        $tempJobsAvaibility =[];
-        $tempJobsHired=[];
         $jobSeekerModel = static::select('is_fulltime', 'is_parttime_monday', 'is_parttime_tuesday', 'is_parttime_wednesday',
                                     'is_parttime_thursday', 'is_parttime_friday', 'is_parttime_saturday', 'is_parttime_sunday')
                                 ->where('user_id', $userId)->first();
         
         if($jobSeekerModel) {
             $list['calendarAvailability'] = $jobSeekerModel->toArray();
-            
-            $tempHired = JobLists::select('temp_job_dates.job_date')
-                            ->join('temp_job_dates', 'temp_job_dates.recruiter_job_id', 'job_lists.recruiter_job_id')
-                            ->where('seeker_id', $userId)
-                            ->where('applied_status', 4)
-                            //->whereBetween('job_date', [$calendarStartDate, $calendarEndDate])
-                            ->get();
-            if($tempHired) {
-                foreach($tempHired as $value) {
-                    $tempJobsHired[] = $value->job_date;
-                }
-            }
-            
             $tempAvailability = JobSeekerTempAvailability::select('temp_job_date')
                                     ->where('user_id', $userId)
                                     ->whereBetween('temp_job_date', [$calendarStartDate, $calendarEndDate])
                                     ->get();
             if($tempAvailability) {
                 foreach($tempAvailability as $value) {
-                    if(!in_array($value->temp_job_date, $tempJobsHired)) {
-                        $tempJobsAvaibility[] = $value->temp_job_date;
-                    }
+                    $list['tempDatesAvailability'][] = $value['temp_job_date'];
                 }
             }
-            
-            $list['tempDatesAvailability'] = $tempJobsAvaibility; 
-            
         }
         return $list;
     }
