@@ -40,7 +40,7 @@ class CalendarApiController extends Controller {
                     $tempDateArray = array();
                     foreach($reqData['tempdDates'] as $tempDate){
                         $availability = JobSeekerTempAvailability::where('user_id', '=', $userId)->where('temp_job_date','=',$tempDate)->get();
-                        if(!$availability){        
+                        if($availability->count() == 0){        
                             $tempDateArray[] = array('user_id' => $userId , 'temp_job_date' => $tempDate);
                         }
                     }
