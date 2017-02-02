@@ -87,10 +87,8 @@ class JobLists extends Model
         return $return;
     }
     
-    public static function postJobCalendar($userId, $jobStartDate, $jobEndDate)
+    public static function postJobCalendar($userId, $jobMonth, $jobYear)
     {
-        $startDate = $jobStartDate;
-        $endDate = $jobEndDate;
         $result = [];
         $jobTypeCount = [];
         $searchQueryObj = JobLists::join('recruiter_jobs','job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
@@ -100,8 +98,8 @@ class JobLists extends Model
                         ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
                         ->where('job_lists.seeker_id','=' ,$userId)
                         ->where('job_lists.applied_status', '=' , JobLists::HIRED)
-                        ->where(DB::raw("DATE_FORMAT(job_lists.created_at, '%Y-%m-%d')"), ">=",$startDate)
-                        ->where(DB::raw("DATE_FORMAT(job_lists.created_at, '%Y-%m-%d')"), "<=",$endDate);        
+                        ->where(DB::raw("DATE_FORMAT(job_lists.created_at, '%m')"), "=",$jobMonth)
+                        ->where(DB::raw("DATE_FORMAT(job_lists.created_at, '%Y')"), "=",$jobYear);        
         
         $total = $searchQueryObj->count();
         $searchQueryObj->select('job_lists.recruiter_job_id','recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
