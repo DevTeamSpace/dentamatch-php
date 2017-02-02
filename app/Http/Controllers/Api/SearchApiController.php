@@ -9,6 +9,7 @@ use App\Models\Location;
 use App\Models\SavedJobs;
 use App\Models\JobLists;
 use App\Models\UserProfile;
+use App\Models\SearchFilter;
 
 class SearchApiController extends Controller {
     
@@ -38,6 +39,9 @@ class SearchApiController extends Controller {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $reqData = $request->all();
+                
+                SearchFilter::createFilter($userId, $reqData);
+                
                 $location = Location::where('zipcode',$reqData['zipCode'])->get();
                 if($location){
                     $reqData['userId'] = $userId;
