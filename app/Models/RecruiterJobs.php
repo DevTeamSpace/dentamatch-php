@@ -133,6 +133,8 @@ class RecruiterJobs extends Model
     
     public static function getJobDetail($jobId, $userId)
     {
+        $tempJob = [];
+        $searchResult = [];
         $userProfile = UserProfile::where('user_id', $userId)->first();
         $longitude = $userProfile->longitude;
         $latitude = $userProfile->latitude;
@@ -168,16 +170,18 @@ class RecruiterJobs extends Model
                         );
                         
         $data = $searchQueryObj->first();
-        $tempDates =  $data->tempJobActiveDates;
-        $tempJob = [];
-        if($tempDates) {
-            foreach($tempDates as $value) {
-                $tempJob[]= $value->job_date;
+        if(!empty($data)) {
+            $tempDates = $data->tempJobActiveDates;
+            if(!empty($tempDates)) {
+                $searchResult['job_type_dates'] = [];
+                foreach($tempDates as $value) {
+                    $tempJob[]= $value->job_date;
+                }
             }
             
+            $searchResult = $searchQueryObj->first()->toArray();
         }
-        $searchResult = $searchQueryObj->first()->toArray();
-        $searchResult['job_type_dates'] = [];
+        
         if($searchResult)
         {
             $searchResult['job_type_string'] = static::$jobTypeName[$searchResult['job_type']];

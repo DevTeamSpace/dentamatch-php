@@ -22,27 +22,28 @@ class UserProfile extends Model {
         $s3Url = env('AWS_URL');
         $s3Bucket = env('AWS_BUCKET');
         
-        $userModel = static::select('jobseeker_profiles.id', 'user_id', 'first_name', 'last_name', 'zipcode', 'latitude', 'longitude', 'preferred_job_location', 
-                            'job_titile_id', 'jobtitle_name as job_title', 'profile_pic', 'dental_state_board', 'license_number', 'state', 'about_me')
-                            ->join('job_titles', 'job_titles.id', '=', 'jobseeker_profiles.job_titile_id')
-                    ->where('user_id', $userId)
+        $userModel = static::select('jobseeker_profiles.id', 'jobseeker_profiles.user_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'jobseeker_profiles.zipcode', 'jobseeker_profiles.latitude', 'jobseeker_profiles.longitude', 'jobseeker_profiles.preferred_job_location', 
+                            'jobseeker_profiles.job_titile_id',  'jobseeker_profiles.profile_pic', 'jobseeker_profiles.dental_state_board', 'jobseeker_profiles.license_number', 'jobseeker_profiles.state', 'jobseeker_profiles.about_me')      
+                    ->where('jobseeker_profiles.user_id', $userId)
                     ->first();
         
         if($userModel) {
             $return = $userModel->toArray();
-            /*$profilePic = $return['profile_pic'];
-            $profilePic = "";
-            if($return['profile_pic'] != ""){
-                $width = 120;
-                $height = 120;
-                $profilePic  = url("image/" . $width . "/" . $height . "/?src=" .$return['profile_pic']);
+            $title = "";   
+            if($return['job_titile_id']){
+                $jobTitle = JobTitles::select('jobtitle_name')->where('id',$return['job_titile_id'])->first()->toArray();
+                $title = $jobTitle['jobtitle_name'];
+            }else{
+                $return['job_titile_id'] = 0;
             }
-            $dentalStateBoard = $return['dental_state_board'];
-            //$return['profile_pic'] = !empty($profilePic) ? $s3Url.DIRECTORY_SEPARATOR.$s3Bucket.DIRECTORY_SEPARATOR.$profilePic : $profilePic;
-            
-            $return['dental_state_board'] = !empty($dentalStateBoard) ? $s3Url.DIRECTORY_SEPARATOR.$s3Bucket.DIRECTORY_SEPARATOR.$dentalStateBoard : $dentalStateBoard;*/
+            $return['job_title'] = $title;
             $return['profile_pic'] = apiResponse::getThumbImage($return['profile_pic']);
-            $return['dental_state_board'] = apiResponse::getThumbImage($return['dental_state_board']);
+            if(($return['dental_state_board']) && $return['dental_state_board'] != ""){
+                $return['dental_state_board'] = apiResponse::getThumbImage($return['dental_state_board']);
+            }else{
+                $return['dental_state_board'] = "";
+            }
+            
         }
         return $return;
     }

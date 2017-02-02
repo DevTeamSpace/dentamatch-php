@@ -10,6 +10,8 @@ function createProfile() {
                     $("#createProfileButton").prop('disabled', true);
                     errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully.</li></ul></div>';
                     $('#createForm-errors').html(errorsHtml);
+                    $('div.alert').delay(1000).slideUp(300);
+
                 },
                 error: function (data) {
                     if (data.status === 422) {
@@ -23,9 +25,12 @@ function createProfile() {
                         errorsHtml = '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a>' + data.msg + '</div>';
                     }
                     $('#createForm-errors').html(errorsHtml);
+                    $('div.alert').delay(1000).slideUp(300);
+
                 }
             });
-    $('form').parsley().destroy();
+
+
     $('form').parsley();
 
 }
@@ -43,9 +48,10 @@ function officeDetail() {
                     $("#removeButton").append('<a id="countinueLink" href="/subscription-detail" class="btn btn-primary pd-l-40 pd-r-40">Continue</a>')
                     errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully.</li></ul></div>';
                     if (data == 1) {
-                        errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully. But you will be not able to put job on tihs address.</li></ul></div>';
+                        errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully. But you will be not able to put job on this address.</li></ul></div>';
                     }
                     $('#officeDetail-errors').html(errorsHtml);
+                    $('div.alert').delay(1000).slideUp(300);
                 },
                 error: function (data) {
                     console.log(data);
@@ -60,6 +66,7 @@ function officeDetail() {
                         errorsHtml = '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a>' + data.msg + '</div>';
                     }
                     $('#officeDetail-errors').html(errorsHtml);
+                    $('div.alert').delay(1000).slideUp(300);
                 }
             });
     $('form').parsley().destroy();
@@ -80,10 +87,8 @@ function officeDetail1() {
                     $("#countinueLink").remove();
                     $("#removeButton1").append('<a id="countinueLink1" href="/subscription-detail" class="btn btn-primary pd-l-40 pd-r-40">Continue</a>')
                     errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully.</li></ul></div>';
-                    if (data == 1) {
-                        errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully. But you will be not able to put job on tihs address.</li></ul></div>';
-                    }
                     $('#officeDetail-errors1').html(errorsHtml);
+                    $('div.alert').delay(1000).slideUp(300);
                 },
                 error: function (data) {
                     console.log(data);
@@ -98,6 +103,7 @@ function officeDetail1() {
                         errorsHtml = '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a>' + data.msg + '</div>';
                     }
                     $('#officeDetail-errors1').html(errorsHtml);
+                    $('div.alert').delay(1000).slideUp(300);
                 }
             });
     $('form').parsley().destroy();
@@ -121,6 +127,7 @@ function officeDetail2() {
                         errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully. But you will be not able to put job on tihs address.</li></ul></div>';
                     }
                     $('#officeDetail-errors2').html(errorsHtml);
+                    $('div.alert').delay(1000).slideUp(300);
                 },
                 error: function (data) {
                     console.log(data);
@@ -135,9 +142,36 @@ function officeDetail2() {
                         errorsHtml = '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a>' + data.msg + '</div>';
                     }
                     $('#officeDetail-errors2').html(errorsHtml);
+                    $('div.alert').delay(1000).slideUp(300);
                 }
             });
     $('form').parsley().destroy();
     $('form').parsley();
+
+}
+
+function checkLocation(zip, indexField) {
+    var msg = "";
+    $('#location-msg' + indexField).html('');
+    $.ajax(
+            {
+                url: '/get-location/' + zip,
+                type: "GET",
+                success: function (data) {
+                    console.log(data);
+                    if (data == 0) {
+                        msg = 'Please enter a valid address.';
+                        $('#location-msg' + indexField).html(msg);
+                    } else if (data == 2) {
+                        msg = 'Job cannot be currently created for this location. We will soon be available in your area.';
+                        $('#location-msg' + indexField).html(msg);
+                    }
+                },
+                error: function (data) {
+                    msg = 'Please enter a valid address.';
+                    $('#location-msg' + indexField).html(msg);
+                }
+            });
+
 
 }

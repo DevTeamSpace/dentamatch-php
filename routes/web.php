@@ -56,6 +56,7 @@ Route::group(['middleware' => ['auth', 'xss']], function () {
             Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
             Route::post('create-profile', 'web\UserProfileController@createProfile');
             Route::post('office-details', 'web\UserProfileController@officeDetails');
+            Route::get('get-location/{zip}', 'web\UserProfileController@checkValidLocation');
 
             Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
             Route::get('subscription-detail', 'web\SubscriptionController@getSubscription');
