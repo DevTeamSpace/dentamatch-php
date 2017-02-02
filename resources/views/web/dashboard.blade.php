@@ -46,7 +46,7 @@
             <input type="hidden" name="lat" id="lat">
             <input type="hidden" name="lng" id="lng">
             <input type="hidden" name="full_address" id="full_address">
-            <input type="hidden" id="postal_code" data-parsley-required  name="postal_code">
+            <input type="text" style="display:none;"  id="postal_code" data-parsley-required data-parsley-required-message=""  name="postal_code">
 
             <div class="commonBox cboxbottom masterBox">
                 <div class="form-group">
@@ -485,7 +485,7 @@
                 var indexField = name.split('autocomplete')[1];
                 allPlace.forEach(function (place) {
 
-
+                    $('#postal_code' + indexField).val('');
                     for (var i = 0; i < place.address_components.length; i++) {
                         var addressType = place.address_components[i].types[0];
                         if (componentForm[addressType]) {
