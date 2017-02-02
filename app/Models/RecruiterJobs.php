@@ -101,11 +101,12 @@ class RecruiterJobs extends Model
                     if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
                         foreach($reqData['parttimeDays'] as $key => $day){
                             //$searchQueryObj->orWhere('is_'.$day, 1);
-                            if($key == 0){
+                            /*if($key == 0){
                                 $searchQueryObj->Where('is_'.$day, 1);
                             }else{
                                 $searchQueryObj->orWhere('is_'.$day, 1);
-                            }
+                            }*/
+                            $searchQueryObj->orWhere('is_'.$day, 1);
                         }
                     }
                 }
