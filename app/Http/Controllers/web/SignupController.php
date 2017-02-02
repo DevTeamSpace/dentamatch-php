@@ -45,7 +45,7 @@ class SignupController extends Controller {
             Session::flash('message', "Validation Failure");
         }
         $credentials = ['email' => $request->email, 'password' => $request->password, 'is_verified' => 1, 'is_active' => 1];
-        $message = "Invalid username or password or not active yet.";
+        $message = trans("messages.invalid_cred_or_not_active");
         $redirect = 'login';
         if (Auth::validate($credentials)) {
             $user = User::where('email', $credentials['email'])->first();
@@ -96,9 +96,9 @@ class SignupController extends Controller {
             if ($userExists) {
                 if (isset($userExists->userGroup) && !empty($userExists->userGroup)) {
                     if ($userExists->userGroup->group_id == 3) {
-                        Session::flash('message', "You are already registered as job seeker");
+                        Session::flash('message', trans("messages.already_register_as_seeker"));
                     } else {
-                        Session::flash('message', "Email already registered");
+                        Session::flash('message', trans("messages.email_already_regisered"));
                     }
                 }
             } else if ($reqData['password'] !== $reqData['confirmPassword']) {
@@ -119,7 +119,7 @@ class SignupController extends Controller {
 
                 Mail::send('auth.emails.userActivation', ['url' => url("/verification-code/$uniqueCode")], function ($message) use ($reqData) {
                     $message->to($reqData['email'])
-                            ->subject('Confirmation Link for new user.');
+                            ->subject(trans("messages.confirmation_link"));
                 });
 
                 Session::flash('success', trans("messages.successfully_register"));

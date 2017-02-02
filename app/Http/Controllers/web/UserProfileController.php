@@ -104,9 +104,9 @@ class UserProfileController extends Controller {
         }
         if (Hash::check($request->oldPassword, Auth::user()->password)) {
             \App\Models\User::where('id', Auth::user()->id)->update(['password' => Hash::make($request->password)]);
-            return redirect('change-password')->withErrors(['Changed Successfull.'])->withInput();
+            return redirect('change-password')->withErrors([trans("messages.password_saved_successfully")])->withInput();
         }
-        return redirect('change-password')->withErrors(['Old Password not matched.'])->withInput();
+        return redirect('change-password')->withErrors([trans("messages.old_not_match")])->withInput();
     }
 
     public function getEditProfile() {

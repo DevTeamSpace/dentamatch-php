@@ -71,12 +71,17 @@
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Smiley Care <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="{{ url('change-password') }}">Change Password</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Something else here</a></li>
-                            <li><a href="{{ url('logout') }}">Logout</a></li>
+                        <ul class="dropdown-menu menuLastBox borderNone">
+							<span class="fa fa-caret-up notificationCaret"></span>
+							  <li><span class="icon icon-account-circle navRightIcon"></span><a href="#"><b>{{Auth::user()->email}}</b><br>	<button type="button" class="btn btn-primary rghtMenuBtn pd-l-10 pd-r-10">View Profile</button></a>
+						
+							</li>
+                            <li><span class="icon icon-drive-document navRightIcon"></span><a href="#">Reports</a></li>
+                            <li><span class="icon icon-lock navRightIcon"><a href="#"></a></span><a href="{{ url('change-password') }}">Change Password</a></li>
+                            <li><span class="icon icon-drive-form navRightIcon"></span><a href="#">Subscription Details</a></li>
+                            <li><span class="icon icon-text-document-black-interface-symbol navRightIcon"></span><a href="#">Terms &amp; Conditions</a></li>
+                            <li><span class="icon icon-logout-web-button navRightIcon"></span><a href="{{ url('logout') }}">Logout</a></li>
+
                         </ul>
                     </li>
                 </ul>
