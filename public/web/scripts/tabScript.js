@@ -2,18 +2,23 @@ $(function () {
     "use strict";
     var selVal, selLen;
     $(".addProfileBtn").addClass("DynamicAddder");
+	var globalMasterLen=$('.masterBox').length;
+	$('.addProfileBtn').append(`You can add upto ${3-globalMasterLen} more location`);
     var replicaBoxOne, boxLength, firstBox, secondBox, currentFind, dynamicCount;
     boxLength = 0, dynamicCount = 0;
     function totalCount() {
-        boxLength = $('.replicaBox').length;
-        $('.DynamicAddder').html(`<span class="icon icon-plus"></span> Add total of ${boxLength} locations`);
+        boxLength = $('.masterBox').length;
+	
+        $('.DynamicAddder').html(`<span class='icon icon-plus'></span>You can add upto ${3-boxLength} more locations`);
         if (boxLength >= 3) {
             $('.addProfileBtn').removeClass('DynamicAddder');
+
+				 $(".addProfileBtn").empty();
         }
     }
     function addBox() {
         if ($(this).hasClass('DynamicAddder')) {
-            replicaBoxOne = '<div class="resp-tabs-container commonBox replicaBox profilePadding cboxbottom masterBox"><div class="descriptionBox"><div class="dropdown icon-upload-ctn1"> <span class="icon-upload-detail dropdown-toggle" data-toggle="dropdown" aria-expanded="true"></span> <ul class="actions text-left dropdown-menu"> <li ><span class="gbllist iconEdit"><i class="icon icon-edit "></i> Edit</span></li><li><span class="gbllist iconDel"><i class="icon icon-deleteicon"></i> Delete</span></li></ul> </div><div class="descriptionBoxInner"><div class="viewProfileRightCard pd-b-25"><div class="detailTitleBlock"> <h5>OFFICE DETAILS</h5> </div><h6>Dental Office Type</h6><p>Dental Office Type</p></div><div class="viewProfileRightCard pd-b-25"><h6>Dental Office Address</h6><p>Smiley Care, 910 South 17th Street, Newark, New York 07108, USA</p></div><div class="viewProfileRightCard pd-b-25"><h6>Phone Number</h6><p>(415) 200 - 2356</p></div><div class="viewProfileRightCard pd-b-25"><h6>Working Hours</h6><p>Monday : 9am to 6pm</p><p>Monday : 9am to 6pm</p><p>Monday : 9am to 6pm</p></div><div class="viewProfileRightCard pd-b-25"><h6>Office Location Information</h6><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quorum sine causa fieri nihil putandum est. Potius inflammat, ut coercendi magis quam dedocendi esse videantur. Duo Reges: constructio interrete. Mihi enim satis est, ipsis non satis. Cuius ad naturam apta ratio vera illa et summa lex a philosophis dicitur. Id est enim, de quo quaerimus. Id quaeris, inquam, in quo, utrum respondero, verses te huc atque illuc necesse est. Sed ad bona praeterita redeamus. Roges enim Aristonem, bonane ei videantur haec: vacuitas doloris, divitiae, valitudo; Nam prius a se poterit quisque discedere quam appetitum earum rerum, quae sibi conducant, amittere.</p></div></div></div></div>';
+            replicaBoxOne = '<div class="resp-tabs-container commonBox replicaBox profilePadding cboxbottom masterBox"><p class="deleteCard iconDel pull-right"><span class="icon icon-deleteicon"></span>Delete</p><div class="formField"><div class="form-group"><div class="detailTitleBlock"><h5>OFFICE DETAILS</h5></div><label>Dental Office Type</label><div class="slt"><span class="multiselect-native-select"><select class="ddlCars" data-parsley-required="" data-parsley-required-message="Required" multiple=""><option value="Accord">Accord</option><option value="Duster">Duster</option><option value="Esteem">Esteem</option><option value="Fiero">Fiero</option><option value="Lancer">Lancer</option><option value="Phantom">Phantom</option></select><div class="btn-group buttonWidth"><button type="button" class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" title="select"><span class="multiselect-selected-text">select</span> <b class="caret caretModify"></b></button><ul class="multiselect-container dropdown-menu "><li><a tabindex="0" class="dropCheck"><label class="checkbox"><input type="checkbox" value="Accord"><div></div> Accord</label></a></li><li><a tabindex="0" class="dropCheck"><label class="checkbox"><input type="checkbox" value="Duster"><div></div> Duster</label></a></li><li><a tabindex="0" class="dropCheck"><label class="checkbox"><input type="checkbox" value="Esteem"><div></div> Esteem</label></a></li><li><a tabindex="0" class="dropCheck"><label class="checkbox"><input type="checkbox" value="Fiero"><div></div> Fiero</label></a></li><li><a tabindex="0" class="dropCheck"><label class="checkbox"><input type="checkbox" value="Lancer"><div></div> Lancer</label></a></li><li><a tabindex="0" class="dropCheck"><label class="checkbox"><input type="checkbox" value="Phantom"><div></div> Phantom</label></a></li></ul></div></span></div></div><div class="form-group"><label>Dental Office Address</label><input class="form-control" data-parsley-required="" data-parsley-required-message="Required" placeholder="Office name, Street, City, Zip Code and Country"></div><div class="form-group"><label>Phone Number</label><input class="form-control phone-number" data-parsley-required="" data-parsley-required-message="Required" ></div><div class="form-group"><label>Working Hours</label><div class="weekBox"><div class="dayBox row EveryDayCheck"><div class="col-sm-4"><p class="ckBox"><input id="dynamicTest0" type="checkbox"><label class="ckColor" for="dynamicTest0">Everyday</label></p></div><div class="col-sm-4"><div class="customsel date input-group datetimepicker1"><input class="form-control" disabled=""><ul class="parsley-errors-list"></ul><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class="col-sm-4"><div class="customsel date input-group datetimepicker2"><input class="form-control" disabled=""><ul class="parsley-errors-list"></ul><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="allDay"><div class="dayBox row"><div class="col-sm-4"><p class="ckBox"><input id="dynamicTest1" type="checkbox"><label class="ckColor" for="dynamicTest1">Monday</label></p></div><div class="col-sm-4"><div class="customsel date input-group datetimepicker1"><input class="form-control" disabled=""><ul class="parsley-errors-list"></ul><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class="col-sm-4"><div class="customsel date input-group datetimepicker2"><input class="form-control" disabled=""><ul class="parsley-errors-list"></ul><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class="col-sm-4"><p class="ckBox"><input id="dynamicTest2" type="checkbox"><label class="ckColor" for="dynamicTest2">Tuesday</label></p></div><div class="col-sm-4"><div class="customsel date input-group datetimepicker1"><input class="form-control" disabled=""><ul class="parsley-errors-list"></ul><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class="col-sm-4"><div class="customsel date input-group datetimepicker2"><input class="form-control" disabled=""><ul class="parsley-errors-list"></ul><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class="col-sm-4"><p class="ckBox"><input id="dynamicTest3" type="checkbox"><label class="ckColor" for="dynamicTest3">Wednesday</label></p></div><div class="col-sm-4"><div class="customsel date input-group datetimepicker1"><input class="form-control" disabled=""><ul class="parsley-errors-list"></ul><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class="col-sm-4"><div class="customsel date input-group datetimepicker2"><input class="form-control" disabled=""><ul class="parsley-errors-list"></ul><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class="col-sm-4"><p class="ckBox"><input id="dynamicTest4" type="checkbox"><label class="ckColor" for="dynamicTest4">Thursday</label></p></div><div class="col-sm-4"><div class="customsel date input-group datetimepicker1"><input class="form-control" disabled=""><ul class="parsley-errors-list"></ul><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class="col-sm-4"><div class="customsel date input-group datetimepicker2"><input class="form-control" disabled=""><ul class="parsley-errors-list"></ul><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class="col-sm-4"><p class="ckBox"><input id="dynamicTest5" type="checkbox"><label class="ckColor" for="dynamicTest5">Friday</label></p></div><div class="col-sm-4"><div class="customsel date input-group datetimepicker1"><input class="form-control" disabled=""><ul class="parsley-errors-list"></ul><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class="col-sm-4"><div class="customsel date input-group datetimepicker2"><input class="form-control" disabled=""><ul class="parsley-errors-list"></ul><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class="col-sm-4"><p class="ckBox"><input id="dynamicTest6" type="checkbox"><label class="ckColor" for="dynamicTest6">Saturday</label></p></div><div class="col-sm-4"><div class="customsel date input-group datetimepicker1"><input class="form-control" disabled=""><ul class="parsley-errors-list"></ul><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class="col-sm-4"><div class="customsel date input-group datetimepicker2"><input class="form-control" disabled=""><ul class="parsley-errors-list"></ul><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class="col-sm-4"><p class="ckBox"><input id="dynamicTest7" type="checkbox"><label class="ckColor" for="dynamicTest7">Sunday</label></p></div><div class="col-sm-4"><div class="customsel date input-group datetimepicker1"><input class="form-control" disabled=""><ul class="parsley-errors-list"></ul><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class="col-sm-4"><div class="customsel date input-group datetimepicker2"><input class="form-control" disabled=""><ul class="parsley-errors-list"></ul><span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div></div></div></div></div></div><div class="form-group"><label>Office Location Information <i class="optional">(Optional)</i></label><textarea class="form-control txtHeight" data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" data-parsley-required="" data-parsley-required-message="Required"></textarea></div><div class="pull-right text-right"><button class="btn btn-primary pd-l-40 pd-r-40 formBtnAction" type="submit">Save</button></div><br><br></div></div>';
             $('.addReplica').append(replicaBoxOne);
         }
         totalCount();
@@ -36,12 +41,12 @@ $(function () {
     }
     function firstBoxAdd() {
         $(this).parents('.resp-tabs-container').find('.descriptionBox').hide();
-        firstBox = ' <div class="form-group"> <label>Dental Office Name</label> <input value="' + $('#hiddenofficename').val() + '" type="text" class="form-control" data-parsley-required="" data-parsley-required-message="office name required" data-parsley-id="1934"><ul class="parsley-errors-list" id="parsley-id-1934"></ul> </div><div class="form-group"> <label>Dental Office Description</label> <textarea class="form-control txtHeight"  data-parsley-required data-parsley-required-message="office description required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-parsley-trigger="keyup">' + $('#hiddenofficedesc').val() + '</textarea><ul class="parsley-errors-list" id="parsley-id-6436"></ul> </div><div class="pull-right text-right"><button type="button" class="btn btn-link mr-r-10 cancelled" style="font-weight:500" >Cancel</button><button type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button></div><br><br>';
+        firstBox = ' <div class="form-group"> <label>Dental Office Name</label> <input value="'+$('#hiddenofficename').val()+'" type="text" class="form-control" data-parsley-required="" data-parsley-required-message="Required" data-parsley-id="1934"><ul class="parsley-errors-list" id="parsley-id-1934"></ul> </div><div class="form-group"> <label>Dental Office Description</label> <textarea class="form-control txtHeight"  data-parsley-required data-parsley-required-message="Required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-parsley-trigger="keyup">'+$('#hiddenofficedesc').val()+'</textarea><ul class="parsley-errors-list" id="parsley-id-6436"></ul> </div><div class="pull-right text-right"><button type="button" class="btn btn-link mr-r-10 cancelled" style="font-weight:500" >Cancel</button><button type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button></div><br><br>';
         $('.resp-tabs-container').first().append(`<div class="descriptionBox1">${firstBox}</div>`);
     }
     function boxdel() {
-        boxLength = $('.replicaBox').length;
-        $('.DynamicAddder').html(`<span class="icon icon-plus"></span> Add total of ${boxLength} locations`);
+        boxLength = $('.masterBox').length;
+        $('.DynamicAddder').html(`<span class="icon icon-plus"></span> You can add upto ${3-boxLength} more locations`);
     }
     function editBox() {
         var editId = $(this).closest(".descriptionBox").find("#hiddenEditId").val();
@@ -112,6 +117,7 @@ console.log($('hiddenofficeTypeId'+editId).val());
             var $endTime1 = $('.datetimepicker2');
             $startTime1.datetimepicker({
                 format: 'hh:mm A',
+				'allowInputToggle' : true,
 //		defaultDate: new Date(),
                 //ignoreReadonly: true,
                 minDate: moment().startOf('day'),
@@ -119,6 +125,7 @@ console.log($('hiddenofficeTypeId'+editId).val());
             });
             $endTime1.datetimepicker({
                 format: 'hh:mm A',
+				'allowInputToggle' : true,
 //		defaultDate: $startTime1.data("DateTimePicker").date().add(1, 'minutes'),
 //		useCurrent: false,
                 //ignoreReadonly: true,
@@ -141,7 +148,7 @@ console.log($('hiddenofficeTypeId'+editId).val());
                 //	blackValueCheck()
                 if ($(this).find("input").prop("disabled") == false) {
                     if ($(this).find("input").val() == "") {
-                        $(this).find("input").siblings(".parsley-errors-list").html("<li>Field Required</li>");
+                        $(this).find("input").siblings(".parsley-errors-list").html("<li>Required</li>");
                     } else {
                         $(this).find("input").siblings(".parsley-errors-list").find("li").remove();
                     }
@@ -158,7 +165,7 @@ console.log($('hiddenofficeTypeId'+editId).val());
         for (var valChange = 0; valChange < selLen; valChange++) {
             if ($(selVal).eq(valChange).find("input").val() == "") {
                 //$(parentBx).find(".customsel").eq(selectBx[index]).addClass("chetan");
-                $(selVal).eq(valChange).find("input").siblings(".parsley-errors-list").addClass("filled filledPosition").html("<li>Field Required</li>");
+                $(selVal).eq(valChange).find("input").siblings(".parsley-errors-list").addClass("filled filledPosition").html("<li>Required</li>");
             } else {
                 $(selVal).eq(valChange).find("input").siblings(".parsley-errors-list").children("li").remove();
             }
@@ -186,11 +193,14 @@ console.log($('hiddenofficeTypeId'+editId).val());
     });
 
 //=====phone number====//	
+	
     function deleteItem() {
         currentFind = $(this);
         currentFind.parents('.resp-tabs-container').remove();
         $('.addProfileBtn').addClass('DynamicAddder');
-        boxdel()
+        boxdel();
+		
+
     }
 //=====	Box Cancel=====//
 
@@ -198,7 +208,11 @@ console.log($('hiddenofficeTypeId'+editId).val());
         var current = $(this).closest(".resp-tabs-container");
         current.find(".descriptionBox").show();
         current.find(".descriptionBox1").hide();
+
     }
+
+
+	
 
     //=====	Box Cancel=====//
     $('.addProfileBtn,.iconFirstEdit').on('click', addBox);
