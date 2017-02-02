@@ -1002,13 +1002,13 @@ paths:
           in: header
           description: access token
           type: string
-        - name: calendarStartDate
+        - name: calendarMonth
           in: formData
-          description: jobDate in YYYY-MM-DD format
+          description: calendarMonth in (01-12)
           type: string
-        - name: calendarEndDate
+        - name: calendarYear
           in: formData
-          description: jobDate in YYYY-MM-DD format
+          description: calendarYear in YYYY format
           type: string
          
       tags:
