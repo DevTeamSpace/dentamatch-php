@@ -124,7 +124,7 @@ label{color:#686868;}
 .messageBoxTextArea{height:280px !important;}
 .filledPosition{    position: absolute;
     bottom: -16px;}
-.parsley-errors-list.filled{ font-size: 10px;}
+.parsley-errors-list.filled, #location-msg,#location-msg1,#location-msg2{ font-size: 10px; color:#f00}
 .customsel .input-group-addon{visibility:hidden; display: block;}
 .customsel input{     border-top-right-radius:3px !important; border-bottom-right-radius:3px !important; width:400px;}
 
