@@ -129,7 +129,7 @@
                 @if(count($offices)>2)
                 @else
                 <div class="pull-right text-right">
-                    <div class="addProfileBtn "><span class="icon icon-plus"></span>Add total of 1 locations</div>
+                    <div class="addProfileBtn "><span class="icon icon-plus"></span></div>
                 </div>
                 @endif
             </div>

@@ -1,7 +1,7 @@
 /*-----common------*/
 ul{list-style-type:none;}
 h3{font-size:22px;}
-body{background-color: #fbfcfd; padding-top: 88px;}
+body{background-color: #fbfcfd; padding-top: 88px; word-wrap: break-word;}
 h4{font-size:20px;}
 h5{font-size:18px; font-weight: 500;}
 h6{font-size:16px;}
@@ -169,10 +169,10 @@ width: 100%;
 .masterCardBox{  background-color: #f5f5f5;     padding: 11px 20px;}
 .filledPosition{    position: absolute;
     bottom: -16px;}
-.parsley-errors-list.filled, #location-msg,#location-msg1,#location-msg2{ font-size: 10px; color:#f00}
+.parsley-errors-list.filled, #location-msg,#location-msg1,#location-msg2{color:#f00}
 .customsel .input-group-addon{visibility:hidden; display: block;}
 .customsel input{     border-top-right-radius:3px !important; border-bottom-right-radius:3px !important; width:400px;}
-
+.filledPosition{font-size:9px;    bottom: -14px;}
 
 /*------------sagar Kapoor------------*/
 /*.padding-top-30 {padding-top: 30px;}*/
