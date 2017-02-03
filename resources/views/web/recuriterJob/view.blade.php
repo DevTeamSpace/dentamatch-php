@@ -143,13 +143,13 @@
                                 <p>{{ $seeker['distance'] }} miles away</p>
                                 @if($key==\App\Models\JobLists::HIRED)
                                 <button type="button" class="btn btn-primary pd-l-30 pd-r-30 mr-r-5">Message</button>
-                                @else if($key==\App\Models\JobLists::SHORTLISTED)
+                                @elseif($key==\App\Models\JobLists::SHORTLISTED)
                                 <button type="button" class="btn btn-primary pd-l-30 pd-r-30 mr-r-5">Message</button>
                                 <button type="button" class="btn btn-primary pd-l-30 pd-r-30 ">Hire</button>
-                                @else if($key==\App\Models\JobLists::APPLIED)
+                                @elseif($key==\App\Models\JobLists::APPLIED)
                                 <button type="button" class="btn btn-link  mr-r-5">Reject</button>
                                 <button type="button" class="btn btn-primary pd-l-30 pd-r-30 ">Shortlist</button>
-                                @else if($key==\App\Models\JobLists::INVITED)
+                                @elseif($key==\App\Models\JobLists::INVITED)
                                 <button type="button" class="btn btn-primary-outline pd-l-30 pd-r-30 ">Invite</button>
                                 @endif
                                 @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
