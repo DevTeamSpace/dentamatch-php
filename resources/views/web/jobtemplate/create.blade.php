@@ -38,17 +38,18 @@
                     <div class="detailTitleBlock">
                         <h5>KEY SKILLS</h5>
                     </div>
-                </div>
                 @foreach ($skillsData as $key => $skills)
                 <div class="form-group">
                     <label ><?=$key?></label>
-                    <select class="my-select" name="skills[]" multiple="multiple">
+                    <select class="my-select" name="skills[]" multiple="multiple" style="display:none">
                         @foreach ($skills as $skillData)
                         <option {{ (isset($skillData['sel_skill_id']) && $skillData['sel_skill_id']==$skillData['id'])?'selected':'' }} value="{{ $skillData['id'] }}">{{ $skillData['skill_name'] }}</option>
                         @endforeach
                     </select>
                 </div>
                 @endforeach
+					</div>
+                
             </div>	
         </div>
         <div class="pull-right text-right">
