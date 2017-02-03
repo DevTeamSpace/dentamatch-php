@@ -74,13 +74,12 @@ class RecruiterJobs extends Model
                         ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
                         ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
                         ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
-                        
-                        ->whereIn('job_titles.id', $reqData['jobTitle']);
+                        ->whereIn('job_templates.job_title_id', $reqData['jobTitle']);
                 if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 0){
                     $searchQueryObj->where('recruiter_jobs.job_type',1);
                 }
                 if($reqData['isFulltime'] == 0 && $reqData['isParttime'] == 1){
-                    //$searchQueryObj->where('recruiter_jobs.job_type',2);
+                    $searchQueryObj->where('recruiter_jobs.job_type',2);
                     if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
                         //$daysArray = ['is_monday'=>0, 'is_tuesday'=>0, 'is_wednesday'=>0, 'is_thursday'=>0, 'is_friday'=>0, 'is_saturday'=>0, 'is_sunday'=>0];
                         foreach($reqData['parttimeDays'] as $key => $day){
@@ -97,16 +96,16 @@ class RecruiterJobs extends Model
                     }
                 }
                 if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 1){
-                    $searchQueryObj->where('recruiter_jobs.job_type',1);
+                    $searchQueryObj->whereIn('recruiter_jobs.job_type',[1,2]);
                     if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
                         foreach($reqData['parttimeDays'] as $key => $day){
                             //$searchQueryObj->orWhere('is_'.$day, 1);
-                            /*if($key == 0){
+                            if($key == 0){
                                 $searchQueryObj->Where('is_'.$day, 1);
                             }else{
                                 $searchQueryObj->orWhere('is_'.$day, 1);
-                            }*/
-                            $searchQueryObj->orWhere('is_'.$day, 1);
+                            }
+                            //$searchQueryObj->orWhere('is_'.$day, 1);
                         }
                     }
                 }
@@ -115,7 +114,7 @@ class RecruiterJobs extends Model
                                 'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
                                 'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
                                 'recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
-                                'job_titles.jobtitle_name','recruiter_profiles.office_name',
+                                'job_titles.jobtitle_name','recruiter_profiles.office_name','job_templates.job_title_id',
                                 'recruiter_offices.address','recruiter_offices.zipcode',
                                 'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
                                 DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
