@@ -36,7 +36,7 @@ class CalendarApiController extends Controller {
                     $userProfileModel->is_parttime_friday = 0;
                     $userProfileModel->is_parttime_saturday = 0;
                     $userProfileModel->is_parttime_sunday = 0;
-                    $userProfileModel->save();
+                    //$userProfileModel->save();
                     foreach($reqData['partTimeDays'] as $value){
                         $field = 'is_parttime_'.$value;
                         $userProfileModel->$field = 1;
