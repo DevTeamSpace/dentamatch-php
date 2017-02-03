@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\Device;
 use App\Models\UserProfile;
+use App\Models\SearchFilter;
 use App\Models\PasswordReset;
 use Mail;
 use Auth;
@@ -155,6 +156,7 @@ class UserApiController extends Controller {
                             'preferredJobLocation' => $userData['preferred_job_location'],
                             'accessToken' => $userToken,
                         );
+                        $userArray['searchFilters'] = SearchFilter::getFiltersOnLogin($userId);
                         $response = apiResponse::customJsonResponse(1, 200, trans("messages.user_logged_successful"),$userArray);
                 }else{
                     $response = apiResponse::customJsonResponse(0, 202, trans("messages.user_account_not_active")); 
