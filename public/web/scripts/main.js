@@ -62,7 +62,8 @@ $(document).ready(function(){
                 getId = $(this).parent().find('input').attr('id');
 
                 if (getId === 'parttime') {
-                	$('.job-opening').addClass('hide');
+                    $('#monthSelect').prop('data-parsley-required',true);
+                    	$('.job-opening').addClass('hide');
                 	$('div.select-days-custom').css('display', 'block');
                 	$('#monthSelect').multipleSelect({
                 		filter: false,
@@ -75,11 +76,14 @@ $(document).ready(function(){
                 } else if (getId === 'temporary') {
                 	$('div.select-days-custom').css('display', 'none');
                 	$('.job-opening').removeClass('hide');
+                    $('#jobopening').prop('data-parsley-required',true);
                 	$("#CoverStartDateOtherPicker").datepicker("show");
                 } else {
                 	$('div.select-days-custom').css('display', 'none');
                 	$('.job-opening').addClass('hide');
                 }
+                $("form").parsley().destroy();
+                $("form").parsley();
             });
 	$(document).on('click', '.select-days-custom div.ms-drop', function (e) {
 		$(this).parent().parent().find('button span').addClass('placeholder').text('Select Days');
@@ -88,6 +92,19 @@ $(document).ready(function(){
 		$(this).find('div').addClass('open');
 		$(this).parent().find('.ms-drop ').css('display', 'block');
 	});
+        
+        $('#dentalOfficeId').change(function(){
+                $('.error-div').addClass('hide')
+                var officeJson = $.parseJSON($('#officeJson').val());
+                var dentalOfficeId = $('#dentalOfficeId').val()
+                $.each(officeJson,function(index,value){
+                    console.log(value);
+                    if(dentalOfficeId==value.id && value.zipcode==null){
+                        $('.error-div').removeClass('hide');
+                        $('#dentalOfficeId').val('');
+                    }
+                });
+            });
 
 	/*-----------Add template----------*/
 	$('.info-block img').on( "mouseenter", function() {
