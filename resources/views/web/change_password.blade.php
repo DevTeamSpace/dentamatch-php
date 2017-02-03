@@ -4,7 +4,7 @@
 <div class="container globalpadder">
     <!-- Tab-->
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-4 col-md-3">
             <div id="ChildVerticalTab_1"  class="cboxbottom">
                 <ul class="resp-tabs-list ver_1 small-border-radius  decoration">
                     <li class="resp-tab-active"><a href ="#"><span class="icon icon-account-circle  "></span>Profile</a></li>
@@ -19,7 +19,7 @@
                 </ul>
             </div>
         </div>
-        <div class="col-sm-8 ">
+        <div class="col-sm-8 col-md-9 ">
             <div class="addReplica">
                 <div class="resp-tabs-container commonBox profilePadding cboxbottom ">
                     <div class="descriptionBox">
