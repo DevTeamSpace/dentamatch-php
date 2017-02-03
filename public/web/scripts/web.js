@@ -206,7 +206,33 @@ function editofficedetail() {
                 }
             });
 }
-
+function addofficedetail() {
+    var form_data = $('#addofficedetailform').serialize();
+    var errorsHtml;
+    $.ajax(
+            {
+                url: '/office-details',
+                type: "POST",
+                data: form_data,
+                success: function (data) {
+                   location.reload();
+                },
+                error: function (data) {
+                    if (data.status === 422) {
+                        var errors = data.responseJSON;
+                        errorsHtml = '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a><ul>';
+                        $.each(errors, function (key, value) {
+                            errorsHtml += '<li>' + value[0] + '</li>';
+                        });
+                        errorsHtml += '</ul></div>';
+                    } else if (data.status === 1) {
+                        errorsHtml = '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a>' + data.msg + '</div>';
+                    }
+                    $('#createForm-errors').html(errorsHtml);
+                    $('div.alert').delay(1000).slideUp(300);
+                }
+            });
+}
 function getOfficeName() {
     officeName = new google.maps.places.SearchBox(
             (document.getElementById('officeName')),

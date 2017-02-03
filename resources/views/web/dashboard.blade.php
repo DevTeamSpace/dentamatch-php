@@ -55,7 +55,7 @@
                     </div>
                     <label >Dental Office Type</label>
                     <div class="slt">
-                        <select style="display:none;" name="officeType[]" value="" class="ddlCars" multiple="multiple" data-parsley-required data-parsley-required-message="required">
+                        <select  name="officeType[]" value="" class="ddlCars" multiple="multiple" data-parsley-required data-parsley-required-message="required">
                             @foreach($officeType as $office)
                             <option value="{{$office->id}}" >{{$office->officetype_name}}</option>
                             @endforeach
