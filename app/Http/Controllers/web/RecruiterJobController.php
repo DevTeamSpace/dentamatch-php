@@ -114,8 +114,8 @@ class RecruiterJobController extends Controller
         try{
             $this->viewData['job'] = RecruiterJobs::getJobDetails($jobId);
             $this->viewData['skills'] = TemplateSkills::getTemplateSkills($this->viewData['job']['job_template_id']);
-            $this->viewData['job'] = JobLists::getJobSeekerList($this->viewData['job']);
-            dd($this->viewData['job']);
+            $this->viewData['seekerList'] = JobLists::getJobSeekerList($this->viewData['job']);
+            
             return $this->returnView('view');
         } catch (\Exception $e) {
             return view('web.error.',["message" => $e->getMessage()]);

@@ -22,7 +22,7 @@
                 <div class="template-header-right-publish">
                     {!! csrf_field() !!}
                     <input type="hidden" name="templateId" value="{{ $templateId }}">
-                    <span class="cancel">Cancel</span>
+                    <a href="{{ url('jobtemplates') }}" class="cancel">Cancel</a>
                     <button type="submit" class="btn btn-primary">Publish</button>
                 </div>  
             </div>    
