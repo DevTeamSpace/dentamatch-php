@@ -29,6 +29,14 @@ class CalendarApiController extends Controller {
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
                 $userProfileModel->is_fulltime = $reqData['isFulltime'];
                 if(is_array($reqData['partTimeDays']) && (count($reqData['partTimeDays']) > 0)){
+                    $userProfileModel->is_parttime_monday = 0;
+                    $userProfileModel->is_parttime_tuesday = 0;
+                    $userProfileModel->is_parttime_wednesday = 0;
+                    $userProfileModel->is_parttime_thursday = 0;
+                    $userProfileModel->is_parttime_friday = 0;
+                    $userProfileModel->is_parttime_saturday = 0;
+                    $userProfileModel->is_parttime_sunday = 0;
+                    $userProfileModel->save();
                     foreach($reqData['partTimeDays'] as $value){
                         $field = 'is_parttime_'.$value;
                         $userProfileModel->$field = 1;
