@@ -103,19 +103,18 @@ $(document).ready(function(){
 	});
 	/*-----------Add template----------*/
 
-
-	/*-----------range slider--------*/
+/*-----------range slider--------*/
 	
-//	$("#range_slider").slider({ 
-//		min: 1, 
-//		max: 20, 
-//		value: 0, 
-//		tooltip_position:'bottom',
-//		
-//		formatter: function(value) {
-//			return   value + ' miles ' ;
-//		}
-//	});
+	$("#range_slider").slider({ 
+		min: 1, 
+		max: 20, 
+		value: 0, 
+		tooltip_position:'bottom',
+		
+		formatter: function(value) {
+			return   value + ' miles ' ;
+		}
+	});
 	/*-----------range slider--------*/
 
 });

@@ -118,7 +118,6 @@
         <script src="{{asset('web/scripts/custom.js')}}"></script>
         <script src ="{{asset('web/scripts/moment.min.js')}}"></script>
         <script src ="{{asset('web/scripts/bootstrap-datetimepicker.js')}}"></script>
-
         <script src ="{{asset('web/scripts/main.js')}}"></script>
         
         @yield('js')

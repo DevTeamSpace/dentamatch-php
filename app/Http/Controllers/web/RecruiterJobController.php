@@ -10,6 +10,7 @@ use App\Models\JobTemplates;
 use App\Models\TempJobDates;
 use App\Models\TemplateSkills;
 use App\Models\JobLists;
+use App\Models\JobTitles;
 use App\Models\RecruiterOffice;
 use DB;
 
@@ -40,6 +41,16 @@ class RecruiterJobController extends Controller
         
     }
     
+    public function searchSeekers($jobTypeId, $jobTitleId){
+        try{
+            $titleName      =   JobTitles::getTitle($jobTitleId);
+            $seekersList    =   JobLists::getJobSeekerListByFilter($jobTypeId, $jobTitleId);
+            return view('web.recuriterJob.search', compact('seekersList','titleName'));
+        } catch (\Exception $e) {
+            return view('web.error.',["message" => $e->getMessage()]);
+        }
+    }
+
     public function saveOrUpdate(Request $request){
         $this->validate($request, [
                 'templateId' => 'required',

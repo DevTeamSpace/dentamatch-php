@@ -95,7 +95,7 @@
                 </ul>
             </div>
             <div class="col-sm-4 search-seeker">
-                <a href="{{ url('search/job',[$job['job_type'],$job['job_title_id']]) }}" class="btn btn-primary pd-l-30 pd-r-30 pull-right">Search Seekers</a>
+                <a href="{{ url('job/search',[$job['job_type'],$job['job_title_id']]) }}" class="btn btn-primary pd-l-30 pd-r-30 pull-right">Search Seekers</a>
             </div>
         </div>
 
