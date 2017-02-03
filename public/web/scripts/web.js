@@ -175,3 +175,17 @@ function checkLocation(zip, indexField) {
 
 
 }
+
+
+function getOfficeName() {
+    officeName = new google.maps.places.SearchBox(
+            (document.getElementById('officeName')),
+            {types: ['geocode']});
+    officeName.addListener('places_changed', fillOfficeAddress);
+}
+
+function fillOfficeAddress() {
+    var addy = $('#officeName').val();
+    var offName = addy.substr(0, addy.indexOf(','));
+    document.getElementById('officeName').value = offName;
+}
