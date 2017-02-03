@@ -28,23 +28,23 @@ class CalendarApiController extends Controller {
                 $reqData = $request->all();
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
                 $userProfileModel->is_fulltime = $reqData['isFulltime'];
+                $userProfileModel->is_parttime_monday = 0;
+                $userProfileModel->is_parttime_tuesday = 0;
+                $userProfileModel->is_parttime_wednesday = 0;
+                $userProfileModel->is_parttime_thursday = 0;
+                $userProfileModel->is_parttime_friday = 0;
+                $userProfileModel->is_parttime_saturday = 0;
+                $userProfileModel->is_parttime_sunday = 0;
+                $userProfileModel->save();
                 if(is_array($reqData['partTimeDays']) && (count($reqData['partTimeDays']) > 0)){
-                    $userProfileModel->is_parttime_monday = 0;
-                    $userProfileModel->is_parttime_tuesday = 0;
-                    $userProfileModel->is_parttime_wednesday = 0;
-                    $userProfileModel->is_parttime_thursday = 0;
-                    $userProfileModel->is_parttime_friday = 0;
-                    $userProfileModel->is_parttime_saturday = 0;
-                    $userProfileModel->is_parttime_sunday = 0;
-                    //$userProfileModel->save();
                     foreach($reqData['partTimeDays'] as $value){
                         $field = 'is_parttime_'.$value;
                         $userProfileModel->$field = 1;
                     }
                 }
                 $userProfileModel->save();
+                JobSeekerTempAvailability::where('user_id', '=', $userId)->where('temp_job_date','>=',date('Y-m-d'))->forceDelete();
                 if(is_array($reqData['tempdDates']) && count($reqData['tempdDates']) > 0){
-                    JobSeekerTempAvailability::where('user_id', '=', $userId)->where('temp_job_date','>=',date('Y-m-d'))->forceDelete();
                     $tempDateArray = array();
                     foreach($reqData['tempdDates'] as $tempDate){
                         $availability = JobSeekerTempAvailability::where('user_id', '=', $userId)->where('temp_job_date','=',$tempDate)->get();
