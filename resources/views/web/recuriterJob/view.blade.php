@@ -109,9 +109,61 @@
     <div class="job-seeker mr-t-40">
         <label >Job Seekers</label>
         <div class="jobseeker-border  mr-t-15 mr-b-25"></div>
+        @if(count($seekerList)==0)
+        <div class="text-center">
+            <img src="{{ asset('web/images/denta_create_profile.png')}}" alt="create profile">
+            <div class="mr-b-10">
+                <label class="mr-t-15">No jobseekers yet</label>
+            </div>
+        </div>
+        @else
+            @foreach($seekerList as $key=>$seekerGroup)
+                <div class="jobseeker-statebox">
+                    <label class="fnt-16 textcolr-38">Jobseeker {{ \App\Models\JobLists::APPLIED_STATUS[$key] }} ({{ count($seekerGroup) }})</label>
+                    @foreach($seekerGroup as $seeker)
+                    <div class="media jobCatbox">
+                        <div class="media-left ">
+                            <div class="img-holder ">
+                                <img class="media-object img-circle" src="http://placehold.it/66x66" alt="...">
+                                <span class="star star-fill"></span>
+                            </div>
+                        </div>
+                        <div class="media-body row">
+                            <div class="col-sm-8 pd-t-10 ">
+                                <div >
+                                    <a href="#" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
+                                    @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+                                    <span class="mr-l-5 label label-success">{{ $seeker['avg_rating'] }}</span>
+                                    @endif
+                                </div>
+                                <p class="nopadding">{{ $seeker['jobtitle_name'] }}</p>
+                                <p  class="nopadding">Wed, 08 Nov 2016</p>
+                            </div>
+                            <div class="col-sm-4 pd-t-5 text-right">
+                                <p>{{ $seeker['distance'] }} miles away</p>
+                                @if($key==\App\Models\JobLists::HIRED)
+                                <button type="button" class="btn btn-primary pd-l-30 pd-r-30 mr-r-5">Message</button>
+                                @else if($key==\App\Models\JobLists::SHORTLISTED)
+                                <button type="button" class="btn btn-primary pd-l-30 pd-r-30 mr-r-5">Message</button>
+                                <button type="button" class="btn btn-primary pd-l-30 pd-r-30 ">Hire</button>
+                                @else if($key==\App\Models\JobLists::APPLIED)
+                                <button type="button" class="btn btn-link  mr-r-5">Reject</button>
+                                <button type="button" class="btn btn-primary pd-l-30 pd-r-30 ">Shortlist</button>
+                                @else if($key==\App\Models\JobLists::INVITED)
+                                <button type="button" class="btn btn-primary-outline pd-l-30 pd-r-30 ">Invite</button>
+                                @endif
+                                @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+                                <button type="submit" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-b-5" >Rate seeker</button>
+                                @endif
+                            </div>
+                        </div>
 
-        <div class="jobseeker-statebox">
-            <label class="fnt-16 textcolr-38">Jobseeker Hired (2)</label>
+                    </div>
+                    @endforeach
+                </div>
+            @endforeach
+        
+        
             <div class="media jobCatbox ">
                 <div class="media-left">
                     <div class="img-holder ">
@@ -171,30 +223,9 @@
                 </div>
 
             </div>
-            <div class="media jobCatbox">
-                <div class="media-left ">
-
-                    <div class="img-holder ">
-
-                        <img class="media-object img-circle" src="http://placehold.it/66x66" alt="...">
-                        <span class="star star-fill"></span>
-                    </div>
-
-                </div>
-                <div class="media-body row">
-                    <div class="col-sm-8 pd-t-10 ">
-                        <div ><a href="#" class="media-heading">Elle Nelson</a> <span class="mr-l-5 label label-success">3.4</span></div>
-                        <p class="nopadding">Dental Assistant</p>
-                        <p  class="nopadding">Wed, 08 Nov 2016</p>
-                    </div>
-                    <div class="col-sm-4 pd-t-5 text-right">
-                        <p>1.2 miles away</p>
-                        <button type="submit" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-b-5" >Rate seeker</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
+        
+            
+            
         <div class="jobseeker-statebox">
             <label class="mr-t-50 fnt-16 textcolr-38">Jobseeker Invited (20)</label>
             <div class="media jobCatbox">
@@ -259,7 +290,7 @@
             </div>
 
         </div>
-
+        @endif
 
 
 
