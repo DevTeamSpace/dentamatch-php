@@ -511,7 +511,18 @@
     });
 
 
+    function getOfficeName() {
+        officeName = new google.maps.places.SearchBox(
+                (document.getElementById('officeName')),
+                {types: ['geocode']});
+        officeName.addListener('places_changed', fillOfficeAddress);
+    }
 
+    function fillOfficeAddress() {
+        var addy = $('#officeName').val();
+        var offName = addy.substr(0, addy.indexOf(','));
+        document.getElementById('officeName').value = offName;
+    }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsIYaIMo9hd5yEL7pChkVPKPWGX6rFcv8&libraries=places"
 async defer></script>

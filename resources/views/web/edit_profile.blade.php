@@ -39,7 +39,7 @@
                 @endif
 
                 @foreach($offices as $office)
-                <form data-parsley-validate="" id="officedetailform" novalidate=""  class="formdataPart">	
+<!--                <form data-parsley-validate="" id="officedetailform" novalidate=""  class="formdataPart">	-->
                     <div class="resp-tabs-container commonBox replicaBox profilePadding cboxbottom masterBox">
                         <div class="descriptionBox">
                             <div class="dropdown icon-upload-ctn1">
@@ -151,12 +151,12 @@
                                 <div class="viewProfileRightCard pd-b-25">
                                     <input type="hidden" value="{{ $office->office_location }}" id="hiddenlocation{{$office->id}}">
                                     <h6>Office Location Information</h6>	
-                                    <p>{{$office->location}}</p>	
+                                    <p>{{$office->office_location}}</p>	
                                 </div>					
                             </div>
                         </div>
                     </div>
-                </form>
+<!--                </form>-->
                 @endforeach
             </div>
             <br>
