@@ -16,7 +16,7 @@
 
         <link rel="stylesheet" href="{{asset('web/plugins/parsley/css/parsley.css')}}">
         <link rel="stylesheet" href="{{asset('web/css/dentaIcon.css')}}">
-        <!--<link rel="stylesheet" href="{{asset('web/css/custom.css')}}">-->
+        <link rel="stylesheet" href="{{asset('web/css/custom.css')}}">
         <link rel="stylesheet" href="{{asset('web/css/dashboard.css')}}">
         <link rel="stylesheet" href="{{asset('web/css/bootstrap-multiselect.css')}}">
         <link rel="stylesheet" href="{{asset('web/css/checkBox.css')}}">
@@ -97,7 +97,7 @@
                             <a href="{{ url('job/lists') }}">Job Listing</a>
                         </li>
                         <li class="{{ ($navActive=='favseeker')?'active':''}}">
-                            <a href="#">Favorite Jobseeker</a>
+                            <a href="{{url('favorite-jobseeker')}}">Favorite Jobseeker</a>
                         </li>
                         <li class="{{ ($navActive=='template')?'active':''}}">
                             <a href="{{ url('jobtemplates') }}">Template</a>

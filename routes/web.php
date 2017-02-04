@@ -58,6 +58,8 @@ Route::group(['middleware' => ['auth', 'xss']], function () {
             Route::post('office-details', 'web\UserProfileController@officeDetails');
             Route::get('get-location/{zip}', 'web\UserProfileController@checkValidLocation');
 
+            Route::get('favorite-jobseeker','web\FavoriteJobseekerController@getFavJobseeker');
+            Route::post('favorite-jobseeker','web\FavoriteJobseekerController@postFavJobseeker');
             Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
             Route::get('subscription-detail', 'web\SubscriptionController@getSubscription');
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
