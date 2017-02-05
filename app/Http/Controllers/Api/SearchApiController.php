@@ -9,6 +9,7 @@ use App\Models\Location;
 use App\Models\SavedJobs;
 use App\Models\JobLists;
 use App\Models\UserProfile;
+use App\Models\SearchFilter;
 
 class SearchApiController extends Controller {
     
@@ -38,6 +39,9 @@ class SearchApiController extends Controller {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $reqData = $request->all();
+                
+                SearchFilter::createFilter($userId, $reqData);
+                
                 $location = Location::where('zipcode',$reqData['zipCode'])->get();
                 if($location){
                     $reqData['userId'] = $userId;
@@ -182,13 +186,21 @@ class SearchApiController extends Controller {
             if($userId > 0){
                 $reqData = $request->all();
                 $reqData['userId'] = $userId;
+                $message = "";
                 if($reqData['type'] == 1){
                     $searchResult = SavedJobs::listSavedJobs($reqData);
+                    $message = trans("messages.saved_job_list");
                 }else{
+                    
                     $searchResult = JobLists::listJobsByStatus($reqData);
+                    if($reqData['type'] == 2){
+                        $message = trans("messages.applied_job_list");
+                    }else{
+                        $message = trans("messages.shortlisted_job_list");
+                    }
                 }
                 if(count($searchResult['list']) > 0){
-                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"),  apiResponse::convertToCamelCase($searchResult));
+                    $response = apiResponse::customJsonResponse(1, 200, $message,  apiResponse::convertToCamelCase($searchResult));
                 }else{
                     $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
                 }

@@ -3,23 +3,32 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
 
 class JobLists extends Model
 {
-    
+    use SoftDeletes;
     const INVITED = 1;
     const APPLIED = 2;
     const SHORTLISTED = 3;
     const HIRED = 4;
     const REJECTED = 5;
     const CANCELLED = 6;
+    const APPLIED_STATUS = [JobLists::INVITED=>'Invited',JobLists::APPLIED=>'Applied',
+        JobLists::SHORTLISTED=>'Shortlisted',JobLists::HIRED=>'Hired',
+        JobLists::REJECTED=>'Rejected',JobLists::CANCELLED=>'Cancelled'];
+
     static $jobTypeName = ['1'=>'Full Time', '2'=>'Part Time', '3'=>'Temp'];
     
     protected $table = 'job_lists';
     protected $primaryKey = 'id';
     
     const LIMIT = 10;
+    
+    public function tempJobDates() {
+        return $this->hasMany(TempJobDates::class,'recruiter_job_id', 'recruiter_job_id')->select('job_date','recruiter_job_id');
+    }
     
     public static function listJobsByStatus($reqData){
         $latitude = $reqData['lat'];
@@ -82,7 +91,7 @@ class JobLists extends Model
         return $return;
     }
     
-    public static function postJobCalendar($userId, $jobDate)
+    public static function postJobCalendar($userId, $jobMonth, $jobYear)
     {
         $result = [];
         $jobTypeCount = [];
@@ -93,11 +102,11 @@ class JobLists extends Model
                         ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
                         ->where('job_lists.seeker_id','=' ,$userId)
                         ->where('job_lists.applied_status', '=' , JobLists::HIRED)
-                        ->whereDate('job_lists.created_at', $jobDate);  
-        
+                        ->where(DB::raw("DATE_FORMAT(job_lists.created_at, '%m')"), "=",$jobMonth)
+                        ->where(DB::raw("DATE_FORMAT(job_lists.created_at, '%Y')"), "=",$jobYear);        
         
         $total = $searchQueryObj->count();
-        $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
+        $searchQueryObj->select('job_lists.recruiter_job_id','recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
                         'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
                         'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
                         'recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
@@ -105,19 +114,18 @@ class JobLists extends Model
                         'recruiter_offices.address','recruiter_offices.zipcode',
                         'recruiter_offices.latitude','recruiter_offices.longitude',
                         'recruiter_jobs.created_at as job_created_at', 'job_lists.created_at as job_applied_on',
-                        DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
+                        DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
+                        DB::raw("DATE_FORMAT(job_lists.created_at, '%Y-%m-%d') AS jobDate"));
 
-        $searchResult = $searchQueryObj->get();
+        $searchResult = $searchQueryObj->with('tempJobDates')->get();
         
         if($searchResult){
             foreach($searchResult as $value) {
                 $value->job_type_string = static::$jobTypeName[$value->job_type];
                 $jobTypeCount[] = $value->job_type;
             }
-            $jobTypeCount = array_unique($jobTypeCount);
             $list = $searchResult->toArray();
             $result['list'] = $list;
-            $result['jobTypeCount'] = count($jobTypeCount);
             $result['total'] = $total;
         }
         return $result;
@@ -129,18 +137,39 @@ class JobLists extends Model
                 ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                 ->join('jobseeker_profiles','jobseeker_profiles.user_id','=','job_lists.seeker_id')
                 ->join('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id')
-                ->where('job_lists.recruiter_job_id',$job->id)
-                ->whereIn('job_lists.applied_status',[ JobLists::INVITED, JobLists::APPLIED,JobLists::SHORTLISTED,JobLists::HIRED]);
-        if($job->job_type==RecruiterJobs::TEMPORARY){
-            $obj->leftjoin('jobseeker_temp_availability',function($query){
+                ->where('job_lists.recruiter_job_id',$job['id'])
+                ->whereIn('job_lists.applied_status',[ JobLists::INVITED, JobLists::APPLIED,JobLists::SHORTLISTED,JobLists::HIRED])
+                ->select('job_lists.applied_status','jobseeker_profiles.first_name','jobseeker_profiles.last_name',
+            'jobseeker_profiles.profile_pic','job_lists.seeker_id','job_titles.jobtitle_name','recruiter_jobs.job_type');
+        
+        if($job['job_type']==RecruiterJobs::FULLTIME){
+            $obj->addSelect('jobseeker_profiles.is_fulltime');
+        }
+        elseif($job['job_type']==RecruiterJobs::PARTTIME){
+            $obj->addSelect('jobseeker_profiles.is_parttime_monday','jobseeker_profiles.is_parttime_tuesday',
+                    'jobseeker_profiles.is_parttime_wednesday','jobseeker_profiles.is_parttime_thursday',
+                    'jobseeker_profiles.is_parttime_friday','jobseeker_profiles.is_parttime_saturday',
+                    'jobseeker_profiles.is_parttime_sunday');
+        }
+        elseif($job['job_type']==RecruiterJobs::TEMPORARY){
+            $obj->leftjoin('job_ratings',function($query){
+                    $query->on('job_ratings.seeker_id', '=', 'job_lists.seeker_id')
+                        //->where('job_ratings.recruiter_job_id', '=', 'job_lists.recruiter_job_id')
+                        ->whereNotNull('job_lists.temp_job_id');
+                })
+                ->leftJoin('temp_job_dates','job_lists.temp_job_id','=','temp_job_dates.id')
+                ->addSelect(DB::raw("group_concat(temp_job_dates.job_date) AS temp_job_dates"))
+                ->addSelect(DB::raw("(avg(punctuality)+avg(time_management)+avg(skills)+avg(teamwork)+avg(onemore))/5 AS avg_rating"))
+                ->groupby('job_lists.applied_status','job_lists.seeker_id','job_lists.recruiter_job_id');
+            /*$obj->leftjoin('jobseeker_temp_availability',function($query) use ($job){
                 $query->on('jobseeker_temp_availability.user_id', '=', 'job_lists.seeker_id')
                 ->whereIn('jobseeker_temp_availability.temp_job_date',explode(',',$job->temp_job_dates));
-            });
+            })
+            ->groupby('job_lists.applied_status','job_lists.seeker_id');
+            $obj->addSelect(DB::raw("group_concat(jobseeker_temp_availability.temp_job_date) AS temp_job_dates"));*/
         }
-        $obj->select('job_lists.applied_status','jobseeker_profiles.first_name','jobseeker_profiles.last_name',
-                        'jobseeker_profiles.profile_pic','job_lists.seeker_id','job_titles.jobtitle_name',
-                        'recruiter_jobs.job_type',
-                        DB::raw("(
+        
+        $data = $obj->addSelect(DB::raw("(
                     3959 * acos (
                       cos ( radians(recruiter_offices.latitude) )
                       * cos( radians( jobseeker_profiles.latitude) )
@@ -151,6 +180,7 @@ class JobLists extends Model
                 ->orderby('job_lists.applied_status','desc')
                 ->orderby('distance','asc')
                     ->get();
-      dd($obj->groupBy('applied_status')->toArray());  
+        
+        return ($data->groupBy('applied_status')->toArray());  
     }
 }

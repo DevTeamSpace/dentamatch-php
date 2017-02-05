@@ -3,7 +3,7 @@
 @section('content')
 
 
-        <div class="container padding-top-30">
+        <div class="container pd-t-30">
             <div class="equalheight">
                 <div class="col-sm-12 nopadding container-color border-block offset30" >
                     <div class="box text-center center-block">
@@ -18,7 +18,7 @@
                     </div>      
                 </div> 
                 @foreach ($jobTemplates as $template)
-                <div class="col-sm-12 nopadding container-color offset30 mainTemplateBlock">
+                <div class="col-sm-12  container-color offset30 mainTemplateBlock">
                     <div class="dropdown icon-upload-ctn">
                         <span class="icon-upload-detail dropdown-toggle" data-toggle="dropdown"></span>
                         <ul class="actions text-left dropdown-menu">

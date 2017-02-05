@@ -280,7 +280,7 @@
                 </div>	
                 <div class="form-group">
                     <label>Office Location Information <i class="optional">(Optional)</i></label>
-                    <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="location information required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
+                    <textarea name="officeLocation" class="form-control txtHeight chacterValidtion"   data-parsley-required-message="location information required" maxlength="500" >{{ old('officeLocation') }}</textarea>
                 </div>	
             </div>
             <div id="removeButton" class="pull-right text-right pd-b-15">

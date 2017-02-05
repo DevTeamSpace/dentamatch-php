@@ -55,10 +55,14 @@ return [
     'apply_job_success' => 'Successfully applied for this job',
     'job_not_applied_by_you' => 'You have not applied for this job',
     'job_cancelled_success' => 'Job has cancelled successfully',
-    'profile_not_complete' => 'You ll need to fillout your profile before applying for this job',
+    'profile_not_complete' => 'You’ll need to fill out your profile before applying for the job. Would you like to fill this out now?',
     'job_detail_success' => 'Job detail retrieved successfully',
     'job_already_saved' => 'You have already saved this job before',
     'location_update_success' => 'Location details updated successfully',
+    'calendar_availability_list' => 'Calendar Availability List Retrieved',
+    'saved_job_list' => "Saved job list",
+    'applied_job_list' => 'Applied job list',
+    'shortlisted_job_list' => 'Shortlisted job list'
     
     'password_saved_successfully'=>'Password changed successfully',
     'old_not_match'=>'Old Password not matched.',
