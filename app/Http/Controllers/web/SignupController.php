@@ -76,7 +76,7 @@ class SignupController extends Controller {
     }
 
     public function dashboard() {
-        $officeType = \App\Models\OfficeType::all();
+        $officeType = \App\Models\OfficeType::orderBy('officetype_name', 'ASC')->get();
         return view('web.dashboard')->with('officeType', $officeType);
     }
 

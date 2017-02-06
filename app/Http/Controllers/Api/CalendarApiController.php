@@ -128,7 +128,7 @@ class CalendarApiController extends Controller {
                 $calendarYear = $reqData['calendarYear'];
                 $listAvailability = UserProfile::getAvailability($userId, $calendarMonth, $calendarYear);
                 if(count($listAvailability) > 0){
-                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.calendar_availability_list"),  apiResponse::convertToCamelCase($listAvailability));
+                    $response = apiResponse::customJsonResponse(1, 200, "",  apiResponse::convertToCamelCase($listAvailability));
                 }else{
                     $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
                 }

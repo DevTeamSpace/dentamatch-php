@@ -59,5 +59,6 @@ class Kernel extends HttpKernel
         'recruiter'=> \App\Http\Middleware\Recruiter::class,
         'acceptedTerms'=> \App\Http\Middleware\AcceptedTerms::class,
         'officeDetails'=> \App\Http\Middleware\OfficeDetails::class,
+        'nocache' => \App\Http\Middleware\NocacheMiddleware::class,
     ];
 }
