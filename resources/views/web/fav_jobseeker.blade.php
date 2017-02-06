@@ -12,7 +12,7 @@
         </div>
         <div class="media-body row">
             <div class="col-sm-8 pd-t-10 ">
-                <div ><a href="#" class="media-heading">{{$fav->first_name}} {{$fav->last_name}}</a> <span class="mr-l-5 label label-success">3.8</span></div>
+                <div ><a href="#" class="media-heading">{{$fav->first_name}} {{$fav->last_name}}</a> <span class="mr-l-5 label label-success">{{number_format($fav->sum,1)}}</span></div>
                 <p>Dental Assistant</p>
             </div>
             <div class="col-sm-4 pd-t-15 text-right">
@@ -20,7 +20,7 @@
                 <button type="submit" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-b-5" >Invite</button>
                 <p class="text-success "><span  class=" invite-success"><i class="fa fa-check "></i></span> Invitation sent</p>
                 @else
-                <button type="submit" class="btn btn-primary-outline pd-l-30 pd-r-30 " onclick="<script>$('#seekerId').val('12');</script>" data-toggle="modal" data-target=".select_list">Invite</button>
+                <button type="submit" class="btn btn-primary-outline pd-l-30 pd-r-30 " onclick="putValue('{{$fav->seeker_id}}')" data-toggle="modal" data-target=".select_list">Invite</button>
                 @endif
             </div>
         </div>
@@ -43,16 +43,15 @@
                         {{ csrf_field() }}
                         <div class="form-group custom-select">
                             <label for="selectJobSeeker">Choose the job you want to invite for</label>
-                            <input type="hidden" id="seekerId" value="12">
+                            <input type="hidden" id="seekerId" name="seekerId" >
                             <select  id="selectJobSeeker" name="selectJobSeeker"  class="selectpicker" required="" data-parsley-required-message="Please select the job." >
                                 <option value="" disabled selected>Select </option>
-                                <option value="1" data-content="<h5>Dental Hygienist</h5><span class='label label-warning'>Temporary</span>">
-                                    Dental Hygienist
+                                @foreach($jobDetail as $job)
+                                <option value="{{$job->recruiterId}}" data-content="<h5>{{$job->jobtitle_name}}</h5><span class='label label-warning'>Temporary</span>">
+                                    {{$job->jobtitle_name}}
                                 </option>
                                 <option data-divider="true"></option>
-                                <option value="1" data-content="<h5>Dental </h5><span class='label label-warning'>Temporary</span>">
-                                    Dental
-                                </option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="text-right mr-t-20 mr-b-30">
@@ -65,13 +64,17 @@
         </div>
     </div>
 </div>
+@section('js')
+
 <script>
     $(document).ready(function () {
-        $('#selectJobSeeker, #selectTemplate').selectpicker({
-            style: 'btn btn-primary'
-        });
-
+    $('#selectJobSeeker, #selectTemplate').selectpicker({
+    style: 'btn btn-primary'
     });
-
+    });
+    function putValue(v){
+    $('#seekerId').val(v);
+    }
 </script>
+@endsection
 @endsection
