@@ -41,11 +41,22 @@ class FavoriteJobseekerController extends Controller {
                             ->withInput();
         }
         try {
-            \App\Models\JobLists::create([
-                'recruiter_job_id' => $request->selectJobSeeker,
-                'seeker_id' => $request->seekerId,
-                'applied_status' => '1',
-            ]);
+            $jobList = \App\Models\JobLists::where('seeker_id', $request->seekerId)->first();
+            if (isset($jobList) && !empty($jobList)) {
+                if ($jobList->recruiter_job_id != $request->selectJobSeeker) {
+                    \App\Models\JobLists::create([
+                        'recruiter_job_id' => $request->selectJobSeeker,
+                        'seeker_id' => $request->seekerId,
+                        'applied_status' => '1',
+                    ]);
+                }
+            } else {
+                \App\Models\JobLists::create([
+                    'recruiter_job_id' => $request->selectJobSeeker,
+                    'seeker_id' => $request->seekerId,
+                    'applied_status' => '1',
+                ]);
+            }
             return redirect('favorite-jobseeker');
         } catch (Exception $ex) {
             print_r($ex->getMessage());
