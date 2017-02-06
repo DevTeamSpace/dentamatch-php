@@ -62,7 +62,7 @@ return [
     'calendar_availability_list' => 'Calendar Availability List Retrieved',
     'saved_job_list' => "Saved job list",
     'applied_job_list' => 'Applied job list',
-    'shortlisted_job_list' => 'Shortlisted job list'
+    'shortlisted_job_list' => 'Shortlisted job list',
     
     'password_saved_successfully'=>'Password changed successfully',
     'old_not_match'=>'Old Password not matched.',
