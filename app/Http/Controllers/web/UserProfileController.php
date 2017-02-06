@@ -15,7 +15,7 @@ use Hash;
 class UserProfileController extends Controller {
 
     public function officeDetails(Request $request) {
-
+        
         if (isset($request->phoneNumber) && !empty($request->phoneNumber)) {
             $var = filter_var($request->phoneNumber, FILTER_SANITIZE_NUMBER_INT);
             $newPhone = str_replace(array('+', '-'), '', $var);
@@ -44,7 +44,6 @@ class UserProfileController extends Controller {
             'sundayEnd' => 'required_if:sunday,1',
             'contactNumber' => 'required|numeric|digits_between:9,10'
         ]);
-
         try {
             RecruiterOffice::createProfile($request);
 //            if (in_array($request->postal_code, \App\Models\Location::getList())) {

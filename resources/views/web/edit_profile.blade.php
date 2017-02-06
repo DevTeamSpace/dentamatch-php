@@ -1,14 +1,21 @@
 @extends('web.layouts.dashboard')
 
 @section('content')
+<style>
+    .pac-container:after{
+        content:none !important;
+    }
+</style>
 <div class="container globalpadder">
     <!-- Tab-->
-    <form data-parsley-validate="" novalidate=""  class="formdataPart">	
-        <div class="row">
-            @include('web.layouts.sidebar')
-            <div class="col-sm-8 ">
-                <div class="addReplica">
-                    @if(isset($user->office_name) && !empty($user->office_name && !empty($user->office_desc)))
+    <div class="row">
+        @include('web.layouts.sidebar')
+        <div class="col-sm-8 ">
+            <div class="addReplica">
+                @if(isset($user->office_name) && !empty($user->office_name && !empty($user->office_desc)))
+                <form data-parsley-validate="" id="createProfileForm" novalidate=""  class="formdataPart" action="javascript:void(0);">	
+                    {{ csrf_field() }}
+                    <div id="createForm-errors"></div>
                     <div class="resp-tabs-container commonBox profilePadding cboxbottom ">
                         <div class="descriptionBox">
                             <div class="dropdown icon-upload-ctn1">
@@ -28,9 +35,12 @@
                             </div>
                         </div>
                     </div>
-                    @endif
+                </form>
+                @endif
+                                    <input type="hidden" value="{{ json_encode($officeType,true) }}" id="hiddenofficeTypesJson">
 
-                    @foreach($offices as $office)
+                @foreach($offices as $office)
+<!--                <form data-parsley-validate="" id="officedetailform" novalidate=""  class="formdataPart">	-->
                     <div class="resp-tabs-container commonBox replicaBox profilePadding cboxbottom masterBox">
                         <div class="descriptionBox">
                             <div class="dropdown icon-upload-ctn1">
@@ -43,7 +53,6 @@
                             <div class="descriptionBoxInner">
                                 <div class="viewProfileRightCard pd-b-25">
                                     <input type="hidden" value="{{ $office->officetype_id }}" id="hiddenofficeTypeId{{$office->id}}">
-                                    <input type="hidden" value="{{ json_encode($officeType,true) }}" id="hiddenofficeTypesJson">
                                     <input type="hidden" value="{{$office->id}}" id="hiddenEditId">
                                     <div class="detailTitleBlock">
                                         <h5>OFFICE DETAILS</h5>
@@ -142,22 +151,74 @@
                                 <div class="viewProfileRightCard pd-b-25">
                                     <input type="hidden" value="{{ $office->office_location }}" id="hiddenlocation{{$office->id}}">
                                     <h6>Office Location Information</h6>	
-                                    <p>{{$office->location}}</p>	
+                                    <p>{{$office->office_location}}</p>	
                                 </div>					
                             </div>
                         </div>
                     </div>
-                    @endforeach
-                </div>
-                <br>
-                @if(count($offices)>2)
-                @else
-                <div class="pull-right text-right">
-                    <div class="addProfileBtn "><span class="icon icon-plus"></span></div>
-                </div>
-                @endif
+<!--                </form>-->
+                @endforeach
             </div>
+            <br>
+            @if(count($offices)>2)
+            @else
+            <div class="pull-right text-right">
+                <div class="addProfileBtn "><span class="icon icon-plus"></span></div>
+            </div>
+            @endif
         </div>
-    </form>	
+    </div>
 </div>    
+<!--<input id="autocomplete" type="text">
+<input id="postal_code" type="text">-->
+@section('js')
+
+<script>
+    var placeSearch, autocomplete;
+    var componentForm = {
+        postal_code: 'short_name'
+    };
+
+    function initAutocomplete() {
+        // Create the autocomplete object, restricting the search to geographical
+        // location types.
+        console.log(document.getElementById('autocomplete'));
+        autocomplete = new google.maps.places.SearchBox(
+                /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+                {types: ['geocode']});
+
+        // When the user selects an address from the dropdown, populate the address
+        // fields in the form.
+        autocomplete.addListener('places_changed', fillInAddress);
+    }
+
+    function fillInAddress() {
+        // Get the place details from the autocomplete object.
+        var allPlace = autocomplete.getPlaces();
+
+        allPlace.forEach(function (place) {
+                    $('#postal_code').val('');
+            // Get each component of the address from the place details
+            // and fill the corresponding field on the form.
+            for (var i = 0; i < place.address_components.length; i++) {
+                var addressType = place.address_components[i].types[0];
+                if (componentForm[addressType]) {
+                    var val = place.address_components[i][componentForm[addressType]];
+                    document.getElementById(addressType).value = val;
+                }
+            }
+                    document.getElementById('full_address').value = place.formatted_address;
+                    document.getElementById('lat').value = place.geometry.location.lat();
+                    document.getElementById('lng').value = place.geometry.location.lng();
+                    $('#autocomplete').val(place.formatted_address);
+                    checkLocation($('#postal_code').val(), '');
+
+        });
+
+    }
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsIYaIMo9hd5yEL7pChkVPKPWGX6rFcv8&libraries=places"
+async defer></script>
+@endsection
 @endsection

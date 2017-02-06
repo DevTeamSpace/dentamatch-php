@@ -16,7 +16,7 @@ class RecruiterJobs extends Model
     const FULLTIME = 1;
     const PARTTIME = 2;
     const TEMPORARY = 3;
-    const LIMIT = 2;
+    const LIMIT = 10;
     
     static $jobTypeName = ['1'=>'Full Time', '2'=>'Part Time', '3'=>'Temp'];
     
@@ -63,27 +63,49 @@ class RecruiterJobs extends Model
                 }
         $latitude = $reqData['lat'];
         $longitude = $reqData['lng'];
+                /*$searchQueryObj = RecruiterJobs::leftJoin('job_lists','job_lists.recruiter_job_id','=','recruiter_jobs.id')
+                        ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+                        ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
+                        ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
+                        ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
+                        ->whereNull('job_lists.id')
+                        ->whereIn('job_titles.id', $reqData['jobTitle']);*/
                 $searchQueryObj = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                         ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
                         ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
                         ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
-                        ->whereIn('job_titles.id', $reqData['jobTitle']);
+                        ->whereIn('job_templates.job_title_id', $reqData['jobTitle']);
                 if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 0){
                     $searchQueryObj->where('recruiter_jobs.job_type',1);
                 }
                 if($reqData['isFulltime'] == 0 && $reqData['isParttime'] == 1){
                     $searchQueryObj->where('recruiter_jobs.job_type',2);
                     if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
-                        foreach($reqData['parttimeDays'] as $day){
-                            $searchQueryObj->orWhere('is_'.$day, 1);
+                        //$daysArray = ['is_monday'=>0, 'is_tuesday'=>0, 'is_wednesday'=>0, 'is_thursday'=>0, 'is_friday'=>0, 'is_saturday'=>0, 'is_sunday'=>0];
+                        foreach($reqData['parttimeDays'] as $key => $day){
+                            //foreach($reqData['parttimeDays'] as $key => $day){
+                            //$searchQueryObj->orWhere('is_'.$day, 1);
+                            if($key == 0){
+                                $searchQueryObj->Where('is_'.$day, 1);
+                            }else{
+                                $searchQueryObj->orWhere('is_'.$day, 1);
+                            }
+                        //}
                         }
+                         //$searchQueryObj->where($daysArray);
                     }
                 }
                 if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 1){
                     $searchQueryObj->whereIn('recruiter_jobs.job_type',[1,2]);
                     if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
-                        foreach($reqData['parttimeDays'] as $day){
-                            $searchQueryObj->orWhere('is_'.$day, 1);
+                        foreach($reqData['parttimeDays'] as $key => $day){
+                            //$searchQueryObj->orWhere('is_'.$day, 1);
+                            if($key == 0){
+                                $searchQueryObj->Where('is_'.$day, 1);
+                            }else{
+                                $searchQueryObj->orWhere('is_'.$day, 1);
+                            }
+                            //$searchQueryObj->orWhere('is_'.$day, 1);
                         }
                     }
                 }
@@ -92,7 +114,7 @@ class RecruiterJobs extends Model
                                 'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
                                 'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
                                 'recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
-                                'job_titles.jobtitle_name','recruiter_profiles.office_name',
+                                'job_titles.jobtitle_name','recruiter_profiles.office_name','job_templates.job_title_id',
                                 'recruiter_offices.address','recruiter_offices.zipcode',
                                 'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
                                 DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
@@ -110,7 +132,7 @@ class RecruiterJobs extends Model
                 if($page>1){
                     $skip = ($page-1)* $limit;
                 }
-                $searchResult = $searchQueryObj->skip($skip)->take($limit)->get();
+                $searchResult = $searchQueryObj->skip($skip)->take($limit)->orderBy('distance', 'asc')->get();
                 $result = array();
                 $updatedResult = array();
                 if($searchResult){
@@ -248,8 +270,8 @@ class RecruiterJobs extends Model
             DB::raw("group_concat(office_types.officetype_name) AS officetype_name"),
             DB::raw("group_concat(temp_job_dates.job_date) AS temp_job_dates"),
             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
-        $jobData = $jobObj->first()->toArray();
-        return $jobObj->first();
+    
+        return $jobObj->first()->toArray();
     } 
 }
     

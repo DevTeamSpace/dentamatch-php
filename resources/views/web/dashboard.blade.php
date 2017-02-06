@@ -55,7 +55,7 @@
                     </div>
                     <label >Dental Office Type</label>
                     <div class="slt">
-                        <select style="display:none;" name="officeType[]" value="" class="ddlCars" multiple="multiple" data-parsley-required data-parsley-required-message="Required">
+                        <select  name="officeType[]" value="" class="ddlCars" multiple="multiple" data-parsley-required data-parsley-required-message="required">
                             @foreach($officeType as $office)
                             <option value="{{$office->id}}" >{{$office->officetype_name}}</option>
                             @endforeach
@@ -281,6 +281,7 @@
                 <div class="form-group">
                     <label>Office Location Information <i class="optional">(Optional)</i></label>
                     <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="Required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
+
                 </div>	
             </div>
             <div id="removeButton" class="pull-right text-right pd-b-15">

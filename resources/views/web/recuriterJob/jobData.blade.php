@@ -95,12 +95,7 @@
                 </ul>
             </div>
             <div class="col-sm-4 search-seeker">
-                <form method="post" action="javascript:void(0);">
-                    <!--{{ url('search/job') }}-->
-                    <input type="hidden" name="jobType" value="{{ $job['job_type'] }}">
-                    <input type="hidden" name="jobTitle" value="{{ $job['job_title_id'] }}">
-                    <button type="submit" class="btn btn-primary pd-l-30 pd-r-30 pull-right">Search Seekers</button>
-                </form>
+                <a href="{{ url('search/job',[$job['job_type'],$job['job_title_id']]) }}" class="btn btn-primary pd-l-30 pd-r-30 pull-right">Search Seekers</a>
             </div>
         </div>
 

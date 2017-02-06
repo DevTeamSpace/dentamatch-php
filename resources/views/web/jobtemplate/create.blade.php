@@ -12,13 +12,13 @@
 
                 <div class="form-group">
                     <label >Template Name</label>
-                    <input value="{{ (isset($templateData->templateName)?$templateData->templateName:'') }}" name="templateName" type="text" class="form-control"  data-parsley-required data-parsley-required-message="templete name required">
+                    <input value="{{ (isset($templateData->templateName)?$templateData->templateName:'') }}" name="templateName" type="text" class="form-control"  data-parsley-required data-parsley-required-message="Required">
                 </div>
                 <div class="form-group">
                     <label >Job Title</label>
 
-                    <div class="slt">
-                        <select name="jobTitleId" class="ddlCars" data-parsley-required data-parsley-required-message="job title required">
+                    <div class="slt custom-select">
+                        <select id="jobTitleId" name="jobTitleId" class="selectpicker"  data-parsley-required data-parsley-required-message="Required">
                             @foreach ($jobTitleData as $jobTitle)
                             <option {{ (isset($templateData->jobTitleId) && $templateData->jobTitleId==$jobTitle['id'])?'selected':'' }} value="{{ $jobTitle['id'] }}">{{ $jobTitle['jobtitle_name'] }}</option>
                             @endforeach
@@ -28,7 +28,7 @@
                 </div>
                 <div class="form-group">
                     <label>Job Description</label>
-                    <textarea name="templateDesc" class="form-control txtHeight"  data-parsley-required data-parsley-required-message= "job description required"  data-parsley-maxlength="100" data-parsley-maxlength-message="Charcter should be 500" >{{ (isset($templateData->templateDesc)?$templateData->templateDesc:'') }}</textarea>
+                    <textarea name="templateDesc" class="form-control chacterValidtion txtHeight" maxlength="500"  data-parsley-required data-parsley-required-message= "Required"   >{{ (isset($templateData->templateDesc)?$templateData->templateDesc:'') }}</textarea>
                 </div>
 
             </div>		
@@ -38,17 +38,18 @@
                     <div class="detailTitleBlock">
                         <h5>KEY SKILLS</h5>
                     </div>
-                </div>
                 @foreach ($skillsData as $key => $skills)
                 <div class="form-group">
                     <label ><?=$key?></label>
-                    <select class="my-select" name="skills[]" multiple="multiple">
+                    <select class="my-select" name="skills[]" multiple="multiple" style="display:none">
                         @foreach ($skills as $skillData)
                         <option {{ (isset($skillData['sel_skill_id']) && $skillData['sel_skill_id']==$skillData['id'])?'selected':'' }} value="{{ $skillData['id'] }}">{{ $skillData['skill_name'] }}</option>
                         @endforeach
                     </select>
                 </div>
                 @endforeach
+					</div>
+                
             </div>	
         </div>
         <div class="pull-right text-right">
@@ -102,6 +103,9 @@
 $('.ddlCars').multiselect({
     numberDisplayed: 3,
 });
+	$('#jobTitleId').selectpicker({
+				style: 'btn btn-default'
+			});
 
 $('.my-select').searchableOptionList({
     maxHeight: 200,

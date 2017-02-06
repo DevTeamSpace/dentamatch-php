@@ -973,12 +973,45 @@ paths:
           in: header
           description: access token
           type: string
-        - name: jobDate
+        - name: jobMonth
           in: formData
-          description: jobDate in YYYY-MM-DD format
+          description: jobMonth in (01-12)
+          type: string
+        - name: jobYear
+          in: formData
+          description: jobYear in YYYY format
           type: string
          
       tags:
         - Job search
+
+  /users/availability-list:
+    post:
+      summary: Get Hired Jobs
+      description: Api to get availability of user
+      responses: 
+          200:
+            description: Api to get availability of user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: calendarMonth
+          in: formData
+          description: calendarMonth in (01-12)
+          type: string
+        - name: calendarYear
+          in: formData
+          description: calendarYear in YYYY format
+          type: string
+         
+      tags:
+        - Availability
 
 
