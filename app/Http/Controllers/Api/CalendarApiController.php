@@ -78,16 +78,16 @@ class CalendarApiController extends Controller {
     {
         try{
             $this->validate($request, [
-                'jobMonth' => 'required',
-                'jobYear' => 'required'
+                'jobStartDate' => 'required',
+                'jobEndDate' => 'required'
             ]);
             
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $reqData = $request->all();
-                $jobMonth = $reqData['jobMonth'];
-                $jobYear = $reqData['jobYear'];
-                $listHiredJobs = JobLists::postJobCalendar($userId, $jobMonth, $jobYear);
+                $jobStartDate = $reqData['jobStartDate'];
+                $jobEndDate = $reqData['jobEndDate'];
+                $listHiredJobs = JobLists::postJobCalendar($userId, $jobStartDate, $jobEndDate);
                 if(count($listHiredJobs['list']) > 0){
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"),  apiResponse::convertToCamelCase($listHiredJobs));
                 }else{
@@ -117,16 +117,16 @@ class CalendarApiController extends Controller {
     {
         try{
             $this->validate($request, [
-                'calendarMonth' => 'required',
-                'calendarYear' => 'required'
+                'calendarStartDate' => 'required',
+                'calendarEndDate' => 'required'
             ]);
             
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $reqData = $request->all();
-                $calendarMonth = $reqData['calendarMonth'];
-                $calendarYear = $reqData['calendarYear'];
-                $listAvailability = UserProfile::getAvailability($userId, $calendarMonth, $calendarYear);
+                $calendarStartDate = $reqData['calendarStartDate'];
+                $calendarEndDate = $reqData['calendarEndDate'];
+                $listAvailability = UserProfile::getAvailability($userId, $calendarStartDate, $calendarEndDate);
                 if(count($listAvailability) > 0){
                     $response = apiResponse::customJsonResponse(1, 200, "",  apiResponse::convertToCamelCase($listAvailability));
                 }else{
