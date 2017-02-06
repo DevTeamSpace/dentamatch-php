@@ -91,7 +91,7 @@ class JobLists extends Model
         return $return;
     }
     
-    public static function postJobCalendar($userId, $jobMonth, $jobYear)
+    public static function postJobCalendar($userId, $jobStartDate, $jobEndDate)
     {
         $result = [];
         $jobTypeCount = [];
@@ -102,8 +102,8 @@ class JobLists extends Model
                         ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
                         ->where('job_lists.seeker_id','=' ,$userId)
                         ->where('job_lists.applied_status', '=' , JobLists::HIRED)
-                        ->where(DB::raw("DATE_FORMAT(job_lists.created_at, '%m')"), "=",$jobMonth)
-                        ->where(DB::raw("DATE_FORMAT(job_lists.created_at, '%Y')"), "=",$jobYear);        
+                        ->where(DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d')"), ">=",$jobStartDate)
+                        ->where(DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d')"), "<=",$jobEndDate);        
         
         $total = $searchQueryObj->count();
         $searchQueryObj->select('job_lists.recruiter_job_id','recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
@@ -115,7 +115,7 @@ class JobLists extends Model
                         'recruiter_offices.latitude','recruiter_offices.longitude',
                         'recruiter_jobs.created_at as job_created_at', 'job_lists.created_at as job_applied_on',
                         DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
-                        DB::raw("DATE_FORMAT(job_lists.created_at, '%Y-%m-%d') AS jobDate"));
+                        DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d') AS jobDate"));
 
         $searchResult = $searchQueryObj->with('tempJobDates')->get();
         
