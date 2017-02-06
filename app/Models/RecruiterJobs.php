@@ -270,8 +270,8 @@ class RecruiterJobs extends Model
             DB::raw("group_concat(office_types.officetype_name) AS officetype_name"),
             DB::raw("group_concat(temp_job_dates.job_date) AS temp_job_dates"),
             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
-        $jobData = $jobObj->first()->toArray();
-        return $jobObj->first();
+    
+        return $jobObj->first()->toArray();
     } 
 }
     
