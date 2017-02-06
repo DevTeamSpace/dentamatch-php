@@ -86,16 +86,17 @@ class JobLists extends Model {
     public static function postJobCalendar($userId, $jobMonth, $jobYear) {
         $result = [];
         $jobTypeCount = [];
-        $searchQueryObj = JobLists::join('recruiter_jobs', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
-                ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
-                ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
-                ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
-                ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'recruiter_offices.user_id')
-                ->where('job_lists.seeker_id', '=', $userId)
-                ->where('job_lists.applied_status', '=', JobLists::HIRED)
-                ->where(DB::raw("DATE_FORMAT(job_lists.created_at, '%m')"), "=", $jobMonth)
-                ->where(DB::raw("DATE_FORMAT(job_lists.created_at, '%Y')"), "=", $jobYear);
 
+        $searchQueryObj = static::join('recruiter_jobs','job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
+                        ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+                        ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
+                        ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
+                        ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
+                        ->where('job_lists.seeker_id','=' ,$userId)
+                        ->where('job_lists.applied_status', '=' , JobLists::HIRED)
+                        ->where(DB::raw("DATE_FORMAT(job_lists.created_at, '%m')"), "=",$jobMonth)
+                        ->where(DB::raw("DATE_FORMAT(job_lists.created_at, '%Y')"), "=",$jobYear);        
+        
         $total = $searchQueryObj->count();
         $searchQueryObj->select('job_lists.recruiter_job_id', 'recruiter_jobs.id', 'recruiter_jobs.job_type', 'recruiter_jobs.is_monday', 'recruiter_jobs.is_tuesday', 'recruiter_jobs.is_wednesday', 'recruiter_jobs.is_thursday', 'recruiter_jobs.is_friday', 'recruiter_jobs.is_saturday', 'recruiter_jobs.is_sunday', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name', 'recruiter_offices.address', 'recruiter_offices.zipcode', 'recruiter_offices.latitude', 'recruiter_offices.longitude', 'recruiter_jobs.created_at as job_created_at', 'job_lists.created_at as job_applied_on', DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"), DB::raw("DATE_FORMAT(job_lists.created_at, '%Y-%m-%d') AS jobDate"));
 

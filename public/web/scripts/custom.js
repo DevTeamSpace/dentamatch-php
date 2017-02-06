@@ -258,7 +258,7 @@ $(function () {
     //$('.masterBox').find('.ckBox').children('input[type="checkbox"]').on('change',checkBoxValidation);
     $(document).on('change', '.masterBox .ckBox input[type="checkbox"]', checkBoxValidation);
 //$('.customsel').on("change",changeSelect);
-	$(document).on("click",".formBtnAction",checkBtnValidation);
+	//$(document).on("click",".formBtnAction",checkBtnValidation);
 
 
 });
