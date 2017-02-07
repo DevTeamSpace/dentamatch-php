@@ -12,4 +12,5 @@ return [
         'user_width' => '300',
         'user_height' => '300',
         'ImageType' => 'jpg',
+        'LocationActive' => 1
 ];
