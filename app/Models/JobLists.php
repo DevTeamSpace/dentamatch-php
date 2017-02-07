@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Auth;
 
 class JobLists extends Model
 {
@@ -100,8 +101,15 @@ class JobLists extends Model
                         //->where('job_ratings.recruiter_job_id', '=', 'job_lists.recruiter_job_id')
                         ->whereNotNull('job_lists.temp_job_id');
                 })
+                ->leftjoin('favourites',function($query){
+                    $query->on('favourites.seeker_id','=','job_lists.seeker_id')
+                        ->where('favourites.recruiter_id',Auth::user()->id);
+                })
+                ->addSelect('favourites.seeker_id as is_favourite')
                 ->leftJoin('temp_job_dates','job_lists.temp_job_id','=','temp_job_dates.id')
                 ->addSelect(DB::raw("group_concat(temp_job_dates.job_date) AS temp_job_dates"))
+                ->addSelect(DB::raw("avg(punctuality) as punctuality"),DB::raw("avg(time_management) as time_management"),
+                        DB::raw("avg(skills) as skills"),DB::raw("avg(teamwork) as teamwork"),DB::raw("avg(onemore) as onemore"))
                 ->addSelect(DB::raw("(avg(punctuality)+avg(time_management)+avg(skills)+avg(teamwork)+avg(onemore))/5 AS avg_rating"))
                 ->groupby('job_lists.applied_status','job_lists.seeker_id','job_lists.recruiter_job_id');
             /*$obj->leftjoin('jobseeker_temp_availability',function($query) use ($job){
@@ -125,5 +133,9 @@ class JobLists extends Model
                     ->get();
         
         return ($data->groupBy('applied_status')->toArray());  
+    }
+    
+    public static function getJobInfo($seekerId,$jobId) {
+        return static::where('seeker_id',$seekerId)->where('recruiter_job_id',$jobId)->first();
     }
 }
