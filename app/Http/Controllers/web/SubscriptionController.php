@@ -12,7 +12,7 @@ use App\Models\RecruiterOffice;
 class SubscriptionController extends Controller {
     
     public function __construct(){
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+//        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
     }
 
     public function getSubscription(){
