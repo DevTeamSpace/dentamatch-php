@@ -10,7 +10,7 @@
   | to using a Closure or controller method. Build something great!
   |
  */
-
+Route::post('stripe-test', 'web\SubscriptionController@getStripeTest');
 Route::get('image/{w}/{h}/', function(League\Glide\Server $server, $w, $h) {
     $server->outputImage($_GET['src'], ['w' => $w, 'h' => $h, 'fit' => 'crop']);
 });
@@ -59,6 +59,8 @@ Route::group(['middleware' => ['auth', 'xss']], function () {
             Route::get('get-location/{zip}', 'web\UserProfileController@checkValidLocation');
 
             Route::get('subscription-detail', 'web\SubscriptionController@getSubscription');
+            Route::get('get-subscription-list', 'web\SubscriptionController@getSubscriptionList');
+            Route::get('stripe/connect', 'web\SubscriptionController@getStripeConnect');
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
             Route::post('change-password', 'web\UserProfileController@postChangePassword');
         });
