@@ -31,6 +31,25 @@ class SubscriptionController extends Controller {
         return $subscription;
     }
     
+    public function getConnectLink(){
+        $auth_uri = "https://connect.stripe.com/oauth/authorize";
+        $redirect = url('stripe/connect');
+
+        $client_id = env('STRIPE_CLIENT_ID');
+
+        $authorize_request_body = array(
+          'response_type' => 'code',
+          'scope' => 'read_write',
+          'client_id' => $client_id,
+          'redirect_uri' => $redirect,
+          'stripe_user[email]' => Auth::user()->email
+        );
+
+        $url = $auth_uri . '?' . http_build_query($authorize_request_body);
+
+        echo "<script>location.href =' $url';</script>";
+    } //End of function getConnectLink
+    
     public function getStripeConnect(){
         $stripeToken = $_GET['code'];
         $updateToken = RecruiterProfile::updateStripeToken($stripeToken);
