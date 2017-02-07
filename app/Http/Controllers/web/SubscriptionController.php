@@ -28,6 +28,9 @@ class SubscriptionController extends Controller {
     }
     
     public function getStripeConnect(){
-        dd($_REQUEST);
+        $stripeToken = $_GET['code'];
+        $updateToken = RecruiterProfile::updateStripeToken($stripeToken);
+        print_r($stripeToken);
+        dd($updateToken);
     }
 }
