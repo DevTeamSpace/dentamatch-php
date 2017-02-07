@@ -34,10 +34,11 @@ class SubscriptionController extends Controller {
     public function getStripeConnect(){
         $stripeToken = $_GET['code'];
         $updateToken = RecruiterProfile::updateStripeToken($stripeToken);
-        $customerCard = \Stripe\Customer::all();
-//        $customerCard = \Stripe\Customer::retrieve($stripeToken)->sources->all(array(
-//            "object" => "card"
-//          ));
-        dd($customerCard);
+        $createCustomer = \Stripe\Customer::create(array(
+            "description" => "Customer for ".Auth::user()->email,
+            "source" => $stripeToken, // obtained with Stripe.js
+            "email" => Auth::user()->email
+        ));
+        dd($createCustomer);
     }
 }
