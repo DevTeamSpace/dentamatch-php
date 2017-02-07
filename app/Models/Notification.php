@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Auth;
@@ -28,5 +28,10 @@ class Notification extends Model {
             $array['list'] = $list;
             $array['total'] = $total;
             return $array;
+    }
+    
+    public static function createNotification($data)
+    {
+        static::insert($data);
     }
 }
