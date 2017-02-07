@@ -118,12 +118,14 @@ class UserApiController extends Controller {
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                         ->select(
                                 'user_groups.group_id', 
-                                'users.email','users.id',
+                                'users.email',
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name',
                                 'jobseeker_profiles.profile_pic',
                                 'jobseeker_profiles.zipcode',
                                 'jobseeker_profiles.preferred_job_location',
+                                'jobseeker_profiles.latitude',
+                                'jobseeker_profiles.longitude',
                                 'users.is_verified'
                                 )
                         ->where('users.id', $userId)
