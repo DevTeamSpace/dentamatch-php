@@ -127,7 +127,7 @@
             <div class="media jobCatbox">
                 <div class="media-left ">
                     <div class="img-holder ">
-                        <img class="media-object img-circle" src="{{ url("image/150/150/?src=" .$seeker['profile_pic']) }}" alt="...">
+                        <img class="media-object img-circle" src="{{ url("image/66/66/?src=" .$seeker['profile_pic']) }}" alt="...">
                         @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
                         <span class="star {{ ($seeker['is_favourite']==null)?'star-empty':'star-fill' }}"></span>
                         @endif
