@@ -17,5 +17,9 @@ class RecruiterProfile extends Model {
                     'office_desc' => $request->officeDescription
         ]);
     }
+    
+    public static function updateStripeToken($token){
+        return RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['stripe_token' => $token]);
+    }
 
 }
