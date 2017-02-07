@@ -11,6 +11,7 @@ use App\Models\TempJobDates;
 use App\Models\TemplateSkills;
 use App\Models\JobLists;
 use App\Models\RecruiterOffice;
+use App\Models\ChatUserLists;
 use DB;
 
 class RecruiterJobController extends Controller
@@ -133,6 +134,12 @@ class RecruiterJobController extends Controller
             if($jobData){
                 $jobData->applied_status = $requestData['appliedStatus'];
                 $jobData->save();
+                if($requestData['appliedStatus']==JobLists::SHORTLISTED || $requestData['appliedStatus']==JobLists::HIRED){
+                    $userChat = new ChatUserLists();
+                    $userChat->recruiter_id = Auth::user()->id;
+                    $userChat->seeker_id = $jobData->seeker_id;
+                    $userChat->save();
+                }
                 return redirect('job/details/'.$requestData['jobId']);
             }
         } catch (\Exception $e) {

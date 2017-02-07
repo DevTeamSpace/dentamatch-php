@@ -9,6 +9,7 @@ use App\Models\Device;
 use App\Models\UserProfile;
 use App\Models\SearchFilter;
 use App\Models\PasswordReset;
+use App\Models\ChatUserLists;
 use Mail;
 use Auth;
 use App\Helpers\apiResponse;
@@ -284,6 +285,25 @@ class UserApiController extends Controller {
             if($userId>0) {
                 Device::unRegister_all($userId);
                 $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.user_signout"));
+            } else {
+                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+            }
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            $returnResponse = apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        } catch (\Exception $e) {
+            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+        return $returnResponse;
+    }
+    
+    public function chatRecruiterList(Request $request){
+        try {
+            
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            if($userId>0) {
+                $recruiterList = ChatUserLists::getRecruiterListForChat($userId);
+                $returnResponse = apiResponse::customJsonResponse(1, 200, '',['list'=>$recruiterList]);
             } else {
                 $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
