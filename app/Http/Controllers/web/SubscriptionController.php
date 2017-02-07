@@ -32,6 +32,24 @@ class SubscriptionController extends Controller {
     }
     
     public function getStripeConnect(){
-        return \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        if(isset($_REQUEST['code'])){
+            $client = new \GuzzleHttp\Client();
+            $authCredentials = $client->post('https://connect.stripe.com/oauth/token', [
+                "form_params" => [
+                    "client_secret" => "sk_test_wb4RsL7x0sDB3UFOxhevW76O",
+                    "code" => $_REQUEST['code'],
+                    "grant_type" => "authorization_code"
+                ]
+            ]);
+            $result = $authCredentials->getBody()->getContents();
+            if(isset($result->stripe_user_id)){
+                $updateToken = RecruiterProfile::updateStripeToken($result->stripe_user_id);
+                $createCustomer = \Stripe\Customer::create(array(
+                    "description" => "Customer for".Auth::user()->email,
+                    "source" => $result->stripe_user_id // obtained with Stripe.js
+                ));
+                dd($createCustomer);
+            }
+        }
     }
 }
