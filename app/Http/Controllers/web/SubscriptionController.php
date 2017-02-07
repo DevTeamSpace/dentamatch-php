@@ -12,8 +12,7 @@ use App\Models\RecruiterOffice;
 class SubscriptionController extends Controller {
     
     public function __construct(){
-//        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
-//        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
     }
 
     public function getSubscription(){
@@ -36,9 +35,9 @@ class SubscriptionController extends Controller {
         $stripeToken = $_GET['code'];
         $updateToken = RecruiterProfile::updateStripeToken($stripeToken);
 //        $customerCard = \Stripe\Customer::retrieve($stripeToken)->sources->all();
-//        $customerCard = \Stripe\Customer::retrieve($stripeToken)->sources->all(array(
-//            "object" => "card"
-//          ));
-//        dd($customerCard);
+        $customerCard = \Stripe\Customer::retrieve($stripeToken)->sources->all(array(
+            "object" => "card"
+          ));
+        dd($customerCard);
     }
 }
