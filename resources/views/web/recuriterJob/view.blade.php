@@ -120,119 +120,123 @@
             </div>
         </div>
         @else
-            @foreach($seekerList as $key=>$seekerGroup)
-                <div class="jobseeker-statebox mr-t-25">
-                    <label class="fnt-16 textcolr-38">Jobseeker {{ \App\Models\JobLists::APPLIED_STATUS[$key] }} ({{ count($seekerGroup) }})</label>
-                    @foreach($seekerGroup as $seeker)
-                    <div class="media jobCatbox">
-                        <div class="media-left ">
-                            <div class="img-holder ">
-                                <img class="media-object img-circle" src="{{ url("image/150/150/?src=" .$seeker['profile_pic']) }}" alt="...">
-                                <span class="star {{ ($seeker['is_favourite']==null)?'star-empty':'star-fill' }}"></span>
-                            </div>
-                        </div>
-                        <div class="media-body row">
-                            <div class="col-sm-7 pd-t-10 ">
-                                <div >
-                                    <a href="#" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
-                                    @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
-                                    <span class="mr-l-5 dropdown date_drop">
-                                        <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{ ($seeker['avg_rating']!='')?round($seeker['avg_rating'],1):'' }}</span>
-                                        <ul class="dropdown-menu rating-info">
-                                            <li><div class="rating_on"> Punctuality</div>
-                                                <ul class="rate_me">
-                                                    <li><span></span></li>
-                                                    <li class="active"><span></span></li>
-                                                    <li><span></span></li>
-                                                    <li><span></span></li>
-                                                    <li><span></span></li>
-                                                </ul>
-                                            </li>
-                                            <li><div class="rating_on"> Time management</div>
-                                                <ul class="rate_me">
-                                                    <li><span></span></li>
-                                                    <li class="active"><span></span></li>
-                                                    <li><span></span></li>
-                                                    <li><span></span></li>
-                                                    <li><span></span></li>
-                                                </ul></li>
-                                            <li>
-                                                <div class="rating_on">  Personal/Professional skill</div>
-                                                <ul class="rate_me">
-                                                    <li><span></span></li>
-                                                    <li class="active"><span></span></li>
-                                                    <li><span></span></li>
-                                                    <li><span></span></li>
-                                                    <li><span></span></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </span>
-                                    @endif
-                                </div>
-                                <p class="nopadding">{{ $seeker['jobtitle_name'] }}</p>
-                                @if($seeker['job_type']==\App\Models\RecruiterJobs::PARTTIME)
-                                <p  class="nopadding">
-                                    <!--<span class="bg-ember statusBtn mr-r-5">Part time</span>-->
-                                    @php 
-                                    $seekerDayArr = [];
-                                    ($seeker['is_monday']==1)?array_push($seekerDayArr,'Monday'):'';
-                                    ($seeker['is_tuesday']==1)?array_push($seekerDayArr,'Tuseday'):'';
-                                    ($seeker['is_wednesday']==1)?array_push($seekerDayArr,'Wednesday'):'';
-                                    ($seeker['is_thursday']==1)?array_push($seekerDayArr,'Thursday'):'';
-                                    ($seeker['is_friday']==1)?array_push($seekerDayArr,'Friday'):'';
-                                    ($seeker['is_saturday']==1)?array_push($seekerDayArr,'Saturday'):'';
-                                    ($seeker['is_sunday']==1)?array_push($seekerDayArr,Sunday):'';
-                                    @endphp
-                                    {{ implode(', ',$seekerDayArr) }}
-                                </p>
-                                @endif
-                                @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY && $seeker['temp_job_dates']!=null)
-                                <p  class="nopadding">
-                                    <!--<span class="bg-ember statusBtn mr-r-5">Temporary</span>-->
-                                    <span class="dropdown date-drop">
-                                        @php 
-                                        $seekerDates = explode(',',$seeker['temp_job_dates']);
-                                        @endphp
-                                        <span class="dropdown-toggle"  data-toggle="dropdown">
-                                            <span class="day-drop">{{ date('l, d M Y',strtotime($seekerDates[0])) }}</span>
-                                            <span class="caret"></span></span>
-                                        <ul class="dropdown-menu">
-                                            @foreach ($seekerDates as $date)
-                                            <li>{{ date('l, d M Y',strtotime($date)) }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </span>
-                                </p>
-                                @endif
-                            </div>
-                            <div class="col-sm-5 pd-t-5 text-right">
-                                <p>{{ round($seeker['distance'],2) }} miles away</p>
-                                <form action="{{ url('job/updateStatus') }}" method="post">
-                                    {!! csrf_field() !!}
-                                    <input type="hidden" name="jobId" value="{{ $job['id'] }}">
-                                    <input type="hidden" name="seekerId" value="{{ $seeker['seeker_id'] }}">
-                                @if($key==\App\Models\JobLists::HIRED)
-                                    <button type="button" class="btn btn-primary pd-l-30 pd-r-30 mr-r-5">Message</button>
-                                    @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY && $seeker['avg_rating']==null)
-                                    <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-l-5" >Rate seeker</button>
-                                    @endif
-                                @elseif($key==\App\Models\JobLists::SHORTLISTED)
-                                <button type="button" class="btn btn-primary pd-l-30 pd-r-30 mr-r-5">Message</button>
-                                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::HIRED }}" class="btn btn-primary pd-l-30 pd-r-30 ">Hire</button>
-                                @elseif($key==\App\Models\JobLists::APPLIED)
-                                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::REJECTED }}" class="btn btn-link  mr-r-5">Reject</button>
-                                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::SHORTLISTED }}" class="btn btn-primary pd-l-30 pd-r-30 ">Shortlist</button>
-                                @elseif($key==\App\Models\JobLists::INVITED)
-                                <button type="submit" class="btn btn-primary-outline pd-l-30 pd-r-30 ">Invite</button>
-                                @endif
-                                </form>
-                            </div>
-                        </div>
+        @foreach($seekerList as $key=>$seekerGroup)
+        <div class="jobseeker-statebox mr-t-25">
+            <label class="fnt-16 textcolr-38">Jobseeker {{ \App\Models\JobLists::APPLIED_STATUS[$key] }} ({{ count($seekerGroup) }})</label>
+            @foreach($seekerGroup as $seeker)
+            <div class="media jobCatbox">
+                <div class="media-left ">
+                    <div class="img-holder ">
+                        <img class="media-object img-circle" src="{{ url("image/66/66/?src=" .$seeker['profile_pic']) }}" alt="...">
+                        @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+                        <span class="star {{ ($seeker['is_favourite']==null)?'star-empty':'star-fill' }}"></span>
+                        @endif
                     </div>
-                    @endforeach
                 </div>
+                <div class="media-body row">
+                    <div class="col-sm-7 pd-t-10 ">
+                        <div >
+                            <a href="#" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
+                            @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+                            <span class="mr-l-5 dropdown date_drop">
+                                <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{ ($seeker['avg_rating']!='')?round($seeker['avg_rating'],1):'' }}</span>
+                                <ul class="dropdown-menu rating-info">
+                                    <li><div class="rating_on"> Punctuality</div>
+                                        <ul class="rate_me">
+                                            <li><span></span></li>
+                                            <li class="active"><span></span></li>
+                                            <li><span></span></li>
+                                            <li><span></span></li>
+                                            <li><span></span></li>
+                                        </ul>
+                                    </li>
+                                    <li><div class="rating_on"> Time management</div>
+                                        <ul class="rate_me">
+                                            <li><span></span></li>
+                                            <li class="active"><span></span></li>
+                                            <li><span></span></li>
+                                            <li><span></span></li>
+                                            <li><span></span></li>
+                                        </ul></li>
+                                    <li>
+                                        <div class="rating_on">  Personal/Professional skill</div>
+                                        <ul class="rate_me">
+                                            <li><span></span></li>
+                                            <li class="active"><span></span></li>
+                                            <li><span></span></li>
+                                            <li><span></span></li>
+                                            <li><span></span></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </span>
+                            @endif
+                        </div>
+                        <p class="nopadding">{{ $seeker['jobtitle_name'] }}</p>
+                        @if($seeker['job_type']==\App\Models\RecruiterJobs::PARTTIME)
+                        <p  class="nopadding">
+                            <!--<span class="bg-ember statusBtn mr-r-5">Part time</span>-->
+                            @php 
+                            $seekerDayArr = [];
+                            ($seeker['is_parttime_monday']==1)?array_push($seekerDayArr,'Monday'):'';
+                            ($seeker['is_parttime_tuesday']==1)?array_push($seekerDayArr,'Tuseday'):'';
+                            ($seeker['is_parttime_wednesday']==1)?array_push($seekerDayArr,'Wednesday'):'';
+                            ($seeker['is_parttime_thursday']==1)?array_push($seekerDayArr,'Thursday'):'';
+                            ($seeker['is_parttime_friday']==1)?array_push($seekerDayArr,'Friday'):'';
+                            ($seeker['is_parttime_saturday']==1)?array_push($seekerDayArr,'Saturday'):'';
+                            ($seeker['is_parttime_sunday']==1)?array_push($seekerDayArr,Sunday):'';
+                            @endphp
+                            {{ implode(', ',$seekerDayArr) }}
+                        </p>
+                        @endif
+                        @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY && $seeker['temp_job_dates']!=null)
+                        <p  class="nopadding">
+                            <!--<span class="bg-ember statusBtn mr-r-5">Temporary</span>-->
+                            <span class="dropdown date-drop">
+                                @php 
+                                $seekerDates = explode(',',$seeker['temp_job_dates']);
+                                @endphp
+                                <span class="dropdown-toggle"  data-toggle="dropdown">
+                                    <span class="day-drop">{{ date('l, d M Y',strtotime($seekerDates[0])) }}</span>
+                                    <span class="caret"></span></span>
+                                <ul class="dropdown-menu">
+                                    @foreach ($seekerDates as $date)
+                                    <li>{{ date('l, d M Y',strtotime($date)) }}</li>
+                                    @endforeach
+                                </ul>
+                            </span>
+                        </p>
+                        @endif
+                    </div>
+                    <div class="col-sm-5 pd-t-5 text-right">
+                        <p>{{ round($seeker['distance'],2) }} miles away</p>
+                        <form action="{{ url('job/updateStatus') }}" method="post">
+                            {!! csrf_field() !!}
+                            <input type="hidden" name="jobId" value="{{ $job['id'] }}">
+                            <input type="hidden" name="seekerId" value="{{ $seeker['seeker_id'] }}">
+                            @if($key==\App\Models\JobLists::HIRED)
+                            <button type="button" class="btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
+                                    data-target="#ShortListMessageBox">Message</button>
+                            @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY && $seeker['avg_rating']==null)
+                            <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-l-5" >Rate seeker</button>
+                            @endif
+                            @elseif($key==\App\Models\JobLists::SHORTLISTED)
+                            <button type="button" class="btn btn-primary pd-l-30 pd-r-30" data-toggle="modal" 
+                                    data-target="#ShortListMessageBox">Message</button>
+                            <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::HIRED }}" class="btn btn-primary pd-l-30 pd-r-30 ">Hire</button>
+                            @elseif($key==\App\Models\JobLists::APPLIED)
+                            <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::REJECTED }}" class="btn btn-link  mr-r-5">Reject</button>
+                            <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::SHORTLISTED }}" class="btn btn-primary pd-l-30 pd-r-30 ">Shortlist</button>
+                            @elseif($key==\App\Models\JobLists::INVITED)
+                            <button type="submit" class="btn btn-primary-outline pd-l-30 pd-r-30 ">Invite</button>
+                            @endif
+                        </form>
+                    </div>
+                </div>
+            </div>
             @endforeach
+        </div>
+        @endforeach
         @endif
         <div class="mr-t-15 text-center">
             <!--<button type="button" class="view_loadmore btn-block">View More</button>-->
@@ -243,13 +247,90 @@
 
 
 
-
+<div id="ShortListMessageBox" class="modal fade" role="dialog">
+    <div class="modal-dialog custom-modal popup-wd522">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Invite Jobseeker</h4>
+            </div>
+            <div class="modal-body ">
+                <form>
+                    <div class="form-group custom-select">
+                        <textarea id="chatMsg" class="form-control messageBoxTextArea" placeholder="Type your message here"></textarea>
+                    </div>
+                    <div class="text-right mr-t-20 mr-b-30">
+                        <button id="sendChat" type="submit" class="btn btn-primary pd-l-30 pd-r-30">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @endsection
 
 @section('js')
+<script src="http://172.16.16.188:3000/socket.io/socket.io.js"></script>
 <script type="text/javascript">
+jQuery(function ($) {
+    var socket = io.connect('http://172.16.16.188:3000');
+    console.log(socket);
+    var $nickForm = $('#setNick');
+    var $nickBox = $('#nickname');
+    var $nickError = $('#nickError');
+    var $users = $('#users');
+
+    var $messageForm = $('#send-message');
+    var $messageBox = $('#message');
+    var $chat = $('#chat');
+    socket.emit('init', {'fromId':'2','toId':'test','msg':""});
+            
+    $('#sendChat').click(function(e){
+        e.preventDefault();
+        var chatMsg = $('#chatMsg').val();
+        if(chatMsg!=''){
+            socket.emit('sendMsg', {'fromId':'2','toId':'420','msg':chatMsg});
+        }
+    });
+    socket.on('recMsg', function (data) {
+        
+        console.log(data);
+    });
+    
+    $nickForm.submit(function (e) {
+        e.preventDefault();
+        socket.emit('new user', $nickBox.val(), function (data) {
+            if (data) {
+                $('#nickWrap').hide();
+                $('#contentWrap').show();
+            } else {
+                $nickError.html('That username is already taken! Try again.');
+            }
+        });
+        $nickBox.val('');
+    });
+
+    socket.on('usernames', function (data) {
+        var html = '';
+        for (var i = 0; i < data.length; i++) {
+            html += data[i] + '<br/>';
+        }
+        $users.html(html);
+    });
+
+    $messageForm.submit(function (e) {
+        e.preventDefault();
+        socket.emit('send message', $messageBox.val());
+            $messageBox.val('');
+        });
+
+        socket.on('new message', function (data) {
+        $chat.append('<b>' + data.nick + ' : </b>' + data.msg + '<br/>');
+    })
+});
 
     $(function () {
         $('body').on('click', '.pagination a', function (e) {
