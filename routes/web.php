@@ -103,5 +103,14 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('create', 'Cms\LocationController@create');
         Route::post('store', 'Cms\LocationController@store');
     });
+    
+    Route::group(['prefix' => 'affiliation/'], function() {
+        Route::get('index', 'Cms\AffiliationController@index');
+        Route::get('list', 'Cms\AffiliationController@affiliationsList');
+        Route::delete('{id}/delete', 'Cms\AffiliationController@delete');
+        Route::get('{id}/edit', 'Cms\AffiliationController@edit');
+        Route::get('create', 'Cms\AffiliationController@create');
+        Route::post('store', 'Cms\AffiliationController@store');
+    });
 });
 

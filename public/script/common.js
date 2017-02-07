@@ -98,6 +98,21 @@ $(function () {
         ]
     });
     
+    $('#affiliation_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'affiliation/list',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'affiliation_name', name: 'affiliation_name',searchable:true},
+            {data: 'active', name: 'active',searchable:false},
+            {data: 'action', name: 'action',searchable:false}
+        ]
+    });
+    
     $('#coupon_list').DataTable({
         processing: true,
         serverSide: true,
