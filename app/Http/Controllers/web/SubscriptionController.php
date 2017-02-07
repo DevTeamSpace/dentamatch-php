@@ -13,6 +13,7 @@ class SubscriptionController extends Controller {
     
     public function __construct(){
 //        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
     }
 
     public function getSubscription(){
@@ -34,9 +35,10 @@ class SubscriptionController extends Controller {
     public function getStripeConnect(){
         $stripeToken = $_GET['code'];
         $updateToken = RecruiterProfile::updateStripeToken($stripeToken);
-        $customerCard = \Stripe\Customer::retrieve($stripeToken)->sources->all(array(
-            "object" => "card"
-          ));
+        $customerCard = \Stripe\Customer::retrieve($stripeToken)->sources->all();
+//        $customerCard = \Stripe\Customer::retrieve($stripeToken)->sources->all(array(
+//            "object" => "card"
+//          ));
         dd($customerCard);
     }
 }
