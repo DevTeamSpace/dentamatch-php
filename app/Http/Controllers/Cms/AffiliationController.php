@@ -29,7 +29,7 @@ class AffiliationController extends Controller
      */
     public function create()
     {
-        return view('cms.location.create');
+        return view('cms.affiliation.create');
     }
     
     /**
@@ -50,9 +50,9 @@ class AffiliationController extends Controller
      */
     public function edit($id)
     {
-        $location = Location::find($id);
+        $affiliation = Affiliation::find($id);
         
-        return view('cms.location.update',['location'=>$location]);
+        return view('cms.affiliation.update',['affiliation'=>$affiliation]);
     }
 
     /**
@@ -65,28 +65,26 @@ class AffiliationController extends Controller
     {
         // Validate and store the location...
         $rules = array(
-            'zipcode' => array('required','digits_between:5,6','regex:/[0-9]/','unique:locations,zipcode,NULL,id,deleted_at,NULL'),
+            'affiliation' => array('required','unique:affiliations,affiliation_name'),
         );
         
         if(isset($request->id)){
-            $rules['zipcode'] = "Required|Between:5,6|regex:/[0-9]/|Unique:locations,zipcode,".$request->id;
-            $location = Location::find($request->id);  
-            $msg = trans('messages.location_updated');
+            $rules['affiliation'] = "Required|Unique:affiliations,affiliation_name,".$request->id;
+            $affiliation = Affiliation::find($request->id);  
+            $msg = trans('messages.affiliation_updated');
         }
         else{
-            $location = new Location;
-            $msg = trans('messages.location_added');
+            $affiliation = new Affiliation;
+            $msg = trans('messages.affiliation_added');
         }
         
         $this->validate($request, $rules);
         
-        $location->zipcode = trim($request->zipcode);
-        $location->description = trim($request->description);
-        $location->free_trial_period = $request->free_trial_period;
-        $location->is_active = ($request->is_active)?1:0;
-        $location->save();
+        $affiliation->affiliation_name = trim($request->affiliation);
+        $affiliation->is_active = ($request->is_active)?1:0;
+        $affiliation->save();
         Session::flash('message',$msg);
-        return redirect('cms/location/index');
+        return redirect('cms/affiliation/index');
     }
     
     /**
@@ -96,7 +94,7 @@ class AffiliationController extends Controller
      * @return return to lisitng page
      */
     public function delete($id){
-        Location::findOrFail($id)->delete();
+        Affiliation::findOrFail($id)->delete();
         Session::flash('message',trans('messages.location_deleted'));
         
     }
@@ -110,8 +108,8 @@ class AffiliationController extends Controller
                     return $active;
                 })
                 ->addColumn('action', function ($affiliations) {
-                    $edit = url('cms/location/'.$affiliations->id.'/edit');
-                    $delete =url('cms/location/'.$affiliations->id.'/delete');
+                    $edit = url('cms/affiliation/'.$affiliations->id.'/edit');
+                    $delete =url('cms/affiliation/'.$affiliations->id.'/delete');
                     $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
 //                    $action .= '<a href="'.$delete.'" onclick="deleteRecord(this);return false;"  class="delete btn btn-xs btn-primary" onclick="return confirm(\'Are you sure you want to delete this location?\')"><i class="fa fa-remove"></i> Delete</a>';
                     return $action;
