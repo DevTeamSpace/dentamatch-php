@@ -57,5 +57,13 @@ class RecruiterOffice extends Model {
             $recOfficeArrObj->officeTypes()->saveMany($recOfficeTypeArrObj);
         }
     }
+    
+    public static function getAllOffices(){
+        return RecruiterOffice::join(
+                'locations', 'recruiter_offices.zipcode', '=', 'locations.zipcode'
+                )->where(['user_id' => Auth::user()->id, 'locations.is_active' => 1])
+                ->get()
+                ->toArray();
+    }
 
 }
