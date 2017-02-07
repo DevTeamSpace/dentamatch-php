@@ -10,7 +10,8 @@
         "league/flysystem-aws-s3-v3": "~1.0",
         "yajra/laravel-datatables-oracle": "~6.0",
         "sofa/eloquence": "~5.1",
-        "league/glide": "^1.0"
+        "league/glide": "^1.0",
+        "stripe/stripe-php": "4.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
