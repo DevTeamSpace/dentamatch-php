@@ -8,8 +8,8 @@ use DB;
 
 class Notification extends Model {
 
-    protected $table = 'notification';
-    protected $primaryKey = 'notification_id';
+    protected $table = 'notification_logs';
+    protected $primaryKey = 'id';
     protected $hidden = ['updated_at', 'deleted_at'];
     
     public static function userNotificationList($start = 0, $limit = '')
