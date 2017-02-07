@@ -41,13 +41,12 @@ class SubscriptionController extends Controller {
                     "grant_type" => "authorization_code"
                 ]
             ]);
-            $result = $authCredentials->getBody()->getContents();
-            dd($result->stripe_user_id);
+            $result = json_decode($authCredentials->getBody()->getContents());
             if(isset($result->stripe_user_id)){
                 $updateToken = RecruiterProfile::updateStripeToken($result->stripe_user_id);
                 $createCustomer = \Stripe\Customer::create(array(
                     "description" => "Customer for".Auth::user()->email,
-                    "source" => $result->stripe_user_id // obtained with Stripe.js
+                    "email" => Auth::user()->email
                 ));
                 dd($createCustomer);
             }
