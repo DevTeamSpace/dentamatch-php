@@ -64,7 +64,6 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
             Route::get('subscription-detail', 'web\SubscriptionController@getSubscription');
             Route::get('get-subscription-list', 'web\SubscriptionController@getSubscriptionList');
-            Route::get('connect-link', 'web\SubscriptionController@getConnectLink');
             Route::get('stripe/connect', 'web\SubscriptionController@getStripeConnect');
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
             Route::post('change-password', 'web\UserProfileController@postChangePassword');
