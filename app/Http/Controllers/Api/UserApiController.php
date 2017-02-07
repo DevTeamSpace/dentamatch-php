@@ -118,7 +118,7 @@ class UserApiController extends Controller {
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                         ->select(
                                 'user_groups.group_id', 
-                                'users.email',
+                                'users.email','users.id',
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name',
                                 'jobseeker_profiles.profile_pic',
@@ -148,6 +148,7 @@ class UserApiController extends Controller {
                             $imgUrl = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/profile_pic/' . $userData['profile_pic'];
                         }
                         $userArray['userDetails'] = array(
+                            'id' => $userData['id'],
                             'email' => $userData['email'],
                             'firstName' => $userData['first_name'],
                             'lastName' => $userData['last_name'],
