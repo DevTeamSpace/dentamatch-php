@@ -43,8 +43,9 @@ class SubscriptionController extends Controller {
             ]);
             $result = json_decode($authCredentials->getBody()->getContents());
             if(isset($result->stripe_user_id)){
-                $updateToken = RecruiterProfile::updateStripeToken($result->stripe_user_id);
-                dd($updateToken);
+                RecruiterProfile::updateStripeToken($result->stripe_user_id);
+                $customerId = RecruiterProfile::where('user_id', Auth::user()->id)->first();
+                dd($customerId);
                 $createCustomer = \Stripe\Customer::create(array(
                     "description" => "Customer for".Auth::user()->email,
                     "email" => Auth::user()->email
