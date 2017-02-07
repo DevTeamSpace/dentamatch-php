@@ -73,7 +73,10 @@
             <div class="template-job-information-right j-i-m-r">
                 <div class="job-information-detail">
                     <div class="search-seeker">
-                        <a href="{{ url('search/job',[$job['job_type'],$job['job_title_id']]) }}" class="btn btn-primary pd-l-30 pd-r-30 btn-block">Search Seekers</a>
+                        <a href="{{ url('search/job',[$job['job_type'],$job['job_title_id']]) }}" class="btn btn-primary pd-l-30 pd-r-20 btn-block">Search Seekers</a>
+                        @if(count($seekerList)==0)
+                        <a href="{{ url('job/edit',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-20 btn-block">Edit</a>
+                        @endif
                     </div>
 
                 </div> 
@@ -118,184 +121,121 @@
         </div>
         @else
             @foreach($seekerList as $key=>$seekerGroup)
-                <div class="jobseeker-statebox">
+                <div class="jobseeker-statebox mr-t-25">
                     <label class="fnt-16 textcolr-38">Jobseeker {{ \App\Models\JobLists::APPLIED_STATUS[$key] }} ({{ count($seekerGroup) }})</label>
                     @foreach($seekerGroup as $seeker)
                     <div class="media jobCatbox">
                         <div class="media-left ">
                             <div class="img-holder ">
-                                <img class="media-object img-circle" src="http://placehold.it/66x66" alt="...">
-                                <span class="star star-fill"></span>
+                                <img class="media-object img-circle" src="{{ url("image/150/150/?src=" .$seeker['profile_pic']) }}" alt="...">
+                                <span class="star {{ ($seeker['is_favourite']==null)?'star-empty':'star-fill' }}"></span>
                             </div>
                         </div>
                         <div class="media-body row">
-                            <div class="col-sm-8 pd-t-10 ">
+                            <div class="col-sm-7 pd-t-10 ">
                                 <div >
                                     <a href="#" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
                                     @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
-                                    <span class="mr-l-5 label label-success">{{ $seeker['avg_rating'] }}</span>
+                                    <span class="mr-l-5 dropdown date_drop">
+                                        <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{ ($seeker['avg_rating']!='')?round($seeker['avg_rating'],1):'' }}</span>
+                                        <ul class="dropdown-menu rating-info">
+                                            <li><div class="rating_on"> Punctuality</div>
+                                                <ul class="rate_me">
+                                                    <li><span></span></li>
+                                                    <li class="active"><span></span></li>
+                                                    <li><span></span></li>
+                                                    <li><span></span></li>
+                                                    <li><span></span></li>
+                                                </ul>
+                                            </li>
+                                            <li><div class="rating_on"> Time management</div>
+                                                <ul class="rate_me">
+                                                    <li><span></span></li>
+                                                    <li class="active"><span></span></li>
+                                                    <li><span></span></li>
+                                                    <li><span></span></li>
+                                                    <li><span></span></li>
+                                                </ul></li>
+                                            <li>
+                                                <div class="rating_on">  Personal/Professional skill</div>
+                                                <ul class="rate_me">
+                                                    <li><span></span></li>
+                                                    <li class="active"><span></span></li>
+                                                    <li><span></span></li>
+                                                    <li><span></span></li>
+                                                    <li><span></span></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </span>
                                     @endif
                                 </div>
                                 <p class="nopadding">{{ $seeker['jobtitle_name'] }}</p>
-                                <p  class="nopadding">Wed, 08 Nov 2016</p>
+                                @if($seeker['job_type']==\App\Models\RecruiterJobs::PARTTIME)
+                                <p  class="nopadding">
+                                    <!--<span class="bg-ember statusBtn mr-r-5">Part time</span>-->
+                                    @php 
+                                    $seekerDayArr = [];
+                                    ($seeker['is_monday']==1)?array_push($seekerDayArr,'Monday'):'';
+                                    ($seeker['is_tuesday']==1)?array_push($seekerDayArr,'Tuseday'):'';
+                                    ($seeker['is_wednesday']==1)?array_push($seekerDayArr,'Wednesday'):'';
+                                    ($seeker['is_thursday']==1)?array_push($seekerDayArr,'Thursday'):'';
+                                    ($seeker['is_friday']==1)?array_push($seekerDayArr,'Friday'):'';
+                                    ($seeker['is_saturday']==1)?array_push($seekerDayArr,'Saturday'):'';
+                                    ($seeker['is_sunday']==1)?array_push($seekerDayArr,Sunday):'';
+                                    @endphp
+                                    {{ implode(', ',$seekerDayArr) }}
+                                </p>
+                                @endif
+                                @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY && $seeker['temp_job_dates']!=null)
+                                <p  class="nopadding">
+                                    <!--<span class="bg-ember statusBtn mr-r-5">Temporary</span>-->
+                                    <span class="dropdown date-drop">
+                                        @php 
+                                        $seekerDates = explode(',',$seeker['temp_job_dates']);
+                                        @endphp
+                                        <span class="dropdown-toggle"  data-toggle="dropdown">
+                                            <span class="day-drop">{{ date('l, d M Y',strtotime($seekerDates[0])) }}</span>
+                                            <span class="caret"></span></span>
+                                        <ul class="dropdown-menu">
+                                            @foreach ($seekerDates as $date)
+                                            <li>{{ date('l, d M Y',strtotime($date)) }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </span>
+                                </p>
+                                @endif
                             </div>
-                            <div class="col-sm-4 pd-t-5 text-right">
-                                <p>{{ $seeker['distance'] }} miles away</p>
+                            <div class="col-sm-5 pd-t-5 text-right">
+                                <p>{{ round($seeker['distance'],2) }} miles away</p>
+                                <form action="{{ url('job/updateStatus') }}" method="post">
+                                    {!! csrf_field() !!}
+                                    <input type="hidden" name="jobId" value="{{ $job['id'] }}">
+                                    <input type="hidden" name="seekerId" value="{{ $seeker['seeker_id'] }}">
                                 @if($key==\App\Models\JobLists::HIRED)
-                                <button type="button" class="btn btn-primary pd-l-30 pd-r-30 mr-r-5">Message</button>
+                                    <button type="button" class="btn btn-primary pd-l-30 pd-r-30 mr-r-5">Message</button>
+                                    @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY && $seeker['avg_rating']==null)
+                                    <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-l-5" >Rate seeker</button>
+                                    @endif
                                 @elseif($key==\App\Models\JobLists::SHORTLISTED)
                                 <button type="button" class="btn btn-primary pd-l-30 pd-r-30 mr-r-5">Message</button>
-                                <button type="button" class="btn btn-primary pd-l-30 pd-r-30 ">Hire</button>
+                                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::HIRED }}" class="btn btn-primary pd-l-30 pd-r-30 ">Hire</button>
                                 @elseif($key==\App\Models\JobLists::APPLIED)
-                                <button type="button" class="btn btn-link  mr-r-5">Reject</button>
-                                <button type="button" class="btn btn-primary pd-l-30 pd-r-30 ">Shortlist</button>
+                                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::REJECTED }}" class="btn btn-link  mr-r-5">Reject</button>
+                                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::SHORTLISTED }}" class="btn btn-primary pd-l-30 pd-r-30 ">Shortlist</button>
                                 @elseif($key==\App\Models\JobLists::INVITED)
-                                <button type="button" class="btn btn-primary-outline pd-l-30 pd-r-30 ">Invite</button>
+                                <button type="submit" class="btn btn-primary-outline pd-l-30 pd-r-30 ">Invite</button>
                                 @endif
-                                @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
-                                <button type="submit" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-b-5" >Rate seeker</button>
-                                @endif
+                                </form>
                             </div>
                         </div>
-
                     </div>
                     @endforeach
                 </div>
             @endforeach
-        
-        
-            <div class="media jobCatbox ">
-                <div class="media-left">
-                    <div class="img-holder ">
-
-                        <img class="media-object img-circle" src="http://placehold.it/66x66" alt="...">
-                        <span class="star star-empty"></span>
-                    </div>
-                </div>
-                <div class="media-body row">
-                    <div class="col-sm-8 pd-t-10 ">
-                        <div >
-                            <a href="#" class="media-heading">Paula Jackson</a> 
-
-
-                            <span class="mr-l-5 dropdown date_drop">
-                                <span class=" dropdown-toggle label label-success" data-toggle="dropdown">3.8</span>
-
-
-                                <ul class="dropdown-menu rating-info">
-                                    <li><div class="rating_on"> Punctuality</div>
-                                        <ul class="rate_me">
-                                            <li><span></span></li>
-                                            <li class="active"><span></span></li>
-                                            <li><span></span></li>
-                                            <li><span></span></li>
-                                            <li><span></span></li>
-                                        </ul>
-                                    </li>
-                                    <li><div class="rating_on"> Time management</div>
-                                        <ul class="rate_me">
-                                            <li><span></span></li>
-                                            <li class="active"><span></span></li>
-                                            <li><span></span></li>
-                                            <li><span></span></li>
-                                            <li><span></span></li>
-                                        </ul></li>
-                                    <li>
-                                        <div class="rating_on">  Personal/Professional skill</div>
-                                        <ul class="rate_me">
-                                            <li><span></span></li>
-                                            <li class="active"><span></span></li>
-                                            <li><span></span></li>
-                                            <li><span></span></li>
-                                            <li><span></span></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </span>
-                        </div>
-                        <p class="nopadding">Dental Assistant</p>
-                        <p  class="nopadding">Wed, 08 Nov  &  Fri, 10 Nov 2016</p>
-                    </div>
-                    <div class="col-sm-4 pd-t-5 text-right">
-                        <p>1.5 miles away</p>
-                        <button type="submit" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-b-5" data-toggle="modal" data-target="#ratesekeerPopup">Rate seeker</button>
-                    </div>
-                </div>
-
-            </div>
-        
-            
-            
-        <div class="jobseeker-statebox">
-            <label class="mr-t-50 fnt-16 textcolr-38">Jobseeker Invited (20)</label>
-            <div class="media jobCatbox">
-                <div class="media-left ">
-                    <div class="img-holder ">
-
-                        <img class="media-object img-circle" src="http://placehold.it/66x66" alt="...">
-                        <span class="star star-empty"></span>
-                    </div>
-                </div>
-                <div class="media-body row">
-                    <div class="col-sm-8 pd-t-10 ">
-                        <div ><a href="#" class="media-heading">James Fernandis</a> <span class="mr-l-5 label label-success">4.1</span></div>
-                        <p class="nopadding">Dental Assistant</p>
-                        <p class="nopadding">Wed, 08 Nov 2016</p>
-                    </div>
-                    <div class="col-sm-4 pd-t-15 text-right">
-                        <p>1.2 miles away</p>
-                        <button type="submit" class="btn btn-primary-outline pd-l-30 pd-r-30 ">Invite</button>
-                    </div>
-                </div>
-            </div>
-            <div class="media jobCatbox">
-                <div class="media-left ">
-                    <div class="img-holder ">
-
-                        <img class="media-object img-circle" src="http://placehold.it/66x66" alt="...">
-                        <span class="star star-empty"></span>
-                    </div>
-                </div>
-                <div class="media-body row">
-                    <div class="col-sm-8 pd-t-10 ">
-                        <div ><a href="#" class="media-heading">Anthony Palmer</a> <span class="mr-l-5 label label-warning">3.0</span></div>
-                        <p class="nopadding">Dental Assistant</p>
-                        <p class="nopadding">Wed, 08 Nov 2016</p>
-                    </div>
-                    <div class="col-sm-4 pd-t-15 text-right">
-                        <p>1.2 miles away</p>
-                        <button type="submit" class="btn btn-primary-outline pd-l-30 pd-r-30 ">Invite</button>
-                    </div>
-                </div>
-            </div>
-            <div class="media jobCatbox">
-                <div class="media-left ">
-                    <div class="img-holder ">
-
-                        <img class="media-object img-circle" src="http://placehold.it/66x66" alt="...">
-                        <span class="star star-empty"></span>
-                    </div>
-                </div>
-                <div class="media-body row">
-                    <div class="col-sm-8 pd-t-10 ">
-                        <div ><a href="#" class="media-heading">Mark E. Shaffrey</a> <span class="mr-l-5 label lable-error">3.0</span></div>
-                        <p class="nopadding">Dental Assistant</p>
-                        <p class="nopadding">Wed, 08 Nov 2016</p>
-                    </div>
-                    <div class="col-sm-4 pd-t-15 text-right">
-                        <p>2 miles away</p>
-                        <button type="submit" class="btn btn-primary-outline pd-l-30 pd-r-30 ">Invite</button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
         @endif
-
-
-
         <div class="mr-t-15 text-center">
-            <button type="button" class="view_loadmore btn-block">View More</button>
+            <!--<button type="button" class="view_loadmore btn-block">View More</button>-->
         </div>
 
     </div>

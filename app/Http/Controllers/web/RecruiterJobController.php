@@ -120,4 +120,23 @@ class RecruiterJobController extends Controller
             return view('web.error.',["message" => $e->getMessage()]);
         }
     }
+    
+    public function updateStatus(Request $request) {
+        $this->validate($request, [
+                'jobId' => 'required|integer',
+                'seekerId' => 'required|integer',
+                'appliedStatus' => 'required|integer',
+            ]);
+        try{
+            $requestData = $request->all();
+            $jobData = JobLists::getJobInfo($requestData['seekerId'],$requestData['jobId']);
+            if($jobData){
+                $jobData->applied_status = $requestData['appliedStatus'];
+                $jobData->save();
+                return redirect('job/details/'.$requestData['jobId']);
+            }
+        } catch (\Exception $e) {
+            return view('web.error.',["message" => $e->getMessage()]);
+        }
+    }
 }

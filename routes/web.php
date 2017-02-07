@@ -53,6 +53,7 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::get('createJob/{templateId}', 'web\RecruiterJobController@createJob');
             Route::get('job/lists', 'web\RecruiterJobController@listJobs');
             Route::get('job/details/{jobId}', 'web\RecruiterJobController@jobDetails');
+            Route::post('job/updateStatus', 'web\RecruiterJobController@updateStatus');
             Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
             Route::post('create-profile', 'web\UserProfileController@createProfile');
             Route::post('office-details', 'web\UserProfileController@officeDetails');
