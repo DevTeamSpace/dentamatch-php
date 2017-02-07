@@ -34,10 +34,10 @@ class SubscriptionController extends Controller {
     public function getStripeConnect(){
         $stripeToken = $_GET['code'];
         $updateToken = RecruiterProfile::updateStripeToken($stripeToken);
-//        $customerCard = \Stripe\Customer::retrieve($stripeToken)->sources->all();
-        $customerCard = \Stripe\Customer::retrieve($stripeToken)->sources->all(array(
-            "object" => "card"
-          ));
+        $customerCard = \Stripe\Customer::all();
+//        $customerCard = \Stripe\Customer::retrieve($stripeToken)->sources->all(array(
+//            "object" => "card"
+//          ));
         dd($customerCard);
     }
 }
