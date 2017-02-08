@@ -37,7 +37,8 @@ class SubscriptionController extends Controller {
             $createCustomer = $this->createCustomer();
             if($createCustomer['success'] == true){
                 $addCard = $this->addCardForSubscription($request->all(), $createCustomer['data']['id']);
-                dd($addCard);
+                $createSubscription = $this->createSubscription($createCustomer['data']['id'], $request->subscriptionType, $request->trailPeriod);
+                dd($createSubscription);
                 $this->response['success'] = true;
                 $this->response['message'] = 'Subscription created successfully.';
             }else{
@@ -45,6 +46,23 @@ class SubscriptionController extends Controller {
                 $this->response['message'] = 'Cannot create subscription please contact admin.';
             }
         } catch (\Exception $e) {
+            $this->response['message'] = $e->getMessage();
+        }
+        return $this->response;
+    }
+    
+    public function createSubscription($customerId, $subscriptionType, $trailPeriod){
+        try{
+            $now = \Carbon::now();
+            $addMonths = $now->addMonths($freeTrail); 
+            $trailPeriodDays = $addMonths->diff($now)->days;
+            dd($trailPeriodDays);
+            \Stripe\Subscription::create(array(
+                "customer" => $customerId,
+                "plan" => $planId,
+                "trial_period_days" => $trailPeriodDays
+            ));
+        } catch (Exception $ex) {
             $this->response['message'] = $e->getMessage();
         }
         return $this->response;
@@ -66,15 +84,9 @@ class SubscriptionController extends Controller {
                               "cvc" => $cardDetails['cvv']
                             )
                           ));
-            dd($cardToken);
             $customer = \Stripe\Customer::retrieve($customerId);
             $card = $customer->sources->create(array(
-                "source" => [
-                    "number" => $cardDetails['cardNumber'],
-                    "exp_month" => $month,
-                    "exp_year" => $year,
-                    "objec"
-                    ]
+                "source" => $cardToken['id']
             ));
         } catch (\Exception $e) {
             $this->response = $e->getMessage();

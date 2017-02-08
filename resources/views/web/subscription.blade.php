@@ -13,9 +13,29 @@
                     <p class="mr-b-25">Half Yearly</p>
                     <div class="subcription-price pos-rel">
                         <span class="price-symbol ">$</span>
-                        <span class="price">60</span>
+                        <span class="price" data-bind="text: halfYearPrice">60</span>
                         <span class="price-duration">/ 6 mo.</span>
                         <p data-bind="text: free_trial_period">with 1 months free trial</p>
+                        <input type="hidden" id="stype" value="1">
+                    </div>
+                </div>
+                <div class="subscription-desc">
+                    <p>Unlimited template creation,
+                        job posting, searching jobseeker, message & reports</p>
+                </div>
+                <!--<a id="stripe" href="https:/connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_A4GIpAptEF5hAp1QDsIVsSgNcF4P1QcV&scope=read_write&page=subscription_list" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>-->
+                <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
+            </div>
+            
+            <div class="subscription-inr-box ">
+                <div class="subscription-type">
+                    <p class="mr-b-25">Half Yearly</p>
+                    <div class="subcription-price pos-rel">
+                        <span class="price-symbol ">$</span>
+                        <span class="price" data-bind="text: fullYearPrice">99</span>
+                        <span class="price-duration">/ 1 year.</span>
+                        <p data-bind="text: free_trial_period">with 1 months free trial</p>
+                        <input type="hidden" id="stype" value="2">
                     </div>
                 </div>
                 <div class="subscription-desc">
@@ -109,6 +129,8 @@ var FirstSubscriptionVM = function () {
     me.expiry = ko.observable('');
     me.cvv = ko.observable();
     me.errorMessage = ko.observable('');
+    me.trailPeriod = ko.observable();
+    me.subscriptionType = ko.observable();
     
     me.getSubscriptionList = function () {
         if (me.isLoading()) {
@@ -117,7 +139,10 @@ var FirstSubscriptionVM = function () {
         me.isLoading(true);
         $.get('get-subscription-list', {}, function (d) {
             if(typeof d.data != "undefined"){
+                d.data['trailPeriod'] = d.data['free_trial_period'];
                 d.data['free_trial_period'] = 'with '+d.data['free_trial_period']+' months free trial';
+                d.data['halfYearPrice'] = 60;
+                d.data['fullYearPrice'] = 99;
                 me.visibleSubcription(true);
                 me.subscriptionDetails.push(d.data);
             }else{
@@ -131,13 +156,16 @@ var FirstSubscriptionVM = function () {
     };
     
     me.addCard = function(d, e){
+        me.trailPeriod(d.trailPeriod);
+        subType = $(e.currentTarget).parent().find('#stype').val();
+        me.subscriptionType(subType);
         $('#addCardModal').modal('show');
     };
     
     me.addCardFunction = function(d, e){
         me.errorMessage('');
         if(me.cardNumber() != null && me.expiry() != null && me.cvv() != null){
-            $.post('create-subscription', {cardNumber: me.cardNumber(), expirty: me.expiry(), cvv: me.cvv()}, function(){
+            $.post('create-subscription', {cardNumber: me.cardNumber(), expirty: me.expiry(), cvv: me.cvv(), subscriptionType: me.subscriptionType(), trailPeriod: me.trailPeriod()}, function(){
                 
             });
         }else{
