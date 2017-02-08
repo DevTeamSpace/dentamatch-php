@@ -2,18 +2,17 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\ServiceProvider;
 use App\Models\Device;
 use App\Models\Notification;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use App\Model\User;
 
 /**
  * NotificationServiceProvider class contains methods for notification management
  */
-class NotificationServiceProvider extends BaseServiceProvider {
+class NotificationServiceProvider extends ServiceProvider {
 
     /**
      * send push notification
@@ -22,7 +21,7 @@ class NotificationServiceProvider extends BaseServiceProvider {
      * @param type $data 
      * @return type
      */
-    public static function sendPushNotification($devices, $message, $params = false) {
+    public static function sendPushNotification($device, $message, $params = false) {
         if (strtolower($device->device_type) == Device::DEVICE_TYPE_IOS) {
                 static::sendPushIOS($device->device_token, $message, $params);
             } else if (strtolower($device->device_type) == Device::DEVICE_TYPE_ANDROID) {
@@ -39,15 +38,17 @@ class NotificationServiceProvider extends BaseServiceProvider {
             $config = config('pushnotification.apple.sandbox');
             $certFile = $config['pem_file'];
             $url = $config['url'];
+            $passphrase = $config['passphrase'];
         } else {
             $config = config('pushnotification.apple.production');
             $certFile = $config['pem_file'];
             $url = $config['url'];
+            $passphrase = $config['passphrase'];
         }
 
         $ctx = stream_context_create();
         stream_context_set_option($ctx, 'ssl', 'local_cert', $certFile);
-        stream_context_set_option($ctx, 'ssl', 'passphrase', '');
+        stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
 
         // Open a connection to the APNS server
         $fp = stream_socket_client(
