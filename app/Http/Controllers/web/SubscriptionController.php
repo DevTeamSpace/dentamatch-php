@@ -35,10 +35,8 @@ class SubscriptionController extends Controller {
     public function getCreateSubscription(Request $request){
         try{
             $createCustomer = $this->createCustomer();
-            $getCustomer = \Stripe\Customer::retrieve($createCustomer['data']['id']);
-            dd($getCustomer);
             if($createCustomer['success'] == true){
-                $addCard = $this->addCardForSubscription($request->all());
+                $addCard = $this->addCardForSubscription($request->all(), $createCustomer['data']['id']);
                 dd($addCard);
                 $this->response['success'] = true;
                 $this->response['message'] = 'Subscription created successfully.';
@@ -53,13 +51,31 @@ class SubscriptionController extends Controller {
     }
     
     public function postAddCard(Request $request){
-        
-        dd($createCustomer);
     }
     
-    public function addCardForSubscription($cardDetails){
+    public function addCardForSubscription($cardDetails, $customerId){
         try{
-            
+            $expiry = explode('/', $cardDetails['expiry']);
+            $month = $expiry[0];
+            $year = $expiry[1];
+            $cardToken = \Stripe\Token::create(array(
+                            "card" => array(
+                              "number" => $cardDetails['cardNumber'],
+                              "exp_month" => $month,
+                              "exp_year" => $year,
+                              "cvc" => $cardDetails['cvv']
+                            )
+                          ));
+            dd($cardToken);
+            $customer = \Stripe\Customer::retrieve($customerId);
+            $card = $customer->sources->create(array(
+                "source" => [
+                    "number" => $cardDetails['cardNumber'],
+                    "exp_month" => $month,
+                    "exp_year" => $year,
+                    "objec"
+                    ]
+            ));
         } catch (\Exception $e) {
             $this->response = $e->getMessage();
         }
