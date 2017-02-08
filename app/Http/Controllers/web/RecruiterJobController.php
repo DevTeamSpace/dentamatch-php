@@ -10,8 +10,11 @@ use App\Models\JobTemplates;
 use App\Models\TempJobDates;
 use App\Models\TemplateSkills;
 use App\Models\JobLists;
+use App\Models\JobTitles;
 use App\Models\RecruiterOffice;
 use App\Models\ChatUserLists;
+use App\Models\JobSeekerProfiles;
+
 use DB;
 
 class RecruiterJobController extends Controller
@@ -41,6 +44,29 @@ class RecruiterJobController extends Controller
         
     }
     
+    public function searchSeekers(Request $request,$jobId){
+        try{
+            $searchData = $request->all();
+
+            if(!isset($searchData['distance']))
+                $searchData['distance'] =  10;
+            
+            $jobDetails = RecruiterJobs::getJobDetails($jobId);
+            
+            $seekersList = JobSeekerProfiles::getJobSeekerProfiles($jobDetails,$searchData);
+            
+            //dd($seekersList);
+
+            if ($request->ajax()) {
+                return view('web.recuriterJob.search', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData])->render();  
+            }
+
+            return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData'));
+        } catch (\Exception $e) {
+            return view('web.error.',["message" => $e->getMessage()]);
+        }
+    }
+
     public function saveOrUpdate(Request $request){
         $this->validate($request, [
                 'templateId' => 'required',
@@ -120,6 +146,7 @@ class RecruiterJobController extends Controller
             return view('web.error.',["message" => $e->getMessage()]);
         }
     }
+
     
     public function updateStatus(Request $request) {
         $this->validate($request, [
@@ -141,6 +168,16 @@ class RecruiterJobController extends Controller
                 }
                 return redirect('job/details/'.$requestData['jobId']);
             }
+
+
+    public function jobSeekerDetails($seekerId, $jobId){
+        try{
+            $this->viewData['job'] = RecruiterJobs::getJobDetails($jobId);
+
+            $seekerDetails = JobSeekerProfiles::getJobSeekerDetails($seekerId,$this->viewData['job']);
+            
+            return view('web.recuriterJob.seekerDetails',compact('seekerDetails'));
+
         } catch (\Exception $e) {
             return view('web.error.',["message" => $e->getMessage()]);
         }

@@ -120,7 +120,6 @@
         <script src ="{{asset('web/scripts/web.js')}}"></script>
         <script src ="{{asset('web/scripts/moment.min.js')}}"></script>
         <script src ="{{asset('web/scripts/bootstrap-datetimepicker.js')}}"></script>
-
         <script src ="{{asset('web/scripts/main.js')}}"></script>
         <script src ="{{asset('web/scripts/tabScript1.js')}}"></script>
         

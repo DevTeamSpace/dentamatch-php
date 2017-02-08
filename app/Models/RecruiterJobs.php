@@ -258,17 +258,19 @@ class RecruiterJobs extends Model
             ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
             ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
             ->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
-            ->groupBy('recruiter_jobs.id','recruiter_profiles.office_name','recruiter_profiles.office_desc','office_types.officetype_name')
+            ->leftJoin('template_skills','job_templates.id','=','template_skills.job_template_id')
+            ->groupBy('recruiter_jobs.id','recruiter_profiles.office_name','recruiter_profiles.office_desc','office_types.officetype_name','template_skills.job_template_id')
             ->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
             'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday','recruiter_jobs.is_thursday',
             'recruiter_jobs.is_friday','recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
             'recruiter_jobs.no_of_jobs','recruiter_jobs.created_at','recruiter_jobs.job_template_id',
             'recruiter_profiles.office_name','recruiter_profiles.office_desc',
-            'recruiter_offices.address','recruiter_offices.zipcode',
+            'recruiter_offices.address','recruiter_offices.zipcode','recruiter_offices.latitude','recruiter_offices.longitude',
             'job_templates.template_name','job_templates.template_desc','job_templates.job_title_id',
             'job_titles.jobtitle_name',
             DB::raw("group_concat(office_types.officetype_name) AS officetype_name"),
             DB::raw("group_concat(temp_job_dates.job_date) AS temp_job_dates"),
+            DB::raw("group_concat(template_skills.skill_id) AS required_skills"),
             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
     
         return $jobObj->first()->toArray();
