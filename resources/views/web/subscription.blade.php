@@ -22,7 +22,8 @@
                     <p>Unlimited template creation,
                         job posting, searching jobseeker, message & reports</p>
                 </div>
-                <a id="stripe" href="https:/connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_A4GIpAptEF5hAp1QDsIVsSgNcF4P1QcV&scope=read_write&page=subscription_list" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
+                <!--<a id="stripe" href="https:/connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_A4GIpAptEF5hAp1QDsIVsSgNcF4P1QcV&scope=read_write&page=subscription_list" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>-->
+                <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
             </div>
 
             <!--/ko-->
@@ -43,20 +44,52 @@
                 <a class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
             </div>-->
 
-
-
-
-        </div>
     </div>
     <div class="frm-cred-access-box subscription-box" data-bind="visible: noSubscription">
         <h3 class="no-subscription-heading text-center" data-bind="text: noSubscriptionDetails"></h3>
     </div>
-
 </div>
+    <div id="addCardModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bind="visible: cancelButton"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Add Card</h4>
+                </div>
+                <form data-bind="submit: $root.addCardFunction">
+                <div class="modal-body">
+                  <p>Please provide card details to subscribe.</p>
+                  <p class="text-center" style="color: red;" data-bind="text: errorMessage"></p>
+                    <div class="form-group">
+                        <label class="sr-only" for="card-number">Card number</label>
+                        <input type="number" class="form-control" id="card-number" placeholder="Card number" data-bind="value: cardNumber">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="expiry">Expiry</label>
+                        <input type="text" class="form-control" id="expiry" placeholder="MM/YY" data-bind="value: expiry">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="cvv">CVV</label>
+                        <input type="number" class="form-control" id="cvv" placeholder="CVV" data-bind="value: cvv">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Add Card</button>
+                </div>
+                  </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
 @endsection
 @section('js')
 <script type="text/javascript" src="{{asset('web/scripts/knockout-3.4.1.js')}}"></script>
+<script src="https://checkout.stripe.com/checkout.js"></script>
+
+<script>
+
+</script>
 <script>
     $.ajaxSetup({
         headers: {
@@ -71,6 +104,11 @@ var FirstSubscriptionVM = function () {
     me.subscriptionDetails = ko.observableArray([]);
     me.noSubscription = ko.observable(false);
     me.noSubscriptionDetails = ko.observable('');
+    me.cancelButton = ko.observable(true);
+    me.cardNumber = ko.observable();
+    me.expiry = ko.observable('');
+    me.cvv = ko.observable();
+    me.errorMessage = ko.observable('');
     
     me.getSubscriptionList = function () {
         if (me.isLoading()) {
@@ -90,6 +128,21 @@ var FirstSubscriptionVM = function () {
         }).error(function (xhr, e) {
             me.isLoading(false);
         });
+    };
+    
+    me.addCard = function(d, e){
+        $('#addCardModal').modal('show');
+    };
+    
+    me.addCardFunction = function(d, e){
+        me.errorMessage('');
+        if(me.cardNumber() != null && me.expiry() != null && me.cvv() != null){
+            $.post('create-subscription', {cardNumber: me.cardNumber(), expirty: me.expiry(), cvv: me.cvv()}, function(){
+                
+            });
+        }else{
+            me.errorMessage('Please fill all the details');
+        }
     };
     
     me._init = function () {

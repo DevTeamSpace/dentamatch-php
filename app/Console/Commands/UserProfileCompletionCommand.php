@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\UserProfile;
 use App\Models\Notification;
+use App\Models\Device;
 use DB;
 
 class UserProfileCompletionCommand extends Command
@@ -42,20 +43,34 @@ class UserProfileCompletionCommand extends Command
      */
     public function handle()
     {
-        $message = "dummy notification data";
+        $notificationData = array(
+                    'message' => "The profile completion is still pending.",
+                    'notification_title'=>'Registration Completion Reminder',
+                    'sender_id' => "",
+                    'type' => 1
+                );
+        
         $userModel = UserProfile::select('jobseeker_profiles.user_id')
                         ->join('users', 'users.id', '=', 'jobseeker_profiles.user_id')
                         ->where('is_completed',static::IS_COMPLETED)
-                        ->where(DB::raw("DATEDIFF(now(), users.created_at)"),'=', static::NOTIFICATION_INTERVAL)
+                        ->where(DB::raw("DATEDIFF(now(), users.created_at)"),'=', 16)
                         ->get();
         
         if(!empty($userModel)) {
             foreach($userModel as $value) {
-                $data = ['receiver_id'=>$value->user_id, 'notification_data'=>$message];
+                $userId = $value->user_id;
                 
-                Notification::createNotification($data);
-                $this->info($value->user_id);
+                $notificationData['receiver_id'] = $userId;
+                $params['data'] = $notificationData;
                 
+                $deviceModel = Device::getDeviceToken($userId);
+                if($deviceModel) {
+                    $this->info($userId);
+                    \NotificationService::sendPushNotification($deviceModel, $notificationData['message'], $params);
+                    
+                    $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['message']];
+                    Notification::createNotification($data);
+                }
             }
         }
     }
