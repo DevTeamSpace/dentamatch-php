@@ -21,5 +21,9 @@ class RecruiterProfile extends Model {
     public static function updateStripeToken($token){
         return RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['stripe_token' => $token]);
     }
+    
+    public static function updateCustomerId($customerId){
+        return RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['customer_id' => $customerId]);
+    }
 
 }

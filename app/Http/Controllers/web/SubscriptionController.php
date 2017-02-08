@@ -31,12 +31,52 @@ class SubscriptionController extends Controller {
         return $subscription;
     }
     
+    public function getCreateSubscription(Request $request){
+        try{
+            $createCustomer = $this->createCustomer();
+            if($createCustomer['success'] == true){
+                $addCard = $this->addCardForSubscription($request->all());
+                dd($addCard);
+                $response['success'] = true;
+                $response['message'] = 'Subscription created successfully.';
+            }else{
+                $response['success'] = false;
+                $response['message'] = 'Cannot create subscription please contact admin.';
+            }
+        } catch (\Exception $e) {
+            $response['message'] = $e->getMessage();
+        }
+        return $response;
+    }
+    
     public function postAddCard(Request $request){
-        $createCustomer = \Stripe\Customer::create(array(
-            "description" => "Customer for".Auth::user()->email,
-            "email" => Auth::user()->email
-        ));
+        
         dd($createCustomer);
+    }
+    
+    public function addCardForSubscription($cardDetails){
+        try{
+            
+        } catch (\Exception $e) {
+            $response = $e->getMessage();
+        }
+        return $response;
+    }
+    
+    public function createCustomer(){
+        try{
+            $createCustomer = \Stripe\Customer::create(array(
+                "description" => "Customer for".Auth::user()->email,
+                "email" => Auth::user()->email
+            ));
+            RecruiterProfile::updateCustomerId($createCustomer['id']);
+            $respose['success'] = true;
+            $respose['message'] = 'Customer Created successfully';
+        } catch (\Exception $e) {
+            $response['success'] = false;
+            $response['message'] = $e->getMessage();
+        }
+        return $response;
     }
 
 
