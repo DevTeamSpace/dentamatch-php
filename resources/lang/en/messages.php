@@ -91,4 +91,5 @@ return [
     'user_added_to_subscription' => 'User added to subscription successfully.',
     'customer_created' => 'Customer Created successfully.',
     'card_added' => 'Card added successfully.',
+    'cannot_add_card' => 'Cannot add card.',
 ];
