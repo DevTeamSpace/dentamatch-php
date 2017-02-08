@@ -7,7 +7,13 @@
                 <h4>{{ $job['jobtitle_name'] }}</h4>
             </div>
             <div class="template-job-information-right">
-                <span>Posted : {{ $job['days'].' day'.(($job['days']>1)?'s':'') }} ago</span>
+                <span>Posted : 
+                    @if($job['days']>0)
+                    {{ $job['days'].' day'.(($job['days']>1)?'s':'') }} ago
+                    @else
+                    Today
+                    @endif
+                </span>
 
             </div> 
         </div>  

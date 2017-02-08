@@ -101,6 +101,9 @@ $(document).ready(function(){
                     console.log(value);
                     if(dentalOfficeId==value.id && value.zipcode==null){
                         $('.error-div').removeClass('hide');
+                        window.setTimeout(function(){
+                            $('.error-div').addClass('hide');
+                        }, 5000);
                         $('#dentalOfficeId').val('');
                     }
                 });

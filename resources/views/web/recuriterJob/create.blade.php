@@ -12,7 +12,7 @@
         <!--breadcrumb-->
         <ul class="breadcrumb">
             <li><a href="{{ url('jobtemplates') }}">Template</a></li>
-            <li><a href="#">Dental Assistant Template</a></li>
+            <li><a href="{{ url('jobtemplates/view',[$jobTemplates->id]) }}">{{ $jobTemplates->templateName }}</a></li>
             <li class="active">Create Job Opening</li>
         </ul>
         <!--/breadcrumb-->
