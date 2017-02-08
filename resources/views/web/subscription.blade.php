@@ -165,7 +165,7 @@ var FirstSubscriptionVM = function () {
     me.addCardFunction = function(d, e){
         me.errorMessage('');
         if(me.cardNumber() != null && me.expiry() != null && me.cvv() != null){
-            $.post('create-subscription', {cardNumber: me.cardNumber(), expiry: me.expiry(), cvv: me.cvv(), subscriptionType: me.subscriptionType(), trailPeriod: me.trailPeriod()}, function(){
+            $.post('create-subscription', {cardNumber: me.cardNumber(), expiry: me.expiry(), cvv: me.cvv(), subscriptionType: me.subscriptionType(), trailPeriod: me.trailPeriod()}, function(d){
                 if(d.success == false){
                     me.errorMessage(d.message);
                 }else{
