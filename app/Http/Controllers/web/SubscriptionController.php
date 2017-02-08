@@ -22,7 +22,7 @@ class SubscriptionController extends Controller {
     
     public function getSubscriptionList(){
         $recruiterOffice = RecruiterOffice::getAllOffices();
-        $subscription = [];
+        $subscription['data'] = [];
         foreach ($recruiterOffice as $office){
             if($office['free_trial_period'] != 0){
                 $subscription['data'] = $office;
@@ -52,6 +52,7 @@ class SubscriptionController extends Controller {
                 $addCard = $this->addCardForSubscription($request->all(), $customer);
                 if($addCard['success'] == true){
                     $createSubscription = $this->addUserTOSubscription($customer, $request->subscriptionType, $request->trailPeriod);
+                    RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 1, 'free_period' => $request->trailPeriod]);
                     $this->response['success'] = true;
                     $this->response['message'] = trans('messages.user_subscribed');
                 }else{

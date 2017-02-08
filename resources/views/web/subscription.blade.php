@@ -29,7 +29,7 @@
             
             <div class="subscription-inr-box ">
                 <div class="subscription-type">
-                    <p class="mr-b-25">Half Yearly</p>
+                    <p class="mr-b-25">Yearly</p>
                     <div class="subcription-price pos-rel">
                         <span class="price-symbol ">$</span>
                         <span class="price" data-bind="text: fullYearPrice">99</span>
@@ -144,8 +144,13 @@ var FirstSubscriptionVM = function () {
         me.isLoading(true);
         $.get('get-subscription-list', {}, function (d) {
             if(typeof d.data != "undefined"){
-                d.data['trailPeriod'] = d.data['free_trial_period'];
-                d.data['free_trial_period'] = 'with '+d.data['free_trial_period']+' months free trial';
+                if(d.data.length == 0){
+                    d.data['trailPeriod'] = 0;
+                    d.data['free_trial_period'] = 'with 0 months of free trial'
+                }else{
+                    d.data['trailPeriod'] = d.data['free_trial_period'];
+                    d.data['free_trial_period'] = 'with '+d.data['free_trial_period']+' months free trial';
+                }
                 d.data['halfYearPrice'] = 60;
                 d.data['fullYearPrice'] = 99;
                 me.visibleSubcription(true);
@@ -182,6 +187,7 @@ var FirstSubscriptionVM = function () {
     });
     
     me.addCardFunction = function(d, e){
+        return false;
         me.errorMessage('');
         me.successMessage('');
         if(me.expiry() != null && me.expiry().indexOf('/') >= 0){
