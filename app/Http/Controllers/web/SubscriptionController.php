@@ -95,12 +95,17 @@ class SubscriptionController extends Controller {
                               "cvc" => $cardDetails['cvv']
                             )
                           ));
-            $customer = \Stripe\Customer::retrieve($customerId);
-            $card = $customer->sources->create(array(
-                "source" => $cardToken['id']
-            ));
-            $this->response['success'] = true;
-            $this->response['message'] = trans('messages.card_added');
+            if(isset($cardToken['id'])){
+                $customer = \Stripe\Customer::retrieve($customerId);
+                $card = $customer->sources->create(array(
+                    "source" => $cardToken['id']
+                ));
+                $this->response['success'] = true;
+                $this->response['message'] = trans('messages.card_added');
+            }else{
+                $this->response['success'] = false;
+                $this->response['message'] = trans('messages.cannot_add_card');
+            }
         } catch (\Exception $e) {
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
