@@ -76,7 +76,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bind="visible: cancelButton"><span aria-hidden="true">&times;</span></button>
                   <h4 class="modal-title">Add Card</h4>
                 </div>
-                <form data-bind="submit: $root.addCardFunction">
+                <form id="addCardForm" data-bind="submit: $root.addCardFunction">
                 <div class="modal-body">
                   <p>Please provide card details to subscribe.</p>
                   <p class="text-center" style="color: red;" data-bind="text: errorMessage"></p>
@@ -166,7 +166,16 @@ var FirstSubscriptionVM = function () {
         me.errorMessage('');
         if(me.cardNumber() != null && me.expiry() != null && me.cvv() != null){
             $.post('create-subscription', {cardNumber: me.cardNumber(), expiry: me.expiry(), cvv: me.cvv(), subscriptionType: me.subscriptionType(), trailPeriod: me.trailPeriod()}, function(){
-                
+                if(d.success == false){
+                    me.errorMessage(d.message);
+                }else{
+                    setTimeout(
+                        function ()
+                        {
+                            return false;
+                            location.href = 'broadcast';
+                        }, 700);
+                }
             });
         }else{
             me.errorMessage('Please fill all the details');
