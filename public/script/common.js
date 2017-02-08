@@ -113,6 +113,21 @@ $(function () {
         ]
     });
     
+    $('#jobtitle_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'jobtitle/list',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'jobtitle_name', name: 'jobtitle_name',searchable:true},
+            {data: 'active', name: 'active',searchable:false},
+            {data: 'action', name: 'action',searchable:false}
+        ]
+    });
+    
     $('#coupon_list').DataTable({
         processing: true,
         serverSide: true,

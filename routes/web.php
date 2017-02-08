@@ -117,5 +117,14 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('create', 'Cms\AffiliationController@create');
         Route::post('store', 'Cms\AffiliationController@store');
     });
+    
+    Route::group(['prefix' => 'jobtitle/'], function() {
+        Route::get('index', 'Cms\JobTitleController@index');
+        Route::get('list', 'Cms\JobTitleController@jobTitleList');
+        Route::delete('{id}/delete', 'Cms\JobTitleController@delete');
+        Route::get('{id}/edit', 'Cms\JobTitleController@edit');
+        Route::get('create', 'Cms\JobTitleController@create');
+        Route::post('store', 'Cms\JobTitleController@store');
+    });
 });
 
