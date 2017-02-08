@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //
         Commands\Inspire::class,
+        Commands\UserProfileCompletionCommand::class,
     ];
 
     /**
@@ -25,7 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        
+        $schedule->command('user:profileCompletion')->daily();
     }
 
     /**
