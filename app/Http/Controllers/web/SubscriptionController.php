@@ -10,9 +10,9 @@ use App\Models\RecruiterProfile;
 use App\Models\RecruiterOffice;
 
 class SubscriptionController extends Controller {
+    private $response = [];
     
     public function __construct(){
-        $this->response = [];
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
     }
 
