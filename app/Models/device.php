@@ -4,6 +4,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Device extends Model  {
+    
+    const DEVICE_TYPE_IOS = "ios";
+    const DEVICE_TYPE_ANDROID = "android";
     protected $table        = 'devices';
     protected $primaryKey   = 'id';
     

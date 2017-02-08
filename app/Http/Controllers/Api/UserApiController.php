@@ -119,7 +119,7 @@ class UserApiController extends Controller {
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                         ->select(
                                 'user_groups.group_id', 
-                                'users.email',
+                                'users.email','users.id',
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name',
                                 'jobseeker_profiles.profile_pic',
@@ -158,6 +158,8 @@ class UserApiController extends Controller {
                             'imageUrl' => $imgUrl,
                             'zipCode' => $userData['zipcode'],
                             'preferredJobLocation' => $userData['preferred_job_location'],
+                            'latitude' => $userData['latitude'],
+                            'longitude' => $userData['longitude'],
                             'accessToken' => $userToken,
                         );
                         $userArray['searchFilters'] = SearchFilter::getFiltersOnLogin($userId);

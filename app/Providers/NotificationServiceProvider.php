@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\DB;
-use App\Model\Device;
-use App\Model\Notification;
+use App\Models\Device;
+use App\Models\Notification;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -23,9 +23,9 @@ class NotificationServiceProvider extends BaseServiceProvider {
      * @return type
      */
     public static function sendPushNotification($devices, $message, $params = false) {
-        if ($device->device_type == AppUserToken::DEVICE_TYPE_IOS) {
+        if (strtolower($device->device_type) == Device::DEVICE_TYPE_IOS) {
                 static::sendPushIOS($device->device_token, $message, $params);
-            } else if ($device->device_type == AppUserToken::DEVICE_TYPE_ANDROID) {
+            } else if (strtolower($device->device_type) == Device::DEVICE_TYPE_ANDROID) {
                 static::sendPushAndroid($device->device_token, $message, $params);
             }
     }
@@ -36,11 +36,13 @@ class NotificationServiceProvider extends BaseServiceProvider {
         }
         
         if (env('APP_ENV') == 'local') {
-            $certFile = public_path('notification_pems/push_development.pem');
-            $url = 'ssl://gateway.sandbox.push.apple.com:2195';
+            $config = config('pushnotification.apple.sandbox');
+            $certFile = $config['pem_file'];
+            $url = $config['url'];
         } else {
-            $certFile = public_path('notification_pems/push_distribution.pem');
-            $url = 'ssl://gateway.push.apple.com:2195';
+            $config = config('pushnotification.apple.production');
+            $certFile = $config['pem_file'];
+            $url = $config['url'];
         }
 
         $ctx = stream_context_create();
@@ -82,7 +84,7 @@ class NotificationServiceProvider extends BaseServiceProvider {
             return;
         }
 
-        $config = config('push_notification.android');
+        $config = config('pushnotification.android');
 
         $notification = ['text' => $message];
         $body = json_encode($params);
