@@ -35,6 +35,7 @@ class SubscriptionController extends Controller {
     public function getCreateSubscription(Request $request){
         try{
             $createCustomer = $this->createCustomer();
+            dd($createCustomer);
             if($createCustomer['success'] == true){
                 $addCard = $this->addCardForSubscription($request->all());
                 dd($addCard);
@@ -72,6 +73,7 @@ class SubscriptionController extends Controller {
             ));
             RecruiterProfile::updateCustomerId($createCustomer['id']);
             $this->response['success'] = true;
+            $this->response['data'] = $createCustomer;
             $this->response['message'] = 'Customer Created successfully';
         } catch (\Exception $e) {
             $this->response['success'] = false;
