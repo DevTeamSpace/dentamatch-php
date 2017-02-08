@@ -74,4 +74,7 @@ return [
     
     'affiliation_added' => 'Affiliation added successfully',
     'affiliation_updated' => 'Affiliation updated successfully',
+    
+    'jobtitle_added' => 'Job title added successfully',
+    'jobtitle_updated' => 'Job title updated successfully',
 ];

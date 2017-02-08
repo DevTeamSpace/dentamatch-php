@@ -35,7 +35,8 @@ class SubscriptionController extends Controller {
     public function getCreateSubscription(Request $request){
         try{
             $createCustomer = $this->createCustomer();
-            dd($createCustomer);
+            $getCustomer = \Stripe\Customer::retrieve($createCustomer['data']['id']);
+            dd($getCustomer);
             if($createCustomer['success'] == true){
                 $addCard = $this->addCardForSubscription($request->all());
                 dd($addCard);
