@@ -187,7 +187,6 @@ var FirstSubscriptionVM = function () {
     });
     
     me.addCardFunction = function(d, e){
-        return false;
         me.errorMessage('');
         me.successMessage('');
         if(me.expiry() != null && me.expiry().indexOf('/') >= 0){
