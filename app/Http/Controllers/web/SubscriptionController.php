@@ -12,6 +12,7 @@ use App\Models\RecruiterOffice;
 class SubscriptionController extends Controller {
     
     public function __construct(){
+        $this->response = [];
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
     }
 
@@ -37,16 +38,16 @@ class SubscriptionController extends Controller {
             if($createCustomer['success'] == true){
                 $addCard = $this->addCardForSubscription($request->all());
                 dd($addCard);
-                $response['success'] = true;
-                $response['message'] = 'Subscription created successfully.';
+                $this->response['success'] = true;
+                $this->response['message'] = 'Subscription created successfully.';
             }else{
-                $response['success'] = false;
-                $response['message'] = 'Cannot create subscription please contact admin.';
+                $this->response['success'] = false;
+                $this->response['message'] = 'Cannot create subscription please contact admin.';
             }
         } catch (\Exception $e) {
-            $response['message'] = $e->getMessage();
+            $this->response['message'] = $e->getMessage();
         }
-        return $response;
+        return $this->response;
     }
     
     public function postAddCard(Request $request){
@@ -58,9 +59,9 @@ class SubscriptionController extends Controller {
         try{
             
         } catch (\Exception $e) {
-            $response = $e->getMessage();
+            $this->response = $e->getMessage();
         }
-        return $response;
+        return $this->response;
     }
     
     public function createCustomer(){
@@ -70,13 +71,13 @@ class SubscriptionController extends Controller {
                 "email" => Auth::user()->email
             ));
             RecruiterProfile::updateCustomerId($createCustomer['id']);
-            $respose['success'] = true;
-            $respose['message'] = 'Customer Created successfully';
+            $this->response['success'] = true;
+            $this->response['message'] = 'Customer Created successfully';
         } catch (\Exception $e) {
-            $response['success'] = false;
-            $response['message'] = $e->getMessage();
+            $this->response['success'] = false;
+            $this->response['message'] = $e->getMessage();
         }
-        return $response;
+        return $this->response;
     }
 
 
