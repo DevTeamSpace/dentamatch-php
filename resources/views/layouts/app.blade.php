@@ -72,6 +72,7 @@
                             <li><a href="{{ url('cms/affiliation/index') }}">Affiliations</a></li>
                             <li><a href="{{ url('cms/jobtitle/index') }}">Job Title</a></li>
                             <li><a href="{{ url('cms/officetype/index') }}">Office Type</a></li>
+                            <li><a href="{{ url('cms/certificate/index') }}">Certification</a></li>
 <!--                            <li><a href="{{ url('cms/payments/index') }}">Payments</a></li>
                             <li><a href="{{ url('cms/event/index') }}">Manage Events</a></li>
                             <li class="dropdown">
