@@ -328,8 +328,8 @@ class UserApiController extends Controller {
             ]);
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId>0) {
-                ChatUserLists::blockUnblockSeekerOrRecruiter($userId, $request->recruiterId);
-                $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.recruiter_blocked"));
+                $blockStatus = ChatUserLists::blockUnblockSeekerOrRecruiter($userId, $request->recruiterId);
+                $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.recruiter_blocked"),['recruiterId'=>$request->recruiterId,'blockStatus'=>$blockStatus]);
             } else {
                 $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }

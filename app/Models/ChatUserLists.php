@@ -45,11 +45,15 @@ class ChatUserLists extends Model
     
     public static function blockUnblockSeekerOrRecruiter($seekerId, $recruiterId,$type=1){
         $chatResult = static::where('seeker_id',$seekerId)->where('recruiter_id',$recruiterId)->first();
+        $blockStatus = 0;
         if($chatResult && $type==1){
             $chatResult->seeker_block = ($chatResult->seeker_block==0)?1:0;
+            $blockStatus = $chatResult->seeker_block;
         }elseif($chatResult && $type==2){
             $chatResult->recruiter_block = ($chatResult->recruiter_block==0)?1:0;
+            $blockStatus = $chatResult->recruiter_block;
         }
         $chatResult->save();
+        return $blockStatus;
     }
 }
