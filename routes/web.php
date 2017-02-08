@@ -128,5 +128,14 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('create', 'Cms\JobTitleController@create');
         Route::post('store', 'Cms\JobTitleController@store');
     });
+    
+    Route::group(['prefix' => 'officetype/'], function() {
+        Route::get('index', 'Cms\OfficeTypeController@index');
+        Route::get('list', 'Cms\OfficeTypeController@officeTypeList');
+        Route::delete('{id}/delete', 'Cms\OfficeTypeController@delete');
+        Route::get('{id}/edit', 'Cms\OfficeTypeController@edit');
+        Route::get('create', 'Cms\OfficeTypeController@create');
+        Route::post('store', 'Cms\OfficeTypeController@store');
+    });
 });
 

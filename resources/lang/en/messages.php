@@ -77,4 +77,7 @@ return [
     
     'jobtitle_added' => 'Job title added successfully',
     'jobtitle_updated' => 'Job title updated successfully',
+    
+    'officetype_added' => 'Office type added successfully',
+    'officetype_updated' => 'Office type updated successfully',
 ];

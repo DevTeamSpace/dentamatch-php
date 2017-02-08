@@ -1013,5 +1013,52 @@ paths:
          
       tags:
         - Availability
+        
+  users/chat-user-list:
+    get:
+      summary: Get Chat user list
+      description: Api to get chat user list
+      responses: 
+          200:
+            description: Api to get chat user list
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+  
+      tags:
+        - Chat
+        
+   
+  users/chat-user-block-unblock:
+    post:
+      summary: Block unblock recruiter
+      description: Block unblock recruiter
+      responses: 
+          200:
+            description: Api to block unblock recruiter
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: recruiterId
+          in: formData
+          description: recruiter id
+          type: integer
+  
+      tags:
+        - Chat
 
 
