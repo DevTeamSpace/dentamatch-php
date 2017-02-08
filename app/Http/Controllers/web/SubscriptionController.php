@@ -36,19 +36,20 @@ class SubscriptionController extends Controller {
             $client = new \GuzzleHttp\Client();
             $authCredentials = $client->post('https://connect.stripe.com/oauth/token', [
                 "form_params" => [
-                    "client_secret" => "sk_test_wb4RsL7x0sDB3UFOxhevW76O",
+                    "client_secret" => env('STRIPE_SECRET_KEY'),
                     "code" => $_REQUEST['code'],
-                    "grant_type" => "authorization_code"
+                    "grant_type" => "authorization_code",
+                    "client_id" => env('STRIPE_CLIENT_ID')
                 ]
             ]);
             $result = json_decode($authCredentials->getBody()->getContents());
             if(isset($result->stripe_user_id)){
                 RecruiterProfile::updateStripeToken($result->stripe_user_id);
                 $customerId = RecruiterProfile::where('user_id', Auth::user()->id)->first();
-                dd($customerId);
                 $createCustomer = \Stripe\Customer::create(array(
                     "description" => "Customer for".Auth::user()->email,
-                    "email" => Auth::user()->email
+                    "email" => Auth::user()->email,
+                    "source" => $result->stripe_user_id
                 ));
             }
         }else{
