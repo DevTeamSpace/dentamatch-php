@@ -360,11 +360,11 @@
                     </div>
                     <!-- Controls -->
                     <a class="left carousel-control" href="#fade-quote-carousel"  data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="fa  fa-chevron-left" aria-hidden="true"></span>
                         <span class="sr-only">Previous</span>
                     </a>
                     <a class="right carousel-control" href="#fade-quote-carousel"  data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="fa  fa-chevron-right" aria-hidden="true"></span>
                         <span class="sr-only">Next</span>
                     </a>
                 </div>
@@ -384,20 +384,23 @@
 </script>
 
 <script>
-    $("#fade-quote-carousel").carousel({
+   $("#fade-quote-carousel").carousel({
         interval: false,
         wrap: false
     });
-    var checkitem = function () {
+    var checkitem = function() {
         var $this;
         $this = $("#fade-quote-carousel");
         if ($("#fade-quote-carousel .carousel-inner .item:first").hasClass("active")) {
             $this.children(".left").hide();
+            $('.close').text('Skip')
             $this.children(".right").show();
         } else if ($("#fade-quote-carousel .carousel-inner .item:last").hasClass("active")) {
             $this.children(".right").hide();
+            $('.close').text('Done')
             $this.children(".left").show();
         } else {
+            $('.close').text('Skip')
             $this.children(".carousel-control").show();
         }
     };
