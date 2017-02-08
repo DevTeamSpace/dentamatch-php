@@ -68,7 +68,7 @@
                         <!--li><a href="{{ url('/register') }}">Register</a></li-->
                     @else
                         @if (Auth::user()->userGroup->group_id==1)
-                            <li><a href="{{ url('cms/index') }}">Home</a></li>
+                            <li><a href="{{ url('/cms') }}">Location</a></li>
                             <li><a href="{{ url('cms/affiliation/index') }}">Affiliations</a></li>
                             <li><a href="{{ url('cms/jobtitle/index') }}">Job Title</a></li>
 <!--                            <li><a href="{{ url('cms/payments/index') }}">Payments</a></li>
