@@ -55,7 +55,7 @@ Route::post('users/user-location-update', 'Api\UserProfileApiController@updateUs
 Route::post('users/update-availability', 'Api\CalendarApiController@postJobAvailability');
 Route::post('users/search-jobs', 'Api\SearchApiController@postSearchjobs');
 Route::get('users/chat-user-list', 'Api\UserApiController@chatRecruiterList');
-Route::get('users/chat-user-block-unblock', 'Api\UserApiController@chatBlockUnblockRecruiter');
+Route::post('users/chat-user-block-unblock', 'Api\UserApiController@chatBlockUnblockRecruiter');
 Route::post('users/save-job', 'Api\SearchApiController@postSaveUnsavejob');
 Route::post('users/apply-job', 'Api\SearchApiController@postApplyJob');
 Route::post('users/cancel-job', 'Api\SearchApiController@postCancelJob');
