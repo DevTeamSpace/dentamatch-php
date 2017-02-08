@@ -37,14 +37,21 @@ class SubscriptionController extends Controller {
             $recruiter = RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
             if($recruiter['customer_id'] == null){
                 $createCustomer = $this->createCustomer();
-                $customer = $createCustomer['data']['id'];
+                if($createCustomer['success'] == true){
+                    $customer = $createCustomer['data']['id'];
+                }else{
+                    $customer = null;
+                    $this->response['success'] = false;
+                    $this->response['message'] = $createCustomer['message'];
+                    $this->response['data'] = null;
+                }
             }else{
                 $customer = $recruiter['customer_id'];
             }
-            if($createCustomer['success'] == true){
+            if($customer != null){
                 $addCard = $this->addCardForSubscription($request->all(), $customer);
                 if($addCard['success'] == true){
-                    $createSubscription = $this->addUserTOSubscription($createCustomer['data']['id'], $request->subscriptionType, $request->trailPeriod);
+                    $createSubscription = $this->addUserTOSubscription($customer, $request->subscriptionType, $request->trailPeriod);
                     $this->response['success'] = true;
                     $this->response['message'] = trans('messages.user_subscribed');
                 }else{
