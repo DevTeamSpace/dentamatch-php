@@ -24,7 +24,7 @@ class ChatUserLists extends Model
         ];  
    
     public static function getRecruiterListForChat($userId){
-        return static::join('recruiter_profiles','recruiter_profiles.user_id','=','chat_user_list.recruiter_id')
+        $chatUserList = static::join('recruiter_profiles','recruiter_profiles.user_id','=','chat_user_list.recruiter_id')
             ->join('user_chat',function($query){
                 $query->on('user_chat.to_id','=','chat_user_list.recruiter_id')
                     ->orOn('user_chat.from_id','=','chat_user_list.recruiter_id');
@@ -40,7 +40,15 @@ class ChatUserLists extends Model
                     DB::raw("max(user_chat.updated_at) AS timestamp"),
                     DB::raw("max(user_chat.id) AS messageId"),
                     'chat_user_list.id as messageListId','chat_user_list.seeker_id as seekerId',
-                    'chat_user_list.recruiter_block as recruiterBlock','chat_user_list.seeker_block as seekerBlock')->get()->toArray();
+                    'chat_user_list.recruiter_block as recruiterBlock','chat_user_list.seeker_block as seekerBlock')->get();
+    
+        $messageIds = $chatUserList->pluck('messageId'); 
+        $responseData = $chatUserList->toArray();
+        $chatData = UserChat::whereIn('id',$messageIds)->pluck('message','id');
+        foreach($responseData as $key=>$row){
+            $responseData[$key]['message'] = $chatData[$row['messageId']];
+        }
+        return $responseData;
     }
     
     public static function blockUnblockSeekerOrRecruiter($seekerId, $recruiterId, $blockStatus,$type=1){
