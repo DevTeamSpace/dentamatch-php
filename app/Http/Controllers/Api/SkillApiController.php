@@ -145,7 +145,7 @@ class SkillApiController extends Controller {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $userCertification = JobseekerCertificates::where('user_id', '=', $userId)->get();
-                $certificationList = Certifications::get()->toArray();
+                $certificationList = Certifications::where('is_active',1)->get()->toArray();
                 $userCertificationData=[];
                 
                 if($userCertification) {
