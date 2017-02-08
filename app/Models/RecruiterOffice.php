@@ -99,7 +99,7 @@ class RecruiterOffice extends Model {
     public static function getAllOffices(){
         return RecruiterOffice::join(
                 'locations', 'recruiter_offices.zipcode', '=', 'locations.zipcode'
-                )->where(['user_id' => Auth::user()->id, 'locations.is_active' => 1])
+                )->where(['user_id' => Auth::user()->id, 'locations.is_active' => config('constants.LocationActive')])
                 ->get()
                 ->toArray();
     }

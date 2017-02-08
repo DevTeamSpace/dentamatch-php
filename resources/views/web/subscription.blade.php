@@ -22,7 +22,7 @@
                     <p>Unlimited template creation,
                         job posting, searching jobseeker, message & reports</p>
                 </div>
-                <a id="stripe" href="https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_A4GIpAptEF5hAp1QDsIVsSgNcF4P1QcV&scope=read_only&page=subscription_list" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
+                <a id="stripe" href="https:/connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_A4GIpAptEF5hAp1QDsIVsSgNcF4P1QcV&scope=read_write&page=subscription_list" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
             </div>
 
             <!--/ko-->

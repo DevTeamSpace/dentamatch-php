@@ -10,7 +10,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Affiliation List
                     <div class="span6 pull-right" style="text-align:right">
-                        <a href="{{ URL::to("cms/location/create") }}">Add Affiliation</a>
+                        <a href="{{ URL::to("cms/affiliation/create") }}">Add Affiliation</a>
                     </div>
                 </div>
 

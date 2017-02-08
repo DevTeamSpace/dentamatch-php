@@ -69,5 +69,9 @@ return [
     'calendar_availability_list' => 'Calendar Availability List Retrieved',
     'saved_job_list' => "Saved job list",
     'applied_job_list' => 'Applied job list',
-    'shortlisted_job_list' => 'Shortlisted job list'
+    'shortlisted_job_list' => 'Shortlisted job list',
+    
+    
+    'affiliation_added' => 'Affiliation added successfully',
+    'affiliation_updated' => 'Affiliation updated successfully',
 ];
