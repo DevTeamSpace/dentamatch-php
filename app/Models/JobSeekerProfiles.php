@@ -20,7 +20,7 @@ class JobSeekerProfiles extends Model
         $obj->leftJoin('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id');
 
         if($job->job_type==RecruiterJobs::FULLTIME){
-            //$obj->where('jobseeker_profiles.is_fulltime',1);
+            $obj->where('jobseeker_profiles.is_fulltime',1);
         }
         elseif($job->job_type==RecruiterJobs::PARTTIME){
             $obj->where('jobseeker_profiles.is_fulltime',0);
@@ -47,13 +47,12 @@ class JobSeekerProfiles extends Model
         }
         elseif($job->job_type==RecruiterJobs::TEMPORARY){
             $obj->where('jobseeker_profiles.is_fulltime',0);
-            
-            $obj->leftJoin('jobseeker_temp_availability',function($query) use ($job){
+        }
+
+        $obj->leftJoin('jobseeker_temp_availability',function($query) use ($job){
                 $query->on('jobseeker_temp_availability.user_id', '=', 'jobseeker_profiles.user_id')
                 ->whereIn('jobseeker_temp_availability.temp_job_date',explode(',',$job->temp_job_dates));
-            })->groupby('jobseeker_profiles.user_id');
-            $obj->addSelect(DB::raw("group_concat(distinct(jobseeker_temp_availability.temp_job_date)) AS temp_job_dates"));
-        }
+        });
         
         $obj->select('jobseeker_profiles.first_name','jobseeker_profiles.last_name','jobseeker_profiles.profile_pic',
                     'jobseeker_profiles.is_parttime_monday','jobseeker_profiles.is_parttime_tuesday','jobseeker_profiles.is_parttime_tuesday',
@@ -63,8 +62,11 @@ class JobSeekerProfiles extends Model
                 $query->on('jobseeker_profiles.user_id', '=', 'skill_count.user_id')
                 ->whereIn('skill_count.skill_id',explode(',',$job->required_skills));
             })->groupby('skill_count.skill_id');
+
         $obj->addSelect(DB::raw("count(distinct(skill_count.skill_id)) AS matched_skills")); 
 
+        $obj->addSelect(DB::raw("group_concat(distinct(jobseeker_temp_availability.temp_job_date)) AS temp_job_dates"));
+        
         $obj->addSelect(DB::raw("(
                         3959 * acos (
                           cos ( radians(".$job->latitude.") )
@@ -107,11 +109,6 @@ class JobSeekerProfiles extends Model
         $obj->leftJoin('jobseeker_affiliations','jobseeker_profiles.user_id','=','jobseeker_affiliations.user_id')
             ->leftJoin('affiliations','jobseeker_affiliations.affiliation_id','=','affiliations.id');
 
-        $obj->leftJoin('jobseeker_certificates','jobseeker_profiles.user_id','=','jobseeker_certificates.user_id')
-            ->leftJoin('certifications','jobseeker_certificates.certificate_id','=','certifications.id');
-
-        $obj->leftJoin('jobseeker_work_experiences','jobseeker_profiles.user_id','=','jobseeker_work_experiences.user_id');
-
         $obj->leftJoin('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id');
 
         $obj->leftJoin('jobseeker_temp_availability','jobseeker_profiles.user_id','=','jobseeker_temp_availability.user_id')
@@ -120,11 +117,9 @@ class JobSeekerProfiles extends Model
         $obj->select('jobseeker_profiles.first_name','jobseeker_profiles.last_name','jobseeker_profiles.profile_pic',
                     'jobseeker_profiles.is_parttime_monday','jobseeker_profiles.is_parttime_tuesday','jobseeker_profiles.is_parttime_tuesday',
                     'jobseeker_profiles.is_parttime_wednesday','jobseeker_profiles.is_parttime_thursday','jobseeker_profiles.is_parttime_friday','jobseeker_profiles.is_parttime_saturday','jobseeker_profiles.is_parttime_sunday','jobseeker_profiles.is_fulltime','jobseeker_profiles.user_id','jobseeker_profiles.id','job_titles.jobtitle_name','jobseeker_profiles.about_me', 'jobseeker_profiles.preferred_job_location')
-            ->groupby('jobseeker_profiles.user_id', 'jobseeker_affiliations.user_id','jobseeker_certificates.user_id','jobseeker_work_experiences.user_id');
+            ->groupby('jobseeker_profiles.user_id', 'jobseeker_affiliations.user_id');
 
         $obj->addSelect(DB::raw("group_concat(distinct(affiliations.affiliation_name) SEPARATOR ', ') AS affiliations"));
-
-        $obj->addSelect(DB::raw("group_concat(distinct(certifications.certificate_name) SEPARATOR ', ') AS certifications"));
 
         $obj->addSelect(DB::raw("group_concat(distinct(jobseeker_temp_availability.temp_job_date) SEPARATOR ' | ') AS temp_job_dates"));
 
@@ -135,20 +130,10 @@ class JobSeekerProfiles extends Model
                           * cos( radians(".$job->longitude.") - radians(jobseeker_profiles.longitude) )
                           + sin ( radians(".$job->latitude.") )
                           * sin( radians( jobseeker_profiles.latitude ) )
-                         )) AS distance") )
-            ->having(DB::raw("(
-                        3959 * acos (
-                          cos ( radians(".$job->latitude.") )
-                          * cos( radians( jobseeker_profiles.latitude) )
-                          * cos( radians(".$job->longitude.") - radians(jobseeker_profiles.longitude) )
-                          + sin ( radians(".$job->latitude.") )
-                          * sin( radians( jobseeker_profiles.latitude ) )
-                         )) AS distance"),'<=',$reqData['distance']);
+                         )) AS distance") );
 
         $searchResult   =   $obj->first();
         
-
-        //dd($searchResult->toArray());
 
         $result = array();
         if($searchResult){
@@ -173,13 +158,18 @@ class JobSeekerProfiles extends Model
             $experience = JobSeekerWorkExperiences::where('jobseeker_work_experiences.user_id',$seekerUserId)
                             ->leftJoin('job_titles','jobseeker_work_experiences.job_title_id','=','job_titles.id')
                             ->select('months_of_expereince','office_name','office_address', 'city', 'reference1_name', 'reference1_mobile', 'reference1_email', 'reference2_name', 'reference2_mobile', 'reference2_email', 'job_titles.jobtitle_name')
-                            ->get();                                
-            //dd($experience->toArray());
+                            ->get(); 
+
+            $certificate= JobseekerCertificates::where('jobseeker_certificates.user_id',$seekerUserId)
+                            ->leftJoin('certifications','jobseeker_certificates.certificate_id','=','certifications.id')
+                            ->select('image_path','validity_date', 'certifications.certificate_name')
+                            ->get();                                                
             
             $result                 =   $searchResult->toArray();
             $result['schoolings']   =   $schoolings->toArray();
             $result['skills']       =   $skills->toArray();
             $result['experience']   =   $experience->toArray();
+            $result['certificate']  =   $certificate->toArray();
         }
         return $result;        
     } 

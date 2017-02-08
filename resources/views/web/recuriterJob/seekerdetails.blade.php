@@ -6,24 +6,25 @@
 @section('content')
 
 <div class="container padding-container-template">
-        <!--breadcrumb-->
-        <ul class="breadcrumb">
-            <li><a href="#">Jobs Listing</a></li>
-            <li><a href="#">Jobs Detail</a></li>
-            <li><a href="#">Search Preference</a></li>
-            <li class="active">Create Job Opening</li>
-        </ul>
-        <!--/breadcrumb-->
+    <!--breadcrumb-->
+    <ul class="breadcrumb">
+        <li><a href="#">Jobs Listing</a></li>
+        <li><a href="#">Jobs Detail</a></li>
+        <li><a href="#">Search Preference</a></li>
+        <li class="active">{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']." Profile"}}</li>
+    </ul>
+    <!--/breadcrumb-->
 
-        <div class="commonBox">   
-            <div class="row resultHeading">
-                <div class="col-md-2 col-sm-2 resultImage">
-                    <img src="{{ url('image/66/66/?src=' .$seekerDetails['profile_pic']) }}" class="img-circle">
-                </div> 
-                <div class="col-md-7 col-sm-6">
-                    <h4>{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']}}</h4>
-                    <h6>{{$seekerDetails['jobtitle_name']}}</h6> 
-                    <p>
+    <div class="commonBox">   
+        <div class="row resultHeading">
+            <div class="col-md-2 col-sm-2 resultImage">
+                <img src="{{ url('image/66/66/?src=' .$seekerDetails['profile_pic']) }}" class="img-circle">
+            </div> 
+            <div class="col-md-7 col-sm-6">
+                <h4>{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']}}</h4>
+                <h6>{{$seekerDetails['jobtitle_name']}}</h6> 
+                <div class="job-type-detail">
+                
                     @if($seekerDetails['is_fulltime'])
                     <span class="statusBtn bg-ltgreen text-center statusBtnMargin">Full Time</span>
                     @endif
@@ -44,111 +45,116 @@
                     </span>
                     @endif
                     @if($seekerDetails['temp_job_dates'])
-                    <span class="bg-ember statusBtn mr-r-5">Temporary</span>
-                    <span class="dropdown date-drop">
-                        @php 
-                        $dates = explode(',',$seekerDetails['temp_job_dates']);
-                        @endphp
-                        <span class=" dropdown-toggle"  data-toggle="dropdown"><span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
-                            <span class="caret"></span></span>
-                        <ul class="dropdown-menu">
-                            @foreach ($dates as $date)
-                            <li>{{ date('l, d M Y',strtotime($date)) }}</li>
-                            @endforeach
-                        </ul>
-                    </span>
+                        <span class="bg-ember statusBtn mr-r-5">Temporary</span>
+                        <span class="dropdown date-drop">
+                            @php 
+                            $dates = explode(' | ',$seekerDetails['temp_job_dates']);
+                            @endphp
+                            <span class=" dropdown-toggle"  data-toggle="dropdown">
+                                <span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
+                                <span class="caret"></span>
+                            </span>
+                            <ul class="dropdown-menu">
+                              @foreach ($dates as $date)
+                                <li>{{ date('l, d M Y',strtotime($date)) }}</li>
+                                @endforeach
+                            </ul>
+                        </span>
                     @endif
-                    </p>
                 </div>
-                <div class="col-md-3 text-right"><p>{{round($seekerDetails['distance'])}} miles away</p><button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Invite</button></div>
             </div>
+            <div class="col-md-3 text-right"><p>{{round($seekerDetails['distance'])}} miles away</p><button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Invite</button></div>
+        </div>
 
-            <div class="pd-t-60">
-                <div class="leftCircle">
-                    <div class="searchResultHeading">
-                        <h5>ABOUT ME</h5>
-                        <p>{{$seekerDetails['about_me']}}</p>
-                    </div>
-
-                    <div class="searchResultHeading pd-t-20">
-                        <h5>LOCATION</h5>
-                        <p>{{$seekerDetails['preferred_job_location']}}</p>
-                    </div>
-
-                    <div class="searchResultHeading pd-t-20">
-                        <h5>EXPERIENCE</h5>
-                        @if(!empty($seekerDetails['experience']))
-                            @foreach($seekerDetails['experience'] as $experience)
-                                <div class="row">   
-                                    <div class="col-sm-6 exprience">
-                                        <dl>
-                                            <dt>
-                                                <div class="expTitle">{{$experience['jobtitle_name']}} 
-                                                    <span>({{(round($experience['months_of_expereince']/12,0)!=0?round($experience['months_of_expereince']/12,0)." years":"")." ".(round($experience['months_of_expereince']%12,0)!=0?round($experience['months_of_expereince']%12,0)." months":"")}})</span>
-                                                </div>
-                                                {{$experience['reference1_name']}}
-                                            </dt>
-                                            <dd>{{$experience['reference1_mobile']}}</dd>
-                                            <dd>{{$experience['reference1_email']}}</dd> 
-                                        </dl>
-                                    </div>
-                                    <div class="col-sm-6 exprience">
-                                        <dl>
-                                            <dt>
-                                                <div class="expTitle">Reference</div>
-                                                {{$experience['reference2_name']}}
-                                            </dt>
-                                            <dd>{{$experience['reference2_mobile']}}</dd>
-                                            <dd>{{$experience['reference2_email']}}</dd>                 
-                                        </dl>
-                                    </div>
-                                </div>
-                            @endforeach
-                        @endif
-                    </div>    
-
-
-                                <div class="searchResultHeading pd-t-20">
-                                    <h5>DENTAL SCHOOL / TRAINING / GRADUATIONS</h5>
-                                    @if(!empty($seekerDetails['schoolings']))
-                                        @foreach($seekerDetails['schoolings'] as $schoolings)
-                                            <div class="pd-t-10 keySkills">
-                                                <b>{{$schoolings['school_title']." (".$schoolings['year_of_graduation'].")"}}</b>
-                                                <p>{{$schoolings['school_name']}}</p>
-                                            </div>
-                                        @endforeach
-                                    @endif
-                                </div>
-
-                                <div class="searchResultHeading pd-t-20">
-                                    <h5>KEY SKILLS</h5>
-                                </div>
-
-                                @if(!empty($seekerDetails['skills']))
-                                    @foreach($seekerDetails['skills'] as $skills)
-                                        <div class="pd-t-10 keySkills">
-                                            <b>{{$skills['skill_title']}}</b>
-                                            <p>{{$skills['skill_name']}}</p>
-                                        </div>
-                                    @endforeach
-                                @endif
-                                
-                                <div class="searchResultHeading pd-t-20">
-                                    <h5>AFFILAATIONS</h5>
-                                    <P>{{$seekerDetails['affiliations']}}</P>
-                                </div>
-
-                                <div class="searchResultHeading pd-t-20">
-                                    <h5>CERTIFICATIONS</h5>
-                                    <P>{{$seekerDetails['certifications']}}</P>
-                                </div>
-                            </div>  
-                        </div>
-
-
-
-                    </div>  
+        <div class="pd-t-60">
+            <div class="leftCircle">
+                <div class="searchResultHeading">
+                    <h5>ABOUT ME</h5>
+                    <p>{{$seekerDetails['about_me']}}</p>
                 </div>
+
+                <div class="searchResultHeading pd-t-20">
+                    <h5>LOCATION</h5>
+                    <p>{{$seekerDetails['preferred_job_location']}}</p>
+                </div>
+
+                <div class="searchResultHeading pd-t-20">
+                    <h5>EXPERIENCE</h5>
+                    @if(!empty($seekerDetails['experience']))
+                        @foreach($seekerDetails['experience'] as $experience)
+                            <div class="row">   
+                                <div class="col-sm-6 exprience">
+                                    <dl>
+                                        <dt>
+                                            <div class="expTitle">{{$experience['jobtitle_name']}} 
+                                                <span>({{(round($experience['months_of_expereince']/12,0)!=0?round($experience['months_of_expereince']/12,0)." years":"")." ".(round($experience['months_of_expereince']%12,0)!=0?round($experience['months_of_expereince']%12,0)." months":"")}})</span>
+                                            </div>
+                                            {{$experience['reference1_name']}}
+                                        </dt>
+                                        <dd>{{$experience['reference1_mobile']}}</dd>
+                                        <dd>{{$experience['reference1_email']}}</dd> 
+                                    </dl>
+                                </div>
+                                <div class="col-sm-6 exprience">
+                                    <dl>
+                                        <dt>
+                                            <div class="expTitle">Reference</div>
+                                            {{$experience['reference2_name']}}
+                                        </dt>
+                                        <dd>{{$experience['reference2_mobile']}}</dd>
+                                        <dd>{{$experience['reference2_email']}}</dd>                 
+                                    </dl>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
+                </div>    
+
+
+                <div class="searchResultHeading pd-t-20">
+                    <h5>DENTAL SCHOOL / TRAINING / GRADUATIONS</h5>
+                    @if(!empty($seekerDetails['schoolings']))
+                        @foreach($seekerDetails['schoolings'] as $schoolings)
+                            <div class="pd-t-10 keySkills">
+                                <b>{{$schoolings['school_title']." (".$schoolings['year_of_graduation'].")"}}</b>
+                                <p>{{$schoolings['school_name']}}</p>
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
+
+                <div class="searchResultHeading pd-t-20">
+                    <h5>KEY SKILLS</h5>
+                </div>
+
+                @if(!empty($seekerDetails['skills']))
+                    @foreach($seekerDetails['skills'] as $skills)
+                        <div class="pd-t-10 keySkills">
+                            <b>{{$skills['skill_title']}}</b>
+                            <p>{{$skills['skill_name']}}</p>
+                        </div>
+                    @endforeach
+                @endif
+                
+                <div class="searchResultHeading pd-t-20">
+                    <h5>AFFILAATIONS</h5>
+                    <P>{{$seekerDetails['affiliations']}}</P>
+                </div>
+
+                @if(!empty($seekerDetails['certificate']))
+                    @foreach($seekerDetails['certificate'] as $certificate)
+                        <div class="searchResultHeading pd-t-20">
+                            <h5>{{$certificate['certificate_name']}}</h5>
+                            <P>
+                            <img src="{{ url('image/66/66/?src=' .$certificate['image_path']) }}">
+                            Valid Till: {{date('d M Y',strtotime($certificate['validity_date']))}}</P>
+                        </div>
+                    @endforeach
+                @endif
+            </div>  
+        </div>
+    </div>  
+</div>
 @endsection
 
 @section('js')

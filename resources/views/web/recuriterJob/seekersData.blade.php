@@ -13,7 +13,40 @@
     <div class="media-body ">
         <div class="template-job-information mr-t-15">
           <div class="template-job-information-left">
-            <h4 class="pull-left"><a href="{{ url('job/seekerdetails/'.$seeker['id'].'/'.$jobDetails->id) }}">{{$seeker['first_name'].' '.$seeker['last_name']}}</a></h4><span class="mr-l-5 label label-warning">{{round($seeker['avg_rating'],1)}}</span>
+            <h4 class="pull-left"><a href="{{ url('job/seekerdetails/'.$seeker['id'].'/'.$jobDetails->id) }}">{{$seeker['first_name'].' '.$seeker['last_name']}}</a></h4>
+            <span class="mr-l-5 dropdown date_drop">
+              <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{round($seeker['avg_rating'],1)}}</span>
+                <ul class="dropdown-menu rating-info">
+                  <li><div class="rating_on"> Punctuality</div>
+                    <ul class="rate_me">
+                      <li><span></span></li>
+                      <li class="active"><span></span></li>
+                      <li><span></span></li>
+                      <li><span></span></li>
+                      <li><span></span></li>
+                    </ul>
+                  </li>
+                  <li><div class="rating_on"> Time management</div>
+                    <ul class="rate_me">
+                      <li><span></span></li>
+                      <li class="active"><span></span></li>
+                      <li><span></span></li>
+                      <li><span></span></li>
+                      <li><span></span></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <div class="rating_on">  Personal/Professional skill</div>
+                    <ul class="rate_me">
+                      <li><span></span></li>
+                      <li class="active"><span></span></li>
+                      <li><span></span></li>
+                      <li><span></span></li>
+                      <li><span></span></li>
+                    </ul>
+                  </li>
+                </ul>
+              </span>
           </div>
           <div class="template-job-information-right">
             <span >{{round($seeker['distance'],0)}} miles away</span>
@@ -40,18 +73,20 @@
             </span>
             @else
             <span class="bg-ember statusBtn mr-r-5">Temporary</span>
-            <span class="dropdown date-drop">
-                @php 
-                $dates = explode(',',$seeker['temp_job_dates']);
-                @endphp
-                <span class=" dropdown-toggle"  data-toggle="dropdown"><span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
-                    <span class="caret"></span></span>
-                <ul class="dropdown-menu">
-                    @foreach ($dates as $date)
-                    <li>{{ date('l, d M Y',strtotime($date)) }}</li>
-                    @endforeach
-                </ul>
-            </span>
+                @if($seeker['temp_job_dates'])
+                <span class="dropdown date-drop">
+                    @php 
+                    $dates = explode(',',$seeker['temp_job_dates']);
+                    @endphp
+                    <span class=" dropdown-toggle"  data-toggle="dropdown"><span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
+                        <span class="caret"></span></span>
+                    <ul class="dropdown-menu">
+                        @foreach ($dates as $date)
+                        <li>{{ date('l, d M Y',strtotime($date)) }}</li>
+                        @endforeach
+                    </ul>
+                </span>
+                @endif
             @endif
         </div>
         <dl class="dl-horizontal text-left mr-t-30">
