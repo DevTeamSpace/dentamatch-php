@@ -34,22 +34,32 @@ class SubscriptionController extends Controller {
     
     public function postCreateSubscription(Request $request){
         try{
-            $createCustomer = $this->createCustomer();
+            $recruiter = RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
+            if($recruiter['customer_id'] == null){
+                $createCustomer = $this->createCustomer();
+                $customer = $createCustomer['data']['id'];
+            }else{
+                $customer = $recruiter['customer_id'];
+            }
             if($createCustomer['success'] == true){
-                $addCard = $this->addCardForSubscription($request->all(), $createCustomer['data']['id']);
-                if($addCard){
+                $addCard = $this->addCardForSubscription($request->all(), $customer);
+                if($addCard['success'] == true){
                     $createSubscription = $this->addUserTOSubscription($createCustomer['data']['id'], $request->subscriptionType, $request->trailPeriod);
                     $this->response['success'] = true;
                     $this->response['message'] = trans('messages.user_subscribed');
                 }else{
                     $this->response['success'] = false;
-                    $this->response['message'] = trans('messages.user_subscribed');
+                    $this->response['data'] = null;
+                    $this->response['message'] = $addCard['message'];
                 }
             }else{
                 $this->response['success'] = false;
+                $this->response['data'] = null;
                 $this->response['message'] = trans('messages.cannot_subscribe');
             }
         } catch (\Exception $e) {
+            $this->response['success'] = false;
+            $this->response['data'] = null;
             $this->response['message'] = $e->getMessage();
         }
         return $this->response;
@@ -74,6 +84,7 @@ class SubscriptionController extends Controller {
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.user_added_to_subscription');
         } catch (\Exception $e) {
+            $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
         return $this->response;
@@ -104,10 +115,12 @@ class SubscriptionController extends Controller {
                 $this->response['message'] = trans('messages.card_added');
             }else{
                 $this->response['success'] = false;
+                $this->response['data'] = null;
                 $this->response['message'] = trans('messages.cannot_add_card');
             }
         } catch (\Exception $e) {
             $this->response['success'] = false;
+            $this->response['data'] = null;
             $this->response['message'] = $e->getMessage();
         }
         return $this->response;
