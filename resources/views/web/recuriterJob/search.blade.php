@@ -6,7 +6,7 @@
 @endsection
 @section('content')
 
-<div class="container padding-container-template ">
+<div id="ajaxData" class="container padding-container-template ">
     <!--breadcrumb-->
     <ul class="breadcrumb ">
         <li><a href="#">Jobs Listing</a></li>
@@ -38,7 +38,6 @@
             <div class="col-sm-5">
               <label class="fnt-16 nopadding">Radius</label>
               <div >
-                <input type="hidden" name="page" value="{{$searchData['page']}}"/>
                 <input type="hidden" name="slider_val" id="slider_val" value="{{$searchData['distance']}}"/>
                 <input id="range_slider" type="text"/>
                 <span class="pull-left">1 mile</span>

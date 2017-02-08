@@ -20,7 +20,7 @@ class JobSeekerProfiles extends Model
         $obj->leftJoin('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id');
 
         if($job->job_type==RecruiterJobs::FULLTIME){
-            $obj->where('jobseeker_profiles.is_fulltime',1);
+            //$obj->where('jobseeker_profiles.is_fulltime',1);
         }
         elseif($job->job_type==RecruiterJobs::PARTTIME){
             $obj->where('jobseeker_profiles.is_fulltime',0);
@@ -94,8 +94,6 @@ class JobSeekerProfiles extends Model
                 DB::raw("avg(skills) as skills"),DB::raw("avg(teamwork) as teamwork"),DB::raw("avg(onemore) as onemore"))
         ->addSelect(DB::raw("(avg(punctuality)+avg(time_management)+avg(skills)+avg(teamwork)+avg(onemore))/5 AS avg_rating"))
         ->groupby('jobseeker_profiles.user_id');
-
-        $total  = 0;
 
         $obj->orderby('matched_skills','desc');
         $obj->orderby('distance');
