@@ -137,5 +137,14 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('create', 'Cms\OfficeTypeController@create');
         Route::post('store', 'Cms\OfficeTypeController@store');
     });
+    
+    Route::group(['prefix' => 'certificate/'], function() {
+        Route::get('index', 'Cms\CertificateController@index');
+        Route::get('list', 'Cms\CertificateController@certificationList');
+        Route::delete('{id}/delete', 'Cms\CertificateController@delete');
+        Route::get('{id}/edit', 'Cms\CertificateController@edit');
+        Route::get('create', 'Cms\CertificateController@create');
+        Route::post('store', 'Cms\CertificateController@store');
+    });
 });
 

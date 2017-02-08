@@ -81,6 +81,9 @@ return [
     
     'officetype_added' => 'Office type added successfully',
     'officetype_updated' => 'Office type updated successfully',
+    
+    'certification_added' => 'Certification added successfully',
+    'certification_updated' => 'Certification updated successfully',
 
     'recruiter_blocked'=>'Recruiter Blocked',
     'user_subscribed' => 'User subscribed successfully.',
