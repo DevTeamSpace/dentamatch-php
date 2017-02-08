@@ -33,8 +33,7 @@ class SubscriptionController extends Controller {
     }
     
     public function getCreateSubscription(Request $request){
-        try{
-            $createCustomer = $this->createCustomer();
+        try{$createCustomer = $this->createCustomer();
             if($createCustomer['success'] == true){
                 $addCard = $this->addCardForSubscription($request->all(), $createCustomer['data']['id']);
                 $createSubscription = $this->createSubscription($createCustomer['data']['id'], $request->subscriptionType, $request->trailPeriod);
@@ -53,15 +52,17 @@ class SubscriptionController extends Controller {
     
     public function createSubscription($customerId, $subscriptionType, $trailPeriod){
         try{
-            $now = \Carbon::now();
-            $addMonths = $now->addMonths($freeTrail); 
-            $trailPeriodDays = $addMonths->diff($now)->days;
-            dd($trailPeriodDays);
+            $now = \Carbon\Carbon::now();
+            $fotDiff = \Carbon\Carbon::now();
+            $addMonths = $now->addMonths($trailPeriod);
+            $trailPeriodDays = $addMonths->diff($fotDiff)->days;
             \Stripe\Subscription::create(array(
                 "customer" => $customerId,
                 "plan" => $planId,
                 "trial_period_days" => $trailPeriodDays
             ));
+            $this->response['success'] = true;
+            $this->response['message'] = 'Subscription added successfully.';
         } catch (Exception $ex) {
             $this->response['message'] = $e->getMessage();
         }
