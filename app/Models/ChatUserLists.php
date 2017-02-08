@@ -26,7 +26,11 @@ class ChatUserLists extends Model
         return static::join('recruiter_profiles','recruiter_profiles.user_id','=','chat_user_list.recruiter_id')
             ->join('user_chat',function($query){
                 $query->on('user_chat.to_id','=','chat_user_list.recruiter_id')
-                    ->orwhere('user_chat.from_id','=','chat_user_list.recruiter_id');
+                    ->orOn('user_chat.from_id','=','chat_user_list.recruiter_id');
+            })
+            ->where(function($query) use ($userId){
+                return $query->where('user_chat.from_id',$userId)
+                    ->orwhere('user_chat.to_id',$userId);
             })
             ->where('chat_user_list.seeker_id',$userId)
             ->groupBy('chat_user_list.seeker_id')
