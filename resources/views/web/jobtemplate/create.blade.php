@@ -74,7 +74,7 @@
 				</div>
 				<div class="modal-body text-center">
 					
-					<p>Do you want to discard the template ?</p>
+					<p>Do you want to discard the changes?</p>
 
 					<div class="mr-t-20 mr-b-30">
 						<button id="cancelButton" type="button" class="btn btn-link mr-r-5">Yes</button>

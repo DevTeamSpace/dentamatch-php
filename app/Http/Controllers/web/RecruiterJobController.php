@@ -105,7 +105,6 @@ class RecruiterJobController extends Controller
             return view('web.recuriterJob.list', compact('jobList'));
             
         } catch (\Exception $e) {
-            dd($e);
             return view('web.error.',["message" => $e->getMessage()]);
         }
     }

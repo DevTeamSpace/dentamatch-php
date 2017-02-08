@@ -27,7 +27,7 @@
                         ($job['is_thursday']==1)?array_push($dayArr,'Thursday'):'';
                         ($job['is_friday']==1)?array_push($dayArr,'Friday'):'';
                         ($job['is_saturday']==1)?array_push($dayArr,'Saturday'):'';
-                        ($job['is_sunday']==1)?array_push($dayArr,Sunday):'';
+                        ($job['is_sunday']==1)?array_push($dayArr,'Sunday'):'';
                     @endphp
                     {{ implode(', ',$dayArr) }}
                 </span>
