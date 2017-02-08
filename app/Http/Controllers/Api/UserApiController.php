@@ -318,4 +318,25 @@ class UserApiController extends Controller {
         }
         return $returnResponse;
     }
+    
+    public function chatBlockUnblockRecruiter(Request $request){
+        try {
+            $this->validate($request, [
+                'recruiterId' => 'required',
+            ]);
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            if($userId>0) {
+                ChatUserLists::blockUnblockSeekerOrRecruiter($userId, $request->recruiterId);
+                $returnResponse = apiResponse::customJsonResponse(1, 200, '',['list'=>$recruiterList]);
+            } else {
+                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+            }
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            $returnResponse = apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        } catch (\Exception $e) {
+            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+        return $returnResponse;
+    }
 }

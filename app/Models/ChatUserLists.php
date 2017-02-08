@@ -31,8 +31,18 @@ class ChatUserLists extends Model
             ->where('chat_user_list.seeker_id',$userId)
             ->groupBy('chat_user_list.seeker_id')
             ->select('recruiter_profiles.office_name as name','chat_user_list.recruiter_id as recruiterId',
-                    'chat_user_list.seeker_id as seekerId',
+                    'chat_user_list.id as messageListId','chat_user_list.seeker_id as seekerId','user_chat.id as messageId',
                     'chat_user_list.recruiter_block as recruiterBlock','chat_user_list.seeker_block as seekerBlock',
                     'user_chat.message','user_chat.updated_at as timestamp')->get()->toArray();
+    }
+    
+    public static function blockUnblockSeekerOrRecruiter($seekerId, $recruiterId,$type=1){
+        $chatResult = static::where('seeker_id',$seekerId)->where('recruiter_id',$recruiterId)->first();
+        if($chatResult && $type==1){
+            $chatResult->seeker_block = ($chatResult->seeker_block==0)?1:0;
+        }elseif($chatResult && $type==2){
+            $chatResult->recruiter_block = ($chatResult->recruiter_block==0)?1:0;
+        }
+        $chatResult->save();
     }
 }
