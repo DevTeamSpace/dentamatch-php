@@ -49,7 +49,7 @@ class RecruiterJobController extends Controller
             $searchData = $request->all();
 
             if(!isset($searchData['distance']))
-                $searchData['distance'] =  10;
+                $searchData['distance'] =  10000;
             
             $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
             $seekersList = JobSeekerProfiles::getJobSeekerProfiles($jobDetails,$searchData);

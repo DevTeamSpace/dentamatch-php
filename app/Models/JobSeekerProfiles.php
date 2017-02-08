@@ -125,10 +125,10 @@ class JobSeekerProfiles extends Model
 
         $obj->addSelect(DB::raw("(
                         3959 * acos (
-                          cos ( radians(".$job->latitude.") )
+                          cos ( radians(".$job['latitude'].") )
                           * cos( radians( jobseeker_profiles.latitude) )
-                          * cos( radians(".$job->longitude.") - radians(jobseeker_profiles.longitude) )
-                          + sin ( radians(".$job->latitude.") )
+                          * cos( radians(".$job['longitude'].") - radians(jobseeker_profiles.longitude) )
+                          + sin ( radians(".$job['latitude'].") )
                           * sin( radians( jobseeker_profiles.latitude ) )
                          )) AS distance") );
 
