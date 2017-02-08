@@ -36,11 +36,13 @@ class NotificationServiceProvider extends BaseServiceProvider {
         }
         
         if (env('APP_ENV') == 'local') {
-            $certFile = public_path('notification_pems/DentaMatchDev.pem');
-            $url = 'ssl://gateway.sandbox.push.apple.com:2195';
+            $config = config('pushnotification.apple.sandbox');
+            $certFile = $config['pem_file'];
+            $url = $config['url'];
         } else {
-            $certFile = public_path('notification_pems/DentaMatchDist.pem');
-            $url = 'ssl://gateway.push.apple.com:2195';
+            $config = config('pushnotification.apple.production');
+            $certFile = $config['pem_file'];
+            $url = $config['url'];
         }
 
         $ctx = stream_context_create();
@@ -82,7 +84,7 @@ class NotificationServiceProvider extends BaseServiceProvider {
             return;
         }
 
-        $config = config('push_notification.android');
+        $config = config('pushnotification.android');
 
         $notification = ['text' => $message];
         $body = json_encode($params);
