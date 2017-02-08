@@ -149,27 +149,4 @@ class SubscriptionController extends Controller {
         }
         return $this->response;
     }
-
-
-    public function getStripeConnect(){
-        if(isset($_REQUEST['code'])){
-            $client = new \GuzzleHttp\Client();
-            $authCredentials = $client->post('https://connect.stripe.com/oauth/token', [
-                "form_params" => [
-                    "client_secret" => env('STRIPE_SECRET_KEY'),
-                    "code" => $_REQUEST['code'],
-                    "grant_type" => "authorization_code",
-                    "client_id" => env('STRIPE_CLIENT_ID')
-                ]
-            ]);
-            $result = json_decode($authCredentials->getBody()->getContents());
-            if(isset($result->stripe_user_id)){
-                RecruiterProfile::updateStripeToken($result->stripe_user_id);
-                $customerId = RecruiterProfile::where('user_id', Auth::user()->id)->first();
-            }
-        }else{
-            $response = redirect('stripe/errors');
-        }
-        return $response;
-    }
 }

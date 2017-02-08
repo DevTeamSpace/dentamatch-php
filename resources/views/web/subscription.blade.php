@@ -74,28 +74,30 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bind="visible: cancelButton"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title">Add Card</h4>
+                  <h4 class="modal-title text-center">Add Card</h4>
                 </div>
                 <form id="addCardForm" data-bind="submit: $root.addCardFunction">
                 <div class="modal-body">
-                  <p>Please provide card details to subscribe.</p>
+                  <p class="text-center">Please provide card details to subscribe.</p>
+                  <p class="text-center" style="color: blue" data-bind="text: creatingMessage"></p>
                   <p class="text-center" style="color: red;" data-bind="text: errorMessage"></p>
+                  <p class="text-center" style="color: green;" data-bind="text: successMessage"></p>
                     <div class="form-group">
                         <label class="sr-only" for="card-number">Card number</label>
-                        <input type="number" class="form-control" id="card-number" placeholder="Card number" data-bind="value: cardNumber">
+                        <input type="number" class="form-control" id="card-number" placeholder="Card number" data-bind="value: cardNumber, disable: disableInput">
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="expiry">Expiry</label>
-                        <input type="text" class="form-control" id="expiry" placeholder="MM/YY" data-bind="value: expiry">
+                        <input type="text" class="form-control" id="expiry" placeholder="MM/YY" data-bind="value: expiry, disable: disableInput">
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="cvv">CVV</label>
-                        <input type="number" class="form-control" id="cvv" placeholder="CVV" data-bind="value: cvv">
+                        <input type="number" class="form-control" id="cvv" placeholder="CVV" data-bind="value: cvv, disable: disableInput">
                     </div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary">Add Card</button>
+                  <button type="submit" id="addCardButton" class="btn btn-primary">Add Card</button>
                 </div>
                   </form>
             </div><!-- /.modal-content -->
@@ -131,6 +133,9 @@ var FirstSubscriptionVM = function () {
     me.errorMessage = ko.observable('');
     me.trailPeriod = ko.observable();
     me.subscriptionType = ko.observable();
+    me.successMessage = ko.observable('');
+    me.creatingMessage = ko.observable('');
+    me.disableInput = ko.observable(false);
     
     me.getSubscriptionList = function () {
         if (me.isLoading()) {
@@ -156,19 +161,56 @@ var FirstSubscriptionVM = function () {
     };
     
     me.addCard = function(d, e){
+        me.cardNumber();
+        me.expiry();
+        me.cvv();
         me.trailPeriod(d.trailPeriod);
         subType = $(e.currentTarget).parent().find('#stype').val();
         me.subscriptionType(subType);
+        me.creatingMessage('');
+        me.disableInput(false);
         $('#addCardModal').modal('show');
     };
     
+    $(".modal").on("hidden.bs.modal", function(){
+        me.errorMessage('');
+        me.successMessage('');
+        me.cardNumber('');
+        me.expiry('');
+        me.cvv('');
+        me.disableInput(false);
+    });
+    
     me.addCardFunction = function(d, e){
         me.errorMessage('');
+        me.successMessage('');
+        if(me.expiry() != null && me.expiry().indexOf('/') >= 0){
+            var expirySplit = me.expiry().split('/');
+            if(expirySplit[1] == null || expirySplit[1] == ""){
+                me.errorMessage('Invalid expiry date.');
+                return false;
+            }
+        }
         if(me.cardNumber() != null && me.expiry() != null && me.cvv() != null){
+            me.cancelButton(false);
+            me.disableInput(true);
+            $('#addCardButton').attr('disabled','disabled');
+            me.creatingMessage('Adding card please wait...');
+            $('#addCardModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
             $.post('create-subscription', {cardNumber: me.cardNumber(), expiry: me.expiry(), cvv: me.cvv(), subscriptionType: me.subscriptionType(), trailPeriod: me.trailPeriod()}, function(d){
+                me.creatingMessage('');
                 if(d.success == false){
                     me.errorMessage(d.message);
+                    me.successMessage('');
+                    me.cancelButton(true);
+                    $('#addCardButton').removeAttr('disabled');
+                    me.disableInput(false);
                 }else{
+                    me.errorMessage('');
+                    me.successMessage(d.message);
                     setTimeout(
                         function ()
                         {
@@ -179,6 +221,13 @@ var FirstSubscriptionVM = function () {
             });
         }else{
             me.errorMessage('Please fill all the details');
+            me.creatingMessage('');
+            me.cancelButton(true);
+            me.disableInput(false);
+            $('#addCardModal').modal({
+                backdrop: true,
+                keyboard: true
+            });
         }
     };
     
