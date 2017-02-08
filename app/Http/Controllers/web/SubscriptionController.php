@@ -33,7 +33,8 @@ class SubscriptionController extends Controller {
     }
     
     public function postCreateSubscription(Request $request){
-        try{$createCustomer = $this->createCustomer();
+        try{
+            $createCustomer = $this->createCustomer();
             if($createCustomer['success'] == true){
                 $addCard = $this->addCardForSubscription($request->all(), $createCustomer['data']['id']);
                 $createSubscription = $this->addUserTOSubscription($createCustomer['data']['id'], $request->subscriptionType, $request->trailPeriod);
@@ -67,7 +68,7 @@ class SubscriptionController extends Controller {
             ));
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.user_added_to_subscription');
-        } catch (Exception $ex) {
+        } catch (\Exception $e) {
             $this->response['message'] = $e->getMessage();
         }
         return $this->response;
@@ -93,7 +94,6 @@ class SubscriptionController extends Controller {
             $card = $customer->sources->create(array(
                 "source" => $cardToken['id']
             ));
-            dd($card);
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.card_added');
         } catch (\Exception $e) {
