@@ -1,38 +1,59 @@
 <!--Seeker listing-->
-@foreach ($seekersList as $job)
+@foreach ($seekersList as $seeker)
 <!--search preference list-->
 <div class="media jobCatbox">
     <div class="media-left ">
         <div class="img-holder ">
-          <img class="media-object img-circle" src="{{asset($job['profile_pic'])}}" alt="...">
+          <img class="media-object img-circle" src="{{ url('image/66/66/?src=' .$seeker['profile_pic']) }}" alt="...">
+          @if($seeker['is_favourite'] != null)
             <span class="star star-fill"></span>
+          @endif  
         </div>
     </div>
     <div class="media-body ">
         <div class="template-job-information mr-t-15">
           <div class="template-job-information-left">
-            <h4 class="pull-left">{{$job['first_name'].' '.$job['last_name']}}</h4><span class="mr-l-5 label label-warning">3.8</span>
+            <h4 class="pull-left"><a href="{{ url('job/seekerdetails/'.$seeker['id'].'/'.$jobDetails->id) }}">{{$seeker['first_name'].' '.$seeker['last_name']}}</a></h4><span class="mr-l-5 label label-warning">{{round($seeker['avg_rating'],1)}}</span>
           </div>
           <div class="template-job-information-right">
-            <span >2 miles away</span>
+            <span >{{round($seeker['distance'],0)}} miles away</span>
           </div> 
         </div> 
         <div class="job-type-detail">
-            <p class="nopadding">Dental Assistant</p>
+            <p class="nopadding">{{$seeker['jobtitle_name']}}</p>
+            @if($seeker['is_fulltime'])
+            <span class="bg-ember statusBtn mr-r-5">Full Time</span>
+            @elseif($seeker['is_parttime_monday'] || $seeker['is_parttime_tuesday'] || $seeker['is_parttime_wednesday'] || $seeker['is_parttime_thursday'] || $seeker['is_parttime_friday'] || $seeker['is_parttime_saturday'] || $seeker['is_parttime_sunday'])
+            <span class="bg-ember statusBtn mr-r-5">Part Time</span>
+            <span> | 
+                @php 
+                    $dayArr = [];
+                    ($seeker['is_parttime_monday']==1)?array_push($dayArr,'Monday'):'';
+                    ($seeker['is_parttime_tuesday']==1)?array_push($dayArr,'Tuseday'):'';
+                    ($seeker['is_parttime_wednesday']==1)?array_push($dayArr,'Wednesday'):'';
+                    ($seeker['is_parttime_thursday']==1)?array_push($dayArr,'Thursday'):'';
+                    ($seeker['is_parttime_friday']==1)?array_push($dayArr,'Friday'):'';
+                    ($seeker['is_parttime_saturday']==1)?array_push($dayArr,'Saturday'):'';
+                    ($seeker['is_parttime_sunday']==1)?array_push($dayArr,'Sunday'):'';
+                @endphp
+                {{ implode(', ',$dayArr) }}
+            </span>
+            @else
             <span class="bg-ember statusBtn mr-r-5">Temporary</span>
             <span class="dropdown date-drop">
-                <span class=" dropdown-toggle"  data-toggle="dropdown">
-                    <span class="day-drop">Friday, 08 Nov 2016</span>
-                    <span class="caret"></span>
-                </span>
+                @php 
+                $dates = explode(',',$seeker['temp_job_dates']);
+                @endphp
+                <span class=" dropdown-toggle"  data-toggle="dropdown"><span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
+                    <span class="caret"></span></span>
                 <ul class="dropdown-menu">
-                    <li>Saturday, 09 Nov 2016</li>
-                    <li>Sunday, 10 Nov 2016</li>
-                    <li>Monday, 11 Nov 2016</li>
+                    @foreach ($dates as $date)
+                    <li>{{ date('l, d M Y',strtotime($date)) }}</li>
+                    @endforeach
                 </ul>
             </span>
+            @endif
         </div>
-
         <dl class="dl-horizontal text-left mr-t-30">
             <dt>Software Training:</dt>
             <dd>Softdent front office/Softdent charting</dd>
@@ -64,3 +85,5 @@
 </div>
 <!--/search preference list-->
 @endforeach 
+
+{{ $seekersList->links() }}

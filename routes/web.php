@@ -49,8 +49,9 @@ Route::group(['middleware' => ['auth', 'xss']], function () {
             Route::post('jobtemplates/saveOrUpdate', 'web\JobtemplateController@saveOrUpdate');
             Route::get('createJob/{templateId}', 'web\RecruiterJobController@createJob');
             Route::get('job/lists', 'web\RecruiterJobController@listJobs');
-            Route::get('job/search/{jobTypeId}/{jobTitleId}', 'web\RecruiterJobController@searchSeekers');
+            Route::get('job/search/{jobId}', 'web\RecruiterJobController@searchSeekers');
             Route::get('job/details/{jobId}', 'web\RecruiterJobController@jobDetails');
+            Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
             Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
             Route::post('create-profile', 'web\UserProfileController@createProfile');
         });

@@ -2,7 +2,7 @@
 
 @section('css')
 <link rel="stylesheet" href="{{asset('web/css/style.css')}}">
-
+<link rel="stylesheet" href="{{asset('web/plugins/range-slider/css/bootstrap-slider.css')}}">
 @endsection
 @section('content')
 
@@ -14,22 +14,32 @@
         <li class="active">Search Preference</li>
     </ul>
     <!--/breadcrumb-->
-
+<?php //dd($jobDetails); ?>
     
     <div class="col-sm-12 mr-b-55">
         <div class="row section-title mr-b-10">Search Preference</div>
         <div class="jobCatbox row searchpreference">
             <div class="col-sm-4 mr-b-5">
                 <label class="fnt-16 nopadding">Job Title</label>
-                <h4 class="textcolr-38 nopadding"><strong>{{$titleName[0]['jobtitle_name']}}</strong></h4>
+                <h4 class="textcolr-38 nopadding"><strong>{{$jobDetails->jobtitle_name}}</strong></h4>
             </div>
             <div class="col-sm-3 mr-b-5">
               <label class="fnt-16 nopadding">Job Type</label>
-              <h4 class="textcolr-38 nopadding"><strong>Temporary</strong></h4>
+              <h4 class="textcolr-38 nopadding">
+                @if($jobDetails->job_type==\App\Models\RecruiterJobs::FULLTIME)
+                <strong>Full Time</strong>
+                @elseif($jobDetails->job_type==\App\Models\RecruiterJobs::PARTTIME)
+                <strong>Part Time</strong>
+                @else
+                <strong>Temporary</strong>
+                @endif
+              </h4>
             </div>
             <div class="col-sm-5">
               <label class="fnt-16 nopadding">Radius</label>
               <div >
+                <input type="hidden" name="page" value="{{$searchData['page']}}"/>
+                <input type="hidden" name="slider_val" id="slider_val" value="{{$searchData['distance']}}"/>
                 <input id="range_slider" type="text"/>
                 <span class="pull-left">1 mile</span>
                 <span class="pull-right">20 miles</span>
@@ -40,7 +50,7 @@
 
     <div class="row sec-mob">
     <div class="col-sm-6 mr-b-10 col-xs-6">
-        <div class="section-title">10 Results Found</div>
+        <div class="section-title">{{$seekersList->total()}} Results Found</div>
     </div>
     <div class="col-sm-6 text-right mr-b-10 col-xs-6">
         <button type="button" class="btn btn-primary-outline ">Available all days </button>
@@ -48,12 +58,9 @@
     </div>
 
     @if(count($seekersList)>0)
-    <div class="jobseeker-statebox">
-        @include('web.recuriterJob.seekersData')
-   </div>
-   <div class="mr-t-15 text-center">
-      <button type="button" class="view_loadmore btn-block">View More</button>
-    </div>
+        <div class="jobseeker-statebox">
+            @include('web.recuriterJob.seekersData')
+        </div>
     @else
     <div class="jobCatbox mr-b-20">
         <div class="template-job-information ">
@@ -83,6 +90,27 @@
             getArticles(url);
             window.history.pushState("", "", url);
         });
+
+        /*-----------range slider--------*/
+        $("#range_slider").slider({ 
+            min: 1, 
+            max: 20, 
+            value: $('#slider_val').val(), 
+            tooltip_position:'bottom',
+            formatter: function(value) {
+                return   value + ' miles ' ;
+            },
+            change: function(event, ui) {
+                if (event.originalEvent) {
+                    alert('manual: ' + ui.value);
+                }
+                else {
+                    alert('programmatic: ' + ui.value);
+                }
+            }
+        });
+        /*-----------range slider--------*/
+
 
         function getArticles(url) {
             $.ajax({

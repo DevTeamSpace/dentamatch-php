@@ -27,7 +27,7 @@
                         ($job['is_thursday']==1)?array_push($dayArr,'Thursday'):'';
                         ($job['is_friday']==1)?array_push($dayArr,'Friday'):'';
                         ($job['is_saturday']==1)?array_push($dayArr,'Saturday'):'';
-                        ($job['is_sunday']==1)?array_push($dayArr,Sunday):'';
+                        ($job['is_sunday']==1)?array_push($dayArr,'Sunday'):'';
                     @endphp
                     {{ implode(', ',$dayArr) }}
                 </span>
@@ -95,7 +95,7 @@
                 </ul>
             </div>
             <div class="col-sm-4 search-seeker">
-                <a href="{{ url('job/search',[$job['job_type'],$job['job_title_id']]) }}" class="btn btn-primary pd-l-30 pd-r-30 pull-right">Search Seekers</a>
+                <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-30 pull-right">Search Seekers</a>
             </div>
         </div>
 
