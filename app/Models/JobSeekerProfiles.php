@@ -20,7 +20,7 @@ class JobSeekerProfiles extends Model
         $obj->leftJoin('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id');
 
         if($job->job_type==RecruiterJobs::FULLTIME){
-            $obj->where('jobseeker_profiles.is_fulltime',1);
+            //$obj->where('jobseeker_profiles.is_fulltime',1);
         }
         elseif($job->job_type==RecruiterJobs::PARTTIME){
             $obj->where('jobseeker_profiles.is_fulltime',0);

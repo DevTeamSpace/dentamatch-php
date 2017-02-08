@@ -47,10 +47,10 @@ class RecruiterJobController extends Controller
             $searchData = $request->all();
 
             if(!isset($searchData['distance']))
-                $searchData['distance'] =  7727;
+                $searchData['distance'] =  10;
             
             $jobDetails = RecruiterJobs::getJobDetails($jobId);
-            //dd($jobDetails);
+            
             $seekersList = JobSeekerProfiles::getJobSeekerProfiles($jobDetails,$searchData);
             
             if ($request->ajax()) {
