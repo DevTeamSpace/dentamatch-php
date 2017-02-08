@@ -170,7 +170,7 @@ class RecruiterJobs extends Model
                         ->where('recruiter_jobs.id', $jobId)
                         ->groupBy('recruiter_jobs.id');
         
-        $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
+        $searchQueryObj->select('recruiter_jobs.id', 'recruiter_jobs.no_of_jobs','recruiter_jobs.job_type','recruiter_jobs.is_monday',
                             'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
                             'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
                             'recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',

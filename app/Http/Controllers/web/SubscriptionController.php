@@ -33,13 +33,11 @@ class SubscriptionController extends Controller {
     }
     
     public function getCreateSubscription(Request $request){
-        try{
-            $createCustomer = $this->createCustomer();
-            $getCustomer = \Stripe\Customer::retrieve($createCustomer['data']['id']);
-            dd($getCustomer);
+        try{$createCustomer = $this->createCustomer();
             if($createCustomer['success'] == true){
-                $addCard = $this->addCardForSubscription($request->all());
-                dd($addCard);
+                $addCard = $this->addCardForSubscription($request->all(), $createCustomer['data']['id']);
+                $createSubscription = $this->createSubscription($createCustomer['data']['id'], $request->subscriptionType, $request->trailPeriod);
+                dd($createSubscription);
                 $this->response['success'] = true;
                 $this->response['message'] = 'Subscription created successfully.';
             }else{
@@ -52,14 +50,50 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
-    public function postAddCard(Request $request){
-        
-        dd($createCustomer);
+    public function createSubscription($customerId, $subscriptionType, $trailPeriod){
+        try{
+            $now = \Carbon\Carbon::now();
+            $fotDiff = \Carbon\Carbon::now();
+            $addMonths = $now->addMonths($trailPeriod);
+            $trailPeriodDays = $addMonths->diff($fotDiff)->days;
+            if($subscriptionType == 1){
+                $planId = "six-months";
+            }else{
+                $planId = "one-year";
+            }
+            \Stripe\Subscription::create(array(
+                "customer" => $customerId,
+                "plan" => $planId,
+                "trial_period_days" => $trailPeriodDays
+            ));
+            $this->response['success'] = true;
+            $this->response['message'] = 'Subscription added successfully.';
+        } catch (Exception $ex) {
+            $this->response['message'] = $e->getMessage();
+        }
+        return $this->response;
     }
     
-    public function addCardForSubscription($cardDetails){
+    public function postAddCard(Request $request){
+    }
+    
+    public function addCardForSubscription($cardDetails, $customerId){
         try{
-            
+            $expiry = explode('/', $cardDetails['expiry']);
+            $month = $expiry[0];
+            $year = $expiry[1];
+            $cardToken = \Stripe\Token::create(array(
+                            "card" => array(
+                              "number" => $cardDetails['cardNumber'],
+                              "exp_month" => $month,
+                              "exp_year" => $year,
+                              "cvc" => $cardDetails['cvv']
+                            )
+                          ));
+            $customer = \Stripe\Customer::retrieve($customerId);
+            $card = $customer->sources->create(array(
+                "source" => $cardToken['id']
+            ));
         } catch (\Exception $e) {
             $this->response = $e->getMessage();
         }
