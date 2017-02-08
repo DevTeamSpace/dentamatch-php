@@ -77,5 +77,15 @@ return [
     
     'jobtitle_added' => 'Job title added successfully',
     'jobtitle_updated' => 'Job title updated successfully',
+
+    
+    'officetype_added' => 'Office type added successfully',
+    'officetype_updated' => 'Office type updated successfully',
+
     'recruiter_blocked'=>'Recruiter Blocked',
+    'user_subscribed' => 'User subscribed successfully.',
+    'cannot_subscribe' => 'Cannot subscribe please contact admin.',
+    'user_added_to_subscription' => 'User added to subscription successfully.',
+    'customer_created' => 'Customer Created successfully.',
+    'card_added' => 'Card added successfully.',
 ];

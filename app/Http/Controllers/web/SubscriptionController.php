@@ -10,9 +10,9 @@ use App\Models\RecruiterProfile;
 use App\Models\RecruiterOffice;
 
 class SubscriptionController extends Controller {
+    private $response = [];
     
     public function __construct(){
-        $this->response = [];
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
     }
 
@@ -32,18 +32,17 @@ class SubscriptionController extends Controller {
         return $subscription;
     }
     
-    public function getCreateSubscription(Request $request){
+    public function postCreateSubscription(Request $request){
         try{
             $createCustomer = $this->createCustomer();
             if($createCustomer['success'] == true){
                 $addCard = $this->addCardForSubscription($request->all(), $createCustomer['data']['id']);
-                $createSubscription = $this->createSubscription($createCustomer['data']['id'], $request->subscriptionType, $request->trailPeriod);
-                dd($createSubscription);
+                $createSubscription = $this->addUserTOSubscription($createCustomer['data']['id'], $request->subscriptionType, $request->trailPeriod);
                 $this->response['success'] = true;
-                $this->response['message'] = 'Subscription created successfully.';
+                $this->response['message'] = trans('messages.user_subscribed');
             }else{
                 $this->response['success'] = false;
-                $this->response['message'] = 'Cannot create subscription please contact admin.';
+                $this->response['message'] = trans('messages.cannot_subscribe');
             }
         } catch (\Exception $e) {
             $this->response['message'] = $e->getMessage();
@@ -51,18 +50,25 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
-    public function createSubscription($customerId, $subscriptionType, $trailPeriod){
+    public function addUserTOSubscription($customerId, $subscriptionType, $trailPeriod){
         try{
-            $now = \Carbon::now();
-            $addMonths = $now->addMonths($freeTrail); 
-            $trailPeriodDays = $addMonths->diff($now)->days;
-            dd($trailPeriodDays);
+            $now = \Carbon\Carbon::now();
+            $fotDiff = \Carbon\Carbon::now();
+            $addMonths = $now->addMonths($trailPeriod);
+            $trailPeriodDays = $addMonths->diff($fotDiff)->days;
+            if($subscriptionType == 1){
+                $planId = "six-months";
+            }else{
+                $planId = "one-year";
+            }
             \Stripe\Subscription::create(array(
                 "customer" => $customerId,
                 "plan" => $planId,
                 "trial_period_days" => $trailPeriodDays
             ));
-        } catch (Exception $ex) {
+            $this->response['success'] = true;
+            $this->response['message'] = trans('messages.user_added_to_subscription');
+        } catch (\Exception $e) {
             $this->response['message'] = $e->getMessage();
         }
         return $this->response;
@@ -88,6 +94,8 @@ class SubscriptionController extends Controller {
             $card = $customer->sources->create(array(
                 "source" => $cardToken['id']
             ));
+            $this->response['success'] = true;
+            $this->response['message'] = trans('messages.card_added');
         } catch (\Exception $e) {
             $this->response = $e->getMessage();
         }
@@ -103,7 +111,7 @@ class SubscriptionController extends Controller {
             RecruiterProfile::updateCustomerId($createCustomer['id']);
             $this->response['success'] = true;
             $this->response['data'] = $createCustomer;
-            $this->response['message'] = 'Customer Created successfully';
+            $this->response['message'] = trans('messages.customer_created');
         } catch (\Exception $e) {
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();

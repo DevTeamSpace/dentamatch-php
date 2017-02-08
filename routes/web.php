@@ -64,7 +64,7 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
             Route::get('subscription-detail', 'web\SubscriptionController@getSubscription');
             Route::get('get-subscription-list', 'web\SubscriptionController@getSubscriptionList');
-            Route::post('create-subscription', 'web\SubscriptionController@getCreateSubscription');
+            Route::post('create-subscription', 'web\SubscriptionController@postCreateSubscription');
             Route::post('add-card', 'web\SubscriptionController@postAddCard');
             Route::get('stripe/connect', 'web\SubscriptionController@getStripeConnect');
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
@@ -127,6 +127,15 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('{id}/edit', 'Cms\JobTitleController@edit');
         Route::get('create', 'Cms\JobTitleController@create');
         Route::post('store', 'Cms\JobTitleController@store');
+    });
+    
+    Route::group(['prefix' => 'officetype/'], function() {
+        Route::get('index', 'Cms\OfficeTypeController@index');
+        Route::get('list', 'Cms\OfficeTypeController@officeTypeList');
+        Route::delete('{id}/delete', 'Cms\OfficeTypeController@delete');
+        Route::get('{id}/edit', 'Cms\OfficeTypeController@edit');
+        Route::get('create', 'Cms\OfficeTypeController@create');
+        Route::post('store', 'Cms\OfficeTypeController@store');
     });
 });
 
