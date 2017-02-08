@@ -31,6 +31,15 @@ class SubscriptionController extends Controller {
         return $subscription;
     }
     
+    public function postAddCard(Request $request){
+        $createCustomer = \Stripe\Customer::create(array(
+            "description" => "Customer for".Auth::user()->email,
+            "email" => Auth::user()->email
+        ));
+        dd($createCustomer);
+    }
+
+
     public function getStripeConnect(){
         if(isset($_REQUEST['code'])){
             $client = new \GuzzleHttp\Client();
@@ -46,11 +55,6 @@ class SubscriptionController extends Controller {
             if(isset($result->stripe_user_id)){
                 RecruiterProfile::updateStripeToken($result->stripe_user_id);
                 $customerId = RecruiterProfile::where('user_id', Auth::user()->id)->first();
-                $createCustomer = \Stripe\Customer::create(array(
-                    "description" => "Customer for".Auth::user()->email,
-                    "email" => Auth::user()->email,
-                    "source" => $result->stripe_user_id
-                ));
             }
         }else{
             $response = redirect('stripe/errors');
