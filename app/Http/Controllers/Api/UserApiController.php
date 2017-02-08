@@ -158,6 +158,8 @@ class UserApiController extends Controller {
                             'imageUrl' => $imgUrl,
                             'zipCode' => $userData['zipcode'],
                             'preferredJobLocation' => $userData['preferred_job_location'],
+                            'latitude' => $userData['latitude'],
+                            'longitude' => $userData['longitude'],
                             'accessToken' => $userToken,
                         );
                         $userArray['searchFilters'] = SearchFilter::getFiltersOnLogin($userId);
