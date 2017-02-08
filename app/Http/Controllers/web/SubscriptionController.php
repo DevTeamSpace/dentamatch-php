@@ -56,6 +56,11 @@ class SubscriptionController extends Controller {
             $fotDiff = \Carbon\Carbon::now();
             $addMonths = $now->addMonths($trailPeriod);
             $trailPeriodDays = $addMonths->diff($fotDiff)->days;
+            if($subscriptionType == 1){
+                $planId = "six-months";
+            }else{
+                $planId = "one-year";
+            }
             \Stripe\Subscription::create(array(
                 "customer" => $customerId,
                 "plan" => $planId,
