@@ -36,10 +36,10 @@ class NotificationServiceProvider extends BaseServiceProvider {
         }
         
         if (env('APP_ENV') == 'local') {
-            $certFile = public_path('notification_pems/push_development.pem');
+            $certFile = public_path('notification_pems/DentaMatchDev.pem');
             $url = 'ssl://gateway.sandbox.push.apple.com:2195';
         } else {
-            $certFile = public_path('notification_pems/push_distribution.pem');
+            $certFile = public_path('notification_pems/DentaMatchDist.pem');
             $url = 'ssl://gateway.push.apple.com:2195';
         }
 
