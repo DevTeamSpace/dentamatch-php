@@ -21,14 +21,14 @@
         <div class="jobCatbox row searchpreference">
             <div class="col-sm-4 mr-b-5">
                 <label class="fnt-16 nopadding">Job Title</label>
-                <h4 class="textcolr-38 nopadding"><strong>{{$jobDetails->jobtitle_name}}</strong></h4>
+                <h4 class="textcolr-38 nopadding"><strong>{{$jobDetails['jobtitle_name']}}</strong></h4>
             </div>
             <div class="col-sm-3 mr-b-5">
               <label class="fnt-16 nopadding">Job Type</label>
               <h4 class="textcolr-38 nopadding">
-                @if($jobDetails->job_type==\App\Models\RecruiterJobs::FULLTIME)
+                @if($jobDetails['job_type']==\App\Models\RecruiterJobs::FULLTIME)
                 <strong>Full Time</strong>
-                @elseif($jobDetails->job_type==\App\Models\RecruiterJobs::PARTTIME)
+                @elseif($jobDetails['job_type']==\App\Models\RecruiterJobs::PARTTIME)
                 <strong>Part Time</strong>
                 @else
                 <strong>Temporary</strong>

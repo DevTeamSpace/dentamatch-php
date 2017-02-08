@@ -13,7 +13,7 @@
     <div class="media-body ">
         <div class="template-job-information mr-t-15">
           <div class="template-job-information-left">
-            <h4 class="pull-left"><a href="{{ url('job/seekerdetails/'.$seeker['id'].'/'.$jobDetails->id) }}">{{$seeker['first_name'].' '.$seeker['last_name']}}</a></h4>
+            <h4 class="pull-left"><a href="{{ url('job/seekerdetails/'.$seeker['id'].'/'.$jobDetails['id']) }}">{{$seeker['first_name'].' '.$seeker['last_name']}}</a></h4>
             <span class="mr-l-5 dropdown date_drop">
               <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{round($seeker['avg_rating'],1)}}</span>
                 <ul class="dropdown-menu rating-info">

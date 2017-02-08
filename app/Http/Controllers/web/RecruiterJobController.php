@@ -51,8 +51,7 @@ class RecruiterJobController extends Controller
             if(!isset($searchData['distance']))
                 $searchData['distance'] =  10;
             
-            $jobDetails = RecruiterJobs::getJobDetails($jobId);
-            
+            $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
             $seekersList = JobSeekerProfiles::getJobSeekerProfiles($jobDetails,$searchData);
             
             //dd($seekersList);
@@ -176,7 +175,7 @@ class RecruiterJobController extends Controller
 
     public function jobSeekerDetails($seekerId, $jobId){
         try{
-            $this->viewData['job'] = RecruiterJobs::getJobDetails($jobId);
+            $this->viewData['job'] = RecruiterJobs::getRecruiterJobDetails($jobId);
 
             $seekerDetails = JobSeekerProfiles::getJobSeekerDetails($seekerId,$this->viewData['job']);
             

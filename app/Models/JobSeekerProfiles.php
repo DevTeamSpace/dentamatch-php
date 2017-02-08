@@ -15,43 +15,43 @@ class JobSeekerProfiles extends Model
     const LIMIT = 10;
 
     public static function getJobSeekerProfiles($job,$reqData){
-        $obj = JobSeekerProfiles::where('jobseeker_profiles.job_titile_id',$job->job_title_id);
+        $obj = JobSeekerProfiles::where('jobseeker_profiles.job_titile_id',$job['job_title_id']);
 
         $obj->leftJoin('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id');
 
-        if($job->job_type==RecruiterJobs::FULLTIME){
+        if($job['job_type']==RecruiterJobs::FULLTIME){
             $obj->where('jobseeker_profiles.is_fulltime',1);
         }
-        elseif($job->job_type==RecruiterJobs::PARTTIME){
+        elseif($job['job_type']==RecruiterJobs::PARTTIME){
             $obj->where('jobseeker_profiles.is_fulltime',0);
-            if($job->is_monday)
+            if($job['is_monday'])
                 $obj->where('jobseeker_profiles.is_parttime_monday',1);
 
-            if($job->is_tuesday)
+            if($job['is_tuesday'])
                 $obj->where('jobseeker_profiles.is_parttime_tuesday',1);
 
-            if($job->is_wednesday)
+            if($job['is_wednesday'])
                 $obj->where('jobseeker_profiles.is_parttime_wednesday',1);
 
-            if($job->is_thursday)
+            if($job['is_thursday'])
                 $obj->where('jobseeker_profiles.is_parttime_thursday',1);
 
-            if($job->is_friday)
+            if($job['is_friday'])
                 $obj->where('jobseeker_profiles.is_parttime_friday',1);
 
-            if($job->is_saturday)
+            if($job['is_saturday'])
                 $obj->where('jobseeker_profiles.is_parttime_saturday',1);
 
-            if($job->is_sunday)
+            if($job['is_sunday'])
                 $obj->where('jobseeker_profiles.is_parttime_sunday',1);
         }
-        elseif($job->job_type==RecruiterJobs::TEMPORARY){
+        elseif($job['job_type']==RecruiterJobs::TEMPORARY){
             $obj->where('jobseeker_profiles.is_fulltime',0);
         }
 
         $obj->leftJoin('jobseeker_temp_availability',function($query) use ($job){
                 $query->on('jobseeker_temp_availability.user_id', '=', 'jobseeker_profiles.user_id')
-                ->whereIn('jobseeker_temp_availability.temp_job_date',explode(',',$job->temp_job_dates));
+                ->whereIn('jobseeker_temp_availability.temp_job_date',explode(',',$job['temp_job_dates']));
         });
         
         $obj->select('jobseeker_profiles.first_name','jobseeker_profiles.last_name','jobseeker_profiles.profile_pic',
@@ -60,7 +60,7 @@ class JobSeekerProfiles extends Model
 
         $obj->leftJoin('jobseeker_skills as skill_count',function($query) use ($job){
                 $query->on('jobseeker_profiles.user_id', '=', 'skill_count.user_id')
-                ->whereIn('skill_count.skill_id',explode(',',$job->required_skills));
+                ->whereIn('skill_count.skill_id',explode(',',$job['required_skills']));
             })->groupby('skill_count.skill_id');
 
         $obj->addSelect(DB::raw("count(distinct(skill_count.skill_id)) AS matched_skills")); 
@@ -69,21 +69,21 @@ class JobSeekerProfiles extends Model
         
         $obj->addSelect(DB::raw("(
                         3959 * acos (
-                          cos ( radians(".$job->latitude.") )
+                          cos ( radians(".$job['latitude'].") )
                           * cos( radians( jobseeker_profiles.latitude) )
-                          * cos( radians(".$job->longitude.") - radians(jobseeker_profiles.longitude) )
-                          + sin ( radians(".$job->latitude.") )
+                          * cos( radians(".$job['longitude'].") - radians(jobseeker_profiles.longitude) )
+                          + sin ( radians(".$job['latitude'].") )
                           * sin( radians( jobseeker_profiles.latitude ) )
                          )) AS distance") )
             ->where(DB::raw("(
                         3959 * acos (
-                          cos ( radians(".$job->latitude.") )
+                          cos ( radians(".$job['latitude'].") )
                           * cos( radians( jobseeker_profiles.latitude) )
-                          * cos( radians(".$job->longitude.") - radians(jobseeker_profiles.longitude) )
-                          + sin ( radians(".$job->latitude.") )
+                          * cos( radians(".$job['longitude'].") - radians(jobseeker_profiles.longitude) )
+                          + sin ( radians(".$job['latitude'].") )
                           * sin( radians( jobseeker_profiles.latitude ) )
                          ))"),'<=',$reqData['distance']);
-
+    
         $obj->leftjoin('job_ratings',function($query){
             $query->on('job_ratings.seeker_id', '=', 'jobseeker_profiles.user_id');
         })
