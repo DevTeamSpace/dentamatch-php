@@ -1,5 +1,5 @@
 <!--Seeker listing-->
-@foreach ($seekersList as $seeker)
+@foreach ($seekersList['paginate'] as $seeker)
 <!--search preference list-->
 <div class="media jobCatbox">
     <div class="media-left ">
@@ -15,35 +15,77 @@
           <div class="template-job-information-left">
             <h4 class="pull-left"><a href="{{ url('job/seekerdetails/'.$seeker['id'].'/'.$jobDetails['id']) }}">{{$seeker['first_name'].' '.$seeker['last_name']}}</a></h4>
             <span class="mr-l-5 dropdown date_drop">
-              <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{round($seeker['avg_rating'],1)}}</span>
+                @if(round($seeker['avg_rating'],0) > 3)
+                    @php $avgrateClass = 'bg-green' @endphp
+                @elseif(round($seeker['avg_rating'],0) == 3)
+                    @php $avgrateClass = 'bg-ember' @endphp
+                @elseif(round($seeker['avg_rating'],0) < 3)
+                    @php $avgrateClass = 'bg-red'  @endphp
+                @endif
+              
+                @if(round($seeker['punctuality'],0) > 3)
+                    @php $puncClass = 'bg-green' @endphp
+                @elseif(round($seeker['punctuality'],0) == 3)
+                    @php $puncClass = 'bg-ember' @endphp
+                @elseif(round($seeker['punctuality'],0) < 3)
+                    @php $puncClass = 'bg-red'  @endphp
+                @endif 
+                
+                @if(round($seeker['time_management'],0) > 3)
+                    @php $timeClass = 'bg-green' @endphp
+                @elseif(round($seeker['time_management'],0) == 3)
+                    @php $timeClass = 'bg-ember' @endphp
+                @elseif(round($seeker['time_management'],0) < 3)
+                    @php $timeClass = 'bg-red'  @endphp
+                @endif 
+
+                @if(round($seeker['skills'],0) > 3)
+                    @php $skillClass = 'bg-green' @endphp
+                @elseif(round($seeker['skills'],0) == 3)
+                    @php $skillClass = 'bg-ember' @endphp
+                @elseif(round($seeker['skills'],0) < 3)
+                    @php $skillClass = 'bg-red'  @endphp
+                @endif   
+
+                <span class=" dropdown-toggle label {{$avgrateClass}}" data-toggle="dropdown">{{number_format($seeker['avg_rating'], 1, '.', '')}}</span>
+               
                 <ul class="dropdown-menu rating-info">
                   <li><div class="rating_on"> Punctuality</div>
                     <ul class="rate_me">
-                      <li><span></span></li>
-                      <li class="active"><span></span></li>
-                      <li><span></span></li>
-                      <li><span></span></li>
-                      <li><span></span></li>
+                        @for($i=1; $i<=5; $i++)
+                            @if($i <= round($seeker['punctuality'],0))
+                                <li><span class="{{$puncClass}}"></span></li>
+                            @else
+                                <li><span></span></li>
+                            @endif
+                        @endfor
                     </ul>
+                    <label class="total-count "><span class="counter">{{round($seeker['punctuality'],0)}}</span>/5</label>
                   </li>
                   <li><div class="rating_on"> Time management</div>
                     <ul class="rate_me">
-                      <li><span></span></li>
-                      <li class="active"><span></span></li>
-                      <li><span></span></li>
-                      <li><span></span></li>
-                      <li><span></span></li>
+                        @for($i=1; $i<=5; $i++)
+                            @if($i <= round($seeker['time_management'],0))
+                                <li><span class="{{$timeClass}}"></span></li>
+                            @else
+                                <li><span></span></li>
+                            @endif
+                        @endfor
                     </ul>
+                    <label class="total-count "><span class="counter">{{round($seeker['time_management'],0)}}</span>/5</label>
                   </li>
                   <li>
                     <div class="rating_on">  Personal/Professional skill</div>
                     <ul class="rate_me">
-                      <li><span></span></li>
-                      <li class="active"><span></span></li>
-                      <li><span></span></li>
-                      <li><span></span></li>
-                      <li><span></span></li>
+                        @for($i=1; $i<=5; $i++)
+                            @if($i <= round($seeker['skills'],0))
+                                <li><span class="{{$skillClass}}"></span></li>
+                            @else
+                                <li><span></span></li>
+                            @endif
+                        @endfor
                     </ul>
+                    <label class="total-count "><span class="counter">{{round($seeker['skills'],0)}}</span>/5</label>
                   </li>
                 </ul>
               </span>
@@ -55,9 +97,9 @@
         <div class="job-type-detail">
             <p class="nopadding">{{$seeker['jobtitle_name']}}</p>
             @if($seeker['is_fulltime'])
-            <span class="bg-ember statusBtn mr-r-5">Full Time</span>
+            <span class="bg-green statusBtn mr-r-5">Full Time</span>
             @elseif($seeker['is_parttime_monday'] || $seeker['is_parttime_tuesday'] || $seeker['is_parttime_wednesday'] || $seeker['is_parttime_thursday'] || $seeker['is_parttime_friday'] || $seeker['is_parttime_saturday'] || $seeker['is_parttime_sunday'])
-            <span class="bg-ember statusBtn mr-r-5">Part Time</span>
+            <span class="bg-ltgreen statusBtn mr-r-5">Part Time</span>
             <span> | 
                 @php 
                     $dayArr = [];
@@ -90,27 +132,18 @@
             @endif
         </div>
         <dl class="dl-horizontal text-left mr-t-30">
-            <dt>Software Training:</dt>
-            <dd>Softdent front office/Softdent charting</dd>
-
-            <dt>CAD CAM:</dt>
-            <dd>Planscan, Cerec</dd>
-
-            <dt>DIG IMP:</dt>
-
-            <dd>3 m true definition, 3 shape trios, Itero</dd>
-            <dt>Digital Imaging:</dt>
-            <dd>Dexis, Schick, Trophy, Suni</dd>
-            <dt>Professional Training:</dt>
-            <dd>Back office management, Supply inventory management</dd>
-            <dt>Language:</dt>
-            <dd>English, Spanish, Farsi</dd>
-            <dt>General Skills:</dt>
-            <dd>Intra oral camera, Alginate impression, Night guards</dd>
+            @if(isset($seekersList['allSkills'][$seeker['user_id']]))
+                @foreach($seekersList['allSkills'][$seeker['user_id']] as $skills)
+                    <dt>{{$skills['title']}}</dt>
+                    <dd>{{ implode(', ',$skills['skills']) }}</dd>
+                @endforeach
+            @endif
         </dl>
         <div class="row">
             <div class="col-sm-6 col-xs-6">
+                <!--
                 <a href="#">See more.. </a>
+                -->
             </div>
             <div class="col-sm-6 col-xs-6 ">
                 <button type="submit" class="btn btn-primary pull-right pd-l-30 pd-r-30 ">Invite</button>
@@ -121,4 +154,4 @@
 <!--/search preference list-->
 @endforeach 
 
-{{ $seekersList->links() }}
+{{ $seekersList['paginate']->appends(['distance' => $searchData['distance'] ])->links() }}
