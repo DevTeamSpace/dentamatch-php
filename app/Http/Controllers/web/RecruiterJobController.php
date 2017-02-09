@@ -15,6 +15,7 @@ use App\Models\RecruiterOffice;
 use App\Models\ChatUserLists;
 use App\Models\JobSeekerProfiles;
 use App\Providers\NotificationServiceProvider;
+use App\Models\Device;
 
 use DB;
 
