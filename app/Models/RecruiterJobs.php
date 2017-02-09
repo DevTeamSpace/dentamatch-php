@@ -99,6 +99,12 @@ class RecruiterJobs extends Model
                     $searchQueryObj->where('recruiter_jobs.job_type',1);
                     if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
                         foreach($reqData['parttimeDays'] as $key => $day){
+                            $searchQueryObj->orWhere('recruiter_jobs.job_type',2);
+                            if($key == 0){
+                                $searchQueryObj->Where('is_'.$day, 1);
+                            }else{
+                                $searchQueryObj->orWhere('is_'.$day, 1);
+                            }
                             //$searchQueryObj->orWhere('is_'.$day, 1);
                             /*if($key == 0){
                                 $searchQueryObj->Where('is_'.$day, 1);
