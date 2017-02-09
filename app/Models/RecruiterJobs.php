@@ -61,12 +61,12 @@ class RecruiterJobs extends Model
                         return  $value['recruiter_job_id'];
                     }, $savedJobsArray);
                 }
-        //$latitude = $reqData['lat'];
-        //$longitude = $reqData['lng'];
+        $latitude = $reqData['lat'];
+        $longitude = $reqData['lng'];
         
-        $userProfile = UserProfile::where('user_id', $reqData['userId'])->first();
+        /*$userProfile = UserProfile::where('user_id', $reqData['userId'])->first();
         $longitude = $userProfile->longitude;
-        $latitude = $userProfile->latitude;
+        $latitude = $userProfile->latitude;*/
                 /*$searchQueryObj = RecruiterJobs::leftJoin('job_lists','job_lists.recruiter_job_id','=','recruiter_jobs.id')
                         ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                         ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
