@@ -23,7 +23,7 @@
                             <label class="col-md-4 control-label">Zipcode</label>
 
                             <div class="col-md-6">
-                                <input type="number" minlength="5" maxlength="6" class="form-control" name="zipcode" value="{{ old('zipcode') }}">
+                                <input type="number" minlength="5" maxlength="8" class="form-control" name="zipcode" value="{{ old('zipcode') }}">
 
                                 @if ($errors->has('zipcode'))
                                     <span class="help-block">

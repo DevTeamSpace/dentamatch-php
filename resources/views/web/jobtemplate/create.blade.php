@@ -28,7 +28,7 @@
                 </div>
                 <div class="form-group">
                     <label>Job Description</label>
-                    <textarea name="templateDesc" class="form-control chacterValidtion txtHeight" maxlength="500"  data-parsley-required data-parsley-required-message= "Required"   >{{ (isset($templateData->templateDesc)?$templateData->templateDesc:'') }}</textarea>
+                    <textarea name="templateDesc" class="form-control chacterValidtion txtHeight" maxlength="1000"  data-parsley-required data-parsley-required-message= "Required"   >{{ (isset($templateData->templateDesc)?$templateData->templateDesc:'') }}</textarea>
                 </div>
 
             </div>		
