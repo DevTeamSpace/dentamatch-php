@@ -23,11 +23,7 @@
                         <span class="icon-upload-detail dropdown-toggle" data-toggle="dropdown"></span>
                         <ul class="actions text-left dropdown-menu">
                             <li class="text-center">
-                                <form method="post" action="{{ url('jobtemplates/delete/') }}">
-                                    {!! csrf_field() !!}
-                                    <input name="_method" type="hidden" value="DELETE">
-                                    <input name="templateId" type="hidden" value="{{ $template['id'] }}">
-                                    <button type="submit" class=" btn btn-link-noline">
+                                    <button type="button" class="deleteTemplate btn btn-link-noline" data-toggle="modal" data-target="#discardTemplate" data-templateId="{{ $template['id'] }}">
                                         <span class="delete-icon">
                                             <img src="{{asset('web/images/dentamatch-delete.png')}}" alt="delta delete icon" width="10">
                                         </span>
@@ -69,10 +65,40 @@
                 @endforeach
                 </div>
         </div>
+
+<div id="discardTemplate" class="modal fade" role="dialog" style="display: none;">
+		<div class="modal-dialog custom-modal popup-wd522">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h4 class="modal-title">Delete Template</h4>
+				</div>
+				<div class="modal-body text-center">
+                                    <p>Do you want to delete this template?</p>
+					<div class="mr-t-20 mr-b-30">
+                                            <form method="post" action="{{ url('jobtemplates/delete/') }}">
+                                                {!! csrf_field() !!}
+                                                <input name="_method" type="hidden" value="DELETE">
+                                                <input id="templateId" name="templateId" type="hidden" value="">
+                                                
+                                                <button type="submit" class="btn btn-primary pd-l-30 pd-r-30" >Yes </button>
+						<button id="cancelButton" type="button" class="btn btn-link mr-r-5" data-dismiss="modal">No</button>
+                                            </form>
+					</div>
+                                </div>
+			</div>
+		</div>
+	</div>
 @endsection
 
 @section('js')
         <script>
+            $('.deleteTemplate').click(function(){
+                var templateId = $(this).data('templateid');
+                $('#templateId').val(templateId);
+                console.log(templateId);
+            });
             $('.info-block img').on( "mouseenter", function() {
                 $(this).closest('div.mainTemplateBlock').children('div.defaultBlock').addClass('hide');
                 $(this).closest('div.mainTemplateBlock').children('div.hoverBlock').removeClass('hide');
