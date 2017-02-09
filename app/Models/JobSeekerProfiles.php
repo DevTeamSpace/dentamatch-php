@@ -13,6 +13,7 @@ class JobSeekerProfiles extends Model
     protected $primaryKey = 'id';
     
     const LIMIT = 10;
+    const DISTANCE = 10;
 
     public static function getJobSeekerProfiles($job,$reqData){
         $obj = JobSeekerProfiles::where('jobseeker_profiles.job_titile_id',$job['job_title_id']);
@@ -52,7 +53,7 @@ class JobSeekerProfiles extends Model
         $obj->leftJoin('jobseeker_temp_availability',function($query) use ($job){
                 $query->on('jobseeker_temp_availability.user_id', '=', 'jobseeker_profiles.user_id')
                 ->whereIn('jobseeker_temp_availability.temp_job_date',explode(',',$job['temp_job_dates']));
-        });
+        })->groupby('jobseeker_temp_availability.user_id');
         
         $obj->select('jobseeker_profiles.first_name','jobseeker_profiles.last_name','jobseeker_profiles.profile_pic',
                     'jobseeker_profiles.is_parttime_monday','jobseeker_profiles.is_parttime_tuesday','jobseeker_profiles.is_parttime_tuesday',
@@ -74,8 +75,10 @@ class JobSeekerProfiles extends Model
                           * cos( radians(".$job['longitude'].") - radians(jobseeker_profiles.longitude) )
                           + sin ( radians(".$job['latitude'].") )
                           * sin( radians( jobseeker_profiles.latitude ) )
-                         )) AS distance") )
-            ->where(DB::raw("(
+                         )) AS distance") );
+
+        if(isset($reqData['distance']) && !empty($reqData['distance'])){
+            $obj->where(DB::raw("(
                         3959 * acos (
                           cos ( radians(".$job['latitude'].") )
                           * cos( radians( jobseeker_profiles.latitude) )
@@ -83,6 +86,7 @@ class JobSeekerProfiles extends Model
                           + sin ( radians(".$job['latitude'].") )
                           * sin( radians( jobseeker_profiles.latitude ) )
                          ))"),'<=',$reqData['distance']);
+        }    
     
         $obj->leftjoin('job_ratings',function($query){
             $query->on('job_ratings.seeker_id', '=', 'jobseeker_profiles.user_id');
@@ -100,7 +104,13 @@ class JobSeekerProfiles extends Model
         $obj->orderby('matched_skills','desc');
         $obj->orderby('distance');
         
-        return $obj->paginate(RecruiterJobs::LIMIT);     
+        $allProfiles    =   $obj->pluck('user_id');
+
+        $allSkills      =   '';
+        if(is_object($allProfiles)){
+            $allSkills = JobSeekerSkills::getAllJobSeekerSkills($allProfiles->toArray());                  
+        }
+        return ['allSkills' => $allSkills, 'paginate' => $obj->paginate(RecruiterJobs::LIMIT)];     
     } 
 
     public static function getJobSeekerDetails($seekerId, $job){
@@ -139,37 +149,18 @@ class JobSeekerProfiles extends Model
         if($searchResult){
             $seekerUserId = $searchResult->user_id;                        
             
-            $schoolings = JobSeekerSchooling::where('jobseeker_schoolings.user_id',$seekerUserId)
-                            ->leftJoin('schoolings','jobseeker_schoolings.schooling_id','=','schoolings.id')
-                            ->leftJoin('schoolings as school_title','schoolings.parent_id','=','school_title.id')
-                            ->select('jobseeker_schoolings.other_schooling','jobseeker_schoolings.year_of_graduation','schoolings.school_name','school_title.school_name as school_title')
-                            ->groupby('schoolings.parent_id')
-                            ->addSelect(DB::raw("group_concat(schoolings.school_name SEPARATOR ', ') AS school_name"))
-                            ->get();
+            
 
-            $skills     = JobSeekerSkills::where('jobseeker_skills.user_id',$seekerUserId)
-                            ->leftJoin('skills','jobseeker_skills.skill_id','=','skills.id')
-                            ->leftJoin('skills as skill_title','skills.parent_id','=','skill_title.id')
-                            ->select('jobseeker_skills.other_skill','skills.skill_name','skill_title.skill_name as skill_title')
-                            ->groupby('skills.parent_id')
-                            ->addSelect(DB::raw("group_concat(skills.skill_name SEPARATOR ', ') AS skill_name"))
-                            ->get(); 
-
-            $experience = JobSeekerWorkExperiences::where('jobseeker_work_experiences.user_id',$seekerUserId)
-                            ->leftJoin('job_titles','jobseeker_work_experiences.job_title_id','=','job_titles.id')
-                            ->select('months_of_expereince','office_name','office_address', 'city', 'reference1_name', 'reference1_mobile', 'reference1_email', 'reference2_name', 'reference2_mobile', 'reference2_email', 'job_titles.jobtitle_name')
-                            ->get(); 
-
-            $certificate= JobseekerCertificates::where('jobseeker_certificates.user_id',$seekerUserId)
-                            ->leftJoin('certifications','jobseeker_certificates.certificate_id','=','certifications.id')
-                            ->select('image_path','validity_date', 'certifications.certificate_name')
-                            ->get();                                                
+            $schoolings     =   JobSeekerSchooling::getParentJobSeekerSchooling($seekerUserId); 
+            $skills         =   JobSeekerSkills::getParentJobSeekerSkills($seekerUserId); 
+            $certificate    =   JobseekerCertificates::getParentJobSeekerCertificates($seekerUserId); 
+            $experience     =   JobSeekerWorkExperiences::getParentWorkExperiences($seekerUserId); 
             
             $result                 =   $searchResult->toArray();
-            $result['schoolings']   =   $schoolings->toArray();
-            $result['skills']       =   $skills->toArray();
-            $result['experience']   =   $experience->toArray();
-            $result['certificate']  =   $certificate->toArray();
+            $result['schoolings']   =   $schoolings;
+            $result['skills']       =   $skills;
+            $result['experience']   =   $experience;
+            $result['certificate']  =   $certificate;
         }
         return $result;        
     } 

@@ -26,7 +26,7 @@
                 <div class="job-type-detail">
                 
                     @if($seekerDetails['is_fulltime'])
-                    <span class="statusBtn bg-ltgreen text-center statusBtnMargin">Full Time</span>
+                    <span class="statusBtn bg-green text-center statusBtnMargin">Full Time</span>
                     @endif
                     @if($seekerDetails['is_parttime_monday'] || $seekerDetails['is_parttime_tuesday'] || $seekerDetails['is_parttime_wednesday'] || $seekerDetails['is_parttime_thursday'] || $seekerDetails['is_parttime_friday'] || $seekerDetails['is_parttime_saturday'] || $seekerDetails['is_parttime_sunday'])
                     <span class="statusBtn bg-ltgreen text-center statusBtnMargin">Part Time</span>

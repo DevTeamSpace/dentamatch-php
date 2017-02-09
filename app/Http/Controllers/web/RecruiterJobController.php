@@ -48,14 +48,15 @@ class RecruiterJobController extends Controller
     public function searchSeekers(Request $request,$jobId){
         try{
             $searchData = $request->all();
-
-            if(!isset($searchData['distance']))
-                $searchData['distance'] =  10000;
             
-            $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
-            $seekersList = JobSeekerProfiles::getJobSeekerProfiles($jobDetails,$searchData);
+            $distance = $request->get('distance');
+            if(empty($distance))
+                $distance = JobSeekerProfiles::DISTANCE;
             
-            //dd($seekersList);
+            $searchData['distance'] = $distance;
+            $jobDetails     = RecruiterJobs::getRecruiterJobDetails($jobId);
+            $seekersList    = JobSeekerProfiles::getJobSeekerProfiles($jobDetails,$searchData);
+            //dd($seekersList['paginate']);
 
             if ($request->ajax()) {
                 return view('web.recuriterJob.search', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData])->render();  
@@ -181,7 +182,7 @@ class RecruiterJobController extends Controller
 
             $seekerDetails = JobSeekerProfiles::getJobSeekerDetails($seekerId,$this->viewData['job']);
             
-            return view('web.recuriterJob.seekerDetails',compact('seekerDetails'));
+            return view('web.recuriterJob.seekerdetails',compact('seekerDetails'));
 
         } catch (\Exception $e) {
             return view('web.error.',["message" => $e->getMessage()]);

@@ -38,7 +38,7 @@
             <div class="col-sm-5">
               <label class="fnt-16 nopadding">Radius</label>
               <div >
-                <input type="hidden" name="slider_val" id="slider_val" value="{{$searchData['distance']}}"/>
+                <input type="hidden" id="slider_val" name="slider_val" value="{{ $searchData['distance'] }}">
                 <input id="range_slider" type="text"/>
                 <span class="pull-left">1 mile</span>
                 <span class="pull-right">20 miles</span>
@@ -49,14 +49,16 @@
 
     <div class="row sec-mob">
     <div class="col-sm-6 mr-b-10 col-xs-6">
-        <div class="section-title">{{$seekersList->total()}} Results Found</div>
+        <div class="section-title">{{$seekersList['paginate']->total()}} Results Found</div>
     </div>
+    <!--
     <div class="col-sm-6 text-right mr-b-10 col-xs-6">
         <button type="button" class="btn btn-primary-outline ">Available all days </button>
     </div>
+    -->
     </div>
 
-    @if(count($seekersList)>0)
+    @if(count($seekersList['paginate'])>0)
         <div class="jobseeker-statebox">
             @include('web.recuriterJob.seekersData')
         </div>
@@ -99,15 +101,17 @@
             formatter: function(value) {
                 return   value + ' miles ' ;
             },
-            change: function(event, ui) {
-                if (event.originalEvent) {
-                    alert('manual: ' + ui.value);
-                }
-                else {
-                    alert('programmatic: ' + ui.value);
-                }
-            }
         });
+
+        $("#range_slider").slider().on('slideStop', function(ev){
+            var distance    =   $('#range_slider').val();
+            var url         =   window.location.href;
+            var mainUrl     =   url.split("?")[0]; 
+            url = mainUrl+'?distance='+distance;
+            getArticles(url);
+            window.history.pushState("", "", url);
+        });
+
         /*-----------range slider--------*/
 
 
