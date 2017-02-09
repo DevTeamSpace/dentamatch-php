@@ -86,9 +86,10 @@ return [
     'certification_updated' => 'Certification updated successfully',
 
     'recruiter_blocked'=>'Recruiter Blocked',
-    'user_subscribed' => 'User subscribed successfully.',
+    'user_subscribed' => 'Subscribed successfully.',
     'cannot_subscribe' => 'Cannot subscribe please contact admin.',
     'user_added_to_subscription' => 'User added to subscription successfully.',
     'customer_created' => 'Customer Created successfully.',
     'card_added' => 'Card added successfully.',
+    'cannot_add_card' => 'Cannot add card.',
 ];

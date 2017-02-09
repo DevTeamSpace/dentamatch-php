@@ -52,8 +52,10 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::post('jobtemplates/saveOrUpdate', 'web\JobtemplateController@saveOrUpdate');
             Route::get('createJob/{templateId}', 'web\RecruiterJobController@createJob');
             Route::get('job/lists', 'web\RecruiterJobController@listJobs');
+            Route::get('job/search/{jobId}', 'web\RecruiterJobController@searchSeekers');
             Route::get('job/details/{jobId}', 'web\RecruiterJobController@jobDetails');
             Route::post('job/updateStatus', 'web\RecruiterJobController@updateStatus');
+            Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
             Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
             Route::post('create-profile', 'web\UserProfileController@createProfile');
             Route::post('office-details', 'web\UserProfileController@officeDetails');
@@ -66,7 +68,6 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::get('get-subscription-list', 'web\SubscriptionController@getSubscriptionList');
             Route::post('create-subscription', 'web\SubscriptionController@postCreateSubscription');
             Route::post('add-card', 'web\SubscriptionController@postAddCard');
-            Route::get('stripe/connect', 'web\SubscriptionController@getStripeConnect');
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
             Route::post('change-password', 'web\UserProfileController@postChangePassword');
         });

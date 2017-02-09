@@ -475,6 +475,7 @@
         },
         {
             "name": "intervention/image",
+
             "version": "2.3.11",
             "source": {
                 "type": "git",
@@ -485,6 +486,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/Intervention/image/zipball/e8881fd99b9804b29e02d6d1c2c15ee459335cf1",
                 "reference": "e8881fd99b9804b29e02d6d1c2c15ee459335cf1",
+
                 "shasum": ""
             },
             "require": {
@@ -533,7 +535,9 @@
                 "thumbnail",
                 "watermark"
             ],
+
             "time": "2017-02-04 10:37:19"
+
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -3811,6 +3815,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a6ad2472daba76b0689042b7709f86d4f06bcaab",
                 "reference": "a6ad2472daba76b0689042b7709f86d4f06bcaab",
+
                 "shasum": ""
             },
             "require": {

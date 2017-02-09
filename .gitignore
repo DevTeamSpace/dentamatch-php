@@ -9,3 +9,4 @@ Homestead.yaml
 .sonar/report-task.txt
 sonar-project.properties
 /storage
+composer.lock
