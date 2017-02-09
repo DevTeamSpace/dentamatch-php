@@ -22,7 +22,7 @@ class SubscriptionController extends Controller {
     
     public function getSubscriptionList(){
         $recruiterOffice = RecruiterOffice::getAllOffices();
-        $subscription = [];
+        $subscription['data'] = [];
         foreach ($recruiterOffice as $office){
             if($office['free_trial_period'] != 0){
                 $subscription['data'] = $office;
@@ -34,22 +34,40 @@ class SubscriptionController extends Controller {
     
     public function postCreateSubscription(Request $request){
         try{
-            $createCustomer = $this->createCustomer();
-            if($createCustomer['success'] == true){
-                $addCard = $this->addCardForSubscription($request->all(), $createCustomer['data']['id']);
-                if($addCard){
-                    $createSubscription = $this->addUserTOSubscription($createCustomer['data']['id'], $request->subscriptionType, $request->trailPeriod);
+            $recruiter = RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
+            if($recruiter['customer_id'] == null){
+                $createCustomer = $this->createCustomer();
+                if($createCustomer['success'] == true){
+                    $customer = $createCustomer['data']['id'];
+                }else{
+                    $customer = null;
+                    $this->response['success'] = false;
+                    $this->response['message'] = $createCustomer['message'];
+                    $this->response['data'] = null;
+                }
+            }else{
+                $customer = $recruiter['customer_id'];
+            }
+            if($customer != null){
+                $addCard = $this->addCardForSubscription($request->all(), $customer);
+                if($addCard['success'] == true){
+                    $createSubscription = $this->addUserTOSubscription($customer, $request->subscriptionType, $request->trailPeriod);
+                    RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 1, 'free_period' => $request->trailPeriod]);
                     $this->response['success'] = true;
                     $this->response['message'] = trans('messages.user_subscribed');
                 }else{
                     $this->response['success'] = false;
-                    $this->response['message'] = trans('messages.user_subscribed');
+                    $this->response['data'] = null;
+                    $this->response['message'] = $addCard['message'];
                 }
             }else{
                 $this->response['success'] = false;
+                $this->response['data'] = null;
                 $this->response['message'] = trans('messages.cannot_subscribe');
             }
         } catch (\Exception $e) {
+            $this->response['success'] = false;
+            $this->response['data'] = null;
             $this->response['message'] = $e->getMessage();
         }
         return $this->response;
@@ -74,6 +92,7 @@ class SubscriptionController extends Controller {
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.user_added_to_subscription');
         } catch (\Exception $e) {
+            $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
         return $this->response;
@@ -104,10 +123,12 @@ class SubscriptionController extends Controller {
                 $this->response['message'] = trans('messages.card_added');
             }else{
                 $this->response['success'] = false;
+                $this->response['data'] = null;
                 $this->response['message'] = trans('messages.cannot_add_card');
             }
         } catch (\Exception $e) {
             $this->response['success'] = false;
+            $this->response['data'] = null;
             $this->response['message'] = $e->getMessage();
         }
         return $this->response;
@@ -128,28 +149,5 @@ class SubscriptionController extends Controller {
             $this->response['message'] = $e->getMessage();
         }
         return $this->response;
-    }
-
-
-    public function getStripeConnect(){
-        if(isset($_REQUEST['code'])){
-            $client = new \GuzzleHttp\Client();
-            $authCredentials = $client->post('https://connect.stripe.com/oauth/token', [
-                "form_params" => [
-                    "client_secret" => env('STRIPE_SECRET_KEY'),
-                    "code" => $_REQUEST['code'],
-                    "grant_type" => "authorization_code",
-                    "client_id" => env('STRIPE_CLIENT_ID')
-                ]
-            ]);
-            $result = json_decode($authCredentials->getBody()->getContents());
-            if(isset($result->stripe_user_id)){
-                RecruiterProfile::updateStripeToken($result->stripe_user_id);
-                $customerId = RecruiterProfile::where('user_id', Auth::user()->id)->first();
-            }
-        }else{
-            $response = redirect('stripe/errors');
-        }
-        return $response;
     }
 }
