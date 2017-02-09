@@ -114,13 +114,13 @@ class RecruiterJobs extends Model
                     });
                            
                         
-                            $searchQueryObj->orWhere('recruiter_jobs.job_type',2);
+                            /*$searchQueryObj->orWhere('recruiter_jobs.job_type',2);
                             foreach($reqData['parttimeDays'] as $key => $day){
                             if($key == 0){
                                 $searchQueryObj->Where('is_'.$day, 1);
                             }else{
                                 $searchQueryObj->orWhere('is_'.$day, 1);
-                            }
+                            }*/
                             //$searchQueryObj->orWhere('is_'.$day, 1);
                             /*if($key == 0){
                                 $searchQueryObj->Where('is_'.$day, 1);
@@ -129,7 +129,7 @@ class RecruiterJobs extends Model
                             }*/
                             //$searchQueryObj->orWhere('is_'.$day, 1);
                         }
-                    }
+                    //}
                 }
                 $total = $searchQueryObj->count();
                 $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
