@@ -58,6 +58,9 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::post('office-details', 'web\UserProfileController@officeDetails');
             Route::get('get-location/{zip}', 'web\UserProfileController@checkValidLocation');
 
+            Route::get('favorite-jobseeker','web\FavoriteJobseekerController@getFavJobseeker');
+            Route::post('favorite-jobseeker','web\FavoriteJobseekerController@postFavJobseeker');
+            Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
             Route::get('subscription-detail', 'web\SubscriptionController@getSubscription');
             Route::get('get-subscription-list', 'web\SubscriptionController@getSubscriptionList');
             Route::get('stripe/connect', 'web\SubscriptionController@getStripeConnect');

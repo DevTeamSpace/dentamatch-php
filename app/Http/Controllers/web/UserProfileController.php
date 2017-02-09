@@ -15,7 +15,7 @@ use Hash;
 class UserProfileController extends Controller {
 
     public function officeDetails(Request $request) {
-
+        
         if (isset($request->phoneNumber) && !empty($request->phoneNumber)) {
             $var = filter_var($request->phoneNumber, FILTER_SANITIZE_NUMBER_INT);
             $newPhone = str_replace(array('+', '-'), '', $var);
@@ -44,11 +44,10 @@ class UserProfileController extends Controller {
             'sundayEnd' => 'required_if:sunday,1',
             'contactNumber' => 'required|numeric|digits_between:9,10'
         ]);
-
         try {
             RecruiterOffice::createProfile($request);
 //            if (in_array($request->postal_code, \App\Models\Location::getList())) {
-                return 'success';
+            return 'success';
 //            }
 //            return 1;
         } catch (\Exception $e) {
@@ -90,7 +89,7 @@ class UserProfileController extends Controller {
 //    }
 
     public function getChangePassword() {
-        return view('web.change_password');
+        return view('web.change_password',['activeTab'=>'3']);
     }
 
     public function postChangePassword(Request $request) {
@@ -107,6 +106,17 @@ class UserProfileController extends Controller {
             return redirect('change-password')->withErrors([trans("messages.password_saved_successfully")])->withInput();
         }
         return redirect('change-password')->withErrors([trans("messages.old_not_match")])->withInput();
+    }
+
+    public function getEditProfile() {
+        $user = RecruiterProfile::where('user_id', Auth::user()->id)->first();
+        $officeType = \App\Models\OfficeType::all();
+        $offices = RecruiterOffice::join('recruiter_office_types', 'recruiter_office_types.recruiter_office_id', '=', 'recruiter_offices.id')
+                        ->join('office_types', 'recruiter_office_types.office_type_id', '=', 'office_types.id')
+                        ->where('user_id', Auth::user()->id)
+                        ->select('recruiter_offices.*', DB::raw('group_concat(office_types.officetype_name) as officetype_names'), DB::raw('group_concat(office_types.id) as officetype_id'))
+                        ->groupby('recruiter_offices.id')->get();
+        return view('web.edit_profile', ['user' => $user, 'offices' => $offices, 'officeType' => $officeType]);
     }
 
 }

@@ -50,9 +50,7 @@
                         </div>
                         <div class="info-block"><!-- BODY BOX-->
                             <div class="createjob">
-                                <button type="button" class="btn btn-primary">
-                                    <a href="{{ url('createJob/'.$template['id']) }}">Create Job Opening</a>
-                                </button>
+                                    <a class="btn btn-primary btn-block" href="{{ url('createJob/'.$template['id']) }}">Create Job Opening</a>
                             </div>
                             <div class="info-block-dentinal-text"> 
                                 <span class="view-template-text">

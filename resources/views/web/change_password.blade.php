@@ -4,22 +4,8 @@
 <div class="container globalpadder">
     <!-- Tab-->
     <div class="row">
-        <div class="col-sm-4 col-md-3">
-            <div id="ChildVerticalTab_1"  class="cboxbottom">
-                <ul class="resp-tabs-list ver_1 small-border-radius  decoration">
-                    <li class="resp-tab-active"><a href ="#"><span class="icon icon-account-circle  "></span>Profile</a></li>
-                    <li><a href ="#"><span class="icon icon-drive-document "></span>Reports</a></li>
-                    <li><a href ="#"><span class="icon icon-lock "></span>Change Password</a></li>
-                    <li><a href ="#"><span class="icon icon-drive-form "></span>Terms & Conditions</a></li>
-                    <li>
-                        <a href ="#">
-                            <span class="icon icon-text-document-black-interface-symbol "></span>Subscription Details</a>
-                    </li>
-                    <li><a href ="#"><span class="icon icon-logout-web-button "></span>Logout</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-sm-8 col-md-9 ">
+        @include('web.layouts.sidebar')
+        <div class="col-sm-8 ">
             <div class="addReplica">
                 <div class="resp-tabs-container commonBox profilePadding cboxbottom ">
                     <div class="descriptionBox">

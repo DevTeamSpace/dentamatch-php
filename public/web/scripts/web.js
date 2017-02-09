@@ -147,7 +147,6 @@ function officeDetail2() {
             });
     $('form').parsley().destroy();
     $('form').parsley();
-
 }
 
 function checkLocation(zip, indexField) {
@@ -172,6 +171,77 @@ function checkLocation(zip, indexField) {
                     $('#location-msg' + indexField).html(msg);
                 }
             });
+}
 
+function editofficedetail() {
+    var form_data = $('#editofficedetailform').serialize();
+    var errorsHtml;
+    $.ajax(
+            {
+                url: '/office-details',
+                type: "POST",
+                data: form_data,
+                success: function (data) {
+                    if (data === 1) {
+                        errorsHtml = '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a>Already job applied on this address.</div>';
+                        $('#editForm-errors').html(errorsHtml);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                    if (data.status === 422) {
+                        var errors = data.responseJSON;
+                        errorsHtml = '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a><ul>';
+                        $.each(errors, function (key, value) {
+                            errorsHtml += '<li>' + value[0] + '</li>';
+                        });
+                        errorsHtml += '</ul></div>';
+                    } else if (data.status === 1) {
+                        errorsHtml = '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a>' + data.msg + '</div>';
+                    }
+                    $('#editForm-errors').html(errorsHtml);
+                    $('div.alert').delay(1000).slideUp(300);
+                }
+            });
+}
+function addofficedetail() {
+    var form_data = $('#addofficedetailform').serialize();
+    var errorsHtml;
+    $.ajax(
+            {
+                url: '/office-details',
+                type: "POST",
+                data: form_data,
+                success: function (data) {
+                   location.reload();
+                },
+                error: function (data) {
+                    if (data.status === 422) {
+                        var errors = data.responseJSON;
+                        errorsHtml = '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a><ul>';
+                        $.each(errors, function (key, value) {
+                            errorsHtml += '<li>' + value[0] + '</li>';
+                        });
+                        errorsHtml += '</ul></div>';
+                    } else if (data.status === 1) {
+                        errorsHtml = '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a>' + data.msg + '</div>';
+                    }
+                    $('#createForm-errors').html(errorsHtml);
+                    $('div.alert').delay(1000).slideUp(300);
+                }
+            });
+}
+function getOfficeName() {
+    officeName = new google.maps.places.SearchBox(
+            (document.getElementById('officeName')),
+            {types: ['geocode']});
+    officeName.addListener('places_changed', fillOfficeAddress);
+}
 
+function fillOfficeAddress() {
+    var addy = $('#officeName').val();
+    var offName = addy.substr(0, addy.indexOf(','));
+    document.getElementById('officeName').value = offName;
 }
