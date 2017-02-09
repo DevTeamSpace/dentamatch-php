@@ -14,6 +14,7 @@ use App\Models\JobTitles;
 use App\Models\RecruiterOffice;
 use App\Models\ChatUserLists;
 use App\Models\JobSeekerProfiles;
+use App\Providers\NotificationServiceProvider;
 
 use DB;
 
@@ -165,6 +166,7 @@ class RecruiterJobController extends Controller
                     $userChat->seeker_id = $jobData->seeker_id;
                     $userChat->save();
                 }
+                $this->sendPushUser($requestData['appliedStatus'],Auth::user()->id,$jobData->seeker_id,$requestData['jobId']);
                 return redirect('job/details/'.$requestData['jobId']);
             }
         } catch (\Exception $e) {
@@ -184,5 +186,40 @@ class RecruiterJobController extends Controller
         } catch (\Exception $e) {
             return view('web.error.',["message" => $e->getMessage()]);
         }
+    }
+    
+    public function sendPushUser($jobstatus,$sender,$receiver,$jobId){
+        $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
+        if($jobstatus == JobLists::SHORTLISTED){
+            $notificationData = array(
+                    'message' => $jobDetails['office_name']." has accepted your invitation for ".$jobDetails['jobtitle_name'],
+                    'notification_title'=>'User shortlisted',
+                    'sender_id' => $sender,
+                    'type' => 1
+                );
+        } else if($jobstatus == JobLists::HIRED){
+            $notificationData = array(
+                    'message' => "You have been hired for  ".$jobDetails['jobtitle_name'],
+                    'notification_title'=>'User hired',
+                    'sender_id' => $sender,
+                    'type' => 1
+                );
+        }
+        
+        $userId = $receiver;
+
+        $notificationData['receiver_id'] = $userId;
+        $params['data'] = $notificationData;
+        $params['jobDetails'] = $jobDetails;
+
+        $deviceModel = Device::getDeviceToken($userId);
+        if($deviceModel) {
+            $this->info($userId);
+            NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['message'], $params);
+
+            $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['message']];
+            Notification::createNotification($data);
+        }
+        
     }
 }
