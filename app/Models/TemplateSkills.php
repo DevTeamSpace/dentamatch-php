@@ -28,7 +28,8 @@ class TemplateSkills extends Model
                 ->join('skills','template_skills.skill_id','=','skills.id')
                 ->join('skills as sk','sk.id','=','skills.parent_id')
                 ->where('skills.is_active',  Skills::ACTIVE)->where('skills.parent_id','<>',null)
-                ->select('sk.skill_name as parent_skill_name',DB::raw('group_concat(skills.skill_name) as skill_name'))
+                ->select('sk.skill_name as parent_skill_name',DB::raw('group_concat(skills.skill_name SEPARATOR ", ") as skill_name'))
+                ->orderBy('skills.skill_name','desc')
                 ->orderBy('skills.parent_id','asc')
                 ->groupBy('skills.parent_id')
                 ->get()->toArray();

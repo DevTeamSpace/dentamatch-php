@@ -64,11 +64,11 @@ class LocationController extends Controller
     {
         // Validate and store the location...
         $rules = array(
-            'zipcode' => array('required','digits_between:5,6','regex:/[0-9]/','unique:locations,zipcode,NULL,id,deleted_at,NULL'),
+            'zipcode' => array('required','digits_between:5,8','regex:/[0-9]/','unique:locations,zipcode,NULL,id,deleted_at,NULL'),
         );
         
         if(isset($request->id)){
-            $rules['zipcode'] = "Required|Between:5,6|regex:/[0-9]/|Unique:locations,zipcode,".$request->id;
+            $rules['zipcode'] = "Required|Between:5,8|regex:/[0-9]/|Unique:locations,zipcode,".$request->id;
             $location = Location::find($request->id);  
             $msg = trans('messages.location_updated');
         }
