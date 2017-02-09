@@ -89,7 +89,7 @@ class UserProfileController extends Controller {
 //    }
 
     public function getChangePassword() {
-        return view('web.change_password');
+        return view('web.change_password',['activeTab'=>'3']);
     }
 
     public function postChangePassword(Request $request) {
