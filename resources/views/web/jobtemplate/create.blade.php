@@ -57,7 +57,7 @@
             <input type="hidden" name="action" value="{{ (isset($templateData->id)?'edit':'add') }}">
             <input type="hidden" name="id" value="{{ (isset($templateData->id)?$templateData->id:'') }}">
             <button type="button" class="btn btn-link mr-r-10" data-toggle="modal" data-target="#discardTemplate">Cancel</button>
-            <button type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
+            <button type="submit" id="Save" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
 
         </div>
     </div>
@@ -74,7 +74,7 @@
 				</div>
 				<div class="modal-body text-center">
 					
-					<p>Do you want to discard the template ?</p>
+					<p>Do you want to discard the changes?</p>
 
 					<div class="mr-t-20 mr-b-30">
 						<button id="cancelButton" type="button" class="btn btn-link mr-r-5">Yes</button>
@@ -97,6 +97,13 @@
 <script src="{{asset('web/scripts/optionDropDown.js')}}"></script>
 <script src="{{asset('web/scripts/custom.js')}}"></script>
 <script>
+    $('form').submit(function(e){
+        var form = $(this);
+        form.parsley().validate();
+        if (form.parsley().isValid()){
+            $('#Save').attr('disabled',true);
+        }
+    });
     document.getElementById("cancelButton").onclick = function () {
         location.href = "{{ url('jobtemplates') }}";
     };
