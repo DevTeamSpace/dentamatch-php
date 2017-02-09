@@ -180,7 +180,7 @@ class RecruiterJobController extends Controller
 
             $seekerDetails = JobSeekerProfiles::getJobSeekerDetails($seekerId,$this->viewData['job']);
             
-            return view('web.recuriterJob.seekerDetails',compact('seekerDetails'));
+            return view('web.recuriterJob.seekerdetails',compact('seekerDetails'));
 
         } catch (\Exception $e) {
             return view('web.error.',["message" => $e->getMessage()]);
