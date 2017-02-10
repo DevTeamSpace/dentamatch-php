@@ -74,7 +74,8 @@ class JobSeekerProfiles extends Model
 
         $obj->addSelect(DB::raw("count(distinct(skill_count.skill_id)) AS matched_skills")); 
 
-        $obj->addSelect(DB::raw("group_concat(distinct(jobseeker_temp_availability.temp_job_date)) AS temp_job_dates"));
+        if($job['job_type']==RecruiterJobs::TEMPORARY)
+            $obj->addSelect(DB::raw("group_concat(distinct(jobseeker_temp_availability.temp_job_date)) AS temp_job_dates"));
         
         $obj->addSelect(DB::raw("(
                         3959 * acos (

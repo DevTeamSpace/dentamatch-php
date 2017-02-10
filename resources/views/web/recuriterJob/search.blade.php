@@ -98,6 +98,7 @@
 
         $('#availAllBtn').click(function(){
             $('#avail_all').val(1);
+            $('.loader-box').show();
             var distance    =   $('#range_slider').val();
             var url         =   window.location.href;
             var mainUrl     =   url.split("?")[0]; 
