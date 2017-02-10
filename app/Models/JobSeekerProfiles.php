@@ -53,7 +53,15 @@ class JobSeekerProfiles extends Model
             }); 
         }
 
-        
+        if($reqData['avail_all']==1){
+            $obj->where('jobseeker_profiles.is_parttime_monday',1);
+            $obj->where('jobseeker_profiles.is_parttime_tuesday',1);
+            $obj->where('jobseeker_profiles.is_parttime_wednesday',1);
+            $obj->where('jobseeker_profiles.is_parttime_thursday',1);
+            $obj->where('jobseeker_profiles.is_parttime_friday',1);
+            $obj->where('jobseeker_profiles.is_parttime_saturday',1);
+            $obj->where('jobseeker_profiles.is_parttime_sunday',1);
+        }
         
         $obj->select('jobseeker_profiles.first_name','jobseeker_profiles.last_name','jobseeker_profiles.profile_pic',
                     'jobseeker_profiles.is_parttime_monday','jobseeker_profiles.is_parttime_tuesday','jobseeker_profiles.is_parttime_tuesday',

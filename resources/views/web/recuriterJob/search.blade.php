@@ -39,6 +39,7 @@
               <label class="fnt-16 nopadding">Radius</label>
               <div >
                 <input type="hidden" id="slider_val" name="slider_val" value="{{ $searchData['distance'] }}">
+                <input type="hidden" id="avail_all" name="avail_all" value="{{ $searchData['avail_all'] }}">
                 <input id="range_slider" type="text"/>
                 <span class="pull-left">1 mile</span>
                 <span class="pull-right">20 miles</span>
@@ -52,7 +53,7 @@
         <div class="section-title">{{$seekersList['paginate']->total()}} Results Found</div>
     </div>
     <div class="col-sm-6 text-right mr-b-10 col-xs-6">
-        <button type="button" class="btn btn-primary-outline ">Available all days </button>
+        <button type="button" class="btn btn-primary-outline " id="availAllBtn">Available all days </button>
     </div>
     </div>
 
@@ -70,7 +71,7 @@
     </div>
     @endif    
 <!--loader part-->
-<div class="loader-box">
+<div class="loader-box" style="display: none;">
     <div id="loader"></div>
 </div>
 <!--/loader part-->
@@ -95,6 +96,16 @@
             window.history.pushState("", "", url);
         });
 
+        $('#availAllBtn').click(function(){
+            $('#avail_all').val(1);
+            var distance    =   $('#range_slider').val();
+            var url         =   window.location.href;
+            var mainUrl     =   url.split("?")[0]; 
+            url = mainUrl+'?distance='+distance+'&avail_all=1';
+            getArticles(url);
+            window.history.pushState("", "", url);
+        });
+
         /*-----------range slider--------*/
         $("#range_slider").slider({ 
             min: 1, 
@@ -107,11 +118,16 @@
         });
 
         $("#range_slider").slider().on('slideStop', function(ev){
-            
+            $('.loader-box').show();
             var distance    =   $('#range_slider').val();
             var url         =   window.location.href;
             var mainUrl     =   url.split("?")[0]; 
             url = mainUrl+'?distance='+distance;
+
+            if($('#avail_all').val()==1){
+                url += '&avail_all=1';
+            }
+
             getArticles(url);
             window.history.pushState("", "", url);
         });
@@ -124,6 +140,7 @@
                 url: url
             }).done(function (data) {
                 $('#ajaxData').html(data);
+                $('.loader-box').hide();
             }).fail(function () {
 
             });
