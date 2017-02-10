@@ -7,6 +7,7 @@ use App\Models\UserProfile;
 use App\Models\Notification;
 use App\Models\Device;
 use DB;
+use App\Providers\NotificationServiceProvider;
 
 class UserProfileCompletionCommand extends Command
 {
@@ -66,7 +67,7 @@ class UserProfileCompletionCommand extends Command
                 $deviceModel = Device::getDeviceToken($userId);
                 if($deviceModel) {
                     $this->info($userId);
-                    \NotificationService::sendPushNotification($deviceModel, $notificationData['message'], $params);
+                    NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['message'], $params);
                     
                     $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['message']];
                     Notification::createNotification($data);

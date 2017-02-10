@@ -92,4 +92,8 @@ return [
     'customer_created' => 'Customer Created successfully.',
     'card_added' => 'Card added successfully.',
     'cannot_add_card' => 'Cannot add card.',
+    'customer_fetched' => 'Customer fetched from stripe.',
+    'no_customer' => 'No customer found.',
+    'card_deleted' => 'Card deleted successfully.',
+    'no_card' => 'No card found.'
 ];

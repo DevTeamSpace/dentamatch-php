@@ -219,8 +219,7 @@ var FirstSubscriptionVM = function () {
                     setTimeout(
                         function ()
                         {
-                            return false;
-                            location.href = 'broadcast';
+                            location.href = 'setting-subscription';
                         }, 700);
                 }
             });
