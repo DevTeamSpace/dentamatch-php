@@ -189,8 +189,8 @@ var SubscriptionVM = function () {
                         me.noSubscription(false);
                         me.visibleSubcription(true);
                         me.subscriptionAmount("$"+(String)(d.data.data.subscriptions.data[0].plan.amount).slice(0,2));
-                        me.subscriptionActivation(moment(Date('Y-m-d',d.data.data.subscriptions.data[0].created)).format('LL'));
-                        me.subscriptionAutoRenewal(moment(Date('Y-m-d',d.data.data.subscriptions.data[0].current_period_end)).format('LL'));
+                        me.subscriptionActivation(moment(d.data.data.subscriptions.data[0].created).format('LL'));
+                        me.subscriptionAutoRenewal(moment(d.data.data.subscriptions.data[0].current_period_end).format('LL'));
                         me.subscription.push(d.data.data.subscriptions.data[0]);
                         if(d.data.data.sources.data.length >= 2){
                             me.addCardVisible(false);
