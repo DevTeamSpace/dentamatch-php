@@ -151,5 +151,10 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('create', 'Cms\CertificateController@create');
         Route::post('store', 'Cms\CertificateController@store');
     });
+    
+    Route::group(['prefix' => 'config/'], function() {
+        Route::get('create-radius', 'Cms\ConfigurationController@create');
+        Route::post('store-radius', 'Cms\ConfigurationController@store');
+    });
 });
 

@@ -14,12 +14,14 @@ class Notification extends Model {
     
     const LIMIT = 10;
     
-    const INVITED = 1;
-    const APPLIED = 2;
-    const SHORTLISTED = 3;
-    const HIRED = 4;
-    const REJECTED = 5;
-    const CANCELLED = 6;
+    const ACCEPTJOB = 1;
+    const HIRED = 2;
+    const JOBCANCEL = 3;
+    const DELETEJOB = 4;
+    const VERIFYDOCUMENT = 5;
+    const COMPLETEPROFILE = 6;
+    const CHATMESSAGE = 7;
+    const OTHER = 8;
     
     public static function userNotificationList($reqData)
     {

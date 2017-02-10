@@ -1,0 +1,65 @@
+<?php
+
+namespace App\Http\Controllers\Cms;
+
+use Illuminate\Http\Request;
+
+use App\Http\Controllers\Controller;
+use App\Models\Location;
+use Yajra\Datatables\Datatables;
+use Session;
+use App\Models\Certifications;
+
+class ConfigurationController extends Controller
+{
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('cms');
+    }
+
+    /**
+     * Show the form to create a new location.
+     *
+     * @return Response 
+     */
+    public function create()
+    {
+        return view('cms.config.radius');
+    }
+    /**
+     * Store a new/update location.
+     *
+     * @param  Request  $request
+     * @return return to lisitng page
+     */
+    public function store(Request $request)
+    {
+        // Validate and store the location...
+        $rules = array(
+            'certificate' => array('required','unique:certifications,certificate_name'),
+        );
+        
+        if(isset($request->id)){
+            $rules['certificate'] = "Required|Unique:certifications,certificate_name,".$request->id;
+            $certification = Certifications::find($request->id);  
+            $msg = trans('messages.certification_updated');
+        }
+        else{
+            $certification = new Certifications;
+            $msg = trans('messages.certification_added');
+        }
+        
+        $this->validate($request, $rules);
+        
+        $certification->certificate_name = trim($request->certificate);
+        $certification->is_active = ($request->is_active)?1:0;
+        $certification->save();
+        Session::flash('message',$msg);
+        return redirect('cms/certificate/index');
+    }
+}
