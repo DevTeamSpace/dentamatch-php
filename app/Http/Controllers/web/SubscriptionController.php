@@ -29,6 +29,13 @@ class SubscriptionController extends Controller {
     public function getSubscriptionList(){
         $recruiterOffice = RecruiterOffice::getAllOffices();
         $subscription['data'] = [];
+        $customerId = RecruiterProfile::where(['user_id' => Auth::user()->id])->pluck('customer_id');
+        if($customerId == null){
+            $subscription['customer'] = [];
+        }else{
+            $customer = \Stripe\Customer::retrieve($customerId[0]);
+            $subscription['customer'] = [$customer];
+        }
         foreach ($recruiterOffice as $office){
             if($office['free_trial_period'] != 0){
                 $subscription['data'] = $office;
@@ -41,35 +48,42 @@ class SubscriptionController extends Controller {
     public function postCreateSubscription(Request $request){
         try{
             $recruiter = RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
-            if($recruiter['customer_id'] == null){
-                $createCustomer = $this->createCustomer();
-                if($createCustomer['success'] == true){
-                    $customer = $createCustomer['data']['id'];
-                }else{
-                    $customer = null;
-                    $this->response['success'] = false;
-                    $this->response['message'] = $createCustomer['message'];
-                    $this->response['data'] = null;
-                }
+            if($request->cardExist == true){
+                $createSubscription = $this->addUserTOSubscription($recruiter['customer_id'], $request->subscriptionType, $request->trailPeriod);
+                RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 1, 'free_period' => $request->trailPeriod]);
+                $this->response['success'] = true;
+                $this->response['message'] = trans('messages.user_subscribed');
             }else{
-                $customer = $recruiter['customer_id'];
-            }
-            if($customer != null){
-                $addCard = $this->addCardForSubscription($request->all(), $customer);
-                if($addCard['success'] == true){
-                    $createSubscription = $this->addUserTOSubscription($customer, $request->subscriptionType, $request->trailPeriod);
-                    RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 1, 'free_period' => $request->trailPeriod]);
-                    $this->response['success'] = true;
-                    $this->response['message'] = trans('messages.user_subscribed');
+                if($recruiter['customer_id'] == null){
+                    $createCustomer = $this->createCustomer();
+                    if($createCustomer['success'] == true){
+                        $customer = $createCustomer['data']['id'];
+                    }else{
+                        $customer = null;
+                        $this->response['success'] = false;
+                        $this->response['message'] = $createCustomer['message'];
+                        $this->response['data'] = null;
+                    }
+                }else{
+                    $customer = $recruiter['customer_id'];
+                }
+                if($customer != null){
+                    $addCard = $this->addCardForSubscription($request->all(), $customer);
+                    if($addCard['success'] == true){
+                        $createSubscription = $this->addUserTOSubscription($customer, $request->subscriptionType, $request->trailPeriod);
+                        RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 1, 'free_period' => $request->trailPeriod]);
+                        $this->response['success'] = true;
+                        $this->response['message'] = trans('messages.user_subscribed');
+                    }else{
+                        $this->response['success'] = false;
+                        $this->response['data'] = null;
+                        $this->response['message'] = $addCard['message'];
+                    }
                 }else{
                     $this->response['success'] = false;
                     $this->response['data'] = null;
-                    $this->response['message'] = $addCard['message'];
+                    $this->response['message'] = trans('messages.cannot_subscribe');
                 }
-            }else{
-                $this->response['success'] = false;
-                $this->response['data'] = null;
-                $this->response['message'] = trans('messages.cannot_subscribe');
             }
         } catch (\Exception $e) {
             $this->response['success'] = false;
@@ -224,6 +238,10 @@ class SubscriptionController extends Controller {
     private function fetchUser($customerId){
         try{
             $customer = \Stripe\Customer::retrieve($customerId);
+            foreach($customer->subscriptions['data'] as $subscription){
+                $subscription['created'] = date('Y-m-d', $subscription['created']);
+                $subscription['current_period_end'] = date('Y-m-d', $subscription['current_period_end']);
+            }
             $this->response['success'] = true;
             $this->response['data'] = $customer;
             $this->response['message'] = trans('messages.customer_fetched');

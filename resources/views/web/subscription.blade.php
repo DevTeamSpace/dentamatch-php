@@ -80,7 +80,7 @@
                 <div class="modal-body">
                   <p class="text-center">Please provide card details to subscribe.</p>
                   <p class="text-center" style="color: blue" data-bind="text: creatingMessage"></p>
-                  <p class="text-center" style="color: red;" data-bind="text: errorMessage"></p>
+                  <p class="text-center" style="color: red" data-bind="text: errorMessage"></p>
                   <p class="text-center" style="color: green;" data-bind="text: successMessage"></p>
                     <div class="form-group">
                         <label class="sr-only" for="card-number">Card number</label>
@@ -100,6 +100,28 @@
                   <button type="submit" id="addCardButton" class="btn btn-primary">Add Card</button>
                 </div>
                   </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    
+    <div id="subscribeModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bind="visible: cancelButtonSubscribe"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title text-center">Subscribe</h4>
+                </div>
+                <div class="modal-body">
+                  <p class="text-center" style="color: blue" data-bind="text: creatingMessage"></p>
+                  <p class="text-center" style="color: red" data-bind="text: errorMessage"></p>
+                  <p class="text-center" style="color: green;" data-bind="text: successMessage"></p>
+                  <p class="text-center">You have already added card please continue to subscribe.</p>
+                  <p class="text-center">* You can manage your cards once you login.</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="submit" id="cardAlreadySubscribe" class="btn btn-primary" data-bind="click: cardAlreadySubscribe">Subscribe</button>
+                </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
@@ -136,6 +158,8 @@ var FirstSubscriptionVM = function () {
     me.successMessage = ko.observable('');
     me.creatingMessage = ko.observable('');
     me.disableInput = ko.observable(false);
+    me.cardExist = ko.observable(false);
+    me.cancelButtonSubscribe = ko.observable(true);
     
     me.getSubscriptionList = function () {
         if (me.isLoading()) {
@@ -155,6 +179,11 @@ var FirstSubscriptionVM = function () {
                 d.data['fullYearPrice'] = 99;
                 me.visibleSubcription(true);
                 me.subscriptionDetails.push(d.data);
+                if(d.customer[0].sources.data.length == 0){
+                    me.cardExist(false);
+                }else{
+                    me.cardExist(true);
+                }
             }else{
                 me.visibleSubcription(false);
                 me.noSubscription(true);
@@ -174,7 +203,13 @@ var FirstSubscriptionVM = function () {
         me.subscriptionType(subType);
         me.creatingMessage('');
         me.disableInput(false);
-        $('#addCardModal').modal('show');
+        if(me.cardExist() == true){
+            $('#cardAlreadySubscribe').removeAttr('disabled');
+            $('#subscribeModal').modal('show');
+        }else{
+            $('#addCardButton').removeAttr('disabled');
+            $('#addCardModal').modal('show');
+        }
     };
     
     $(".modal").on("hidden.bs.modal", function(){
@@ -205,7 +240,7 @@ var FirstSubscriptionVM = function () {
                 backdrop: 'static',
                 keyboard: false
             });
-            $.post('create-subscription', {cardNumber: me.cardNumber(), expiry: me.expiry(), cvv: me.cvv(), subscriptionType: me.subscriptionType(), trailPeriod: me.trailPeriod()}, function(d){
+            $.post('create-subscription', {cardNumber: me.cardNumber(), expiry: me.expiry(), cvv: me.cvv(), subscriptionType: me.subscriptionType(), trailPeriod: me.trailPeriod(), cardExist: me.cardExist()}, function(d){
                 me.creatingMessage('');
                 if(d.success == false){
                     me.errorMessage(d.message);
@@ -233,6 +268,35 @@ var FirstSubscriptionVM = function () {
                 keyboard: true
             });
         }
+    };
+    
+    me.cardAlreadySubscribe = function(d, e){
+        me.errorMessage('');
+        me.successMessage('');
+        me.cancelButtonSubscribe(false);
+        me.creatingMessage('Subscribing please wait...');
+        $('#cardAlreadySubscribe').attr('disabled','disabled');
+        $('#subscribeModal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+        $.post('create-subscription', {subscriptionType: me.subscriptionType(), trailPeriod: me.trailPeriod(), cardExist: me.cardExist()}, function(d){
+            me.creatingMessage('');
+            if(d.success == false){
+                me.errorMessage(d.message);
+                me.successMessage('');
+                me.cancelButtonSubscribe(true);
+                $('#cardAlreadySubscribe').removeAttr('disabled');
+            }else{
+                me.errorMessage('');
+                me.successMessage(d.message);
+                setTimeout(
+                    function ()
+                    {
+                        location.href = 'setting-subscription';
+                    }, 700);
+            }
+        });
     };
     
     me._init = function () {
