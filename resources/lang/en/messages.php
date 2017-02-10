@@ -97,5 +97,7 @@ return [
     'card_deleted' => 'Card deleted successfully.',
     'no_card' => 'No card found.',
     'unsubscribed' => 'Unsubscribed successfylly.',
-    'no_subscription' => 'No subscription found'
+    'no_subscription' => 'No subscription found',
+    'cannot_delete_card' => 'Atlease one card should be added to continue the subscription.',
+    'card_edidted' => 'Card edidted successfully.'
 ];

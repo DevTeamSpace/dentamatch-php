@@ -15,15 +15,15 @@
                             <div class="frm-title mr-b-10">Subcription Details</div>
                         </div>
                         <div class="tabSubscriptionContainer">
-                            <div class="title pull-left pd-b-20">Membership</div>	
+                            <div class="title pull-left pd-b-20"><b>Membership</b></div>	
                             <a class="pull-right" data-bind="click: $root.unsubscribePlan">Unsubscribe</a>	
                             <div class="clearfix"></div>
                             <div class="table-responsive">
                                 <table class="table customSubscriptionTable">
                                     <tbody>
                                         <tr>
-                                            <td data-bind="text: subscriptionAmount"></td>
-                                            <th>Plan Charged</th>	
+                                            <td>Plan Charged</td>
+                                            <th data-bind="text: subscriptionAmount"></th>	
                                         </tr>
                                         <tr>
                                             <td>Subscription Plan</td>
@@ -41,18 +41,16 @@
                                 </table>
                                 <p>Your next half yearly charge of <span data-bind="text: subscriptionAmount"></span> will be applied to your primary payment method on <span data-bind="text: subscriptionAutoRenewal"></span>.</p>	
                                 <hr>
-                                <div class="title pd-b-20 ">Payment Methods</div>
+                                <div class="title pd-b-20 "><b>Payment Methods</b></div>
                                 <!--ko foreach: cards-->
-                                <div class="masterCardBox small-border-radius">
+                                <div class="masterCardBox small-border-radius dev_card_box">
                                     <p class="pull-left"><span data-bind="text: brand"></span> ending in <span data-bind="text: last4"></span> - <span data-bind="text: exp_month"></span>/<span data-bind="text: exp_year"></span></p>
-                                    <div class="masterEDOPtion pull-right"><span class="gbllist"><i class="icon icon-edit "></i> Edit</span>
+                                    <div class="masterEDOPtion pull-right"><span class="gbllist dev_edit_button" data-bind="click: $root.editCard"><i class="icon icon-edit"></i> Edit</span>
                                         <span class="gbllist" data-bind="click: $root.deleteCard"><i class="icon icon-deleteicon"></i> Delete</span></div>
                                     <div class="clearfix"></div>
                                 </div>
-                                <br>
                                 <!--/ko-->
-
-                                <a href="#" class="pull-right pd-t-20 pd-b-20" data-bind="visible: addCardVisible,click: addCard">Add Payment Method</a>	
+                                <a href="#" class="pull-right pd-t-10 pd-b-20" data-bind="visible: addCardVisible,click: addCard"><b>Add Payment Method</b></a>	
 
                             </div>		
                         </div>
@@ -74,11 +72,12 @@
                         </div>
                         <form id="addCardForm" data-bind="submit: $root.addCardFunction">
                         <div class="modal-body">
-                          <p class="text-center">Please provide card details to subscribe.</p>
+                          <p class="text-center">Please provide card details.</p>
                           <br>
                           <p class="text-center" style="color: blue" data-bind="text: creatingMessage"></p>
                           <p class="text-center" style="color: red;" data-bind="text: errorMessage"></p>
                           <p class="text-center" style="color: green;" data-bind="text: successMessage"></p>
+                          <br>
                             <div class="form-group">
                                 <label class="sr-only" for="card-number">Card number</label>
                                 <input type="number" class="form-control" id="card-number" placeholder="Card number" data-bind="value: cardNumber, disable: disableInput">
@@ -95,6 +94,42 @@
                         <div class="modal-footer">
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                           <button type="submit" id="addCardButton" class="btn btn-primary">Add Card</button>
+                        </div>
+                          </form>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+            <div id="editCardModal" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bind="visible: cancelButtonEdit"><span aria-hidden="true">&times;</span></button>
+                          <h4 class="modal-title text-center">Edit</h4>
+                        </div>
+                        <form id="addCardForm" data-bind="submit: $root.editCardFunction">
+                        <div class="modal-body">
+                          <p class="text-center">Please provide expiry details to edit.</p>
+                          <br>
+                          <p class="text-center" style="color: blue" data-bind="text: creatingMessage"></p>
+                          <p class="text-center" style="color: red;" data-bind="text: errorMessage"></p>
+                          <p class="text-center" style="color: green;" data-bind="text: successMessage"></p>
+                          <br>
+<!--                            <div class="form-group">
+                                <label class="sr-only" for="card-number">Card number</label>
+                                <input type="number" class="form-control" placeholder="Card number" data-bind="value: editCardNumber" disabled="disable">
+                            </div>-->
+                            <div class="form-group">
+                                <label class="sr-only" for="expiry">Expiry</label>
+                                <input type="text" class="form-control" id="editCvv" placeholder="MM/YY" data-bind="value: editExpiry">
+                            </div>
+<!--                            <div class="form-group">
+                                <label class="sr-only" for="cvv">CVV</label>
+                                <input type="number" class="form-control" placeholder="CVV" data-bind="value: editCvv">
+                            </div>-->
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          <button type="submit" id="editCardButton" class="btn btn-primary">Edit Card</button>
                         </div>
                           </form>
                     </div><!-- /.modal-content -->
@@ -150,8 +185,6 @@ var SubscriptionVM = function () {
     me.expiry = ko.observable('');
     me.cvv = ko.observable();
     me.errorMessage = ko.observable('');
-//    me.trailPeriod = ko.observable();
-//    me.subscriptionType = ko.observable();
     me.successMessage = ko.observable('');
     me.creatingMessage = ko.observable('');
     me.disableInput = ko.observable(false);
@@ -168,6 +201,11 @@ var SubscriptionVM = function () {
     me.showModalFooter = ko.observable(true);
     me.actionButtonText = ko.observable('');
     me.addCardVisible = ko.observable(true);
+    me.cancelButtonEdit = ko.observable(true);
+    me.editCvv = ko.observable();
+    me.editExpiry = ko.observable('');
+    me.editCardNumber = ko.observable('');
+    me.editCardId = ko.observable('');
     
     me.getSubscription = function () {
         me.isLoadingSubscription(true);
@@ -177,7 +215,6 @@ var SubscriptionVM = function () {
         }
         me.isLoading(true);
         $.get('get-subscription-details', {}, function (d) {
-            console.log(d);
             me.isLoadingSubscription(false);
             if(d.success == false || d.data.data.subscriptions.data.length == 0){
                 me.noSubscription(true);
@@ -221,31 +258,34 @@ var SubscriptionVM = function () {
         me.cardNumber();
         me.expiry();
         me.cvv();
-//        me.trailPeriod(d.trailPeriod);
-//        subType = $(e.currentTarget).parent().find('#stype').val();
-//        me.subscriptionType(subType);
         me.creatingMessage('');
         me.disableInput(false);
+        me.errorMessage('');
+        me.successMessage('');
         $('#addCardModal').modal('show');
     };
     
     $(".modal").on("hidden.bs.modal", function(){
-        me.errorMessage('');
-        me.successMessage('');
-        me.cardNumber('');
-        me.expiry('');
-        me.cvv('');
-        me.disableInput(false);
-        me.prompt('');
-        me.headMessage('');
-        me.actionButtonText('');
-        me.showModalFooter(false);
-        me.cancelButtonDelete(false);
+//        me.errorMessage('');
+//        me.successMessage('');
+//        me.cardNumber('');
+//        me.expiry('');
+//        me.cvv('');
+//        me.disableInput(false);
+//        me.prompt('');
+//        me.headMessage('');
+//        me.actionButtonText('');
+//        me.showModalFooter(false);
+//        me.cancelButtonDelete(false);
+//        me.editCvv();
+//        me.editCardNumber('');
+//        me.editExpiry('');
     });
     
     me.addCardFunction = function(d, e){
         me.errorMessage('');
         me.successMessage('');
+        
         if(me.expiry() != null && me.expiry().indexOf('/') >= 0){
             var expirySplit = me.expiry().split('/');
             if(expirySplit[1] == null || expirySplit[1] == ""){
@@ -295,7 +335,7 @@ var SubscriptionVM = function () {
     me.deleteCard = function(d, e){
         if(me.cards().length <= 1){
             me.prompt('Cannot delete card, you should have atleast one card added to continue the subscription.');
-            me.headMessage('Card');
+            me.headMessage('Delete Card');
             me.showModalFooter(false);
             me.cancelButtonDelete(true);
             $('#actionModal').modal('show');
@@ -356,9 +396,66 @@ var SubscriptionVM = function () {
         });
     };
     
+    me.editCard = function(d, e){
+        me.editCvv();
+        me.editCardNumber('XXXX-XXXX-XXXX-'+d.last4);
+        me.editExpiry(d.exp_month+'/'+d.exp_year);
+        me.editCardId(d.id);
+        me.errorMessage('');
+        me.successMessage('');
+        me.creatingMessage('');
+        $('#editCardModal').modal('show');
+    };
+    
+    me.editCardFunction = function(d, e){
+        me.errorMessage('');
+        me.successMessage('');
+        if(me.editExpiry() !== null && me.editExpiry().indexOf('/') >= 0){
+            var editExpirySplit = me.editExpiry().split('/');
+            if(editExpirySplit[1] === null || editExpirySplit[1] === "" || editExpirySplit[0] === null || editExpirySplit[0] === ""){
+                me.errorMessage('Invalid expiry details.');
+                return false;
+            }
+        }
+        if(me.editExpiry() !== null || me.editExpiry() !== ''){
+            me.cancelButtonEdit(false);
+            $('#editCardButton').attr('disabled','disabled');
+            me.creatingMessage('Editing card please wait...');
+            $('#editCardModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            $.post('edit-card', {expiry: me.editExpiry(), cardId: me.editCardId()}, function(d){
+                me.creatingMessage('');
+                if(d.success == false){
+                    me.errorMessage(d.message);
+                    me.successMessage('');
+                    me.cancelButtonEdit(true);
+                    $('#editCardButton').removeAttr('disabled');
+                }else{
+                    me.errorMessage('');
+                    me.successMessage(d.message);
+                    setTimeout(
+                        function ()
+                        {
+                            location.reload();
+                        }, 700);
+                }
+            });
+        }else{
+            me.errorMessage('Please fill the details');
+            me.creatingMessage('');
+            me.cancelButtonEdit(true);
+            $('#editCardModal').modal({
+                backdrop: true,
+                keyboard: true
+            });
+        }
+    };
+    
     me._init = function () {
         $('body').find('#ChildVerticalTab_1').find('li').removeClass('resp-tab-active');
-        $('body').find('#ChildVerticalTab_1').find('li:nth-child(5)').addClass('resp-tab-active')
+        $('body').find('#ChildVerticalTab_1').find('li:nth-child(4)').addClass('resp-tab-active')
         me.getSubscription();
     };
     me._init();
