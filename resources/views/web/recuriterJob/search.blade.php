@@ -71,8 +71,13 @@
         </div>  
     </div>
     @endif    
+<!--loader part-->
+<div class="loader-box">
+    <div id="loader"></div>
 </div>
+<!--/loader part-->
 
+</div>
 
 @endsection
 
@@ -104,6 +109,7 @@
         });
 
         $("#range_slider").slider().on('slideStop', function(ev){
+            
             var distance    =   $('#range_slider').val();
             var url         =   window.location.href;
             var mainUrl     =   url.split("?")[0]; 
