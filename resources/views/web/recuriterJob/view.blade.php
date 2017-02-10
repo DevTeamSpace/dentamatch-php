@@ -38,7 +38,7 @@
                 ($job['is_thursday']==1)?array_push($dayArr,'Thursday'):'';
                 ($job['is_friday']==1)?array_push($dayArr,'Friday'):'';
                 ($job['is_saturday']==1)?array_push($dayArr,'Saturday'):'';
-                ($job['is_sunday']==1)?array_push($dayArr,Sunday):'';
+                ($job['is_sunday']==1)?array_push($dayArr,'Sunday'):'';
                 @endphp
                 {{ implode(', ',$dayArr) }}
             </span>
@@ -215,14 +215,14 @@
                             <input type="hidden" name="jobId" value="{{ $job['id'] }}">
                             <input type="hidden" name="seekerId" value="{{ $seeker['seeker_id'] }}">
                             @if($key==\App\Models\JobLists::HIRED)
-                            <button type="button" class="btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
-                                    data-target="#ShortListMessageBox">Message</button>
+                            <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
+                                    data-target="#ShortListMessageBox" data-seekerId="{{ $seeker['seeker_id'] }}">Message</button>
                             @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY && $seeker['avg_rating']==null)
                             <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-l-5" >Rate seeker</button>
                             @endif
                             @elseif($key==\App\Models\JobLists::SHORTLISTED)
-                            <button type="button" class="btn btn-primary pd-l-30 pd-r-30" data-toggle="modal" 
-                                    data-target="#ShortListMessageBox">Message</button>
+                            <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30" data-toggle="modal" 
+                                    data-target="#ShortListMessageBox" data-seekerId="{{ $seeker['seeker_id'] }}">Message</button>
                             <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::HIRED }}" class="btn btn-primary pd-l-30 pd-r-30 ">Hire</button>
                             @elseif($key==\App\Models\JobLists::APPLIED)
                             <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::REJECTED }}" class="btn btn-link  mr-r-5">Reject</button>
@@ -261,6 +261,7 @@
                         <textarea id="chatMsg" class="form-control messageBoxTextArea" placeholder="Type your message here"></textarea>
                     </div>
                     <div class="text-right mr-t-20 mr-b-30">
+                        <input type="hidden" id="seekerId" value="">
                         <button id="sendChat" type="submit" class="btn btn-primary pd-l-30 pd-r-30">Send</button>
                     </div>
                 </form>
@@ -273,63 +274,44 @@
 @endsection
 
 @section('js')
-<script src="http://172.16.16.188:3000/socket.io/socket.io.js"></script>
+<script src="{{ url('') }}:3000/socket.io/socket.io.js"></script>
 <script type="text/javascript">
 jQuery(function ($) {
-    var socket = io.connect('http://172.16.16.188:3000');
+    var socket = io.connect('{{ url('') }}:3000');
     console.log(socket);
-    var $nickForm = $('#setNick');
-    var $nickBox = $('#nickname');
-    var $nickError = $('#nickError');
-    var $users = $('#users');
-
-    var $messageForm = $('#send-message');
-    var $messageBox = $('#message');
-    var $chat = $('#chat');
-    socket.emit('init', {'fromId':'2','toId':'test','msg':""});
+    
+    var userId = "{{ Auth::id() }}";
+    socket.emit('init', {userId : userId, userName : "{{ $job['office_name'] }}"});
+    
+    $('.modalClick').click(function(e){
+        $('#seekerId').val($(this).data('seekerid'));
+        $('#chatMsg').val('');
+    });
             
     $('#sendChat').click(function(e){
         e.preventDefault();
         var chatMsg = $('#chatMsg').val();
+        var seekerId = $('#seekerId').val();
+        console.log(seekerId);
+        var data = {'fromId':userId,'toId':seekerId,'message':chatMsg};
         if(chatMsg!=''){
-            socket.emit('sendMsg', {'fromId':'2','toId':'420','msg':chatMsg});
+            socket.emit('sendMessage', data, function(msgObj){
+                console.log(msgObj);
+            });
         }
     });
-    socket.on('recMsg', function (data) {
+    socket.on('receiveMessage', function (data) {
         
         console.log(data);
     });
     
-    $nickForm.submit(function (e) {
-        e.preventDefault();
-        socket.emit('new user', $nickBox.val(), function (data) {
-            if (data) {
-                $('#nickWrap').hide();
-                $('#contentWrap').show();
-            } else {
-                $nickError.html('That username is already taken! Try again.');
-            }
-        });
-        $nickBox.val('');
+    //socket.emit('getHistory',{'fromId':userId,'toId':'20','page':1});
+    
+    socket.on('getMessages', function (data) {
+        
+        console.log(data);
     });
-
-    socket.on('usernames', function (data) {
-        var html = '';
-        for (var i = 0; i < data.length; i++) {
-            html += data[i] + '<br/>';
-        }
-        $users.html(html);
-    });
-
-    $messageForm.submit(function (e) {
-        e.preventDefault();
-        socket.emit('send message', $messageBox.val());
-            $messageBox.val('');
-        });
-
-        socket.on('new message', function (data) {
-        $chat.append('<b>' + data.nick + ' : </b>' + data.msg + '<br/>');
-    })
+    
 });
 
     $(function () {

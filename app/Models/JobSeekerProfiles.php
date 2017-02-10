@@ -53,7 +53,7 @@ class JobSeekerProfiles extends Model
         $obj->leftJoin('jobseeker_temp_availability',function($query) use ($job){
                 $query->on('jobseeker_temp_availability.user_id', '=', 'jobseeker_profiles.user_id')
                 ->whereIn('jobseeker_temp_availability.temp_job_date',explode(',',$job['temp_job_dates']));
-        })->groupby('jobseeker_temp_availability.user_id');
+        });
         
         $obj->select('jobseeker_profiles.first_name','jobseeker_profiles.last_name','jobseeker_profiles.profile_pic',
                     'jobseeker_profiles.is_parttime_monday','jobseeker_profiles.is_parttime_tuesday','jobseeker_profiles.is_parttime_tuesday',
@@ -62,7 +62,7 @@ class JobSeekerProfiles extends Model
         $obj->leftJoin('jobseeker_skills as skill_count',function($query) use ($job){
                 $query->on('jobseeker_profiles.user_id', '=', 'skill_count.user_id')
                 ->whereIn('skill_count.skill_id',explode(',',$job['required_skills']));
-            })->groupby('skill_count.skill_id');
+            })->groupby('skill_count.user_id');
 
         $obj->addSelect(DB::raw("count(distinct(skill_count.skill_id)) AS matched_skills")); 
 
