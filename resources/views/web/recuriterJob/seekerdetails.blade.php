@@ -68,7 +68,9 @@
                 <h6>INVITED</h6>
                 <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Invite</button>
             @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::APPLIED)
-                <h6>APPLIED</h6>
+                <h6></h6>
+                <button type="submit" class="btn btn-primary pd-l-20 pd-r-20">Reject</button>
+                <button type="submit" class="btn btn-primary pd-l-20 pd-r-20">Accept</button>
             @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::SHORTLISTED)
                 <h6>SHORTLISTED</h6>
                 <button type="submit" class="btn btn-primary pd-l-20 pd-r-20">Message</button>
