@@ -51,11 +51,9 @@
     <div class="col-sm-6 mr-b-10 col-xs-6">
         <div class="section-title">{{$seekersList['paginate']->total()}} Results Found</div>
     </div>
-    <!--
     <div class="col-sm-6 text-right mr-b-10 col-xs-6">
         <button type="button" class="btn btn-primary-outline ">Available all days </button>
     </div>
-    -->
     </div>
 
     @if(count($seekersList['paginate'])>0)
