@@ -65,3 +65,6 @@ Route::post('jobs/job-detail', 'Api\SearchApiController@postJobDetail');
 Route::post('jobs/hired-jobs', 'Api\CalendarApiController@postHiredJobsByDate');
 
 Route::post('users/availability-list', 'Api\CalendarApiController@postAvailability');
+
+Route::get('users/notification-list', 'Api\PushNotificationApiController@getNotificationlists');
+Route::post('users/notification-read', 'Api\PushNotificationApiController@PostUpdateNotification');

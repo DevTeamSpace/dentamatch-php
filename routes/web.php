@@ -68,6 +68,7 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::get('get-subscription-list', 'web\SubscriptionController@getSubscriptionList');
             Route::post('create-subscription', 'web\SubscriptionController@postCreateSubscription');
             Route::get('setting-subscription', 'web\SubscriptionController@getSettingSubscription');
+            Route::post('unsubscribe', 'web\SubscriptionController@postUnsubscribe');
             Route::get('get-subscription-details', 'web\SubscriptionController@getSubscriptionDetails');
             Route::post('add-card', 'web\SubscriptionController@postAddCard');
             Route::post('delete-card', 'web\SubscriptionController@postDeleteCard');
@@ -149,6 +150,11 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('{id}/edit', 'Cms\CertificateController@edit');
         Route::get('create', 'Cms\CertificateController@create');
         Route::post('store', 'Cms\CertificateController@store');
+    });
+    
+    Route::group(['prefix' => 'config/'], function() {
+        Route::get('create-radius', 'Cms\ConfigurationController@create');
+        Route::post('store-radius', 'Cms\ConfigurationController@store');
     });
 });
 
