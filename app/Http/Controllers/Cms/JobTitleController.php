@@ -77,6 +77,7 @@ class JobTitleController extends Controller
             $jobtitle = new JobTitles;
             $msg = trans('messages.jobtitle_added');
         }
+            $msg = 
         
         $this->validate($request, $rules);
         

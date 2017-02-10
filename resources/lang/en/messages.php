@@ -102,6 +102,8 @@ return [
     'notification_update_status' => 'Notification read successfully',
 
     'unsubscribed' => 'Unsubscribed successfylly.',
-    'no_subscription' => 'No subscription found'
+    'no_subscription' => 'No subscription found',
+    
+    'radius_update' => 'Radius updated successfully',
 
 ];

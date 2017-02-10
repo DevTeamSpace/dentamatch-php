@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Cms;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
-use App\Models\Location;
-use Yajra\Datatables\Datatables;
 use Session;
-use App\Models\Certifications;
+use App\Models\Configs;
 
 class ConfigurationController extends Controller
 {
@@ -29,7 +27,8 @@ class ConfigurationController extends Controller
      */
     public function create()
     {
-        return view('cms.config.radius');
+        $radius = Configs::select('config_data')->where('config_name','=','SEARCHRADIUS')->first();
+        return view('cms.config.radius',['radius' => $radius]);
     }
     /**
      * Store a new/update location.
@@ -39,27 +38,13 @@ class ConfigurationController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate and store the location...
         $rules = array(
-            'certificate' => array('required','unique:certifications,certificate_name'),
+            'radius' => array('required'),
         );
-        
-        if(isset($request->id)){
-            $rules['certificate'] = "Required|Unique:certifications,certificate_name,".$request->id;
-            $certification = Certifications::find($request->id);  
-            $msg = trans('messages.certification_updated');
-        }
-        else{
-            $certification = new Certifications;
-            $msg = trans('messages.certification_added');
-        }
-        
         $this->validate($request, $rules);
-        
-        $certification->certificate_name = trim($request->certificate);
-        $certification->is_active = ($request->is_active)?1:0;
-        $certification->save();
+        Configs::where('config_name', 'SEARCHRADIUS')->update(['config_data' => $request->radius]);
+        $msg = trans('messages.radius_update');
         Session::flash('message',$msg);
-        return redirect('cms/certificate/index');
+        return redirect('cms/config/create-radius');
     }
 }

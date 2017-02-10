@@ -14,7 +14,7 @@
                             <label class="col-md-4 control-label">Radius</label>
 
                             <div class="col-md-6">
-                                <input type="text"  class="form-control" name="radius" value="{{ old('radius') }}">
+                                <input type="text"  class="form-control" name="radius" value="{{ $radius->config_data }}">
 
                                 @if ($errors->has('radius'))
                                     <span class="help-block">
