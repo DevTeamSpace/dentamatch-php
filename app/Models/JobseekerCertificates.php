@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\apiResponse;
 
+use DB;
+
 class JobseekerCertificates extends Model
 {
     //
@@ -33,5 +35,19 @@ class JobseekerCertificates extends Model
             }
         }
         return $returnData;
+    }
+
+    public static function getParentJobSeekerCertificates($userId){
+        $certificates = [];
+        if($userId){
+            $certificates = static::where('jobseeker_certificates.user_id',$userId)
+                            ->leftJoin('certifications','jobseeker_certificates.certificate_id','=','certifications.id')
+                            ->select('image_path','validity_date', 'certifications.certificate_name')
+                            ->where('certifications.is_active',1)
+                            ->get()
+                            ->toArray();
+        }
+
+        return $certificates;
     }
 }

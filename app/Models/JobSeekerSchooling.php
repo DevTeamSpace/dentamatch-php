@@ -3,6 +3,7 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DB;
 
 class JobSeekerSchooling extends Model
 {
@@ -63,6 +64,24 @@ class JobSeekerSchooling extends Model
         $list = $query->get()->toArray();
 
         return $list;
+    }
+
+    public static function getParentJobSeekerSchooling($userId){
+        $schoolings = array();
+        if($userId){
+            $schoolings = static::where('jobseeker_schoolings.user_id',$userId)
+                            ->leftJoin('schoolings','jobseeker_schoolings.schooling_id','=','schoolings.id')
+                            ->leftJoin('schoolings as school_title','schoolings.parent_id','=','school_title.id')
+                            ->select('jobseeker_schoolings.other_schooling','jobseeker_schoolings.year_of_graduation','schoolings.school_name','school_title.school_name as school_title')
+                            ->groupby('schoolings.parent_id')
+                            ->whereNotNull('schoolings.parent_id')
+                            ->where('schoolings.is_active', 1)
+                            ->addSelect(DB::raw("group_concat(schoolings.school_name SEPARATOR ', ') AS school_name"))
+                            ->get()
+                            ->toArray();
+        }
+
+        return $schoolings;
     }
 
 }

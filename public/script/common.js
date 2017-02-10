@@ -143,6 +143,21 @@ $(function () {
         ]
     });
     
+    $('#certificate_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'certificate/list',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'certificate_name', name: 'certificate_name',searchable:true},
+            {data: 'active', name: 'active',searchable:false},
+            {data: 'action', name: 'action',searchable:false}
+        ]
+    });
+    
     $('#coupon_list').DataTable({
         processing: true,
         serverSide: true,

@@ -17,12 +17,18 @@ class SubscriptionController extends Controller {
     }
 
     public function getSubscription(){
-        return view('web.subscription');
+        $recruiter = RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
+        if($recruiter['is_subscribed'] == 0){
+            $result = view('web.subscription');
+        }else{
+            $result = redirect('setting-subscription');
+        }
+        return $result;
     }
     
     public function getSubscriptionList(){
         $recruiterOffice = RecruiterOffice::getAllOffices();
-        $subscription = [];
+        $subscription['data'] = [];
         foreach ($recruiterOffice as $office){
             if($office['free_trial_period'] != 0){
                 $subscription['data'] = $office;
@@ -34,17 +40,40 @@ class SubscriptionController extends Controller {
     
     public function postCreateSubscription(Request $request){
         try{
-            $createCustomer = $this->createCustomer();
-            if($createCustomer['success'] == true){
-                $addCard = $this->addCardForSubscription($request->all(), $createCustomer['data']['id']);
-                $createSubscription = $this->addUserTOSubscription($createCustomer['data']['id'], $request->subscriptionType, $request->trailPeriod);
-                $this->response['success'] = true;
-                $this->response['message'] = trans('messages.user_subscribed');
+            $recruiter = RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
+            if($recruiter['customer_id'] == null){
+                $createCustomer = $this->createCustomer();
+                if($createCustomer['success'] == true){
+                    $customer = $createCustomer['data']['id'];
+                }else{
+                    $customer = null;
+                    $this->response['success'] = false;
+                    $this->response['message'] = $createCustomer['message'];
+                    $this->response['data'] = null;
+                }
+            }else{
+                $customer = $recruiter['customer_id'];
+            }
+            if($customer != null){
+                $addCard = $this->addCardForSubscription($request->all(), $customer);
+                if($addCard['success'] == true){
+                    $createSubscription = $this->addUserTOSubscription($customer, $request->subscriptionType, $request->trailPeriod);
+                    RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 1, 'free_period' => $request->trailPeriod]);
+                    $this->response['success'] = true;
+                    $this->response['message'] = trans('messages.user_subscribed');
+                }else{
+                    $this->response['success'] = false;
+                    $this->response['data'] = null;
+                    $this->response['message'] = $addCard['message'];
+                }
             }else{
                 $this->response['success'] = false;
+                $this->response['data'] = null;
                 $this->response['message'] = trans('messages.cannot_subscribe');
             }
         } catch (\Exception $e) {
+            $this->response['success'] = false;
+            $this->response['data'] = null;
             $this->response['message'] = $e->getMessage();
         }
         return $this->response;
@@ -69,12 +98,43 @@ class SubscriptionController extends Controller {
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.user_added_to_subscription');
         } catch (\Exception $e) {
+            $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
         return $this->response;
     }
     
     public function postAddCard(Request $request){
+        try{
+            $customerId = RecruiterProfile::where(['user_id' => Auth::user()->id])->pluck('customer_id');
+            $expiry = explode('/', $request->expiry);
+            $month = $expiry[0];
+            $year = $expiry[1];
+            $cardToken = \Stripe\Token::create(array(
+                            "card" => array(
+                              "number" => $request->cardNumber,
+                              "exp_month" => $month,
+                              "exp_year" => $year,
+                              "cvc" => $request->cvv
+                            )
+                          ));
+            if(isset($cardToken['id'])){
+                $customer = \Stripe\Customer::retrieve($customerId[0]);
+                $card = $customer->sources->create(array(
+                    "source" => $cardToken['id']
+                ));
+                $this->response['success'] = true;
+                $this->response['message'] = trans('messages.card_added');
+            }else{
+                $this->response['success'] = false;
+                $this->response['data'] = null;
+                $this->response['message'] = trans('messages.cannot_add_card');
+            }
+        } catch (Exception $ex) {
+            $this->response['success'] = false;
+            $this->response['message'] = $e->getMessage();
+        }
+        return $this->response;
     }
     
     public function addCardForSubscription($cardDetails, $customerId){
@@ -90,14 +150,22 @@ class SubscriptionController extends Controller {
                               "cvc" => $cardDetails['cvv']
                             )
                           ));
-            $customer = \Stripe\Customer::retrieve($customerId);
-            $card = $customer->sources->create(array(
-                "source" => $cardToken['id']
-            ));
-            $this->response['success'] = true;
-            $this->response['message'] = trans('messages.card_added');
+            if(isset($cardToken['id'])){
+                $customer = \Stripe\Customer::retrieve($customerId);
+                $card = $customer->sources->create(array(
+                    "source" => $cardToken['id']
+                ));
+                $this->response['success'] = true;
+                $this->response['message'] = trans('messages.card_added');
+            }else{
+                $this->response['success'] = false;
+                $this->response['data'] = null;
+                $this->response['message'] = trans('messages.cannot_add_card');
+            }
         } catch (\Exception $e) {
-            $this->response = $e->getMessage();
+            $this->response['success'] = false;
+            $this->response['data'] = null;
+            $this->response['message'] = $e->getMessage();
         }
         return $this->response;
     }
@@ -118,27 +186,69 @@ class SubscriptionController extends Controller {
         }
         return $this->response;
     }
-
-
-    public function getStripeConnect(){
-        if(isset($_REQUEST['code'])){
-            $client = new \GuzzleHttp\Client();
-            $authCredentials = $client->post('https://connect.stripe.com/oauth/token', [
-                "form_params" => [
-                    "client_secret" => env('STRIPE_SECRET_KEY'),
-                    "code" => $_REQUEST['code'],
-                    "grant_type" => "authorization_code",
-                    "client_id" => env('STRIPE_CLIENT_ID')
-                ]
-            ]);
-            $result = json_decode($authCredentials->getBody()->getContents());
-            if(isset($result->stripe_user_id)){
-                RecruiterProfile::updateStripeToken($result->stripe_user_id);
-                $customerId = RecruiterProfile::where('user_id', Auth::user()->id)->first();
-            }
-        }else{
-            $response = redirect('stripe/errors');
+    
+    public function getSettingSubscription(){
+        return view('web.setting-subscription');
+    }
+    
+    public function getSubscriptionDetails(){
+        try{
+            $this->fetchSubscription(Auth::user()->id);
+        } catch (\Exception $e) {
+            $this->response['success'] = false;
+            $this->response['message'] = $e->getMessage();
         }
-        return $response;
+        return $this->response;
+    }
+    
+    private function fetchSubscription($userId){
+        try{
+            $customerId = RecruiterProfile::where(['user_id' => $userId])->pluck('customer_id');
+            $customerWithSubscription = $this->fetchUser($customerId[0]);
+            if($customerWithSubscription['success'] == false){
+                $this->response['success'] = false;
+                $this->response['data'] = null;
+                $this->response['message'] = trans('messages.no_customer');
+            }else{
+                $this->response['success'] = true;
+                $this->response['data'] = $customerWithSubscription;
+                $this->response['message'] = trans('messages.customer_fetched');
+            }
+        } catch (\Exception $e) {
+            $this->response['success'] = false;
+            $this->response['message'] = $e->getMessage();
+        }
+        return $this->response;
+    }
+    
+    private function fetchUser($customerId){
+        try{
+            $customer = \Stripe\Customer::retrieve($customerId);
+            $this->response['success'] = true;
+            $this->response['data'] = $customer;
+            $this->response['message'] = trans('messages.customer_fetched');
+        } catch (\Exception $e) {
+            $this->response['success'] = false;
+            $this->response['message'] = $e->getMessage();
+        }
+        return $this->response;
+    }
+    
+    public function postDeleteCard(Request $request){
+        try{
+            $customerId = RecruiterProfile::where(['user_id' => Auth::user()->id])->pluck('customer_id');
+            $customer = \Stripe\Customer::retrieve($customerId[0]);
+            if($customer->sources->retrieve($request->cardId)->delete()){
+                $this->response['success'] = true;
+                $this->response['message'] = trans('messages.card_deleted');
+            }else{
+                $this->response['success'] = false;
+                $this->response['message'] = trans('messages.no_card');
+            }
+        } catch (\Exception $e) {
+            $this->response['success'] = false;
+            $this->response['message'] = $e->getMessage();
+        }
+        return $this->response;
     }
 }

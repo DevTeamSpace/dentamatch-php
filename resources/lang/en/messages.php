@@ -81,11 +81,19 @@ return [
     
     'officetype_added' => 'Office type added successfully',
     'officetype_updated' => 'Office type updated successfully',
+    
+    'certification_added' => 'Certification added successfully',
+    'certification_updated' => 'Certification updated successfully',
 
     'recruiter_blocked'=>'Recruiter Blocked',
-    'user_subscribed' => 'User subscribed successfully.',
+    'user_subscribed' => 'Subscribed successfully.',
     'cannot_subscribe' => 'Cannot subscribe please contact admin.',
     'user_added_to_subscription' => 'User added to subscription successfully.',
     'customer_created' => 'Customer Created successfully.',
     'card_added' => 'Card added successfully.',
+    'cannot_add_card' => 'Cannot add card.',
+    'customer_fetched' => 'Customer fetched from stripe.',
+    'no_customer' => 'No customer found.',
+    'card_deleted' => 'Card deleted successfully.',
+    'no_card' => 'No card found.'
 ];

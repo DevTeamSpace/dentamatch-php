@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use DB;
+
 class JobSeekerSkills extends Model
 {
     const ACTIVE = 1;
@@ -32,7 +34,47 @@ class JobSeekerSkills extends Model
 
         return $list;
     }
+
+    public static function getAllJobSeekerSkills($userIds){
+        $result = [];
+            
+        if($userIds){
+            $allSkills      =   JobSeekerSkills::whereIn('jobseeker_skills.user_id',$userIds)
+                            ->where('skills.is_active', JobSeekerSkills::ACTIVE)
+                            ->where('skills.parent_id','!=',0)
+                            ->leftJoin('skills','jobseeker_skills.skill_id','=','skills.id')
+                            ->leftJoin('skills as skill_title','skills.parent_id','=','skill_title.id')
+                            ->select('jobseeker_skills.other_skill','skills.skill_name','skill_title.skill_name as skill_title','jobseeker_skills.user_id', 'skills.parent_id')
+                            ->get();
+            foreach ($allSkills as $key => $value) {
+                $innerArray = [];
+                $result[$value->user_id][$value->parent_id]['title'] = $value->skill_title;
+                $result[$value->user_id][$value->parent_id]['skills'][] = $value->skill_name;
+            }    
+        }
+        return $result;
+                         
+    }
     
+    public static function getParentJobSeekerSkills($userId){
+        $skills = array();
+        if ($userId) {
+            $skills     = static::where('jobseeker_skills.user_id',$userId)
+                            ->where('skills.is_active', static::ACTIVE)
+                            ->whereNotNull('skills.parent_id')
+                            ->leftJoin('skills','jobseeker_skills.skill_id','=','skills.id')
+                            ->leftJoin('skills as skill_title','skills.parent_id','=','skill_title.id')
+                            ->select('jobseeker_skills.other_skill','skills.skill_name','skill_title.skill_name as skill_title')
+                            ->groupby('skills.parent_id')
+                            ->orderBy('skills.parent_id','desc')
+                            ->addSelect(DB::raw("group_concat(skills.skill_name SEPARATOR ', ') AS skill_name"))
+                            ->get()
+                            ->toArray(); 
+        }
+
+        return $skills;
+    }
+
     public static function getJobseekerOtherSkills($userId)
     {
         $schoolId = [];

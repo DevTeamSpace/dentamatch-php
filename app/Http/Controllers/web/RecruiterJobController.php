@@ -10,8 +10,13 @@ use App\Models\JobTemplates;
 use App\Models\TempJobDates;
 use App\Models\TemplateSkills;
 use App\Models\JobLists;
+use App\Models\JobTitles;
 use App\Models\RecruiterOffice;
 use App\Models\ChatUserLists;
+use App\Models\JobSeekerProfiles;
+use App\Providers\NotificationServiceProvider;
+use App\Models\Device;
+
 use DB;
 
 class RecruiterJobController extends Controller
@@ -41,6 +46,29 @@ class RecruiterJobController extends Controller
         
     }
     
+    public function searchSeekers(Request $request,$jobId){
+        try{
+            $searchData = $request->all();
+            
+            $distance = $request->get('distance');
+            if(empty($distance))
+                $distance = JobSeekerProfiles::DISTANCE;
+            
+            $searchData['distance'] = $distance;
+            $jobDetails     = RecruiterJobs::getRecruiterJobDetails($jobId);
+            $seekersList    = JobSeekerProfiles::getJobSeekerProfiles($jobDetails,$searchData);
+            //dd($seekersList['paginate']);
+
+            if ($request->ajax()) {
+                return view('web.recuriterJob.search', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData])->render();  
+            }
+
+            return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData'));
+        } catch (\Exception $e) {
+            return view('web.error.',["message" => $e->getMessage()]);
+        }
+    }
+
     public function saveOrUpdate(Request $request){
         $this->validate($request, [
                 'templateId' => 'required',
@@ -120,6 +148,7 @@ class RecruiterJobController extends Controller
             return view('web.error.',["message" => $e->getMessage()]);
         }
     }
+
     
     public function updateStatus(Request $request) {
         $this->validate($request, [
@@ -139,10 +168,60 @@ class RecruiterJobController extends Controller
                     $userChat->seeker_id = $jobData->seeker_id;
                     $userChat->save();
                 }
+                $this->sendPushUser($requestData['appliedStatus'],Auth::user()->id,$jobData->seeker_id,$requestData['jobId']);
                 return redirect('job/details/'.$requestData['jobId']);
             }
         } catch (\Exception $e) {
             return view('web.error.',["message" => $e->getMessage()]);
         }
+    }        
+
+
+    public function jobSeekerDetails($seekerId, $jobId){
+        try{
+            $this->viewData['job'] = RecruiterJobs::getRecruiterJobDetails($jobId);
+
+            $seekerDetails = JobSeekerProfiles::getJobSeekerDetails($seekerId,$this->viewData['job']);
+            
+            return view('web.recuriterJob.seekerdetails',compact('seekerDetails'));
+
+        } catch (\Exception $e) {
+            return view('web.error.',["message" => $e->getMessage()]);
+        }
+    }
+    
+    public function sendPushUser($jobstatus,$sender,$receiver,$jobId){
+        $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
+        if($jobstatus == JobLists::SHORTLISTED){
+            $notificationData = array(
+                    'message' => $jobDetails['office_name']." has accepted your invitation for ".$jobDetails['jobtitle_name'],
+                    'notification_title'=>'User shortlisted',
+                    'sender_id' => $sender,
+                    'type' => 1
+                );
+        } else if($jobstatus == JobLists::HIRED){
+            $notificationData = array(
+                    'message' => "You have been hired for  ".$jobDetails['jobtitle_name'],
+                    'notification_title'=>'User hired',
+                    'sender_id' => $sender,
+                    'type' => 1
+                );
+        }
+        
+        $userId = $receiver;
+
+        $notificationData['receiver_id'] = $userId;
+        $params['data'] = $notificationData;
+        $params['jobDetails'] = $jobDetails;
+
+        $deviceModel = Device::getDeviceToken($userId);
+        if($deviceModel) {
+            $this->info($userId);
+            NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['message'], $params);
+
+            $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['message']];
+            Notification::createNotification($data);
+        }
+        
     }
 }

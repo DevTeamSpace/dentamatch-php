@@ -23,4 +23,11 @@ class JobTitles extends Model
         }
         return $obj->get()->toArray();
     }
+
+    public static function getTitle($titleId){
+        $obj = JobTitles::select('jobtitle_name');
+        $obj->where('id',$titleId);
+        $obj->where('is_active',JobTitles::ACTIVE);
+        return $obj->get()->toArray();
+    }
 }

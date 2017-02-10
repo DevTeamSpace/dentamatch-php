@@ -73,7 +73,7 @@
             <div class="template-job-information-right j-i-m-r">
                 <div class="job-information-detail">
                     <div class="search-seeker">
-                        <a href="{{ url('search/job',[$job['job_type'],$job['job_title_id']]) }}" class="btn btn-primary pd-l-30 pd-r-20 btn-block">Search Seekers</a>
+                        <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-20 btn-block">Search Seekers</a>
                         @if(count($seekerList)==0)
                         <a href="{{ url('job/edit',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-20 btn-block">Edit</a>
                         @endif
