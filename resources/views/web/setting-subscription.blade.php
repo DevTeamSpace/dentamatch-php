@@ -204,6 +204,7 @@ var SubscriptionVM = function () {
                             me.cards.push(d.data.data.sources.data[i]);
                         }
                         me.allData.push(me.subscription()[0], me.cards()[0]);
+                        break;
                     }else{
                         me.noSubscription(true);
                         me.visibleSubcription(false);
