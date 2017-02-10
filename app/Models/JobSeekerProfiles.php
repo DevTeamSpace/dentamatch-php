@@ -26,25 +26,25 @@ class JobSeekerProfiles extends Model
         }
         elseif($job['job_type']==RecruiterJobs::PARTTIME){
             if($job['is_monday'])
-                $obj->orWhere('jobseeker_profiles.is_parttime_monday',1);
+                $obj->where('jobseeker_profiles.is_parttime_monday',1);
 
             if($job['is_tuesday'])
-                $obj->orWhere('jobseeker_profiles.is_parttime_tuesday',1);
+                $obj->where('jobseeker_profiles.is_parttime_tuesday',1);
 
             if($job['is_wednesday'])
-                $obj->orWhere('jobseeker_profiles.is_parttime_wednesday',1);
+                $obj->where('jobseeker_profiles.is_parttime_wednesday',1);
 
             if($job['is_thursday'])
-                $obj->orWhere('jobseeker_profiles.is_parttime_thursday',1);
+                $obj->where('jobseeker_profiles.is_parttime_thursday',1);
 
             if($job['is_friday'])
-                $obj->orWhere('jobseeker_profiles.is_parttime_friday',1);
+                $obj->where('jobseeker_profiles.is_parttime_friday',1);
 
             if($job['is_saturday'])
-                $obj->orWhere('jobseeker_profiles.is_parttime_saturday',1);
+                $obj->where('jobseeker_profiles.is_parttime_saturday',1);
 
             if($job['is_sunday'])
-                $obj->orWhere('jobseeker_profiles.is_parttime_sunday',1);
+                $obj->where('jobseeker_profiles.is_parttime_sunday',1);
         }
         elseif($job['job_type']==RecruiterJobs::TEMPORARY){
             $obj->leftJoin('jobseeker_temp_availability',function($query) use ($job){
