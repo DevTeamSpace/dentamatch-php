@@ -1060,5 +1060,56 @@ paths:
   
       tags:
         - Chat
+        
+  users/notification-list:
+    get:
+      summary: Notification listing
+      description: User notification list
+      responses: 
+          200:
+            description: User notification list
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: page
+          in: formData
+          description: recruiter id
+          type: integer
+  
+      tags:
+        - Notification
+        
+        
+  users/notification-read:
+    post:
+      summary: Read notification
+      description: Read Notification
+      responses: 
+          200:
+            description: Read notification list
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: notificationId
+          in: formData
+          description: notificationId 
+          type: integer
+  
+      tags:
+        - Notification
 
 
