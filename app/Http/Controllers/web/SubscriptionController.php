@@ -30,7 +30,7 @@ class SubscriptionController extends Controller {
         $recruiterOffice = RecruiterOffice::getAllOffices();
         $subscription['data'] = [];
         $customerId = RecruiterProfile::where(['user_id' => Auth::user()->id])->pluck('customer_id');
-        if($customerId == null){
+        if($customerId[0] == null){
             $subscription['customer'] = [];
         }else{
             $customer = \Stripe\Customer::retrieve($customerId[0]);
