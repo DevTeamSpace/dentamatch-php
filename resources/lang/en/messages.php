@@ -95,5 +95,7 @@ return [
     'customer_fetched' => 'Customer fetched from stripe.',
     'no_customer' => 'No customer found.',
     'card_deleted' => 'Card deleted successfully.',
-    'no_card' => 'No card found.'
+    'no_card' => 'No card found.',
+    'unsubscribed' => 'Unsubscribed successfylly.',
+    'no_subscription' => 'No subscription found'
 ];
