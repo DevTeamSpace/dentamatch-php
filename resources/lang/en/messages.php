@@ -103,7 +103,7 @@ return [
 
     'unsubscribed' => 'Unsubscribed successfylly.',
     'no_subscription' => 'No subscription found',
-    
     'radius_update' => 'Radius updated successfully',
-
+    'cannot_delete_card' => 'Atlease one card should be added to continue the subscription.',
+    'card_edidted' => 'Card edidted successfully.'
 ];

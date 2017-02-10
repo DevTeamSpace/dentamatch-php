@@ -1511,3 +1511,13 @@ strong {
         padding-left: 0;
     }
 }
+
+@media only screen and (max-width: 480px) {}
+
+.dev_edit_button{
+    margin-right: 17px !important;
+}
+
+.dev_card_box{
+    margin-bottom: 10px;
+}
