@@ -159,6 +159,7 @@ h6 {
 
 .bg-green {
     background: #05c410 !important;
+    ;
 }
 
 .bg-ember {
@@ -167,10 +168,12 @@ h6 {
 
 .bg-red {
     background: #ff6565 !important;
+    ;
 }
 
 .drk-green {
     background: #45b1b2 !important;
+    ;
 }
 
 .label-success {
@@ -1349,6 +1352,53 @@ strong {
 
 .message-textarea .input-group-btn > btn {
     border-radius: 4px !important;
+}
+
+
+/*-----------Loader-------*/
+
+.loader-box {
+    background: rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+#loader {
+    border: 8px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 8px solid #3498db;
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    -webkit-transform: translate(-25%, -50%);
+    -moz-transform: translate(-25%, -50%);
+    transform: translate(-25%, -50%);
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 @media only screen and (min-width: 768px) {

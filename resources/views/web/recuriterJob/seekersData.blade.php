@@ -4,17 +4,18 @@
 <div class="media jobCatbox">
     <div class="media-left ">
         <div class="img-holder ">
-          <img class="media-object img-circle" src="{{ url('image/66/66/?src=' .$seeker['profile_pic']) }}" alt="...">
-          @if($seeker['is_favourite'] != null)
-            <span class="star star-fill"></span>
-          @endif  
+            <img class="media-object img-circle" src="{{ url("image/66/66/?src=" .$seeker['profile_pic']) }}" alt="...">
+            @if($jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+            <span class="star {{ ($seeker['is_favourite']==null)?'star-empty':'star-fill' }}"></span>
+            @endif
         </div>
     </div>
     <div class="media-body ">
         <div class="template-job-information mr-t-15">
           <div class="template-job-information-left">
             <h4 class="pull-left"><a href="{{ url('job/seekerdetails/'.$seeker['id'].'/'.$jobDetails['id']) }}">{{$seeker['first_name'].' '.$seeker['last_name']}}</a></h4>
-            <span class="mr-l-5 dropdown date_drop">
+            @if($jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+                <span class="mr-l-5 dropdown date_drop">
                 @if(round($seeker['avg_rating'],0) > 3)
                     @php $avgrateClass = 'bg-green' @endphp
                 @elseif(round($seeker['avg_rating'],0) == 3)
@@ -89,6 +90,7 @@
                   </li>
                 </ul>
               </span>
+            @endif  
           </div>
           <div class="template-job-information-right">
             <span >{{round($seeker['distance'],0)}} miles away</span>
@@ -154,4 +156,4 @@
 <!--/search preference list-->
 @endforeach 
 
-{{ $seekersList['paginate']->appends(['distance' => $searchData['distance'] ])->links() }}
+{{ $seekersList['paginate']->appends(['distance' => $searchData['distance'],'avail_all' => $searchData['avail_all']])->links() }}

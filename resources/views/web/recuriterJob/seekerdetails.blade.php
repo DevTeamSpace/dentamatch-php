@@ -137,7 +137,7 @@
                 @endif
                 
                 <div class="searchResultHeading pd-t-20">
-                    <h5>AFFILAATIONS</h5>
+                    <h5>AFFILIATIONS</h5>
                     <P>{{$seekerDetails['affiliations']}}</P>
                 </div>
 

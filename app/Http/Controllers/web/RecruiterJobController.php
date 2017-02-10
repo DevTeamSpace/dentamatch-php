@@ -52,10 +52,14 @@ class RecruiterJobController extends Controller
             $searchData = $request->all();
             
             $distance = $request->get('distance');
+            $availAll = $request->get('avail_all');
             if(empty($distance))
                 $distance = JobSeekerProfiles::DISTANCE;
-            
-            $searchData['distance'] = $distance;
+            if(empty($availAll)) {
+                $availAll = 0;
+            }
+            $searchData['distance']     = $distance;
+            $searchData['avail_all']    = $availAll;
             $jobDetails     = RecruiterJobs::getRecruiterJobDetails($jobId);
             $seekersList    = JobSeekerProfiles::getJobSeekerProfiles($jobDetails,$searchData);
             //dd($seekersList['paginate']);

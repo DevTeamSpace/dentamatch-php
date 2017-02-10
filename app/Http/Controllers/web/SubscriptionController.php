@@ -251,4 +251,22 @@ class SubscriptionController extends Controller {
         }
         return $this->response;
     }
+    
+    public function postUnsubscribe(Request $request){
+        try{
+            $sub = \Stripe\Subscription::retrieve($request->subscriptionId);
+            if($sub->cancel(array("at_period_end" => true ))){
+                RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 0]);
+                $this->response['success'] = true;
+                $this->response['message'] = trans('messages.unsubscribed');
+            }else{
+                $this->response['success'] = false;
+                $this->response['message'] = trans('messages.no_subscription');
+            }
+        } catch (\Exception $e) {
+            $this->response['success'] = false;
+            $this->response['message'] = trans('messages.no_subscription');
+        }
+        return $this->response;
+    }
 }

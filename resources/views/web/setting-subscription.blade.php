@@ -16,7 +16,7 @@
                         </div>
                         <div class="tabSubscriptionContainer">
                             <div class="title pull-left pd-b-20">Membership</div>	
-                            <a href="#" class="subBtn pull-right">Unsubscribe</a>	
+                            <a class="pull-right" data-bind="click: $root.unsubscribePlan">Unsubscribe</a>	
                             <div class="clearfix"></div>
                             <div class="table-responsive">
                                 <table class="table customSubscriptionTable">
@@ -27,7 +27,7 @@
                                         </tr>
                                         <tr>
                                             <td>Subscription Plan</td>
-                                            <th>Half Yearly</th>	
+                                            <th data-bind="text: subscriptionPlan"></th>	
                                         </tr>
                                         <tr>
                                             <td>Activated On</td>
@@ -156,7 +156,7 @@ var SubscriptionVM = function () {
     me.creatingMessage = ko.observable('');
     me.disableInput = ko.observable(false);
     me.subscriptionAmount = ko.observable();
-    me.subscriptionPlan = ko.observable();
+    me.subscriptionPlan = ko.observable('');
     me.subscriptionActivation = ko.observable();
     me.subscriptionAutoRenewal = ko.observable();
     me.subscription = ko.observableArray([]);
@@ -177,25 +177,40 @@ var SubscriptionVM = function () {
         }
         me.isLoading(true);
         $.get('get-subscription-details', {}, function (d) {
+            console.log(d);
             me.isLoadingSubscription(false);
-            if(d.success == false){
+            if(d.success == false || d.data.data.subscriptions.data.length == 0){
                 me.noSubscription(true);
                 me.visibleSubcription(false);
                 me.noSubscriptionDetails('No subscription availed.');
             }else{
-                me.noSubscription(false);
-                me.visibleSubcription(true);
-                me.subscriptionAmount("$"+(String)(d.data.data.subscriptions.data[0].plan.amount).slice(0,2));
-                me.subscriptionActivation(moment(Date('Y-m-d',d.data.data.subscriptions.data[0].created)).format('LL'));
-                me.subscriptionAutoRenewal(moment(Date('Y-m-d',d.data.data.subscriptions.data[0].current_period_end)).format('LL'));
-                me.subscription.push(d.data.data.subscriptions.data[0]);
-                if(d.data.data.sources.data.length >= 2){
-                    me.addCardVisible(false);
+                for(i in d.data.data.subscriptions.data){
+                    if(d.data.data.subscriptions.data[i].cancel_at_period_end == false){
+                        me.noSubscription(false);
+                        me.visibleSubcription(true);
+                        me.subscriptionAmount("$"+(String)(d.data.data.subscriptions.data[0].plan.amount).slice(0,2));
+                        me.subscriptionActivation(moment(Date('Y-m-d',d.data.data.subscriptions.data[0].created)).format('LL'));
+                        me.subscriptionAutoRenewal(moment(Date('Y-m-d',d.data.data.subscriptions.data[0].current_period_end)).format('LL'));
+                        me.subscription.push(d.data.data.subscriptions.data[0]);
+                        if(d.data.data.sources.data.length >= 2){
+                            me.addCardVisible(false);
+                        }
+                        if(d.data.data.subscriptions.data[0].plan.interval_count == 6){
+                            me.subscriptionPlan('Half Yearly');
+                        }else{
+                            me.subscriptionPlan('Yearly');
+                        }
+                        for(i in d.data.data.sources.data){
+                            me.cards.push(d.data.data.sources.data[i]);
+                        }
+                        me.allData.push(me.subscription()[0], me.cards()[0]);
+                        break;
+                    }else{
+                        me.noSubscription(true);
+                        me.visibleSubcription(false);
+                        me.noSubscriptionDetails('No subscription availed.');
+                    }
                 }
-                for(i in d.data.data.sources.data){
-                    me.cards.push(d.data.data.sources.data[i]);
-                }
-                me.allData.push(me.subscription()[0], me.cards()[0]);
             }
         }).error(function (xhr, e) {
             me.isLoading(false);
@@ -314,6 +329,31 @@ var SubscriptionVM = function () {
                 });
             });
         }
+    };
+    
+    me.unsubscribePlan = function(d, e){
+        me.prompt('Do you want to unsubscribe ?');
+        me.headMessage('Unsubscribe');
+        me.showModalFooter(true);
+        me.cancelButtonDelete(true);
+        me.actionButtonText('Unsubscribe');
+        $('#actionModal').modal('show');
+        $('#actionButton').on('click', function(){
+            me.prompt('Unsubscribing please wait.');
+            me.cancelButtonDelete(false);
+            me.showModalFooter(false);
+            subscriptionId = d.subscription()[0].id;
+            $.post('unsubscribe', {subscriptionId: subscriptionId}, function(d){
+                if(d.success == true){
+                    me.prompt('Unsubscribed successfully.');
+                }else{
+                    me.prompt(d.message);
+                }
+                setTimeout( function(){
+                    location.reload();
+                }, 700);
+            });
+        });
     };
     
     me._init = function () {
