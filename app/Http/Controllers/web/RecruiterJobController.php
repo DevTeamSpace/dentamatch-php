@@ -16,6 +16,7 @@ use App\Models\ChatUserLists;
 use App\Models\JobSeekerProfiles;
 use App\Providers\NotificationServiceProvider;
 use App\Models\Device;
+use App\Models\Notification;
 
 use DB;
 
@@ -216,7 +217,7 @@ class RecruiterJobController extends Controller
 
         $deviceModel = Device::getDeviceToken($userId);
         if($deviceModel) {
-            $this->info($userId);
+            //$this->info($userId);
             NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['message'], $params);
 
             $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['message']];
