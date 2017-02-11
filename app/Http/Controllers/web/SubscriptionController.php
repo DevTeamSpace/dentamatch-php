@@ -21,7 +21,7 @@ class SubscriptionController extends Controller {
         if($recruiter['is_subscribed'] == 0){
             $result = view('web.subscription');
         }else{
-            $result = redirect('setting-subscription');
+            $result = redirect('jobtemplates');
         }
         return $result;
     }
