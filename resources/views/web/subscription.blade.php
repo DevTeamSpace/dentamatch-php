@@ -70,11 +70,11 @@
     </div>
 </div>
     <div id="addCardModal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-dialog custom-modal modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bind="visible: cancelButton"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title text-center">Add Card</h4>
+                  <h4 class="modal-title">Add Card</h4>
                 </div>
                 <form id="addCardForm" data-bind="submit: $root.addCardFunction">
                 <div class="modal-body">
@@ -94,10 +94,10 @@
                         <label class="sr-only" for="cvv">CVV</label>
                         <input type="number" class="form-control" id="cvv" placeholder="CVV" data-bind="value: cvv, disable: disableInput">
                     </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="submit" id="addCardButton" class="btn btn-primary">Add Card</button>
+                    <div class="mr-t-20 mr-b-30 dev-pd-l-13p">
+                        <button type="button" class="btn btn-link mr-r-5" data-dismiss="modal">Close</button>
+                        <button type="submit" id="addCardButton" class="btn btn-primary pd-l-30 pd-r-30">Add Card</button>
+                    </div>
                 </div>
                   </form>
             </div><!-- /.modal-content -->
@@ -105,22 +105,22 @@
     </div><!-- /.modal -->
     
     <div id="subscribeModal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-dialog custom-modal modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bind="visible: cancelButtonSubscribe"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title text-center">Subscribe</h4>
+                  <h4 class="modal-title">Subscribe</h4>
                 </div>
                 <div class="modal-body">
-                  <p class="text-center" style="color: blue" data-bind="text: creatingMessage"></p>
-                  <p class="text-center" style="color: red" data-bind="text: errorMessage"></p>
-                  <p class="text-center" style="color: green;" data-bind="text: successMessage"></p>
-                  <p class="text-center">You have already added card please continue to subscribe.</p>
-                  <p class="text-center">* You can manage your cards once you login.</p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="submit" id="cardAlreadySubscribe" class="btn btn-primary" data-bind="click: cardAlreadySubscribe">Subscribe</button>
+                    <p class="text-center" style="color: blue" data-bind="text: creatingMessage"></p>
+                    <p class="text-center" style="color: red" data-bind="text: errorMessage"></p>
+                    <p class="text-center" style="color: green;" data-bind="text: successMessage"></p>
+                    <p class="text-center">You have already added card please continue to subscribe.</p>
+                    <p class="text-center">* You can manage your cards once you login.</p>
+                    <div class="mr-t-20 mr-b-30 dev-pd-l-13p">
+                        <button type="button" class="btn btn-link mr-r-5" data-dismiss="modal">Close</button>
+                        <button type="submit" id="cardAlreadySubscribe" class="btn btn-primary pd-l-30 pd-r-30" data-bind="click: cardAlreadySubscribe">Subscribe</button>
+                    </div>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
