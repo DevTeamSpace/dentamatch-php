@@ -8,6 +8,11 @@ use Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RecruiterProfile;
 use App\Models\RecruiterOffice;
+use App\Http\Requests\CreateSubscriptionRequest;
+use App\Http\Requests\AddCardRequest;
+use App\Http\Requests\DeleteCardRequest;
+use App\Http\Requests\UnsubscribeRequest;
+use App\Http\Requests\EditCardRequest;
 
 class SubscriptionController extends Controller {
     private $response = [];
@@ -45,10 +50,10 @@ class SubscriptionController extends Controller {
         return $subscription;
     }
     
-    public function postCreateSubscription(Request $request){
+    public function postCreateSubscription(CreateSubscriptionRequest $request){
         try{
             $recruiter = RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
-            if($request->cardExist == true){
+            if($request->cardExist === true){
                 $createSubscription = $this->addUserTOSubscription($recruiter['customer_id'], $request->subscriptionType, $request->trailPeriod);
                 RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 1, 'free_period' => $request->trailPeriod]);
                 $this->response['success'] = true;
@@ -118,7 +123,7 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
-    public function postAddCard(Request $request){
+    public function postAddCard(AddCardRequest $request){
         try{
             $customerId = RecruiterProfile::where(['user_id' => Auth::user()->id])->pluck('customer_id');
             $expiry = explode('/', $request->expiry);
@@ -252,7 +257,7 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
-    public function postDeleteCard(Request $request){
+    public function postDeleteCard(DeleteCardRequest $request){
         try{
             $customerId = RecruiterProfile::where(['user_id' => Auth::user()->id])->pluck('customer_id');
             $customer = \Stripe\Customer::retrieve($customerId[0]);
@@ -275,7 +280,7 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
-    public function postUnsubscribe(Request $request){
+    public function postUnsubscribe(UnsubscribeRequest $request){
         try{
             $sub = \Stripe\Subscription::retrieve($request->subscriptionId);
             if($sub->cancel(array("at_period_end" => true ))){
@@ -293,7 +298,7 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
-    public function postEditCard(Request $request){
+    public function postEditCard(EditCardRequest $request){
         try{
             $expiry = explode('/', $request->expiry);
             $month = $expiry[0];
