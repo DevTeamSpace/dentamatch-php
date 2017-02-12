@@ -19,6 +19,7 @@
                             <a class="pull-right" data-bind="click: $root.unsubscribePlan">Unsubscribe</a>	
                             <div class="clearfix"></div>
                             <div class="table-responsive">
+                                <!--ko foreach: subscription-->
                                 <table class="table customSubscriptionTable">
                                     <tbody>
                                         <tr>
@@ -40,6 +41,7 @@
                                     </tbody>
                                 </table>
                                 <p>Your next half yearly charge of <span data-bind="text: subscriptionAmount"></span> will be applied to your primary payment method on <span data-bind="text: subscriptionAutoRenewal"></span>.</p>	
+                                <!--/ko-->
                                 <hr>
                                 <div class="title pd-b-20 "><b>Payment Methods</b></div>
                                 <!--ko foreach: cards-->
@@ -170,7 +172,32 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    
+
+var SubscriptionModel = function(data){
+    var me = this;
+    me.subscriptionAmount = ko.observable();
+    me.subscriptionPlan = ko.observable('');
+    me.subscriptionActivation = ko.observable();
+    me.subscriptionAutoRenewal = ko.observable();
+    me.subscriptionId = ko.observable('');
+    me._init = function(d){
+        if(typeof d == "undefined"){
+            return false;
+        }
+        me.subscriptionId(d.id);
+        me.subscriptionAmount("$"+(String)(d.plan.amount).slice(0,2));
+        me.subscriptionActivation(moment(d.created).format('LL'));
+        me.subscriptionAutoRenewal(moment(d.current_period_end).format('LL'));
+        if(d.plan.interval_count == 6){
+            me.subscriptionPlan('Half Yearly');
+        }else{
+            me.subscriptionPlan('Yearly');
+        }
+    }
+    me._init(data);
+    return me;
+};
+
 var SubscriptionVM = function () {
     var me = this;
     me.isLoading = ko.observable(false);
@@ -188,10 +215,6 @@ var SubscriptionVM = function () {
     me.successMessage = ko.observable('');
     me.creatingMessage = ko.observable('');
     me.disableInput = ko.observable(false);
-    me.subscriptionAmount = ko.observable();
-    me.subscriptionPlan = ko.observable('');
-    me.subscriptionActivation = ko.observable();
-    me.subscriptionAutoRenewal = ko.observable();
     me.subscription = ko.observableArray([]);
     me.cards = ko.observableArray([]);
     me.allData = ko.observableArray([]);
@@ -222,25 +245,13 @@ var SubscriptionVM = function () {
                 me.noSubscriptionDetails('No subscription availed.');
             }else{
                 for(i in d.data.data.subscriptions.data){
-                    if(d.data.data.subscriptions.data[i].cancel_at_period_end == false){
+                    if(d.data.data.subscriptions.data[i].cancel_at_period_end === false){
                         me.noSubscription(false);
                         me.visibleSubcription(true);
-                        me.subscriptionAmount("$"+(String)(d.data.data.subscriptions.data[0].plan.amount).slice(0,2));
-                        me.subscriptionActivation(moment(d.data.data.subscriptions.data[0].created).format('LL'));
-                        me.subscriptionAutoRenewal(moment(d.data.data.subscriptions.data[0].current_period_end).format('LL'));
-                        me.subscription.push(d.data.data.subscriptions.data[0]);
                         if(d.data.data.sources.data.length >= 2){
                             me.addCardVisible(false);
                         }
-                        if(d.data.data.subscriptions.data[0].plan.interval_count == 6){
-                            me.subscriptionPlan('Half Yearly');
-                        }else{
-                            me.subscriptionPlan('Yearly');
-                        }
-                        for(i in d.data.data.sources.data){
-                            me.cards.push(d.data.data.sources.data[i]);
-                        }
-                        me.allData.push(me.subscription()[0], me.cards()[0]);
+                        me.subscription.push(new SubscriptionModel(d.data.data.subscriptions.data[i]));
                         break;
                     }else{
                         me.noSubscription(true);
@@ -248,6 +259,10 @@ var SubscriptionVM = function () {
                         me.noSubscriptionDetails('No subscription availed.');
                     }
                 }
+                for(i in d.data.data.sources.data){
+                    me.cards.push(d.data.data.sources.data[i]);
+                }
+                me.allData.push(me.subscription(), me.cards()[0]);
             }
         }).error(function (xhr, e) {
             me.isLoading(false);
@@ -364,7 +379,7 @@ var SubscriptionVM = function () {
                             function ()
                             {
                                 location.reload();
-                            }, 700);
+                            }, 400);
                     }
                 });
             });
@@ -382,7 +397,7 @@ var SubscriptionVM = function () {
             me.prompt('Unsubscribing please wait.');
             me.cancelButtonDelete(false);
             me.showModalFooter(false);
-            subscriptionId = d.subscription()[0].id;
+            subscriptionId = d.subscription()[0].subscriptionId;
             $.post('unsubscribe', {subscriptionId: subscriptionId}, function(d){
                 if(d.success == true){
                     me.prompt('Unsubscribed successfully.');
