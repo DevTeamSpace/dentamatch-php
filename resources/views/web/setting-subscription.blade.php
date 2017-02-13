@@ -239,19 +239,19 @@ var SubscriptionVM = function () {
         me.isLoading(true);
         $.get('get-subscription-details', {}, function (d) {
             me.isLoadingSubscription(false);
-            if(d.success == false || d.data.data.subscriptions.data.length == 0){
+            if(d.success == false || d.data.data.data.subscriptions.data.length == 0){
                 me.noSubscription(true);
                 me.visibleSubcription(false);
                 me.noSubscriptionDetails('No subscription availed.');
             }else{
-                for(i in d.data.data.subscriptions.data){
-                    if(d.data.data.subscriptions.data[i].cancel_at_period_end === false){
+                for(i in d.data.data.data.subscriptions.data){
+                    if(d.data.data.data.subscriptions.data[i].cancel_at_period_end === false){
                         me.noSubscription(false);
                         me.visibleSubcription(true);
-                        if(d.data.data.sources.data.length >= 2){
+                        if(d.data.data.data.sources.data.length >= 2){
                             me.addCardVisible(false);
                         }
-                        me.subscription.push(new SubscriptionModel(d.data.data.subscriptions.data[i]));
+                        me.subscription.push(new SubscriptionModel(d.data.data.data.subscriptions.data[i]));
                         break;
                     }else{
                         me.noSubscription(true);
@@ -259,8 +259,8 @@ var SubscriptionVM = function () {
                         me.noSubscriptionDetails('No subscription availed.');
                     }
                 }
-                for(i in d.data.data.sources.data){
-                    me.cards.push(d.data.data.sources.data[i]);
+                for(i in d.data.data.data.sources.data){
+                    me.cards.push(d.data.data.data.sources.data[i]);
                 }
                 me.allData.push(me.subscription(), me.cards()[0]);
             }

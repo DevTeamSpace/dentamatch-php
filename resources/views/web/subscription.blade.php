@@ -293,7 +293,7 @@ var FirstSubscriptionVM = function () {
                 setTimeout(
                     function ()
                     {
-                        location.href = 'setting-subscription';
+                        location.href = 'jobtemplates';
                     }, 700);
             }
         });
