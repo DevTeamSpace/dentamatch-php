@@ -16,7 +16,7 @@ return [
     ],
     //using fcm (firebase cloud messaging)
     'android' => [
-        'server_key' => 'AAAAvCDW54s:APA91bG5jXPH5bMt1CSYe_MJaQ045lLYxDpOeVvrNCP8Mj5cafT_RNnpUvuvbCKtt10ljivwstW-oG9RkPdziczKqqPrb98HGs03FWmI1zepogV4hJTJMJDFSYJjiFnoayQqSMh_4SJ_UnkCIzywR76mbJpkFctQNQ',
+        'server_key' => 'AAAAzB0ZeR8:APA91bH1FaZKM9gpMGwa7lDdOA-PiEkQAvxvqPLfmCjrgCjYBaNd-nVGmRJaeHQuoBX6sIlROlJp_AIc8IvinLKN0Z2DOVGypIytbi0eOz2qxLWi9OpWy01rx4D66O1TQIul_gkZyoUJ',
         'url' => 'https://fcm.googleapis.com/fcm/send'
     ]
 ];

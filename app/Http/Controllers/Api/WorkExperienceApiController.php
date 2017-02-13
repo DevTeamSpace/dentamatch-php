@@ -82,6 +82,7 @@ class WorkExperienceApiController extends Controller {
                 }else{
                     $message = trans("messages.work_exp_added");
                 }
+                apiResponse::chkProfileComplete($userId);
                 $returnResponse = apiResponse::customJsonResponse(1, 200, $message, apiResponse::convertToCamelCase($data));
             } else {
                 $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
@@ -265,7 +266,7 @@ class WorkExperienceApiController extends Controller {
                 if(!empty($jobSeekerData)) {
                     JobSeekerSchooling::insert($jobSeekerData);
                 }
-                
+                apiResponse::chkProfileComplete($userId);
                 $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.school_add_success")); 
             } else {
                 $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 

@@ -120,6 +120,7 @@ class SkillApiController extends Controller {
                     }
                     JobSeekerSkills::insert($jobseekerOtherSkills);
                 }
+                apiResponse::chkProfileComplete($userId);
                 $response = apiResponse::customJsonResponse(1, 200, trans("messages.skill_add_success")); 
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
@@ -199,6 +200,7 @@ class SkillApiController extends Controller {
                             ['image_path' => $response['file']]
                     );
                     $url['imgUrl'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $response['file'];
+                    apiResponse::chkProfileComplete($userId);
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.certificate_successful_update"),$url);
                 } else {
                     $response = apiResponse::responseError(trans("messages.upload_image_problem"));
@@ -235,6 +237,7 @@ class SkillApiController extends Controller {
                         JobseekerCertificates::where('user_id',$userId)->where('certificate_id',$value['id'])->update(['validity_date' => $value['value']]);
                     }
                 }
+                apiResponse::chkProfileComplete($userId);
                 $response =  apiResponse::customJsonResponse(1, 200, trans("messages.certificate_details_successful_update"));
             }else{
                 $response =  apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));

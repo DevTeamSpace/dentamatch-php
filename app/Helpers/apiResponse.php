@@ -1,6 +1,12 @@
 <?php
 namespace App\Helpers;
 use App\Models\Device;
+use App\Models\UserProfile;
+use App\Models\WorkExperience;
+use App\Models\JobSeekerSchooling;
+use App\Models\JobSeekerSkills;
+use App\Models\JobSeekerAffiliation;
+use App\Models\JobseekerCertificates;
 
 class apiResponse {
 
@@ -77,6 +83,57 @@ class apiResponse {
                 $profilePic  = url("image/" . $width . "/" . $height . "/?src=" .$image);
             }
         return $profilePic;
+    }
+    
+    public static function chkProfileComplete($userId){
+        $userProfileModel = UserProfile::getUserProfile($userId);
+        $userWorkExperience = WorkExperience::getWorkExperienceList($userId);
+        $schooling = JobSeekerSchooling::getJobSeekerSchooling($userId);
+        $otherSchooling = JobSeekerSchooling::getJobseekerOtherSchooling($userId);
+        $schooling = array_merge($schooling, $otherSchooling);
+        $skills = JobSeekerSkills::getJobSeekerSkills($userId);
+        $otherSkills = JobSeekerSkills::getJobseekerOtherSkills($userId);
+        $skills = array_merge($skills, $otherSkills);
+        $affiliations = JobSeekerAffiliation::getJobSeekerAffiliation($userId);
+        $jobSeekerCertifications = JobseekerCertificates::getJobSeekerCertificates($userId);
+        $chkProfileStatus = 0;
+        $workExperienceStatus = 0;
+        $schoolingStatus = 0;
+        $skillStatus = 0;
+        $affiliationStatus = 0;
+        $certificationStatus = 0;
+        if($userProfileModel['job_titile_id'] > 0 && 
+                $userProfileModel['profile_pic'] != "" && 
+                $userProfileModel['dental_state_board'] != "" && 
+                $userProfileModel['license_number'] != "" && 
+                $userProfileModel['state'] != "" && 
+                $userProfileModel['about_me'] != "" 
+                ){
+            $chkProfileStatus = 1;
+        }
+        if($userWorkExperience['total'] > 0){
+            $workExperienceStatus = 1;
+        }
+        if(count($schooling) > 0){
+            $schoolingStatus = 1;
+        }
+        if(count($skills) > 0){
+            $skillStatus = 1;
+        }
+        if(count($affiliations) > 0){
+            $affiliationStatus = 1;
+        }
+        if(count($jobSeekerCertifications) > 0){
+            $certificationStatus = 1;
+        }
+        $completionStatus = 0;
+        if($chkProfileStatus == 1 && $workExperienceStatus == 1 && $schoolingStatus == 1 && $skillStatus == 1 && $affiliationStatus == 1 && $certificationStatus == 1){
+            $completionStatus = 1;
+        }
+        $userProfile = UserProfile::where('user_id', $userId)->first();
+        $userProfile->is_completed = $completionStatus;
+        $userProfile->save();
+        
     }
 }
 

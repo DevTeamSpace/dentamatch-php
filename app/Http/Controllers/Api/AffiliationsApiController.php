@@ -109,7 +109,7 @@ class AffiliationsApiController extends Controller {
                 if(!empty($jobSeekerData)) {
                     JobSeekerAffiliation::insert($jobSeekerData);
                 }
-                
+                apiResponse::chkProfileComplete($userId);
                 $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.affiliation_add_success")); 
             } else {
                 $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 

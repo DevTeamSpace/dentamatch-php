@@ -83,6 +83,7 @@ class UserProfileApiController extends Controller {
                     } else {
                         UserProfile::where('user_id', $userId)->update(['dental_state_board' => $response['file']]);
                     }
+                    apiResponse::chkProfileComplete($userId);
                     /*$img = '/' . $response['file'];
                     $width = 120;
                     $height = 120;
@@ -123,6 +124,7 @@ class UserProfileApiController extends Controller {
                 if(($request->jobTitleId != "") && ($request->jobTitleId > 0)){
                     UserProfile::where('user_id', $userId)->update(['job_titile_id' => $request->jobTitleId]);
                 }
+                apiResponse::chkProfileComplete($userId);
                 $response =  apiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"));
             }else{
                 $response =  apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
@@ -151,6 +153,7 @@ class UserProfileApiController extends Controller {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 UserProfile::where('user_id', $userId)->update(['about_me' => $request->aboutMe,'is_completed' => 1]);
+                apiResponse::chkProfileComplete($userId);
                 $response =  apiResponse::customJsonResponse(1, 200, trans("messages.profile_update_success"));
             }else{
                 $response =  apiResponse::customJsonResponse(0, 204, "invalid user token");
@@ -295,7 +298,7 @@ class UserProfileApiController extends Controller {
                 $userProfile->job_titile_id = $reqData['jobTitileId'];
                 $userProfile->about_me = $reqData['aboutMe'];
                 $userProfile->save();
-                
+                apiResponse::chkProfileComplete($userId);
                 $message = trans("messages.user_profile_updated");
                 $returnResponse = apiResponse::customJsonResponse(1, 200, $message);
             } else {
@@ -347,4 +350,6 @@ class UserProfileApiController extends Controller {
             return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
     }
+    
+    
 }
