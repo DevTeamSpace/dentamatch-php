@@ -582,18 +582,17 @@ $(function () {
     $('#resetPassword').click(function(){
         var adminEmail = $('#emailForgetpassword').val();
         if(adminEmail!=''){
+            $('#resetPassword').hide();
             $.ajax({
-                url:public_path+'../api/user/forgot-password',
-                type:'PUT',
+                url:public_path+'../api/admin/forgot-password',
+                type:'POST',
+                dataType: 'json',
                 data:{email:adminEmail},
                 success:function(response){
-                    if(response.Success=="1"){
+                    if(response.status == 1){
                         $('#emailForgetpassword').val('');
-                        if(response.Result['redirect']){
-                            window.setTimeout( function(){
-                                window.location = response.Result['redirect'];
-                            }, 100 );
-                        }
+                        $('#ForgetError').html(response.message).removeClass('hidden');
+                        window.location.reload();
                     }else{
                         $('#ForgetError').html(response.Message).removeClass('hidden');
                     }

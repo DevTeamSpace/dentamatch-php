@@ -88,7 +88,11 @@ use ResetsPasswords;
         if ($users->group_id == 3) {
             Auth::logout();
             return redirect('/success-register');
-        } else {
+        }else if($users->group_id == 1){
+            Auth::logout();
+            return redirect('/cms/login');
+        }
+        else {
             return redirect($this->redirectPath())
                             ->with('status', trans($response));
         }

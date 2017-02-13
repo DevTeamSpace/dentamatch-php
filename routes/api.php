@@ -68,3 +68,6 @@ Route::post('users/availability-list', 'Api\CalendarApiController@postAvailabili
 
 Route::get('users/notification-list', 'Api\PushNotificationApiController@getNotificationlists');
 Route::post('users/notification-read', 'Api\PushNotificationApiController@PostUpdateNotification');
+
+
+Route::post('admin/forgot-password', 'Api\UserApiController@postAdminForgotPassword');

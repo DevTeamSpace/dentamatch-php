@@ -342,4 +342,47 @@ class UserApiController extends Controller {
         }
         return $returnResponse;
     }
+    
+    public function postAdminForgotPassword(Request $request) {
+        try {
+            $this->validate($request, [
+                'email' => 'required|email',
+            ]);
+            $reqData = $request->all();
+            $user = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+                            ->select(
+                                'users.id',
+                                'user_groups.group_id', 
+                                'users.email',
+                                'users.is_verified'
+                                )
+                        ->where('users.email', $reqData['email'])
+                        ->where('user_groups.group_id' , 1)
+                        ->first();
+            
+            if ($user) {
+                
+                    PasswordReset::where('user_id' , $user->id)->where('email', $user->email)->delete();
+                    $token = md5($user->email . time());
+                    $passwordModel = PasswordReset::firstOrNew(array('user_id' => $user->id, 'email' => $user->email));
+                    $passwordModel->fill(['token' => $token]);
+                    $passwordModel->save();
+                
+                    Mail::queue('email.resetPasswordToken', ['name' => 'Admin', 'url' => url('password/reset', ['token' => $token]), 'email' => $user->email], function($message) use ($user) {
+                        $message->to($user->email, $user->first_name)->subject('Reset Password Request ');
+                    });
+                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.reset_pw_email_sent"));
+                }else{
+                $response = apiResponse::customJsonResponse(0, 201, trans("messages.email_not_exists"));
+            }
+            return $response;
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        } catch (\Exception $ex) {
+            $message = $ex->getMessage();
+            return apiResponse::responseError("Some error occoured", ["data" => $message]);
+        }
+        
+    }
 }
