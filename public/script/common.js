@@ -158,6 +158,38 @@ $(function () {
         ]
     });
     
+    $('#skill_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'skill/list',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'skill_name', name: 'skill_name',searchable:true},
+            {data: 'parent_skill', name: 'parent_skill',searchable:false},
+            {data: 'active', name: 'active',searchable:false},
+            {data: 'action', name: 'action',searchable:false}
+        ]
+    });
+    
+    $('#school_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'school/list',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'school_name', name: 'school_name',searchable:true},
+            {data: 'parent_school', name: 'parent_school',searchable:false},
+            {data: 'active', name: 'active',searchable:false},
+            {data: 'action', name: 'action',searchable:false}
+        ]
+    });
+    
     $('#coupon_list').DataTable({
         processing: true,
         serverSide: true,

@@ -156,5 +156,23 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('create-radius', 'Cms\ConfigurationController@create');
         Route::post('store-radius', 'Cms\ConfigurationController@store');
     });
+    
+    Route::group(['prefix' => 'skill/'], function() {
+        Route::get('index', 'Cms\SkillController@index');
+        Route::get('list', 'Cms\SkillController@skillList');
+        Route::delete('{id}/delete', 'Cms\SkillController@delete');
+        Route::get('{id}/edit', 'Cms\SkillController@edit');
+        Route::get('create', 'Cms\SkillController@create');
+        Route::post('store', 'Cms\SkillController@store');
+    });
+    
+    Route::group(['prefix' => 'school/'], function() {
+        Route::get('index', 'Cms\SchoolController@index');
+        Route::get('list', 'Cms\SchoolController@schoolList');
+        Route::delete('{id}/delete', 'Cms\SchoolController@delete');
+        Route::get('{id}/edit', 'Cms\SchoolController@edit');
+        Route::get('create', 'Cms\SchoolController@create');
+        Route::post('store', 'Cms\SchoolController@store');
+    });
 });
 

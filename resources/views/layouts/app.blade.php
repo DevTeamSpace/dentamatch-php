@@ -68,12 +68,25 @@
                         <!--li><a href="{{ url('/register') }}">Register</a></li-->
                     @else
                         @if (Auth::user()->userGroup->group_id==1)
-                            <li><a href="{{ url('/cms') }}">Location</a></li>
-                            <li><a href="{{ url('cms/affiliation/index') }}">Affiliations</a></li>
-                            <li><a href="{{ url('cms/jobtitle/index') }}">Job Title</a></li>
-                            <li><a href="{{ url('cms/officetype/index') }}">Office Type</a></li>
-                            <li><a href="{{ url('cms/certificate/index') }}">Certification</a></li>
-                            <li><a href="{{ url('cms/config/create-radius') }}">Search Radius</a></li>
+                        
+                            <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    Menu <span class="caret"></span>
+                                </a>
+
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{ url('/cms') }}">Location</a></li>
+                                <li><a href="{{ url('cms/affiliation/index') }}">Affiliations</a></li>
+                                <li><a href="{{ url('cms/jobtitle/index') }}">Job Title</a></li>
+                                <li><a href="{{ url('cms/officetype/index') }}">Office Type</a></li>
+                                <li><a href="{{ url('cms/certificate/index') }}">Certification</a></li>
+                                <li><a href="{{ url('cms/config/create-radius') }}">Search Radius</a></li>
+                                <li><a href="{{ url('cms/skill/index') }}">Skills</a></li>
+                                <li><a href="{{ url('cms/school/index') }}">Schooling</a></li>
+                            </ul>
+                        </li>
+                        
+                            
 <!--                            <li><a href="{{ url('cms/payments/index') }}">Payments</a></li>
                             <li><a href="{{ url('cms/event/index') }}">Manage Events</a></li>
                             <li class="dropdown">

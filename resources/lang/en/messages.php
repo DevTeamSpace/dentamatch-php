@@ -105,5 +105,12 @@ return [
     'no_subscription' => 'No subscription found',
     
     'radius_update' => 'Radius updated successfully',
+    
+    'skill_added' => 'Skill added successfully',
+    'skill_updated' => 'Skill updated successfully',
+    
+    'school_added' => 'School added successfully',
+    'school_updated' => 'School updated successfully'
+    
 
 ];

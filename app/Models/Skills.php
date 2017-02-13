@@ -15,7 +15,7 @@ class Skills extends Model
     protected $maps          = [
         'skillName' => 'skill_name',
         ];
-    protected $hidden       = ['is_active','created_at','updated_at'];
+    protected $hidden       = ['created_at','updated_at'];
     
    
     public function parent()
