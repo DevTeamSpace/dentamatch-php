@@ -59,6 +59,12 @@ return [
     'job_detail_success' => 'Job detail retrieved successfully',
     'job_already_saved' => 'You have already saved this job before',
     'location_update_success' => 'Location details updated successfully',
+
+    'calendar_availability_list' => 'Calendar Availability List Retrieved',
+    'saved_job_list' => "Saved job list",
+    'applied_job_list' => 'Applied job list',
+    'shortlisted_job_list' => 'Shortlisted job list',
+
     
     'password_saved_successfully'=>'Password changed successfully',
     'old_not_match'=>'Old Password not matched.',
@@ -66,6 +72,7 @@ return [
     'already_register_as_seeker'=>'You are already registered as job seeker',
     'email_already_regisered' => 'Email already registered',
     'confirmation_link'=>'Confirmation Link for new user',
+
     'calendar_availability_list' => 'Calendar Availability List Retrieved',
     'saved_job_list' => "Saved job list",
     'applied_job_list' => 'Applied job list',

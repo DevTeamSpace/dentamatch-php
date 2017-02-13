@@ -34,6 +34,9 @@ class SignupController extends Controller {
     }
 
     public function getLogin(Request $request) {
+        if(Auth::check()){
+            return redirect('home');
+        }
         return view('web.login');
     }
 

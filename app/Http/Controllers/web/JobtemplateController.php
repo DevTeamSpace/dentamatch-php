@@ -93,8 +93,10 @@ class JobtemplateController extends Controller
             try{
             
             $jobTemplate = new JobTemplates();
+            $redirect = 'jobtemplates';
             if ($request->action=="edit" && !empty($request->id)) {
                 $jobTemplate = JobTemplates::findById($request->id);
+                $redirect = 'jobtemplates/view/'.$request->id;
             }
             
             $jobTemplate->user_id = Auth::user()->id;
@@ -112,7 +114,7 @@ class JobtemplateController extends Controller
                 unset($skillArrObj);
             }
             unset($jobTemplate);
-            return redirect('jobtemplates');
+            return redirect($redirect);
         } catch (\Exception $e) {
             return view('web.error.',["message" => $e->getMessage()]);
         }

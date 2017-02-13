@@ -121,7 +121,7 @@ class RecruiterJobController extends Controller
             }
             DB::commit();
             unset($recruiterJobObj);
-            return redirect('jobtemplates');
+            return redirect('job/lists');
         } catch (\Exception $e) {
             DB::rollback();
             return view('web.error.',["message" => $e->getMessage()]);
