@@ -103,14 +103,18 @@ return [
 
     'unsubscribed' => 'Unsubscribed successfylly.',
     'no_subscription' => 'No subscription found',
-    
     'radius_update' => 'Radius updated successfully',
+
     
     'skill_added' => 'Skill added successfully',
     'skill_updated' => 'Skill updated successfully',
     
     'school_added' => 'School added successfully',
-    'school_updated' => 'School updated successfully'
+    'school_updated' => 'School updated successfully',
     
+
+
+    'cannot_delete_card' => 'Atlease one card should be added to continue the subscription.',
+    'card_edidted' => 'Card edidted successfully.'
 
 ];

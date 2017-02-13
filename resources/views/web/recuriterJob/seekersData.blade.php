@@ -99,7 +99,7 @@
         <div class="job-type-detail">
             <p class="nopadding">{{$seeker['jobtitle_name']}}</p>
             @if($seeker['is_fulltime'])
-            <span class="bg-green statusBtn mr-r-5">Full Time</span>
+            <span class="drk-green statusBtn mr-r-5">Full Time</span>
             @elseif($seeker['is_parttime_monday'] || $seeker['is_parttime_tuesday'] || $seeker['is_parttime_wednesday'] || $seeker['is_parttime_thursday'] || $seeker['is_parttime_friday'] || $seeker['is_parttime_saturday'] || $seeker['is_parttime_sunday'])
             <span class="bg-ltgreen statusBtn mr-r-5">Part Time</span>
             <span> | 

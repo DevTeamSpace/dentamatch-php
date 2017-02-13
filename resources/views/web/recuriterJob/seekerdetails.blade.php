@@ -26,7 +26,7 @@
                 <div class="job-type-detail">
                 
                     @if($seekerDetails['is_fulltime'])
-                    <span class="statusBtn bg-green text-center statusBtnMargin">Full Time</span>
+                    <span class="statusBtn drk-green text-center statusBtnMargin">Full Time</span>
                     @endif
                     @if($seekerDetails['is_parttime_monday'] || $seekerDetails['is_parttime_tuesday'] || $seekerDetails['is_parttime_wednesday'] || $seekerDetails['is_parttime_thursday'] || $seekerDetails['is_parttime_friday'] || $seekerDetails['is_parttime_saturday'] || $seekerDetails['is_parttime_sunday'])
                     <span class="statusBtn bg-ltgreen text-center statusBtnMargin">Part Time</span>
@@ -63,7 +63,26 @@
                     @endif
                 </div>
             </div>
-            <div class="col-md-3 text-right"><p>{{round($seekerDetails['distance'])}} miles away</p><button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Invite</button></div>
+            <div class="col-md-3 text-right"><p>{{round($seekerDetails['distance'])}} miles away
+            @if($seekerDetails['applied_status'] == \App\Models\JobLists::INVITED)
+                <h6>INVITED</h6>
+                <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Invite</button>
+            @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::APPLIED)
+                <h6></h6>
+                <button type="submit" class="btn btn-primary pd-l-20 pd-r-20">Reject</button>
+                <button type="submit" class="btn btn-primary pd-l-20 pd-r-20">Accept</button>
+            @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::SHORTLISTED)
+                <h6>SHORTLISTED</h6>
+                <button type="submit" class="btn btn-primary pd-l-20 pd-r-20">Message</button>
+                <button type="submit" class="btn btn-primary pd-l-20 pd-r-20">Hire</button>
+            @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::HIRED)
+                <h6>HIRED</h6>
+                <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Message</button>
+            @else
+                <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Invite</button>    
+            @endif 
+            </p>   
+            </div>
         </div>
 
         <div class="pd-t-60">

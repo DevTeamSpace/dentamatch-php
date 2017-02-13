@@ -8,6 +8,11 @@ use Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RecruiterProfile;
 use App\Models\RecruiterOffice;
+use App\Http\Requests\CreateSubscriptionRequest;
+use App\Http\Requests\AddCardRequest;
+use App\Http\Requests\DeleteCardRequest;
+use App\Http\Requests\UnsubscribeRequest;
+use App\Http\Requests\EditCardRequest;
 
 class SubscriptionController extends Controller {
     private $response = [];
@@ -21,7 +26,7 @@ class SubscriptionController extends Controller {
         if($recruiter['is_subscribed'] == 0){
             $result = view('web.subscription');
         }else{
-            $result = redirect('setting-subscription');
+            $result = redirect('jobtemplates');
         }
         return $result;
     }
@@ -45,10 +50,10 @@ class SubscriptionController extends Controller {
         return $subscription;
     }
     
-    public function postCreateSubscription(Request $request){
+    public function postCreateSubscription(CreateSubscriptionRequest $request){
         try{
             $recruiter = RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
-            if($request->cardExist == true){
+            if($request->cardExist === "true"){
                 $createSubscription = $this->addUserTOSubscription($recruiter['customer_id'], $request->subscriptionType, $request->trailPeriod);
                 RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 1, 'free_period' => $request->trailPeriod]);
                 $this->response['success'] = true;
@@ -93,7 +98,7 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
-    public function addUserTOSubscription($customerId, $subscriptionType, $trailPeriod){
+    private function addUserTOSubscription($customerId, $subscriptionType, $trailPeriod){
         try{
             $now = \Carbon\Carbon::now();
             $fotDiff = \Carbon\Carbon::now();
@@ -118,7 +123,7 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
-    public function postAddCard(Request $request){
+    public function postAddCard(AddCardRequest $request){
         try{
             $customerId = RecruiterProfile::where(['user_id' => Auth::user()->id])->pluck('customer_id');
             $expiry = explode('/', $request->expiry);
@@ -151,7 +156,7 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
-    public function addCardForSubscription($cardDetails, $customerId){
+    private function addCardForSubscription($cardDetails, $customerId){
         try{
             $expiry = explode('/', $cardDetails['expiry']);
             $month = $expiry[0];
@@ -184,7 +189,7 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
-    public function createCustomer(){
+    private function createCustomer(){
         try{
             $createCustomer = \Stripe\Customer::create(array(
                 "description" => "Customer for".Auth::user()->email,
@@ -207,7 +212,9 @@ class SubscriptionController extends Controller {
     
     public function getSubscriptionDetails(){
         try{
-            $this->fetchSubscription(Auth::user()->id);
+            $subscriptions = $this->fetchSubscription(Auth::user()->id);
+            $this->response['success'] = true;
+            $this->response['data'] = $subscriptions;
         } catch (\Exception $e) {
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
@@ -252,16 +259,21 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
-    public function postDeleteCard(Request $request){
+    public function postDeleteCard(DeleteCardRequest $request){
         try{
             $customerId = RecruiterProfile::where(['user_id' => Auth::user()->id])->pluck('customer_id');
             $customer = \Stripe\Customer::retrieve($customerId[0]);
-            if($customer->sources->retrieve($request->cardId)->delete()){
-                $this->response['success'] = true;
-                $this->response['message'] = trans('messages.card_deleted');
+            if(count($customer->sources['data']) > 1){
+                if($customer->sources->retrieve($request->cardId)->delete()){
+                    $this->response['success'] = true;
+                    $this->response['message'] = trans('messages.card_deleted');
+                }else{
+                    $this->response['success'] = false;
+                    $this->response['message'] = trans('messages.no_card');
+                }
             }else{
                 $this->response['success'] = false;
-                $this->response['message'] = trans('messages.no_card');
+                $this->response['message'] = trans('messages.cannot_delete_card');
             }
         } catch (\Exception $e) {
             $this->response['success'] = false;
@@ -270,11 +282,11 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
-    public function postUnsubscribe(Request $request){
+    public function postUnsubscribe(UnsubscribeRequest $request){
         try{
             $sub = \Stripe\Subscription::retrieve($request->subscriptionId);
             if($sub->cancel(array("at_period_end" => true ))){
-                RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 0]);
+                RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 0, 'free_period' => null, 'auto_renewal' => null]);
                 $this->response['success'] = true;
                 $this->response['message'] = trans('messages.unsubscribed');
             }else{
@@ -284,6 +296,26 @@ class SubscriptionController extends Controller {
         } catch (\Exception $e) {
             $this->response['success'] = false;
             $this->response['message'] = trans('messages.no_subscription');
+        }
+        return $this->response;
+    }
+    
+    public function postEditCard(EditCardRequest $request){
+        try{
+            $expiry = explode('/', $request->expiry);
+            $month = $expiry[0];
+            $year = $expiry[1];
+            $customerId = RecruiterProfile::where(['user_id' => Auth::user()->id])->pluck('customer_id');
+            $customer = \Stripe\Customer::retrieve($customerId[0]);
+            $card = $customer->sources->retrieve($request->cardId);
+            $card->exp_month = $month;
+            $card->exp_year = $year;
+            $card->save();
+            $this->response['success'] = true;
+            $this->response['message'] = trans('messages.card_edidted');
+        } catch (\Exception $e) {
+            $this->response['success'] = false;
+            $this->response['message'] = $e->getMessage();
         }
         return $this->response;
     }

@@ -26,7 +26,7 @@
         </div>    
         <div class="job-type-detail">
             @if($job['job_type']==\App\Models\RecruiterJobs::FULLTIME)
-            <span class="bg-ltgreen statusBtn mr-r-5">Full Time</span>
+            <span class="drk-green statusBtn mr-r-5">Full Time</span>
             @elseif($job['job_type']==\App\Models\RecruiterJobs::PARTTIME)
             <span class="bg-ltgreen statusBtn mr-r-5">Part Time</span>
             <span> | 

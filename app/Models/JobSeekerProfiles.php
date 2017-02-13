@@ -132,12 +132,17 @@ class JobSeekerProfiles extends Model
 
         $obj->leftJoin('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id');
 
+        $obj->leftjoin('job_lists',function($query) use ($job){
+                $query->on('jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
+                ->where('job_lists.recruiter_job_id',$job['id']);
+        });
+
         $obj->leftJoin('jobseeker_temp_availability','jobseeker_profiles.user_id','=','jobseeker_temp_availability.user_id')
             ->groupby('jobseeker_profiles.user_id');
         
         $obj->select('jobseeker_profiles.first_name','jobseeker_profiles.last_name','jobseeker_profiles.profile_pic',
                     'jobseeker_profiles.is_parttime_monday','jobseeker_profiles.is_parttime_tuesday','jobseeker_profiles.is_parttime_tuesday',
-                    'jobseeker_profiles.is_parttime_wednesday','jobseeker_profiles.is_parttime_thursday','jobseeker_profiles.is_parttime_friday','jobseeker_profiles.is_parttime_saturday','jobseeker_profiles.is_parttime_sunday','jobseeker_profiles.is_fulltime','jobseeker_profiles.user_id','jobseeker_profiles.id','job_titles.jobtitle_name','jobseeker_profiles.about_me', 'jobseeker_profiles.preferred_job_location')
+                    'jobseeker_profiles.is_parttime_wednesday','jobseeker_profiles.is_parttime_thursday','jobseeker_profiles.is_parttime_friday','jobseeker_profiles.is_parttime_saturday','jobseeker_profiles.is_parttime_sunday','jobseeker_profiles.is_fulltime','jobseeker_profiles.user_id','jobseeker_profiles.id','job_titles.jobtitle_name','jobseeker_profiles.about_me', 'jobseeker_profiles.preferred_job_location','job_lists.applied_status')
             ->groupby('jobseeker_profiles.user_id', 'jobseeker_affiliations.user_id');
 
         $obj->addSelect(DB::raw("group_concat(distinct(affiliations.affiliation_name) SEPARATOR ', ') AS affiliations"));
@@ -155,12 +160,9 @@ class JobSeekerProfiles extends Model
 
         $searchResult   =   $obj->first();
         
-
         $result = array();
         if($searchResult){
             $seekerUserId = $searchResult->user_id;                        
-            
-            
 
             $schoolings     =   JobSeekerSchooling::getParentJobSeekerSchooling($seekerUserId); 
             $skills         =   JobSeekerSkills::getParentJobSeekerSkills($seekerUserId); 
