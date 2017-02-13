@@ -86,6 +86,7 @@ class apiResponse {
     }
     
     public static function chkProfileComplete($userId){
+        
         $userProfileModel = UserProfile::getUserProfile($userId);
         $userWorkExperience = WorkExperience::getWorkExperienceList($userId);
         $schooling = JobSeekerSchooling::getJobSeekerSchooling($userId);
