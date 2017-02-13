@@ -53,7 +53,7 @@ class SubscriptionController extends Controller {
     public function postCreateSubscription(CreateSubscriptionRequest $request){
         try{
             $recruiter = RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
-            if($request->cardExist === true){
+            if($request->cardExist === "true"){
                 $createSubscription = $this->addUserTOSubscription($recruiter['customer_id'], $request->subscriptionType, $request->trailPeriod);
                 RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 1, 'free_period' => $request->trailPeriod]);
                 $this->response['success'] = true;
@@ -98,7 +98,7 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
-    public function addUserTOSubscription($customerId, $subscriptionType, $trailPeriod){
+    private function addUserTOSubscription($customerId, $subscriptionType, $trailPeriod){
         try{
             $now = \Carbon\Carbon::now();
             $fotDiff = \Carbon\Carbon::now();
@@ -156,7 +156,7 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
-    public function addCardForSubscription($cardDetails, $customerId){
+    private function addCardForSubscription($cardDetails, $customerId){
         try{
             $expiry = explode('/', $cardDetails['expiry']);
             $month = $expiry[0];
@@ -189,7 +189,7 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
-    public function createCustomer(){
+    private function createCustomer(){
         try{
             $createCustomer = \Stripe\Customer::create(array(
                 "description" => "Customer for".Auth::user()->email,
@@ -212,7 +212,9 @@ class SubscriptionController extends Controller {
     
     public function getSubscriptionDetails(){
         try{
-            $this->fetchSubscription(Auth::user()->id);
+            $subscriptions = $this->fetchSubscription(Auth::user()->id);
+            $this->response['success'] = true;
+            $this->response['data'] = $subscriptions;
         } catch (\Exception $e) {
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
