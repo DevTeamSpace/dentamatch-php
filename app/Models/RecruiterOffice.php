@@ -100,6 +100,7 @@ class RecruiterOffice extends Model {
         return RecruiterOffice::join(
                 'locations', 'recruiter_offices.zipcode', '=', 'locations.zipcode'
                 )->where(['user_id' => Auth::user()->id, 'locations.is_active' => config('constants.LocationActive')])
+                ->select('locations.*', 'recruiter_offices.*')
                 ->get()
                 ->toArray();
     }

@@ -259,7 +259,7 @@ class RecruiterJobs extends Model
             ->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
             ->leftJoin('template_skills','job_templates.id','=','template_skills.job_template_id')
             ->groupBy('recruiter_jobs.id','recruiter_profiles.office_name','recruiter_profiles.office_desc','office_types.officetype_name','template_skills.job_template_id')
-            ->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
+            ->select('recruiter_jobs.id','recruiter_jobs.recruiter_office_id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
             'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday','recruiter_jobs.is_thursday',
             'recruiter_jobs.is_friday','recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
             'recruiter_jobs.no_of_jobs','recruiter_jobs.created_at','recruiter_jobs.job_template_id',

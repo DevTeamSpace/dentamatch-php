@@ -14,6 +14,7 @@ use App\Models\JobTitles;
 use App\Models\RecruiterOffice;
 use App\Models\ChatUserLists;
 use App\Models\JobSeekerProfiles;
+use App\Models\RecruiterProfile;
 
 use DB;
 
@@ -184,5 +185,25 @@ class RecruiterJobController extends Controller
         } catch (\Exception $e) {
             return view('web.error.',["message" => $e->getMessage()]);
         }
+    }
+    
+    public function jobEdit(Request $request, $jobId){
+        return view('web.recuriterJob.edit', compact('jobId'));
+    }
+    
+    public function jobEditDetails(Request $request){
+        try{
+            $allData = [];
+            $jobDetails = RecruiterJobs::getRecruiterJobDetails($request->jobId);
+            $jobSeekerStatus = JobLists::getJobSeekerStatus($request->jobId);
+            $recruiterOffices = RecruiterOffice::getAllOffices();
+            $allData['jobDetails'] = $jobDetails;
+            $allData['jobSeekerStatus'] = $jobSeekerStatus;
+            $allData['recruiterOffices'] = $recruiterOffices;
+            $response = $allData;
+        } catch (\Exception $e) {
+            $response = $e->getMessage();
+        }
+        return $response;
     }
 }

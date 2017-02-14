@@ -181,4 +181,8 @@ class JobLists extends Model {
     public static function getJobInfo($seekerId,$jobId) {
         return static::where('seeker_id',$seekerId)->where('recruiter_job_id',$jobId)->first();
     }
+    
+    public static function getJobSeekerStatus($jobId){
+        return JobLists::where(['recruiter_job_id' => $jobId])->count();
+    }
 }

@@ -160,7 +160,6 @@
 </div>
 @endsection
 @section('js')
-<script type="text/javascript" src="{{asset('web/scripts/knockout-3.4.1.js')}}"></script>
 <script src="https://checkout.stripe.com/checkout.js"></script>
 
 <script>
