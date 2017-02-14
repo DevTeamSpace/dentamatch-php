@@ -2,12 +2,13 @@
 
 @section('content')
 
-<div class="container">
-    <div class="frm-cred-access-box subscription-box">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<div class="container" id="subscription">
+    <div class="frm-cred-access-box subscription-box" data-bind="visible: visibleSubcription">
         <h4 class="frm-title">Our Subscription Plan</h4>
         <p>Unlock unlimited access to jobs post and finding suitable jobseekers.</p>
         <div class="subs-holder text-center ">
-
+            <!--ko foreach: subscriptionDetails-->
             <div class="subscription-inr-box ">
                 <div class="subscription-type">
                     <p class="mr-b-25">Half Yearly</p>
@@ -15,17 +16,14 @@
                         <span class="price-symbol ">$</span>
                         <span class="price" data-bind="text: halfYearPrice">60</span>
                         <span class="price-duration">/ 6 mo.</span>
-
                         <p data-bind="text: free_trial_period">with 1 months free trial</p>
                         <input type="hidden" id="stype" value="1">
-
                     </div>
                 </div>
                 <div class="subscription-desc">
                     <p>Unlimited template creation,
                         job posting, searching jobseeker, message & reports</p>
                 </div>
-
                 <!--<a id="stripe" href="https:/connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_A4GIpAptEF5hAp1QDsIVsSgNcF4P1QcV&scope=read_write&page=subscription_list" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>-->
                 <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
             </div>
@@ -47,11 +45,10 @@
                 </div>
                 <!--<a id="stripe" href="https:/connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_A4GIpAptEF5hAp1QDsIVsSgNcF4P1QcV&scope=read_write&page=subscription_list" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>-->
                 <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
-
             </div>
 
-
-            <div class="subscription-inr-box ">
+            <!--/ko-->
+<!--            <div class="subscription-inr-box ">
                 <div class="subscription-type">
                     <p class="mr-b-25">Annual</p>
                     <div class="subcription-price pos-rel">
@@ -65,15 +62,13 @@
                     <p>Unlimited template creation,
                         job posting, searching jobseeker, message & reports</p>
                 </div>
-                <a href="{{url('/jobtemplates')}}" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
-            </div>
+                <a class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
+            </div>-->
 
     </div>
-
     <div class="frm-cred-access-box subscription-box" data-bind="visible: noSubscription">
         <h3 class="no-subscription-heading text-center" data-bind="text: noSubscriptionDetails"></h3>
     </div>
-
 </div>
     <div id="addCardModal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog custom-modal modal-sm" role="document">
