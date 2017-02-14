@@ -271,33 +271,37 @@ class RecruiterJobs extends Model
             DB::raw("group_concat(temp_job_dates.job_date) AS temp_job_dates"),
             DB::raw("group_concat(template_skills.skill_id) AS required_skills"),
             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
-    
+            
         return $jobObj->first()->toArray();
     }
     
     public static function getAllTempJobs(){
         $jobObj = RecruiterJobs::where('recruiter_jobs.job_type',3)
-                ->join('recruiter_offices', 'recruiter_offices.id', '=', 'recruiter_jobs.recruiter_office_id')
-                ->join('recruiter_office_types', function($query1){
-                    $query1->on('recruiter_office_types.recruiter_office_id', '=', 'recruiter_offices.id')
-                            ->join('office_types', function($query2){
-                                $query2->on('office_types.id', '=', 'recruiter_office_types.office_type_id')
-                                        ->select(DB::raw("group_concat(office_types.officetype_name) AS officetype_name"));
-                            });
-                })
-//                ->join('office_types', 'office_types.id', '=', 'recruiter_office_types.office_type_id')
-                ->join('job_templates',function($query){
-                    $query->on('job_templates.id','=','recruiter_jobs.job_template_id')
-                    ->where('job_templates.user_id',Auth::user()->id);
-                })
-                ->join('job_titles', 'job_titles.id' , '=', 'job_templates.job_title_id');
-//                ->select('recruiter_jobs.id','recruiter_jobs.recruiter_office_id','recruiter_jobs.job_type',
-//                    'recruiter_jobs.no_of_jobs','recruiter_jobs.created_at','recruiter_jobs.job_template_id',
-//                    'recruiter_offices.address','recruiter_offices.zipcode','recruiter_offices.latitude','recruiter_offices.longitude',
-//                    'job_templates.template_name','job_templates.template_desc','job_templates.job_title_id',
-//                    'job_titles.jobtitle_name',
-//                    DB::raw("group_concat(office_types.officetype_name) AS officetype_name")
-//                );
+            ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+            ->join('job_templates',function($query){
+                $query->on('job_templates.id','=','recruiter_jobs.job_template_id')
+                ->where('job_templates.user_id',Auth::user()->id);
+            })
+            ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
+            ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id');
+        
+        $jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
+            ->leftJoin('job_lists',function($query){
+                $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
+                ->whereIn('job_lists.applied_status',[]);
+            })
+            ->groupBy('recruiter_jobs.id','recruiter_profiles.office_name','recruiter_profiles.office_desc');
+        $jobObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
+            'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday','recruiter_jobs.is_thursday',
+            'recruiter_jobs.is_friday','recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
+            'recruiter_jobs.no_of_jobs','recruiter_jobs.created_at',
+            'recruiter_profiles.office_name','recruiter_profiles.office_desc',
+            'recruiter_offices.address','recruiter_offices.zipcode',
+            'job_templates.template_name','job_templates.template_desc','job_templates.job_title_id',
+            'job_titles.jobtitle_name',
+            DB::raw("group_concat(job_lists.applied_status) AS applied_status"),
+            DB::raw("group_concat(temp_job_dates.job_date) AS temp_job_dates"),
+            DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
     
         return $jobObj->get();
     }

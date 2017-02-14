@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\RecruiterOffice;
 use App\Models\RecruiterJobs;
+use App\Models\JobLists;
 
 class CalenderController extends Controller
 {
@@ -21,8 +22,14 @@ class CalenderController extends Controller
     
     public function getCalenderDetails(){
         try{
-            $jobs = RecruiterJobs::getAllTempJobs();
-            $this->response['data'] = $jobs;
+            $allJobs = RecruiterJobs::getAllTempJobs();
+            foreach($allJobs as $job){
+                $jobDetails['id'] = $job['id'];
+                $jobDetails['job_type'] = $job['job_type'];
+                $seekers = JobLists::getJobSeekerList($jobDetails);
+                $job['seekers'] = $seekers;
+            }
+            $this->response['jobs'] = $allJobs;
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.calender_details_fetched');
         } catch (\Exception $e) {

@@ -300,9 +300,13 @@ var SubscriptionVM = function () {
         me.errorMessage('');
         me.successMessage('');
         
-        if(me.expiry() != null && me.expiry().indexOf('/') >= 0){
+        if(me.expiry() != null && (me.expiry().indexOf('/') >= 0 || me.expiry().indexOf('/') < 0)){
             var expirySplit = me.expiry().split('/');
             if(expirySplit[1] == null || expirySplit[1] == ""){
+                me.errorMessage('Invalid expiry date.');
+                return false;
+            }
+            if(expirySplit[0] == null || expirySplit[0] == ""){
                 me.errorMessage('Invalid expiry date.');
                 return false;
             }
