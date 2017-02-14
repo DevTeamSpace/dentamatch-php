@@ -224,7 +224,7 @@ class RecruiterJobController extends Controller
             //$this->info($userId);
             NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['message'], $params);
 
-            $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['message']];
+            $data = ['receiver_id'=>$userId,'sender_id' => $sender, 'notification_data'=>$notificationData['message'],'notification_type' => $jobstatus];
             Notification::createNotification($data);
         }
         
