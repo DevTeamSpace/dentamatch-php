@@ -46,7 +46,7 @@ class UserProfileCompletionCommand extends Command
     {
         $notificationData = array(
                     'message' => "The profile completion is still pending.",
-                    'notification_title'=>'Registration Completion Reminder',
+                    'notification_title'=>'Profile Completion Reminder',
                     'sender_id' => "",
                     'type' => 1
                 );
@@ -68,7 +68,6 @@ class UserProfileCompletionCommand extends Command
                 if($deviceModel) {
                     $this->info($userId);
                     NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['message'], $params);
-                    
                     $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['message']];
                     Notification::createNotification($data);
                 }

@@ -1061,7 +1061,7 @@ paths:
       tags:
         - Chat
         
-  users/notification-list:
+  /users/notification-list:
     get:
       summary: Notification listing
       description: User notification list
@@ -1087,7 +1087,7 @@ paths:
         - Notification
         
         
-  users/notification-read:
+  /users/notification-read:
     post:
       summary: Read notification
       description: Read Notification
