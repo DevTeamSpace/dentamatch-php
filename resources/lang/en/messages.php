@@ -99,5 +99,7 @@ return [
     'unsubscribed' => 'Unsubscribed successfylly.',
     'no_subscription' => 'No subscription found',
     'cannot_delete_card' => 'Atlease one card should be added to continue the subscription.',
-    'card_edidted' => 'Card edidted successfully.'
+    'card_edidted' => 'Card edidted successfully.',
+    'calender_details_fetched' => 'Calender details fetched successfully.',
+    'calender_details_failed' => 'Cannot fetch calender details.',
 ];

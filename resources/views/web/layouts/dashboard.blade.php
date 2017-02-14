@@ -16,12 +16,14 @@
 
         <link rel="stylesheet" href="{{asset('web/plugins/parsley/css/parsley.css')}}">
         <link rel="stylesheet" href="{{asset('web/css/dentaIcon.css')}}">
-        <link rel="stylesheet" href="{{asset('web/css/custom.css')}}">
         <link rel="stylesheet" href="{{asset('web/css/dashboard.css')}}">
         <link rel="stylesheet" href="{{asset('web/css/bootstrap-multiselect.css')}}">
         <link rel="stylesheet" href="{{asset('web/css/checkBox.css')}}">
         <link rel="stylesheet" href="{{asset('web/css/dentaIcon.css')}}">
         <link rel="stylesheet" href="{{asset('web/css/bootstrap-datetimepicker.css')}}">
+        <link rel="stylesheet" href="{{asset('web/plugins/calender/css/fullcalendar.css')}}">
+        <link rel="stylesheet" href="{{asset('web/plugins/custom-scroller/css/mCustomScrollbar.min.css')}}">
+        <link rel="stylesheet" href="{{asset('web/css/custom.css')}}">
 
         @yield('css')
 
@@ -122,6 +124,8 @@
         <script src ="{{asset('web/scripts/main.js')}}"></script>
         <script src ="{{asset('web/scripts/tabScript1.js')}}"></script>
         <script type="text/javascript" src="{{asset('web/scripts/knockout-3.4.1.js')}}"></script>
+        <script src ="{{asset('web/plugins/custom-scroller/js/mCustomScrollbar.js')}}"></script>
+        <script src="{{asset('web/plugins/calender/js/fullcalendar.js')}}"></script>
         
         @yield('js')
 

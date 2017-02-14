@@ -273,6 +273,33 @@ class RecruiterJobs extends Model
             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
     
         return $jobObj->first()->toArray();
-    } 
+    }
+    
+    public static function getAllTempJobs(){
+        $jobObj = RecruiterJobs::where('recruiter_jobs.job_type',3)
+                ->join('recruiter_offices', 'recruiter_offices.id', '=', 'recruiter_jobs.recruiter_office_id')
+                ->join('recruiter_office_types', function($query1){
+                    $query1->on('recruiter_office_types.recruiter_office_id', '=', 'recruiter_offices.id')
+                            ->join('office_types', function($query2){
+                                $query2->on('office_types.id', '=', 'recruiter_office_types.office_type_id')
+                                        ->select(DB::raw("group_concat(office_types.officetype_name) AS officetype_name"));
+                            });
+                })
+//                ->join('office_types', 'office_types.id', '=', 'recruiter_office_types.office_type_id')
+                ->join('job_templates',function($query){
+                    $query->on('job_templates.id','=','recruiter_jobs.job_template_id')
+                    ->where('job_templates.user_id',Auth::user()->id);
+                })
+                ->join('job_titles', 'job_titles.id' , '=', 'job_templates.job_title_id');
+//                ->select('recruiter_jobs.id','recruiter_jobs.recruiter_office_id','recruiter_jobs.job_type',
+//                    'recruiter_jobs.no_of_jobs','recruiter_jobs.created_at','recruiter_jobs.job_template_id',
+//                    'recruiter_offices.address','recruiter_offices.zipcode','recruiter_offices.latitude','recruiter_offices.longitude',
+//                    'job_templates.template_name','job_templates.template_desc','job_templates.job_title_id',
+//                    'job_titles.jobtitle_name',
+//                    DB::raw("group_concat(office_types.officetype_name) AS officetype_name")
+//                );
+    
+        return $jobObj->get();
+    }
 }
     

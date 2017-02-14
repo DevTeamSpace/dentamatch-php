@@ -158,19 +158,19 @@ h6 {
 }
 
 .bg-green {
-    background: #05c410;
+    background: #05c410 !important;
 }
 
 .bg-ember {
-    background: #f1b85a
+    background: #f1b85a !important;
 }
 
 .bg-red {
-    background: #ff6565;
+    background: #ff6565 !important;
 }
 
 .drk-green {
-    background: #45b1b2;
+    background: #45b1b2 !important;
 }
 
 .label-success {
@@ -219,7 +219,7 @@ strong {
 /*-------------------------*/
 
 .denta-access-bg {
-    background-image: url('../images/denta_bg.jpg');
+    background-image: url('../img/denta_bg.jpg');
     background-size: cover;
     min-height: 100vh;
     background-repeat: no-repeat;
@@ -877,11 +877,11 @@ strong {
 }
 
 .star-empty {
-    background: url('../images/star-empty.png')no-repeat;
+    background: url('../img/star-empty.png')no-repeat;
 }
 
 .star-fill {
-    background: url('../images/star-fill.png')no-repeat;
+    background: url('../img/star-fill.png')no-repeat;
 }
 
 .jobCatbox .media-heading {
@@ -1196,8 +1196,8 @@ strong {
     vertical-align: top;
 }
 
-.chat-action .gbllist {
-    font-size: 14px;
+.chat-action .btn {
+    padding: 0 12px;
 }
 
 .time {
@@ -1232,6 +1232,16 @@ strong {
     height: 340px;
 }
 
+.action-disabled {
+    background-color: #dddddd !important;
+    border-color: #ccc !important;
+    cursor: not-allowed;
+}
+
+#comment:disabled {
+    background: #fff;
+}
+
 .chat-datewise {
     margin: 5px 0 32px;
     color: #bdbdbd;
@@ -1261,6 +1271,12 @@ strong {
     position: relative;
 }
 
+.wd50-rt {
+    width: 50%;
+    position: relative;
+    float: right;
+}
+
 .chat-msg-desc {
     padding: 9px 20px;
     margin-bottom: 5px;
@@ -1284,6 +1300,10 @@ strong {
     height: 50px;
     width: 100%;
     padding: 0 8px;
+}
+
+.chat-action ul.actions {
+    min-height: auto;
 }
 
 .type-text::-moz-placeholder {
@@ -1377,6 +1397,10 @@ strong {
     .popup-wd522 {
         width: 522px !important;
     }
+    .chat-list .media-object {
+        width: 40px;
+        height: 40px;
+    }
 }
 
 @media only screen and (max-width: 767px) {
@@ -1400,6 +1424,13 @@ strong {
     .jobCatbox {
         padding: 35px 15px;
     }
+    .chat-list .media-body {
+        display: none;
+    }
+    .chat-list .media-object {
+        width: 30px;
+        height: 30px;
+    }
 }
 
 @media only screen and (max-width: 520px) {
@@ -1414,8 +1445,22 @@ strong {
     }
 }
 
-@media only screen and (max-width: 480px) {}
-
+@media only screen and (max-width: 480px) {
+    .chat-list .media-object {
+        width: 25px;
+        height: 25px;
+    }
+    .chat-list-title {
+        padding: 16px 10px;
+        font-size: 10px;
+    }
+    .chat-list .list-group a {
+        padding: 15px 10px;
+    }
+    .col-xs-9.mob-chat-dialog {
+        padding-left: 0;
+    }
+}
 .dev_edit_button{
     margin-right: 17px !important;
 }
