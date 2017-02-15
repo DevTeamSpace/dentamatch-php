@@ -74,7 +74,7 @@
 
                 <div class="form-group">
                     <label>Phone Number</label>
-                    <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control phone-number" data-parsley-required data-parsley-required-message="Required"   data-parsley-trigger="keyup" data-parsley-minlength="10"  >
+                    <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control phone-number" data-parsley-required data-parsley-required-message="Please, Provide a valid Phone number of 10 digits"   data-parsley-trigger="keyup" data-parsley-minlength="10"  >
 <!--                    <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="13" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup"  >-->
 <!--                    <input name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required"  data-parsley-trigger="keyup"  data-parsley-pattern="^\(?([0-9]{3})\)([0-9]{3})[-]([0-9]{4})$" data-parsley-pattern-message="pattern should be (123)456-7890" >-->
                 </div>
@@ -454,7 +454,7 @@
 
         var date = $(this).data('date');
 
-        $(this).parents(".row").find('.datetimepicker2').data('DateTimePicker').minDate(date);
+        $(this).parents(".row").find('.datetimepicker2').data('DateTimePicker').minDate('12:00 AM');
         console.log(date);
     });
     $('.datetimepicker2').on("dp.change", function () {

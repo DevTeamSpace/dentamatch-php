@@ -41,6 +41,6 @@ class Skills extends Model
         }else{
             $skillObj->select('skills.id','skills.skill_name','skills.parent_id','sk.skill_name as parent_skill_name');
         }
-        return $skillObj->get()->groupBy('parent_skill_name')->toArray();
+        return $skillObj->orderBy('sk.skill_name','asc')->orderBy('skills.skill_name','asc')->get()->groupBy('parent_skill_name')->toArray();
     }
 }
