@@ -109,8 +109,9 @@ class NotificationServiceProvider extends ServiceProvider {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-        curl_exec($ch);
+        $result = curl_exec($ch);
         curl_close($ch);
+        dd($result);
     }
 
     

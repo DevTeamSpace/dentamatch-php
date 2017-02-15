@@ -174,6 +174,8 @@ class JobSeekerController extends Controller
                     'sender_id' => "",
                     'type' => 1
                 );
+        $params['data'] = $notificationData;
+        //NotificationServiceProvider::sendPushAndroid('fNGa2LzJ4p4:APA91bFKozuiRnK20e5R7lmdyr3vd7ycpC-Ji_PqTdcpUm3yWL3wa5ogc0OOalhE_VPhErXP3oWPnSCf3HtfZvIy', $notificationData['message'], $params);
         $notificationData['receiver_id'] = $userId;
         $params['data'] = $notificationData;
         $deviceModel = Device::getDeviceToken($userId);
