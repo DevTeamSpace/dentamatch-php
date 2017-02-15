@@ -335,6 +335,7 @@ var EditJobVM = function () {
         selectedId = $(e.currentTarget).val();
         for(i in d.allLocations()){
             if(d.allLocations()[i].id == selectedId){
+                console.log(d.allLocations()[i]);
             }
         }
     };
