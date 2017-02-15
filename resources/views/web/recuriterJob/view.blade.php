@@ -305,13 +305,6 @@ jQuery(function ($) {
         console.log(data);
     });
     
-    //socket.emit('getHistory',{'fromId':userId,'toId':'20','page':1});
-    
-    socket.on('getMessages', function (data) {
-        
-        console.log(data);
-    });
-    
 });
 
     $(function () {
