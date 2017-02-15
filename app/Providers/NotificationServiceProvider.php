@@ -88,12 +88,12 @@ class NotificationServiceProvider extends ServiceProvider {
         $config = config('pushnotification.android');
 
         $notification = ['text' => $message];
-        $body = json_encode($params);
+        //$body = json_encode($params);
 
         $fields = array
             (
             'notification' => $notification,
-            'data'=>$body,
+            'data'=>$params,
             'to' => $device_token
         );
         $headers = array
