@@ -16,6 +16,7 @@ use App\Models\PasswordReset;
 use Mail;
 use App\Providers\NotificationServiceProvider;
 use App\Models\Device;
+use App\Models\Notification;
 
 
 class JobSeekerController extends Controller
