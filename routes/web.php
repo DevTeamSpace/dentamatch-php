@@ -75,6 +75,8 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::post('edit-card', 'web\SubscriptionController@postEditCard');
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
             Route::post('change-password', 'web\UserProfileController@postChangePassword');
+            
+            Route::get('chat', 'web\ChatController@getChatSeekerList');
         });
 
         Route::group(['middleware' => 'termCondition'], function () {
