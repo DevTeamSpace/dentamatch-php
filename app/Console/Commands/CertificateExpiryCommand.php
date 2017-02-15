@@ -24,7 +24,7 @@ class CertificateExpiryCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Cron to send push notification on certificate expairy before 7 days';
+    protected $description = 'Cron to send push notification on certificate expiry before 7 days';
 
     /**
      * Create a new command instance.
@@ -45,7 +45,7 @@ class CertificateExpiryCommand extends Command
     {
         $certificateModel = JobseekerCertificates::select('jobseeker_certificates.certificate_id','jobseeker_certificates.user_id','certifications.certificate_name')
                         ->join('certifications', 'certifications.id', '=', 'jobseeker_certificates.certificate_id')
-                        ->where('jobseeker_certificates.deleted_at','<>',null)
+                        ->whereNull('jobseeker_certificates.deleted_at')
                         ->where(DB::raw("DATEDIFF(now(), jobseeker_certificates.validity_date)"),'<=', static::NOTIFICATION_INTERVAL)
                         ->get();
         
