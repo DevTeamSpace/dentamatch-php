@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         //
         Commands\Inspire::class,
         Commands\UserProfileCompletionCommand::class,
+        Commands\CertificateExpiryCommand::class,
     ];
 
     /**
@@ -27,6 +28,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('user:profileCompletion')->daily();
+        $schedule->command('user:certificateExpiry')->daily();
     }
 
     /**

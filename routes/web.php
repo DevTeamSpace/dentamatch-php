@@ -175,5 +175,14 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('create', 'Cms\SchoolController@create');
         Route::post('store', 'Cms\SchoolController@store');
     });
+    
+    Route::group(['prefix' => 'jobseeker/'], function() {
+        Route::get('index', 'Cms\JobSeekerController@index');
+        Route::get('list', 'Cms\JobSeekerController@jobSeekerList');
+        Route::delete('{id}/delete', 'Cms\JobSeekerController@delete');
+        Route::get('{id}/edit', 'Cms\JobSeekerController@edit');
+        Route::get('create', 'Cms\JobSeekerController@create');
+        Route::post('store', 'Cms\JobSeekerController@store');
+    });
 });
 

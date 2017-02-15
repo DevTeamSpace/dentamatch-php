@@ -190,6 +190,23 @@ $(function () {
         ]
     });
     
+    $('#jonseeker_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'jobseeker/list',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'email', name: 'email',searchable:true},
+            {data: 'first_name', name: 'first_name',searchable:false},
+            {data: 'last_name', name: 'last_name',searchable:false},
+            {data: 'active', name: 'active',searchable:false},
+            {data: 'action', name: 'action',searchable:false}
+        ]
+    });
+    
     $('#coupon_list').DataTable({
         processing: true,
         serverSide: true,

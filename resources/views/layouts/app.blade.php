@@ -83,6 +83,7 @@
                                 <li><a href="{{ url('cms/config/create-radius') }}">Search Radius</a></li>
                                 <li><a href="{{ url('cms/skill/index') }}">Skills</a></li>
                                 <li><a href="{{ url('cms/school/index') }}">Schooling</a></li>
+                                <li><a href="{{ url('cms/jobseeker/index') }}">Job Seeker</a></li>
                             </ul>
                         </li>
                         

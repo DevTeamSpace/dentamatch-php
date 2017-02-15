@@ -3,29 +3,28 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\UserProfile;
+use App\Models\JobseekerCertificates;
 use App\Models\Notification;
 use App\Models\Device;
 use DB;
 use App\Providers\NotificationServiceProvider;
 
-class UserProfileCompletionCommand extends Command
+class CertificateExpiryCommand extends Command
 {
-    const IS_COMPLETED = 0;
-    const NOTIFICATION_INTERVAL = 15;
+    const NOTIFICATION_INTERVAL = 7;
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'user:profileCompletion';
+    protected $signature = 'user:certificateExpiry';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Cron to send push notification on user profile completion';
+    protected $description = 'Cron to send push notification on certificate expairy before 7 days';
 
     /**
      * Create a new command instance.
@@ -44,28 +43,28 @@ class UserProfileCompletionCommand extends Command
      */
     public function handle()
     {
-        $notificationData = array(
-                    'message' => "The profile completion is still pending.",
-                    'notification_title'=>'Profile Completion Reminder',
+        $certificateModel = JobseekerCertificates::select('jobseeker_certificates.certificate_id','jobseeker_certificates.user_id','certifications.certificate_name')
+                        ->join('certifications', 'certifications.id', '=', 'jobseeker_certificates.certificate_id')
+                        ->where('jobseeker_certificates.deleted_at','<>',null)
+                        ->where(DB::raw("DATEDIFF(now(), jobseeker_certificates.validity_date)"),'<=', static::NOTIFICATION_INTERVAL)
+                        ->get();
+        
+        if(!empty($certificateModel)) {
+            foreach($certificateModel as $value) {
+                $userId = $value->user_id;
+                $notificationData['receiver_id'] = $userId;
+                $notificationData = array(
+                    'message' => "7 days remaining before the expiry of ".$value->certificate_name,
+                    'notification_title'=>'Certification expairy Reminder',
                     'sender_id' => "",
                     'type' => 1
                 );
-        
-        $userModel = UserProfile::select('jobseeker_profiles.user_id')
-                        ->join('users', 'users.id', '=', 'jobseeker_profiles.user_id')
-                        ->where('is_completed',static::IS_COMPLETED)
-                        ->where(DB::raw("DATEDIFF(now(), users.created_at)"),'=', 16)
-                        ->get();
-        
-        if(!empty($userModel)) {
-            foreach($userModel as $value) {
-                $userId = $value->user_id;
                 
-                $notificationData['receiver_id'] = $userId;
                 $params['data'] = $notificationData;
                 
                 $deviceModel = Device::getDeviceToken($userId);
                 if($deviceModel) {
+                    $this->info($userId);
                     NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['message'], $params);
                     $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['message']];
                     Notification::createNotification($data);

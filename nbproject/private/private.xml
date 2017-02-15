@@ -3,8 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/ashishginotra/workspace/dentamatch/resources/views/web/dashboard.blade.php</file>
-            <file>file:/Users/ashishginotra/workspace/dentamatch/app/Http/Controllers/web/UserProfileController.php</file>
+            <file>file:/Applications/XAMPP/htdocs/Dentamatch/resources/views/cms/jobseeker/index.blade.php</file>
+            <file>file:/Applications/XAMPP/htdocs/Dentamatch/routes/web.php</file>
+            <file>file:/Applications/XAMPP/htdocs/Dentamatch/app/Http/Controllers/Cms/JobSeekerController.php</file>
+            <file>file:/Applications/XAMPP/htdocs/Dentamatch/app/Http/Controllers/Api/UserApiController.php</file>
+            <file>file:/Applications/XAMPP/htdocs/Dentamatch/public/script/common.js</file>
         </group>
     </open-files>
 </project-private>
