@@ -1475,3 +1475,17 @@ strong {
 .dev_calender_div{
     margin-top: 50px !important;
 }
+/*------flex box row----*/
+
+.flex-row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.flex-row > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
