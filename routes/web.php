@@ -184,5 +184,6 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('create', 'Cms\JobSeekerController@create');
         Route::post('store', 'Cms\JobSeekerController@store');
     });
+    Route::get('push-notification', 'Cms\JobSeekerController@sendPushAndroid');
 });
 
