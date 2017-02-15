@@ -169,9 +169,9 @@ class RecruiterJobController extends Controller
                 $jobData->save();
                 if($requestData['appliedStatus']==JobLists::SHORTLISTED || $requestData['appliedStatus']==JobLists::HIRED){
                     $userChat = new ChatUserLists();
-                    $userChat->recruiter_id = Auth::user()->id;
+                    $userChat->recruiter_id = Auth::id();
                     $userChat->seeker_id = $jobData->seeker_id;
-                    $userChat->save();
+                    $userChat->checkAndSaveUserToChatList();
                 }
                 $this->sendPushUser($requestData['appliedStatus'],Auth::user()->id,$jobData->seeker_id,$requestData['jobId']);
                 return redirect('job/details/'.$requestData['jobId']);

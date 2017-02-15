@@ -1233,6 +1233,7 @@ strong {
 
 .users-chat-outerbox .content {
     height: 340px;
+    overflow: hidden !important;
 }
 
 .action-disabled {
