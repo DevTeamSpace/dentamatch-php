@@ -125,14 +125,18 @@ class JobLists extends Model {
         return $result;
     }
 
-    public static function getJobSeekerList($job) {
+    public static function getJobSeekerList($job, $forJobType='') {
         $obj = JobLists::join('recruiter_jobs', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
                 ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                 ->join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
                 ->join('job_titles', 'jobseeker_profiles.job_titile_id', '=', 'job_titles.id')
-                ->where('job_lists.recruiter_job_id', $job['id'])
-                ->whereIn('job_lists.applied_status', [JobLists::INVITED, JobLists::APPLIED, JobLists::SHORTLISTED, JobLists::HIRED])
-                ->select('job_lists.applied_status', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'jobseeker_profiles.profile_pic', 'job_lists.seeker_id', 'job_titles.jobtitle_name', 'recruiter_jobs.job_type');
+                ->where('job_lists.recruiter_job_id', $job['id']);
+        if($forJobType!=''){
+            $obj->whereIn('job_lists.applied_status', [JobLists::HIRED]);
+        }else{
+            $obj->whereIn('job_lists.applied_status', [JobLists::INVITED, JobLists::APPLIED, JobLists::SHORTLISTED, JobLists::HIRED]);
+        }
+        $obj->select('job_lists.applied_status', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'jobseeker_profiles.profile_pic', 'job_lists.seeker_id', 'job_titles.jobtitle_name', 'recruiter_jobs.job_type');
 
         if ($job['job_type'] == RecruiterJobs::FULLTIME) {
             $obj->addSelect('jobseeker_profiles.is_fulltime');

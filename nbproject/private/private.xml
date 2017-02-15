@@ -3,8 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/ashishginotra/workspace/dentamatch/resources/views/web/dashboard.blade.php</file>
-            <file>file:/Users/ashishginotra/workspace/dentamatch/app/Http/Controllers/web/UserProfileController.php</file>
+            <file>file:/Applications/XAMPP/xamppfiles/htdocs/dentamatch_php/resources/views/web/subscription.blade.php</file>
+            <file>file:/Applications/XAMPP/xamppfiles/htdocs/dentamatch_php/resources/views/web/setting-subscription.blade.php</file>
+            <file>file:/Applications/XAMPP/xamppfiles/htdocs/dentamatch_php/app/Models/RecruiterJobs.php</file>
+            <file>file:/Applications/XAMPP/xamppfiles/htdocs/dentamatch_php/app/Models/JobLists.php</file>
+            <file>file:/Applications/XAMPP/xamppfiles/htdocs/dentamatch_php/app/Models/RecruiterOffice.php</file>
+            <file>file:/Applications/XAMPP/xamppfiles/htdocs/dentamatch_php/routes/web.php</file>
+            <file>file:/Applications/XAMPP/xamppfiles/htdocs/dentamatch_php/app/Http/Controllers/web/RecruiterJobController.php</file>
+            <file>file:/Applications/XAMPP/xamppfiles/htdocs/dentamatch_php/app/Http/Controllers/web/SubscriptionController.php</file>
+            <file>file:/Applications/XAMPP/xamppfiles/htdocs/dentamatch_php/app/Http/Controllers/web/CalenderController.php</file>
+            <file>file:/Applications/XAMPP/xamppfiles/htdocs/dentamatch_php/resources/views/web/calender.blade.php</file>
         </group>
     </open-files>
 </project-private>

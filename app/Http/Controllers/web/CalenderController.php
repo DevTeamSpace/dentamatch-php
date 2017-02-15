@@ -26,7 +26,12 @@ class CalenderController extends Controller
             foreach($allJobs as $job){
                 $jobDetails['id'] = $job['id'];
                 $jobDetails['job_type'] = $job['job_type'];
-                $seekers = JobLists::getJobSeekerList($jobDetails);
+                $seekers = JobLists::getJobSeekerList($jobDetails, 1);
+                foreach($seekers as &$seeker){
+                    foreach($seeker as &$seek){
+                        $seek['profile_pic'] = url("image/" . 60 . "/" . 60 . "/?src=" .$seek['profile_pic']);
+                    }
+                }
                 $job['seekers'] = $seekers;
             }
             $this->response['jobs'] = $allJobs;

@@ -278,6 +278,8 @@ class RecruiterJobs extends Model
     public static function getAllTempJobs(){
         $jobObj = RecruiterJobs::where('recruiter_jobs.job_type',3)
             ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+            ->join('recruiter_office_types','recruiter_office_types.recruiter_office_id', '=' , 'recruiter_offices.id')
+            ->leftjoin('office_types','recruiter_office_types.office_type_id', '=' , 'office_types.id')
             ->join('job_templates',function($query){
                 $query->on('job_templates.id','=','recruiter_jobs.job_template_id')
                 ->where('job_templates.user_id',Auth::user()->id);
@@ -301,6 +303,7 @@ class RecruiterJobs extends Model
             'job_titles.jobtitle_name',
             DB::raw("group_concat(job_lists.applied_status) AS applied_status"),
             DB::raw("group_concat(temp_job_dates.job_date) AS temp_job_dates"),
+            DB::raw("GROUP_CONCAT(office_types.officetype_name) AS office_type_name"),
             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
     
         return $jobObj->get();
