@@ -149,7 +149,7 @@ class SubscriptionController extends Controller {
                 $this->response['data'] = null;
                 $this->response['message'] = trans('messages.cannot_add_card');
             }
-        } catch (Exception $ex) {
+        } catch (\Exception $e) {
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
