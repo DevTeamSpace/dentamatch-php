@@ -298,7 +298,7 @@
 
 @if(isset($modal))
 <!-- Modal -->
-<div id="onboardView" class="modal fade" role="dialog">
+<div id="onboardView" class="modal " role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
