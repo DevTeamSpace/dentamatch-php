@@ -123,9 +123,10 @@ return [
 
     'cannot_delete_card' => 'Atlease one card should be added to continue the subscription.',
     'card_edidted' => 'Card edidted successfully.',
-    
     'jobseeker_added_success' => 'Jobseeker added successfully',
     'jobseeker_updated_success' => 'Jobseeker updated successfully',
     'password_updated' => 'Password successfully updated.',
     'incorrect_pass' => 'Incorrect password. Please try again',
+    'subscription_plan_changed' => 'Subscription plan changed successfully.'
+
 ];

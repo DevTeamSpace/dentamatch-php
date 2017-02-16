@@ -54,6 +54,7 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::get('job/lists', 'web\RecruiterJobController@listJobs');
             Route::get('job/search/{jobId}', 'web\RecruiterJobController@searchSeekers');
             Route::get('job/details/{jobId}', 'web\RecruiterJobController@jobDetails');
+            Route::get('job/edit/{jobId}', 'web\RecruiterJobController@editJob');
             Route::post('job/updateStatus', 'web\RecruiterJobController@updateStatus');
             Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
             Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
@@ -70,9 +71,12 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::get('setting-subscription', 'web\SubscriptionController@getSettingSubscription');
             Route::post('unsubscribe', 'web\SubscriptionController@postUnsubscribe');
             Route::get('get-subscription-details', 'web\SubscriptionController@getSubscriptionDetails');
+            Route::post('change-subscription-plan', 'web\SubscriptionController@postChangeSubscriptionPlan');
             Route::post('add-card', 'web\SubscriptionController@postAddCard');
             Route::post('delete-card', 'web\SubscriptionController@postDeleteCard');
             Route::post('edit-card', 'web\SubscriptionController@postEditCard');
+            
+            Route::get('setting-terms-conditions', 'web\UserProfileController@getTermsConditions');
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
             Route::post('change-password', 'web\UserProfileController@postChangePassword');
             

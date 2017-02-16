@@ -20,8 +20,13 @@
                 <h4>{{ $job['jobtitle_name'] }}</h4>
             </div>
             <div class="template-job-information-right">
-                <span >Posted : {{ $job['days'].' day'.(($job['days']>1)?'s':'') }} ago</span>
-
+                <span >Posted : 
+                     @if($job['days']>0)
+                    {{ $job['days'].' day'.(($job['days']>1)?'s':'') }} ago
+                    @else
+                    Today
+                    @endif
+                </span>
             </div> 
         </div>    
         <div class="job-type-detail">
@@ -136,7 +141,7 @@
                 <div class="media-body row">
                     <div class="col-sm-7 pd-t-10 ">
                         <div >
-                            <a href="#" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
+                            <a href="{{ url('job/seekerdetails/'.$seeker['seeker_id'].'/'.$job['id']) }}" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
                             @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
                             <span class="mr-l-5 dropdown date_drop">
                                 <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{ ($seeker['avg_rating']!='')?round($seeker['avg_rating'],1):'' }}</span>

@@ -33,4 +33,11 @@ class User extends Authenticatable
     public function userGroup(){
         return $this->hasOne(UserGroup::class);
     }
+    
+    public static function validateRecuriterEmail($email){
+        return static::join('user_groups','user_groups.user_id','=','users.id')
+            ->where('user_groups.group_id',  UserGroup::RECRUITER)    
+            ->where('users.email',$email)
+            ->count();
+    }
 }
