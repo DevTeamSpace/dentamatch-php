@@ -15,6 +15,7 @@ use App\Models\RecruiterOffice;
 use App\Models\ChatUserLists;
 use App\Models\JobSeekerProfiles;
 use App\Models\RecruiterProfile;
+use App\Models\OfficeType;
 
 use DB;
 
@@ -197,9 +198,11 @@ class RecruiterJobController extends Controller
             $jobDetails = RecruiterJobs::getRecruiterJobDetails($request->jobId);
             $jobSeekerStatus = JobLists::getJobSeekerStatus($request->jobId);
             $recruiterOffices = RecruiterOffice::getAllOffices();
+            $allOfficeTypes = OfficeType::allOfficeTypes();
             $allData['jobDetails'] = $jobDetails;
             $allData['jobSeekerStatus'] = $jobSeekerStatus;
             $allData['recruiterOffices'] = $recruiterOffices;
+            $allData['allOfficeTypes'] = $allOfficeTypes;
             $response = $allData;
         } catch (\Exception $e) {
             $response = $e->getMessage();

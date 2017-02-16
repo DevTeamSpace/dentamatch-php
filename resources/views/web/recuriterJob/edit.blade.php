@@ -102,16 +102,16 @@
                         <option value="Smiley">Orthodontist, Oral Surgeon</option>
 
                     </select>
-                    <p class="error-div">Job cannot be currently created for this location. We will soon be available in your area.</p>
+                    <!--<p class="error-div">Job cannot be currently created for this location. We will soon be available in your area.</p>-->
                 </div>
             </div>
             <div class="form-group">
                 <label>Dental Office Address</label>
-                <input type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="office address required">
+                <input data-bind="value: selectedOffice.selectedOfficeAddress" type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="office address required">
             </div>
             <div class="form-group">
                 <label>Phone Number</label>
-                <input type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits" >
+                <input data-bind="value: selectedOffice.selectedOfficePhone" type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits" >
             </div>
             <div class="form-group">
                 <label >Working Hours</label>
@@ -268,6 +268,104 @@ var JobModel = function(data){
     return me;
 };
 
+var OfficeModel = function(data){
+    var me = this;
+    me.selectedOfficeId = ko.observable();
+    me.selectedOfficeType = ko.observable();
+    me.selectedOfficeAddress = ko.observable('');
+    me.selectedOfficePhone = ko.observable();
+    me.selectedOfficeInfo = ko.observable('');
+    me.selectedOfficeWorkingHours = ko.observable();
+    me.selectedOfficeZipcode = ko.observable();
+    
+    me._init = function(d){
+      me.selectedOfficeId = d.id;
+      me.selectedOfficeType = d.office_type_name;
+      me.selectedOfficeAddress = d.address;
+      me.selectedOfficePhone = d.phone_no;
+      me.selectedOfficeInfo = d.office_info;
+      me.selectedOfficeZipcode = d.zipcode;
+      me.selectedOfficeWorkingHours = new WorkingHourModel(d);
+    };
+    
+    me._init(data);
+};
+
+var WorkingHourModel = function(data){
+    var me = this;
+    me.isMondayWork = ko.observable(false);
+    me.mondayStart = ko.observable();
+    me.mondayEnd = ko.observable();
+    me.isTuesdayWork = ko.observable(false);
+    me.tuesdayStart = ko.observable();
+    me.tuesdayEnd = ko.observable();
+    me.isWednesdayWork = ko.observable(false);
+    me.wednesdayStart = ko.observable();
+    me.wednesdayEnd = ko.observable();
+    me.isThursdayWork = ko.observable(false);
+    me.thursdayStart = ko.observable();
+    me.thursdayEnd = ko.observable();
+    me.isFridayWork = ko.observable(false);
+    me.fridayStart = ko.observable();
+    me.fridayEnd = ko.observable();
+    me.isSaturdayWork = ko.observable(false);
+    me.saturdayStart = ko.observable();
+    me.saturdayEnd = ko.observable();
+    me.isSundayWork = ko.observable(false);
+    me.sundayStart = ko.observable();
+    me.sundayEnd = ko.observable();
+    me.isEverydayWork = ko.observable(false);
+    me.everydayStart = ko.observable();
+    me.everydayEnd = ko.observable();
+    
+    me._init = function(d){
+        console.log(d);
+        if(d.work_everyday_start == "00:00:00" && d.work_everyday_end == "00:00:00"){
+            if(d.monday_start != "00:00:00"){
+                me.isMondayWork(true);
+                me.mondayStart = d.monday_start;
+                me.mondayEnd = d.monday_end;
+            }
+            if(d.tuesday_start != "00:00:00"){
+                me.isTuesdayWork(true);
+                me.tuesdayStart = d.tuesday_start;
+                me.tuesdayEnd = d.tuesday_end;
+            }
+            if(d.wednesday_start != "00:00:00"){
+                me.isWednesdayWork(true);
+                me.wednesdayStart = d.wednesday_start;
+                me.wednesdayEnd = d.wednesday_end;
+            }
+            if(d.thursday_start != "00:00:00"){
+                me.isThursdayWork(true);
+                me.thursdayStart = d.thursday_start;
+                me.thursdayEnd = d.thursday_end;
+            }
+            if(d.friday_start != "00:00:00"){
+                me.isFridayWork(true);
+                me.fridayStart = d.friday_start;
+                me.fridayEnd = d.friday_end;
+            }
+            if(d.saturday_start != "00:00:00"){
+                me.isSaturdayWork(true);
+                me.saturdayStart = d.saturday_start;
+                me.saturdayEnd = d.saturday_end;
+            }
+            if(d.sunday_start != "00:00:00"){
+                me.isSundayWork(true);
+                me.sundayStart = d.sunday_start;
+                me.sundayEnd = d.sunday_end;
+            }
+        }else{
+            me.isEverydayWork(true);
+            me.everydayStart = d.work_everyday_start;
+            me.everydayEnd = d.work_everyday_end;
+        }
+    };
+    
+    me._init(data);
+};
+
 var EditJobVM = function () {
     var me = this;
     me.showEdit = ko.observable(true);
@@ -286,11 +384,11 @@ var EditJobVM = function () {
     me.isFriday = ko.observable(false);
     me.isSaturday = ko.observable(false);
     me.isSunday = ko.observable(false);
+    me.selectedOffice = ko.observable();
     
     me.getJobDetails = function(){
         jobId = <?php echo json_encode($jobId) ?>;
         $.get('/job/edit-details', {jobId: jobId}, function(d){
-            console.log(d);
             if(d.jobSeekerStatus != 0){
                 me.cannotEdit(true);
                 me.showEdit(false);
@@ -335,7 +433,7 @@ var EditJobVM = function () {
         selectedId = $(e.currentTarget).val();
         for(i in d.allLocations()){
             if(d.allLocations()[i].id == selectedId){
-                console.log(d.allLocations()[i]);
+                me.selectedOffice(new OfficeModel(d.allLocations()[i]));
             }
         }
     };
