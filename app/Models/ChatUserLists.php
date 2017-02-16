@@ -78,6 +78,7 @@ class ChatUserLists extends Model
         $chatData = UserChat::whereIn('id',$messageIds)->pluck('message','id');
         foreach($responseData as $key=>$row){
             $responseData[$key]['message'] = $chatData[$row['messageId']];
+            $responseData[$key]['timestamp'] = strtotime($row['timestamp'])*1000;
         }
         return $responseData;
     }
