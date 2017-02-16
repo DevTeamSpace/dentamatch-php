@@ -63,6 +63,7 @@ class NotificationServiceProvider extends ServiceProvider {
         );
 
         if (!empty($params['data'])) {
+            //$body['data'] = $params['data'];
             $body['data'] = $params['data'];
         }
 
