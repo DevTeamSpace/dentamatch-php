@@ -114,7 +114,7 @@
                     <label>Phone Number</label>
                     <input type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits"  data-bind="value: selectedOfficePhone">
                 </div>
-                <div class="form-group">
+                <div class="form-group" data-bind="datetimePicker: datePickerBinding">
                     <label >Working Hours</label>
                     <div class="row dayBox EveryDayCheck">
                         <div class="col-sm-4 col-md-3">  
@@ -123,8 +123,16 @@
                                 <label for="test2" class="ckColor"> Everyday</label>
                             </p>    
                         </div>
-                        <div class="col-sm-4 col-md-3"><input type="text" class="form-control datetime" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.everydayStart,click: $root.datePicker1"></div>
-                        <div class="col-sm-4 col-md-3"><input type="text" class="form-control datetime" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.everydayEnd,click: $root.datePicker2" ></div>
+                        <div class="col-sm-4 col-md-3">
+                            <div class="date datetime1">
+                                <input type="text" class="form-control datetime" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.everydayStart, disable: !selectedOfficeWorkingHours.isEverydayWork()">
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-md-3">
+                            <div class="date datetime1">
+                                <input type="text" class="form-control datetime" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.everydayEnd, disable: !selectedOfficeWorkingHours.isEverydayWork()" >
+                            </div>                               
+                        </div>
                     </div>
                     <div class="allDay">  
                         <div class="row dayBox">
@@ -134,8 +142,16 @@
                                     <label for="mon" class="ckColor"> Monday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4 col-md-3"><input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.mondayStart"></div>
-                            <div class="col-sm-4 col-md-3"><input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.mondayEnd" ></div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.mondayStart, disable: !selectedOfficeWorkingHours.isMondayWork()">
+                                </div>    
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.mondayEnd, disable: !selectedOfficeWorkingHours.isMondayWork()" >
+                                </div>
+                            </div>
                         </div>
                         <div class="row dayBox">
                             <div class="col-sm-4 col-md-3">  
@@ -144,8 +160,16 @@
                                     <label for="tue" class="ckColor"> Tuesday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4 col-md-3"><input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.tuesdayStart"></div>
-                            <div class="col-sm-4 col-md-3"><input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required  data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.tuesdayEnd" ></div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.tuesdayStart, disable: !selectedOfficeWorkingHours.isTuesdayWork()">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required  data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.tuesdayEnd, disable: !selectedOfficeWorkingHours.isTuesdayWork()" >
+                                </div>
+                            </div>
                         </div>
                         <div class="row dayBox">
                             <div class="col-sm-4 col-md-3">  
@@ -154,8 +178,16 @@
                                     <label for="wed" class="ckColor"> Wednesday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4 col-md-3"><input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.wednesdayStart"></div>
-                            <div class="col-sm-4 col-md-3"><input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.wednesdayEnd" ></div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.wednesdayStart, disable: !selectedOfficeWorkingHours.isWednesdayWork()">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.wednesdayEnd, disable: !selectedOfficeWorkingHours.isWednesdayWork()" >
+                                </div>
+                            </div>
                         </div>
                         <div class="row dayBox">
                             <div class="col-sm-4 col-md-3">  
@@ -164,8 +196,16 @@
                                     <label for="thu" class="ckColor"> Thursday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4 col-md-3"><input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.thursdayStart"></div>
-                            <div class="col-sm-4 col-md-3"><input type="text" class="form-control" placeholder="Closing Hours"data-parsley-required data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.thursdayEnd" ></div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.thursdayStart, disable: !selectedOfficeWorkingHours.isThursdayWork()">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Closing Hours"data-parsley-required data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.thursdayEnd, disable: !selectedOfficeWorkingHours.isThursdayWork()" >
+                                </div>
+                            </div>
                         </div>
                         <div class="row dayBox">
                             <div class="col-sm-4 col-md-3">  
@@ -174,8 +214,16 @@
                                     <label for="fri" class="ckColor"> Friday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4 col-md-3"><input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.fridayStart"></div>
-                            <div class="col-sm-4 col-md-3"><input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.fridayEnd" ></div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.fridayStart, disable: !selectedOfficeWorkingHours.isFridayWork()">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.fridayEnd, disable: !selectedOfficeWorkingHours.isFridayWork()" >
+                                </div>
+                            </div>
                         </div>
                         <div class="row dayBox">
                             <div class="col-sm-4 col-md-3">  
@@ -184,8 +232,16 @@
                                     <label for="sat" class="ckColor"> Saturday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4 col-md-3"><input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.saturdayStart"></div>
-                            <div class="col-sm-4 col-md-3"><input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.saturdayEnd" ></div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.saturdayStart, disable: !selectedOfficeWorkingHours.isSaturdayWork()">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.saturdayEnd, disable: !selectedOfficeWorkingHours.isSaturdayWork()" >
+                                </div>
+                            </div>
                         </div>
                         <div class="row dayBox">
                             <div class="col-sm-4 col-md-3">  
@@ -194,8 +250,16 @@
                                     <label for="sun" class="ckColor"> Sunday</label>
                                 </p>    
                             </div>
-                            <div class="col-sm-4 col-md-3"><input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.sundayStart"></div>
-                            <div class="col-sm-4 col-md-3"><input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.sundayEnd" ></div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.sundayStart, disable: !selectedOfficeWorkingHours.isSundayWork()">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.sundayEnd, disable: !selectedOfficeWorkingHours.isSundayWork()" >
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>	
@@ -220,7 +284,7 @@ $.ajaxSetup({
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
-
+$(function () {
 var JobModel = function (data) {
     var me = this;
 //    me.location = ko.observableArray([]);
@@ -280,6 +344,7 @@ var OfficeModel = function (data) {
     me.selectedOfficeInfo = ko.observable('');
     me.selectedOfficeWorkingHours = ko.observable();
     me.selectedOfficeZipcode = ko.observable();
+    me.datePickerBinding = ko.observable(false);
 
     me._init = function (d) {
         me.selectedOfficeId(d.id);
@@ -289,6 +354,7 @@ var OfficeModel = function (data) {
         me.selectedOfficeInfo(d.office_location);
         me.selectedOfficeZipcode(d.zipcode);
         me.selectedOfficeWorkingHours = new WorkingHourModel(d);
+        me.datePickerBinding(true);
     };
 
     me._init(data);
@@ -326,47 +392,58 @@ var WorkingHourModel = function (data) {
         if (d.work_everyday_start == "00:00:00" && d.work_everyday_end == "00:00:00") {
             if (d.monday_start != "00:00:00") {
                 me.isMondayWork(true);
-                me.mondayStart(d.monday_start);
-                me.mondayEnd(d.monday_end);
+                me.mondayStart(moment(Date(d.monday_start)).format('LT'));
+                me.mondayEnd(moment(Date(d.monday_end)).format('LT'));
             }
             if (d.tuesday_start != "00:00:00") {
                 me.isTuesdayWork(true);
-                me.tuesdayStart(d.tuesday_start);
-                me.tuesdayEnd(d.tuesday_end);
+                me.tuesdayStart(moment(Date(d.tuesday_start)).format('LT'));
+                me.tuesdayEnd(moment(Date(d.tuesday_end)).format('LT'));
             }
             if (d.wednesday_start != "00:00:00") {
                 me.isWednesdayWork(true);
-                me.wednesdayStart(d.wednesday_start);
-                me.wednesdayEnd(d.wednesday_end);
+                me.wednesdayStart(moment(Date(d.wednesday_start)).format('LT'));
+                me.wednesdayEnd(moment(Date(d.wednesday_end)).format('LT'));
             }
             if (d.thursday_start != "00:00:00") {
                 me.isThursdayWork(true);
-                me.thursdayStart(d.thursday_start);
-                me.thursdayEnd(d.thursday_end);
+                me.thursdayStart(moment(Date(d.thursday_start)).format('LT'));
+                me.thursdayEnd(moment(Date(d.thursday_end)).format('LT'));
             }
             if (d.friday_start != "00:00:00") {
                 me.isFridayWork(true);
-                me.fridayStart(d.friday_start);
-                me.fridayEnd(d.friday_end);
+                me.fridayStart(moment(Date(d.friday_start)).format('LT'));
+                me.fridayEnd(moment(Date(d.friday_end)).format('LT'));
             }
             if (d.saturday_start != "00:00:00") {
                 me.isSaturdayWork(true);
-                me.saturdayStart(d.saturday_start);
-                me.saturdayEnd(d.saturday_end);
+                me.saturdayStart(moment(Date(d.saturday_start)).format('LT'));
+                me.saturdayEnd(moment(Date(d.saturday_end)).format('LT'));
             }
             if (d.sunday_start != "00:00:00") {
                 me.isSundayWork(true);
-                me.sundayStart(d.sunday_start);
-                me.sundayEnd(d.sunday_end);
+                me.sundayStart(moment(Date(d.sunday_start)).format('LT'));
+                me.sundayEnd(moment(Date(d.sunday_end)).format('LT'));
             }
         } else {
             me.isEverydayWork(true);
-            me.everydayStart(d.work_everyday_start);
-            me.everydayEnd(d.work_everyday_end);
+            me.everydayStart(moment(Date(d.work_everyday_start)).format('LT'));
+            me.everydayEnd(moment(Date(d.work_everyday_end)).format('LT'));
         }
     };
 
     me._init(data);
+};
+
+ko.bindingHandlers.datetimePicker = {
+    init: function(element, valueAccessor){
+        $('.datetime1').datetimepicker({
+            format: 'hh:mm A',
+                        'allowInputToggle' : true,
+            minDate: moment().startOf('day'),
+            maxDate: moment().endOf('day')
+        });
+    }
 };
 
 var EditJobVM = function () {
@@ -450,28 +527,16 @@ var EditJobVM = function () {
     };
     
     me.datePicker1 = function(d, e){
-        $(e.currentTarget).parent().datetimepicker({
-            format: 'hh:mm A',
-                        'allowInputToggle' : true,
-            minDate: moment().startOf('day'),
-            maxDate: moment().endOf('day')
-        });
         
-        $(e.currentTarget).parent().on("dp.change", function () {
-            console.log('on change call 1');
+        $(e.currentTarget).on("dp.change", function () {
+            
         });
     };
     
     me.datePicker2 = function(d, e){
-        $(e.currentTarget).parent().datetimepicker({
-            format: 'hh:mm A',
-                        'allowInputToggle' : true,
-            minDate: moment().startOf('day'),
-            maxDate: moment().endOf('day')
-        });
         
-        $(e.currentTarget).parent().on("dp.change", function () {
-            console.log('on change call 2');
+        $(e.currentTarget).on("dp.change", function () {
+            
         });
     };
 
@@ -482,5 +547,6 @@ var EditJobVM = function () {
 };
 var ejObj = new EditJobVM();
 ko.applyBindings(ejObj, $('#edit-job')[0])
+});
 </script>
 @endsection
