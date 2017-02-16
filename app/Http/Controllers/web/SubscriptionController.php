@@ -208,7 +208,7 @@ class SubscriptionController extends Controller {
     }
     
     public function getSettingSubscription(){
-        return view('web.setting-subscription');
+        return view('web.setting-subscription',['activeTab'=>'4']);
     }
     
     public function getSubscriptionDetails(){
