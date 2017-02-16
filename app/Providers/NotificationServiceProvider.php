@@ -62,9 +62,13 @@ class NotificationServiceProvider extends ServiceProvider {
             'sound' => 'AlertSound.mp3'
         );
 
-        if (!empty($params['data'])) {
+        /*if (!empty($params['data'])) {
             //$body['data'] = $params['data'];
-            $body['data'] = $params['data'];
+            $body['data'] = $params;
+        }*/
+        
+        if(is_array($params) && count($params) > 0){
+            $body = $params;
         }
 
         // Encode the payload as JSON
