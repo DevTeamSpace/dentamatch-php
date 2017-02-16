@@ -14,6 +14,7 @@ use App\Http\Requests\DeleteCardRequest;
 use App\Http\Requests\UnsubscribeRequest;
 use App\Http\Requests\EditCardRequest;
 use App\Http\Requests\ChangeSubscriptionPlanRequest;
+use App\Http\Requests\SubscribeAgainRequest;
 
 class SubscriptionController extends Controller {
     private $response = [];
@@ -330,6 +331,9 @@ class SubscriptionController extends Controller {
             $subscription = \Stripe\Subscription::retrieve($request->subscriptionId);
             $subscription->plan = $plan;
             $subscription->save();
+            if($request->type == "resubscribe"){
+                RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 1]);
+            }
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.subscription_plan_changed');
         } catch (\Exception $e) {
