@@ -477,9 +477,9 @@ var SubscriptionVM = function () {
         me.cancelButtonDelete(true);
         me.actionButtonText('Change');
         if(d.subscription()[0].subscriptionPlan === "Yearly"){
-            me.prompt('Do you want to change plan to annually. ?');
-        }else{
             me.prompt('Do you want to change plan to half yearly. ?');
+        }else{
+            me.prompt('Do you want to change plan to annually. ?');
         }
         $('#actionModal').modal('show');
         $('#actionButton').on('click', function(){
