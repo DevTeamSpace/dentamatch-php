@@ -54,6 +54,7 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::get('job/lists', 'web\RecruiterJobController@listJobs');
             Route::get('job/search/{jobId}', 'web\RecruiterJobController@searchSeekers');
             Route::get('job/details/{jobId}', 'web\RecruiterJobController@jobDetails');
+            Route::get('job/edit/{jobId}', 'web\RecruiterJobController@editJob');
             Route::post('job/updateStatus', 'web\RecruiterJobController@updateStatus');
             Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
             Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');

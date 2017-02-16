@@ -27,7 +27,7 @@ class RecruiterJobController extends Controller
     public function __construct() {
         $this->middleware('auth');
         $this->user = Auth::user();
-        $this->viewData = ['navActive'=>'template',];
+        $this->viewData = ['navActive'=>'joblisting',];
     }
     
     public function returnView($viewFileName){
@@ -130,14 +130,23 @@ class RecruiterJobController extends Controller
     
     public function listJobs(Request $request) {
         try{
-            $jobList = RecruiterJobs::getJobs();
+            $this->viewData['jobList'] = RecruiterJobs::getJobs();
             
             if ($request->ajax()) {
-                return view('web.recuriterJob.jobData', ['jobList' => $jobList])->render();  
+                return view('web.recuriterJob.jobData', ['jobList' => $this->viewData['jobList']])->render();  
             }
             
-            return view('web.recuriterJob.list', compact('jobList'));
+            return $this->returnView('list');
             
+        } catch (\Exception $e) {
+            return view('web.error.',["message" => $e->getMessage()]);
+        }
+    }
+    
+    
+    public function editJob(Request $request,$jobId) {
+        try{
+            dd('In progress');
         } catch (\Exception $e) {
             return view('web.error.',["message" => $e->getMessage()]);
         }
