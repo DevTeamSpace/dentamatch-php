@@ -13,6 +13,7 @@ use App\Http\Requests\AddCardRequest;
 use App\Http\Requests\DeleteCardRequest;
 use App\Http\Requests\UnsubscribeRequest;
 use App\Http\Requests\EditCardRequest;
+use App\Http\Requests\ChangeSubscriptionPlanRequest;
 
 class SubscriptionController extends Controller {
     private $response = [];
@@ -315,6 +316,24 @@ class SubscriptionController extends Controller {
             $this->response['message'] = trans('messages.card_edidted');
         } catch (\Exception $e) {
             $this->response['success'] = false;
+            $this->response['message'] = $e->getMessage();
+        }
+        return $this->response;
+    }
+    
+    public function postChangeSubscriptionPlan(ChangeSubscriptionPlanRequest $request){
+        try{
+            $plan = "six-months";
+            if($request->plan == 2){
+                $plan = "one-year";
+            }
+            $subscription = \Stripe\Subscription::retrieve($request->subscriptionId);
+            $subscription->plan = $plan;
+            $subscription->save();
+            $this->response['success'] = true;
+            $this->response['message'] = trans('messages.subscription_plan_changed');
+        } catch (\Exception $e) {
+            $this->response['success'] = true;
             $this->response['message'] = $e->getMessage();
         }
         return $this->response;
