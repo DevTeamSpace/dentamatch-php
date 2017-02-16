@@ -84,7 +84,7 @@ class ChatUserLists extends Model
         foreach($responseData as $key=>$row){
             $responseData[$key]['message'] = $chatData[$row['messageId']];
             $responseData[$key]['timestamp'] = strtotime($row['timestamp'])*1000;
-            $responseData[$key]['unreadCount'] = $chatCountData[$row['recruiterId']];
+            $responseData[$key]['unreadCount'] = isset($chatCountData[$row['recruiterId']])?$chatCountData[$row['recruiterId']]:0;
         }
         return $responseData;
     }
