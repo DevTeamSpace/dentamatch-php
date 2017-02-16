@@ -141,7 +141,7 @@
                 <div class="media-body row">
                     <div class="col-sm-7 pd-t-10 ">
                         <div >
-                            <a href="#" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
+                            <a href="{{ url('job/seekerdetails/'.$seeker['seeker_id'].'/'.$job['id']) }}" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
                             @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
                             <span class="mr-l-5 dropdown date_drop">
                                 <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{ ($seeker['avg_rating']!='')?round($seeker['avg_rating'],1):'' }}</span>
