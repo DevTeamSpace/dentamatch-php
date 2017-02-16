@@ -65,7 +65,7 @@ class ChatUserLists extends Model
                     ->orwhere('user_chat.to_id',$userId);
             })
             ->where('chat_user_list.seeker_id',$userId)
-            ->groupBy('chat_user_list.seeker_id')
+            ->groupBy('chat_user_list.recruiter_id')
             ->select('recruiter_profiles.office_name as name','chat_user_list.recruiter_id as recruiterId',
                     DB::raw("max(user_chat.message) AS message"),
                     DB::raw("max(user_chat.updated_at) AS timestamp"),
@@ -75,10 +75,16 @@ class ChatUserLists extends Model
     
         $messageIds = $chatUserList->pluck('messageId'); 
         $responseData = $chatUserList->toArray();
+        
+        $chatCountData = UserChat::where('to_id',$userId)->where('read_status',0)
+                ->select('from_id as fromId',DB::raw("count(id) AS unreadCount"))
+                ->groupBy('from_id')->pluck('unreadCount','fromId');
+        
         $chatData = UserChat::whereIn('id',$messageIds)->pluck('message','id');
         foreach($responseData as $key=>$row){
             $responseData[$key]['message'] = $chatData[$row['messageId']];
             $responseData[$key]['timestamp'] = strtotime($row['timestamp'])*1000;
+            $responseData[$key]['unreadCount'] = $chatCountData[$row['recruiterId']];
         }
         return $responseData;
     }
