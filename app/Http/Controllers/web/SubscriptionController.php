@@ -25,7 +25,7 @@ class SubscriptionController extends Controller {
     public function getSubscription(){
         $recruiter = RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
         if($recruiter['is_subscribed'] == 0){
-            $result = view('web.subscription');
+            $result = view('web.subscription',['activeTab'=>'4']);
         }else{
             $result = redirect('jobtemplates');
         }
