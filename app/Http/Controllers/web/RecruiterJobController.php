@@ -202,14 +202,16 @@ class RecruiterJobController extends Controller
                     'message' => $jobDetails['office_name']." has accepted your invitation for ".$jobDetails['jobtitle_name'],
                     'notification_title'=>'User shortlisted',
                     'sender_id' => $sender,
-                    'type' => 1
+                    'type' => 1,
+                    'notification_type' => Notification::ACCEPTJOB,
                 );
         } else if($jobstatus == JobLists::HIRED){
             $notificationData = array(
                     'message' => "You have been hired for  ".$jobDetails['jobtitle_name'],
                     'notification_title'=>'User hired',
                     'sender_id' => $sender,
-                    'type' => 1
+                    'type' => 1,
+                    'notification_type' => Notification::HIRED,
                 );
         }
         
