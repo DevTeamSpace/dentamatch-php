@@ -27,7 +27,7 @@
             <div class="commonBox cboxbottom">
                 <div class="form-group">
                     <label >Dental Office Name</label>
-                    <input type="text" value="{{ old('officeName') }}" onclick="getOfficeName()" id="officeName" name="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="Required" placeholder="Office name">
+                    <input type="text" value="{{ old('officeName') }}" onclick="getOfficeName()" id="officeName" name="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="Required" placeholder="Enter Dental Office Name">
                 </div>
                 <div class="form-group">
                     <label  >Dental Office Description</label>
