@@ -16,7 +16,8 @@
                         </div>
                         <div class="tabSubscriptionContainer">
                             <div class="title pull-left pd-b-20"><b>Membership</b></div>	
-                            <a class="pull-right" data-bind="click: $root.unsubscribePlan">Unsubscribe</a>	
+                            <a class="pull-right" data-bind="visible: unsubscribeButton,click: $root.unsubscribePlan">Unsubscribe</a>
+                            <a class="pull-right" data-bind="visible: resubscribeButton,click: $root.subscribeAgain">Subscribe Again</a>
                             <div class="clearfix"></div>
                             <div class="table-responsive">
                                 <!--ko foreach: subscription-->
@@ -229,6 +230,9 @@ var SubscriptionVM = function () {
     me.editExpiry = ko.observable('');
     me.editCardNumber = ko.observable('');
     me.editCardId = ko.observable('');
+    me.unsubscribeButton = ko.observable(true);
+    me.resubscribeButton = ko.observable(false);
+    me.subscriptionType = ko.observable();
     
     me.getSubscription = function () {
         me.isLoadingSubscription(true);
@@ -252,11 +256,19 @@ var SubscriptionVM = function () {
                             me.addCardVisible(false);
                         }
                         me.subscription.push(new SubscriptionModel(d.data.data.data.subscriptions.data[i]));
+                        me.unsubscribeButton(true);
+                        me.resubscribeButton(false);
                         break;
                     }else{
-                        me.noSubscription(true);
-                        me.visibleSubcription(false);
-                        me.noSubscriptionDetails('No subscription availed.');
+                        me.noSubscription(false);
+                        me.visibleSubcription(true);
+                        if(d.data.data.data.sources.data.length >= 2){
+                            me.addCardVisible(false);
+                        }
+                        me.subscription.push(new SubscriptionModel(d.data.data.data.subscriptions.data[i]));
+                        me.resubscribeButton(true);
+                        me.unsubscribeButton(false);
+                        break;
                     }
                 }
                 for(i in d.data.data.data.sources.data){
@@ -404,6 +416,37 @@ var SubscriptionVM = function () {
             $.post('unsubscribe', {subscriptionId: subscriptionId}, function(d){
                 if(d.success == true){
                     me.prompt('Unsubscribed successfully.');
+                }else{
+                    me.prompt(d.message);
+                }
+                setTimeout( function(){
+                    location.reload();
+                }, 700);
+            });
+        });
+    };
+    
+    me.subscribeAgain = function(d, e){
+        me.subscriptionType();
+        me.prompt('Do you want to subscribe again ?');
+        me.headMessage('Subscribe Again');
+        me.showModalFooter(true);
+        me.cancelButtonDelete(true);
+        me.actionButtonText('Subscribe');
+        
+        if(d.subscription()[0].subscriptionPlan() === 'Yearly'){
+            me.subscriptionType(2);
+        }else{
+            me.subscriptionType(1);
+        }
+        $('#actionModal').modal('show');
+        $('#actionButton').on('click', function(){
+            me.prompt('Subscribing please wait.');
+            me.cancelButtonDelete(false);
+            me.showModalFooter(false);
+            $.post('create-subscription', {subscriptionType: me.subscriptionType(), trailPeriod: 0, cardExist: true}, function(d){
+                if(d.success == true){
+                    me.prompt('Subscribed successfully.');
                 }else{
                     me.prompt(d.message);
                 }
