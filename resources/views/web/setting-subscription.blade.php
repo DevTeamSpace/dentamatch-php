@@ -41,8 +41,11 @@
                                         </tr>	 	 
                                     </tbody>
                                 </table>
-                                <p>Your next half yearly charge of <span data-bind="text: subscriptionAmount"></span> will be applied to your primary payment method on <span data-bind="text: subscriptionAutoRenewal"></span>.</p>	
+                                <p>Your next half yearly charge of <span data-bind="text: subscriptionAmount"></span> will be applied to your primary payment method on <span data-bind="text: subscriptionAutoRenewal"></span>.</p>
                                 <!--/ko-->
+                                <div class="text-right" data-bind="visible: switchVisible">
+                                    <button type="submit" class="btn btn-primary pd-l-30 pd-r-30 mr-t-10" data-bind="text: switchToText, click: $root.switchTo"></button>
+                                </div>
                                 <hr>
                                 <div class="title pd-b-20 "><b>Payment Methods</b></div>
                                 <!--ko foreach: cards-->
@@ -181,6 +184,7 @@ var SubscriptionModel = function(data){
     me.subscriptionActivation = ko.observable();
     me.subscriptionAutoRenewal = ko.observable();
     me.subscriptionId = ko.observable('');
+    
     me._init = function(d){
         if(typeof d == "undefined"){
             return false;
@@ -233,6 +237,8 @@ var SubscriptionVM = function () {
     me.unsubscribeButton = ko.observable(true);
     me.resubscribeButton = ko.observable(false);
     me.subscriptionType = ko.observable();
+    me.switchVisible = ko.observable(false);
+    me.switchToText = ko.observable('');
     
     me.getSubscription = function () {
         me.isLoadingSubscription(true);
@@ -258,6 +264,12 @@ var SubscriptionVM = function () {
                         me.subscription.push(new SubscriptionModel(d.data.data.data.subscriptions.data[i]));
                         me.unsubscribeButton(true);
                         me.resubscribeButton(false);
+                        me.switchVisible(true);
+                        if(d.data.data.data.subscriptions.data[i].plan.id === "one-year"){
+                            me.switchToText('Switch to Half Yearly');
+                        }else{
+                            me.switchToText('Switch to Yearly');
+                        }
                         break;
                     }else{
                         me.noSubscription(false);
@@ -268,6 +280,7 @@ var SubscriptionVM = function () {
                         me.subscription.push(new SubscriptionModel(d.data.data.data.subscriptions.data[i]));
                         me.resubscribeButton(true);
                         me.unsubscribeButton(false);
+                        me.switchVisible(false);
                         break;
                     }
                 }
@@ -456,6 +469,40 @@ var SubscriptionVM = function () {
             });
         });
     };
+    
+    me.switchTo = function(d, e){
+        console.log(d);
+        me.headMessage('Change Plan');
+        me.showModalFooter(true);
+        me.cancelButtonDelete(true);
+        me.actionButtonText('Change');
+        if(d.subscription()[0].subscriptionPlan === "Yearly"){
+            me.prompt('Do you want to change plan to annually. ?');
+        }else{
+            me.prompt('Do you want to change plan to half yearly. ?');
+        }
+        $('#actionModal').modal('show');
+        $('#actionButton').on('click', function(){
+            me.prompt('Changing please wait.');
+            me.cancelButtonDelete(false);
+            me.showModalFooter(false);
+            if(d.subscription()[0].subscriptionPlan === "Yearly"){
+                plan = 2;
+            }else{
+                plan = 1;
+            }
+            $.post('change-subscription-plan', {subscriptionId: d.subscription()[0].subscriptionId,plan: plan}, function(d){
+                if(d.success == true){
+                    me.prompt('Plan changes successfully.');
+                }else{
+                    me.prompt(d.message);
+                }
+                setTimeout( function(){
+                    location.reload();
+                }, 700);
+            });
+        });
+    }
     
     me.editCard = function(d, e){
         me.editCvv();
