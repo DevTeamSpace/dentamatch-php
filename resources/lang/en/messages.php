@@ -128,4 +128,6 @@ return [
     'jobseeker_updated_success' => 'Jobseeker updated successfully',
     'password_updated' => 'Password successfully updated.',
     'incorrect_pass' => 'Incorrect password. Please try again',
+    
+    'already_job_availability' => 'You already have pending jobs for curreny availability',
 ];
