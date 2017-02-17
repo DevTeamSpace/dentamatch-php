@@ -70,6 +70,7 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::post('create-subscription', 'web\SubscriptionController@postCreateSubscription');
             Route::get('setting-subscription', 'web\SubscriptionController@getSettingSubscription');
             Route::post('unsubscribe', 'web\SubscriptionController@postUnsubscribe');
+            Route::post('subscribe-again', 'web\SubscriptionController@postSubscribeAgain');
             Route::get('get-subscription-details', 'web\SubscriptionController@getSubscriptionDetails');
             Route::post('change-subscription-plan', 'web\SubscriptionController@postChangeSubscriptionPlan');
             Route::post('add-card', 'web\SubscriptionController@postAddCard');

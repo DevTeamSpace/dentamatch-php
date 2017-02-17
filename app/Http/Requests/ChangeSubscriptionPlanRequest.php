@@ -15,7 +15,8 @@ class ChangeSubscriptionPlanRequest extends FormRequest
     {
         return [
             'subscriptionId' => 'required',
-            'plan' => 'required'
+            'plan' => 'required',
+            'type' => 'required'
         ];
     }
     /**
