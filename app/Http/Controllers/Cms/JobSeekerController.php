@@ -186,4 +186,85 @@ class JobSeekerController extends Controller
         }
         echo 'test';
     }
+    
+    public function jobSeekerVerificationList(){
+        $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+                        ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->select(
+                                'users.id',
+                                'jobseeker_profiles.dental_state_board',
+                                'jobseeker_profiles.license_number',
+                                'jobseeker_profiles.is_job_seeker_verified'
+                                )
+                        ->where('user_groups.group_id', 3)
+                        ->orderBy('users.id', 'desc');
+        return Datatables::of($userData)
+                ->removeColumn('id')
+                ->addColumn('dental_state_board', function ($userData) {
+                	$dentalStateBoard = !empty($userData->dental_state_board) ? $userData->dental_state_board :'N/A';
+                    return $dentalStateBoard;
+                })
+                ->addColumn('license_number', function ($userData) {
+                	$licenseNumber = !empty($userData->license_number) ? $userData->license_number : "N/A";
+                    return $licenseNumber;
+                })
+                ->addColumn('is_job_seeker_verified', function ($userData) {
+                        $statusCode = ['0'=>"Not Verified", '1'=>'Approved', '2'=>'Rejected'];
+                	$isVerified = $statusCode[$userData->is_job_seeker_verified];
+                    return $isVerified;
+                })
+                ->addColumn('action', function ($userData) {
+                    $edit = url('cms/jobseeker/'.$userData->id.'/verification');
+                    $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> View</a>&nbsp;';
+                    return $action;
+                       
+                })
+                ->make(true);
+                       
+    }
+    
+    public function jobSeekerVerificationView($id) {
+        $s3Path = env('AWS_URL');
+        $s3Bucket = env('AWS_BUCKET');
+        $s3Url = $s3Path.DIRECTORY_SEPARATOR.$s3Bucket.DIRECTORY_SEPARATOR;
+        $userProfile = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+                        ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->select(
+                                'users.email','users.id','users.is_active',
+                                'jobseeker_profiles.first_name',
+                                'jobseeker_profiles.last_name',
+                                'jobseeker_profiles.dental_state_board',
+                                'jobseeker_profiles.license_number'
+                                )
+                        ->where('users.id', $id)->first();
+        
+        return view('cms.jobseeker.verificationDetail',['userProfile'=>$userProfile, 's3Url' => $s3Url]);
+    }
+    
+    public function storeVerification(Request $request)
+    {
+        $msg = trans('messages.something_wrong');
+        if(!empty($request->verify)) {
+            
+            switch ($request->verify) {
+                case "Approve" : 
+                    $statusCode = 1;
+                    $msg = trans('messages.jobseeker_verification_approved');
+                    break;
+                case "Reject" :
+                    $statusCode = 2;
+                    $msg = trans('messages.jobseeker_verification_reject');
+                    break;
+                default : 
+                    $statusCode = 0;
+                    $msg = trans('messages.jobseeker_updated_success');
+                    break;
+            }
+            
+            UserProfile::where('user_id', $request->user_id)->update(['is_job_seeker_verified' => $statusCode]);
+        }
+            
+        Session::flash('message',$msg);
+        return redirect('cms/jobseeker/index');
+    }
 }

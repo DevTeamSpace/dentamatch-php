@@ -207,6 +207,22 @@ $(function () {
         ]
     });
     
+    $('#jobseeker_verification').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'jobseeker/verification-list',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'dental_state_board', name: 'dental_state_board',searchable:true},
+            {data: 'license_number', name: 'license_number',searchable:false},
+            {data: 'is_job_seeker_verified', name: 'is_job_seeker_verified',searchable:false},
+            {data: 'action', name: 'action',searchable:false}
+        ]
+    });
+    
     $('#coupon_list').DataTable({
         processing: true,
         serverSide: true,

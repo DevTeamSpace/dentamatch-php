@@ -3,11 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Applications/XAMPP/htdocs/Dentamatch/resources/views/cms/jobseeker/index.blade.php</file>
-            <file>file:/Applications/XAMPP/htdocs/Dentamatch/routes/web.php</file>
-            <file>file:/Applications/XAMPP/htdocs/Dentamatch/app/Http/Controllers/Cms/JobSeekerController.php</file>
-            <file>file:/Applications/XAMPP/htdocs/Dentamatch/app/Http/Controllers/Api/UserApiController.php</file>
-            <file>file:/Applications/XAMPP/htdocs/Dentamatch/public/script/common.js</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/resources/views/cms/users/changePassword.blade.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Console/Commands/UserProfileCompletionCommand.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Models/Notification.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Models/JobLists.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Controllers/Api/CalendarApiController.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/resources/views/cms/jobseeker/verificationDetail.blade.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Controllers/Cms/UserController.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/config/app.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Controllers/Cms/JobSeekerController.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/resources/views/cms/jobseeker/update.blade.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/resources/lang/en/messages.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/resources/views/cms/jobseeker/index.blade.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Controllers/Api/UserApiController.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/routes/web.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Controllers/Api/SearchApiController.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/routes/api.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/public/script/common.js</file>
         </group>
     </open-files>
 </project-private>

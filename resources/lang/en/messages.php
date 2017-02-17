@@ -128,10 +128,16 @@ return [
     'password_updated' => 'Password successfully updated.',
     'incorrect_pass' => 'Incorrect password. Please try again',
 
+
     
     'already_job_availability' => 'You already have pending jobs for curreny availability',
 
-    'subscription_plan_changed' => 'Subscription plan changed successfully.'
+    'subscription_plan_changed' => 'Subscription plan changed successfully.',
 
+
+
+    'subscription_plan_changed' => 'Subscription plan changed successfully.',
+    'jobseeker_verification_approved' => 'Jobseeker successfully verified',
+    'jobseeker_verification_reject' => 'Jobseeker verification request rejected',
 
 ];
