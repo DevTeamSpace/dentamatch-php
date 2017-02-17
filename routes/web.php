@@ -190,6 +190,9 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('{id}/edit', 'Cms\JobSeekerController@edit');
         Route::get('create', 'Cms\JobSeekerController@create');
         Route::post('store', 'Cms\JobSeekerController@store');
+        Route::get('verification-list', 'Cms\JobSeekerController@jobSeekerVerificationList');
+        Route::get('{id}/verification', 'Cms\JobSeekerController@jobSeekerVerificationView');
+        Route::post('storeVerification', 'Cms\JobSeekerController@storeVerification');
     });
     Route::get('push-notification', 'Cms\JobSeekerController@sendPushAndroid');
 });

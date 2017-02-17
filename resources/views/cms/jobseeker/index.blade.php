@@ -28,6 +28,20 @@
 
 			</table>
                 </div>
+                
+                <div class="panel-body">
+                    <table id="jobseeker_verification" class="display responsive nowrap" cellspacing="0" width="100%">
+                          <thead>
+                              <tr>
+                                  <th>Dental State Board</th>
+                                  <th>License Number</th>
+                                  <th>Status</th>
+                                  <th>Action</th>
+                              </tr>
+                          </thead>
+
+			</table>
+                </div>
             </div>
         </div>
     </div>

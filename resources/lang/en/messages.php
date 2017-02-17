@@ -127,6 +127,7 @@ return [
     'jobseeker_updated_success' => 'Jobseeker updated successfully',
     'password_updated' => 'Password successfully updated.',
     'incorrect_pass' => 'Incorrect password. Please try again',
-    'subscription_plan_changed' => 'Subscription plan changed successfully.'
-
+    'subscription_plan_changed' => 'Subscription plan changed successfully.',
+    'jobseeker_verification_approved' => 'Jobseeker successfully verified',
+    'jobseeker_verification_reject' => 'Jobseeker verification request rejected',
 ];
