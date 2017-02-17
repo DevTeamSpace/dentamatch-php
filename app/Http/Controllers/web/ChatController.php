@@ -19,11 +19,10 @@ class ChatController extends Controller
         return view('web.chat.'.$viewFileName,$this->viewData);
     }
     
-    public function getChatSeekerList(){
+    public function getChatSeekerList(Request $request){
         try{
             $this->viewData['seekerList'] = ChatUserLists::getSeekerListForChat(Auth::id());
-            //dd($this->viewData);
-           
+            
             return $this->returnView('view');
         } catch (\Exception $e) {
             dd($e);

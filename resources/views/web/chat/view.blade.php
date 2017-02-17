@@ -103,6 +103,7 @@
 <script src="{{ url('') }}:3000/socket.io/socket.io.js"></script>
 <script type="text/javascript">
 var fromId = "{{ Auth::id() }}";
+var userName = '{{ Session::get("userData")["profile"]["office_name"] }}';
 var socketUrl = '{{ url('') }}:3000';
 </script>
 <script src="{{ asset('web/scripts/chat.js')}}"></script>

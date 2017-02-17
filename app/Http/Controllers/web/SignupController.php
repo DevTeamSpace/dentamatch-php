@@ -55,6 +55,7 @@ class SignupController extends Controller {
             if ($user->userGroup->group_id == 2 && Auth::attempt($credentials)) {
                 $redirect = 'terms-conditions';
                 $term = RecruiterProfile::where('user_id', Auth::user()->id)->first();
+                $request->session()->put('userData', ['basic'=>$user->toArray(),'profile'=>$term->toArray()]);
                 if (!empty($term) && isset($term)) {
                     $redirect = 'home';
                 }
