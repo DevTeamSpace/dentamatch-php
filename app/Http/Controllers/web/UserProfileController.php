@@ -91,6 +91,10 @@ class UserProfileController extends Controller {
     public function getChangePassword() {
         return view('web.change_password',['activeTab'=>'3']);
     }
+    
+    public function getTermsConditions() {
+        return view('web.setting-terms-conditions',['activeTab'=>'5']);
+    }
 
     public function postChangePassword(Request $request) {
         $validator = Validator::make($request->all(), [

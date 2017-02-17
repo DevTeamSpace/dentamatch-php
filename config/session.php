@@ -174,6 +174,7 @@ return [
     |
     */
 
-    'http_only' => true,
+    'secure' => env('HTTP_SECURE', true),
+    'httponly' => env('HTTP_ONLY', true),
     
 ];

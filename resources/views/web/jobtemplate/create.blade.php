@@ -12,7 +12,7 @@
 
                 <div class="form-group">
                     <label >Template Name</label>
-                    <input value="{{ (isset($templateData->templateName)?$templateData->templateName:'') }}" name="templateName" type="text" class="form-control"  data-parsley-required data-parsley-required-message="Required">
+                    <input value="{{ (isset($templateData->templateName)?$templateData->templateName:'') }}" name="templateName" type="text" class="form-control" data-parsley-type="alphanum" data-parsley-required data-parsley-required-message="Required">
                 </div>
                 <div class="form-group">
                     <label >Job Title</label>

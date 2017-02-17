@@ -16,7 +16,8 @@
                         </div>
                         <div class="tabSubscriptionContainer">
                             <div class="title pull-left pd-b-20"><b>Membership</b></div>	
-                            <a class="pull-right" data-bind="click: $root.unsubscribePlan">Unsubscribe</a>	
+                            <a class="pull-right" data-bind="visible: unsubscribeButton,click: $root.unsubscribePlan">Unsubscribe</a>
+                            <a class="pull-right" data-bind="visible: resubscribeButton,click: $root.subscribeAgain">Subscribe Again</a>
                             <div class="clearfix"></div>
                             <div class="table-responsive">
                                 <!--ko foreach: subscription-->
@@ -40,8 +41,11 @@
                                         </tr>	 	 
                                     </tbody>
                                 </table>
-                                <p>Your next half yearly charge of <span data-bind="text: subscriptionAmount"></span> will be applied to your primary payment method on <span data-bind="text: subscriptionAutoRenewal"></span>.</p>	
+                                <p>Your next half yearly charge of <span data-bind="text: subscriptionAmount"></span> will be applied to your primary payment method on <span data-bind="text: subscriptionAutoRenewal"></span>.</p>
                                 <!--/ko-->
+                                <div class="text-right" data-bind="visible: switchVisible">
+                                    <button type="submit" class="btn btn-primary pd-l-30 pd-r-30 mr-t-10" data-bind="text: switchToText, click: $root.switchTo"></button>
+                                </div>
                                 <hr>
                                 <div class="title pd-b-20 "><b>Payment Methods</b></div>
                                 <!--ko foreach: cards-->
@@ -180,6 +184,7 @@ var SubscriptionModel = function(data){
     me.subscriptionActivation = ko.observable();
     me.subscriptionAutoRenewal = ko.observable();
     me.subscriptionId = ko.observable('');
+    
     me._init = function(d){
         if(typeof d == "undefined"){
             return false;
@@ -229,6 +234,11 @@ var SubscriptionVM = function () {
     me.editExpiry = ko.observable('');
     me.editCardNumber = ko.observable('');
     me.editCardId = ko.observable('');
+    me.unsubscribeButton = ko.observable(true);
+    me.resubscribeButton = ko.observable(false);
+    me.subscriptionType = ko.observable();
+    me.switchVisible = ko.observable(false);
+    me.switchToText = ko.observable('');
     
     me.getSubscription = function () {
         me.isLoadingSubscription(true);
@@ -252,11 +262,26 @@ var SubscriptionVM = function () {
                             me.addCardVisible(false);
                         }
                         me.subscription.push(new SubscriptionModel(d.data.data.data.subscriptions.data[i]));
+                        me.unsubscribeButton(true);
+                        me.resubscribeButton(false);
+                        me.switchVisible(true);
+                        if(d.data.data.data.subscriptions.data[i].plan.id === "one-year"){
+                            me.switchToText('Switch to Half Yearly');
+                        }else{
+                            me.switchToText('Switch to Yearly');
+                        }
                         break;
                     }else{
-                        me.noSubscription(true);
-                        me.visibleSubcription(false);
-                        me.noSubscriptionDetails('No subscription availed.');
+                        me.noSubscription(false);
+                        me.visibleSubcription(true);
+                        if(d.data.data.data.sources.data.length >= 2){
+                            me.addCardVisible(false);
+                        }
+                        me.subscription.push(new SubscriptionModel(d.data.data.data.subscriptions.data[i]));
+                        me.resubscribeButton(true);
+                        me.unsubscribeButton(false);
+                        me.switchVisible(false);
+                        break;
                     }
                 }
                 for(i in d.data.data.data.sources.data){
@@ -300,10 +325,13 @@ var SubscriptionVM = function () {
     me.addCardFunction = function(d, e){
         me.errorMessage('');
         me.successMessage('');
-        
-        if(me.expiry() != null && me.expiry().indexOf('/') >= 0){
+        if(me.expiry() != null && (me.expiry().indexOf('/') >= 0 || me.expiry().indexOf('/') < 0)){
             var expirySplit = me.expiry().split('/');
             if(expirySplit[1] == null || expirySplit[1] == ""){
+                me.errorMessage('Invalid expiry date.');
+                return false;
+            }
+            if(expirySplit[0] == null || expirySplit[0] == ""){
                 me.errorMessage('Invalid expiry date.');
                 return false;
             }
@@ -410,6 +438,71 @@ var SubscriptionVM = function () {
             });
         });
     };
+    
+    me.subscribeAgain = function(d, e){
+        me.subscriptionType();
+        me.prompt('Do you want to subscribe again ?');
+        me.headMessage('Subscribe Again');
+        me.showModalFooter(true);
+        me.cancelButtonDelete(true);
+        me.actionButtonText('Subscribe');
+        
+        if(d.subscription()[0].subscriptionPlan() === 'Yearly'){
+            me.subscriptionType(2);
+        }else{
+            me.subscriptionType(1);
+        }
+        $('#actionModal').modal('show');
+        $('#actionButton').on('click', function(){
+            me.prompt('Subscribing please wait.');
+            me.cancelButtonDelete(false);
+            me.showModalFooter(false);
+            $.post('change-subscription-plan', {plan: me.subscriptionType(), subscriptionId: d.subscription()[0].subscriptionId, type: "resubscribe"}, function(d){
+                if(d.success == true){
+                    me.prompt('Subscribed successfully.');
+                }else{
+                    me.prompt(d.message);
+                }
+                setTimeout( function(){
+                    location.reload();
+                }, 700);
+            });
+        });
+    };
+    
+    me.switchTo = function(d, e){
+        me.headMessage('Change Plan');
+        me.showModalFooter(true);
+        me.cancelButtonDelete(true);
+        me.actionButtonText('Change');
+        console.log(d);
+        if(d.subscription()[0].subscriptionPlan() === "Yearly"){
+            me.prompt('Do you want to change plan to half yearly. ?');
+        }else{
+            me.prompt('Do you want to change plan to annually. ?');
+        }
+        $('#actionModal').modal('show');
+        $('#actionButton').on('click', function(){
+            me.prompt('Changing please wait.');
+            me.cancelButtonDelete(false);
+            me.showModalFooter(false);
+            if(d.subscription()[0].subscriptionPlan() == "Yearly"){
+                plan = 1;
+            }else{
+                plan = 2;
+            }
+            $.post('change-subscription-plan', {subscriptionId: d.subscription()[0].subscriptionId,plan: plan, type: "change"}, function(d){
+                if(d.success == true){
+                    me.prompt('Plan changed successfully.');
+                }else{
+                    me.prompt(d.message);
+                }
+                setTimeout( function(){
+                    location.reload();
+                }, 700);
+            });
+        });
+    }
     
     me.editCard = function(d, e){
         me.editCvv();

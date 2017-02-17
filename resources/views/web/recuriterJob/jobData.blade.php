@@ -67,7 +67,13 @@
                 </address> 
 
             </div>    
-
+            <div class="template-job-information-right j-i-m-r">           
+                <div class="job-information-detail">
+                    <div class="search-seeker">
+                        <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-30 pull-right">Search Seekers</a>
+                    </div>
+                </div> 
+            </div>
         </div> 
         <div class="template-job-information mr-t-15 width-job-info">
 
@@ -99,9 +105,6 @@
                     @endif
                     <li><a href="{{ url('job/details/'.$job['id']) }}"> View Detail</a></li>
                 </ul>
-            </div>
-            <div class="col-sm-4 search-seeker">
-                <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-30 pull-right">Search Seekers</a>
             </div>
         </div>
 
