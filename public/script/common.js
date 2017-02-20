@@ -9,78 +9,6 @@ $(document).ajaxError(function (e, request, settings, exception) {
         }
     });
 $(function () {
-    $('#photographer_list').DataTable({
-        lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-        processing: true,
-        serverSide: true,
-        responsive: true,
-        "autoWidth": false,
-        ajax: public_path+'user/listPhotographer',
-        ordering:false,
-        //bFilter: false,
-        columns: [
-            {data: 'firstName', name: 'first_name',searchable:true},
-            {data: 'lastName', name: 'last_name',searchable:true},
-            {data: 'email', name: 'email',searchable:true},
-            {data: 'active', name: 'active',searchable:false},
-            {data: 'rejected', name: 'rejected',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
-        ]
-
-    });
-    
-    $('#consumer_list').DataTable({
-        lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-        processing: true,
-        serverSide: true,
-        responsive: true,
-        "autoWidth": false,
-        ajax: public_path+'user/listConsumer',
-        ordering:false,
-        //bFilter: false,
-        columns: [
-            {data: 'firstName', name: 'first_name',searchable:true},
-            {data: 'lastName', name: 'last_name',searchable:true},
-            {data: 'email', name: 'email',searchable:true},
-            {data: 'active', name: 'active',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
-        ]
-
-    });
-    
-    $('#designer_list').DataTable({
-        lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-        processing: true,
-        serverSide: true,
-        responsive: true,
-        "autoWidth": false,
-        ajax: public_path+'user/listDesigner',
-        ordering:false,
-        //bFilter: false,
-        columns: [
-            {data: 'firstName', name: 'first_name',searchable:true},
-            {data: 'lastName', name: 'last_name',searchable:true},
-            {data: 'email', name: 'email',searchable:true},
-            {data: 'active', name: 'active',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
-        ]
-
-    });
-    
-    $('#eventType_list').DataTable({
-        processing: true,
-        serverSide: true,
-        //responsive: true,
-        //autoWidth: false,
-        ajax: public_path+'eventType/list',
-        ordering:false,
-        //bFilter: false,
-        columns: [
-            {data: 'eventTypeName', name: 'eventTypeName',searchable:true},
-            {data: 'active', name: 'active',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
-        ]
-    });
     
     $('#location_list').DataTable({
         processing: true,
@@ -207,6 +135,21 @@ $(function () {
         ]
     });
     
+    $('#recruiter_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'recruiter/list',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'email', name: 'email',searchable:true},
+            {data: 'active', name: 'active',searchable:false},
+            {data: 'action', name: 'action',searchable:false}
+        ]
+    });
+    
     $('#jobseeker_verification').DataTable({
         processing: true,
         serverSide: true,
@@ -221,27 +164,6 @@ $(function () {
             {data: 'is_job_seeker_verified', name: 'is_job_seeker_verified',searchable:false},
             {data: 'action', name: 'action',searchable:false}
         ]
-    });
-    
-    $('#coupon_list').DataTable({
-        processing: true,
-        serverSide: true,
-        //responsive: true,
-        //autoWidth: false,
-        ajax: public_path+'coupon/list',
-        ordering:false,
-        //bFilter: true,
-        columns: [
-            {data: 'couponName', name: 'couponName',searchable :true},
-            {data: 'couponCode', name: 'couponCode',searchable :false},
-            {data: 'couponValue', name: 'couponValue',searchable :false},
-            {data: 'discountType', name: 'discountType',searchable :false},
-            {data: 'startDate', name: 'startDate',searchable :false},
-            {data: 'endDate', name: 'endDate',searchable :false},
-            {data: 'active', name: 'active',searchable :false},
-            {data: 'action', name: 'action',searchable :false}
-        ],
-        initComplete: searchInit
     });
     
     function searchInit() {
@@ -267,112 +189,6 @@ $(function () {
         columns: [
             {data: 'groupName', name: 'group_name'},
             {data: 'termConditions', name: 'termConditions'}
-        ]
-
-    });
-    
-    $('#enhanced_photo_request_list').DataTable({
-        processing: true,
-        serverSide: true,
-        responsive: false,
-        autoWidth: false,
-        ajax: public_path+'event/enhancementRequest',
-        ordering:false,
-        scrollX: true,
-        //paging:false,
-        //bFilter: false,
-        columns: [
-            {data: 'userName', name: 'userName',searchable:false},
-            {data: 'eventType', name: 'eventType',searchable:false},
-            {data: 'paidPhoto', name: 'paidPhoto',searchable:false},
-            {data: 'freePhoto', name: 'freePhoto',searchable:false},
-            {data: 'enhancedDesignerName', name: 'enhancedDesignerName',searchable:false},
-            {data: 'submittedAt', name: 'submittedAt',searchable:false},
-            {data: 'assignedAt', name: 'assignedAt',searchable:false},
-            {data: 'completedAt', name: 'completedAt',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
-        ]
-
-    });
-    
-    var eventId = $('#eventId').val();
-    $('#event_enhancement_list').DataTable({
-        processing: true,
-        serverSide: true,
-        responsive: false,
-        autoWidth: false,
-        ajax: public_path+'event/eventEnhancements/'+eventId,
-        ordering:false,
-        scrollX: true,
-        columns: [
-            {data: 'paidPhotoCount', name: 'paidPhoto',searchable:false},
-            {data: 'freePhotoCount', name: 'freePhoto',searchable:false},
-            {data: 'perPhotoCost', name: 'perphotoCost',searchable:false},
-            {data: 'enhancementStatus', name: 'enhancement_status',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
-        ]
-
-    });
-    
-    $('#event_extension_list').DataTable({
-        processing: true,
-        serverSide: true,
-        responsive: false,
-        autoWidth: false,
-        ajax: public_path+'event/eventExtensions/'+eventId,
-        ordering:false,
-        scrollX: true,
-        columns: [
-            {data: 'overTime', name: 'overtime',searchable:false},
-            {data: 'overtimeCost', name: 'overtime_cost',searchable:false},
-            {data: 'actualCost', name: 'actual_cost',searchable:false},
-            {data: 'isApproved', name: 'is_approved',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
-        ]
-
-    });
-    
-    $('#events_list').DataTable({
-        processing: true,
-        serverSide: true,
-        responsive: false,
-        autoWidth: false,
-        ajax: public_path+'event/list',
-        ordering:false,
-        scrollX: true,
-        //paging:false,
-        //bFilter: false,
-        columns: [
-            {data: 'consumerName', name: 'consumerName',searchable:true},
-            {data: 'photographerName', name: 'photographerName',searchable:true},
-            {data: 'eventType', name: 'event_name',searchable:true},
-            {data: 'status', name: 'status',searchable:true},
-            {data: 'startDate', name: 'startDate',searchable:false},
-            {data: 'endDate', name: 'endDate',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
-        ]
-
-    });
-    
-    $('#designer_enhanced_photo_request_list').DataTable({
-        processing: true,
-        serverSide: true,
-        responsive: false,
-        autoWidth: false,
-        ajax: public_path+'event/enhancementRequest',
-        ordering:false,
-        scrollX: true,
-        //paging:false,
-        //bFilter: false,
-        columns: [
-            {data: 'userName', name: 'userName',searchable:false},
-            {data: 'eventType', name: 'eventType',searchable:false},
-            {data: 'photos', name: 'photos',searchable:false},
-//            {data: 'createdAt', name: 'createdAt',searchable:false},
-            {data: 'submittedAt', name: 'submittedAt',searchable:false},
-            {data: 'assignedAt', name: 'assignedAt',searchable:false},
-            {data: 'completedAt', name: 'completedAt',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
         ]
 
     });
@@ -437,41 +253,6 @@ $(function () {
 
     });
     
-    $('#expertise_request_list').DataTable({
-        processing: true,
-        serverSide: true,
-        responsive: true,
-        autoWidth: false,
-        ajax: public_path+'expertiseRequest/list',
-        ordering:false,
-        paging:true,
-        //bFilter: false,
-        columns: [
-            {data: 'photographerName', name: 'photographerName',searchable:true},
-            {data: 'currentLevel', name: 'currentLevel',searchable:false},
-            {data: 'proposedLevel', name: 'proposedLevel',searchable:false},
-            {data: 'createdAt', name: 'createdAt',searchable:false},
-            {data: 'actionStatus', name: 'actionStatus',searchable:false}
-        ]
-    });
-    
-    $('#checkr_form_list').DataTable({
-        processing: true,
-        serverSide: true,
-        //responsive: true,
-        //autoWidth: false,
-        ajax: public_path+'checkrForm/list',
-        ordering:false,
-        paging:true,
-        //bFilter: false,
-        columns: [
-            {data: 'photographerName', name: 'photographerName',searchable:true},
-            {data: 'pdfLink', name: 'pdfLink',searchable:false},
-            {data: 'createdAt', name: 'createdAt',searchable:false},
-//            {data: 'actionStatus', name: 'actionStatus',searchable:false}
-        ]
-    });
-    
     $('#appMessage_list').DataTable({
         processing: true,
         serverSide: true,
@@ -515,28 +296,6 @@ $(function () {
         bFilter: false,
         dom: 'Bfrtip',
         bInfo : false
-    });
-    
-    var tlist = $('#transaction_list').DataTable({
-        processing: true,
-        serverSide: true,
-        responsive: true,
-        autoWidth: false,
-        ajax: public_path+'payments/transactionList/0',
-        ordering:false,
-        //paging:false,
-        bFilter: false,
-        bStateSave: true,
-        columns: [
-            {data: 'transactionType', name: 'transactionType',searchable:false},
-            {data: 'estimatedCost', name: 'estimatedCost',searchable:false},
-            {data: 'actualCost', name: 'actualCost',searchable:false},
-            {data: 'appownerCost', name: 'appownerCost',searchable:false},
-            {data: 'photographerCost', name: 'photographerCost',searchable:false},
-            {data: 'startDate', name: 'startDate',searchable:false},
-            {data: 'transferStatus', name: 'transferStatus',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
-        ]
     });
     
     $('#listType').change(function(){
