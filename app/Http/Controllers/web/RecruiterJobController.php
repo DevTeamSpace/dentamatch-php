@@ -17,6 +17,8 @@ use App\Models\JobSeekerProfiles;
 use App\Providers\NotificationServiceProvider;
 use App\Models\Device;
 use App\Models\Notification;
+use App\Models\RecruiterProfile;
+use App\Models\OfficeType;
 
 use DB;
 
@@ -238,6 +240,28 @@ class RecruiterJobController extends Controller
 
             
         }
-        
+    
+    }
+    
+    public function jobEdit(Request $request, $jobId){
+        return view('web.recuriterJob.edit', compact('jobId'));
+    }
+    
+    public function jobEditDetails(Request $request){
+        try{
+            $allData = [];
+            $jobDetails = RecruiterJobs::getRecruiterJobDetails($request->jobId);
+            $jobSeekerStatus = JobLists::getJobSeekerStatus($request->jobId);
+            $recruiterOffices = RecruiterOffice::getAllOffices();
+            $allOfficeTypes = OfficeType::allOfficeTypes();
+            $allData['jobDetails'] = $jobDetails;
+            $allData['jobSeekerStatus'] = $jobSeekerStatus;
+            $allData['recruiterOffices'] = $recruiterOffices;
+            $allData['allOfficeTypes'] = $allOfficeTypes;
+            $response = $allData;
+        } catch (\Exception $e) {
+            $response = $e->getMessage();
+        }
+        return $response;
     }
 }

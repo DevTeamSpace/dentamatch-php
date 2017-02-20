@@ -164,7 +164,6 @@
 </div>
 @endsection
 @section('js')
-<script type="text/javascript" src="{{asset('web/scripts/knockout-3.4.1.js')}}"></script>
 <script src="https://checkout.stripe.com/checkout.js"></script>
 
 <script>
@@ -325,6 +324,7 @@ var SubscriptionVM = function () {
     me.addCardFunction = function(d, e){
         me.errorMessage('');
         me.successMessage('');
+
         if(me.expiry() != null && (me.expiry().indexOf('/') >= 0 || me.expiry().indexOf('/') < 0)){
             var expirySplit = me.expiry().split('/');
             if(expirySplit[1] == null || expirySplit[1] == ""){

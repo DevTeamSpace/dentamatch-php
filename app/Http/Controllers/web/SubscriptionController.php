@@ -20,6 +20,7 @@ class SubscriptionController extends Controller {
     private $response = [];
     
     public function __construct(){
+        $this->middleware('auth');
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
     }
 

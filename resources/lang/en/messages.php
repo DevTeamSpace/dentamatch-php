@@ -136,4 +136,6 @@ return [
     'recruiter_added_success' => 'Recruited addedd successfully',
     'email_already_taken' => 'Email already register with other user. Please choose different email id',
     'recruiter_deleted' => 'Recruiter deleted successfully',
+    'calender_details_fetched' => 'Calender details fetched successfully.',
+    'calender_details_failed' => 'Cannot fetch calender details.',
 ];
