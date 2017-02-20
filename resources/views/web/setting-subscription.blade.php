@@ -457,7 +457,7 @@ var SubscriptionVM = function () {
             me.prompt('Subscribing please wait.');
             me.cancelButtonDelete(false);
             me.showModalFooter(false);
-            $.post('create-subscription', {subscriptionType: me.subscriptionType(), trailPeriod: 0, cardExist: true}, function(d){
+            $.post('change-subscription-plan', {plan: me.subscriptionType(), subscriptionId: d.subscription()[0].subscriptionId, type: "resubscribe"}, function(d){
                 if(d.success == true){
                     me.prompt('Subscribed successfully.');
                 }else{
@@ -471,12 +471,12 @@ var SubscriptionVM = function () {
     };
     
     me.switchTo = function(d, e){
-        console.log(d);
         me.headMessage('Change Plan');
         me.showModalFooter(true);
         me.cancelButtonDelete(true);
         me.actionButtonText('Change');
-        if(d.subscription()[0].subscriptionPlan === "Yearly"){
+        console.log(d);
+        if(d.subscription()[0].subscriptionPlan() === "Yearly"){
             me.prompt('Do you want to change plan to half yearly. ?');
         }else{
             me.prompt('Do you want to change plan to annually. ?');
@@ -486,14 +486,14 @@ var SubscriptionVM = function () {
             me.prompt('Changing please wait.');
             me.cancelButtonDelete(false);
             me.showModalFooter(false);
-            if(d.subscription()[0].subscriptionPlan === "Yearly"){
-                plan = 2;
-            }else{
+            if(d.subscription()[0].subscriptionPlan() == "Yearly"){
                 plan = 1;
+            }else{
+                plan = 2;
             }
-            $.post('change-subscription-plan', {subscriptionId: d.subscription()[0].subscriptionId,plan: plan}, function(d){
+            $.post('change-subscription-plan', {subscriptionId: d.subscription()[0].subscriptionId,plan: plan, type: "change"}, function(d){
                 if(d.success == true){
-                    me.prompt('Plan changes successfully.');
+                    me.prompt('Plan changed successfully.');
                 }else{
                     me.prompt(d.message);
                 }

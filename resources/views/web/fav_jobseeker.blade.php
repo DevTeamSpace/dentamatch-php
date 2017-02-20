@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="container mr-b-60 padding-container-template">
+    @if(count($favJobSeeker)>0)
     @foreach($favJobSeeker as $fav)
     <div class="media jobCatbox">
         <div class="media-left ">
@@ -27,7 +28,15 @@
         </div>
     </div>
     @endforeach
-
+    @else
+        <div class="jobCatbox mr-b-20">
+            <div class="template-job-information ">
+                <div class="template-job-information-left">
+                    <h4>No favorites added</h4>
+                </div>
+            </div>  
+        </div>
+    @endif
     <!-- Modal -->
     <div class="modal fade select_list " role="dialog">
         <div class="modal-dialog custom-modal popup-wd522">
