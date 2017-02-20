@@ -56,7 +56,7 @@ $(document).ready(function() {
         $('.datepicker .datepicker-days .table-condensed thead').prepend('<tr><th class="choose-dates" colspan="14">Choose Dates</th></tr>');
     });
 
-    $('#CoverStartDateOtherPicker').data('datepicker').hide = function() {};
+
 
 
 
