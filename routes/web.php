@@ -208,6 +208,17 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('create', 'Cms\RecruiterController@create');
         Route::post('store', 'Cms\RecruiterController@store');
     });
+    
+    Route::group(['prefix' => 'notify/'], function() {
+        Route::get('index', 'cms\AppMessageController@index');
+        Route::get('list', 'cms\AppMessageController@messageList');
+        Route::delete('{id}/delete', 'cms\AppMessageController@delete');
+        Route::get('{id}/send', 'cms\AppMessageController@sendNotification');
+        Route::get('{id}/edit', 'cms\AppMessageController@edit');
+        Route::get('create', 'cms\AppMessageController@create');
+        Route::post('store', 'cms\AppMessageController@store');
+    });
+    
     Route::get('push-notification', 'Cms\JobSeekerController@sendPushAndroid');
 });
 

@@ -265,7 +265,6 @@ $(function () {
         columns: [
             {data: 'messageTo', name: 'messageTo',searchable:true},
             {data: 'message', name: 'message',searchable:false},
-            {data: 'messageType', name: 'messageType',searchable:false},
             {data: 'messageSent', name: 'messageSent',searchable:false},
             {data: 'createdAt', name: 'createdAt',searchable:false},
             {data: 'action', name: 'action',searchable:false}
