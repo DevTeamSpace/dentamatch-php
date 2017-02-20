@@ -9,6 +9,7 @@ use DB;
 use App\Models\UserProfile;
 use App\Models\SavedJobs;
 use Auth;
+use App\Models\Configs;
 
 class RecruiterJobs extends Model
 {
@@ -112,7 +113,8 @@ class RecruiterJobs extends Model
                         }
                     }
                 });
-                
+                $radius = Configs::select('config_data')->where('config_name','=','SEARCHRADIUS')->first();
+                $searchQueryObj->where('distance','<=',$radius->config_data);
                 
                 $total = $searchQueryObj->count();
                 $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
@@ -131,6 +133,7 @@ class RecruiterJobs extends Model
                       + sin ( radians($latitude) )
                       * sin( radians( recruiter_offices.latitude ) )
                      )) AS distance"));
+                
                 $page = $reqData['page'];
                 $limit = RecruiterJobs::LIMIT ;
                 $skip = 0;
