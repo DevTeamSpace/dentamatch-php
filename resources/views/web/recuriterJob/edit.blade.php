@@ -23,7 +23,7 @@
             <div class="col-sm-6 text-right mr-b-10 col-xs-6" data-bind="visible: showEdit">
                 <button type="button" class="btn-link mr-r-5">Cancel</button>
 
-                <button type="button" class="btn btn-primary pd-l-25 pd-r-25">Publish</button>
+                <button type="submit" data-bind="click: $root.publishJob" class="btn btn-primary pd-l-25 pd-r-25">Publish</button>
             </div>
             <div class="col-sm-6 text-right mr-b-10 col-xs-6" data-bind="visible: cannotEdit">
                 <p class="pull-right">Cannot edit this job</p>
@@ -48,7 +48,7 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="full-time-box">
                             <input class="magic-radio" type="radio" name="radio" id="fulltime" value="Full Time" data-bind="checked: jobType">
-                            <label for="Full Time">
+                            <label for="Full Time" data-bind="click: $root.selecteJobType">
                                 Full Time
                             </label>
                         </div>  
@@ -56,25 +56,17 @@
                     <div class="col-md-4  col-lg-4 ">
                         <div class="full-time-box">
                             <input class="magic-radio" type="radio" name="radio" id="parttime" value="Part Time" data-bind="checked: jobType">
-                            <label for="Part Time">
+                            <label for="Part Time" data-bind="click: $root.selecteJobType">
                                 Part Time
                             </label>
-                            <select multiple="multiple" id="monthSelect" style="display: none;" class="select-days-custom">
-                                <option value="1" data-bind="attr: {selected: isMonday}">Monday</option>
-                                <option value="2" data-bind="attr: {selected: isTuesday}">Tuesday</option>
-                                <option value="3" data-bind="attr: {selected: isWednesday}">Wednesday</option>
-                                <option value="4" data-bind="attr: {selected: isThursday}">Thursday</option>
-                                <option value="5" data-bind="attr: {selected: isFriday}">Friday</option>
-                                <option value="6" data-bind="attr: {selected: isSaturday}">Saturday</option>
-                                <option value="7" data-bind="attr: {selected: isSunday}">Sunday</option>
+                            <select multiple="multiple" id="monthSelect" style="display: none;" class="select-days-custom" data-bind="options: allPartTimeDays, selectedOptions: partTimeDays">
                             </select>
                         </div>  
                     </div>
                     <div class="col-md-4 col-lg-4 ">
                         <div class="full-time-box">
                             <input class="magic-radio" type="radio" name="radio" id="temporary" value="Temporary" data-bind="checked: jobType">
-
-                            <label for="Temporary">
+                            <label for="Temporary" data-bind="click: $root.selecteJobType">
                                 Temporary
                             </label>
                             <input type="text" id="CoverStartDateOtherPicker" class="date-instance" />
@@ -98,17 +90,16 @@
                         <h5>OFFICE DETAILS</h5>
                     </div>
                     <label >Dental Office Type</label>
-                    <div class="custom-select">
-                        <select  id="dentalofficetype"  class="selectpicker">
-                            <option value="Smiley">Orthodontist, Oral Surgeon</option>
-
+                    <div class="slt">
+                        <select class="ddlCars" multiple="true" data-bind=" options: $parent.allOfficeTypes, selectedOptions: selectedOfficeType ">
                         </select>
                         <!--<p class="error-div">Job cannot be currently created for this location. We will soon be available in your area.</p>-->
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Dental Office Address</label>
-                    <input type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="office address required" data-bind="value: selectedOfficeAddress">
+                    <input type="text" value="" data-bind="click: $root.getOfficeName, value: selectedOfficeAddress" id="officeName" name="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="Required">
+                    <!--<input type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="office address required" data-bind="value: selectedOfficeAddress">-->
                 </div>
                 <div class="form-group">
                     <label>Phone Number</label>
@@ -119,7 +110,7 @@
                     <div class="row dayBox EveryDayCheck">
                         <div class="col-sm-4 col-md-3">  
                             <p class="ckBox">
-                                <input type="checkbox" id="test2" data-bind="checked: selectedOfficeWorkingHours.isEverydayWork" />
+                                <input type="checkbox" id="test2" data-bind="checked: selectedOfficeWorkingHours.isEverydayWork, event: {change: $root.everyDayWorkHour}" />
                                 <label for="test2" class="ckColor"> Everyday</label>
                             </p>    
                         </div>
@@ -138,31 +129,31 @@
                         <div class="row dayBox">
                             <div class="col-sm-4 col-md-3">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="mon" data-bind="checked: selectedOfficeWorkingHours.isMondayWork" />
+                                    <input type="checkbox" id="mon" data-bind="checked: selectedOfficeWorkingHours.isMondayWork, event: {change: $root.otherDayWorkHour}" />
                                     <label for="mon" class="ckColor"> Monday</label>
                                 </p>    
                             </div>
                             <div class="col-sm-4 col-md-3">
                                 <div class="date datetime1">
-                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.mondayStart, disable: !selectedOfficeWorkingHours.isMondayWork()">
+                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.mondayStart, disable: !selectedOfficeWorkingHours.isMondayWork(), click: $root.datePicker1">
                                 </div>    
                             </div>
                             <div class="col-sm-4 col-md-3">
                                 <div class="date datetime1">
-                                    <input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.mondayEnd, disable: !selectedOfficeWorkingHours.isMondayWork()" >
+                                    <input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="value: selectedOfficeWorkingHours.mondayEnd, disable: !selectedOfficeWorkingHours.isMondayWork(), click: $root.datePicker2" >
                                 </div>
                             </div>
                         </div>
                         <div class="row dayBox">
                             <div class="col-sm-4 col-md-3">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="tue" data-bind="checked: selectedOfficeWorkingHours.isTuesdayWork" />
+                                    <input type="checkbox" id="tue" data-bind="checked: selectedOfficeWorkingHours.isTuesdayWork, event: {change: $root.otherDayWorkHour}" />
                                     <label for="tue" class="ckColor"> Tuesday</label>
                                 </p>    
                             </div>
                             <div class="col-sm-4 col-md-3">
                                 <div class="date datetime1">
-                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.tuesdayStart, disable: !selectedOfficeWorkingHours.isTuesdayWork()">
+                                <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="value: selectedOfficeWorkingHours.tuesdayStart, disable: !selectedOfficeWorkingHours.isTuesdayWork()">
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-3">
@@ -174,7 +165,7 @@
                         <div class="row dayBox">
                             <div class="col-sm-4 col-md-3">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="wed" data-bind="checked: selectedOfficeWorkingHours.isWednesdayWork" />
+                                    <input type="checkbox" id="wed" data-bind="checked: selectedOfficeWorkingHours.isWednesdayWork, event: {change: $root.otherDayWorkHour}" />
                                     <label for="wed" class="ckColor"> Wednesday</label>
                                 </p>    
                             </div>
@@ -192,7 +183,7 @@
                         <div class="row dayBox">
                             <div class="col-sm-4 col-md-3">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="thu" data-bind="checked: selectedOfficeWorkingHours.isThursdayWork" />
+                                    <input type="checkbox" id="thu" data-bind="checked: selectedOfficeWorkingHours.isThursdayWork, event: {change: $root.otherDayWorkHour}" />
                                     <label for="thu" class="ckColor"> Thursday</label>
                                 </p>    
                             </div>
@@ -210,7 +201,7 @@
                         <div class="row dayBox">
                             <div class="col-sm-4 col-md-3">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="fri" data-bind="checked: selectedOfficeWorkingHours.isFridayWork" />
+                                    <input type="checkbox" id="fri" data-bind="checked: selectedOfficeWorkingHours.isFridayWork, event: {change: $root.otherDayWorkHour}" />
                                     <label for="fri" class="ckColor"> Friday</label>
                                 </p>    
                             </div>
@@ -228,7 +219,7 @@
                         <div class="row dayBox">
                             <div class="col-sm-4 col-md-3">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="sat" data-bind="checked: selectedOfficeWorkingHours.isSaturdayWork" />
+                                    <input type="checkbox" id="sat" data-bind="checked: selectedOfficeWorkingHours.isSaturdayWork, event: {change: $root.otherDayWorkHour}" />
                                     <label for="sat" class="ckColor"> Saturday</label>
                                 </p>    
                             </div>
@@ -246,7 +237,7 @@
                         <div class="row dayBox">
                             <div class="col-sm-4 col-md-3">  
                                 <p class="ckBox">
-                                    <input type="checkbox" id="sun" data-bind="checked: selectedOfficeWorkingHours.isSundayWork" />
+                                    <input type="checkbox" id="sun" data-bind="checked: selectedOfficeWorkingHours.isSundayWork, event: {change: $root.otherDayWorkHour}" />
                                     <label for="sun" class="ckColor"> Sunday</label>
                                 </p>    
                             </div>
@@ -276,245 +267,246 @@
 @endsection
 
 @section('js')
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsIYaIMo9hd5yEL7pChkVPKPWGX6rFcv8&libraries=places" async defer></script>
 <script src="{{asset('web/scripts/multiple-select.js')}}"></script>
 <script>
-    
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
-$(function () {
-var JobModel = function (data) {
-    var me = this;
-//    me.location = ko.observableArray([]);
-//    me.jobType = ko.observable('');
-//    me.totalJobOpening = ko.observable();
-//    me.jobOfficeId = ko.observable();
-//    me.showTotalJobOpenings = ko.observable(false);
-//    me.isMonday = ko.observable(false);
-//    me.isTuesday = ko.observable(false);
-//    me.isWednesday = ko.observable(false);
-//    me.isThursday = ko.observable(false);
-//    me.isFriday = ko.observable(false);
-//    me.isSaturday = ko.observable(false);
-//    me.isSunday = ko.observable(false);
 
-    me._init = function (d) {
-        if (typeof d == "undefined") {
-            return false;
+
+
+</script>
+<script>
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
-//        me.location.push(d.address);
-//        if(d.job_type == 1){
-//            me.jobType("Full Time");
-//        }else if(d.job_type == 2){
-//            me.jobType("Part Time");
-//        }else{
-//            me.jobType("Temporary");
-//            me.showTotalJobOpenings(true);
-//            if(d.is_monday != null){
-//                me.isMonday(true);
-//            }if(d.is_tuesday != null){
-//                me.isTuesday(true);
-//            }if(d.is_wednesday != null){
-//                me.isWednesday(true);
-//            }if(d.is_thursday != null){
-//                me.isThursday(true);
-//            }if(d.is_friday != null){
-//                me.isFriday(true);
-//            }if(d.is_saturday != null){
-//                me.isSaturday(true);
-//            }if(d.is_sunday != null){
-//                me.isSunday(true);
-//            }
-//        }
-//        me.totalJobOpening(d.no_of_jobs);
-//        me.jobOfficeId(d.recruiter_office_id);
-    }
-    me._init(data);
-    return me;
-};
+    });
 
-var OfficeModel = function (data) {
-    var me = this;
-    me.selectedOfficeId = ko.observable();
-    me.selectedOfficeType = ko.observable();
-    me.selectedOfficeAddress = ko.observable('');
-    me.selectedOfficePhone = ko.observable();
-    me.selectedOfficeInfo = ko.observable('');
-    me.selectedOfficeWorkingHours = ko.observable();
-    me.selectedOfficeZipcode = ko.observable();
-    me.datePickerBinding = ko.observable(false);
+//$(function () {
 
-    me._init = function (d) {
-        me.selectedOfficeId(d.id);
-        me.selectedOfficeType(d.office_type_name);
-        me.selectedOfficeAddress(d.address);
-        me.selectedOfficePhone(d.phone_no);
-        me.selectedOfficeInfo(d.office_location);
-        me.selectedOfficeZipcode(d.zipcode);
-        me.selectedOfficeWorkingHours = new WorkingHourModel(d);
-        me.datePickerBinding(true);
+    var OfficeModel = function (data) {
+        var me = this;
+        me.selectedOfficeId = ko.observable();
+        me.selectedOfficeAddress = ko.observable('');
+        me.selectedOfficePhone = ko.observable();
+        me.selectedOfficeInfo = ko.observable('');
+        me.selectedOfficeWorkingHours = ko.observable();
+        me.selectedOfficeZipcode = ko.observable();
+        me.datePickerBinding = ko.observable(false);
+        me.selectedOfficeType = ko.observableArray([]);
+
+        me._init = function (d) {
+            me.selectedOfficeId(d.id);
+            splitOfficeType = d.office_type_name.split(',');
+            for (i in splitOfficeType) {
+                me.selectedOfficeType.push(splitOfficeType[i]);
+            }
+            me.selectedOfficeAddress(d.address);
+            me.selectedOfficePhone(d.phone_no);
+            me.selectedOfficeInfo(d.office_location);
+            me.selectedOfficeZipcode(d.zipcode);
+            me.selectedOfficeWorkingHours = new WorkingHourModel(d);
+            me.datePickerBinding(true);
+        };
+
+        me._init(data);
     };
 
-    me._init(data);
-};
-
-var WorkingHourModel = function (data) {
-    var me = this;
-    me.isMondayWork = ko.observable(false);
-    me.mondayStart = ko.observable(null);
-    me.mondayEnd = ko.observable(null);
-    me.isTuesdayWork = ko.observable(false);
-    me.tuesdayStart = ko.observable(null);
-    me.tuesdayEnd = ko.observable(null);
-    me.isWednesdayWork = ko.observable(false);
-    me.wednesdayStart = ko.observable(null);
-    me.wednesdayEnd = ko.observable(null);
-    me.isThursdayWork = ko.observable(false);
-    me.thursdayStart = ko.observable(null);
-    me.thursdayEnd = ko.observable(null);
-    me.isFridayWork = ko.observable(false);
-    me.fridayStart = ko.observable(null);
-    me.fridayEnd = ko.observable(null);
-    me.isSaturdayWork = ko.observable(false);
-    me.saturdayStart = ko.observable(null);
-    me.saturdayEnd = ko.observable(null);
-    me.isSundayWork = ko.observable(false);
-    me.sundayStart = ko.observable(null);
-    me.sundayEnd = ko.observable(null);
-    me.isEverydayWork = ko.observable(false);
-    me.everydayStart = ko.observable(null);
-    me.everydayEnd = ko.observable(null);
-
-    me._init = function (d) {
-        console.log(d);
-        if (d.work_everyday_start == "00:00:00" && d.work_everyday_end == "00:00:00") {
-            if (d.monday_start != "00:00:00") {
-                me.isMondayWork(true);
-                me.mondayStart(moment(Date(d.monday_start)).format('LT'));
-                me.mondayEnd(moment(Date(d.monday_end)).format('LT'));
-            }
-            if (d.tuesday_start != "00:00:00") {
-                me.isTuesdayWork(true);
-                me.tuesdayStart(moment(Date(d.tuesday_start)).format('LT'));
-                me.tuesdayEnd(moment(Date(d.tuesday_end)).format('LT'));
-            }
-            if (d.wednesday_start != "00:00:00") {
-                me.isWednesdayWork(true);
-                me.wednesdayStart(moment(Date(d.wednesday_start)).format('LT'));
-                me.wednesdayEnd(moment(Date(d.wednesday_end)).format('LT'));
-            }
-            if (d.thursday_start != "00:00:00") {
-                me.isThursdayWork(true);
-                me.thursdayStart(moment(Date(d.thursday_start)).format('LT'));
-                me.thursdayEnd(moment(Date(d.thursday_end)).format('LT'));
-            }
-            if (d.friday_start != "00:00:00") {
-                me.isFridayWork(true);
-                me.fridayStart(moment(Date(d.friday_start)).format('LT'));
-                me.fridayEnd(moment(Date(d.friday_end)).format('LT'));
-            }
-            if (d.saturday_start != "00:00:00") {
-                me.isSaturdayWork(true);
-                me.saturdayStart(moment(Date(d.saturday_start)).format('LT'));
-                me.saturdayEnd(moment(Date(d.saturday_end)).format('LT'));
-            }
-            if (d.sunday_start != "00:00:00") {
-                me.isSundayWork(true);
-                me.sundayStart(moment(Date(d.sunday_start)).format('LT'));
-                me.sundayEnd(moment(Date(d.sunday_end)).format('LT'));
-            }
-        } else {
-            me.isEverydayWork(true);
-            me.everydayStart(moment(Date(d.work_everyday_start)).format('LT'));
-            me.everydayEnd(moment(Date(d.work_everyday_end)).format('LT'));
-        }
-    };
-
-    me._init(data);
-};
-
-ko.bindingHandlers.datetimePicker = {
-    init: function(element, valueAccessor){
-        $('.datetime1').datetimepicker({
-            format: 'hh:mm A',
-                        'allowInputToggle' : true,
-            minDate: moment().startOf('day'),
-            maxDate: moment().endOf('day')
+//    var DayVM = function(){
+//        var me = this;
+//        me.label = ko.observable()
+//        me.isSelected = ko.observable();
+//        me.startTime = ko.observable();
+//        me.endTime = ko.observable();
+//    }
+    var WorkingHourModel = function (data) {
+        var me = this;
+        me.isMondayWork = ko.observable(false);
+        me.mondayStart = ko.observable(null);
+        me.mondayEnd = ko.observable(null);
+        me.isTuesdayWork = ko.observable(false);
+        me.tuesdayStart = ko.observable(null);
+        me.tuesdayEnd = ko.observable(null);
+        me.isWednesdayWork = ko.observable(false);
+        me.wednesdayStart = ko.observable(null);
+        me.wednesdayStart.subscribe(function(){
+            alert(11);
         });
-    }
-};
+        me.wednesdayEnd = ko.observable(null);
+        me.isThursdayWork = ko.observable(false);
+        me.thursdayStart = ko.observable(null);
+        me.thursdayEnd = ko.observable(null);
+        me.isFridayWork = ko.observable(false);
+        me.fridayStart = ko.observable(null);
+        me.fridayEnd = ko.observable(null);
+        me.isSaturdayWork = ko.observable(false);
+        me.saturdayStart = ko.observable(null);
+        me.saturdayEnd = ko.observable(null);
+        me.isSundayWork = ko.observable(false);
+        me.sundayStart = ko.observable(null);
+        me.sundayEnd = ko.observable(null);
+        me.isEverydayWork = ko.observable(false);
+        me.everydayStart = ko.observable(null);
+        me.everydayEnd = ko.observable(null);
 
-var EditJobVM = function () {
-    var me = this;
-    me.showEdit = ko.observable(true);
-    me.cannotEdit = ko.observable(false);
-    me.allLocations = ko.observableArray([]);
-    me.selectedLocations = ko.observableArray([]);
-    me.location = ko.observableArray([]);
-    me.jobType = ko.observable('');
-    me.totalJobOpening = ko.observable();
-    me.jobOfficeId = ko.observable();
-    me.showTotalJobOpenings = ko.observable(false);
-    me.isMonday = ko.observable(false);
-    me.isTuesday = ko.observable(false);
-    me.isWednesday = ko.observable(false);
-    me.isThursday = ko.observable(false);
-    me.isFriday = ko.observable(false);
-    me.isSaturday = ko.observable(false);
-    me.isSunday = ko.observable(false);
-    me.selectedOffice = ko.observableArray([]);
-
-    me.getJobDetails = function () {
-        jobId = <?php echo json_encode($jobId) ?>;
-        $.get('/job/edit-details', {jobId: jobId}, function (d) {
-            if (d.jobSeekerStatus != 0) {
-                me.cannotEdit(true);
-                me.showEdit(false);
-            } else {
-                me.cannotEdit(false);
-                me.showEdit(true);
-            }
-            me.location.push(d.address);
-            if (d.jobDetails.job_type == 1) {
-                me.jobType("Full Time");
-            } else if (d.jobDetails.job_type == 2) {
-                me.jobType("Part Time");
-                if (d.jobDetails.is_monday !== null && d.jobDetails.is_monday !== 0) {
-                    me.isMonday(true);
+        me._init = function (d) {
+            if (d.work_everyday_start == "00:00:00" && d.work_everyday_end == "00:00:00") {
+                if (d.monday_start != "00:00:00") {
+                    me.isMondayWork(true);
+                    dates = me.getDateFunc(d.monday_start, d.monday_end);
+                    me.mondayStart(moment(dates[0]).format('LT'));
+                    me.mondayEnd(moment(dates[1]).format('LT'));
                 }
-                if (d.jobDetails.is_tuesday !== null && d.jobDetails.is_tuesday !== 0) {
-                    me.isTuesday(true);
+                if (d.tuesday_start != "00:00:00") {
+                    me.isTuesdayWork(true);
+                    dates = me.getDateFunc(d.tuesday_start, d.tuesday_end);
+                    me.tuesdayStart(moment(dates[0]).format('LT'));
+                    me.tuesdayEnd(moment(dates[1]).format('LT'));
                 }
-                if (d.jobDetails.is_wednesday !== null && d.jobDetails.is_wednesday !== 0) {
-                    me.isWednesday(true);
+                if (d.wednesday_start != "00:00:00") {
+                    me.isWednesdayWork(true);
+                    dates = me.getDateFunc(d.wednesday_start, d.wednesday_end);
+                    me.wednesdayStart(moment(dates[0]).format('LT'));
+                    me.wednesdayEnd(moment(dates[1]).format('LT'));
                 }
-                if (d.jobDetails.is_thursday !== null && d.jobDetails.is_thursday !== 0) {
-                    me.isThursday(true);
+                if (d.thursday_start != "00:00:00") {
+                    me.isThursdayWork(true);
+                    dates = me.getDateFunc(d.thursday_start, d.thursday_end);
+                    me.thursdayStart(moment(dates[0]).format('LT'));
+                    me.thursdayEnd(moment(dates[1]).format('LT'));
                 }
-                if (d.jobDetails.is_friday !== null && d.jobDetails.is_friday !== 0) {
-                    me.isFriday(true);
+                if (d.friday_start != "00:00:00") {
+                    me.isFridayWork(true);
+                    dates = me.getDateFunc(d.friday_start, d.friday_end);
+                    me.fridayStart(moment(dates[0]).format('LT'));
+                    me.fridayEnd(moment(dates[1]).format('LT'));
                 }
-                if (d.jobDetails.is_saturday !== null && d.jobDetails.is_saturday !== 0) {
-                    me.isSaturday(true);
+                if (d.saturday_start != "00:00:00") {
+                    me.isSaturdayWork(true);
+                    dates = me.getDateFunc(d.saturday_start, d.saturday_end);
+                    me.saturdayStart(moment(dates[0]).format('LT'));
+                    me.saturdayEnd(moment(dates[1]).format('LT'));
                 }
-                if (d.jobDetails.is_sunday !== null && d.jobDetails.is_sunday !== 0) {
-                    me.isSunday(true);
+                if (d.sunday_start != "00:00:00") {
+                    me.isSundayWork(true);
+                    dates = me.getDateFunc(d.sunday_start, d.sunday_end);
+                    me.sundayStart(moment(dates[0]).format('LT'));
+                    me.sundayEnd(moment(dates[1]).format('LT'));
                 }
             } else {
-                me.jobType("Temporary");
-                me.showTotalJobOpenings(true);
+                me.isEverydayWork(true);
+                dates = me.getDateFunc(d.work_everyday_start, d.work_everyday_end);
+                me.everydayStart(moment(dates[0]).format('LT'));
+                me.everydayEnd(moment(dates[1]).format('LT'));
             }
-            me.totalJobOpening(d.no_of_jobs);
-            me.jobOfficeId(d.recruiter_office_id);
-            for (i in d.recruiterOffices) {
-                me.selectedLocations.push(d.recruiterOffices[i].address);
-                me.allLocations.push(d.recruiterOffices[i]);
-            }
-        });
+        };
+
+        me.getDateFunc = function (start, end) {
+            splited1 = start.split(':');
+            splited2 = end.split(':');
+            date1 = new Date('', '', '', splited1[0], splited1[1]);
+            date2 = new Date('', '', '', splited2[0], splited2[1]);
+            return [date1, date2];
+        };
+
+        me._init(data);
     };
 
+    ko.bindingHandlers.datetimePicker = {
+        init: function (element, valueAccessor) {
+            $('.datetime1').datetimepicker({
+                format: 'hh:mm A',
+                'allowInputToggle': true,
+                minDate: moment().startOf('day'),
+                maxDate: moment().endOf('day')
+            });
+        }
+    };
+
+    var EditJobVM = function () {
+        var me = this;
+        me.showEdit = ko.observable(true);
+        me.cannotEdit = ko.observable(false);
+        me.allLocations = ko.observableArray([]);
+        me.selectedLocations = ko.observableArray([]);
+        me.location = ko.observableArray([]);
+        me.jobType = ko.observable('');
+        me.totalJobOpening = ko.observable();
+        me.jobOfficeId = ko.observable();
+        me.showTotalJobOpenings = ko.observable(false);
+        me.selectedOffice = ko.observableArray([]);
+        me.allOfficeTypes = ko.observableArray([]);
+        me.selectedJobType = ko.observable('');
+        me.allPartTimeDays = ko.observableArray([]);
+        me.partTimeDays = ko.observableArray([]);
+
+        var placeSearch, autocomplete, autocomplete1, autocomplete2, officeName;
+        var componentForm = {
+            postal_code: 'short_name'
+        };
+
+        var autocomplete = {};
+        var autocompletesWraps = ['autocomplete', 'autocomplete1', 'autocomplete2'];
+
+
+        me.getJobDetails = function () {
+            jobId = <?php echo json_encode($jobId) ?>;
+            $.get('/job/edit-details', {jobId: jobId}, function (d) {
+                console.log(d);
+                if (d.jobSeekerStatus != 0) {
+                    me.cannotEdit(true);
+                    me.showEdit(false);
+                } else {
+                    me.cannotEdit(false);
+                    me.showEdit(true);
+                }
+                me.location.push(d.address);
+                me.allPartTimeDays(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
+                if (d.jobDetails.job_type == 1) {
+                    me.jobType("Full Time");
+                    me.selectedJobType("Full Time");
+                } else if (d.jobDetails.job_type == 2) {
+                    me.selectedJobType("Part Time");
+                    me.jobType("Part Time");
+                    
+                    if (d.jobDetails.is_monday !== null && d.jobDetails.is_monday !== 0) {
+                        me.partTimeDays.push("Monday");
+                    }
+                    if (d.jobDetails.is_tuesday !== null && d.jobDetails.is_tuesday !== 0) {
+                        me.partTimeDays.push("Tuesday");
+                    }
+                    if (d.jobDetails.is_wednesday !== null && d.jobDetails.is_wednesday !== 0) {
+                        me.partTimeDays.push("Wednesday");
+                    }
+                    if (d.jobDetails.is_thursday !== null && d.jobDetails.is_thursday !== 0) {
+                        me.partTimeDays.push("Thursday");
+                    }
+                    if (d.jobDetails.is_friday !== null && d.jobDetails.is_friday !== 0) {
+                        me.partTimeDays.push("Friday");
+                    }
+                    if (d.jobDetails.is_saturday !== null && d.jobDetails.is_saturday !== 0) {
+                        me.partTimeDays.push("Saturday");
+                    }
+                    if (d.jobDetails.is_sunday !== null && d.jobDetails.is_sunday !== 0) {
+                        me.partTimeDays.push("Sunday");
+                    }
+                } else {
+                    me.selectedJobType("Temporary");
+                    me.jobType("Temporary");
+                    me.showTotalJobOpenings(true);
+                }
+                me.totalJobOpening(d.jobDetails.no_of_jobs);
+                me.jobOfficeId(d.jobDetails.recruiter_office_id);
+                for (i in d.recruiterOffices) {
+                    me.selectedLocations.push(d.recruiterOffices[i].address);
+                    me.allLocations.push(d.recruiterOffices[i]);
+                }
+                for(i in d.allOfficeTypes){
+                    me.allOfficeTypes.push(d.allOfficeTypes[i].officetype_name);
+                }
+//                console.log('1',me.allOfficeTypes());
+        });
+    };
     me.showOfficeDetails = function (d, e) {
         me.selectedOffice([]);
         selectedId = $(e.currentTarget).val();
@@ -523,30 +515,107 @@ var EditJobVM = function () {
                 me.selectedOffice.push(new OfficeModel(d.allLocations()[i]));
             }
         }
-        console.log(me.selectedOffice());
+//        console.log('2',me.selectedOffice()[0].selectedOfficeType());
+        $('.ddlCars').multiselect({
+            numberDisplayed: 3,
+        });
+        $(".dropCheck input").after("<div></div>");
     };
     
-    me.datePicker1 = function(d, e){
-        
-        $(e.currentTarget).on("dp.change", function () {
-            
+//    me.datePicker1 = function(d, e){
+//        $(e.currentTarget).on("dp.change", function () {
+//        });
+//    };
+    
+    me.initializeMap = function(){
+        var placeSearch, autocomplete, autocomplete1, autocomplete2, officeName;
+        var componentForm = {
+            postal_code: 'short_name'
+        };
+
+        var autocomplete = {};
+        var autocompletesWraps = ['autocomplete', 'autocomplete1', 'autocomplete2'];
+
+        $.each(autocompletesWraps, function (index, name) {
+            if ($('#' + name).length == 0) {
+                return;
+            }
+
+            autocomplete[name] = new google.maps.places.SearchBox($('#' + name)[0], {types: ['geocode']});
+            autocomplete[name].addListener('places_changed', function () {
+                var allPlace = autocomplete[name].getPlaces();
+                console.log(name);
+                var indexField = name.split('autocomplete')[1];
+                allPlace.forEach(function (place) {
+
+                    $('#postal_code' + indexField).val('');
+                    for (var i = 0; i < place.address_components.length; i++) {
+                        var addressType = place.address_components[i].types[0];
+                        if (componentForm[addressType]) {
+                            var val = place.address_components[i][componentForm[addressType]];
+                            document.getElementById(addressType + indexField).value = val;
+                        }
+                    }
+
+//                    document.getElementById('full_address' + indexField).value = place.formatted_address;
+//                    document.getElementById('lat' + indexField).value = place.geometry.location.lat();
+//                    document.getElementById('lng' + indexField).value = place.geometry.location.lng();
+                    $('#' + name)[0].value = place.formatted_address;
+
+                    checkLocation($('#postal_code' + indexField).val(), indexField);
+                });
+            });
         });
     };
     
-    me.datePicker2 = function(d, e){
-        
-        $(e.currentTarget).on("dp.change", function () {
-            
-        });
+    me.getOfficeName = function(d, e) {
+        officeName = new google.maps.places.SearchBox(
+                (document.getElementById('officeName')),
+                {types: ['geocode']});
     };
+    
+    me.selecteJobType = function(d, e){
+        checkJobType = $(e.currentTarget).prev().val();
+        if( checkJobType == "Full Time"){
+            me.selectedJobType("Full Time");
+        }else if(checkJobType == "Part Time"){
+            me.selectedJobType("Part Time");
+        }else{
+            me.selectedJobType('Temporary');
+            $('#CoverStartDateOtherPicker').datepicker('setDates', [new Date(2017, 2, 20), new Date(2017, 2, 21)]);
+        }
+    };
+    
+    me.everyDayWorkHour = function(d, e){
+        d.selectedOfficeWorkingHours.isMondayWork(false);
+        d.selectedOfficeWorkingHours.isTuesdayWork(false);
+        d.selectedOfficeWorkingHours.isWednesdayWork(false);
+        d.selectedOfficeWorkingHours.isThursdayWork(false);
+        d.selectedOfficeWorkingHours.isFridayWork(false);
+        d.selectedOfficeWorkingHours.isSaturdayWork(false);
+        d.selectedOfficeWorkingHours.isSundayWork(false);
+    };
+    
+    me.otherDayWorkHour = function (d, e){
+        d.selectedOfficeWorkingHours.isEverydayWork(false);
+    };
+    
+    me.changeWorkingHour = function(d, e){
+        console.log(d);
+    }
+    
+    me.publishJob = function(d, e){
+        console.log(d);
+    }
 
     me._init = function () {
         me.getJobDetails();
+        me.initializeMap();
     };
     me._init();
 };
 var ejObj = new EditJobVM();
 ko.applyBindings(ejObj, $('#edit-job')[0])
-});
+//});
 </script>
 @endsection

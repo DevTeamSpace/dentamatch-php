@@ -54,9 +54,9 @@ var hiddenFields = '<input type="hidden" name="_token" value="' + tokenValue + '
 
             $(".masterBox:last").html(masterCLone);
 
-            dropDownDynamic()
+            dropDownDynamic();
             $(".masterBox:last").find(".dropCheck input").after("<div></div>");
-            DynamicTickName()
+            DynamicTickName();
             WeekOption();
             initializeMap();
 //-----datePicker---//
