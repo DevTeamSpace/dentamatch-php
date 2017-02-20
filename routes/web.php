@@ -54,7 +54,9 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::get('job/lists', 'web\RecruiterJobController@listJobs');
             Route::get('job/search/{jobId}', 'web\RecruiterJobController@searchSeekers');
             Route::get('job/details/{jobId}', 'web\RecruiterJobController@jobDetails');
-            Route::get('job/edit/{jobId}', 'web\RecruiterJobController@editJob');
+//            Route::get('job/edit/{jobId}', 'web\RecruiterJobController@editJob');
+            Route::get('job/edit/{jobId}', 'web\RecruiterJobController@jobEdit');
+            Route::get('job/edit-details', 'web\RecruiterJobController@jobEditDetails');
             Route::post('job/updateStatus', 'web\RecruiterJobController@updateStatus');
             Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
             Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
@@ -80,8 +82,11 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::get('setting-terms-conditions', 'web\UserProfileController@getTermsConditions');
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
             Route::post('change-password', 'web\UserProfileController@postChangePassword');
-            
+
             Route::get('chat', 'web\ChatController@getChatSeekerList');
+            Route::get('calender', 'web\CalenderController@getCalender');
+            Route::get('calender-details', 'web\CalenderController@getCalenderDetails');
+
         });
 
         Route::group(['middleware' => 'termCondition'], function () {

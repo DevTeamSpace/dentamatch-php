@@ -119,9 +119,9 @@ label {
     padding: 3px 6px;
 }
 
+
 .customNav .navbar-nav>li>a:focus,
-.customNav .navbar-nav>li>a:hover,
-.createjob a {
+.customNav .navbar-nav>li>a:hover {
     color: white;
 }
 
@@ -366,9 +366,11 @@ label {
 }
 
 
+
 /* .notificaionbell:hover .noficationListContainer {
     display: block;
     } */
+
 
 .topIconBox>li {
     display: inline-block;
@@ -608,6 +610,7 @@ p {
     bottom: -16px;
 }
 
+
 .parsley-errors-list.filled,
 #location-msg,
 #location-msg1,
@@ -629,6 +632,11 @@ p {
 .filledPosition {
     font-size: 9px;
     bottom: -14px;
+}
+
+.customSubscriptionTable th,
+.tabSubscriptionContainer td {
+    white-space: normal !important;
 }
 
 
@@ -1039,7 +1047,6 @@ input[type='checkbox'] {
     background: #fff;
 }
 
-
 /*------------sagar Kapoor------------*/
 
 
@@ -1074,6 +1081,16 @@ input[type='checkbox'] {
         position: absolute;
         top: -17px;
         right: 52px;
+    }
+
+    .topIconBox>li {
+        position: static;
+    }
+    .noficationListContainer {
+        top: 63px;
+    }
+    .notificationCaret {
+        left: 112px;
     }
     .navbar-toggle {
         padding: 6px 6px;
@@ -1156,10 +1173,23 @@ input[type='checkbox'] {
     }
 }
 
+/*  -----chander---*/
+
+@media (max-width: 991px) {
+    .notificationList .media-heading {
+        padding-right: 35px;
+    }
+}
 
 /*  -----chander---*/
 
+
 @media only screen and (min-width: 300px) and (max-width: 991px) {
+
+    /*
+    .left-margin-ist {top:10px;}
+    .left-margin-2nd {top: 20px}
+    */
     .select-days-custom {
         top: 20px;
         width: 246px !important
@@ -1183,11 +1213,13 @@ input[type='checkbox'] {
 
 /*---chander---*/
 
+
 @media(max-width:767px) {
     .add-on-nav {
         bottom: -33px;
     }
 }
+
 
 @media (max-width: 480px) {
     .notificationDel {
@@ -1196,6 +1228,7 @@ input[type='checkbox'] {
     .notificationList .media-heading {
         padding-right: 0px;
     }
+
     .noficationListContainer {
         left: -120px;
         right: auto !important;
@@ -1204,6 +1237,7 @@ input[type='checkbox'] {
     .notificationCaret {
         right: 46%;
     }
+
 }
 
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Auth;
+use DB;
 
 class RecruiterOffice extends Model {
 
@@ -97,10 +98,12 @@ class RecruiterOffice extends Model {
     }
     
     public static function getAllOffices(){
-        return RecruiterOffice::join(
-                'locations', 'recruiter_offices.zipcode', '=', 'locations.zipcode'
-                )->where(['user_id' => Auth::user()->id, 'locations.is_active' => config('constants.LocationActive')])
-                ->select('locations.*', 'recruiter_offices.*')
+        return RecruiterOffice::where(['user_id' => Auth::user()->id, 'locations.is_active' => config('constants.LocationActive')])
+                ->join('locations', 'recruiter_offices.zipcode', '=', 'locations.zipcode')
+                ->join('recruiter_office_types','recruiter_office_types.recruiter_office_id', '=' , 'recruiter_offices.id')
+                ->leftjoin('office_types', 'recruiter_office_types.office_type_id', '=' , 'office_types.id')
+                ->select('locations.*', 'recruiter_offices.*', DB::raw("GROUP_CONCAT(office_types.officetype_name) AS office_type_name"))
+                ->groupBy('recruiter_offices.id')
                 ->get();
     }
 
