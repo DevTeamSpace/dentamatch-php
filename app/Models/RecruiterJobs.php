@@ -113,8 +113,8 @@ class RecruiterJobs extends Model
                         }
                     }
                 });
-                $radius = Configs::select('config_data')->where('config_name','=','SEARCHRADIUS')->first();
-                $searchQueryObj->where('distance','<=',$radius->config_data);
+                //$radius = Configs::select('config_data')->where('config_name','=','SEARCHRADIUS')->first();
+                //$searchQueryObj->where('distance','<=',$radius->config_data);
                 
                 $total = $searchQueryObj->count();
                 $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
