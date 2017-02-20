@@ -27,34 +27,39 @@ class CalendarApiController extends Controller {
             if($userId > 0){
                 $reqData = $request->all();
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
-                $userProfileModel->is_fulltime = $reqData['isFulltime'];
-                $userProfileModel->is_parttime_monday = 0;
-                $userProfileModel->is_parttime_tuesday = 0;
-                $userProfileModel->is_parttime_wednesday = 0;
-                $userProfileModel->is_parttime_thursday = 0;
-                $userProfileModel->is_parttime_friday = 0;
-                $userProfileModel->is_parttime_saturday = 0;
-                $userProfileModel->is_parttime_sunday = 0;
-                $userProfileModel->save();
-                if(is_array($reqData['partTimeDays']) && (count($reqData['partTimeDays']) > 0)){
-                    foreach($reqData['partTimeDays'] as $value){
-                        $field = 'is_parttime_'.$value;
-                        $userProfileModel->$field = 1;
-                    }
-                }
-                $userProfileModel->save();
-                JobSeekerTempAvailability::where('user_id', '=', $userId)->where('temp_job_date','>=',date('Y-m-d'))->forceDelete();
-                if(is_array($reqData['tempdDates']) && count($reqData['tempdDates']) > 0){
-                    $tempDateArray = array();
-                    foreach($reqData['tempdDates'] as $tempDate){
-                        $availability = JobSeekerTempAvailability::where('user_id', '=', $userId)->where('temp_job_date','=',$tempDate)->get();
-                        if($availability->count() == 0){        
-                            $tempDateArray[] = array('user_id' => $userId , 'temp_job_date' => $tempDate);
+                $jobCount = JobLists::where('seeker_id','=',$userId)->whereIn('applied_status',[JobLists::INVITED,JobLists::APPLIED,JobLists::SHORTLISTED,JobLists::HIRED,])->get()->count();
+                if($jobCount > 0){
+                        $userProfileModel->is_fulltime = $reqData['isFulltime'];
+                        $userProfileModel->is_parttime_monday = 0;
+                        $userProfileModel->is_parttime_tuesday = 0;
+                        $userProfileModel->is_parttime_wednesday = 0;
+                        $userProfileModel->is_parttime_thursday = 0;
+                        $userProfileModel->is_parttime_friday = 0;
+                        $userProfileModel->is_parttime_saturday = 0;
+                        $userProfileModel->is_parttime_sunday = 0;
+                        $userProfileModel->save();
+                        if(is_array($reqData['partTimeDays']) && (count($reqData['partTimeDays']) > 0)){
+                            foreach($reqData['partTimeDays'] as $value){
+                                $field = 'is_parttime_'.$value;
+                                $userProfileModel->$field = 1;
+                            }
                         }
-                    }
-                    JobSeekerTempAvailability::insert($tempDateArray);
+                        $userProfileModel->save();
+                        JobSeekerTempAvailability::where('user_id', '=', $userId)->where('temp_job_date','>=',date('Y-m-d'))->forceDelete();
+                        if(is_array($reqData['tempdDates']) && count($reqData['tempdDates']) > 0){
+                            $tempDateArray = array();
+                            foreach($reqData['tempdDates'] as $tempDate){
+                                $availability = JobSeekerTempAvailability::where('user_id', '=', $userId)->where('temp_job_date','=',$tempDate)->get();
+                                if($availability->count() == 0){        
+                                    $tempDateArray[] = array('user_id' => $userId , 'temp_job_date' => $tempDate);
+                                }
+                            }
+                            JobSeekerTempAvailability::insert($tempDateArray);
+                        }
+                        $response = apiResponse::customJsonResponse(1, 200, trans("messages.availability_add_success"));
+                }else{
+                        $response = apiResponse::customJsonResponse(0, 201, trans("messages.already_job_availability"));
                 }
-                $response = apiResponse::customJsonResponse(1, 200, trans("messages.availability_add_success"));
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             } 
