@@ -206,7 +206,6 @@ class RecruiterJobController extends Controller
         }
     }
     
-<<<<<<< HEAD
     public function sendPushUser($jobstatus,$sender,$receiver,$jobId){
         $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
         if($jobstatus == JobLists::SHORTLISTED){
@@ -241,8 +240,9 @@ class RecruiterJobController extends Controller
 
             
         }
-        
-=======
+    
+    }
+    
     public function jobEdit(Request $request, $jobId){
         return view('web.recuriterJob.edit', compact('jobId'));
     }
@@ -263,6 +263,5 @@ class RecruiterJobController extends Controller
             $response = $e->getMessage();
         }
         return $response;
->>>>>>> subscription-2
     }
 }
