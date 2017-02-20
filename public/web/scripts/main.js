@@ -84,7 +84,7 @@ $(document).ready(function(){
                 $("form").parsley().destroy();
                 $("form").parsley();
             });
-    }
+    
 
 
 
