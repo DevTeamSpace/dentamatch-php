@@ -28,6 +28,9 @@
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-btn fa-save"></i>Save
                                 </button>
+                                <a href="<?php echo e(url('cms/recruiter/index')); ?>"  class="btn btn-primary">
+                                    <i class="fa fa-backward"></i> Return to list
+                                </a>
                             </div>
                         </div>
                     </form>

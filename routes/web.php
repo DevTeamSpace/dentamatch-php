@@ -198,7 +198,7 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
     Route::group(['prefix' => 'recruiter/'], function() {
         Route::get('index', 'Cms\RecruiterController@index');
         Route::get('list', 'Cms\RecruiterController@recruiterList');
-        Route::delete('{id}/delete', 'Cms\RecruiterController@delete');
+        Route::get('{id}/delete', 'Cms\RecruiterController@delete');
         Route::get('{id}/edit', 'Cms\RecruiterController@edit');
         Route::get('create', 'Cms\RecruiterController@create');
         Route::post('store', 'Cms\RecruiterController@store');

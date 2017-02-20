@@ -133,8 +133,10 @@ class RecruiterController extends Controller
      * @return return to lisitng page
      */
     public function delete($id){
-        User::findOrFail($id)->update(['is_active',0]);
+        User::where('id',$id)->update(['is_active'=>0]);
+
         Session::flash('message',trans('messages.recruiter_deleted'));
+        return redirect('cms/recruiter/index');
         
     }
     
@@ -156,6 +158,7 @@ class RecruiterController extends Controller
                     $edit = url('cms/recruiter/'.$userData->id.'/edit');
                     $delete =url('cms/recruiter/'.$userData->id.'/delete');
                     $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
+                    $action .= '<a href="'.$delete.'" class="delete btn btn-xs btn-primary" onclick="return confirm(\'Are you sure you want to delete this recruiter?\');"><i class="fa fa-remove"></i> Delete</a>';
                     return $action;
                 })
                 ->make(true);
