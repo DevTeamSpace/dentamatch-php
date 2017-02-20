@@ -58,8 +58,7 @@ class RecruiterController extends Controller
     {
         $user = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->select(
-                                'users.email','users.id','users.is_active',
-                                'users.is_verified'
+                                'users.email','users.id','users.is_active'
                                 )
                         ->where('users.id', $id)->first();
         return view('cms.recruiter.update',['userProfile'=>$user]);
@@ -76,9 +75,22 @@ class RecruiterController extends Controller
         if(isset($request->id)){
             $rules['email'] = "email|required";
             $this->validate($request, $rules);
-            $activationStatus  = isset($request->is_active) ? 1 : 0;
+            $reqData = $request->all();
+            $userId = $reqData['id'];
+            $email = $reqData['email'];
+            $activationStatus  = isset($request['is_active']) ? 1 : 0;
+            User::where('id',$userId)->update(['password'=>'']);
             
-            User::where('id',$request->id)->update(['is_active' => $activationStatus]);
+            PasswordReset::where('user_id' , $userId)->where('email', $email)->delete();
+            $token = md5($email . time());
+            $passwordModel = PasswordReset::firstOrNew(array('user_id' => $userId, 'email' => $email));
+            $passwordModel->fill(['token' => $token]);
+            if($passwordModel->save()) {
+                Mail::queue('email.resetPasswordToken', ['name' => "Recruiter", 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($email) {
+                    $message->to($email, "Recruiter")->subject('Set Password Email');
+                });
+            }
+            
             $msg = trans('messages.recruiter_updated_success');
         }
         else
@@ -104,8 +116,8 @@ class RecruiterController extends Controller
             $passwordModel->fill(['token' => $token]);
             $passwordModel->save();
 
-            Mail::queue('email.resetPasswordToken', ['name' => "Dear Recruiter", 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($reqData) {
-                $message->to($reqData['email'], "Dear Recruiter")->subject('Set Password Email');
+            Mail::queue('email.resetPasswordToken', ['name' => "Recruiter", 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($reqData) {
+                $message->to($reqData['email'], "Recruiter")->subject('Set Password Email');
             });
             $msg = trans('messages.recruiter_added_success');
         }
