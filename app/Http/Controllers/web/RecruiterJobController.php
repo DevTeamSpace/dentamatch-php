@@ -237,7 +237,7 @@ class RecruiterJobController extends Controller
         $deviceModel = Device::getDeviceToken($receiverId);
         if($deviceModel) {
             //$this->info($userId);
-            NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['message'], $params);
+            NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params);
 
             
         }
