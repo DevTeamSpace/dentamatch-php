@@ -207,12 +207,14 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('{id}/edit', 'Cms\RecruiterController@edit');
         Route::get('create', 'Cms\RecruiterController@create');
         Route::post('store', 'Cms\RecruiterController@store');
+        Route::post('storeAdminResetPassword', 'Cms\RecruiterController@storeAdminResetPassword');
+        Route::get('{id}/adminResetPassword', 'Cms\RecruiterController@adminResetPassword');
     });
     
     Route::group(['prefix' => 'notify/'], function() {
         Route::get('index', 'cms\AppMessageController@index');
         Route::get('list', 'cms\AppMessageController@messageList');
-        Route::delete('{id}/delete', 'cms\AppMessageController@delete');
+        Route::get('{id}/delete', 'cms\AppMessageController@delete');
         Route::get('{id}/send', 'cms\AppMessageController@sendNotification');
         Route::get('{id}/edit', 'cms\AppMessageController@edit');
         Route::get('create', 'cms\AppMessageController@create');
