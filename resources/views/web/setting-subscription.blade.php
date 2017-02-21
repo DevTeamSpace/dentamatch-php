@@ -16,8 +16,8 @@
                         </div>
                         <div class="tabSubscriptionContainer">
                             <div class="title pull-left pd-b-20"><b>Membership</b></div>	
-                            <a class="pull-right" data-bind="visible: unsubscribeButton,click: $root.unsubscribePlan">Unsubscribe</a>
-                            <a class="pull-right" data-bind="visible: resubscribeButton,click: $root.subscribeAgain">Subscribe Again</a>
+                            <a class="pull-right" href="#" data-bind="visible: unsubscribeButton,click: $root.unsubscribePlan">Unsubscribe</a>
+                            <a class="pull-right" href="#" data-bind="visible: resubscribeButton,click: $root.subscribeAgain">Subscribe Again</a>
                             <div class="clearfix"></div>
                             <div class="table-responsive">
                                 <!--ko foreach: subscription-->
@@ -51,7 +51,7 @@
                                 <!--ko foreach: cards-->
                                 <div class="masterCardBox small-border-radius dev_card_box">
                                     <p class="pull-left"><span data-bind="text: brand"></span> ending in <span data-bind="text: last4"></span> - <span data-bind="text: exp_month"></span>/<span data-bind="text: exp_year"></span></p>
-                                    <div class="masterEDOPtion pull-right"><span class="gbllist dev_edit_button" data-bind="click: $root.editCard"><i class="icon icon-edit"></i> Edit</span>
+                                    <div class="masterEDOPtion pull-right"><span class="gbllist dev_edit_button" data-bind="click: $root.editCard"><i class="icon icon-edit"></i> Update</span>
                                         <span class="gbllist" data-bind="click: $root.deleteCard"><i class="icon icon-deleteicon"></i> Delete</span></div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -110,11 +110,11 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bind="visible: cancelButtonEdit"><span aria-hidden="true">&times;</span></button>
-                          <h4 class="modal-title">Edit</h4>
+                            <h4 class="modal-title">Update</h4>
                         </div>
                         <form id="addCardForm" data-bind="submit: $root.editCardFunction">
                         <div class="modal-body">
-                          <p class="text-center">Please provide expiry details to edit.</p>
+                          <p class="text-center">Please provide expiry details to update card.</p>
                           <br>
                           <p class="text-center" style="color: blue" data-bind="text: creatingMessage"></p>
                           <p class="text-center" style="color: red;" data-bind="text: errorMessage"></p>
@@ -134,7 +134,7 @@
                             </div>-->
                             <div class="mr-t-20 mr-b-30 dev-pd-l-13p">
                                 <button type="button" class="btn btn-link mr-r-5" data-dismiss="modal">Close</button>
-                                <button type="submit" id="editCardButton" class="btn btn-primary pd-l-30 pd-r-30">Edit Card</button>
+                                <button type="submit" id="editCardButton" class="btn btn-primary pd-l-30 pd-r-30">Update Card</button>
                             </div>
                         </div>
                           </form>
@@ -528,7 +528,7 @@ var SubscriptionVM = function () {
         if(me.editExpiry() !== null || me.editExpiry() !== ''){
             me.cancelButtonEdit(false);
             $('#editCardButton').attr('disabled','disabled');
-            me.creatingMessage('Editing card please wait...');
+            me.creatingMessage('Updating card please wait...');
             $('#editCardModal').modal({
                 backdrop: 'static',
                 keyboard: false
