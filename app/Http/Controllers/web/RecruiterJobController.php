@@ -231,7 +231,7 @@ class RecruiterJobController extends Controller
         $notificationData['id'] = $notificationDetails->id;
         $notificationData['receiverId'] = $receiverId;
         $notificationData['senderId'] = $sender;
-        $params['notificationData'] = $notificationData;
+        $params['data'] = $notificationData;
         $params['jobDetails'] = $jobDetails;
         $params['notification_details'] = $notificationDetails;
         $deviceModel = Device::getDeviceToken($receiverId);
