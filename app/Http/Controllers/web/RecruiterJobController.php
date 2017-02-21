@@ -188,6 +188,7 @@ class RecruiterJobController extends Controller
                 return redirect('job/details/'.$requestData['jobId']);
             }
         } catch (\Exception $e) {
+            dd($e);
             return view('web.error.',["message" => $e->getMessage()]);
         }
     }        
@@ -210,25 +211,26 @@ class RecruiterJobController extends Controller
         $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
         if($jobstatus == JobLists::SHORTLISTED){
             $notificationData = array(
-                    'message' => $jobDetails['office_name']." has accepted your invitation for ".$jobDetails['jobtitle_name'],
+                    'notificationData' => $jobDetails['office_name']." has accepted your invitation for ".$jobDetails['jobtitle_name'],
                     'notification_title'=>'User shortlisted',
                     'sender_id' => $sender,
                     'type' => 1,
-                    'notification_type' => Notification::ACCEPTJOB,
+                    'notificationType' => Notification::ACCEPTJOB,
                 );
         } else if($jobstatus == JobLists::HIRED){
             $notificationData = array(
-                    'message' => "You have been hired for  ".$jobDetails['jobtitle_name'],
+                    'notificationData' => "You have been hired for  ".$jobDetails['jobtitle_name'],
                     'notification_title'=>'User hired',
                     'sender_id' => $sender,
                     'type' => 1,
-                    'notification_type' => Notification::HIRED,
+                    'notificationType' => Notification::HIRED,
                 );
         }
         $data = ['receiver_id'=>$receiverId,'sender_id' => $sender, 'notification_data'=>$notificationData['message'],'notification_type' => $jobstatus];
         $notificationDetails = Notification::create($data);
-        
-        $notificationData['receiver_id'] = $receiverId;
+        $notificationData['id'] = $notificationDetails->id;
+        $notificationData['receiverId'] = $receiverId;
+        $notificationData['senderId'] = $sender;
         $params['data'] = $notificationData;
         $params['jobDetails'] = $jobDetails;
         $params['notification_details'] = $notificationDetails;
