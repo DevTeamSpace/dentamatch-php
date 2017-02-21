@@ -73,8 +73,10 @@ class RecruiterJobs extends Model
                         ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
                         ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
                         ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
-                        ->whereNull('job_lists.id')
+                       // ->whereNull('job_lists.id')
+                        ->where('job_lists.seeker_id','!=', $reqData['userId'])
                         ->whereIn('job_templates.job_title_id', $reqData['jobTitle']);
+                
                         //->whereIn('job_titles.id', $reqData['jobTitle']);
                 /*$searchQueryObj = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                         ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
@@ -113,8 +115,8 @@ class RecruiterJobs extends Model
                         }
                     }
                 });
-                $radius = Configs::select('config_data')->where('config_name','=','SEARCHRADIUS')->first();
-                $searchQueryObj->where('distance','<=',$radius->config_data);
+                //$radius = Configs::select('config_data')->where('config_name','=','SEARCHRADIUS')->first();
+                //$searchQueryObj->where('distance','<=',$radius->config_data);
                 
                 $total = $searchQueryObj->count();
                 $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',

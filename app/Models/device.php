@@ -56,5 +56,18 @@ class Device extends Model  {
                 ->orderBy('devices.id','desc')->first();
     }
     
+    public static function getAllDeviceToken($userGroup=1){
+        $deviceObj = static::whereRaw('device_token IS NOT NULL AND device_token!=""');
+        $deviceObj->join('user_groups','user_groups.user_id','=','devices.user_id');
+        if($userGroup=='1'){
+            $deviceObj->whereIn('group_id',['2','3']);
+        } else {
+            $deviceObj->where('group_id',$userGroup);
+        }
+        return $deviceObj->join('users','users.id','=','devices.user_id')
+                ->where('users.is_active',1)
+                ->select('devices.user_id','device_token', 'device_type')->distinct('device_token')->get();
+    }
+    
 }
 

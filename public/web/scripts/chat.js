@@ -22,14 +22,16 @@ $(document).ready(function () {
         
     
         var currentSel = '';
-        socket.emit('init', {userId : fromId, userName : userName});
+        socket.emit('init', {userId : fromId, userName : userName,userType : 2});
         $('.leftSeekerPanelRow').click(function(e){
             var dataLoaded = $(this).attr('data-loaded');
             var toId = $(this).data('user');
             var obj = $('#li_'+toId).find('.badge');
             var unreadCount = obj.html();
             if(unreadCount>0){
-                socket.emit('updateReadCount', {fromId:toId,toId:fromId});
+                socket.emit('updateReadCount', {fromId:toId,toId:fromId},function(response){
+                    console.log(response);
+                });
                 obj.html(0);
                 obj.addClass('hide');
             }

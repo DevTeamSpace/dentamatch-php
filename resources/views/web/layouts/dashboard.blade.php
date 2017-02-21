@@ -31,7 +31,7 @@
     </head>
     <body>
         <nav class="customNav navbar navbar-default navbar-fixed-top">
-            <div class="container">
+        <div class="container pos-rel">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -48,8 +48,8 @@
 
                 <ul class=" topIconBox navbar-right customnavRight">
                     <li><a href="#"><span class="icon icon-message"></span></a></li>
-                    <li class="notificaionbell"><a href="#"><span class="icon icon-bell "></span><div class="notificationCircle ">2</div></a>
-                        <div class="noficationListContainer small-border-radius box-shadow">
+                <li class="notificaionbell dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="icon icon-bell "></span><div class="notificationCircle ">2</div></a>
+                    <div class="dropdown-menu noficationListContainer small-border-radius box-shadow">
                             <span class="fa fa-caret-up notificationCaret"></span>
                             <ul class="notificationList">
                                 <li><p><b>Horward Patterson</b> has applied for the <b>Dental Hygienists</b></p>

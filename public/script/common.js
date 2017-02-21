@@ -265,7 +265,6 @@ $(function () {
         columns: [
             {data: 'messageTo', name: 'messageTo',searchable:true},
             {data: 'message', name: 'message',searchable:false},
-            {data: 'messageType', name: 'messageType',searchable:false},
             {data: 'messageSent', name: 'messageSent',searchable:false},
             {data: 'createdAt', name: 'createdAt',searchable:false},
             {data: 'action', name: 'action',searchable:false}
@@ -490,7 +489,10 @@ $(function () {
 });
 function deleteRecord(obj) {
         console.log(obj);
-        $.post(obj.href, "_method=delete", function(data) {
+        data = {
+        "_token": "{{ csrf_token() }}",
+        };
+        $.get(obj.href, function(data) {
             //do refresh
             window.location.reload();
         });
