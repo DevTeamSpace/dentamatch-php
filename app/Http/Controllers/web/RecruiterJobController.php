@@ -183,8 +183,9 @@ class RecruiterJobController extends Controller
                     $userChat->recruiter_id = Auth::id();
                     $userChat->seeker_id = $jobData->seeker_id;
                     $userChat->checkAndSaveUserToChatList();
+                    $this->sendPushUser($requestData['appliedStatus'],Auth::user()->id,$jobData->seeker_id,$requestData['jobId']);
                 }
-                $this->sendPushUser($requestData['appliedStatus'],Auth::user()->id,$jobData->seeker_id,$requestData['jobId']);
+                
                 return redirect('job/details/'.$requestData['jobId']);
             }
         } catch (\Exception $e) {
