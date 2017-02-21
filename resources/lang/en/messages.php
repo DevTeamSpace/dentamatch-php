@@ -143,4 +143,5 @@ return [
     'app_message_deleted'=>'Successfully deleted appMessage!',
     'already_sent_message' => 'appMessage already sent',
     'admin_recruiter_password_success' => 'Password reset request sent successfully',
+    'reports_temp_jobs' => 'Temp jobs for reports fetched successfully',
 ];
