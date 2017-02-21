@@ -206,7 +206,7 @@ class RecruiterJobController extends Controller
         }
     }
     
-    public function sendPushUser($jobstatus,$sender,$receiver,$jobId){
+    public function sendPushUser($jobstatus,$sender,$receiverId,$jobId){
         $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
         if($jobstatus == JobLists::SHORTLISTED){
             $notificationData = array(
@@ -225,15 +225,14 @@ class RecruiterJobController extends Controller
                     'notification_type' => Notification::HIRED,
                 );
         }
-        $data = ['receiver_id'=>$userId,'sender_id' => $sender, 'notification_data'=>$notificationData['message'],'notification_type' => $jobstatus];
+        $data = ['receiver_id'=>$receiverId,'sender_id' => $sender, 'notification_data'=>$notificationData['message'],'notification_type' => $jobstatus];
         $notificationDetails = Notification::create($data);
-        $userId = $receiver;
-
-        $notificationData['receiver_id'] = $userId;
+        
+        $notificationData['receiver_id'] = $receiverId;
         $params['data'] = $notificationData;
         $params['jobDetails'] = $jobDetails;
         $params['notification_details'] = $notificationDetails;
-        $deviceModel = Device::getDeviceToken($userId);
+        $deviceModel = Device::getDeviceToken($receiverId);
         if($deviceModel) {
             //$this->info($userId);
             NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['message'], $params);
