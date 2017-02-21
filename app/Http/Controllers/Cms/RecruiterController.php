@@ -44,7 +44,7 @@ class RecruiterController extends Controller
      * @param  array  $data
      * @return User
      */
-    protected function index()
+    public function index()
     {  
         return view('cms.recruiter.index');
     }
@@ -72,57 +72,46 @@ class RecruiterController extends Controller
      */
     public function store(Request $request)
     {
-        if(isset($request->id)){
-            $rules['email'] = "email|required";
-            $this->validate($request, $rules);
-            $reqData = $request->all();
-            $userId = $reqData['id'];
-            $email = $reqData['email'];
-            $activationStatus  = isset($request['is_active']) ? 1 : 0;
-            User::where('id',$userId)->update(['password'=>'']);
-            
-            PasswordReset::where('user_id' , $userId)->where('email', $email)->delete();
-            $token = md5($email . time());
-            $passwordModel = PasswordReset::firstOrNew(array('user_id' => $userId, 'email' => $email));
-            $passwordModel->fill(['token' => $token]);
-            if($passwordModel->save()) {
-                Mail::queue('email.resetPasswordToken', ['name' => "Recruiter", 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($email) {
-                    $message->to($email, "Recruiter")->subject('Set Password Email');
-                });
-            }
-            
-            $msg = trans('messages.recruiter_updated_success');
-        }
-        else
+        try 
         {
-            $rules['email'] = "email|required|unique:users";
-            $this->validate($request, $rules);
-            $reqData = $request->all();
-            $user =  array(
-                'email' => $reqData['email'],
-                'password' => '',
-                'is_verified' => 1,
-                'is_active' => 1,
-            );
-            
-            $userId = User::insertGetId($user);
-            $userGroupModel = new UserGroup();
-            $userGroupModel->group_id = 2;
-            $userGroupModel->user_id = $userId;
-            $userGroupModel->save();
-            
-            $token = md5($reqData['email'] . time());
-            $passwordModel = PasswordReset::firstOrNew(array('user_id' => $userId, 'email' => $reqData['email']));
-            $passwordModel->fill(['token' => $token]);
-            $passwordModel->save();
+            if(isset($request->id)){
+                $rules['email'] = "email|required";
+                $this->validate($request, $rules);
+                $activationStatus  = isset($request->is_active) ? 1 : 0;
 
-            Mail::queue('email.resetPasswordToken', ['name' => "Recruiter", 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($reqData) {
-                $message->to($reqData['email'], "Recruiter")->subject('Set Password Email');
-            });
-            $msg = trans('messages.recruiter_added_success');
+                User::where('id',$request->id)->update(['is_active' => $activationStatus]);
+                $msg = trans('messages.recruiter_updated_success');
+            }
+            else
+            {
+                $rules['email'] = "email|required|unique:users";
+                $this->validate($request, $rules);
+                $reqData = $request->all();
+                $user =  ['email' => $reqData['email'], 'password' => '',
+                                'is_verified' => 1, 'is_active' => 1];
+
+                $userId = User::insertGetId($user);
+                $userGroupModel = new UserGroup();
+                $userGroupModel->group_id = 2;
+                $userGroupModel->user_id = $userId;
+                $userGroupModel->save();
+
+                $token = md5($reqData['email'] . time());
+                $passwordModel = PasswordReset::firstOrNew(array('user_id' => $userId, 'email' => $reqData['email']));
+                $passwordModel->fill(['token' => $token]);
+                $passwordModel->save();
+
+                Mail::queue('email.resetPasswordToken', ['name' => "Recruiter", 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($reqData) {
+                    $message->to($reqData['email'], "Recruiter")->subject('Set Password Email');
+                });
+                $msg = trans('messages.recruiter_added_success');
+            }
+
+            Session::flash('message',$msg);
+            
+        } catch(\Exception $e) {
+            Session::flash('message',$e->getMessage());
         }
-        
-        Session::flash('message',$msg);
         return redirect('cms/recruiter/index');
     }
     
@@ -157,12 +146,58 @@ class RecruiterController extends Controller
                 ->addColumn('action', function ($userData) {
                     $edit = url('cms/recruiter/'.$userData->id.'/edit');
                     $delete =url('cms/recruiter/'.$userData->id.'/delete');
+                    $resetPassword = url('cms/recruiter/'.$userData->id.'/adminResetPassword');
                     $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-                    $action .= '<a href="'.$delete.'" class="delete btn btn-xs btn-primary" onclick="return confirm(\'Are you sure you want to delete this recruiter?\');"><i class="fa fa-remove"></i> Delete</a>';
+                    $action .= '<a href="'.$delete.'" class="delete btn btn-xs btn-primary" onclick="return confirm(\'Are you sure you want to delete this recruiter?\');"><i class="fa fa-remove"></i> Delete</a>&nbsp;';
+                    $action .= '<a href="'.$resetPassword.'"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;';
                     return $action;
                 })
                 ->make(true);
                        
+    }
+    
+    public function adminResetPassword($id)
+    {
+        $user = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+                        ->select(
+                                'users.email','users.id','users.is_active'
+                                )
+                        ->where('users.id', $id)->first();
+        return view('cms.recruiter.adminResetPassword',['userProfile'=>$user]);
+    }
+    
+    public function storeAdminResetPassword(Request $request)
+    {
+        try {
+            if(isset($request->id)){
+                $rules['email'] = "email|required";
+                $this->validate($request, $rules);
+                $reqData = $request->all();
+                $userId = $reqData['id'];
+                $email = $reqData['email'];
+                $activationStatus  = isset($request['is_active']) ? 1 : 0;
+                User::where('id',$userId)->update(['password'=>'']);
+
+                PasswordReset::where('user_id' , $userId)->where('email', $email)->delete();
+                $token = md5($email . time());
+                $passwordModel = PasswordReset::firstOrNew(array('user_id' => $userId, 'email' => $email));
+                $passwordModel->fill(['token' => $token]);
+                if($passwordModel->save()) {
+                    Mail::queue('email.resetPasswordToken', ['name' => "Recruiter", 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($email) {
+                        $message->to($email, "Recruiter")->subject('Set Password Email');
+                    });
+                }
+
+                $msg = trans('messages.admin_recruiter_password_success');
+            }
+            Session::flash('message',$msg);
+        
+        } catch(\Exception $e) {
+            Session::flash('message',$e->getMessage());
+        }
+        
+        return redirect('cms/recruiter/index');
+        
     }
 
 }
