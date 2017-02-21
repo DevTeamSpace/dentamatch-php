@@ -185,8 +185,11 @@ class RecruiterJobController extends Controller
                     $userChat->checkAndSaveUserToChatList();
                     $this->sendPushUser($requestData['appliedStatus'],Auth::user()->id,$jobData->seeker_id,$requestData['jobId']);
                 }
-                
                 return redirect('job/details/'.$requestData['jobId']);
+            }else{
+                $inviteJobs = array('seeker_id' => $requestData['seekerId'] , 'recruiter_job_id' => $requestData['jobId'] , 'applied_status' => JobLists::INVITED);
+                JobLists::insert($inviteJobs);
+                $this->sendPushUser($requestData['appliedStatus'],Auth::user()->id,$requestData['seekerId'],$requestData['jobId']);
             }
         } catch (\Exception $e) {
             dd($e);
@@ -212,7 +215,7 @@ class RecruiterJobController extends Controller
         $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
         if($jobstatus == JobLists::SHORTLISTED){
             $notificationData = array(
-                    'notificationData' => $jobDetails['office_name']." has accepted your invitation for ".$jobDetails['jobtitle_name'],
+                    'notificationData' => $jobDetails['office_name']." has accepted your job application for ".$jobDetails['jobtitle_name'],
                     'notification_title'=>'User shortlisted',
                     'sender_id' => $sender,
                     'type' => 1,
@@ -225,6 +228,14 @@ class RecruiterJobController extends Controller
                     'sender_id' => $sender,
                     'type' => 1,
                     'notificationType' => Notification::HIRED,
+                );
+        } else if($jobstatus == JobLists::INVITED){
+            $notificationData = array(
+                    'notificationData' => $jobDetails['office_name']." has sent you a job invitation for ".$jobDetails['jobtitle_name'],
+                    'notification_title'=>'User invited',
+                    'sender_id' => $sender,
+                    'type' => 1,
+                    'notificationType' => Notification::INVITED,
                 );
         }
         $data = ['receiver_id'=>$receiverId,'job_list_id' => $jobId,'sender_id' => $sender, 'notification_data'=>$notificationData['notificationData'],'notification_type' => $jobstatus];

@@ -76,6 +76,7 @@ class RecruiterJobs extends Model
                        // ->whereNull('job_lists.id')
                         ->where('job_lists.seeker_id','!=', $reqData['userId'])
                         ->whereIn('job_templates.job_title_id', $reqData['jobTitle']);
+                
                         //->whereIn('job_titles.id', $reqData['jobTitle']);
                 /*$searchQueryObj = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                         ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')

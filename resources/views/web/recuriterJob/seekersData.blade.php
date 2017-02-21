@@ -152,7 +152,7 @@
                 -->
             </div>
             <div class="col-sm-6 col-xs-6 ">
-                <button type="submit"  name="appliedStatus" value="{{ \App\Models\JobLists::SHORTLISTED }}" class="btn btn-primary pull-right pd-l-30 pd-r-30 ">Invite</button>
+                <button type="submit"  name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pull-right pd-l-30 pd-r-30 ">Invite</button>
             </div>
         </div>
     </div>
