@@ -22,7 +22,7 @@ $(document).ready(function () {
         
     
         var currentSel = '';
-        socket.emit('init', {userId : fromId, userName : userName});
+        socket.emit('init', {userId : fromId, userName : userName,userType : 2});
         $('.leftSeekerPanelRow').click(function(e){
             var dataLoaded = $(this).attr('data-loaded');
             var toId = $(this).data('user');

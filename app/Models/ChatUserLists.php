@@ -68,7 +68,7 @@ class ChatUserLists extends Model
             ->groupBy('chat_user_list.recruiter_id')
             ->select('recruiter_profiles.office_name as name','chat_user_list.recruiter_id as recruiterId',
                     DB::raw("max(user_chat.message) AS message"),
-                    DB::raw("max(user_chat.updated_at) AS timestamp"),
+                    DB::raw("max(user_chat.created_at) AS timestamp"),
                     DB::raw("max(user_chat.id) AS messageId"),
                     'chat_user_list.id as messageListId','chat_user_list.seeker_id as seekerId',
                     'chat_user_list.recruiter_block as recruiterBlock','chat_user_list.seeker_block as seekerBlock')->get();
