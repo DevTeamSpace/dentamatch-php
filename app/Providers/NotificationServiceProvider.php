@@ -63,8 +63,9 @@ class NotificationServiceProvider extends ServiceProvider {
         );
 
         if (!empty($params['data'])) {
+            $body = $params;
             //$body['data'] = $params['data'];
-            $body['data'] = $params;
+            //$body['data'] = $params;
         }
 
         // Encode the payload as JSON
