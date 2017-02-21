@@ -8,20 +8,24 @@ $(document).ready(function() {
     /*---------view more and view less---------*/
 
     $('.job-detail li').hide().filter(':lt(1)').show();
-    if ($('.job-detail li:eq(1) p').text().length > 140) {
-        $('.job-detail')
-            .append('<li><a href="#">View more</a><a href="#" class="view_less">View Less</a></li>')
-            .find('li:last')
-            .click(function(e) {
-                e.preventDefault();
-                $(this)
-                    .siblings(':gt(1)')
-                    .toggle()
-                    .end()
-                    .find('a')
-                    .toggle();
-            });
-    }
+
+
+    $('.job-detail')
+        .append('<li><a href="#">View more</a><a href="#" class="view_less">View Less</a></li>')
+        .find('li:last')
+        .click(function(e) {
+            e.preventDefault();
+            $(this)
+                .siblings(':gt(1)')
+                .toggle()
+                .end()
+                .find('a')
+                .toggle();
+
+
+        });
+
+
 
 
 
@@ -55,6 +59,7 @@ $(document).ready(function() {
         $('.datepicker .datepicker-days .table-condensed thead').find('.choose-dates').parent().remove();
         $('.datepicker .datepicker-days .table-condensed thead').prepend('<tr><th class="choose-dates" colspan="14">Choose Dates</th></tr>');
     });
+
 
 
 
