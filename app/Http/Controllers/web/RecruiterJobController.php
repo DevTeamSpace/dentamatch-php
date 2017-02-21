@@ -188,6 +188,7 @@ class RecruiterJobController extends Controller
                 return redirect('job/details/'.$requestData['jobId']);
             }
         } catch (\Exception $e) {
+            dd($e);
             return view('web.error.',["message" => $e->getMessage()]);
         }
     }        
