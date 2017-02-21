@@ -159,7 +159,6 @@ h6 {
 
 .bg-green {
     background: #05c410 !important;
-    ;
 }
 
 .bg-ember {
@@ -168,12 +167,10 @@ h6 {
 
 .bg-red {
     background: #ff6565 !important;
-    ;
 }
 
 .drk-green {
     background: #45b1b2 !important;
-    ;
 }
 
 .label-success {
@@ -1246,6 +1243,16 @@ strong {
     background: #fff;
 }
 
+.action-disabled {
+    background-color: #dddddd !important;
+    border-color: #ccc !important;
+    cursor: not-allowed;
+}
+
+#comment:disabled {
+    background: #fff;
+}
+
 .chat-datewise {
     margin: 5px 0 32px;
     color: #bdbdbd;
@@ -1529,7 +1536,6 @@ strong {
         padding-left: 0;
     }
 }
-
 @media only screen and (max-width: 480px) {}
 
 .dev_edit_button {
@@ -1542,4 +1548,22 @@ strong {
 
 .dev-pd-l-13p {
     padding-left: 13%;
+}
+
+.dev_calender_div{
+    margin-top: 50px !important;
+}
+/*------flex box row----*/
+
+.flex-row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.flex-row > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
 }

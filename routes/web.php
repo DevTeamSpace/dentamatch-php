@@ -54,7 +54,9 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::get('job/lists', 'web\RecruiterJobController@listJobs');
             Route::get('job/search/{jobId}', 'web\RecruiterJobController@searchSeekers');
             Route::get('job/details/{jobId}', 'web\RecruiterJobController@jobDetails');
-            Route::get('job/edit/{jobId}', 'web\RecruiterJobController@editJob');
+//            Route::get('job/edit/{jobId}', 'web\RecruiterJobController@editJob');
+            Route::get('job/edit/{jobId}', 'web\RecruiterJobController@jobEdit');
+            Route::get('job/edit-details', 'web\RecruiterJobController@jobEditDetails');
             Route::post('job/updateStatus', 'web\RecruiterJobController@updateStatus');
             Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
             Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
@@ -80,8 +82,11 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::get('setting-terms-conditions', 'web\UserProfileController@getTermsConditions');
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
             Route::post('change-password', 'web\UserProfileController@postChangePassword');
-            
+
             Route::get('chat', 'web\ChatController@getChatSeekerList');
+            Route::get('calender', 'web\CalenderController@getCalender');
+            Route::get('calender-details', 'web\CalenderController@getCalenderDetails');
+
         });
 
         Route::group(['middleware' => 'termCondition'], function () {
@@ -194,6 +199,26 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('{id}/verification', 'Cms\JobSeekerController@jobSeekerVerificationView');
         Route::post('storeVerification', 'Cms\JobSeekerController@storeVerification');
     });
+    
+    Route::group(['prefix' => 'recruiter/'], function() {
+        Route::get('index', 'Cms\RecruiterController@index');
+        Route::get('list', 'Cms\RecruiterController@recruiterList');
+        Route::get('{id}/delete', 'Cms\RecruiterController@delete');
+        Route::get('{id}/edit', 'Cms\RecruiterController@edit');
+        Route::get('create', 'Cms\RecruiterController@create');
+        Route::post('store', 'Cms\RecruiterController@store');
+    });
+    
+    Route::group(['prefix' => 'notify/'], function() {
+        Route::get('index', 'cms\AppMessageController@index');
+        Route::get('list', 'cms\AppMessageController@messageList');
+        Route::delete('{id}/delete', 'cms\AppMessageController@delete');
+        Route::get('{id}/send', 'cms\AppMessageController@sendNotification');
+        Route::get('{id}/edit', 'cms\AppMessageController@edit');
+        Route::get('create', 'cms\AppMessageController@create');
+        Route::post('store', 'cms\AppMessageController@store');
+    });
+    
     Route::get('push-notification', 'Cms\JobSeekerController@sendPushAndroid');
 });
 

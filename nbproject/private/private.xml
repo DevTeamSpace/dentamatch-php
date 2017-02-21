@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+
             <file>file:/Library/WebServer/Documents/git/dentamatch/resources/views/cms/users/changePassword.blade.php</file>
             <file>file:/Library/WebServer/Documents/git/dentamatch/app/Console/Commands/UserProfileCompletionCommand.php</file>
             <file>file:/Library/WebServer/Documents/git/dentamatch/app/Models/Notification.php</file>
@@ -20,6 +21,7 @@
             <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Controllers/Api/SearchApiController.php</file>
             <file>file:/Library/WebServer/Documents/git/dentamatch/routes/api.php</file>
             <file>file:/Library/WebServer/Documents/git/dentamatch/public/script/common.js</file>
+
         </group>
     </open-files>
 </project-private>

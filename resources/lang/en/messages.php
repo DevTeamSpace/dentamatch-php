@@ -127,17 +127,19 @@ return [
     'jobseeker_updated_success' => 'Jobseeker updated successfully',
     'password_updated' => 'Password successfully updated.',
     'incorrect_pass' => 'Incorrect password. Please try again',
-
-
-    
     'already_job_availability' => 'You already have pending jobs for curreny availability',
-
     'subscription_plan_changed' => 'Subscription plan changed successfully.',
-
-
-
     'subscription_plan_changed' => 'Subscription plan changed successfully.',
     'jobseeker_verification_approved' => 'Jobseeker successfully verified',
     'jobseeker_verification_reject' => 'Jobseeker verification request rejected',
-
+    'recruiter_updated_success' => 'Recruiter updated successfully',
+    'recruiter_added_success' => 'Recruited addedd successfully',
+    'email_already_taken' => 'Email already register with other user. Please choose different email id',
+    'recruiter_deleted' => 'Recruiter deleted successfully',
+    'calender_details_fetched' => 'Calender details fetched successfully.',
+    'calender_details_failed' => 'Cannot fetch calender details.',
+    'app_message_updated'=>'Successfully updated appMessage!',
+    'app_message_added'=>'Successfully added appMessage!',
+    'app_message_deleted'=>'Successfully deleted appMessage!',
+    'already_sent_message' => 'appMessage already sent',
 ];

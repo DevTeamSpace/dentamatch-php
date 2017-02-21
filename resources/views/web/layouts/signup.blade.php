@@ -30,6 +30,8 @@
 <script src="{{asset('web/scripts/bootstrap.min.js')}}"></script>
 <script src="{{asset('web/plugins/parsley/js/parsley.js')}}"></script>
 <script src ="{{asset('web/scripts/main.js')}}"></script>
+<script src="{{asset('web/scripts/bootstrap-select.js')}}"></script>
+<script src="{{asset('web/scripts/bootstrap-datepicker.js')}}"></script>
 
 @yield('js')
 

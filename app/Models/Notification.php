@@ -12,6 +12,8 @@ class Notification extends Model {
     protected $primaryKey = 'id';
     protected $hidden = ['updated_at', 'deleted_at'];
     
+    protected $fillable = ['sender_id', 'receiver_id', 'job_list_id', 'notification_data', 'notification_type'];
+    
     const LIMIT = 10;
     
     const ACCEPTJOB = 1;

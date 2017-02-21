@@ -28,7 +28,7 @@ class CalendarApiController extends Controller {
                 $reqData = $request->all();
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
                 $jobCount = JobLists::where('seeker_id','=',$userId)->whereIn('applied_status',[JobLists::INVITED,JobLists::APPLIED,JobLists::SHORTLISTED,JobLists::HIRED,])->get()->count();
-                if($jobCount > 0){
+                if($jobCount == 0){
                         $userProfileModel->is_fulltime = $reqData['isFulltime'];
                         $userProfileModel->is_parttime_monday = 0;
                         $userProfileModel->is_parttime_tuesday = 0;
