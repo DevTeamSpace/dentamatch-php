@@ -51,7 +51,7 @@
                                 <!--ko foreach: cards-->
                                 <div class="masterCardBox small-border-radius dev_card_box">
                                     <p class="pull-left"><span data-bind="text: brand"></span> ending in <span data-bind="text: last4"></span> - <span data-bind="text: exp_month"></span>/<span data-bind="text: exp_year"></span></p>
-                                    <div class="masterEDOPtion pull-right"><span class="gbllist dev_edit_button" data-bind="click: $root.editCard"><i class="icon icon-edit"></i> Update</span>
+                                    <div class="masterEDOPtion pull-right"><span class="gbllist dev_edit_button" data-bind="click: $root.editCard"><i class="icon icon-edit"></i> Edit</span>
                                         <span class="gbllist" data-bind="click: $root.deleteCard"><i class="icon icon-deleteicon"></i> Delete</span></div>
                                     <div class="clearfix"></div>
                                 </div>
