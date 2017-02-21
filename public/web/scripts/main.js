@@ -40,8 +40,13 @@ $(document).ready(function() {
 
 
     /*-------datepicker-------*/
+    $input = $('#CoverStartDateOtherPicker')
     $('#CoverStartDateOtherPicker').datepicker({
         multidate: true,
+        startDate: '+0d',
+
+        format: "dd/mm/yyyy",
+
         minDate: 0,
         orientation: "top auto",
         autoclose: false,
@@ -74,6 +79,7 @@ $(document).ready(function() {
             $('div.select-days-custom').css('display', 'none');
             $('.job-opening').removeClass('hide');
             $('#jobopening').prop('data-parsley-required', true);
+            $input.data('datepicker').hide = function() {};
             $("#CoverStartDateOtherPicker").datepicker("show");
         } else {
             $('div.select-days-custom').css('display', 'none');

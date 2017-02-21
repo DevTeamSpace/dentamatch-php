@@ -1026,6 +1026,7 @@ input[type='checkbox'] {
     border-radius: 50%;
 }
 
+.custom-active .datepicker-days table tr td.disabled.day:hover,
 .custom-active .datepicker-days table tr td.old.day:hover {
     background-color: transparent;
     color: #999;
