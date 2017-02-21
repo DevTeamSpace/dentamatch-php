@@ -29,7 +29,9 @@ $(document).ready(function () {
             var obj = $('#li_'+toId).find('.badge');
             var unreadCount = obj.html();
             if(unreadCount>0){
-                socket.emit('updateReadCount', {fromId:toId,toId:fromId});
+                socket.emit('updateReadCount', {fromId:toId,toId:fromId},function(response){
+                    console.log(response);
+                });
                 obj.html(0);
                 obj.addClass('hide');
             }
