@@ -86,8 +86,6 @@ $(document).ready(function(){
             });
     
 
-
-
     $('.date-drop .dropdown-menu li').on('click', function() {
 
         var day = $(this).html();
@@ -118,6 +116,12 @@ $(document).ready(function(){
         $('.datepicker .datepicker-days .table-condensed thead').find('.choose-dates').parent().remove();
         $('.datepicker .datepicker-days .table-condensed thead').prepend('<tr><th class="choose-dates" colspan="14">Choose Dates</th></tr>');
     });
+
+
+
+
+
+
 
     $('.full-time-box label').click(function() {
         //$(this).parent().parent().parent().find('input').attr("checked",false);
