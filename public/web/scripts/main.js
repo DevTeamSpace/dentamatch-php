@@ -8,7 +8,7 @@ $(document).ready(function(){
 	/*---------view more and view less---------*/
 
 	$('.job-detail li').hide().filter(':lt(1)').show();
-	if($('.job-detail li:eq(1) p').text().length >140){
+
 		$('.job-detail')
 		.append('<li><a href="#">View more</a><a href="#" class="view_less">View Less</a></li>')
 		.find('li:last')
@@ -20,10 +20,7 @@ $(document).ready(function(){
 			.end()
 			.find('a')
 			.toggle();
-
-
 		});
-	}
 
 
 
@@ -86,72 +83,6 @@ $(document).ready(function(){
             });
     
 
-    $('.date-drop .dropdown-menu li').on('click', function() {
-
-        var day = $(this).html();
-
-        $('.day-drop').html(day);
-    });
-
-
-    /*---------select drop down----*/
-
-    $('#officeAddress, #jobopening, #dentalofficetype').selectpicker({
-        style: 'btn  btn-default'
-    });
-
-
-    /*-------datepicker-------*/
-    $('#CoverStartDateOtherPicker').datepicker({
-        multidate: true,
-        orientation: "top auto",
-        autoclose: false,
-
-
-
-    }).on("show", function() {
-        $('.datepicker').addClass('custom-active');
-        $('.custom-active .datepicker-days').find('th.prev').text('<');
-        $('.custom-active .datepicker-days').find('th.next').text('>');
-        $('.datepicker .datepicker-days .table-condensed thead').find('.choose-dates').parent().remove();
-        $('.datepicker .datepicker-days .table-condensed thead').prepend('<tr><th class="choose-dates" colspan="14">Choose Dates</th></tr>');
-    });
-
-
-
-
-
-
-
-    $('.full-time-box label').click(function() {
-        //$(this).parent().parent().parent().find('input').attr("checked",false);
-        $(this).parent().find('input').prop("checked", true);
-        getId = $(this).parent().find('input').attr('id');
-
-        if (getId === 'parttime') {
-            $('#monthSelect').prop('data-parsley-required', true);
-            $('.job-opening').addClass('hide');
-            $('div.select-days-custom').css('display', 'block');
-            $('#monthSelect').multipleSelect({
-                filter: false,
-                isOpen: true,
-                keepOpen: true,
-                selectAll: false,
-                minWidth: 100
-            }).width(300);
-            $(this).parent().parent().find('button span').addClass('placeholder').text('Select Days');
-        } else if (getId === 'temporary') {
-            $('div.select-days-custom').css('display', 'none');
-            $('.job-opening').removeClass('hide');
-            $('#jobopening').prop('data-parsley-required', true);
-            $("#CoverStartDateOtherPicker").datepicker("show");
-        } else {
-            $('div.select-days-custom').css('display', 'none');
-            $('.job-opening').addClass('hide');
-        }
-        $("form").parsley().destroy();
-        $("form").parsley();
-    });
     $(document).on('click', '.select-days-custom div.ms-drop', function(e) {
         $(this).parent().parent().find('button span').addClass('placeholder').text('Select Days');
     });
