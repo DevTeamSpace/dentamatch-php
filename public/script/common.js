@@ -489,7 +489,10 @@ $(function () {
 });
 function deleteRecord(obj) {
         console.log(obj);
-        $.post(obj.href, "_method=delete", function(data) {
+        data = {
+        "_token": "{{ csrf_token() }}",
+        };
+        $.get(obj.href, function(data) {
             //do refresh
             window.location.reload();
         });

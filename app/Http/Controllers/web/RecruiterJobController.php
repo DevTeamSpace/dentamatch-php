@@ -226,7 +226,7 @@ class RecruiterJobController extends Controller
                     'notificationType' => Notification::HIRED,
                 );
         }
-        $data = ['receiver_id'=>$receiverId,'sender_id' => $sender, 'notification_data'=>$notificationData['message'],'notification_type' => $jobstatus];
+        $data = ['receiver_id'=>$receiverId,'sender_id' => $sender, 'notification_data'=>$notificationData['notificationData'],'notification_type' => $jobstatus];
         $notificationDetails = Notification::create($data);
         $notificationData['id'] = $notificationDetails->id;
         $notificationData['receiverId'] = $receiverId;
@@ -237,7 +237,7 @@ class RecruiterJobController extends Controller
         $deviceModel = Device::getDeviceToken($receiverId);
         if($deviceModel) {
             //$this->info($userId);
-            NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['message'], $params);
+            NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params);
 
             
         }

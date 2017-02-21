@@ -142,4 +142,5 @@ return [
     'app_message_added'=>'Successfully added appMessage!',
     'app_message_deleted'=>'Successfully deleted appMessage!',
     'already_sent_message' => 'appMessage already sent',
+    'admin_recruiter_password_success' => 'Password reset request sent successfully',
 ];
