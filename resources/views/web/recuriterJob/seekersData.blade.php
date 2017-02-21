@@ -1,6 +1,10 @@
 <!--Seeker listing-->
 @foreach ($seekersList['paginate'] as $seeker)
 <!--search preference list-->
+<form action="{{ url('job/updateStatus') }}" method="post">
+{!! csrf_field() !!}
+<input type="hidden" name="jobId" value="{{ $jobDetails['id'] }}">
+<input type="hidden" name="seekerId" value="{{ $seeker['user_id'] }}">
 <div class="media jobCatbox">
     <div class="media-left ">
         <div class="img-holder ">
@@ -148,11 +152,12 @@
                 -->
             </div>
             <div class="col-sm-6 col-xs-6 ">
-                <button type="submit" class="btn btn-primary pull-right pd-l-30 pd-r-30 ">Invite</button>
+                <button type="submit"  name="appliedStatus" value="{{ \App\Models\JobLists::SHORTLISTED }}" class="btn btn-primary pull-right pd-l-30 pd-r-30 ">Invite</button>
             </div>
         </div>
     </div>
 </div>
+</form>
 <!--/search preference list-->
 @endforeach 
 
