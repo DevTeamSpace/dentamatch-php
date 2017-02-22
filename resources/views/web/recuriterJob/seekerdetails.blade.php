@@ -8,9 +8,9 @@
 <div class="container padding-container-template">
     <!--breadcrumb-->
     <ul class="breadcrumb">
-        <li><a href="#">Jobs Listing</a></li>
-        <li><a href="#">Jobs Detail</a></li>
-        <li><a href="#">Search Preference</a></li>
+        <li><a href="{{ url('job/lists') }}">Jobs Listing</a></li>
+        <li><a href="{{ url('job/details/'.$jobId) }}">Jobs Detail</a></li>
+        <li><a href="{{ url('job/search/'.$jobId) }}">Search Preference</a></li>
         <li class="active">{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']." Profile"}}</li>
     </ul>
     <!--/breadcrumb-->

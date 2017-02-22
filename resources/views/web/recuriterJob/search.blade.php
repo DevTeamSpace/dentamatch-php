@@ -9,8 +9,8 @@
 <div id="ajaxData" class="container padding-container-template ">
     <!--breadcrumb-->
     <ul class="breadcrumb ">
-        <li><a href="#">Jobs Listing</a></li>
-        <li class=""><a href="#">Jobs Detail</a></li>
+        <li><a href="{{ url('job/lists') }}">Jobs Listing</a></li>
+        <li class=""><a href="{{ url('job/details/'.$jobId) }}">Jobs Detail</a></li>
         <li class="active">Search Preference</li>
     </ul>
     <!--/breadcrumb-->
