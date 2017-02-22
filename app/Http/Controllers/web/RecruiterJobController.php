@@ -65,7 +65,6 @@ class RecruiterJobController extends Controller
             $searchData['avail_all']    = $availAll;
             $jobDetails     = RecruiterJobs::getRecruiterJobDetails($jobId);
             $seekersList    = JobSeekerProfiles::getJobSeekerProfiles($jobDetails,$searchData);
-            //dd($seekersList);
 
             if ($request->ajax()) {
                 return view('web.recuriterJob.search', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'maxDistance'=>$maxDistance])->render();  
