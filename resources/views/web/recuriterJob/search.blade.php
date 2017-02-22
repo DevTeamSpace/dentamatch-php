@@ -9,8 +9,8 @@
 <div id="ajaxData" class="container padding-container-template ">
     <!--breadcrumb-->
     <ul class="breadcrumb ">
-        <li><a href="#">Jobs Listing</a></li>
-        <li class=""><a href="#">Jobs Detail</a></li>
+        <li><a href="{{ url('job/lists') }}">Jobs Listing</a></li>
+        <li class=""><a href="{{ url('job/details/'.$jobId) }}">Jobs Detail</a></li>
         <li class="active">Search Preference</li>
     </ul>
     <!--/breadcrumb-->
@@ -42,7 +42,7 @@
                 <input type="hidden" id="avail_all" name="avail_all" value="{{ $searchData['avail_all'] }}">
                 <input id="range_slider" type="text"/>
                 <span class="pull-left">1 mile</span>
-                <span class="pull-right">20 miles</span>
+                <span class="pull-right">{{ $maxDistance }} miles</span>
               </div>
             </div>
         </div>
@@ -83,7 +83,7 @@
 @section('js')
 <script src ="{{asset('web/plugins/range-slider/js/bootstrap-slider.js')}}"></script>
 <script type="text/javascript">
-
+    maxSliderRange = "<?php echo $maxDistance; ?>";
     $(function () {
         $('body').on('click', '.pagination a', function (e) {
             e.preventDefault();
@@ -103,14 +103,15 @@
             var url         =   window.location.href;
             var mainUrl     =   url.split("?")[0]; 
             url = mainUrl+'?distance='+distance+'&avail_all=1';
-            getArticles(url);
-            window.history.pushState("", "", url);
+            window.location.href = url;
+//            getArticles(url);
+//            window.history.pushState("", "", url);
         });
 
         /*-----------range slider--------*/
         $("#range_slider").slider({ 
             min: 1, 
-            max: 20, 
+            max: maxSliderRange, 
             value: $('#slider_val').val(), 
             tooltip_position:'bottom',
             formatter: function(value) {
@@ -128,9 +129,9 @@
             if($('#avail_all').val()==1){
                 url += '&avail_all=1';
             }
-
-            getArticles(url);
-            window.history.pushState("", "", url);
+            window.location.href = url;
+//            getArticles(url);
+//            window.history.pushState("", "", url);
         });
 
         /*-----------range slider--------*/

@@ -128,6 +128,15 @@ $(document).ready(function() {
     /*-----------Add template----------*/
 
 
+    //search detail
+    $('.leftCircle div').last().addClass('hdline');
+
+
+
+
+
+
+
     /*-----------range slider--------*/
 
     //  $("#range_slider").slider({ 

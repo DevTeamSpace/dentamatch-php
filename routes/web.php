@@ -104,20 +104,20 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
     Route::get('/', 'Cms\LocationController@index');
     Route::get('/home', 'cms\LocationController@index');
     Route::group(['prefix' => 'user/'], function() {
-        Route::get('listPhotographer', 'cms\UserController@getPhotographerList');
-        Route::get('listConsumer', 'cms\UserController@getConsumerList');
-        Route::get('listDesigner', 'cms\UserController@getDesignerList');
-        Route::get('searchDesignerList', 'cms\UserController@searchDesignerList');
-        Route::get('create', 'cms\UserController@createUser');
-        Route::post('store', 'cms\UserController@store');
-        Route::post('reject', 'cms\UserController@reject');
-        Route::post('deactivate', 'cms\UserController@deactivate');
-        Route::get('{id}/view', 'cms\UserController@view');
-        Route::get('{id}/activeOrInactive', 'cms\UserController@updateActiveStatus');
-        Route::get('index', 'cms\UserController@index');
-        Route::get('', 'cms\UserController@index');
-        Route::get('changePassword', 'cms\UserController@changePassword');
-        Route::post('updatePassword', 'cms\UserController@updatePassword');
+        Route::get('listPhotographer', 'Cms\UserController@getPhotographerList');
+        Route::get('listConsumer', 'Cms\UserController@getConsumerList');
+        Route::get('listDesigner', 'Cms\UserController@getDesignerList');
+        Route::get('searchDesignerList', 'Cms\UserController@searchDesignerList');
+        Route::get('create', 'Cms\UserController@createUser');
+        Route::post('store', 'Cms\UserController@store');
+        Route::post('reject', 'Cms\UserController@reject');
+        Route::post('deactivate', 'Cms\UserController@deactivate');
+        Route::get('{id}/view', 'Cms\UserController@view');
+        Route::get('{id}/activeOrInactive', 'Cms\UserController@updateActiveStatus');
+        Route::get('index', 'Cms\UserController@index');
+        Route::get('', 'Cms\UserController@index');
+        Route::get('changePassword', 'Cms\UserController@changePassword');
+        Route::post('updatePassword', 'Cms\UserController@updatePassword');
     });
 
     Route::group(['prefix' => 'location/'], function() {
