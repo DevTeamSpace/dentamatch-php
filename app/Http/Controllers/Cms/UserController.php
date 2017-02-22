@@ -22,7 +22,7 @@ class UserController extends Controller {
      *
      * @return User
      */
-    protected function changePassword()
+    public function changePassword()
     {  
         return view('cms.users.changePassword');
     }

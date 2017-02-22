@@ -16,5 +16,16 @@ class Configs extends Model
     
     protected $hidden       = ['created_at','updated_at'];
     
+    public static function getSearchRadius()
+    {
+        $return = 0;
+        $configModel = static::where('config_name', 'SEARCHRADIUS')->first();
+        if($configModel) {
+            $return = $configModel->config_data;
+        }
+        return $return;
+        
+    }
+    
     
 }

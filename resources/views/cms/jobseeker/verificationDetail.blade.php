@@ -64,6 +64,9 @@
                                 <input type="submit" name="verify"  value="Approve" class="btn btn-primary" />
                             @endif
                             <input type="submit" name="verify"  value="Reject" class="btn btn-primary" />
+                            <a href="<?php echo e(url('cms/jobseeker/index')); ?>"  class="btn btn-primary">
+                                <i class="fa fa-backward"></i> Return to list
+                            </a>
                         </div>
                     </div>
                     </form>
