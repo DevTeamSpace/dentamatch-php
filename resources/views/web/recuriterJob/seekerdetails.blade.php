@@ -106,7 +106,7 @@
                                     <dl>
                                         <dt>
                                             <div class="expTitle">{{$experience['jobtitle_name']}} 
-                                                <span>({{(round($experience['months_of_expereince']/12,0)!=0?round($experience['months_of_expereince']/12,0)." years":"")." ".(round($experience['months_of_expereince']%12,0)!=0?round($experience['months_of_expereince']%12,0)." months":"")}})</span>
+                                                <span>({{(round($experience['months_of_expereince']/12,0)!=0?round($experience['months_of_expereince']/12,0)." year":"")." ".(round($experience['months_of_expereince']%12,0)!=0?round($experience['months_of_expereince']%12,0)." month":"")}})</span>
                                             </div>
                                             {{$experience['reference1_name']}}
                                         </dt>
