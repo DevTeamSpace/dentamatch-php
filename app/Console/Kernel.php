@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         Commands\Inspire::class,
         Commands\UserProfileCompletionCommand::class,
         Commands\CertificateExpiryCommand::class,
+        Commands\AppMessageCommand::class,
     ];
 
     /**
@@ -29,6 +30,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('user:profileCompletion')->daily();
         $schedule->command('user:certificateExpiry')->daily();
+        $schedule->command('notify:adminNotification')->daily();
     }
 
     /**

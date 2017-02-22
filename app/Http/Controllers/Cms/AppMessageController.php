@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AppMessage;
 use Yajra\Datatables\Datatables;
 use Session;
-use App\Repositories\Push\PushNotificationApple;
+use App\Providers\NotificationServiceProvider;
 
 class AppMessageController extends Controller
 {
@@ -94,11 +94,10 @@ class AppMessageController extends Controller
      */
     public function sendNotification($id){
         $appMessage = AppMessage::findById($id);
-        if($appMessage->messageSent==0){
-            //to-do Code to Send message
-//            $pushObject = new PushNotificationApple();
-//            $pushObject->notificationFromAdmin($appMessage);
+        
+        if(!$appMessage->messageSent){
             $appMessage->messageSent=1;
+            $appMessage->cronMessageSent=0;
             $appMessage->save();
         }else {
             Session::flash('message',trans('messages.already_sent_message'));
