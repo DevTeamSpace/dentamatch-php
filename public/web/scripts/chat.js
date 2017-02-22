@@ -44,8 +44,8 @@ $(document).ready(function () {
                 chatScroll();
             }
         });
-        $('.leftSeekerPanelRow:eq(0)').trigger('click');
-        $('.leftSeekerPanelRow:eq(0), .tab-pane:eq(0)').addClass('active');
+        //$('.leftSeekerPanelRow:eq(0)').trigger('click');
+        //$('.leftSeekerPanelRow:eq(0), .tab-pane:eq(0)').addClass('active');
         //$('.chatScroller').mCustomScrollbar();
 
         socket.emit('unreadCount', {fromId:fromId}, function(unreadObj){
@@ -152,13 +152,25 @@ $(document).ready(function () {
                 obj.attr('data-page',page+1);
 
                 var appendHtml = '';
+                var currDateObj = new Date();
+                var prevDateObj = new Date();
+                prevDateObj.setDate(currDateObj.getDate()-1);
+                var currDate = currDateObj.getFullYear()+'_'+currDateObj.getMonth()+'_'+currDateObj.getDate();
+                var prevDate = prevDateObj.getFullYear()+'_'+prevDateObj.getMonth()+'_'+prevDateObj.getDate();
+                console.log(currDate);
                 $.each(msgDateArr,function(dateKey,msgDate){
                     var dateArr = dateKey.split('_');
                     var divId = currentSel+'_'+dateKey;
                     if($('#'+divId)){
                         $('#'+divId).remove();
                     }
-                    appendHtml += '<div id="'+divId+'" class="chat-datewise">'+months[dateArr[1]]+' '+dateArr[2]+', '+dateArr[0]+'</div>';
+                    var viewText = months[dateArr[1]]+' '+dateArr[2]+', '+dateArr[0];
+                    if(dateKey==currDate){
+                        viewText = 'Today';
+                    }else if(dateKey==prevDate){
+                        viewText = 'Yesterday';
+                    }
+                    appendHtml += '<div id="'+divId+'" class="chat-datewise">'+viewText+'</div>';
                     $.each(msgDate,function(index,msgObj){
                         appendHtml += writeHtmlBlock(msgObj);
                     });

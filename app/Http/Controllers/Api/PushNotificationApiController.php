@@ -6,6 +6,8 @@ use App\Helpers\apiResponse;
 use App\Models\Notification;
 use App\Models\JobLists;
 use App\Models\RecruiterJobs;
+use App\Models\Device;
+use App\Providers\NotificationServiceProvider;
 
 class PushNotificationApiController extends Controller {
     
@@ -83,6 +85,25 @@ class PushNotificationApiController extends Controller {
             $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
+    }
+    
+    public function userChatNotification(Request $request){
+        $this->success = 0;
+        try{
+            $requestData = $request->all();
+            $this->validate($request, ['fromId' => 'required','toId' => 'required',
+            'fromName' => 'required','message' => 'required',
+            'sentTime' => 'required','messageId' => 'required']);
+            $deviceModel = Device::getDeviceToken($requestData['toId']);
+            if($deviceModel) {
+                NotificationServiceProvider::sendPushNotification($deviceModel, $requestData['message'], $requestData);
+            }
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+        }catch(\Exception $e){
+            $this->message = $e->getMessage();
+        }
     }
     
 }
