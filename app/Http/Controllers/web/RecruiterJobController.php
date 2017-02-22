@@ -19,6 +19,7 @@ use App\Models\Device;
 use App\Models\Notification;
 use App\Models\RecruiterProfile;
 use App\Models\OfficeType;
+use App\Models\Configs;
 
 use DB;
 
@@ -52,11 +53,11 @@ class RecruiterJobController extends Controller
     public function searchSeekers(Request $request,$jobId){
         try{
             $searchData = $request->all();
-            
+            $maxDistance = Configs::getSearchRadius();
             $distance = $request->get('distance');
             $availAll = $request->get('avail_all');
             if(empty($distance))
-                $distance = JobSeekerProfiles::DISTANCE;
+                $distance = $maxDistance;
             if(empty($availAll)) {
                 $availAll = 0;
             }
@@ -70,7 +71,7 @@ class RecruiterJobController extends Controller
                 return view('web.recuriterJob.search', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData])->render();  
             }
 
-            return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData', 'jobId'));
+            return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData', 'jobId','maxDistance'));
         } catch (\Exception $e) {
             return view('web.error.',["message" => $e->getMessage()]);
         }
