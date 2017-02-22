@@ -1055,8 +1055,7 @@ strong {
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.25);
     border: none;
     height: 100px;
-overflow: scroll;
-
+    overflow: scroll;
 }
 
 .date-drop .dropdown-menu::before {
@@ -1430,7 +1429,7 @@ overflow: scroll;
 }
 
 @media only screen and (min-width: 768px) {
-    .dl-horizontal {
+    .dl-horizontal dt {
         text-align: left;
     }
     .align-l-mob {
@@ -1539,6 +1538,7 @@ overflow: scroll;
         padding-left: 0;
     }
 }
+
 @media only screen and (max-width: 480px) {}
 
 .dev_edit_button {
@@ -1553,9 +1553,11 @@ overflow: scroll;
     padding-left: 13%;
 }
 
-.dev_calender_div{
+.dev_calender_div {
     margin-top: 50px !important;
 }
+
+
 /*------flex box row----*/
 
 .flex-row {
