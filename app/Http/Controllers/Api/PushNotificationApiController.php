@@ -6,6 +6,7 @@ use App\Helpers\apiResponse;
 use App\Models\Notification;
 use App\Models\JobLists;
 use App\Models\RecruiterJobs;
+use App\Models\Device;
 
 class PushNotificationApiController extends Controller {
     
@@ -84,5 +85,32 @@ class PushNotificationApiController extends Controller {
         }
         return $response;
     }
-    
+    /**
+     * Description : Update device token
+     * Method : Update device token
+     * formMethod : POST
+     * @param Request $request
+     * @return type
+     */
+    public function PostUpdateDeviceToken(Request $request){
+        try{
+            $this->validate($request, [
+                'updateDeviceToken' => 'required',
+            ]);
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $reqData = $request->all();
+            if($userId > 0){
+                Device::where('user_id', $userId)->update(['device_token' => $reqData['updateDeviceToken']]);
+                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.update_device_token"));
+            }else{
+                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+            } 
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+        } catch (\Exception $e) {
+            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+        return $response;
+    }
 }
