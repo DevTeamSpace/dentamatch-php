@@ -89,6 +89,9 @@ class JobSeekerController extends Controller
             $msg = trans('messages.jobseeker_updated_success');
         }
         else{
+            $rules['firstname'] = "Required";
+            $rules['lastname'] = "Required";
+            $rules['email'] = 'required|email|Unique:users,email';
             $this->validate($request, $rules);
             $reqData = $request->all();
             $user =  array(

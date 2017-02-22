@@ -1014,7 +1014,7 @@ paths:
       tags:
         - Availability
         
-  users/chat-user-list:
+  /users/chat-user-list:
     get:
       summary: Get Chat user list
       description: Api to get chat user list
@@ -1036,7 +1036,7 @@ paths:
         - Chat
         
    
-  users/chat-user-block-unblock:
+  /users/chat-user-block-unblock:
     post:
       summary: Block unblock recruiter
       description: Block unblock recruiter
@@ -1111,5 +1111,31 @@ paths:
   
       tags:
         - Notification
+        
+        
+  /users/update-devicetoken:
+    post:
+      summary: Update device token of user
+      description: Update device token of user
+      responses: 
+          200:
+            description: Update device token of user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: updateDeviceToken
+          in: formData
+          description: updateDeviceToken 
+          type: string
+  
+      tags:
+        - User Profile
 
 

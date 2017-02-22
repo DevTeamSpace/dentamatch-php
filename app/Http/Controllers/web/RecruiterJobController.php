@@ -64,13 +64,13 @@ class RecruiterJobController extends Controller
             $searchData['avail_all']    = $availAll;
             $jobDetails     = RecruiterJobs::getRecruiterJobDetails($jobId);
             $seekersList    = JobSeekerProfiles::getJobSeekerProfiles($jobDetails,$searchData);
-            //dd($seekersList['paginate']);
+            //dd($seekersList);
 
             if ($request->ajax()) {
                 return view('web.recuriterJob.search', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData])->render();  
             }
 
-            return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData'));
+            return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData', 'jobId'));
         } catch (\Exception $e) {
             return view('web.error.',["message" => $e->getMessage()]);
         }
@@ -204,7 +204,7 @@ class RecruiterJobController extends Controller
 
             $seekerDetails = JobSeekerProfiles::getJobSeekerDetails($seekerId,$this->viewData['job']);
             
-            return view('web.recuriterJob.seekerdetails',compact('seekerDetails'));
+            return view('web.recuriterJob.seekerdetails',compact('seekerDetails', 'jobId'));
 
         } catch (\Exception $e) {
             return view('web.error.',["message" => $e->getMessage()]);

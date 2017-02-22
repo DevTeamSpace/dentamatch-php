@@ -16,7 +16,6 @@ class JobSeekerProfiles extends Model
     const DISTANCE = 10;
 
     public static function getJobSeekerProfiles($job,$reqData){
-        
         $obj = JobSeekerProfiles::where('jobseeker_profiles.job_titile_id',$job['job_title_id']);
 
         $obj->leftJoin('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id');
@@ -106,6 +105,11 @@ class JobSeekerProfiles extends Model
             $query->on('favourites.seeker_id','=','jobseeker_profiles.user_id')
                 ->where('favourites.recruiter_id',Auth::user()->id);
         })
+        ->leftjoin('job_lists',function($query) use ($job){
+            $query->on('job_lists.seeker_id','=','jobseeker_profiles.user_id')
+                ->where('job_lists.recruiter_job_id',$job['id']);
+        })
+        ->addSelect('job_lists.applied_status as job_status')
         ->addSelect('favourites.seeker_id as is_favourite')
         ->addSelect(DB::raw("avg(punctuality) as punctuality"),DB::raw("avg(time_management) as time_management"),
                 DB::raw("avg(skills) as skills"),DB::raw("avg(teamwork) as teamwork"),DB::raw("avg(onemore) as onemore"))

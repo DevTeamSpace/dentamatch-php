@@ -119,7 +119,6 @@ label {
     padding: 3px 6px;
 }
 
-
 .customNav .navbar-nav>li>a:focus,
 .customNav .navbar-nav>li>a:hover {
     color: white;
@@ -366,11 +365,9 @@ label {
 }
 
 
-
 /* .notificaionbell:hover .noficationListContainer {
     display: block;
     } */
-
 
 .topIconBox>li {
     display: inline-block;
@@ -609,7 +606,6 @@ p {
     position: absolute;
     bottom: -16px;
 }
-
 
 .parsley-errors-list.filled,
 #location-msg,
@@ -1030,6 +1026,14 @@ input[type='checkbox'] {
     border-radius: 50%;
 }
 
+.custom-active .datepicker-days table tr td.disabled.day:hover,
+.custom-active .datepicker-days table tr td.old.day:hover {
+    background-color: transparent;
+    color: #999;
+    border-radius: 0;
+    cursor: not-allowed;
+}
+
 .datepicker-dropdown.datepicker-orient-top:before,
 .datepicker-dropdown.datepicker-orient-top:after {
     border: none;
@@ -1046,6 +1050,7 @@ input[type='checkbox'] {
 .custom-active .datepicker-days th.next:hover {
     background: #fff;
 }
+
 
 /*------------sagar Kapoor------------*/
 
@@ -1082,7 +1087,6 @@ input[type='checkbox'] {
         top: -17px;
         right: 52px;
     }
-
     .topIconBox>li {
         position: static;
     }
@@ -1139,7 +1143,16 @@ input[type='checkbox'] {
 @media (min-width:768px) {
     .leftCircle {
         padding: 0 45px;
-        border-left: solid 1px #4895CE;
+        position: relative;
+    }
+    .leftCircle::before {
+        position: absolute;
+        width: 1px;
+        top: 0;
+        left: -1px;
+        height: calc(100% - 11%);
+        background: #4895ce;
+        content: '';
     }
     .leftCircle h5:before {
         content: '';
@@ -1155,6 +1168,18 @@ input[type='checkbox'] {
         position: absolute;
         left: -52px;
         top: 0px;
+    }
+    .hdline {
+        position: relative;
+    }
+    .hdline::before {
+        content: '';
+        position: absolute;
+        left: -48px;
+        width: 5px;
+        background: #fff;
+        top: 34px;
+        height: 63%;
     }
     .menuLastBox {
         top: 26px;
@@ -1173,6 +1198,7 @@ input[type='checkbox'] {
     }
 }
 
+
 /*  -----chander---*/
 
 @media (max-width: 991px) {
@@ -1181,11 +1207,10 @@ input[type='checkbox'] {
     }
 }
 
+
 /*  -----chander---*/
 
-
 @media only screen and (min-width: 300px) and (max-width: 991px) {
-
     /*
     .left-margin-ist {top:10px;}
     .left-margin-2nd {top: 20px}
@@ -1213,13 +1238,11 @@ input[type='checkbox'] {
 
 /*---chander---*/
 
-
 @media(max-width:767px) {
     .add-on-nav {
         bottom: -33px;
     }
 }
-
 
 @media (max-width: 480px) {
     .notificationDel {
@@ -1228,7 +1251,6 @@ input[type='checkbox'] {
     .notificationList .media-heading {
         padding-right: 0px;
     }
-
     .noficationListContainer {
         left: -120px;
         right: auto !important;
@@ -1237,7 +1259,6 @@ input[type='checkbox'] {
     .notificationCaret {
         right: 46%;
     }
-
 }
 
 
