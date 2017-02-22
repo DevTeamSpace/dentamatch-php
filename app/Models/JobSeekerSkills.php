@@ -45,6 +45,8 @@ class JobSeekerSkills extends Model
                             ->leftJoin('skills','jobseeker_skills.skill_id','=','skills.id')
                             ->leftJoin('skills as skill_title','skills.parent_id','=','skill_title.id')
                             ->select('jobseeker_skills.other_skill','skills.skill_name','skill_title.skill_name as skill_title','jobseeker_skills.user_id', 'skills.parent_id')
+                            ->orderBy('skills.parent_id','desc')
+                            ->orderBy('skills.skill_name','ASC')
                             ->get();
             foreach ($allSkills as $key => $value) {
                 $innerArray = [];
