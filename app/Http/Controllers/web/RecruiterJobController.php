@@ -68,7 +68,7 @@ class RecruiterJobController extends Controller
             //dd($seekersList);
 
             if ($request->ajax()) {
-                return view('web.recuriterJob.search', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData])->render();  
+                return view('web.recuriterJob.search', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'maxDistance'=>$maxDistance])->render();  
             }
 
             return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData', 'jobId','maxDistance'));
