@@ -40,4 +40,9 @@ class User extends Authenticatable
             ->where('users.email',$email)
             ->count();
     }
+    
+    public static function getAdminUserDetailsForNotification() {
+        return static::where('is_active',1)->where('group_id',1)
+                ->join('user_groups','users.id','=','user_groups.user_id')->first();
+    }
 }

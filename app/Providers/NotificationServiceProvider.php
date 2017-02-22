@@ -8,6 +8,8 @@ use App\Models\Notification;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Models\AppMessage;
+use App\Models\User;
 
 /**
  * NotificationServiceProvider class contains methods for notification management
@@ -196,6 +198,39 @@ class NotificationServiceProvider extends ServiceProvider {
         } catch (\Exception $e) {
             Log::error(__METHOD__ . ' ' . $e->getMessage());
             return static::responseError(trans('messages.exception_msg'));
+        }
+    }
+    
+    public static function notificationFromAdmin(AppMessage $appMessage){
+        $message = $appMessage->message;
+        $user = User::getAdminUserDetailsForNotification();
+        $params['data'] = [
+                            'notificationData' => $message,
+                            'notification_title'=>'App Admin Update',
+                            'sender_id' => $user->id,
+                            'type' => 1,
+                            'notificationType' => Notification::OTHER,
+                        ];
+        $devices = Device::getAllDeviceToken($appMessage->messageTo);
+        if(!empty($devices)) {
+            
+            $insertData = [];
+            if(!empty($devices)) {
+                foreach ($devices as $deviceData){
+                    if ($deviceData->device_token && strlen($deviceData->device_token) >= 22) {
+                        $insertData[] = ['receiver_id'=>$deviceData->user_id,
+                            'sender_id'=>$user->id,
+                            'notification_data'=>$message,
+                            'created_at'=>date('Y-m-d h:i:s'),
+                            'notification_type' => Notification::OTHER,
+                            ];
+                    }
+                    static::sendPushNotification($deviceData, $message, $params);
+                }
+            }
+            if(!empty($insertData)){
+                Notification::insert($insertData);
+            }
         }
     }
 
