@@ -127,13 +127,39 @@
         }
     });
     
+    var SeekerModel = function(d){
+        var me = this;
+        me.seekerId = ko.observable();
+        me.seekerName = ko.observable('');
+        me.seekerProfilePic = ko.observable('');
+        
+        me._init = function(d){
+            me.seekerId(d.seeker_id);
+            me.seekerName(d.first_name+" "+d.last_name);
+            me.seekerProfilePic(d.profile_pic);
+        };
+        
+        me._init(d);
+    };
+    
     var JobModel = function(d){
         var me = this;
-
+        me.jobDate = ko.observable();
+        me.jobSeekers = ko.observableArray([]);
+        
         me._init = function(d){
-//            console.log(moment(d.job_created_at).format('ll'));
             if(typeof d == "undefined"){
                 return false;
+            }
+            me.jobDate(moment(d.job_created_at).format('ll'));
+            if(d.seekers.length == 0){
+                me.jobSeekers([]);
+            }else{
+                for(i in d.seekers){
+                    for(j in d.seekers[i]){
+                       me.jobSeekers.push(new SeekerModel(d.seekers[i][j])); 
+                    }
+                }
             }
         };
         
@@ -166,10 +192,11 @@
         me.allJobs = ko.observableArray([]);
         
         me.getAllTempJobs = function(){
-            $.get('reports-temp-jobs', {}, function(d){
+            $.get('reports-temp-jobs', function(d){
                 for(i in d.data){
                     me.allJobs.push(new allJobModel(d.data[i]));
                 }
+                console.log(me.allJobs());
             });
         };
         
