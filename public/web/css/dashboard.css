@@ -1143,7 +1143,16 @@ input[type='checkbox'] {
 @media (min-width:768px) {
     .leftCircle {
         padding: 0 45px;
-        border-left: solid 1px #4895CE;
+        position: relative;
+    }
+    .leftCircle::before {
+        position: absolute;
+        width: 1px;
+        top: 0;
+        left: -1px;
+        height: calc(100% - 11%);
+        background: #4895ce;
+        content: '';
     }
     .leftCircle h5:before {
         content: '';
@@ -1159,6 +1168,18 @@ input[type='checkbox'] {
         position: absolute;
         left: -52px;
         top: 0px;
+    }
+    .hdline {
+        position: relative;
+    }
+    .hdline::before {
+        content: '';
+        position: absolute;
+        left: -48px;
+        width: 5px;
+        background: #fff;
+        top: 34px;
+        height: 63%;
     }
     .menuLastBox {
         top: 26px;
