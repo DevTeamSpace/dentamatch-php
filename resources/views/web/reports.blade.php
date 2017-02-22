@@ -48,62 +48,30 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <!--ko foreach: allJobs-->
                                         <tr>
-                                            <td><strong>Dental Hygienists</strong></td>
-                                            <td>2</td>
-                                            <td>Dec 27, 2016</td>
+                                            <td><strong data-bind="text: jobTitle"></strong></td>
+                                            <td data-bind="text: noOfJobs"></td>
                                             <td>
+                                                <!--ko foreach: jobs-->
+                                                <p data-bind="text: jobDate"></p>
+                                                <!--/ko-->
+                                            </td>
+                                            <td>
+                                                <!--ko foreach: jobs-->
                                                 <ul class="list-hired">
+                                                    <!--ko foreach: jobSeekers-->
                                                     <li>
-                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" title="Paula jackson"><img class="cir-28 img-circle" src="http://placehold.it/28x28"></a>
+                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" data-bind="attr: {title: seekerName}">
+                                                            <img class="cir-28 img-circle" src="http://placehold.it/28x28" onerror="this.src = 'http://placehold.it/28x28'" data-bind="attr: {src: seekerProfilePic}">
+                                                        </a>
                                                     </li>
-                                                    <li>
-                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" title="Paula jackson"><img class="cir-28 img-circle" src="http://placehold.it/28x28"></a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" title="Paula jackson"><img class="cir-28 img-circle" src="http://placehold.it/28x28"></a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" title="Paula jackson"><img class="cir-28 img-circle" src="http://placehold.it/28x28"></a>
-                                                    </li>
+                                                    <!--/ko-->
                                                 </ul>
+                                                <!--/ko-->
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td><strong>Dentist</strong></td>
-                                            <td>4</td>
-                                            <td>
-                                                <p>Sep 06, 2016</p>
-                                                <p>Sep 11, 2016</p>
-                                            </td>
-                                            <td>
-                                                <ul class="list-hired">
-                                                    <li>
-                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" title="Paula jackson"><img class="cir-28 img-circle" src="http://placehold.it/28x28"></a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" title="Paula jackson"><img class="cir-28 img-circle" src="http://placehold.it/28x28"></a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" title="Paula jackson"><img class="cir-28 img-circle" src="http://placehold.it/28x28"></a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" title="Paula jackson"><img class="cir-28 img-circle" src="http://placehold.it/28x28"></a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" title="Paula jackson"><img class="cir-28 img-circle" src="http://placehold.it/28x28"></a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" class="cir-28 cir-blue">8+</a>
-                                                    </li>
-                                                </ul>
-                                                <ul class="list-hired ">
-                                                    <li>
-                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" title="Paula jackson"><img class="cir-28 img-circle" src="http://placehold.it/28x28"></a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
+                                        <!--/ko-->
                                     </tbody>
                                 </table>
                             </div>
@@ -152,15 +120,20 @@
                 return false;
             }
             me.jobDate(moment(d.job_created_at).format('ll'));
-            if(d.seekers.length == 0){
-                me.jobSeekers([]);
-            }else{
-                for(i in d.seekers){
-                    for(j in d.seekers[i]){
-                       me.jobSeekers.push(new SeekerModel(d.seekers[i][j])); 
-                    }
+            for(i in d.seekers){
+                for(j in d.seekers[i]){
+                   me.jobSeekers.push(new SeekerModel(d.seekers[i][j])); 
                 }
             }
+//            if(d.seekers.length == 0){
+//                me.jobSeekers([]);
+//            }else{
+//                for(i in d.seekers){
+//                    for(j in d.seekers[i]){
+//                       me.jobSeekers.push(new SeekerModel(d.seekers[i][j])); 
+//                    }
+//                }
+//            }
         };
         
         me._init(d);
