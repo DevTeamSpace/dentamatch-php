@@ -1150,7 +1150,7 @@ input[type='checkbox'] {
         width: 1px;
         top: 0;
         left: -1px;
-        height: calc(100% - 11%);
+        height: 100%;
         background: #4895ce;
         content: '';
     }
