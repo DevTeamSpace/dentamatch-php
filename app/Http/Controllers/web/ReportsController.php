@@ -30,28 +30,13 @@ class ReportsController extends Controller
                     $jobDetails['job_type'] = $forSeeker['job_type'];
                     $seekers = JobLists::getJobSeekerList($jobDetails, 1);
                     foreach($seekers as $seeker){
-                        foreach($seekers as &$seeker){
-                            foreach($seeker as &$seek){
-                                $seek['profile_pic'] = url("image/" . 60 . "/" . 60 . "/?src=" .$seek['profile_pic']);
-                            }
+                        foreach($seeker as &$seek){
+                            $seek['profile_pic'] = url("image/" . 60 . "/" . 60 . "/?src=" .$seek['profile_pic']);
                         }
                     }
                     $forSeeker['seekers'] = $seekers;
                 }
             }
-//            foreach($allTempJobs['jobs'] as $job){
-//                $jobDetails['id'] = $job['recruiter_job_id'];
-//                $jobDetails['job_type'] = $job['job_type'];
-//                $seekers = JobLists::getJobSeekerList($jobDetails, 1);
-//                foreach($seekers as $seeker){
-//                    foreach($seekers as &$seeker){
-//                        foreach($seeker as &$seek){
-//                            $seek['profile_pic'] = url("image/" . 60 . "/" . 60 . "/?src=" .$seek['profile_pic']);
-//                        }
-//                    }
-//                }
-//                $job['seekers'] = $seekers;
-//            }
             $this->response['data'] = $allTempJobs;
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.reports_temp_jobs');

@@ -126,14 +126,50 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    
+    var JobModel = function(d){
+        var me = this;
+
+        me._init = function(d){
+//            console.log(moment(d.job_created_at).format('ll'));
+            if(typeof d == "undefined"){
+                return false;
+            }
+        };
+        
+        me._init(d);
+    };
+    
+    var allJobModel = function(d){
+      var me = this;
+      me.jobTitle = ko.observable('');
+      me.noOfJobs = ko.observable();
+      me.jobs = ko.observableArray([]);
+      
+      me._init = function(d){
+          if(typeof d == "undefined"){
+              return false;
+          }
+          me.jobTitle(d.jobtitle_name);
+          me.noOfJobs(d.jobs_count);
+          for(i in d.jobs){
+              me.jobs.push(new JobModel(d.jobs[i]));
+          }
+      };
+      
+      me._init(d);
+    };
 
     var ReportsVM = function () {
         var me = this;
         me.isLoading = ko.observable(false);
+        me.allJobs = ko.observableArray([]);
         
         me.getAllTempJobs = function(){
             $.get('reports-temp-jobs', {}, function(d){
-                console.log(d);
+                for(i in d.data){
+                    me.allJobs.push(new allJobModel(d.data[i]));
+                }
             });
         };
         
