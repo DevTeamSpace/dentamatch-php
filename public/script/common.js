@@ -373,7 +373,6 @@ $(function () {
     $('#resetPassword').click(function(){
         var adminEmail = $('#emailForgetpassword').val();
         if(adminEmail!=''){
-            $('#resetPassword').hide();
             $.ajax({
                 url:public_path+'../api/admin/forgot-password',
                 type:'POST',

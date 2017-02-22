@@ -35,7 +35,7 @@ class PushNotificationApiController extends Controller {
                     if(count($notificationList['list']) > 0){
                         foreach($notificationList['list'] as $notification){
                             if($notification['job_list_id'] && $notification['job_list_id'] > 0){
-                                $jobList = JobLists::select('recruiter_job_id')->where('id','=',$notification['job_list_id'])->first();
+                                //$jobList = JobLists::select('recruiter_job_id')->where('id','=',$notification['job_list_id'])->first();
                                 $data = RecruiterJobs::getJobDetail($jobList->recruiter_job_id, $userId); 
                                 $notification['job_details'] = $data;
                             }
