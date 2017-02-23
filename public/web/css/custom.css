@@ -877,11 +877,11 @@ strong {
 }
 
 .star-empty {
-    background: url('../img/star-empty.png')no-repeat;
+    background: url('../images/star-empty.png')no-repeat;
 }
 
 .star-fill {
-    background: url('../img/star-fill.png')no-repeat;
+    background: url('../images/star-fill.png')no-repeat;
 }
 
 .jobCatbox .media-heading {
