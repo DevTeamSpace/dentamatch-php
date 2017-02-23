@@ -45,7 +45,7 @@ $(document).ready(function() {
         multidate: true,
         startDate: '+0d',
 
-        format: "dd/mm/yyyy",
+
 
         minDate: 0,
         orientation: "top auto",
