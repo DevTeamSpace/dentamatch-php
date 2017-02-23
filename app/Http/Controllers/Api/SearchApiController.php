@@ -42,7 +42,7 @@ class SearchApiController extends Controller {
                 
                 SearchFilter::createFilter($userId, $reqData);
                 
-                $location = Location::where('zipcode',$reqData['zipCode'])->get();
+                $location = Location::where('zipcode',$reqData['zipCode'])->first();
                 if($location){
                     $reqData['userId'] = $userId;
                     $searchResult = RecruiterJobs::searchJob($reqData);
@@ -116,13 +116,13 @@ class SearchApiController extends Controller {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $reqData = $request->all();
-                $profileComplete = UserProfile::select('is_completed')->where('user_id', $userId)->get()->first();
+                $profileComplete = UserProfile::select('is_completed')->where('user_id', $userId)->first();
                 if($profileComplete->is_completed == 1){
                     $jobExists = JobLists::where('seeker_id','=',$userId)
                                     ->where('recruiter_job_id','=',$reqData['jobId'])
                                     ->whereIn('applied_status',[JobLists::APPLIED,JobLists::INVITED])
-                                    ->get();
-                    if($jobExists->count() > 0){
+                                    ->first();
+                    if($jobExists){
                         if($jobExists->applied_status == JobLists::INVITED){
                             JobLists::where('id', $jobExists->id)->update(['applied_status' => JobLists::APPLIED]);
                             $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
@@ -159,8 +159,8 @@ class SearchApiController extends Controller {
             if($userId > 0){
                 $reqData = $request->all();
                 $jobExists = JobLists::select('id')->where('seeker_id','=',$userId)->where('recruiter_job_id','=',$reqData['jobId'])
-                        ->whereIn('applied_status',[JobLists::SHORTLISTED,JobLists::APPLIED,  JobLists::HIRED])->get()->first();
-                if($jobExists->count() > 0){
+                        ->whereIn('applied_status',[JobLists::SHORTLISTED,JobLists::APPLIED,  JobLists::HIRED])->first();
+                if($jobExists){
                     $jobExists->applied_status = JobLists::CANCELLED;
                     $jobExists->cancel_reason = $reqData['cancelReason'];
                     $jobExists->save();
