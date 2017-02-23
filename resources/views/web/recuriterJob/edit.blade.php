@@ -122,6 +122,7 @@
                         <div class="col-sm-4 col-md-3">
                             <div class="date datetime1">
                                 <input type="text" id="everydayStart" class="form-control datetime" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: selectedOfficeWorkingHours.everydayStart, disable: !selectedOfficeWorkingHours.isEverydayWork(), attr:{'data-parsley-required': selectedOfficeWorkingHours.isEverydayWork()}">
+                                <p class="error-div" data-bind="text: $root.everydayTimeError"></p>
                             </div>
                         </div>
                         <div class="col-sm-4 col-md-3">
@@ -160,6 +161,7 @@
                             <div class="col-sm-4 col-md-3">
                                 <div class="date datetime1">
                                 <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: selectedOfficeWorkingHours.tuesdayStart, disable: !selectedOfficeWorkingHours.isTuesdayWork(), attr:{'data-parsley-required': selectedOfficeWorkingHours.isTuesdayWork()}">
+                                <p class="error-div" data-bind="text: $root.tuesdayTimeError"></p>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-3">
@@ -178,6 +180,7 @@
                             <div class="col-sm-4 col-md-3">
                                 <div class="date datetime1">
                                     <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: selectedOfficeWorkingHours.wednesdayStart, disable: !selectedOfficeWorkingHours.isWednesdayWork(), attr:{'data-parsley-required': selectedOfficeWorkingHours.isWednesdayWork()}">
+                                    <p class="error-div" data-bind="text: $root.wednesdayTimeError"></p>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-3">
@@ -196,6 +199,7 @@
                             <div class="col-sm-4 col-md-3">
                                 <div class="date datetime1">
                                     <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: selectedOfficeWorkingHours.thursdayStart, disable: !selectedOfficeWorkingHours.isThursdayWork(), attr:{'data-parsley-required': selectedOfficeWorkingHours.isThursdayWork()}">
+                                    <p class="error-div" data-bind="text: $root.thursdayTimeError"></p>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-3">
@@ -214,6 +218,7 @@
                             <div class="col-sm-4 col-md-3">
                                 <div class="date datetime1">
                                     <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: selectedOfficeWorkingHours.fridayStart, disable: !selectedOfficeWorkingHours.isFridayWork(), attr:{'data-parsley-required': selectedOfficeWorkingHours.isFridayWork()}">
+                                    <p class="error-div" data-bind="text: $root.fridayTimeError"></p>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-3">
@@ -232,6 +237,7 @@
                             <div class="col-sm-4 col-md-3">
                                 <div class="date datetime1">
                                     <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: selectedOfficeWorkingHours.saturdayStart, disable: !selectedOfficeWorkingHours.isSaturdayWork(), attr:{'data-parsley-required': selectedOfficeWorkingHours.isSaturdayWork()}">
+                                    <p class="error-div" data-bind="text: $root.saturdayTimeError"></p>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-3">
@@ -250,6 +256,7 @@
                             <div class="col-sm-4 col-md-3">
                                 <div class="date datetime1">
                                     <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: selectedOfficeWorkingHours.sundayStart, disable: !selectedOfficeWorkingHours.isSundayWork(), attr:{'data-parsley-required': selectedOfficeWorkingHours.isSundayWork()}">
+                                    <p class="error-div" data-bind="text: $root.sundayTimeError"></p>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-3">
@@ -469,7 +476,6 @@
         me.getJobDetails = function () {
             jobId = <?php echo json_encode($jobId) ?>;
             $.get('/job/edit-details', {jobId: jobId}, function (d) {
-                console.log(d);
                 me.jobId(d.jobDetails.id);
                 if (d.jobSeekerStatus != 0) {
                     me.cannotEdit(true);
@@ -518,13 +524,17 @@
                             me.tempJobDates.push(splitedTempJobDates[i]);
                         }
                     }
+                    var selectedDates = [];
                     for(i in me.tempJobDates()){
                         splitedDate = me.tempJobDates()[i].split('-');
                         year = splitedDate[0];
                         month = splitedDate[1];
                         day = splitedDate[2];
-                        $('#CoverStartDateOtherPicker').datepicker('setDate', new Date(year, month-1, day));
+                        customCreateDate = new Date(year, month-1, day);
+                        selectedDates.push(customCreateDate);
+//                        $('#CoverStartDateOtherPicker').datepicker({format: 'YYYY-MM-DD'});
                     }
+                    $('#CoverStartDateOtherPicker').datepicker('setDates', selectedDates);
                 }
                 me.totalJobOpening(d.jobDetails.no_of_jobs);
                 me.jobOfficeId(d.jobDetails.recruiter_office_id);
@@ -740,11 +750,18 @@
         
         if(me.selectedOffice()[0].selectedOfficePhone() == null || me.selectedOffice()[0].selectedOfficePhone() == ''){
             me.phoneNumberError('Please enter phone number.');
+            return false;
         }
         
-        if(me.errors() == true){
-            return false;
-        }else{
+//        if(me.errors() == true){
+//            return false;
+//        }else{
+            splitedTempDates = ($('#CoverStartDateOtherPicker').val()).split(',');
+            me.tempJobDates([]);
+            for(i in splitedTempDates){
+                me.tempJobDates.push(splitedTempDates[i]);
+            }
+            
             formData = new FormData();
             formData.append('jobDetails', ko.toJSON(me));
             formData.append('jobId', me.jobId())
@@ -759,10 +776,7 @@
                     console.log(data);
                 }
             });
-//            $.post('edit-job', {data: formData}, function(d){
-//                console.log(d);
-//            });
-        }
+//        }
     }
 
     me._init = function () {
