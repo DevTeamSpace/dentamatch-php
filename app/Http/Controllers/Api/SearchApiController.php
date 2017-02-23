@@ -52,7 +52,7 @@ class SearchApiController extends Controller {
                         $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
                     }
                 }else{
-                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
+                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.invalid_job_location"));
                 }
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
