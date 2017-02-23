@@ -165,8 +165,8 @@
             <div class="searchResultHeading pd-t-20">
                 <h5>{{$certificate['certificate_name']}}</h5>
                 <P>
-                    <img src="{{ url('image/66/66/?src=' .$certificate['image_path']) }}">
-                    Valid Till: {{date('d M Y',strtotime($certificate['validity_date']))}}</P>
+                    <img class="img-rounded " width="114" height="114" src="{{ url('image/66/66/?src=' .$certificate['image_path']) }}">
+                    Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span></P>
                 </div>
                 @endforeach
                 @endif
