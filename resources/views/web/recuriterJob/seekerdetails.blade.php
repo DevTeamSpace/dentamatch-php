@@ -63,10 +63,13 @@
                     @endif
                 </div>
             </div>
+            <form action="{{ url('job/updateStatus') }}" method="post">
             <div class="col-md-3 text-right"><p>{{round($seekerDetails['distance'])}} miles away
+                {!! csrf_field() !!}
+                <input type="hidden" name="jobId" value="{{ $jobId }}">
+                <input type="hidden" name="seekerId" value="{{ $seekerDetails['user_id'] }}">
             @if($seekerDetails['applied_status'] == \App\Models\JobLists::INVITED)
                 <h6>INVITED</h6>
-                <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Invite</button>
             @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::APPLIED)
                 <h6></h6>
                 <button type="submit" class="btn btn-primary pd-l-20 pd-r-20">Reject</button>
@@ -79,12 +82,12 @@
                 <h6>HIRED</h6>
                 <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Message</button>
             @else
-                <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Invite</button>    
+                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pd-l-30 pd-r-30">Invite</button>    
             @endif 
             </p>   
             </div>
         </div>
-
+        </form>
         <div class="pd-t-60">
             <div class="leftCircle">
                 <div class="searchResultHeading">

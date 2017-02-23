@@ -120,10 +120,15 @@ class SearchApiController extends Controller {
                 if($profileComplete->is_completed == 1){
                     $jobExists = JobLists::where('seeker_id','=',$userId)
                                     ->where('recruiter_job_id','=',$reqData['jobId'])
-                                    ->where('applied_status','=',JobLists::APPLIED)
+                                    ->whereIn('applied_status',[JobLists::APPLIED,JobLists::INVITED])
                                     ->get();
                     if($jobExists->count() > 0){
-                        $response = apiResponse::customJsonResponse(0, 201, trans("messages.job_already_applied"));
+                        if($jobExists->applied_status == JobLists::INVITED){
+                            JobLists::where('id', $jobExists->id)->update(['applied_status' => JobLists::APPLIED]);
+                            $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
+                        }else{
+                           $response = apiResponse::customJsonResponse(0, 201, trans("messages.job_already_applied")); 
+                        }
                     }else{
                         $applyJobs = array('seeker_id' => $userId , 'recruiter_job_id' => $reqData['jobId'] , 'applied_status' => JobLists::APPLIED);
                         JobLists::insert($applyJobs);
