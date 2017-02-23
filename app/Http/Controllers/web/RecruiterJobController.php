@@ -19,6 +19,7 @@ use App\Models\Device;
 use App\Models\Notification;
 use App\Models\RecruiterProfile;
 use App\Models\OfficeType;
+use App\Models\RecruiterOfficeType;
 use DB;
 
 class RecruiterJobController extends Controller {
@@ -271,39 +272,65 @@ class RecruiterJobController extends Controller {
 
     public function postEditJob(Request $request) {
         try {
+//            DB::beginTransaction();
             $allData = json_decode($request->jobDetails);
-            if ($allData->jobType == "Full Time") {
-                $allData->jobType = 1;
-            } else if ($allData->jobType == "Part Time") {
-                $allData->jobType = 2;
+            if ($allData->selectedJobType == "Full Time") {
+                $allData->selectedJobType = 1;
+            } else if ($allData->selectedJobType == "Part Time") {
+                $allData->selectedJobType = 2;
             } else {
-                $allData->jobType = 3;
+                $allData->selectedJobType = 3;
             }
             $jobDetails = RecruiterJobs::getRecruiterJobDetails($allData->jobId);
             $recruiterOfficeObj = RecruiterOffice::where(['id' => $allData->selectedOffice[0]->selectedOfficeId])->first();
             dd($allData);
-            if ($jobDetails['job_type'] == $allData->jobType) {
-                if ((string) $recruiterOfficeObj['latitude'] == (string) $allData->selectedOffice[0]->selectedOfficeLat && (string) $recruiterOfficeObj['longitude'] == (string) $allData->selectedOffice[0]->selectedOfficeLng) {
-                    $this->updateJob($jobDetails['job_type'], $allData);
-                    $this->updateOffice($allData);
-                } else { 
-                }
+            if ($jobDetails['job_type'] == $allData->selectedJobType) {
+                $this->sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj);
             } else {
-                
+                $this->sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj);
+                RecruiterJobs::where(['id', $allData->jobId])->delete();
             }
+//            DB::commit();
         } catch (\Exception $e) {
+//            DB::rollback();
             $this->result['success'] = false;
             $this->result['message'] = $e->getMessage();
         }
         return $this->result;
     }
+    
+    private function sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj){
+        try{
+            if ((string) $recruiterOfficeObj['latitude'] == (string) $allData->selectedOffice[0]->selectedOfficeLat && (string) $recruiterOfficeObj['longitude'] == (string) $allData->selectedOffice[0]->selectedOfficeLng) {
+                $this->updateJob($jobDetails['job_type'], $allData);
+                $this->updateOffice($allData);
+                $this->updateOfficeType($allData);
+            } else {
+                $newOfficeObj = $this->updateOffice($allData, 1);
+                $this->updateJob($allData->selectedJobType, $allData, $newOfficeObj['id']);
+                $this->updateOfficeType($allData, 1);
+            }
+            $this->result = true;
+        } catch (\Exception $e) {
+            $this->result = $e->getMessage();
+        }
+        return $this->result;
+    }
 
-    private function updateOffice($allData) {
+    private function updateOffice($allData, $requestType = '') {
         try {
-            $recruiterOfficeObj = RecruiterOffice::where(['id' => $allData->selectedOffice[0]->selectedOfficeId])->first();
+            if($requestType != ''){
+                $recruiterOfficeObj = new RecruiterOffice();
+                $recruiterOfficeObj->address = $allData->selectedOffice[0]->selectedOfficeAddress;
+                $recruiterOfficeObj->latitude = $allData->selectedOffice[0]->selectedOfficeLat;
+                $recruiterOfficeObj->longitude = $allData->selectedOffice[0]->selectedOfficeLng;
+                $recruiterOfficeObj->zipcode = $allData->selectedOffice[0]->selectedOfficeZipcode;
+            }else{
+                $recruiterOfficeObj = RecruiterOffice::where(['id' => $allData->selectedOffice[0]->selectedOfficeId])->first();
+            }
 
-            $recruiterOfficeObj->word_everyday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->everydayStart)) : null;
-            $recruiterOfficeObj->word_everyday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->everydayEnd)) : null;
+            $recruiterOfficeObj->work_everyday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->everydayStart)) : null;
+            $recruiterOfficeObj->work_everyday_end = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->everydayEnd)) : null;
             $recruiterOfficeObj->monday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isMondayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->mondayStart)) : null;
             $recruiterOfficeObj->monday_end = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isMondayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->mondayEnd)) : null;
             $recruiterOfficeObj->tuesday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isTuesdayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->tuesdayStart)) : null;
@@ -320,65 +347,64 @@ class RecruiterJobController extends Controller {
             $recruiterOfficeObj->sunday_end = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isSundayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->sundayEnd)) : null;
             $recruiterOfficeObj->phone_no = $allData->selectedOffice[0]->selectedOfficePhone;
             $recruiterOfficeObj->office_info = $allData->selectedOffice[0]->selectedOfficeInfo;
-            $result = $recruiterOfficeObj->save();
+            $recruiterOfficeObj->user_id = Auth::user()->id;
+            $recruiterOfficeObj->save();
+            $result = $recruiterOfficeObj;
         } catch (\Exception $e) {
             $result = $e->getMessage();
         }
         return $result;
     }
 
-    private function updateJob($jobType, $allData) {
+    private function updateJob($jobType, $allData, $officeId = '') {
         try {
             $jobObj = RecruiterJobs::where(['id' => $allData->jobId])->first();
+            $jobTemplateId = $jobObj['job_templated_id'];
+            if($officeId != ''){
+                RecruiterJobs::where(['id' => $allData->jobId])->delete();
+                $jobObj = new RecruiterJobs();
+                $jobObj->job_templated_id = $jobTemplateId;
+                $jobObj->recruiter_office_id = $allData->selectedOffice[0]->selectedOfficeId;
+            }
+            $jobObj->job_type = $jobType;
             if ($jobType == 2) {
-                $isMonday = false;
-                $isTuesday = false;
-                $isWednesday = false;
-                $isThursday = false;
-                $isFriday = false;
-                $isSaturday = false;
-                $isSunday = false;
-
-                foreach ($allData->partTimeDays as $partTimeDay) {
-                    if ($partTimeDay == "Monday") {
-                        $isMonday = true;
-                    }
-                    if ($partTimeDay == "Tuesday") {
-                        $isTuesday = true;
-                    }
-                    if ($partTimeDay == "Wednesday") {
-                        $isWednesday = true;
-                    }
-                    if ($partTimeDay == "Thursday") {
-                        $isThursday = true;
-                    }
-                    if ($partTimeDay == "Friday") {
-                        $isFriday = true;
-                    }
-                    if ($partTimeDay == "Saturday") {
-                        $isSaturday = true;
-                    }
-                    if ($partTimeDay == "Sunday") {
-                        $isSunday = true;
-                    }
-                }
-                $jobObj->is_monday = ($isMonday == true) ? 1 : 0;
-                $jobObj->is_tuesday = ($isTuesday == true) ? 1 : 0;
-                $jobObj->is_wedensday = ($isWednesday == true) ? 1 : 0;
-                $jobObj->is_thursday = ($isThursday == true) ? 1 : 0;
-                $jobObj->is_friday = ($isFriday == true) ? 1 : 0;
-                $jobObj->is_saturday = ($isSaturday == true) ? 1 : 0;
-                $jobObj->is_sunday = ($isSunday == true) ? 1 : 0;
+                $jobObj->is_monday = in_array("Monday", $allData->partTimeDays) ? 1 : 0;
+                $jobObj->is_tuesday = in_array("Tuesday", $allData->partTimeDays) ? 1 : 0;
+                $jobObj->is_wedensday = in_array("Wednesday", $allData->partTimeDays) ? 1 : 0;
+                $jobObj->is_thursday = in_array("Thursday", $allData->partTimeDays) ? 1 : 0;
+                $jobObj->is_friday = in_array("Friday", $allData->partTimeDays) ? 1 : 0;
+                $jobObj->is_saturday = in_array("Saturday", $allData->partTimeDays) ? 1 : 0;
+                $jobObj->is_sunday = in_array("Sunday", $allData->partTimeDays) ? 1 : 0;
                 $jobObj->save();
             } elseif ($jobType == 3) {
                 $jobObj->no_of_jobs = $allData->totalJobOpening;
                 $jobObj->save();
-                $tempJobObj = TempJobDates::where(['recruiter_job_id' => $allData->jobId])->delete();
+                TempJobDates::where(['recruiter_job_id' => $allData->jobId])->delete();
                 $newTemJobObj = new TempJobDates();
                 foreach ($allData->tempJobDates as $tempJobDate) {
                     $newTemJobObj->recruiter_job_id = $allData->jobId;
                     $newTemJobObj->job_date = $tempJobDate;
                     $newTemJobObj->save();
+                }
+            }
+            $this->result = $jobObj;
+        } catch (\Exception $e) {
+            $this->result = $e->getMessage();
+        }
+        return $this->result;
+    }
+    
+    public function updateOfficeType($allData, $requestType = ''){
+        try{
+            if($requestType == ''){
+                RecruiterOfficeType::where(['recruiter_office_id' => $allData->selectedOffice[0]->selectedOfficeId])->delete();
+            }
+            $newRecruiterOfficeTypeObj = new RecruiterOfficeType();
+            foreach($allData->allOfficeTypeDetail as $officeType){
+                if(in_array($officeType['officetype_name'], $allData->selectedOffice[0]->selectedOfficeType)){
+                    $newRecruiterOfficeTypeObj->recruiter_office_id = $allData->selectedOffice[0]->selectedOfficeId;
+                    $newRecruiterOfficeTypeObj->office_type_id = $officeType['id'];
+                    $newRecruiterOfficeTypeObj->save();
                 }
             }
             $this->result = true;
