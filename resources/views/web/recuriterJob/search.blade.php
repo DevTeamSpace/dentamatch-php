@@ -103,9 +103,8 @@
             var url         =   window.location.href;
             var mainUrl     =   url.split("?")[0]; 
             url = mainUrl+'?distance='+distance+'&avail_all=1';
-            window.location.href = url;
-//            getArticles(url);
-//            window.history.pushState("", "", url);
+            getArticles(url);
+            window.history.pushState("", "", url);
         });
 
         /*-----------range slider--------*/
@@ -129,9 +128,9 @@
             if($('#avail_all').val()==1){
                 url += '&avail_all=1';
             }
-            window.location.href = url;
-//            getArticles(url);
-//            window.history.pushState("", "", url);
+            
+            getArticles(url);
+            window.history.pushState("", "", url);
         });
 
         /*-----------range slider--------*/

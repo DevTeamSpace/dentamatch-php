@@ -212,13 +212,13 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
     });
     
     Route::group(['prefix' => 'notify/'], function() {
-        Route::get('index', 'cms\AppMessageController@index');
-        Route::get('list', 'cms\AppMessageController@messageList');
-        Route::get('{id}/delete', 'cms\AppMessageController@delete');
-        Route::get('{id}/send', 'cms\AppMessageController@sendNotification');
-        Route::get('{id}/edit', 'cms\AppMessageController@edit');
-        Route::get('create', 'cms\AppMessageController@create');
-        Route::post('store', 'cms\AppMessageController@store');
+        Route::get('index', 'Cms\AppMessageController@index');
+        Route::get('list', 'Cms\AppMessageController@messageList');
+        Route::get('{id}/delete', 'Cms\AppMessageController@delete');
+        Route::get('{id}/send', 'Cms\AppMessageController@sendNotification');
+        Route::get('{id}/edit', 'Cms\AppMessageController@edit');
+        Route::get('create', 'Cms\AppMessageController@create');
+        Route::post('store', 'Cms\AppMessageController@store');
     });
     
     Route::get('push-notification', 'Cms\JobSeekerController@sendPushAndroid');

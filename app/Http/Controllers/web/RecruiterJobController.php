@@ -65,10 +65,9 @@ class RecruiterJobController extends Controller
             $searchData['avail_all']    = $availAll;
             $jobDetails     = RecruiterJobs::getRecruiterJobDetails($jobId);
             $seekersList    = JobSeekerProfiles::getJobSeekerProfiles($jobDetails,$searchData);
-            //dd($seekersList);
 
             if ($request->ajax()) {
-                return view('web.recuriterJob.search', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData])->render();  
+                return view('web.recuriterJob.search', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'maxDistance'=>$maxDistance])->render();  
             }
 
             return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData', 'jobId','maxDistance'));
@@ -186,12 +185,13 @@ class RecruiterJobController extends Controller
                     $userChat->checkAndSaveUserToChatList();
                     $this->sendPushUser($requestData['appliedStatus'],Auth::user()->id,$jobData->seeker_id,$requestData['jobId']);
                 }
-                return redirect('job/details/'.$requestData['jobId']);
+                
             }else{
                 $inviteJobs = array('seeker_id' => $requestData['seekerId'] , 'recruiter_job_id' => $requestData['jobId'] , 'applied_status' => JobLists::INVITED);
                 JobLists::insert($inviteJobs);
                 $this->sendPushUser($requestData['appliedStatus'],Auth::user()->id,$requestData['seekerId'],$requestData['jobId']);
             }
+            return redirect('job/details/'.$requestData['jobId']);
         } catch (\Exception $e) {
             dd($e);
             return view('web.error.',["message" => $e->getMessage()]);

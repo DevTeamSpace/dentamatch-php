@@ -381,11 +381,11 @@ $(function () {
                 success:function(response){
                     if(response.status == 1){
                         $('#emailForgetpassword').val('');
-                        $('#ForgetError').html(response.message).removeClass('hidden');
-                        window.location.reload();
+                        alert(response.message);
                     }else{
-                        $('#ForgetError').html(response.Message).removeClass('hidden');
+                        alert(response.message);
                     }
+                    window.location.reload();
                 }
             });
         }
