@@ -464,10 +464,12 @@
         me.totalJobOpeningError = ko.observable('');
         me.partTimeJobDaysError = ko.observable('');
         me.temporaryJobError = ko.observable('');
+        me.allOfficeTypeDetail = ko.observableArray([]);
 
         me.getJobDetails = function () {
             jobId = <?php echo json_encode($jobId) ?>;
             $.get('/job/edit-details', {jobId: jobId}, function (d) {
+                console.log(d);
                 me.jobId(d.jobDetails.id);
                 if (d.jobSeekerStatus != 0) {
                     me.cannotEdit(true);
@@ -532,6 +534,7 @@
                 }
                 for(i in d.allOfficeTypes){
                     me.allOfficeTypes.push(d.allOfficeTypes[i].officetype_name);
+                    me.allOfficeTypeDetail.push(d.allOfficeTypes[i]);
                 }
                 office_Id = null;
                 for(i in me.allLocations()){
