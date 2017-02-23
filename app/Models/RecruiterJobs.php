@@ -307,7 +307,7 @@ class RecruiterJobs extends Model
         $jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
             ->leftJoin('job_lists',function($query){
                 $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
-                ->whereIn('job_lists.applied_status',[]);
+                ->whereIn('job_lists.applied_status',[4]);
             })
             ->groupBy('recruiter_jobs.id','recruiter_profiles.office_name','recruiter_profiles.office_desc');
         $jobObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
@@ -324,6 +324,27 @@ class RecruiterJobs extends Model
             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
     
         return $jobObj->get();
+    }
+    
+    public static function getTempJobsReports(){
+        $jobs = RecruiterJobs::where(['recruiter_jobs.job_type' => 3, 'recruiter_offices.user_id' => Auth::user()->id])
+                ->join('recruiter_offices', 'recruiter_offices.id', '=', 'recruiter_jobs.recruiter_office_id')
+                ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
+                ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
+                ->groupBy('job_titles.jobtitle_name');
+        $jobs->select('job_titles.id as job_title_id', 'job_titles.jobtitle_name',
+                DB::raw("COUNT(job_titles.id) as jobs_count"));
+        return $jobs->get();
+    }
+    
+    public static function getIndividualTempJob($job_title_id){
+        $jobs = RecruiterJobs::where(['recruiter_jobs.job_type' => 3, 'recruiter_offices.user_id' => Auth::user()->id, 'job_titles.id' => $job_title_id])
+                ->join('recruiter_offices', 'recruiter_offices.id', '=', 'recruiter_jobs.recruiter_office_id')
+                ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
+                ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
+                ->orderBy('recruiter_jobs.created_at', 'desc');
+        $jobs->select('recruiter_jobs.created_at as job_created_at', 'recruiter_jobs.id as recruiter_job_id', 'recruiter_jobs.job_type');
+        return $jobs->get();
     }
 }
     
