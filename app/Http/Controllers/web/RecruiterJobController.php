@@ -185,12 +185,13 @@ class RecruiterJobController extends Controller
                     $userChat->checkAndSaveUserToChatList();
                     $this->sendPushUser($requestData['appliedStatus'],Auth::user()->id,$jobData->seeker_id,$requestData['jobId']);
                 }
-                return redirect('job/details/'.$requestData['jobId']);
+                
             }else{
                 $inviteJobs = array('seeker_id' => $requestData['seekerId'] , 'recruiter_job_id' => $requestData['jobId'] , 'applied_status' => JobLists::INVITED);
                 JobLists::insert($inviteJobs);
                 $this->sendPushUser($requestData['appliedStatus'],Auth::user()->id,$requestData['seekerId'],$requestData['jobId']);
             }
+            return redirect('job/details/'.$requestData['jobId']);
         } catch (\Exception $e) {
             dd($e);
             return view('web.error.',["message" => $e->getMessage()]);
