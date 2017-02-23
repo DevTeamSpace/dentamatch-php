@@ -190,9 +190,16 @@ $(document).ready(function () {
                 appendToId = data.fromId;
             }
             console.log(appendToId);
+            var activeLi = $('#li_'+appendToId).hasClass('active');
             $('#user-chat-content_'+appendToId).append(appendHtml);
-            chatScroll();
-
+            if(activeLi){
+                chatScroll();
+            }else{
+                var badgeObj = $('#li_'+appendToId).find('.badge');
+                var badgeCount = parseInt(badgeObj.html(),10);
+                badgeObj.removeClass('hide');
+                badgeObj.html(badgeCount+1);
+            }
         });
 
 
