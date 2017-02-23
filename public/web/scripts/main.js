@@ -45,8 +45,6 @@ $(document).ready(function() {
         multidate: true,
         startDate: '+0d',
 
-
-
         minDate: 0,
         orientation: "top auto",
         autoclose: false,
@@ -65,6 +63,7 @@ $(document).ready(function() {
 
         if (getId === 'parttime') {
             $('#monthSelect').prop('data-parsley-required', true);
+            $('#jobopening').attr('data-parsley-required', false);
             $('.job-opening').addClass('hide');
             $('div.select-days-custom').css('display', 'block');
             $('#monthSelect').multipleSelect({
@@ -78,13 +77,14 @@ $(document).ready(function() {
         } else if (getId === 'temporary') {
             $('div.select-days-custom').css('display', 'none');
             $('.job-opening').removeClass('hide');
-            $('#jobopening').prop('data-parsley-required', true);
+            $('#jobopening').attr('data-parsley-required', true);
             // $input.data('datepicker').hide = function() {};
 
             $("#CoverStartDateOtherPicker").datepicker("show");
         } else {
             $('div.select-days-custom').css('display', 'none');
             $('.job-opening').addClass('hide');
+            $('#jobopening').attr('data-parsley-required', false);
         }
         $("form").parsley().destroy();
         $("form").parsley();
