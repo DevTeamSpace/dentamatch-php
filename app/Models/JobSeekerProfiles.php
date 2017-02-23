@@ -129,7 +129,7 @@ class JobSeekerProfiles extends Model
     } 
 
     public static function getJobSeekerDetails($seekerId, $job){
-        $obj = JobSeekerProfiles::where('jobseeker_profiles.id',$seekerId);
+        $obj = JobSeekerProfiles::where('jobseeker_profiles.user_id',$seekerId);
 
         $obj->leftJoin('jobseeker_affiliations','jobseeker_profiles.user_id','=','jobseeker_affiliations.user_id')
             ->leftJoin('affiliations','jobseeker_affiliations.affiliation_id','=','affiliations.id');
