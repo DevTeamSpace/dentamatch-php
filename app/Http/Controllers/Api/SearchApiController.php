@@ -42,7 +42,7 @@ class SearchApiController extends Controller {
                 
                 SearchFilter::createFilter($userId, $reqData);
                 
-                $location = Location::where('zipcode',$reqData['zipCode'])->get();
+                $location = Location::where('zipcode',$reqData['zipCode'])->first();
                 if($location){
                     $reqData['userId'] = $userId;
                     $searchResult = RecruiterJobs::searchJob($reqData);
@@ -52,7 +52,7 @@ class SearchApiController extends Controller {
                         $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
                     }
                 }else{
-                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
+                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.invalid_job_location"));
                 }
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
@@ -116,14 +116,19 @@ class SearchApiController extends Controller {
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId > 0){
                 $reqData = $request->all();
-                $profileComplete = UserProfile::select('is_completed')->where('user_id', $userId)->get()->first();
+                $profileComplete = UserProfile::select('is_completed')->where('user_id', $userId)->first();
                 if($profileComplete->is_completed == 1){
                     $jobExists = JobLists::where('seeker_id','=',$userId)
                                     ->where('recruiter_job_id','=',$reqData['jobId'])
-                                    ->where('applied_status','=',JobLists::APPLIED)
-                                    ->get();
-                    if($jobExists->count() > 0){
-                        $response = apiResponse::customJsonResponse(0, 201, trans("messages.job_already_applied"));
+                                    ->whereIn('applied_status',[JobLists::APPLIED,JobLists::INVITED])
+                                    ->first();
+                    if($jobExists){
+                        if($jobExists->applied_status == JobLists::INVITED){
+                            JobLists::where('id', $jobExists->id)->update(['applied_status' => JobLists::APPLIED]);
+                            $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
+                        }else{
+                           $response = apiResponse::customJsonResponse(0, 201, trans("messages.job_already_applied")); 
+                        }
                     }else{
                         $applyJobs = array('seeker_id' => $userId , 'recruiter_job_id' => $reqData['jobId'] , 'applied_status' => JobLists::APPLIED);
                         JobLists::insert($applyJobs);
@@ -154,8 +159,8 @@ class SearchApiController extends Controller {
             if($userId > 0){
                 $reqData = $request->all();
                 $jobExists = JobLists::select('id')->where('seeker_id','=',$userId)->where('recruiter_job_id','=',$reqData['jobId'])
-                        ->whereIn('applied_status',[JobLists::SHORTLISTED,JobLists::APPLIED,  JobLists::HIRED])->get()->first();
-                if($jobExists->count() > 0){
+                        ->whereIn('applied_status',[JobLists::SHORTLISTED,JobLists::APPLIED,  JobLists::HIRED])->first();
+                if($jobExists){
                     $jobExists->applied_status = JobLists::CANCELLED;
                     $jobExists->cancel_reason = $reqData['cancelReason'];
                     $jobExists->save();

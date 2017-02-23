@@ -10,6 +10,7 @@ use Validator;
 use Exception;
 use DB;
 use App\Models\JobTemplates;
+use App\Models\Favourite;
 
 class FavoriteJobseekerController extends Controller {
 
@@ -61,6 +62,34 @@ class FavoriteJobseekerController extends Controller {
         } catch (Exception $ex) {
             print_r($ex->getMessage());
         }
+    }
+    
+    /**
+     * Mark/UnMark as Favourite
+     * @param type $seekerId
+     * @return int
+     */
+    public function getMarkFavourite($seekerId)
+    {
+        $return=[];
+        $recruiterId = Auth::user()->id;
+        $favModel = Favourite::where('recruiter_id', $recruiterId)->where('seeker_id', $seekerId)->first();
+        if($favModel) {
+            $return['isFavourite'] = "No";
+            $return['seekerId'] = $seekerId;
+            $return['success'] = 1;
+            $favModel->forceDelete();
+        } else {
+            $favModel = new Favourite();
+            $favModel->recruiter_id = $recruiterId;
+            $favModel->seeker_id = $seekerId;
+            $favModel->save();
+            $return['isFavourite'] = "Yes";
+            $return['seekerId'] = $seekerId;
+            $return['success'] = 1;   
+        }
+        
+        return $return;
     }
 
 }
