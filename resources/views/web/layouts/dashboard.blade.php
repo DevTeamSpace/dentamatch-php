@@ -47,7 +47,7 @@
 
 
                 <ul class=" topIconBox navbar-right customnavRight">
-                    <li><a href="#"><span class="icon icon-message"></span></a></li>
+                    <li><a href="{{ url('chat') }}"><span class="icon icon-message"></span></a></li>
                 <li class="notificaionbell dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="icon icon-bell "></span><div class="notificationCircle ">2</div></a>
                     <div class="dropdown-menu noficationListContainer small-border-radius box-shadow">
                             <span class="fa fa-caret-up notificationCaret"></span>

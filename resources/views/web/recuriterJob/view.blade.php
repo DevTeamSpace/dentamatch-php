@@ -288,7 +288,7 @@ jQuery(function ($) {
     var userId = "{{ Auth::id() }}";
     socket.emit('init', {userId : userId, userName : "{{ $job['office_name'] }}",userType : 2},function(response){
             
-        });
+    });
     
     $('.modalClick').click(function(e){
         $('#seekerId').val($(this).data('seekerid'));
@@ -300,7 +300,7 @@ jQuery(function ($) {
         var chatMsg = $('#chatMsg').val();
         var seekerId = $('#seekerId').val();
         console.log(seekerId);
-        var data = {'fromId':userId,'toId':seekerId,'message':chatMsg};
+        var data = {fromId:userId, toId:seekerId, message:chatMsg, messageFrom:1};
         if(chatMsg!=''){
             socket.emit('sendMessage', data, function(msgObj){
                 console.log(msgObj);

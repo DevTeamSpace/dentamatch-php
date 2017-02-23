@@ -91,17 +91,23 @@
             <div class="col-sm-8">
                 <ul class="listing listing-inline ">
                     @php
-                    $valueArr = explode(',',$job['applied_status']);
-                    
-                    if(count($valueArr)>0){
-                        $valueCountArr = array_count_values($valueArr);
+                    $valueCountArr = array("1"=>0, "2"=>0);
+                    if($job['applied_status']!=null){
+                        $valueArr = explode(',',$job['applied_status']);
+
+                        if($valueArr && count($valueArr)>0){
+                            foreach($valueArr as $val){
+                                $statusArr = explode('_',$val);
+                                $valueCountArr[$statusArr[1]]++ ;
+                            }
+                        }
                     }
                     @endphp
-                    @if(isset($valueCountArr['2']))
-                    <li><a href="{{ url('job/details/'.$job['id']) }}">{{ $valueCountArr['2'] }} Seekers Applied</a> </li>
+                    @if($valueCountArr["2"]>0)
+                    <li><a href="{{ url('job/details/'.$job['id']) }}">{{ $valueCountArr['2'] }} Seeker{{ ($valueCountArr['2']>1)?'s':'' }} Applied</a> </li>
                     @endif
-                    @if(isset($valueCountArr['1']))
-                    <li><a href="{{ url('job/details/'.$job['id']) }}">{{ $valueCountArr['1'] }} Seekers Invited </a></li>
+                    @if($valueCountArr["1"]>0)
+                    <li><a href="{{ url('job/details/'.$job['id']) }}">{{ $valueCountArr['1'] }} Seeker{{ ($valueCountArr['1']>1)?'s':'' }} Invited </a></li>
                     @endif
                     <li><a href="{{ url('job/details/'.$job['id']) }}"> View Detail</a></li>
                 </ul>
