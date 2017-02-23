@@ -18,7 +18,7 @@
     <div class="commonBox">   
         <div class="row resultHeading">
             <div class="col-md-2 col-sm-2 resultImage">
-                <img src="{{ url('image/66/66/?src=' .$seekerDetails['profile_pic']) }}" class="img-circle">
+                <img src="{{ url('image/120/120/?src=' .$seekerDetails['profile_pic']) }}" class="img-circle">
             </div> 
             <div class="col-md-7 col-sm-6">
                 <h4>{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']}}</h4>

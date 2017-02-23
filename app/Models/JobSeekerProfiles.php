@@ -48,7 +48,7 @@ class JobSeekerProfiles extends Model
             });
         }
         elseif($job['job_type']==RecruiterJobs::TEMPORARY){
-            $obj->leftJoin('jobseeker_temp_availability',function($query) use ($job){
+            $obj->join('jobseeker_temp_availability',function($query) use ($job){
                     $query->on('jobseeker_temp_availability.user_id', '=', 'jobseeker_profiles.user_id')
                     ->whereIn('jobseeker_temp_availability.temp_job_date',explode(',',$job['temp_job_dates']));
             }); 
