@@ -63,7 +63,7 @@
                     @endif
                 </div>
             </div>
-            <form action="{{ url('job/updateStatus') }}" method="post">
+          <form action="{{ url('job/updateStatus') }}" method="post">
             <div class="col-md-3 text-right"><p>{{round($seekerDetails['distance'])}} miles away
                 {!! csrf_field() !!}
                 <input type="hidden" name="jobId" value="{{ $jobId }}">
@@ -86,8 +86,9 @@
             @endif 
             </p>   
             </div>
-        </div>
         </form>
+        </div>
+        
         <div class="pd-t-60">
             <div class="leftCircle">
                 <div class="searchResultHeading">
