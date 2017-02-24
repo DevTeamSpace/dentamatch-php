@@ -134,7 +134,7 @@
                     <div class="img-holder ">
                         <img class="media-object img-circle" src="{{ url("image/66/66/?src=" .$seeker['profile_pic']) }}" alt="...">
                         @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
-                        <span class="star {{ ($seeker['is_favourite']==null)?'star-empty':'star-fill' }}"></span>
+                        <span id="fav_{{ $seeker['seeker_id'] }}" onclick="markFavourite({{ $seeker['seeker_id'] }});" class="star {{ ($seeker['is_favourite']==null)?'star-empty':'star-fill' }}"></span>
                         @endif
                     </div>
                 </div>
@@ -281,6 +281,8 @@
 @section('js')
 <script src="{{ url('') }}:3000/socket.io/socket.io.js"></script>
 <script type="text/javascript">
+    
+urlFav = "{{ url('recruiter/markFavourite') }}";
 jQuery(function ($) {
     var socket = io.connect('{{ url('') }}:3000');
     console.log(socket);
@@ -288,7 +290,7 @@ jQuery(function ($) {
     var userId = "{{ Auth::id() }}";
     socket.emit('init', {userId : userId, userName : "{{ $job['office_name'] }}",userType : 2},function(response){
             
-        });
+    });
     
     $('.modalClick').click(function(e){
         $('#seekerId').val($(this).data('seekerid'));
@@ -300,7 +302,7 @@ jQuery(function ($) {
         var chatMsg = $('#chatMsg').val();
         var seekerId = $('#seekerId').val();
         console.log(seekerId);
-        var data = {'fromId':userId,'toId':seekerId,'message':chatMsg};
+        var data = {fromId:userId, toId:seekerId, message:chatMsg, messageFrom:1};
         if(chatMsg!=''){
             socket.emit('sendMessage', data, function(msgObj){
                 console.log(msgObj);
@@ -337,5 +339,25 @@ jQuery(function ($) {
             });
         }
     });
+    
+    function markFavourite(seekerId) {
+        url = urlFav+'/'+seekerId;
+        
+        $.ajax({
+            url: url
+        }).done(function (data) {
+            
+            if(data.isFavourite=="Yes") {
+                $("#fav_"+data.seekerId).removeClass('star-empty').addClass('star-fill');
+            } else if(data.isFavourite=="No") {
+                $("#fav_"+data.seekerId).removeClass('star-fill').addClass('star-empty');
+            }
+
+        }).fail(function () {
+            alert("failed");
+        });
+
+    }
+    
 </script>
 @endsection

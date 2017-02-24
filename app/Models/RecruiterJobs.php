@@ -253,7 +253,7 @@ class RecruiterJobs extends Model
             'recruiter_offices.address','recruiter_offices.zipcode',
             'job_templates.template_name','job_templates.template_desc','job_templates.job_title_id',
             'job_titles.jobtitle_name',
-            DB::raw("group_concat(distinct(job_lists.applied_status)) AS applied_status"),
+            DB::raw("group_concat(distinct concat(job_lists.seeker_id,'_', job_lists.applied_status)) AS applied_status"),
             DB::raw("group_concat(distinct(temp_job_dates.job_date) ORDER BY temp_job_dates.job_date ASC) AS temp_job_dates"),
             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"))
             ->orderBy('recruiter_jobs.id','desc');

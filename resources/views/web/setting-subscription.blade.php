@@ -41,7 +41,7 @@
                                         </tr>	 	 
                                     </tbody>
                                 </table>
-                                <p>Your next half yearly charge of <span data-bind="text: subscriptionAmount"></span> will be applied to your primary payment method on <span data-bind="text: subscriptionAutoRenewal"></span>.</p>
+                                <p>Your next half yearly charge of <span data-bind="text: subscriptionAmount"></span> will be applied to your primary payment method on <span data-bind="text: subscriptionAutoRenewal"></span>( i.e. <span data-bind="text: leftDays"></span> Days).</p>
                                 <!--/ko-->
                                 <div class="text-right" data-bind="visible: switchVisible">
                                     <button type="submit" class="btn btn-primary pd-l-30 pd-r-30 mr-t-10" data-bind="text: switchToText, click: $root.switchTo"></button>
@@ -183,6 +183,7 @@ var SubscriptionModel = function(data){
     me.subscriptionActivation = ko.observable();
     me.subscriptionAutoRenewal = ko.observable();
     me.subscriptionId = ko.observable('');
+    me.leftDays = ko.observable('');
     
     me._init = function(d){
         if(typeof d == "undefined"){
@@ -192,6 +193,7 @@ var SubscriptionModel = function(data){
         me.subscriptionAmount("$"+(String)(d.plan.amount).slice(0,2));
         me.subscriptionActivation(moment(d.created).format('LL'));
         me.subscriptionAutoRenewal(moment(d.current_period_end).format('LL'));
+        me.leftDays(moment(d.current_period_end).diff(moment(d.created), 'days'));
         if(d.plan.interval_count == 6){
             me.subscriptionPlan('Half Yearly');
         }else{

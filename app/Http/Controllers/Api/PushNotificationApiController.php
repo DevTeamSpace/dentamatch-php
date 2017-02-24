@@ -96,7 +96,7 @@ class PushNotificationApiController extends Controller {
             'sentTime' => 'required','messageId' => 'required']);
             $deviceModel = Device::getDeviceToken($requestData['toId']);
             if($deviceModel) {
-                NotificationServiceProvider::sendPushNotification($deviceModel, $requestData['message'], $requestData);
+                NotificationServiceProvider::sendPushNotification($deviceModel, $requestData['message'], ["data" => $requestData]);
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
