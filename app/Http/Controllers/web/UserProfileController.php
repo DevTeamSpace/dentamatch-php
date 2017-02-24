@@ -45,9 +45,9 @@ class UserProfileController extends Controller {
             'contactNumber' => 'required|numeric|digits_between:9,10'
         ]);
         try {
-            RecruiterOffice::createProfile($request);
+            $recOfficeArrObj = RecruiterOffice::createProfile($request);
 //            if (in_array($request->postal_code, \App\Models\Location::getList())) {
-            return 'success';
+            return ['success'=>1,'data'=>$recOfficeArrObj];
 //            }
 //            return 1;
         } catch (\Exception $e) {
@@ -123,4 +123,17 @@ class UserProfileController extends Controller {
         return view('web.edit_profile', ['user' => $user, 'offices' => $offices, 'officeType' => $officeType]);
     }
 
+    public function deleteOffice($officeId){
+        try {
+            $recruiterOffice = RecruiterOffice::where('id',$officeId)->where('user_id',Auth::id())->first();
+            
+            if($recruiterOffice){
+                RecruiterOfficeType::where('recruiter_office_id',$officeId)->delete();
+                $recruiterOffice->delete();
+                
+            }
+        } catch (\Exception $e) {
+            
+        }
+    }
 }

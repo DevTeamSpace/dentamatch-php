@@ -1,4 +1,5 @@
 function createProfile() {
+    console.log('In');
     var form_data = $('#createProfileForm').serialize();
     var errorsHtml;
     $.ajax({
@@ -41,11 +42,12 @@ function officeDetail() {
         url: '/office-details',
         type: "POST",
         data: form_data,
-        success: function(data) {
+        success: function(response) {
+            $('#officeDetailForm').find('.deleteCard').attr('data-officeId',response.data.id);
             $("#officeDetailButton").remove();
             $("#removeButton").append('<a id="countinueLink" href="/subscription-detail" class="btn btn-primary pd-l-40 pd-r-40">Continue</a>')
             errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully.</li></ul></div>';
-            if (data == 1) {
+            if (response == 1) {
                 errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully. But you will be not able to put job on this address.</li></ul></div>';
             }
             $('#officeDetail-errors').html(errorsHtml);
@@ -79,7 +81,8 @@ function officeDetail1() {
         url: '/office-details',
         type: "POST",
         data: form_data,
-        success: function(data) {
+        success: function(response) {
+            $('#officeDetailForm1').find('.deleteCard').attr('data-officeId',response.data.id);
             $("#officeDetailButton1").remove();
             $("#countinueLink").remove();
             $("#removeButton1").append('<a id="countinueLink1" href="/subscription-detail" class="btn btn-primary pd-l-40 pd-r-40">Continue</a>')
@@ -114,7 +117,8 @@ function officeDetail2() {
         url: '/office-details',
         type: "POST",
         data: form_data,
-        success: function(data) {
+        success: function(response) {
+            $('#officeDetailForm2').find('.deleteCard').attr('data-officeId',response.data.id);
             $("#officeDetailButton2").remove();
             $("#countinueLink1").remove();
             $("#removeButton2").append('<a id="countinueLink2" href="/subscription-detail" class="btn btn-primary pd-l-40 pd-r-40">Continue</a>')
