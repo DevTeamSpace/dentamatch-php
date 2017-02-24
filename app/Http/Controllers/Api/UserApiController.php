@@ -127,7 +127,7 @@ class UserApiController extends Controller {
                                 'jobseeker_profiles.preferred_job_location',
                                 'jobseeker_profiles.latitude',
                                 'jobseeker_profiles.longitude',
-                                'users.is_verified'
+                                'users.is_verified','jobseeker_profiles.is_completed'
                                 )
                         ->where('users.id', $userId)
                         ->first();
@@ -161,6 +161,7 @@ class UserApiController extends Controller {
                             'latitude' => $userData['latitude'],
                             'longitude' => $userData['longitude'],
                             'accessToken' => $userToken,
+                            'profileCompleted' => $userData['is_completed'],
                         );
                         $userArray['searchFilters'] = SearchFilter::getFiltersOnLogin($userId);
                         $response = apiResponse::customJsonResponse(1, 200, trans("messages.user_logged_successful"),$userArray);
