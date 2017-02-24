@@ -117,10 +117,10 @@ var hiddenFields = '<input type="hidden" name="_token" value="' + tokenValue + '
                 }
             });
         }
-//        $(this).parents(".mainMasterBox").remove();
-//        dynamicLength = $(".mainMasterBox").length;
-//        $(".addBtn").addClass("DynamicAddder");
-//        $(".DynamicAddder").html(`<span class='icon icon-plus'></span>You can add upto ${3 - dynamicLength} more locations`);
+        $(this).parents(".mainMasterBox").remove();
+        dynamicLength = $(".mainMasterBox").length;
+        $(".addBtn").addClass("DynamicAddder");
+        $(".DynamicAddder").html(`<span class='icon icon-plus'></span>You can add upto ${3 - dynamicLength} more locations`);
 
     }
 //-----	customValidation-----//
