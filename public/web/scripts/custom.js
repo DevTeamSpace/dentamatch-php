@@ -203,6 +203,7 @@ var hiddenFields = '<input type="hidden" name="_token" value="' + tokenValue + '
         var currentBtn = $(this);
         if ($('#createProfileForm').parsley().isValid() && currentBtn.parsley().isValid()) {
             createProfile();
+            $('#officeDetailButton').attr('disabled','disabled');
             officeDetail();
         } else {
             
@@ -217,6 +218,7 @@ var hiddenFields = '<input type="hidden" name="_token" value="' + tokenValue + '
         var currentBtn = $(this);
         if ($('#createProfileForm').parsley().isValid() && currentBtn.parsley().isValid()) {
             createProfile();
+            $('#officeDetailButton1').attr('disabled','disabled');
             officeDetail1();
 
         } else {
@@ -231,6 +233,7 @@ var hiddenFields = '<input type="hidden" name="_token" value="' + tokenValue + '
         var currentBtn = $(this);
         if ($('#createProfileForm').parsley().isValid() && currentBtn.parsley().isValid()) {
             createProfile();
+            $('#officeDetailButton2').attr('disabled','disabled');
             officeDetail2();
 
         } else {
