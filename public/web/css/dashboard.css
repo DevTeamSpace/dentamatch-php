@@ -1179,7 +1179,7 @@ input[type='checkbox'] {
         width: 5px;
         background: #fff;
         top: 34px;
-        height: 63%;
+        height: 100%;
     }
     .menuLastBox {
         top: 26px;
