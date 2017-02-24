@@ -62,6 +62,7 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
             Route::post('create-profile', 'web\UserProfileController@createProfile');
             Route::post('office-details', 'web\UserProfileController@officeDetails');
+            Route::delete('office-delete/{officeId}', 'web\UserProfileController@deleteOffice');
             Route::get('get-location/{zip}', 'web\UserProfileController@checkValidLocation');
 
             Route::get('favorite-jobseeker','web\FavoriteJobseekerController@getFavJobseeker');

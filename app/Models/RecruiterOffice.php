@@ -95,6 +95,7 @@ class RecruiterOffice extends Model {
             }
             $recOfficeArrObj->officeTypes()->saveMany($recOfficeTypeArrObj);
         }
+        return $recOfficeArrObj;
     }
     
     public static function getAllOffices(){

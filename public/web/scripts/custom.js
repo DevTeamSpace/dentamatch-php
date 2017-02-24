@@ -105,10 +105,22 @@ var hiddenFields = '<input type="hidden" name="_token" value="' + tokenValue + '
     }
     WeekOption();
     function deleteBox() {
-        $(this).parents(".mainMasterBox").remove();
-        dynamicLength = $(".mainMasterBox").length;
-        $(".addBtn").addClass("DynamicAddder");
-        $(".DynamicAddder").html(`<span class='icon icon-plus'></span>You can add upto ${3 - dynamicLength} more locations`);
+        var officeId = $(this).attr('data-officeId');
+        var tokenValue = $("input[name=_token]").val();
+        if(officeId){
+            $.ajax({
+                url: '/office-delete/'+officeId,
+                type: "DELETE",
+                data: {_token:tokenValue},
+                success: function(response) {
+                    
+                }
+            });
+        }
+//        $(this).parents(".mainMasterBox").remove();
+//        dynamicLength = $(".mainMasterBox").length;
+//        $(".addBtn").addClass("DynamicAddder");
+//        $(".DynamicAddder").html(`<span class='icon icon-plus'></span>You can add upto ${3 - dynamicLength} more locations`);
 
     }
 //-----	customValidation-----//
@@ -189,13 +201,13 @@ var hiddenFields = '<input type="hidden" name="_token" value="' + tokenValue + '
 
     $('#officeDetailForm').on('submit', function () {
         var currentBtn = $(this);
-        if (currentBtn.parsley().isValid()) {
-
+        if ($('#createProfileForm').parsley().isValid() && currentBtn.parsley().isValid()) {
+            createProfile();
             officeDetail();
         } else {
-
+            
+            $('#createProfileForm').parsley().validate();
             $(currentBtn).parsley().validate();
-
         }
 
     });
@@ -203,27 +215,27 @@ var hiddenFields = '<input type="hidden" name="_token" value="' + tokenValue + '
 
     $(document).on('submit', '#officeDetailForm1', function () {
         var currentBtn = $(this);
-        if (currentBtn.parsley().isValid()) {
-
+        if ($('#createProfileForm').parsley().isValid() && currentBtn.parsley().isValid()) {
+            createProfile();
             officeDetail1();
 
         } else {
 
             $(currentBtn).parsley().validate();
-
+            $('#createProfileForm').parsley().validate();
         }
     });
 
 
     $(document).on('submit', '#officeDetailForm2', function () {
         var currentBtn = $(this);
-        if (currentBtn.parsley().isValid()) {
-
+        if ($('#createProfileForm').parsley().isValid() && currentBtn.parsley().isValid()) {
+            createProfile();
             officeDetail2();
 
         } else {
             $(currentBtn).parsley().validate();
-
+            $('#createProfileForm').parsley().validate();
         }
     });
 
