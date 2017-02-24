@@ -1137,5 +1137,36 @@ paths:
   
       tags:
         - User Profile
+        
+        
+  /users/acceptreject-job:
+    post:
+      summary: Accept reject jobs by user
+      description: Accept reject jobs by user
+      responses: 
+          200:
+            description: Accept reject jobs by user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: notificationId
+          in: formData
+          description: updateDeviceToken 
+          type: integer
+        - name: acceptStatus
+          in: formData
+          description: accept status (0 = reject ; 1 = select) 
+          type: integer  
+        
+  
+      tags:
+        - Job search
 
 
