@@ -1,10 +1,6 @@
 <!--Seeker listing-->
 @foreach ($seekersList['paginate'] as $seeker)
 <!--search preference list-->
-<form action="{{ url('job/updateStatus') }}" method="post">
-{!! csrf_field() !!}
-<input type="hidden" name="jobId" value="{{ $jobDetails['id'] }}">
-<input type="hidden" name="seekerId" value="{{ $seeker['user_id'] }}">
 <div class="media jobCatbox">
     <div class="media-left ">
         <div class="img-holder ">
@@ -17,7 +13,7 @@
     <div class="media-body ">
         <div class="template-job-information mr-t-15">
           <div class="template-job-information-left">
-            <h4 class="pull-left"><a href="{{ url('job/seekerdetails/'.$seeker['user_id'].'/'.$jobDetails['id']) }}">{{$seeker['first_name'].' '.$seeker['last_name']}}</a></h4>
+            <h4 class="pull-left"><a href="{{ url('job/seekerdetails/'.$seeker['id'].'/'.$jobDetails['id']) }}">{{$seeker['first_name'].' '.$seeker['last_name']}}</a></h4>
             @if($jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
                 <span class="mr-l-5 dropdown date_drop">
                 @if(round($seeker['avg_rating'],0) > 3)
@@ -152,16 +148,11 @@
                 -->
             </div>
             <div class="col-sm-6 col-xs-6 ">
-                @if(isset($seeker['job_status']) && $seeker['job_status'] == 1)
-                <button type="button" class="btn btn-primary-outline pull-right pd-l-30 pd-r-30">Invited</button>
-                @else
-                <button type="submit"  name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pull-right pd-l-30 pd-r-30 ">Invite</button>
-                @endif
+                <button type="submit" class="btn btn-primary pull-right pd-l-30 pd-r-30 ">Invite</button>
             </div>
         </div>
     </div>
 </div>
-</form>
 <!--/search preference list-->
 @endforeach 
 
