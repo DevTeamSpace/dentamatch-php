@@ -362,46 +362,46 @@
         me.isEverydayWork = ko.observable(false);
         me.everydayStart = ko.observable(null);
         me.everydayEnd = ko.observable(null);
-
+        
         me._init = function (d) {
-            if (d.work_everyday_start == "00:00:00" && d.work_everyday_end == "00:00:00") {
-                if (d.monday_start != "00:00:00") {
+            if ((d.work_everyday_start == "00:00:00" && d.work_everyday_end == "00:00:00") || (d.work_everyday_start == null && d.work_everyday_end == null)) {
+                if (d.monday_start != "00:00:00" && d.monday_start != null) {
                     me.isMondayWork(true);
                     dates = me.getDateFunc(d.monday_start, d.monday_end);
                     me.mondayStart(moment(dates[0]).format('LT'));
                     me.mondayEnd(moment(dates[1]).format('LT'));
                 }
-                if (d.tuesday_start != "00:00:00") {
+                if (d.tuesday_start != "00:00:00" && d.tuesday_start != null) {
                     me.isTuesdayWork(true);
                     dates = me.getDateFunc(d.tuesday_start, d.tuesday_end);
                     me.tuesdayStart(moment(dates[0]).format('LT'));
                     me.tuesdayEnd(moment(dates[1]).format('LT'));
                 }
-                if (d.wednesday_start != "00:00:00") {
+                if (d.wednesday_start != "00:00:00" && d.wednesday_start != null) {
                     me.isWednesdayWork(true);
                     dates = me.getDateFunc(d.wednesday_start, d.wednesday_end);
                     me.wednesdayStart(moment(dates[0]).format('LT'));
                     me.wednesdayEnd(moment(dates[1]).format('LT'));
                 }
-                if (d.thursday_start != "00:00:00") {
+                if (d.thursday_start != "00:00:00" && d.thursday_start != null) {
                     me.isThursdayWork(true);
                     dates = me.getDateFunc(d.thursday_start, d.thursday_end);
                     me.thursdayStart(moment(dates[0]).format('LT'));
                     me.thursdayEnd(moment(dates[1]).format('LT'));
                 }
-                if (d.friday_start != "00:00:00") {
+                if (d.friday_start != "00:00:00" && d.friday_start != null) {
                     me.isFridayWork(true);
                     dates = me.getDateFunc(d.friday_start, d.friday_end);
                     me.fridayStart(moment(dates[0]).format('LT'));
                     me.fridayEnd(moment(dates[1]).format('LT'));
                 }
-                if (d.saturday_start != "00:00:00") {
+                if (d.saturday_start != "00:00:00" && d.saturday_start != null) {
                     me.isSaturdayWork(true);
                     dates = me.getDateFunc(d.saturday_start, d.saturday_end);
                     me.saturdayStart(moment(dates[0]).format('LT'));
                     me.saturdayEnd(moment(dates[1]).format('LT'));
                 }
-                if (d.sunday_start != "00:00:00") {
+                if (d.sunday_start != "00:00:00" && d.sunday_start != null) {
                     me.isSundayWork(true);
                     dates = me.getDateFunc(d.sunday_start, d.sunday_end);
                     me.sundayStart(moment(dates[0]).format('LT'));
@@ -688,9 +688,11 @@
         }else{
             if(me.totalJobOpening() == null || me.totalJobOpening() == ''){
                 me.totalJobOpeningError('Total job openings required');
+                return false;
             }
             if($('#CoverStartDateOtherPicker').val() == '' || $('#CoverStartDateOtherPicker').val() == null){
                 me.temporaryJobError('Please select dates for part time job.');
+                return false;
             }
         }
         
@@ -752,10 +754,11 @@
             me.phoneNumberError('Please enter phone number.');
             return false;
         }
-        
-//        if(me.errors() == true){
-//            return false;
-//        }else{
+        console.log(me);
+        return false;
+        if(me.errors() == true){
+            return false;
+        }else{
             splitedTempDates = ($('#CoverStartDateOtherPicker').val()).split(',');
             me.tempJobDates([]);
             for(i in splitedTempDates){
@@ -776,7 +779,7 @@
                     console.log(data);
                 }
             });
-//        }
+        }
     }
 
     me._init = function () {
