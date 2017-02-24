@@ -239,7 +239,7 @@ class RecruiterJobController extends Controller
                     'notificationType' => Notification::INVITED,
                 );
         }
-        $data = ['receiver_id'=>$receiverId,'job_list_id' => $jobId,'sender_id' => $sender, 'notification_data'=>$notificationData['notificationData'],'notification_type' => $jobstatus];
+        $data = ['receiver_id'=>$receiverId,'job_list_id' => $jobId,'sender_id' => $sender, 'notification_data'=>$notificationData['notificationData'],'notification_type' => $notificationData['notificationType']];
         $notificationDetails = Notification::create($data);
         $notificationData['id'] = $notificationDetails->id;
         $notificationData['receiverId'] = $receiverId;

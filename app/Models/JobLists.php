@@ -76,10 +76,10 @@ class JobLists extends Model {
         $return = 0;
         $jobExists = static::where('seeker_id', '=', $userId)
                 ->where('recruiter_job_id', '=', $jobId)
-                ->where('applied_status', '=', JobLists::APPLIED)
+                /*->where('applied_status', '=', JobLists::APPLIED)*/
                 ->first();
         if ($jobExists) {
-            $return = 1;
+            $return = $jobExists->applied_status;
         }
         return $return;
     }
