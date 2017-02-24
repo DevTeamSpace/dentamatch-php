@@ -54,6 +54,11 @@
                             <span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
                             <span class="caret"></span>
                         </span>
+
+                    @endif
+                </div>
+            </div>
+
                         <ul class="dropdown-menu">
                           @foreach ($dates as $date)
                           <li>{{ date('l, d M Y',strtotime($date)) }}</li>
@@ -63,6 +68,7 @@
                   @endif
               </div>
           </div>
+
           <form action="{{ url('job/updateStatus') }}" method="post">
             <div class="col-md-3 text-right"><p>{{round($seekerDetails['distance'])}} miles away
                 {!! csrf_field() !!}
@@ -85,9 +91,12 @@
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pd-l-30 pd-r-30">Invite</button>    
                 @endif 
             </p>   
+
+            </div>
+        </form>
         </div>
-    </form>
-</div>
+        
+        
 
 <div class="pd-t-60">
     <div class="leftCircle">

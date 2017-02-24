@@ -10,6 +10,7 @@ use App\Models\SavedJobs;
 use App\Models\JobLists;
 use App\Models\UserProfile;
 use App\Models\SearchFilter;
+use App\Models\Notification;
 
 class SearchApiController extends Controller {
     
@@ -249,6 +250,42 @@ class SearchApiController extends Controller {
             $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $returnResponse;
+    }
+    public function postAcceptRejectInvitedJob(Request $request){
+        try{
+            $this->validate($request, [
+                'notificationId' => 'required',
+                'acceptStatus' => 'required',
+            ]);
+            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            if($userId > 0){
+                $reqData = $request->all();
+                $notificationDetails = Notification::where('id',$reqData['notificationId'])->first();
+                $jobExists = JobLists::select('id')->where('seeker_id','=',$userId)->where('recruiter_job_id','=',$notificationDetails->job_list_id)
+                        ->where('applied_status',JobLists::INVITED)->first();
+                if($jobExists){
+                    if($reqData['acceptStatus'] == 0){
+                        $jobExists->applied_status = JobLists::CANCELLED;
+                        $msg = trans("messages.job_cancelled_success");
+                    }else{
+                        $jobExists->applied_status = JobLists::HIRED;
+                        $msg = trans("messages.job_hired_success");
+                    }
+                    $jobExists->save();
+                    $response = apiResponse::customJsonResponse(1, 200, $msg);
+                }else{
+                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.not_invited_job"));
+                }
+            }else{
+                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+            }
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+        } catch (\Exception $e) {
+            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+        return $response;
     }
     
     

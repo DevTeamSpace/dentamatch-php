@@ -50,6 +50,8 @@ Route::get('users/user-profile', 'Api\UserProfileApiController@getUserProfile');
 Route::put('users/user-profile-update', 'Api\UserProfileApiController@updateUserProfile');
 Route::post('users/user-location-update', 'Api\UserProfileApiController@updateUserLocationUpdate');
 
+Route::post('users/acceptreject-job', 'Api\SearchApiController@postAcceptRejectInvitedJob');
+
 
 
 Route::post('users/update-availability', 'Api\CalendarApiController@postJobAvailability');
