@@ -18,7 +18,7 @@ class JobSeekerProfiles extends Model
     public static function getJobSeekerProfiles($job,$reqData){
         $obj = JobSeekerProfiles::where('jobseeker_profiles.job_titile_id',$job['job_title_id']);
 
-        $obj->whereNotIn('job_lists.applied_status',JobLists::SHORTLISTED,  JobLists::APPLIED, JobLists::HIRED)
+        $obj->whereNotIn('job_lists.applied_status',JobLists::SHORTLISTED,  JobLists::APPLIED, JobLists::HIRED);
         $obj->leftJoin('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id');
 
         if($job['job_type']==RecruiterJobs::FULLTIME){
