@@ -299,17 +299,63 @@ class RecruiterJobController extends Controller {
         }
         return $this->result;
     }
-    
-    private function sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj){
-        try{
+
+    private function sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj) {
+        try {
             if ((string) $recruiterOfficeObj['latitude'] == (string) $allData->selectedOffice[0]->selectedOfficeLat && (string) $recruiterOfficeObj['longitude'] == (string) $allData->selectedOffice[0]->selectedOfficeLng) {
                 $this->updateJob($allData->selectedJobType, $allData);
                 $this->updateOffice($allData);
                 $this->updateOfficeType($allData);
             } else {
+                $this->checkingOffice($jobDetails, $allData, $recruiterOfficeObj);
+//                $newOfficeObj = $this->updateOffice($allData, 1);
+//                $this->updateJob($allData->selectedJobType, $allData, $newOfficeObj['id']);
+//                $this->updateOfficeType($allData, $newOfficeObj['id']);
+            }
+            $this->result['success'] = true;
+        } catch (\Exception $e) {
+            $this->result['success'] = $e->getMessage();
+        }
+        return $this->result;
+    }
+
+    private function checkingOffice($jobDetails, $allData, $recruiterOfficeObj) {
+        try {
+            $recruiterOfficeObj = RecruiterOffice::where([
+                        'latitude' => $allData->selectedOffice[0]->selectedOfficeLat,
+                        'longitude' => $allData->selectedOffice[0]->selectedOfficeLng,
+                        'user_id' => Auth::user()->id
+                    ])->first();
+            if($recruiterOfficeObj != null){
+                $recruiterOfficeObj->work_everyday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->everydayStart)) : '';
+                $recruiterOfficeObj->work_everyday_end = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->everydayEnd)) : '';
+                $recruiterOfficeObj->monday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isMondayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->mondayStart)) : '';
+                $recruiterOfficeObj->monday_end = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isMondayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->mondayEnd)) : '';
+                $recruiterOfficeObj->tuesday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isTuesdayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->tuesdayStart)) : '';
+                $recruiterOfficeObj->tuesday_end = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isTuesdayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->tuesdayEnd)) : '';
+                $recruiterOfficeObj->wednesday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isWednesdayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->wednesdayStart)) : '';
+                $recruiterOfficeObj->wednesday_end = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isWednesdayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->wednesdayEnd)) : '';
+                $recruiterOfficeObj->thursday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isThursdayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->thursdayStart)) : '';
+                $recruiterOfficeObj->thursday_end = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isThursdayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->thursdayEnd)) : '';
+                $recruiterOfficeObj->friday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isFridayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->fridayStart)) : '';
+                $recruiterOfficeObj->friday_end = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isFridayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->fridayEnd)) : '';
+                $recruiterOfficeObj->saturday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isSaturdayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->saturdayStart)) : '';
+                $recruiterOfficeObj->saturday_end = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isSaturdayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->saturdayEnd)) : '';
+                $recruiterOfficeObj->sunday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isSundayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->sundayStart)) : '';
+                $recruiterOfficeObj->sunday_end = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isSundayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->sundayEnd)) : '';
+                $recruiterOfficeObj->phone_no = $allData->selectedOffice[0]->selectedOfficePhone;
+                $recruiterOfficeObj->office_info = $allData->selectedOffice[0]->selectedOfficeInfo;
+                $recruiterOfficeObj->user_id = Auth::user()->id;
+                $recruiterOfficeObj->save();
+                $this->updateJob($allData->selectedJobType, $allData, $recruiterOfficeObj['id']);
+                $this->updateOfficeType($allData, $recruiterOfficeObj['id']);
+                DB::table('recruiter_jobs')->where('id', $allData->jobId)->delete();
+            }else{
                 $newOfficeObj = $this->updateOffice($allData, 1);
                 $this->updateJob($allData->selectedJobType, $allData, $newOfficeObj['id']);
                 $this->updateOfficeType($allData, $newOfficeObj['id']);
+                DB::table('recruiter_jobs')->where('id', $allData->jobId)->delete();
+                RecruiterOffice::where('id', $allData->selectedOffice[0]->selectedOfficeId)->delete();
             }
             $this->result['success'] = true;
         } catch (\Exception $e) {
@@ -320,14 +366,14 @@ class RecruiterJobController extends Controller {
 
     private function updateOffice($allData, $requestType = '') {
         try {
-            if($requestType != ''){
-                RecruiterOffice::where('id', $allData->selectedOffice[0]->selectedOfficeId)->delete();
+            if ($requestType != '') {
+//                RecruiterOffice::where('id', $allData->selectedOffice[0]->selectedOfficeId)->delete();
                 $recruiterOfficeObj = new RecruiterOffice();
                 $recruiterOfficeObj->address = $allData->selectedOffice[0]->selectedOfficeAddress;
                 $recruiterOfficeObj->latitude = $allData->selectedOffice[0]->selectedOfficeLat;
                 $recruiterOfficeObj->longitude = $allData->selectedOffice[0]->selectedOfficeLng;
                 $recruiterOfficeObj->zipcode = $allData->selectedOffice[0]->selectedOfficeZipcode;
-            }else{
+            } else {
                 $recruiterOfficeObj = RecruiterOffice::where(['id' => $allData->selectedOffice[0]->selectedOfficeId])->first();
             }
             $recruiterOfficeObj->work_everyday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->everydayStart)) : '';
@@ -361,8 +407,8 @@ class RecruiterJobController extends Controller {
         try {
             $jobObj = RecruiterJobs::where(['id' => $allData->jobId])->first();
             $jobTemplateId = $jobObj['job_template_id'];
-            if($officeId != ''){
-                DB::table('recruiter_jobs')->where('id' , $allData->jobId)->delete();
+            if ($officeId != '') {
+//                DB::table('recruiter_jobs')->where('id', $allData->jobId)->delete();
                 $jobObj = new RecruiterJobs();
                 $jobObj->job_template_id = $jobTemplateId;
                 $jobObj->recruiter_office_id = $officeId;
@@ -388,7 +434,7 @@ class RecruiterJobController extends Controller {
                     $newTemJobObj->job_date = date('Y-m-d', strtotime($tempJobDate));
                     $newTemJobObj->save();
                 }
-            }else{
+            } else {
                 $jobObj->is_monday = 0;
                 $jobObj->is_tuesday = 0;
                 $jobObj->is_wednesday = 0;
@@ -404,19 +450,19 @@ class RecruiterJobController extends Controller {
         }
         return $updateJobResult;
     }
-    
-    public function updateOfficeType($allData, $officeId = ''){
-        try{
-            if($officeId == ''){
+
+    public function updateOfficeType($allData, $officeId = '') {
+        try {
+            if ($officeId == '') {
                 RecruiterOfficeType::where(['recruiter_office_id' => $allData->selectedOffice[0]->selectedOfficeId])->delete();
             }
             $allOfficeTypes = OfficeType::allOfficeTypes();
-            foreach($allOfficeTypes as $officeType){
-                if(in_array($officeType['officetype_name'], $allData->selectedOffice[0]->selectedOfficeType)){
+            foreach ($allOfficeTypes as $officeType) {
+                if (in_array($officeType['officetype_name'], $allData->selectedOffice[0]->selectedOfficeType)) {
                     $newRecruiterOfficeTypeObj = new RecruiterOfficeType();
-                    if($officeId != ''){
+                    if ($officeId != '') {
                         $newRecruiterOfficeTypeObj->recruiter_office_id = $officeId;
-                    }else{
+                    } else {
                         $newRecruiterOfficeTypeObj->recruiter_office_id = $allData->selectedOffice[0]->selectedOfficeId;
                     }
                     $newRecruiterOfficeTypeObj->office_type_id = $officeType['id'];

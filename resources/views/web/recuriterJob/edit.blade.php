@@ -34,7 +34,7 @@
 
             <div class="form-group custom-select">
                 <label >Dental Office Address</label>
-                    <select id="select-office-address" data-bind="options: allLocations, selectedOptions: defaultSelectLocation">
+                <select id="select-office-address" data-bind="options: allLocations, optionsText: 'address', optionsValue: 'address', selectedOptions: defaultSelectLocation, event: {change: showOfficeDetails}">
                 </select>
 <!--                <select  id="officeAddress" class="selectpicker" data-bind="options: selectedLocations, selectedOptions: location">
                 </select>-->
@@ -551,7 +551,6 @@
                     me.allOfficeTypeDetail.push(d.allOfficeTypes[i]);
                 }
                 office_Id = null;
-                
                 for(i in me.allLocations()){
                     if(me.abcd()[0] == me.allLocations()[i].address){
                         office_Id = me.allLocations()[i].id;
@@ -565,7 +564,7 @@
         me.selectedOffice([]);
         selectedId = $(e.target).val();
         for (i in d.allLocations()) {
-            if (d.allLocations()[i].id == selectedId) {
+            if (d.allLocations()[i].address == selectedId) {
                 me.selectedOffice.push(new OfficeModel(d.allLocations()[i]));
             }
         }
@@ -759,8 +758,7 @@
             me.phoneNumberError('Please enter phone number.');
             return false;
         }
-        console.log(me);
-        return false;
+        
         if(me.errors() == true){
             return false;
         }else{
