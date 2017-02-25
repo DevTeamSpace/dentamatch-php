@@ -34,7 +34,7 @@
 
             <div class="form-group custom-select">
                 <label >Dental Office Address</label>
-                <select id="select-office-address" data-bind="options: allLocations, optionsText: 'address', optionsValue: 'id', selectedOptions: location, event:{ change: $root.showOfficeDetails}">
+                    <select id="select-office-address" data-bind="options: allLocations, selectedOptions: defaultSelectLocation">
                 </select>
 <!--                <select  id="officeAddress" class="selectpicker" data-bind="options: selectedLocations, selectedOptions: location">
                 </select>-->
@@ -269,7 +269,7 @@
                 </div>	
                 <div class="form-group">
                     <label>Office Location Information <i class="optional">(Optional)</i></label>
-                    <textarea class="form-control txtHeight"  data-parsley-required data-parsley-required-message="location information required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: selectedOfficeInfo"></textarea>
+                    <textarea class="form-control txtHeight" data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: selectedOfficeInfo"></textarea>
                 </div>	
             </div>
             <!--/ko-->
@@ -445,7 +445,8 @@
         me.cannotEdit = ko.observable(false);
         me.allLocations = ko.observableArray([]);
         me.jobId = ko.observable();
-        me.location = ko.observableArray([]);
+        me.defaultSelectLocation = ko.observableArray([]);
+        me.abcd = ko.observableArray([]);
         me.jobType = ko.observable('');
         me.totalJobOpening = ko.observable();
         me.jobOfficeId = ko.observable();
@@ -484,7 +485,13 @@
                     me.cannotEdit(false);
                     me.showEdit(true);
                 }
-                me.location.push(d.address);
+                
+                me.abcd.push(d.jobDetails.address);
+                for (i in d.recruiterOffices) {
+                    me.allLocations.push(d.recruiterOffices[i]);
+                }
+                me.defaultSelectLocation.push(d.jobDetails.address);
+                
                 me.allPartTimeDays(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
                 if (d.jobDetails.job_type == 1) {
                     me.jobType("Full Time");
@@ -538,18 +545,16 @@
                 }
                 me.totalJobOpening(d.jobDetails.no_of_jobs);
                 me.jobOfficeId(d.jobDetails.recruiter_office_id);
-                for (i in d.recruiterOffices) {
-//                    me.selectedLocations.push(d.recruiterOffices[i].address);
-                    me.allLocations.push(d.recruiterOffices[i]);
-                }
+                
                 for(i in d.allOfficeTypes){
                     me.allOfficeTypes.push(d.allOfficeTypes[i].officetype_name);
                     me.allOfficeTypeDetail.push(d.allOfficeTypes[i]);
                 }
                 office_Id = null;
+                
                 for(i in me.allLocations()){
-                    if(me.location() == me.allLocations()[i].id){
-                        office_Id = me.location()
+                    if(me.abcd()[0] == me.allLocations()[i].address){
+                        office_Id = me.allLocations()[i].id;
                     }
                 }
                 me.showOfficeDetailsTwo(me, office_Id);
