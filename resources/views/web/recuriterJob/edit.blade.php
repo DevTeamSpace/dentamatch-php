@@ -22,7 +22,7 @@
             </div>
             <div class="col-sm-6 text-right mr-b-10 col-xs-6" data-bind="visible: showEdit">
                 <button type="button" class="btn-link mr-r-5">Cancel</button>
-
+                <button type="button" class="btn pd-l-25 pd-r-25 btn-primary-outline" data-bind="click: $root.deleteJob">Delete</button>
                 <button type="submit" class="btn btn-primary pd-l-25 pd-r-25">Publish</button>
             </div>
             <div class="col-sm-6 text-right mr-b-10 col-xs-6" data-bind="visible: cannotEdit">
@@ -275,6 +275,24 @@
             <!--/ko-->
         </div>
     </form>
+    <div id="actionModal" class="modal fade" role="dialog">
+        <div class="modal-dialog custom-modal modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" data-bind="visible:cancelButtonDelete">&times;</button>
+                    <h4 class="modal-title" data-bind="text:headMessage"></h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center" data-bind="text:prompt"></p>
+                    <div class="mr-t-20 mr-b-30 dev-pd-l-13p" data-bind="visible: showModalFooter">
+                        <button type="button" class="btn btn-link mr-r-5" data-dismiss="modal">Close</button>
+                        <button type="submit" id="actionButton" class="btn btn-primary pd-l-30 pd-r-30">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @endsection
@@ -473,6 +491,10 @@
         me.partTimeJobDaysError = ko.observable('');
         me.temporaryJobError = ko.observable('');
         me.allOfficeTypeDetail = ko.observableArray([]);
+        me.headMessage = ko.observable('');
+        me.cancelButtonDelete = ko.observable(true);
+        me.prompt = ko.observable('');
+        me.showModalFooter = ko.observable(true);
 
         me.getJobDetails = function () {
             jobId = <?php echo json_encode($jobId) ?>;
@@ -762,6 +784,11 @@
         if(me.errors() == true){
             return false;
         }else{
+            me.headMessage('Publishing Job');
+            me.cancelButtonDelete(false);
+            me.prompt('Publishing job please wait.');
+            me.showModalFooter(false);
+            $('#actionModal').modal('show');
             splitedTempDates = ($('#CoverStartDateOtherPicker').val()).split(',');
             me.tempJobDates([]);
             for(i in splitedTempDates){
@@ -779,11 +806,51 @@
                 processData: false,
                 type: 'POST',
                 success: function (data) {
-                    console.log(data);
+                    me.prompt('Job published successfully, please wait redirecting you...');
+                    setTimeout(
+                        function ()
+                        {
+                            if(data.data == null){
+                                location.reload();
+                            }else{
+                                location.replace("/job/edit/"+data.data.id);
+                            }
+                        }, 700);
                 }
             });
         }
-    }
+    };
+    
+    me.deleteJob = function(d, e){
+        me.headMessage('Delete Job');
+        me.cancelButtonDelete(true);
+        me.prompt('Do you want to delete job ?');
+        me.showModalFooter(true);
+        $('#actionModal').modal('show');
+        
+        $('#actionButton').click(function(){
+            me.cancelButtonDelete(false);
+            me.showModalFooter(false);
+            formData = new FormData();
+            formData.append('jobId', me.jobId())
+            jQuery.ajax({
+                url: "{{url('delete-job')}}",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: 'POST',
+                success: function (data) {
+                    me.prompt('Job delted successfully.');
+                    setTimeout(
+                        function ()
+                        {
+                            location.replace("/job/lists");
+                        }, 700);
+                }
+            });
+        });
+    };
 
     me._init = function () {
         me.getJobDetails();
