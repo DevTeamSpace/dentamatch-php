@@ -547,7 +547,9 @@
                     me.selectedJobType("Temporary");
                     me.jobType("Temporary");
                     me.showTotalJobOpenings(true);
-                    splitedTempJobDates = d.jobDetails.temp_job_dates.split(',');
+                    if(d.jobDetails.temp_job_dates != null){
+                        splitedTempJobDates = d.jobDetails.temp_job_dates.split(',');
+                    }
                     for(i in splitedTempJobDates){
                         if(me.tempJobDates().indexOf(splitedTempJobDates[i]) < 0){
                             me.tempJobDates.push(splitedTempJobDates[i]);
