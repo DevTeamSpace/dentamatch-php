@@ -455,6 +455,8 @@ class RecruiterJobController extends Controller {
         try {
             if ($officeId == '') {
                 RecruiterOfficeType::where(['recruiter_office_id' => $allData->selectedOffice[0]->selectedOfficeId])->delete();
+            }else{
+                RecruiterOfficeType::where(['recruiter_office_id' => $officeId])->delete();
             }
             $allOfficeTypes = OfficeType::allOfficeTypes();
             foreach ($allOfficeTypes as $officeType) {
