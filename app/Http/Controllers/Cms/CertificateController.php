@@ -100,7 +100,7 @@ class CertificateController extends Controller
     }
 
     public function certificationList(){
-        $certificates = Certifications::SELECT(['certificate_name','is_active','id'])->get();
+        $certificates = Certifications::SELECT(['certificate_name','is_active','id'])->orderBy('id', 'desc')->get();
         return Datatables::of($certificates)
                 ->removeColumn('id')
                 ->addColumn('active', function ($certificates) {

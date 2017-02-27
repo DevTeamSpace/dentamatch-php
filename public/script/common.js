@@ -373,6 +373,8 @@ $(function () {
     $('#resetPassword').click(function(){
         var adminEmail = $('#emailForgetpassword').val();
         if(adminEmail!=''){
+            var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+            if (filter.test(adminEmail)) {
             $.ajax({
                 url:public_path+'../api/admin/forgot-password',
                 type:'POST',
@@ -388,7 +390,12 @@ $(function () {
                     window.location.reload();
                 }
             });
+        }else{
+            alert('Please provide a valid email address');
         }
+    }else{
+        alert('Please provide a valid email address');
+    }
     });
     $('#configForm').submit(function(){
         var error = false;
@@ -486,6 +493,8 @@ $(function () {
         //$(".modal-body1").html("Where did he go?!?!?!");
     });
 });
+
+
 function deleteRecord(obj) {
         console.log(obj);
         data = {
