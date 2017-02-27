@@ -113,8 +113,8 @@
                     for (j in d.data[i]) {
                         d.data[i][j].pic = d.data[i][j].profile_pic;
                         d.data[i][j].name = d.data[i][j].first_name + ' ' + d.data[i][j].last_name;
+                        me.userDetails.push(d.data[i][j]);
                     }
-                    me.userDetails.push(d.data[i]);
                 }
             });
         };
@@ -209,7 +209,6 @@
         };
 
         me.showSeekers = function (d, e, fw) {
-        console.log(d);
             if(fw !== "undefined"){
                 console.log(fw);
             }
@@ -237,7 +236,8 @@
             me.allJobs([]);
             me.jobCreated(moment(d.date).format('LL'));
             for(i in d.segs){
-                console.log(d.segs[i].event);
+//                console.log(d.segs[i].event);
+//                d.segs[i].event.userDetails = d.segs[i].event.userDetails[0];
                 me.allJobs.push(d.segs[i].event);
             }
             $('.calendar_list').modal();

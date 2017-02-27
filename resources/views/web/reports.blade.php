@@ -61,7 +61,7 @@
                                                 <!--ko foreach: jobs-->
                                                 <ul class="list-hired">
                                                     <!--ko foreach: jobSeekers-->
-                                                    <!--ko if: $index() <= 1-->
+                                                    <!--ko if: $index() <= 3-->
                                                     <li>
                                                         <a href="#" data-toggle="tooltip" data-placement="bottom" data-bind="attr: {title: seekerName, 'href': seekerUrl}, event: {mouseover: $root.showToolTip}">
                                                             <img class="cir-28 img-circle" src="http://placehold.it/28x28" onerror="this.src = 'http://placehold.it/28x28'" data-bind="attr: {src: seekerProfilePic}">
@@ -166,17 +166,19 @@
             }
             me.jobDate(moment(d.job_created_at).format('ll'));
             me.jobId(d.recruiter_job_id);
-            for (i in d.seekers) {
-                if (d.seekers[i].length > 2) {
-                    me.extraJobSeekers((d.seekers[i].length - 2).toString() + '+');
+            $.get('calender-seeker-details', {jobId: me.jobId}, function(d){
+                for (i in d.data) {
+                    if (d.data[i].length > 4) {
+                        me.extraJobSeekers((d.data[i].length - 4).toString() + '+');
+                    }
+                    for (j in d.data[i]) {
+                        me.jobSeekers.push(new SeekerModel(d.data[i][j]));
+                    }
+                    for(i in me.jobSeekers()){
+                        me.jobSeekers()[i].seekerUrl('job/seekerdetails/'+me.jobSeekers()[i].seekerId()+'/'+me.jobId());
+                    }
                 }
-                for (j in d.seekers[i]) {
-                    me.jobSeekers.push(new SeekerModel(d.seekers[i][j]));
-                }
-                for(i in me.jobSeekers()){
-                    me.jobSeekers()[i].seekerUrl('job/seekerdetails/'+me.jobSeekers()[i].seekerId()+'/'+d.recruiter_job_id);
-                }
-            }
+            });
         };
 
         me._init(d);
@@ -194,9 +196,11 @@
             }
             me.jobTitle(d.jobtitle_name);
             me.noOfJobs(d.jobs_count);
-            for (i in d.jobs) {
-                me.jobs.push(new JobModel(d.jobs[i]));
-            }
+            $.get('individual-temp-job', {jobTitleId: d.job_title_id}, function(data){
+                for(i in data.data){
+                    me.jobs.push(new JobModel(data.data[i]));
+                }
+            });
         };
 
         me._init(d);

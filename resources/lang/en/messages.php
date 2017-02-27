@@ -152,5 +152,7 @@ return [
     'office_type_update' => 'Office type updated successfylly.',
     'job_edited' => 'Job updated successfully.',
     'job_deleted' => 'Job deleted successfully.',
-    'calender_seekers_fetched' => 'Calender seekers fetched successfylly',
+    'calender_seekers_fetched' => 'Calender seekers fetched successfully',
+    'report_seekers' => 'Reports seekers fetched succcessfully',
+    'individual_report' => 'Individual report fetched successfully.'
 ];

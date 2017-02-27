@@ -81,6 +81,8 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
                 Route::get('calender-seeker-details', 'web\CalenderController@getCalenderSeekers');
                 Route::get('reports', 'web\ReportsController@getReportsPage');
                 Route::get('reports-temp-jobs', 'web\ReportsController@getReportsTempJobs');
+                Route::get('report-seekers', 'web\ReportsController@getReportSeekers');
+                Route::get('individual-temp-job', 'web\ReportsController@getIndividualTempJob');
             });
             Route::get('subscription-detail', 'web\SubscriptionController@getSubscription');
             Route::get('get-subscription-list', 'web\SubscriptionController@getSubscriptionList');

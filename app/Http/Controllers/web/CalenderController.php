@@ -24,17 +24,6 @@ class CalenderController extends Controller
     public function getCalenderDetails(){
         try{
             $allJobs = RecruiterJobs::getAllTempJobs();
-            foreach($allJobs as $job){
-                $jobDetails['id'] = $job['id'];
-                $jobDetails['job_type'] = $job['job_type'];
-                $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));
-                foreach($seekers as &$seeker){
-                    foreach($seeker as &$seek){
-                        $seek['profile_pic'] = url("image/" . config('constants.Resolution') . "/" . config('constants.Resolution') . "/?src=" .$seek['profile_pic']);
-                    }
-                }
-                $job['seekers'] = $seekers;
-            }
             $this->response['jobs'] = $allJobs;
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.calender_details_fetched');
