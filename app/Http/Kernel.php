@@ -60,5 +60,6 @@ class Kernel extends HttpKernel
         'acceptedTerms'=> \App\Http\Middleware\AcceptedTerms::class,
         'officeDetails'=> \App\Http\Middleware\OfficeDetails::class,
         'nocache' => \App\Http\Middleware\NocacheMiddleware::class,
+        'subscription' => \App\Http\Middleware\Subscription::class,
     ];
 }

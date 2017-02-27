@@ -12,5 +12,16 @@ return [
         'user_width' => '300',
         'user_height' => '300',
         'ImageType' => 'jpg',
-        'LocationActive' => 1
+        'LocationActive' => 1,
+        'ZeroValue' => 0,
+        'OneValue' => 1,
+        'PartTimeJob' => 2,
+        'TemporaryJob' => 3,
+        'NullValue' => null,
+        'Resolution' => 60,
+        'FullTime' => 'Full Time',
+        'PartTime' => 'Part Time',
+        'SixMonths' => 'six-months',
+        'OneYear' => 'one-year',
+        'Resubscribe' => 'resubscribe',
 ];
