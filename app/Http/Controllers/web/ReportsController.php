@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\RecruiterJobs;
 use App\Models\JobLists;
+use Log;
 
 class ReportsController extends Controller
 {
@@ -28,10 +29,10 @@ class ReportsController extends Controller
                 foreach($job['jobs'] as $forSeeker){
                     $jobDetails['id'] = $forSeeker['recruiter_job_id'];
                     $jobDetails['job_type'] = $forSeeker['job_type'];
-                    $seekers = JobLists::getJobSeekerList($jobDetails, 1);
+                    $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));
                     foreach($seekers as $seeker){
                         foreach($seeker as &$seek){
-                            $seek['profile_pic'] = url("image/" . 60 . "/" . 60 . "/?src=" .$seek['profile_pic']);
+                            $seek['profile_pic'] = url("image/" . config('constants.Resolution') . "/" . config('constants.Resolution') . "/?src=" .$seek['profile_pic']);
                         }
                     }
                     $forSeeker['seekers'] = $seekers;
@@ -41,6 +42,7 @@ class ReportsController extends Controller
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.reports_temp_jobs');
         } catch (\Exception $e) {
+            Log::error($e);
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }

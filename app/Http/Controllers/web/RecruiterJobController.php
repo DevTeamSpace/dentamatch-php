@@ -23,6 +23,7 @@ use App\Models\Configs;
 use App\Models\RecruiterOfficeType;
 use DB;
 use App\Http\Requests\DeleteJobRequest;
+use Log;
 
 class RecruiterJobController extends Controller {
 
@@ -275,12 +276,12 @@ class RecruiterJobController extends Controller {
         try {
             DB::beginTransaction();
             $allData = json_decode($request->jobDetails);
-            if ($allData->selectedJobType == "Full Time") {
-                $allData->selectedJobType = 1;
-            } else if ($allData->selectedJobType == "Part Time") {
-                $allData->selectedJobType = 2;
+            if ($allData->selectedJobType == config('constants.FullTime')) {
+                $allData->selectedJobType = config('constants.OneValue');
+            } else if ($allData->selectedJobType == config('constants.PartTime')) {
+                $allData->selectedJobType = config('constants.PartTimeJob');
             } else {
-                $allData->selectedJobType = 3;
+                $allData->selectedJobType = config('constants.TemporaryJob');
             }
             $jobDetails = RecruiterJobs::getRecruiterJobDetails($allData->jobId);
             $recruiterOfficeObj = RecruiterOffice::where(['id' => $jobDetails['recruiter_office_id']])->first();
@@ -297,6 +298,7 @@ class RecruiterJobController extends Controller {
             $this->result['message'] = trans('messages.job_edited');
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e);
             $this->result['success'] = false;
             $this->result['message'] = $e->getMessage();
         }
@@ -315,6 +317,7 @@ class RecruiterJobController extends Controller {
             $this->result['data'] = $updatedJob['data'];
             $this->result['success'] = true;
         } catch (\Exception $e) {
+            Log::error($e);
             $this->result['success'] = $e->getMessage();
         }
         return $this->result;
@@ -352,7 +355,7 @@ class RecruiterJobController extends Controller {
                 $this->updateOfficeType($allData, $recruiterOfficeObj['id']);
                 DB::table('recruiter_jobs')->where('id', $allData->jobId)->delete();
             }else{
-                $newOfficeObj = $this->updateOffice($allData, 1);
+                $newOfficeObj = $this->updateOffice($allData, config('constants.OneValue'));
                 $updatedJob =  $this->updateJob($allData->selectedJobType, $allData, $newOfficeObj);
                 $this->updateOfficeType($allData, $newOfficeObj['id']);
                 DB::table('recruiter_jobs')->where('id', $allData->jobId)->delete();
@@ -361,6 +364,7 @@ class RecruiterJobController extends Controller {
             $this->result['data'] = $updatedJob;
             $this->result['success'] = true;
         } catch (\Exception $e) {
+            Log::error($e);
             $this->result['success'] = $e->getMessage();
         }
         return $this->result;
@@ -400,6 +404,7 @@ class RecruiterJobController extends Controller {
             $recruiterOfficeObj->save();
             $updateOfficeResult = $recruiterOfficeObj;
         } catch (\Exception $e) {
+            Log::error($e);
             $updateOfficeResult = $e->getMessage();
         }
         return $updateOfficeResult;
@@ -417,7 +422,7 @@ class RecruiterJobController extends Controller {
             }
             $jobObj->job_type = $jobType;
             TempJobDates::where(['recruiter_job_id' => $allData->jobId])->delete();
-            if ($jobType == 2) {
+            if ($jobType == config('constants.PartTimeJob')) {
                 $jobObj->is_monday = in_array("Monday", $allData->partTimeDays) ? 1 : 0;
                 $jobObj->is_tuesday = in_array("Tuesday", $allData->partTimeDays) ? 1 : 0;
                 $jobObj->is_wednesday = in_array("Wednesday", $allData->partTimeDays) ? 1 : 0;
@@ -427,14 +432,14 @@ class RecruiterJobController extends Controller {
                 $jobObj->is_sunday = in_array("Sunday", $allData->partTimeDays) ? 1 : 0;
                 $jobObj->no_of_jobs = 0;
                 $jobObj->save();
-            } elseif ($jobType == 3) {
-                $jobObj->is_monday = 0;
-                $jobObj->is_tuesday = 0;
-                $jobObj->is_wednesday = 0;
-                $jobObj->is_thursday = 0;
-                $jobObj->is_friday = 0;
-                $jobObj->is_saturday = 0;
-                $jobObj->is_sunday = 0;
+            } elseif ($jobType == config('constants.TemporaryJob')) {
+                $jobObj->is_monday = config('constants.NullValue');
+                $jobObj->is_tuesday = config('constants.NullValue');
+                $jobObj->is_wednesday = config('constants.NullValue');
+                $jobObj->is_thursday = config('constants.NullValue');
+                $jobObj->is_friday = config('constants.NullValue');
+                $jobObj->is_saturday = config('constants.NullValue');
+                $jobObj->is_sunday = config('constants.NullValue');
                 $jobObj->no_of_jobs = $allData->totalJobOpening;
                 $jobObj->save();
                 foreach ($allData->tempJobDates as $tempJobDate) {
@@ -444,17 +449,18 @@ class RecruiterJobController extends Controller {
                     $newTemJobObj->save();
                 }
             } else {
-                $jobObj->is_monday = 0;
-                $jobObj->is_tuesday = 0;
-                $jobObj->is_wednesday = 0;
-                $jobObj->is_thursday = 0;
-                $jobObj->is_friday = 0;
-                $jobObj->is_saturday = 0;
-                $jobObj->is_sunday = 0;
-                $jobObj->no_of_jobs = 0;
+                $jobObj->is_monday = config('constants.NullValue');
+                $jobObj->is_tuesday = config('constants.NullValue');
+                $jobObj->is_wednesday = config('constants.NullValue');
+                $jobObj->is_thursday = config('constants.NullValue');
+                $jobObj->is_friday = config('constants.NullValue');
+                $jobObj->is_saturday = config('constants.NullValue');
+                $jobObj->is_sunday = config('constants.NullValue');
+                $jobObj->no_of_jobs = config('constants.NullValue');
             }
             $updateJobResult = $jobObj;
         } catch (\Exception $e) {
+            Log::error($e);
             $updateJobResult = $e->getMessage();
         }
         return $updateJobResult;
@@ -482,6 +488,7 @@ class RecruiterJobController extends Controller {
             }
             $updateOfficeTypeResult = true;
         } catch (\Exception $e) {
+            Log::error($e);
             $updateOfficeTypeResult = $e->getMessage();
         }
         return $updateOfficeTypeResult;
@@ -490,13 +497,14 @@ class RecruiterJobController extends Controller {
     public function postDeleteJob(DeleteJobRequest $request){
         try{
             $jobObj = RecruiterJobs::where('id', $request->jobId)->first();
-            if($jobObj['job_type'] == 3){
+            if($jobObj['job_type'] == config('constants.TemporaryJob')){
                 TempJobDates::where(['recruiter_job_id' => $jobObj['id']])->delete();
             }
             DB::table('recruiter_jobs')->where('id', $request->jobId)->delete();
             $this->result['success'] = true;
             $this->result['message'] = trans('messages.job_deleted');
         } catch (\Exception $e) {
+            Log::error($e);
             $this->result['success'] = false;
             $this->result['message'] = $e->getMessage();
         }
