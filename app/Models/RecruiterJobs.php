@@ -18,6 +18,12 @@ class RecruiterJobs extends Model
     const PARTTIME = 2;
     const TEMPORARY = 3;
     const LIMIT = 10;
+    const INVITED = 1;
+    const APPLIED = 2;
+    const SHORTLISTED = 3;
+    const HIRED = 4;
+    const REJECTED = 5;
+    const CANCELLED = 6;
     
     static $jobTypeName = ['1'=>'Full Time', '2'=>'Part Time', '3'=>'Temp'];
     
@@ -293,7 +299,7 @@ class RecruiterJobs extends Model
     }
     
     public static function getAllTempJobs(){
-        $jobObj = RecruiterJobs::where('recruiter_jobs.job_type',3)
+        $jobObj = RecruiterJobs::where('recruiter_jobs.job_type',RecruiterJobs::TEMPORARY)
             ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
             ->join('recruiter_office_types','recruiter_office_types.recruiter_office_id', '=' , 'recruiter_offices.id')
             ->leftjoin('office_types','recruiter_office_types.office_type_id', '=' , 'office_types.id')
@@ -307,7 +313,7 @@ class RecruiterJobs extends Model
         $jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
             ->leftJoin('job_lists',function($query){
                 $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
-                ->whereIn('job_lists.applied_status',[4]);
+                ->whereIn('job_lists.applied_status',[RecruiterJobs::HIRED]);
             })
             ->groupBy('recruiter_jobs.id','recruiter_profiles.office_name','recruiter_profiles.office_desc');
         $jobObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
@@ -327,7 +333,7 @@ class RecruiterJobs extends Model
     }
     
     public static function getTempJobsReports(){
-        $jobs = RecruiterJobs::where(['recruiter_jobs.job_type' => 3, 'recruiter_offices.user_id' => Auth::user()->id])
+        $jobs = RecruiterJobs::where(['recruiter_jobs.job_type' => RecruiterJobs::TEMPORARY, 'recruiter_offices.user_id' => Auth::user()->id])
                 ->join('recruiter_offices', 'recruiter_offices.id', '=', 'recruiter_jobs.recruiter_office_id')
                 ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
@@ -338,7 +344,7 @@ class RecruiterJobs extends Model
     }
     
     public static function getIndividualTempJob($job_title_id){
-        $jobs = RecruiterJobs::where(['recruiter_jobs.job_type' => 3, 'recruiter_offices.user_id' => Auth::user()->id, 'job_titles.id' => $job_title_id])
+        $jobs = RecruiterJobs::where(['recruiter_jobs.job_type' => RecruiterJobs::TEMPORARY, 'recruiter_offices.user_id' => Auth::user()->id, 'job_titles.id' => $job_title_id])
                 ->join('recruiter_offices', 'recruiter_offices.id', '=', 'recruiter_jobs.recruiter_office_id')
                 ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
