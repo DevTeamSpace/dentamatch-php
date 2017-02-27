@@ -43,31 +43,44 @@ Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm
 Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
     Route::group(['middleware' => 'recruiter'], function () {
         Route::group(['middleware' => 'acceptedTerms'], function () {
-            Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails');
-            Route::get('jobtemplates', 'web\JobtemplateController@listJobTemplates');
-            Route::get('jobtemplates/view/{templateId}', 'web\JobtemplateController@viewTemplate');
-            Route::get('jobtemplates/edit/{templateId}', 'web\JobtemplateController@editJobTemplate');
-            Route::delete('jobtemplates/delete', 'web\JobtemplateController@deleteJobTemplate');
-            Route::get('jobtemplates/create', 'web\JobtemplateController@createJobTemplate');
-            Route::post('jobtemplates/saveOrUpdate', 'web\JobtemplateController@saveOrUpdate');
-            Route::get('createJob/{templateId}', 'web\RecruiterJobController@createJob');
-            Route::get('job/lists', 'web\RecruiterJobController@listJobs');
-            Route::get('job/search/{jobId}', 'web\RecruiterJobController@searchSeekers');
-            Route::get('job/details/{jobId}', 'web\RecruiterJobController@jobDetails');
-//            Route::get('job/edit/{jobId}', 'web\RecruiterJobController@editJob');
-            Route::get('job/edit/{jobId}', 'web\RecruiterJobController@jobEdit');
-            Route::get('job/edit-details', 'web\RecruiterJobController@jobEditDetails');
-            Route::post('job/updateStatus', 'web\RecruiterJobController@updateStatus');
-            Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
-            Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
-            Route::post('create-profile', 'web\UserProfileController@createProfile');
-            Route::post('office-details', 'web\UserProfileController@officeDetails');
-            Route::delete('office-delete/{officeId}', 'web\UserProfileController@deleteOffice');
-            Route::get('get-location/{zip}', 'web\UserProfileController@checkValidLocation');
+            Route::group(['middleware' => 'subscription'], function () {
+                Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails');
+                Route::get('jobtemplates', 'web\JobtemplateController@listJobTemplates');
+                Route::get('jobtemplates/view/{templateId}', 'web\JobtemplateController@viewTemplate');
+                Route::get('jobtemplates/edit/{templateId}', 'web\JobtemplateController@editJobTemplate');
+                Route::delete('jobtemplates/delete', 'web\JobtemplateController@deleteJobTemplate');
+                Route::get('jobtemplates/create', 'web\JobtemplateController@createJobTemplate');
+                Route::post('jobtemplates/saveOrUpdate', 'web\JobtemplateController@saveOrUpdate');
+                Route::get('createJob/{templateId}', 'web\RecruiterJobController@createJob');
+                Route::get('job/lists', 'web\RecruiterJobController@listJobs');
+                Route::get('job/search/{jobId}', 'web\RecruiterJobController@searchSeekers');
+                Route::get('job/details/{jobId}', 'web\RecruiterJobController@jobDetails');
+    //            Route::get('job/edit/{jobId}', 'web\RecruiterJobController@editJob');
+                Route::get('job/edit/{jobId}', 'web\RecruiterJobController@jobEdit');
+                Route::get('job/edit-details', 'web\RecruiterJobController@jobEditDetails');
+                Route::post('edit-job', 'web\RecruiterJobController@postEditJob');
+                Route::post('delete-job', 'web\RecruiterJobController@postDeleteJob');
+                Route::post('job/updateStatus', 'web\RecruiterJobController@updateStatus');
+                Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
+                Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
+                Route::post('create-profile', 'web\UserProfileController@createProfile');
+                Route::post('office-details', 'web\UserProfileController@officeDetails');
+                Route::get('get-location/{zip}', 'web\UserProfileController@checkValidLocation');
 
-            Route::get('favorite-jobseeker','web\FavoriteJobseekerController@getFavJobseeker');
-            Route::post('invite-jobseeker','web\FavoriteJobseekerController@postInviteJobseeker');
-            Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
+                Route::get('favorite-jobseeker','web\FavoriteJobseekerController@getFavJobseeker');
+                Route::post('invite-jobseeker','web\FavoriteJobseekerController@postInviteJobseeker');
+                Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
+
+                Route::get('setting-terms-conditions', 'web\UserProfileController@getTermsConditions');
+                Route::get('change-password', 'web\UserProfileController@getChangePassword');
+                Route::post('change-password', 'web\UserProfileController@postChangePassword');
+
+                Route::get('chat', 'web\ChatController@getChatSeekerList');
+                Route::get('calender', 'web\CalenderController@getCalender');
+                Route::get('calender-details', 'web\CalenderController@getCalenderDetails');
+                Route::get('reports', 'web\ReportsController@getReportsPage');
+                Route::get('reports-temp-jobs', 'web\ReportsController@getReportsTempJobs');
+            });
             Route::get('subscription-detail', 'web\SubscriptionController@getSubscription');
             Route::get('get-subscription-list', 'web\SubscriptionController@getSubscriptionList');
             Route::post('create-subscription', 'web\SubscriptionController@postCreateSubscription');
@@ -79,7 +92,6 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::post('add-card', 'web\SubscriptionController@postAddCard');
             Route::post('delete-card', 'web\SubscriptionController@postDeleteCard');
             Route::post('edit-card', 'web\SubscriptionController@postEditCard');
-            
             Route::get('setting-terms-conditions', 'web\UserProfileController@getTermsConditions');
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
             Route::post('change-password', 'web\UserProfileController@postChangePassword');
@@ -88,7 +100,6 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::get('calender', 'web\CalenderController@getCalender');
             Route::get('calender-details', 'web\CalenderController@getCalenderDetails');
             Route::get('recruiter/markFavourite/{seekerId}', 'web\FavoriteJobseekerController@getMarkFavourite');
-            
         });
 
         Route::group(['middleware' => 'termCondition'], function () {

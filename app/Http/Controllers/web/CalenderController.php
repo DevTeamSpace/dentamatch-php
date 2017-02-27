@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\RecruiterOffice;
 use App\Models\RecruiterJobs;
 use App\Models\JobLists;
+use Log;
 
 class CalenderController extends Controller
 {
@@ -26,10 +27,10 @@ class CalenderController extends Controller
             foreach($allJobs as $job){
                 $jobDetails['id'] = $job['id'];
                 $jobDetails['job_type'] = $job['job_type'];
-                $seekers = JobLists::getJobSeekerList($jobDetails, 1);
+                $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));
                 foreach($seekers as &$seeker){
                     foreach($seeker as &$seek){
-                        $seek['profile_pic'] = url("image/" . 60 . "/" . 60 . "/?src=" .$seek['profile_pic']);
+                        $seek['profile_pic'] = url("image/" . config('constants.Resolution') . "/" . config('constants.Resolution') . "/?src=" .$seek['profile_pic']);
                     }
                 }
                 $job['seekers'] = $seekers;
@@ -38,6 +39,7 @@ class CalenderController extends Controller
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.calender_details_fetched');
         } catch (\Exception $e) {
+            Log::error($e);
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }

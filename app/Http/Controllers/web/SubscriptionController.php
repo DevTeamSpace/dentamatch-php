@@ -15,6 +15,7 @@ use App\Http\Requests\UnsubscribeRequest;
 use App\Http\Requests\EditCardRequest;
 use App\Http\Requests\ChangeSubscriptionPlanRequest;
 use App\Http\Requests\SubscribeAgainRequest;
+use Log;
 
 class SubscriptionController extends Controller {
     private $response = [];
@@ -26,7 +27,7 @@ class SubscriptionController extends Controller {
 
     public function getSubscription(){
         $recruiter = RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
-        if($recruiter['is_subscribed'] == 0){
+        if($recruiter['is_subscribed'] == config('constants.ZeroValue')){
             $result = view('web.subscription',['activeTab'=>'4']);
         }else{
             $result = redirect('jobtemplates');
@@ -45,7 +46,7 @@ class SubscriptionController extends Controller {
             $subscription['customer'] = [$customer];
         }
         foreach ($recruiterOffice as $office){
-            if($office['free_trial_period'] != 0){
+            if($office['free_trial_period'] != config('constants.ZeroValue')){
                 $subscription['data'] = $office;
                 break;
             }
@@ -58,7 +59,7 @@ class SubscriptionController extends Controller {
             $recruiter = RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
             if($request->cardExist === "true"){
                 $createSubscription = $this->addUserTOSubscription($recruiter['customer_id'], $request->subscriptionType, $request->trailPeriod);
-                RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 1, 'free_period' => $request->trailPeriod]);
+                RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => config('constants.OneValue'), 'free_period' => $request->trailPeriod]);
                 $this->response['success'] = true;
                 $this->response['message'] = trans('messages.user_subscribed');
             }else{
@@ -79,7 +80,7 @@ class SubscriptionController extends Controller {
                     $addCard = $this->addCardForSubscription($request->all(), $customer);
                     if($addCard['success'] == true){
                         $createSubscription = $this->addUserTOSubscription($customer, $request->subscriptionType, $request->trailPeriod);
-                        RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 1, 'free_period' => $request->trailPeriod]);
+                        RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => config('constants.OneValue'), 'free_period' => $request->trailPeriod]);
                         $this->response['success'] = true;
                         $this->response['message'] = trans('messages.user_subscribed');
                     }else{
@@ -94,6 +95,7 @@ class SubscriptionController extends Controller {
                 }
             }
         } catch (\Exception $e) {
+            Log::error($e);
             $this->response['success'] = false;
             $this->response['data'] = null;
             $this->response['message'] = $e->getMessage();
@@ -108,9 +110,9 @@ class SubscriptionController extends Controller {
             $addMonths = $now->addMonths($trailPeriod);
             $trailPeriodDays = $addMonths->diff($fotDiff)->days;
             if($subscriptionType == 1){
-                $planId = "six-months";
+                $planId = config('constants.SixMonths');
             }else{
-                $planId = "one-year";
+                $planId = config('constants.OneYear');
             }
             \Stripe\Subscription::create(array(
                 "customer" => $customerId,
@@ -120,6 +122,7 @@ class SubscriptionController extends Controller {
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.user_added_to_subscription');
         } catch (\Exception $e) {
+            Log::error($e);
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
@@ -142,7 +145,7 @@ class SubscriptionController extends Controller {
                           ));
             if(isset($cardToken['id'])){
                 $customer = \Stripe\Customer::retrieve($customerId[0]);
-                $card = $customer->sources->create(array(
+                $customer->sources->create(array(
                     "source" => $cardToken['id']
                 ));
                 $this->response['success'] = true;
@@ -153,6 +156,7 @@ class SubscriptionController extends Controller {
                 $this->response['message'] = trans('messages.cannot_add_card');
             }
         } catch (\Exception $e) {
+            Log::error($e);
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
@@ -174,7 +178,7 @@ class SubscriptionController extends Controller {
                           ));
             if(isset($cardToken['id'])){
                 $customer = \Stripe\Customer::retrieve($customerId);
-                $card = $customer->sources->create(array(
+                $customer->sources->create(array(
                     "source" => $cardToken['id']
                 ));
                 $this->response['success'] = true;
@@ -185,6 +189,7 @@ class SubscriptionController extends Controller {
                 $this->response['message'] = trans('messages.cannot_add_card');
             }
         } catch (\Exception $e) {
+            Log::error($e);
             $this->response['success'] = false;
             $this->response['data'] = null;
             $this->response['message'] = $e->getMessage();
@@ -203,6 +208,7 @@ class SubscriptionController extends Controller {
             $this->response['data'] = $createCustomer;
             $this->response['message'] = trans('messages.customer_created');
         } catch (\Exception $e) {
+            Log::error($e);
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
@@ -219,6 +225,7 @@ class SubscriptionController extends Controller {
             $this->response['success'] = true;
             $this->response['data'] = $subscriptions;
         } catch (\Exception $e) {
+            Log::error($e);
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
@@ -239,6 +246,7 @@ class SubscriptionController extends Controller {
                 $this->response['message'] = trans('messages.customer_fetched');
             }
         } catch (\Exception $e) {
+            Log::error($e);
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
@@ -256,6 +264,7 @@ class SubscriptionController extends Controller {
             $this->response['data'] = $customer;
             $this->response['message'] = trans('messages.customer_fetched');
         } catch (\Exception $e) {
+            Log::error($e);
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
@@ -279,6 +288,7 @@ class SubscriptionController extends Controller {
                 $this->response['message'] = trans('messages.cannot_delete_card');
             }
         } catch (\Exception $e) {
+            Log::error($e);
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
@@ -289,7 +299,7 @@ class SubscriptionController extends Controller {
         try{
             $sub = \Stripe\Subscription::retrieve($request->subscriptionId);
             if($sub->cancel(array("at_period_end" => true ))){
-                RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 0, 'free_period' => null, 'auto_renewal' => null]);
+                RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => config('constants.ZeroValue'), 'free_period' => null, 'auto_renewal' => null]);
                 $this->response['success'] = true;
                 $this->response['message'] = trans('messages.unsubscribed');
             }else{
@@ -297,6 +307,7 @@ class SubscriptionController extends Controller {
                 $this->response['message'] = trans('messages.no_subscription');
             }
         } catch (\Exception $e) {
+            Log::error($e);
             $this->response['success'] = false;
             $this->response['message'] = trans('messages.no_subscription');
         }
@@ -317,6 +328,7 @@ class SubscriptionController extends Controller {
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.card_edidted');
         } catch (\Exception $e) {
+            Log::error($e);
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
@@ -325,19 +337,20 @@ class SubscriptionController extends Controller {
     
     public function postChangeSubscriptionPlan(ChangeSubscriptionPlanRequest $request){
         try{
-            $plan = "six-months";
+            $plan = config('constants.SixMonths');
             if($request->plan == 2){
-                $plan = "one-year";
+                $plan = config('constants.OneYear');
             }
             $subscription = \Stripe\Subscription::retrieve($request->subscriptionId);
             $subscription->plan = $plan;
             $subscription->save();
-            if($request->type == "resubscribe"){
-                RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => 1]);
+            if($request->type == config('constants.Resubscribe')){
+                RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => config('constants.OneValue')]);
             }
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.subscription_plan_changed');
         } catch (\Exception $e) {
+            Log::error($e);
             $this->response['success'] = true;
             $this->response['message'] = $e->getMessage();
         }

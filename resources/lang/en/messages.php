@@ -122,7 +122,7 @@ return [
 
 
     'cannot_delete_card' => 'Atlease one card should be added to continue the subscription.',
-    'card_edidted' => 'Card edidted successfully.',
+    'card_edidted' => 'Card edited successfully.',
     'jobseeker_added_success' => 'Jobseeker added successfully',
     'jobseeker_updated_success' => 'Jobseeker updated successfully',
     'password_updated' => 'Password successfully updated.',
@@ -148,4 +148,8 @@ return [
     'job_cancelled_success' => 'You have successfully denied this job',
     'job_hired_success' => 'You have successfully accepted this job',
     'not_invited_job' => 'You have not invited for this job',
+    'reports_temp_jobs' => 'Temp jobs for reports fetched successfully',
+    'office_type_update' => 'Office type updated successfylly.',
+    'job_edited' => 'Job updated successfully.',
+    'job_deleted' => 'Job deleted successfully.'
 ];
