@@ -46,10 +46,7 @@ class UserProfileController extends Controller {
         ]);
         try {
             $recOfficeArrObj = RecruiterOffice::createProfile($request);
-//            if (in_array($request->postal_code, \App\Models\Location::getList())) {
             return ['success'=>1,'data'=>$recOfficeArrObj];
-//            }
-//            return 1;
         } catch (\Exception $e) {
             return 'fail';
         }
@@ -75,18 +72,10 @@ class UserProfileController extends Controller {
         try {
             RecruiterProfile::updateOfficeDetail($request);
             return 'success';
-            //return redirect('jobtemplates');
         } catch (\Exception $e) {
             return 'fail';
-//            return view('web.dashboard.', ["message" => $e->getMessage()]);
         }
     }
-
-//    public function messages() {
-//        return [
-//            'postal_code.required' => trans("messages.address_zip_required")
-//        ];
-//    }
 
     public function getChangePassword() {
         return view('web.change_password',['activeTab'=>'3']);
