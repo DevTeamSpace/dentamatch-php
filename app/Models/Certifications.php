@@ -22,7 +22,7 @@ class Certifications extends Model
         
         $list = $query->get()->toArray();
         if(!empty($list)) {
-            foreach($list as $key=>$value) {
+            foreach($list as $value) {
                 $returnData[$value['id']] = $value;
             }
         }

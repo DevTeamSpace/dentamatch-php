@@ -49,7 +49,7 @@ class JobTemplates extends Model
     }
     
     public static function findById($id,$userId=''){
-        $templateId = self::getIdDecrypt($id);
+        $templateId = static::getIdDecrypt($id);
         $tempObj = JobTemplates::where('job_templates.id',$templateId);
         if($userId!=''){
             $tempObj->where('user_id',$userId)

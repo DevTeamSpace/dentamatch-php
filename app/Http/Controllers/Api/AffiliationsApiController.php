@@ -8,6 +8,7 @@ use Illuminate\Validation\ValidationException;
 use App\Models\Affiliation;
 use App\Helpers\apiResponse;
 use App\Models\JobSeekerAffiliation;
+use Log;
 
 class AffiliationsApiController extends Controller {
 
@@ -53,9 +54,11 @@ class AffiliationsApiController extends Controller {
                 $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
         } catch (ValidationException $e) {
+            Log::error($e);
             $messages = json_decode($e->getResponse()->content(), true);
             $returnResponse = apiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $e) {
+            Log::error($e);
             $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         
@@ -115,9 +118,11 @@ class AffiliationsApiController extends Controller {
                 $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
         } catch (ValidationException $e) {
+            Log::error($e);
             $messages = json_decode($e->getResponse()->content(), true);
             $returnResponse = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
+            Log::error($e);
             $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         

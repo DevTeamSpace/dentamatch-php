@@ -8,6 +8,7 @@ use App\Models\JobLists;
 use App\Models\RecruiterJobs;
 use App\Models\Device;
 use App\Providers\NotificationServiceProvider;
+use Log;
 
 class PushNotificationApiController extends Controller {
     
@@ -49,9 +50,11 @@ class PushNotificationApiController extends Controller {
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             } 
         } catch (ValidationException $e) {
+            Log::error($e);
             $messages = json_decode($e->getResponse()->content(), true);
             $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
+            Log::error($e);
             $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
@@ -78,9 +81,11 @@ class PushNotificationApiController extends Controller {
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             } 
         } catch (ValidationException $e) {
+            Log::error($e);
             $messages = json_decode($e->getResponse()->content(), true);
             $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
+            Log::error($e);
             $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
@@ -98,10 +103,13 @@ class PushNotificationApiController extends Controller {
                 NotificationServiceProvider::sendPushNotification($deviceModel, $requestData['message'], ["data" => $requestData]);
             }
         } catch (ValidationException $e) {
+            Log::error($e);
             $messages = json_decode($e->getResponse()->content(), true);
-            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            return apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         }catch(\Exception $e){
+            Log::error($e);
             $this->message = $e->getMessage();
+            return $this->message;
         }
     }
     

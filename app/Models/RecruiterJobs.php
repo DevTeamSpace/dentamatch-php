@@ -92,7 +92,7 @@ class RecruiterJobs extends Model
                     $searchQueryObj->where(function($query) use ($reqData){
                         if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
                             //$daysArray = ['is_monday'=>0, 'is_tuesday'=>0, 'is_wednesday'=>0, 'is_thursday'=>0, 'is_friday'=>0, 'is_saturday'=>0, 'is_sunday'=>0];
-                            foreach($reqData['parttimeDays'] as $key => $day){
+                            foreach($reqData['parttimeDays'] as $day){
                                 $query->orWhere('is_'.$day, 1);
                             }
                         }
@@ -107,7 +107,7 @@ class RecruiterJobs extends Model
                             $query->orWhere(function($query1) use ($reqData){
                                 $query1->where('recruiter_jobs.job_type',2);
                                 $query1->where(function($query2) use ($reqData){
-                                    foreach($reqData['parttimeDays'] as $key => $day){
+                                    foreach($reqData['parttimeDays'] as  $day){
                                         $query2->orWhere('is_'.$day, 1);
                                     }
                                 });

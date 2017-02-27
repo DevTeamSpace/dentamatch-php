@@ -78,18 +78,14 @@ class UserProfileApiController extends Controller {
                 $filename = $this->generateFilename($request->type);
                 $response = $this->uploadFileToAWS($request, $filename);
                 if ($response['res']) {
-                    //$file = str_replace($request->type . '/', '', $response['file']);
+                    
                     if ($request->type == 'profile_pic') {
                         UserProfile::where('user_id', $userId)->update(['profile_pic' => $response['file']]);
                     } else {
                         UserProfile::where('user_id', $userId)->update(['dental_state_board' => $response['file']]);
                     }
                     apiResponse::chkProfileComplete($userId);
-                    /*$img = '/' . $response['file'];
-                    $width = 120;
-                    $height = 120;
-                    $url['img_url'] = url("image/" . $width . "/" . $height . "/?src=" .$img);
-                    $url['img_url'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $response['file'];*/
+                    
                     $url['img_url'] = apiResponse::getThumbImage($response['file']);
                     $response =  apiResponse::customJsonResponse(1, 200, trans("messages.image_upload_success"), $url);
                 } else {
@@ -205,8 +201,6 @@ class UserProfileApiController extends Controller {
     public function getUserProfile(Request $request) {
         try {
             $userId = $request->userServerData->user_id;
-            $s3Url = env('AWS_URL');
-            $s3Bucket = env('AWS_BUCKET');
             $certificationData = [];
             $skillData = [];
             if($userId > 0){
@@ -219,7 +213,7 @@ class UserProfileApiController extends Controller {
                 $otherSkills = JobSeekerSkills::getJobseekerOtherSkills($userId);
                 $skills = array_merge($skills, $otherSkills);
                 if(!empty($skills)) {
-                    foreach($skills as $keySkill=>$skillValue) {
+                    foreach($skills as $skillValue) {
                         $skillData[$skillValue['parentId']]['id'] = $skillValue['parentId'];
                         $skillData[$skillValue['parentId']]['skillName'] = $skillValue['skillsName'];
                         $skillData[$skillValue['parentId']]['children'][] = [
