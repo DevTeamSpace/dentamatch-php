@@ -52,8 +52,9 @@ class RecruiterJobController extends Controller {
         }
     }
 
-    public function searchSeekers(Request $request, $jobId) {
-        try {
+    public function searchSeekers(Request $request,$jobId){
+        try{
+            $userId = Auth::user()->id;
             $searchData = $request->all();
             $maxDistance = Configs::getSearchRadius();
             $distance = $request->get('distance');
@@ -67,12 +68,13 @@ class RecruiterJobController extends Controller {
             $searchData['avail_all']    = $availAll;
             $jobDetails     = RecruiterJobs::getRecruiterJobDetails($jobId);
             $seekersList    = JobSeekerProfiles::getJobSeekerProfiles($jobDetails,$searchData);
+            $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
 
             if ($request->ajax()) {
-                return view('web.recuriterJob.search', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'maxDistance'=>$maxDistance])->render();  
+                return view('web.recuriterJob.search', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'maxDistance'=>$maxDistance, 'jobTemplateModalData'=>$jobTemplateModalData])->render();  
             }
 
-            return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData', 'jobId','maxDistance'));
+            return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData', 'jobId','maxDistance', 'jobTemplateModalData'));
         } catch (\Exception $e) {
             return view('web.error.', ["message" => $e->getMessage()]);
         }
@@ -133,11 +135,13 @@ class RecruiterJobController extends Controller {
     }
 
     public function listJobs(Request $request) {
-        try {
+        try{
+            $userId = Auth::user()->id;
             $this->viewData['jobList'] = RecruiterJobs::getJobs();
-
+            $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
+            
             if ($request->ajax()) {
-                return view('web.recuriterJob.jobData', ['jobList' => $this->viewData['jobList']])->render();
+                return view('web.recuriterJob.jobData', ['jobList' => $this->viewData['jobList'], 'jobTemplateModalData' => $this->viewData['jobTemplateModalData']])->render();
             }
 
             return $this->returnView('list');
@@ -154,11 +158,13 @@ class RecruiterJobController extends Controller {
         }
     }
 
-    public function jobDetails(Request $request, $jobId) {
-        try {
+    public function jobDetails(Request $request,$jobId) {
+        try{
+            $userId = Auth::user()->id;
             $this->viewData['job'] = RecruiterJobs::getRecruiterJobDetails($jobId);
             $this->viewData['skills'] = TemplateSkills::getTemplateSkills($this->viewData['job']['job_template_id']);
             $this->viewData['seekerList'] = JobLists::getJobSeekerList($this->viewData['job']);
+            $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
             return $this->returnView('view');
         } catch (\Exception $e) {
             return view('web.error.', ["message" => $e->getMessage()]);
@@ -251,7 +257,9 @@ class RecruiterJobController extends Controller {
     }
 
     public function jobEdit(Request $request, $jobId) {
-        return view('web.recuriterJob.edit', compact('jobId'));
+        $userId = Auth::user()->id;
+        $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
+        return view('web.recuriterJob.edit', compact('jobId', 'jobTemplateModalData'));
     }
 
     public function jobEditDetails(Request $request) {
@@ -312,7 +320,7 @@ class RecruiterJobController extends Controller {
                 $this->updateOffice($allData);
                 $this->updateOfficeType($allData);
             } else {
-                $updatedJob = $this->checkingOffice($jobDetails, $allData, $recruiterOfficeObj);
+                $updatedJob = $this->checkingOffice($allData, $recruiterOfficeObj);
             }
             $this->result['data'] = $updatedJob['data'];
             $this->result['success'] = true;
@@ -323,7 +331,7 @@ class RecruiterJobController extends Controller {
         return $this->result;
     }
 
-    private function checkingOffice($jobDetails, $allData, $recruiterOfficeObj) {
+    private function checkingOffice($allData, $recruiterOfficeObj) {
         try {
             $recruiterOfficeObj = RecruiterOffice::where([
                         'latitude' => $allData->selectedOffice[0]->selectedOfficeLat,

@@ -105,23 +105,33 @@
             <h5>EXPERIENCE</h5>
             @if(!empty($seekerDetails['experience']))
             @foreach($seekerDetails['experience'] as $experience)
-            <div class="row">   
-                <div class="col-sm-6 exprience">
+                <div class="row">   
+                <div class="col-sm-4 exprience">
                     <dl>
                         <dt>
                             <div class="expTitle">{{$experience['jobtitle_name']}} 
                                 <span>({{(round($experience['months_of_expereince']/12,0)!=0?round($experience['months_of_expereince']/12,0)." year":"")." ".(round($experience['months_of_expereince']%12,0)!=0?round($experience['months_of_expereince']%12,0)." month":"")}})</span>
                             </div>
+                            {{$experience['office_name']}}
+                        </dt>
+                        <dd>{{$experience['office_address']}}</dd>
+                        <dd>{{$experience['city']}}</dd> 
+                    </dl>
+                </div>
+                <div class="col-sm-4 exprience">
+                    <dl>
+                        <dt>
+                            <div class="expTitle">Reference 1</div>
                             {{$experience['reference1_name']}}
                         </dt>
                         <dd>{{$experience['reference1_mobile']}}</dd>
-                        <dd>{{$experience['reference1_email']}}</dd> 
+                        <dd>{{$experience['reference1_email']}}</dd>                 
                     </dl>
                 </div>
-                <div class="col-sm-6 exprience">
+                <div class="col-sm-4 exprience">
                     <dl>
                         <dt>
-                            <div class="expTitle">Reference</div>
+                            <div class="expTitle">Reference 2</div>
                             {{$experience['reference2_name']}}
                         </dt>
                         <dd>{{$experience['reference2_mobile']}}</dd>

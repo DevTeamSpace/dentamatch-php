@@ -160,9 +160,7 @@ class JobSeekerController extends Controller
                 })
                 ->addColumn('action', function ($userData) {
                     $edit = url('cms/jobseeker/'.$userData->id.'/edit');
-                    $delete =url('cms/jobseeker/'.$userData->id.'/delete');
                     $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-//                    $action .= '<a href="'.$delete.'" onclick="deleteRecord(this);return false;"  class="delete btn btn-xs btn-primary" onclick="return confirm(\'Are you sure you want to delete this location?\')"><i class="fa fa-remove"></i> Delete</a>';
                     return $action;
                        
                 })

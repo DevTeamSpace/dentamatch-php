@@ -15,6 +15,7 @@ use App\Models\Favourite;
 class FavoriteJobseekerController extends Controller {
 
     public function getFavJobseeker(Request $request) {
+        $userId = Auth::user()->id;$rating = "(avg(job_ratings.punctuality) + avg(job_ratings.time_management) + avg(job_ratings.skills) + avg(job_ratings.teamwork) + avg(job_ratings.onemore))/5";
         $favJobSeeker = JobSeekerProfile::join('favourites', 'jobseeker_profiles.user_id', '=', 'favourites.seeker_id')
                 ->leftjoin('job_lists', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
                 ->leftjoin('job_ratings', 'jobseeker_profiles.user_id', '=', 'job_ratings.seeker_id')
@@ -27,7 +28,9 @@ class FavoriteJobseekerController extends Controller {
                 ->where('recruiter_jobs.job_type', '3')
                 ->select('job_titles.jobtitle_name', 'recruiter_jobs.id as recruiterId')
                 ->get();
-        return view('web.fav_jobseeker', ['favJobSeeker' => $favJobSeeker, 'jobDetail' => $jobDetail]);
+        
+        $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
+        return view('web.fav_jobseeker', ['favJobSeeker' => $favJobSeeker, 'jobDetail' => $jobDetail, 'jobTemplateModalData' => $jobTemplateModalData]);
     }
 
     public function postInviteJobseeker(Request $request) {

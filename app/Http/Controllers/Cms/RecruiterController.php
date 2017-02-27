@@ -175,7 +175,6 @@ class RecruiterController extends Controller
                 $reqData = $request->all();
                 $userId = $reqData['id'];
                 $email = $reqData['email'];
-                $activationStatus  = isset($request['is_active']) ? 1 : 0;
                 User::where('id',$userId)->update(['password'=>'']);
 
                 PasswordReset::where('user_id' , $userId)->where('email', $email)->delete();

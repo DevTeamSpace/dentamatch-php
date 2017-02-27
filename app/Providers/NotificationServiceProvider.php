@@ -112,7 +112,7 @@ class NotificationServiceProvider extends ServiceProvider {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-        $result = curl_exec($ch);
+        curl_exec($ch);
         curl_close($ch);
     }
 
@@ -131,19 +131,19 @@ class NotificationServiceProvider extends ServiceProvider {
                             ->where('notification.receiver_id', '=', $user->user_id)
                             ->whereNull('notification.read_at')->get()->count();
             if ($unReadCount) {
-                self::$data['data']['unReadCount'] = $unReadCount;
-                self::$data['success'] = true;
-                self::$data['message'] = trans('messages.record_fetched');
+                static::$data['data']['unReadCount'] = $unReadCount;
+                static::$data['success'] = true;
+                static::$data['message'] = trans('messages.record_fetched');
             } else {
-                self::$data['data']['unReadCount'] = 0;
-                self::$data['success'] = true;
-                self::$data['message'] = trans('messages.record_fetched');
+                static::$data['data']['unReadCount'] = 0;
+                static::$data['success'] = true;
+                static::$data['message'] = trans('messages.record_fetched');
             }
         } catch (\Exception $e) {
             Log::error(__METHOD__ . ' ' . $e->getMessage());
             return static::responseError(trans('messages.exception_msg'));
         }
-        return self::baseServiceResponse();
+        return static::baseServiceResponse();
     }
 
     /**
@@ -162,19 +162,19 @@ class NotificationServiceProvider extends ServiceProvider {
             if (count($notification_list)) {
                 Notification::where('receiver_id', '=', $user->user_id)->whereNull('read_at')->update(['read_at' => date("Y-m-d H:i:s")]);
                 
-                self::$data['data']['list'] = $notification_list['list'];
-                self::$data['data']['unReadCount'] = 0;
-                self::$data['data']['total'] = $notification_list['total'];
-                self::$data['data']['start'] = $start;
-                self::$data['data']['limit'] = $limit;
-                self::$data['success'] = true;
-                self::$data['message'] = trans('messages.record_fetched');
+                static::$data['data']['list'] = $notification_list['list'];
+                static::$data['data']['unReadCount'] = 0;
+                static::$data['data']['total'] = $notification_list['total'];
+                static::$data['data']['start'] = $start;
+                static::$data['data']['limit'] = $limit;
+                static::$data['success'] = true;
+                static::$data['message'] = trans('messages.record_fetched');
             }
         } catch (\Exception $e) {
             Log::error(__METHOD__ . ' ' . $e->getMessage());
             return static::responseError(trans('messages.exception_msg'));
         }
-        return self::baseServiceResponse();
+        return static::baseServiceResponse();
     }
 
     /**
@@ -189,7 +189,7 @@ class NotificationServiceProvider extends ServiceProvider {
             $user = Auth::user();
             $notification = Notification::find($data['notificationId']);
             if ($notification && ($notification->receiver_id == $user->user_id)) {
-                $notification->read_at = $current_time = date('Y-m-d H:i:s');
+                $notification->read_at =  date('Y-m-d H:i:s');
                 $notification->save();
                 return static::responseSuccess(null, trans('messages.record_updated'));
             } else {

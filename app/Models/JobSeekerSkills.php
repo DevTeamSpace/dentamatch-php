@@ -48,8 +48,7 @@ class JobSeekerSkills extends Model
                             ->orderBy('skills.parent_id','desc')
                             ->orderBy('skills.skill_name','ASC')
                             ->get();
-            foreach ($allSkills as $key => $value) {
-                $innerArray = [];
+            foreach ($allSkills as  $value) {
                 $result[$value->user_id][$value->parent_id]['title'] = $value->skill_title;
                 $result[$value->user_id][$value->parent_id]['skills'][] = $value->skill_name;
             }    
@@ -79,7 +78,6 @@ class JobSeekerSkills extends Model
 
     public static function getJobseekerOtherSkills($userId)
     {
-        $schoolId = [];
         $killsModel = Skills::select('id')->where('parent_id',0)->get()->toArray();
         foreach($killsModel as $value) {
             $skillsId[] = $value['id'];
