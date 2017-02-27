@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\RecruiterJobs;
 use App\Models\JobLists;
 use Log;
+use App\Http\Requests\CalenderSeekerRequest;
 
 class CalenderController extends Controller
 {
@@ -37,6 +38,28 @@ class CalenderController extends Controller
             $this->response['jobs'] = $allJobs;
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.calender_details_fetched');
+        } catch (\Exception $e) {
+            Log::error($e);
+            $this->response['success'] = false;
+            $this->response['message'] = $e->getMessage();
+        }
+        return $this->response;
+    }
+    
+    public function getCalenderSeekers(CalenderSeekerRequest $request){
+        try{
+            $job = RecruiterJobs::where('id',$request->jobId)->first();
+            $jobDetails['id'] = $job['id'];
+            $jobDetails['job_type'] = $job['job_type'];
+            $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));
+            foreach($seekers as &$seeker){
+                foreach($seeker as &$seek){
+                    $seek['profile_pic'] = url("image/" . config('constants.Resolution') . "/" . config('constants.Resolution') . "/?src=" .$seek['profile_pic']);
+                }
+            }
+            $this->response['data'] = $seekers;
+            $this->response['success'] = true;
+            $this->response['message'] = trans('messages.calender_seekers_fetched');
         } catch (\Exception $e) {
             Log::error($e);
             $this->response['success'] = false;
