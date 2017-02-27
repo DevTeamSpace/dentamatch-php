@@ -11,7 +11,7 @@ use App\Models\JobLists;
 class CalendarApiController extends Controller {
     
     public function __construct() {
-        
+        $this->middleware('ApiAuth');
     }
     
     /**
@@ -23,7 +23,7 @@ class CalendarApiController extends Controller {
      */
     public function postJobAvailability(Request $request){
         try{
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
@@ -87,7 +87,7 @@ class CalendarApiController extends Controller {
                 'jobEndDate' => 'required'
             ]);
             
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
                 $jobStartDate = $reqData['jobStartDate'];
@@ -126,7 +126,7 @@ class CalendarApiController extends Controller {
                 'calendarEndDate' => 'required'
             ]);
             
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
                 $calendarStartDate = $reqData['calendarStartDate'];

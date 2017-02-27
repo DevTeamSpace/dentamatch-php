@@ -26,7 +26,7 @@ class AffiliationsApiController extends Controller {
         try {
             $data = [];
             $jobSeekerAffiliationData=[];
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId>0) {
                 $affiliationList = Affiliation::getAffiliationList();
                 $jobseekerAffiliation = JobSeekerAffiliation::getUserAffiliationList($userId);
@@ -77,7 +77,7 @@ class AffiliationsApiController extends Controller {
             ]);
             
             $reqData = $request->all();
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             $jobSeekerData = [];
             $keyCount = 0;
             

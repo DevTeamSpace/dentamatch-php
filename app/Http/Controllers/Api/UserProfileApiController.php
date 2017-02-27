@@ -21,6 +21,7 @@ class UserProfileApiController extends Controller {
     use FileRepositoryS3;
 
     public function __construct() {
+        $this->middleware('ApiAuth');
     }
     
     /**
@@ -36,7 +37,7 @@ class UserProfileApiController extends Controller {
                 'confirmNewPassword' => 'required|min:6|max:255'
             ]);
             $reqData = $request->all();
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             
             if(isset($userId) && $userId > 0){
                 $userModel = User::where('id', $userId)->first();
@@ -72,7 +73,7 @@ class UserProfileApiController extends Controller {
      */
     public function postUploadImage(Request $request) {
         try {
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $filename = $this->generateFilename($request->type);
                 $response = $this->uploadFileToAWS($request, $filename);
@@ -118,7 +119,7 @@ class UserProfileApiController extends Controller {
                 'license' => 'required',
                 'state' => 'required',
             ]);
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 UserProfile::where('user_id', $userId)->update(['license_number' => $request->license, 'state' => $request->state]);
                 if(($request->jobTitleId != "") && ($request->jobTitleId > 0)){
@@ -150,7 +151,7 @@ class UserProfileApiController extends Controller {
                 'aboutMe' => 'required',
             ]);
             
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 UserProfile::where('user_id', $userId)->update(['about_me' => $request->aboutMe,'is_completed' => 1]);
                 apiResponse::chkProfileComplete($userId);
@@ -174,7 +175,7 @@ class UserProfileApiController extends Controller {
      */
     public function getAboutMe(Request $request) {
         try {
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
                 $data['list']['aboutMe'] = $userProfileModel->about_me;
@@ -203,7 +204,7 @@ class UserProfileApiController extends Controller {
      */
     public function getUserProfile(Request $request) {
         try {
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             $s3Url = env('AWS_URL');
             $s3Bucket = env('AWS_BUCKET');
             $certificationData = [];
@@ -286,7 +287,7 @@ class UserProfileApiController extends Controller {
                 'aboutMe' => 'required'
             ]);
             $reqData = $request->all();
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId>0) {
                 $userProfile = UserProfile::where('user_id', $userId)->first();
                 $userProfile->first_name = $reqData['firstName'];
@@ -330,7 +331,7 @@ class UserProfileApiController extends Controller {
                 'zipCode' => 'required',
             ]);
             $reqData = $request->all();
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId>0) {
                 $userProfile = UserProfile::where('user_id', $userId)->first();
                 $userProfile->zipcode = $reqData['zipCode'];

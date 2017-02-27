@@ -12,7 +12,7 @@ use App\Providers\NotificationServiceProvider;
 class PushNotificationApiController extends Controller {
     
     public function __construct() {
-        
+        $this->middleware('ApiAuth');
     }
     
     /**
@@ -27,7 +27,7 @@ class PushNotificationApiController extends Controller {
             $this->validate($request, [
                 'page' => 'required',
             ]);
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
                 $reqData['userId'] = $userId;
@@ -36,7 +36,6 @@ class PushNotificationApiController extends Controller {
                     if(count($notificationList['list']) > 0){
                         foreach($notificationList['list'] as $notification){
                             if($notification['job_list_id'] && $notification['job_list_id'] > 0){
-                                //$jobList = JobLists::select('recruiter_job_id')->where('id','=',$notification['job_list_id'])->first();
                                 $data = RecruiterJobs::getJobDetail($notification['job_list_id'], $userId); 
                                 $notification['job_details'] = $data;
                             }
@@ -70,7 +69,7 @@ class PushNotificationApiController extends Controller {
             $this->validate($request, [
                 'notificationId' => 'required',
             ]);
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
                 Notification::where('id', $reqData['notificationId'])->update(['seen' => 1]);
@@ -118,7 +117,7 @@ class PushNotificationApiController extends Controller {
             $this->validate($request, [
                 'updateDeviceToken' => 'required',
             ]);
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             $reqData = $request->all();
             if($userId > 0){
                 Device::where('user_id', $userId)->update(['device_token' => $reqData['updateDeviceToken']]);

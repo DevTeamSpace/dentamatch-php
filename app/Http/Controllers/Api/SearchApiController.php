@@ -15,7 +15,7 @@ use App\Models\Notification;
 class SearchApiController extends Controller {
     
     public function __construct() {
-        
+        $this->middleware('ApiAuth');
     }
     
     /**
@@ -37,7 +37,7 @@ class SearchApiController extends Controller {
                 'isParttime' => 'required',
                 
             ]);
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
                 
@@ -80,7 +80,7 @@ class SearchApiController extends Controller {
                 'jobId' => 'required',
                 'status' => 'required',
             ]);
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
                 if($reqData['status'] == 1){
@@ -114,7 +114,7 @@ class SearchApiController extends Controller {
             $this->validate($request, [
                 'jobId' => 'required',
             ]);
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
                 $profileComplete = UserProfile::select('is_completed')->where('user_id', $userId)->first();
@@ -156,7 +156,7 @@ class SearchApiController extends Controller {
                 'jobId' => 'required',
                 'cancelReason' => 'required',
             ]);
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
                 $jobExists = JobLists::select('id')->where('seeker_id','=',$userId)->where('recruiter_job_id','=',$reqData['jobId'])
@@ -189,7 +189,7 @@ class SearchApiController extends Controller {
                 'lat' => 'required',
                 'lng' => 'required',
             ]);
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
                 $reqData['userId'] = $userId;
@@ -229,7 +229,7 @@ class SearchApiController extends Controller {
             $this->validate($request, [
                 'jobId' => 'required'
             ]);
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
                 $jobId = $reqData['jobId'];
@@ -257,7 +257,7 @@ class SearchApiController extends Controller {
                 'notificationId' => 'required',
                 'acceptStatus' => 'required',
             ]);
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
                 $notificationDetails = Notification::where('id',$reqData['notificationId'])->first();

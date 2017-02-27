@@ -3,11 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Auth\Guard;
-use DB;
-use Lang;
-use App\Http\Controllers\Api\ValidateJson;
-use Validator;
 use App\Models\Device;
 use App\Helpers\apiResponse;
 
@@ -30,12 +25,14 @@ class ApiAuth {
     
     public function handle($request, Closure $next) {
         try {
-            $user = Device::getUserByDeviceToken($request->header('accessToken'));
+            $user = Device::select('user_id')->where('user_token',$request->header('accessToken'))->first();
             if (!$user) {
-                apiResponse::customJsonResponse(1, 204, "Token is invalid");
+                return apiResponse::customJsonResponse(1, 204, "Token is invalid");
+            }else{
+                $request->merge(['userServerData' => $user]);
             }
             
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             return apiResponse::responseError("Request validation failed.");
         }
         return $next($request);

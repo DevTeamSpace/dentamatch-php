@@ -53,8 +53,7 @@ class WorkExperienceApiController extends Controller {
                 'action' =>'required|in:add,edit',
                 'id'=>'integer|required_if:action,edit'
             ]);
-            
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId>0) {
                 $workExp = new WorkExperience();
                 if ($request->action=="edit" && !empty($request->id)) {
@@ -111,7 +110,7 @@ class WorkExperienceApiController extends Controller {
                 'id'=>'required|integer'
             ]);
             
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId>0) {
                 WorkExperience::where('id', $request->id)->where('user_id',$userId)->update(['deleted_at' => date('Y-m-d H:i:s')]);
                 $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_removed"));
@@ -142,7 +141,8 @@ class WorkExperienceApiController extends Controller {
             $start = (int) isset($request->start) ? $request->start : 0;
             $limit = (int) isset($request->limit) ? $request->limit : config('app.defaul_product_per_page');
             
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
+            
             if($userId>0) {
                 $query = WorkExperience::getWorkExperienceList($userId, $start, $limit);
                 $query['start'] = $start;
@@ -174,7 +174,7 @@ class WorkExperienceApiController extends Controller {
         try {
             $data = [];
             $jobSeekerData=[];
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId>0) {
                 $schoolingList = Schooling::getScoolingList();
                 $jobseekerSchooling = JobSeekerSchooling::getUserSchoolingList($userId);
@@ -246,7 +246,7 @@ class WorkExperienceApiController extends Controller {
             ]);
             
             $reqData = $request->all();
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             $jobSeekerData = [];
             
             if($userId > 0){

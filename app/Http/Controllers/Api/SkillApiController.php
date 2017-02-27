@@ -14,7 +14,7 @@ use App\Models\JobseekerCertificates;
 class SkillApiController extends Controller {
     use FileRepositoryS3;
     public function __construct() {
-        
+        $this->middleware('ApiAuth');
     }
     /**
      * Description : Show skill lists with user skill
@@ -25,7 +25,7 @@ class SkillApiController extends Controller {
      */
     public function getSkilllists(Request $request){
         try {
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $skillArray = array();
                 $jobseekerSkills  = JobSeekerSkills::where('user_id',$userId)->get();
@@ -103,7 +103,7 @@ class SkillApiController extends Controller {
                 'other' => 'sometimes',
             ]);
             $reqData = $request->all();
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 JobSeekerSkills::where('user_id', '=', $userId)->forceDelete();
                 $jobseekerSkills = array();
@@ -143,7 +143,7 @@ class SkillApiController extends Controller {
     
     public function getCertificationListing(Request $request){
         try{
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $userCertification = JobseekerCertificates::where('user_id', '=', $userId)->get();
                 $certificationList = Certifications::where('is_active',1)->get()->toArray();
@@ -190,7 +190,7 @@ class SkillApiController extends Controller {
                 'certificateId' => 'required|integer',
                 'image' => 'required|mimes:jpeg,jpg,png|max:102400',
             ]);
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $filename = $this->generateFilename('certificate');
                 $response = $this->uploadFileToAWS($request, $filename);
@@ -229,7 +229,7 @@ class SkillApiController extends Controller {
             $this->validate($request, [
                 'certificateValidition' => 'required',
             ]);
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = $request->userServerData->user_id;
             $reqData = $request->all();
             if($userId > 0){
                 if(is_array($reqData['certificateValidition']) && count($reqData['certificateValidition']) > 0){
