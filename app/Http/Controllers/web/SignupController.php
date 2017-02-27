@@ -56,7 +56,7 @@ class SignupController extends Controller {
                 $redirect = 'terms-conditions';
                 $term = RecruiterProfile::where('user_id', Auth::user()->id)->first();
                 $request->session()->put('userData', ['basic'=>$user->toArray(),'profile'=>$term->toArray()]);
-                if (!empty($term) && isset($term)) {
+                if (!empty($term) && isset($term) && $term->accept_term==1) {
                     $redirect = 'home';
                 }
             }
@@ -115,7 +115,7 @@ class SignupController extends Controller {
                     'verification_code' => $uniqueCode,
                 );
                 $user_details = User::create($user);
-
+                RecruiterProfile::create(['user_id' => $user_details->id]);
                 $userGroupModel = new UserGroup();
                 $userGroupModel->group_id = 2;
                 $userGroupModel->user_id = $user_details->id;
@@ -160,7 +160,7 @@ class SignupController extends Controller {
     public function getTutorial() {
         try {
             $officeType = \App\Models\OfficeType::all();
-            \App\Models\RecruiterProfile::create(['user_id' => Auth::user()->id, 'accept_term' => 1]);
+            RecruiterProfile::where('user_id',Auth::user()->id)->update(['accept_term' => 1]);
             return view('web.dashboard')->with('modal', 1)->with('officeType', $officeType);
         } catch (\Exception $e) {
             return redirect('terms-conditions');
