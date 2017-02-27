@@ -106,6 +106,9 @@
                         </li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
+                @if(!empty($jobTemplateModalData))
+                    <a class="modalClick add-on-nav" data-toggle="modal" data-target="#jobTemplate" >+</a>
+                @endif
             </div><!-- /.container-fluid -->
         </nav>
         @yield('content')
@@ -128,7 +131,10 @@
         <script src="{{asset('web/plugins/calender/js/fullcalendar.js')}}"></script>
         
         @yield('js')
-
+        
+        @if(!empty($jobTemplateModalData))
+            @include('web.recuriterJob.jobTemplateModal')
+        @endif
     </body>
     
 </html>
