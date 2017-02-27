@@ -128,8 +128,8 @@ $(function () {
         //bFilter: false,
         columns: [
             {data: 'email', name: 'email',searchable:true},
-            {data: 'first_name', name: 'first_name',searchable:false},
-            {data: 'last_name', name: 'last_name',searchable:false},
+            {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
+            {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
             {data: 'active', name: 'active',searchable:false},
             {data: 'action', name: 'action',searchable:false}
         ]
