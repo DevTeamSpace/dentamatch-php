@@ -100,7 +100,7 @@ class AffiliationController extends Controller
     }
 
     public function affiliationsList(){
-        $affiliations = Affiliation::SELECT(['affiliation_name','is_active','id'])->get();
+        $affiliations = Affiliation::SELECT(['affiliation_name','is_active','id'])->orderBy('id', 'desc')->get();
         return Datatables::of($affiliations)
                 ->removeColumn('id')
                 ->addColumn('active', function ($affiliations) {
