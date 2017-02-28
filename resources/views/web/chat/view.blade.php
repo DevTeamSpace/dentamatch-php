@@ -98,8 +98,6 @@
 <script src="{{ asset('web/scripts/optionDropDown.js')}}"></script>
 <script src="{{ asset('web/scripts/custom.js')}}"></script>
 <script src="{{ asset('web/plugins/custom-scroller/js/mCustomScrollbar.js')}}"></script>
-<!--<script src="{{ asset('web/plugins/emoji/emoticons.js') }}"></script>
-<script src="{{ asset('web/plugins/emoji/emoji-init.js') }}"></script>-->
 <script src="{{ url('') }}:3000/socket.io/socket.io.js"></script>
 <script type="text/javascript">
 var fromId = "{{ Auth::id() }}";

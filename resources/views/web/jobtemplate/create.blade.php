@@ -107,9 +107,6 @@
     document.getElementById("cancelButton").onclick = function () {
         location.href = "{{ url('jobtemplates') }}";
     };
-$('.ddlCars').multiselect({
-    numberDisplayed: 3,
-});
 	$('#jobTitleId').selectpicker({
 				style: 'btn btn-default'
 			});

@@ -25,52 +25,43 @@
                     <li>
                         <a href="{{ url('jobtemplates/edit/'.$templateId) }}">
                             <span class="gbllist iconFirstEdit">
-                             <i class="icon icon-edit"></i>  Edit
-                         </span>
+                                <i class="icon icon-edit"></i>  Edit
+                            </span>
 
-                     </a>
-                 </li>
-             </ul>
-         </div>
-         <div class="searchResultHeading">
-             <h6><strong>Job Title</strong></h6>
-             <p>{{ $templateData->jobtitle_name }}</p>
-         </div>
-<!--                    <div class="title">
-                        <p>Job Title</p>
-                        <p class="title-description">Dental Assistant</p>
-                    </div>-->
-                </div>  
-                <div class="profile-div">
-<!--                    <div class="title">
-                        <p>Job Description</p>
-                        <p class="title-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quorum sine causa fieri nihil putandum est. Potius inflammat, ut coercendi magis quam dedocendi esse videantur. Duo Reges: constructio interrete. Mihi enim satis est, ipsis non satis. Cuius ad naturam apta ratio vera illa et summa lex a philosophis dicitur. Id est enim, de quo quaerimus. Id quaeris, inquam, in quo, utrum respondero, verses te huc atque illuc necesse est.</p>
-                        <p class="title-description">Sed ad bona praeterita redeamus. Roges enim Aristonem, bonane ei videantur haec: vacuitas doloris, divitiae, valitudo; Nam prius a se poterit quisque discedere quam appetitum earum rerum, quae sibi conducant, amittere.</p>
-                    </div>-->
-                    <div class="viewtemp-div mr-b-30">
-                     <h6><strong>Job Description</strong></h6>
-                     <p>{{ $templateData->templateDesc }}</p>
-                 </div>
-             </div> 
-             <div class="viewtemp-div">
-                 <div class="viewtemp-div">
-                     <h6 class="mr-b-30"><strong>KEY SKILLS</strong></h6>
-                 </div>
-                 @foreach($templateSkillsData as $index=>$skillsData)
-                 <div class="{{ ($index=='0'?'':'pd-t-5') }}  keySkills">
-                    <h6><strong>{{ $skillsData['parent_skill_name']}}</strong></h6>
-                    <p>{{ $skillsData['skill_name']}}</p>
-                </div>
-                @endforeach
-            </div> 
-        </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="searchResultHeading">
+                <h6><strong>Job Title</strong></h6>
+                <p>{{ $templateData->jobtitle_name }}</p>
+            </div>
+        </div>  
+        <div class="profile-div">
+            <div class="viewtemp-div mr-b-30">
+                <h6><strong>Job Description</strong></h6>
+                <p>{{ $templateData->templateDesc }}</p>
+            </div>
+        </div> 
+        <div class="viewtemp-div">
+            <div class="viewtemp-div">
+                <h6 class="mr-b-30"><strong>KEY SKILLS</strong></h6>
+            </div>
+            @foreach($templateSkillsData as $index=>$skillsData)
+            <div class="{{ ($index=='0'?'':'pd-t-5') }}  keySkills">
+                <h6><strong>{{ $skillsData['parent_skill_name']}}</strong></h6>
+                <p>{{ $skillsData['skill_name']}}</p>
+            </div>
+            @endforeach
+        </div> 
+    </div>
 
-    </div>   
+</div>   
 
-    @endsection
+@endsection
 
-    @section('js')
-    <script src="{{asset('web/scripts/optionDropDown.js')}}"></script>
-    <script src="{{asset('web/scripts/custom.js')}}"></script>
+@section('js')
+<script src="{{asset('web/scripts/optionDropDown.js')}}"></script>
+<script src="{{asset('web/scripts/custom.js')}}"></script>
 
-    @endsection
+@endsection
