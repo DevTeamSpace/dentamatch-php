@@ -443,14 +443,6 @@ class RecruiterJobController extends Controller {
                 $jobObj->no_of_jobs = config('constants.NullValue');
                 $jobObj->save();
             } elseif ($jobType == config('constants.TemporaryJob')) {
-                $jobObj->is_monday = config('constants.NullValue');
-                $jobObj->is_tuesday = config('constants.NullValue');
-                $jobObj->is_wednesday = config('constants.NullValue');
-                $jobObj->is_thursday = config('constants.NullValue');
-                $jobObj->is_friday = config('constants.NullValue');
-                $jobObj->is_saturday = config('constants.NullValue');
-                $jobObj->is_sunday = config('constants.NullValue');
-                $jobObj->no_of_jobs = $allData->totalJobOpening;
                 $jobObj->save();
                 foreach ($allData->tempJobDates as $tempJobDate) {
                     $newTemJobObj = new TempJobDates();
