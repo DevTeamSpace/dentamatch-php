@@ -176,7 +176,7 @@
         me.showModalFooter = ko.observable(true);
 
         me.getJobDetails = function () {
-            jobId = <?php echo json_encode($jobId) ?>;
+            jobId = $('#jobIdValue').val();
             $.get('/job/edit-details', {jobId: jobId}, function (d) {
                 me.jobId(d.jobDetails.id);
                 if (d.jobSeekerStatus != 0) {
