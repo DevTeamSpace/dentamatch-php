@@ -4,7 +4,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\apiResponse;
 use App\Models\Notification;
-use App\Models\JobLists;
 use App\Models\RecruiterJobs;
 use App\Models\Device;
 use App\Providers\NotificationServiceProvider;
@@ -137,6 +136,60 @@ class PushNotificationApiController extends Controller {
             $messages = json_decode($e->getResponse()->content(), true);
             $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
+            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+        return $response;
+    }
+    
+    /**
+     * Description : Delete notification
+     * Method : Delete notification
+     * formMethod : POST
+     * @param Request $request
+     * @return type
+     */
+    public function PostDeleteNotification(Request $request){
+        try{
+            $this->validate($request, [
+                'notificationId' => 'required',
+            ]);
+            $userId = $request->userServerData->user_id;
+            $reqData = $request->all();
+            if($userId > 0){
+                Notification::findOrFail($reqData['notificationId'])->delete();
+                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.notification_delete"));
+            }else{
+                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+            } 
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+        } catch (\Exception $e) {
+            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+        return $response;
+    }
+    
+    /**
+     * Description : Get unread notification
+     * Method : get unread notification
+     * formMethod : GET
+     * @param Request $request
+     * @return type
+     */
+    public function GetunreadNotification(Request $request){
+        try{
+            $userId = $request->userServerData->user_id;
+            $reqData = $request->all();
+            if($userId > 0){
+                $query = Notification::where('receiver_id', '=', $userId)->where('seen','=',0);
+                $total = $query->count();
+                $unread['notificationCount'] = $total;
+                $response =  apiResponse::customJsonResponse(1, 200,"",$unread);
+            }else{
+                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+            } 
+        }catch (\Exception $e) {
             $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;

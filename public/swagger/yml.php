@@ -1112,14 +1112,13 @@ paths:
       tags:
         - Notification
         
-        
-  /users/update-devicetoken:
+  /users/notification-read:
     post:
-      summary: Update device token of user
-      description: Update device token of user
+      summary: Read notification
+      description: Read Notification
       responses: 
           200:
-            description: Update device token of user
+            description: Read notification list
           default:
             description: Unexpected error
             schema:
@@ -1130,13 +1129,60 @@ paths:
           in: header
           description: access token
           type: string
-        - name: updateDeviceToken
+        - name: notificationId
           in: formData
-          description: updateDeviceToken 
-          type: string
+          description: notificationId 
+          type: integer
   
       tags:
-        - User Profile
+        - Notification
+            
+  /users/unread-notification:
+    get:
+      summary: unread notification
+      description: unread notification
+      responses: 
+          200:
+            description: unread notification of  user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        
+  
+      tags:
+        - Notification
+        
+  /users/delete-notification:
+    post:
+      summary: delete notification
+      description: delete notification
+      responses: 
+          200:
+            description: delete notification of  user
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: accessToken
+          in: header
+          description: access token
+          type: string
+        - name: notificationId
+          in: formData
+          description: notificationId 
+          type: integer
+  
+      tags:
+        - Notification
         
         
   /users/acceptreject-job:

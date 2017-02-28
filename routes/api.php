@@ -70,6 +70,8 @@ Route::post('users/availability-list', 'Api\CalendarApiController@postAvailabili
 
 Route::get('users/notification-list', 'Api\PushNotificationApiController@getNotificationlists');
 Route::post('users/notification-read', 'Api\PushNotificationApiController@PostUpdateNotification');
+Route::get('users/unread-notification', 'Api\PushNotificationApiController@GetunreadNotification');
+Route::post('users/delete-notification', 'Api\PushNotificationApiController@PostDeleteNotification');
 
 Route::post('chat/send-message', 'Api\PushNotificationApiController@userChatNotification');
 Route::post('users/update-devicetoken', 'Api\PushNotificationApiController@PostUpdateDeviceToken');

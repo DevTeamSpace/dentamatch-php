@@ -127,7 +127,7 @@ return [
     'jobseeker_updated_success' => 'Jobseeker updated successfully',
     'password_updated' => 'Password successfully updated.',
     'incorrect_pass' => 'Incorrect password. Please try again',
-    'already_job_availability' => 'You already have pending jobs for curreny availability',
+    'already_job_availability' => 'You already have pending jobs for current availability',
     'subscription_plan_changed' => 'Subscription plan changed successfully.',
     'subscription_plan_changed' => 'Subscription plan changed successfully.',
     'jobseeker_verification_approved' => 'Jobseeker successfully verified',
@@ -151,5 +151,6 @@ return [
     'reports_temp_jobs' => 'Temp jobs for reports fetched successfully',
     'office_type_update' => 'Office type updated successfylly.',
     'job_edited' => 'Job updated successfully.',
-    'job_deleted' => 'Job deleted successfully.'
+    'job_deleted' => 'Job deleted successfully.',
+    'notification_delete' => 'Notification deleted successfully',
 ];
