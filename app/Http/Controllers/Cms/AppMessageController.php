@@ -9,7 +9,7 @@ use App\Models\AppMessage;
 use Yajra\Datatables\Datatables;
 use Session;
 use App\Providers\NotificationServiceProvider;
-
+use Log;
 class AppMessageController extends Controller
 {
     /**
@@ -63,27 +63,30 @@ class AppMessageController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate and store the appMessage...
-        $rules = array(
-            'message' => array('required','min:2','max:255'),
-        );
-        
-        $this->validate($request, $rules);
-        if(isset($request->id)){
-            $appMessage = AppMessage::find($request->id); 
-            $appMessage->messageSent = isset($request->message_sent) ? 1 : 0;
-            $msg = trans('messages.app_message_updated');
+        try{
+            $rules = array(
+                'message' => array('required','min:2','max:255'),
+            );
+
+            $this->validate($request, $rules);
+            if(isset($request->id)){
+                $appMessage = AppMessage::find($request->id); 
+                $appMessage->messageSent = isset($request->message_sent) ? 1 : 0;
+                $msg = trans('messages.app_message_updated');
+            }
+            else{
+                $appMessage = new AppMessage;
+                $msg = trans('messages.app_message_added');
+            }
+
+            $appMessage->message = $request->message;
+            $appMessage->messageTo = $request->message_to;
+            $appMessage->save();
+            Session::flash('message',$msg);
+            return redirect('cms/notify/index');
+        } catch (\Exception $e) {
+            Log::error($e);
         }
-        else{
-            $appMessage = new AppMessage;
-            $msg = trans('messages.app_message_added');
-        }
-        
-        $appMessage->message = $request->message;
-        $appMessage->messageTo = $request->message_to;
-        $appMessage->save();
-        Session::flash('message',$msg);
-        return redirect('cms/notify/index');
     }
     
     /**
@@ -118,6 +121,7 @@ class AppMessageController extends Controller
     }
 
     public function messageList(){
+        try{
         $appMessages = AppMessage::SELECT(['message','message_to','message_sent','created_at','id'])->get();
         return Datatables::of($appMessages)
                 ->removeColumn('id')
@@ -140,6 +144,8 @@ class AppMessageController extends Controller
                        
                 })
                 ->make(true);
-                       
+        }catch (\Exception $e) {
+            Log::error($e);
+        }              
     }
 }

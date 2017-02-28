@@ -22,7 +22,7 @@ class CalendarApiController extends Controller {
      * @return type
      */
     public function postJobAvailability(Request $request){
-        //try{
+        try{
             $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
@@ -74,12 +74,12 @@ class CalendarApiController extends Controller {
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             } 
-       /* } catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
             $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
-        }*/
+        }
         return $response;
     }
     

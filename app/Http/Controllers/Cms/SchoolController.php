@@ -9,6 +9,7 @@ use App\Models\Location;
 use Yajra\Datatables\Datatables;
 use Session;
 use App\Models\Schooling;
+use Log;
 
 class SchoolController extends Controller
 {
@@ -65,6 +66,7 @@ class SchoolController extends Controller
      */
     public function store(Request $request)
     {
+        try{
         $rules = array(
             'parent_school' => array('required','integer'),
             'school' => array('required','unique:schoolings,school_name,parent_id')
@@ -89,6 +91,9 @@ class SchoolController extends Controller
         $school->save();
         Session::flash('message',$msg);
         return redirect('cms/school/index');
+        } catch(\Exception $e) {
+            Session::flash('message',$e->getMessage());
+        }
     }
     
     /**
@@ -104,6 +109,7 @@ class SchoolController extends Controller
     }
 
     public function schoolList(){
+        try{
         $schools =  Schooling::leftJoin('schoolings as sc','sc.id','=','schoolings.parent_id')
                     ->select('schoolings.id','schoolings.school_name','schoolings.is_active','schoolings.parent_id','sc.school_name as parent_school_name')
                     ->orderBy('schoolings.id', 'desc')
@@ -130,6 +136,9 @@ class SchoolController extends Controller
                        
                 })
                 ->make(true);
+        } catch(\Exception $e) {
+            Session::flash('message',$e->getMessage());
+        }
                        
     }
 }

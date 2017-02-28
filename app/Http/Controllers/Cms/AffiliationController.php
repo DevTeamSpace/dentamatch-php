@@ -9,6 +9,7 @@ use App\Models\Location;
 use Yajra\Datatables\Datatables;
 use Session;
 use App\Models\Affiliation;
+use Log;
 
 class AffiliationController extends Controller
 {
@@ -63,28 +64,31 @@ class AffiliationController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate and store the location...
-        $rules = array(
-            'affiliation' => array('required','unique:affiliations,affiliation_name'),
-        );
-        
-        if(isset($request->id)){
-            $rules['affiliation'] = "Required|Unique:affiliations,affiliation_name,".$request->id;
-            $affiliation = Affiliation::find($request->id);  
-            $msg = trans('messages.affiliation_updated');
+        try{
+            $rules = array(
+                'affiliation' => array('required','unique:affiliations,affiliation_name'),
+            );
+
+            if(isset($request->id)){
+                $rules['affiliation'] = "Required|Unique:affiliations,affiliation_name,".$request->id;
+                $affiliation = Affiliation::find($request->id);  
+                $msg = trans('messages.affiliation_updated');
+            }
+            else{
+                $affiliation = new Affiliation;
+                $msg = trans('messages.affiliation_added');
+            }
+
+            $this->validate($request, $rules);
+
+            $affiliation->affiliation_name = trim($request->affiliation);
+            $affiliation->is_active = ($request->is_active)?1:0;
+            $affiliation->save();
+            Session::flash('message',$msg);
+            return redirect('cms/affiliation/index');
+        }  catch (\Exception $e) {
+            Log::error($e);
         }
-        else{
-            $affiliation = new Affiliation;
-            $msg = trans('messages.affiliation_added');
-        }
-        
-        $this->validate($request, $rules);
-        
-        $affiliation->affiliation_name = trim($request->affiliation);
-        $affiliation->is_active = ($request->is_active)?1:0;
-        $affiliation->save();
-        Session::flash('message',$msg);
-        return redirect('cms/affiliation/index');
     }
     
     /**
@@ -100,20 +104,24 @@ class AffiliationController extends Controller
     }
 
     public function affiliationsList(){
-        $affiliations = Affiliation::SELECT(['affiliation_name','is_active','id'])->orderBy('id', 'desc')->get();
-        return Datatables::of($affiliations)
-                ->removeColumn('id')
-                ->addColumn('active', function ($affiliations) {
-                	$active = ($affiliations->is_active == 1) ? 'Yes':'No';
-                    return $active;
-                })
-                ->addColumn('action', function ($affiliations) {
-                    $edit = url('cms/affiliation/'.$affiliations->id.'/edit');
-                    $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-                    return $action;
-                       
-                })
-                ->make(true);
+        try{
+            $affiliations = Affiliation::SELECT(['affiliation_name','is_active','id'])->orderBy('id', 'desc')->get();
+            return Datatables::of($affiliations)
+                    ->removeColumn('id')
+                    ->addColumn('active', function ($affiliations) {
+                            $active = ($affiliations->is_active == 1) ? 'Yes':'No';
+                        return $active;
+                    })
+                    ->addColumn('action', function ($affiliations) {
+                        $edit = url('cms/affiliation/'.$affiliations->id.'/edit');
+                        $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
+                        return $action;
+
+                    })
+                    ->make(true);
+        }catch (\Exception $e) {
+            Log::error($e);
+        }
                        
     }
 }

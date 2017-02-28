@@ -14,7 +14,7 @@ use App\Models\UserGroup;
 use App\Models\UserProfile;
 use App\Models\PasswordReset;
 use Mail;
-
+use Log;
 
 class RecruiterController extends Controller
 {
@@ -108,11 +108,10 @@ class RecruiterController extends Controller
             }
 
             Session::flash('message',$msg);
-            
-        } catch(\Exception $e) {
-            Session::flash('message',$e->getMessage());
-        }
         return redirect('cms/recruiter/index');
+        } catch (\Exception $e) {
+            Log::error($e);
+        }
     }
     
     /**
@@ -130,6 +129,7 @@ class RecruiterController extends Controller
     }
     
     public function recruiterList(){
+        try{
         $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->select(
                                 'users.email','users.id',
@@ -153,6 +153,9 @@ class RecruiterController extends Controller
                     return $action;
                 })
                 ->make(true);
+        }  catch (\Exception $e) {
+            Log::error($e);
+        }
                        
     }
     
@@ -190,12 +193,12 @@ class RecruiterController extends Controller
                 $msg = trans('messages.admin_recruiter_password_success');
             }
             Session::flash('message',$msg);
-        
+
+        return redirect('cms/recruiter/index');
         } catch(\Exception $e) {
+            Log::error($e);
             Session::flash('message',$e->getMessage());
         }
-        
-        return redirect('cms/recruiter/index');
         
     }
 

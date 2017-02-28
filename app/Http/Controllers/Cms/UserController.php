@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Auth;
 use Session;
-
+use Log;
 class UserController extends Controller {
     
     public function __construct() {
@@ -35,6 +35,7 @@ class UserController extends Controller {
      */
     public function updatePassword(Request $request)
     {
+        try{
         $id = Auth::id();
         $credentials = [
             'id' => $id,
@@ -67,6 +68,10 @@ class UserController extends Controller {
                             ->withInput();
             }
         }
+        
+    }catch(\Exception $e) {
+    Log::error($e);
+}
     }
     
     

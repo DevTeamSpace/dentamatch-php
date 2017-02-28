@@ -9,7 +9,7 @@ use App\Models\Location;
 use Yajra\Datatables\Datatables;
 use Session;
 use App\Models\Certifications;
-
+use Log;
 class CertificateController extends Controller
 {
     /**
@@ -64,6 +64,7 @@ class CertificateController extends Controller
     public function store(Request $request)
     {
         // Validate and store the location...
+        try{
         $rules = array(
             'certificate' => array('required','unique:certifications,certificate_name'),
         );
@@ -85,6 +86,9 @@ class CertificateController extends Controller
         $certification->save();
         Session::flash('message',$msg);
         return redirect('cms/certificate/index');
+        }catch (\Exception $e) {
+            Log::error($e);
+        }
     }
     
     /**
@@ -100,6 +104,7 @@ class CertificateController extends Controller
     }
 
     public function certificationList(){
+        try{
         $certificates = Certifications::SELECT(['certificate_name','is_active','id'])->orderBy('id', 'desc')->get();
         return Datatables::of($certificates)
                 ->removeColumn('id')
@@ -114,6 +119,8 @@ class CertificateController extends Controller
                        
                 })
                 ->make(true);
-                       
+        }catch (\Exception $e) {
+            Log::error($e);
+        } 
     }
 }

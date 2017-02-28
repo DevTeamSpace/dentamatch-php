@@ -9,7 +9,7 @@ use App\Models\Location;
 use Yajra\Datatables\Datatables;
 use Session;
 use App\Models\Skills;
-
+use Log;
 class SkillController extends Controller
 {
     /**
@@ -65,6 +65,7 @@ class SkillController extends Controller
      */
     public function store(Request $request)
     {
+        try{
         $rules = array(
             'parent_skill' => array('required','integer'),
             'skill' => array('required','unique:skills,skill_name,parent_id')
@@ -87,6 +88,9 @@ class SkillController extends Controller
         $skill->save();
         Session::flash('message',$msg);
         return redirect('cms/skill/index');
+        } catch(\Exception $e) {
+            Log::error($e);
+        }
     }
     
     /**
@@ -102,6 +106,7 @@ class SkillController extends Controller
     }
 
     public function skillList(){
+        try{
         $skills =  Skills::leftJoin('skills as sk','sk.id','=','skills.parent_id')
                     ->select('skills.id','skills.skill_name','skills.is_active','skills.parent_id','sk.skill_name as parent_skill_name')
                     ->orderBy('skills.id', 'desc')
@@ -128,6 +133,9 @@ class SkillController extends Controller
                        
                 })
                 ->make(true);
+        }  catch(\Exception $e) {
+            Log::error($e);
+        }
                        
     }
 }
