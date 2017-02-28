@@ -13,7 +13,7 @@ use App\Models\RecruiterOfficeType;
 use Hash;
 
 class UserProfileController extends Controller {
-
+    private $result = [];
     public function officeDetails(Request $request) {
         
         if (isset($request->phoneNumber) && !empty($request->phoneNumber)) {
@@ -102,14 +102,26 @@ class UserProfileController extends Controller {
     }
 
     public function getEditProfile() {
-        $user = RecruiterProfile::where('user_id', Auth::user()->id)->first();
-        $officeType = \App\Models\OfficeType::all();
-        $offices = RecruiterOffice::join('recruiter_office_types', 'recruiter_office_types.recruiter_office_id', '=', 'recruiter_offices.id')
-                        ->join('office_types', 'recruiter_office_types.office_type_id', '=', 'office_types.id')
-                        ->where('user_id', Auth::user()->id)
-                        ->select('recruiter_offices.*', DB::raw('group_concat(office_types.officetype_name) as officetype_names'), DB::raw('group_concat(office_types.id) as officetype_id'))
-                        ->groupby('recruiter_offices.id')->get();
-        return view('web.edit_profile', ['user' => $user, 'offices' => $offices, 'officeType' => $officeType]);
+        return view('web.edit_profile', ['activeTab'=>'3']);
+    }
+    
+    public function getRecruiterProfileDetails(){
+        try{
+            $user = RecruiterProfile::where('user_id', Auth::user()->id)->select('id', 'user_id', 'office_name', 'office_desc')->first();
+            $officeType = \App\Models\OfficeType::all();
+            $offices = RecruiterOffice::join('recruiter_office_types', 'recruiter_office_types.recruiter_office_id', '=', 'recruiter_offices.id')
+                            ->join('office_types', 'recruiter_office_types.office_type_id', '=', 'office_types.id')
+                            ->where('user_id', Auth::user()->id)
+                            ->select('recruiter_offices.*', DB::raw('group_concat(office_types.officetype_name) as officetype_names'), DB::raw('group_concat(office_types.id) as officetype_id'))
+                            ->groupby('recruiter_offices.id')->get();
+            $this->result['user'] = $user;
+            $this->result['officeType'] = $officeType;
+            $this->result['offices'] = $offices;
+            $this->result['success'] = true;
+        } catch (\Exception $e) {
+            $this->result['message'] = $e->getMessage();
+        }
+        return $this->result;
     }
 
     public function deleteOffice($officeId){

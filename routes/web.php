@@ -70,6 +70,7 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
                 Route::get('favorite-jobseeker','web\FavoriteJobseekerController@getFavJobseeker');
                 Route::post('invite-jobseeker','web\FavoriteJobseekerController@postInviteJobseeker');
                 Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
+                Route::get('recruiter-profile-details', 'web\UserProfileController@getRecruiterProfileDetails');
 
                 Route::get('setting-terms-conditions', 'web\UserProfileController@getTermsConditions');
                 Route::get('change-password', 'web\UserProfileController@getChangePassword');
