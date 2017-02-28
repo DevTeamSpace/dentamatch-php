@@ -8,7 +8,7 @@
 </style>
 <div class="container globalpadder">
     <!-- Tab-->
-    <div class="row">
+    <div class="row" id="edit-profile">
         @include('web.layouts.sidebar')
         <div class="col-sm-8 ">
             <div class="addReplica">

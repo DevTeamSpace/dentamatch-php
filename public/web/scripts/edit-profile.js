@@ -136,162 +136,16 @@
         }
     };
 
-    var EditJobVM = function () {
+    var EditProfileVM = function () {
         var me = this;
-        me.showEdit = ko.observable(true);
-        me.cannotEdit = ko.observable(false);
-        me.allLocations = ko.observableArray([]);
-        me.jobId = ko.observable();
-        me.defaultSelectLocation = ko.observableArray([]);
-        me.abcd = ko.observableArray([]);
-        me.jobType = ko.observable('');
-        me.totalJobOpening = ko.observable();
-        me.jobOfficeId = ko.observable();
-        me.showTotalJobOpenings = ko.observable(false);
-        me.selectedOffice = ko.observableArray([]);
-        me.allOfficeTypes = ko.observableArray([]);
-        me.selectedJobType = ko.observable('');
-        me.allPartTimeDays = ko.observableArray([]);
-        me.tempJobDates = ko.observableArray([]);
-        me.partTimeDays = ko.observableArray([]);
-        me.locationError = ko.observable('');
-        me.errors = ko.observable(false);
-        me.mixedWorkHourError = ko.observable('');
-        me.mondayTimeError = ko.observable('');
-        me.tuesdayTimeError = ko.observable('');
-        me.wednesdayTimeError = ko.observable('');
-        me.thursdayTimeError = ko.observable('');
-        me.fridayTimeError = ko.observable('');
-        me.saturdayTimeError = ko.observable('');
-        me.sundayTimeError = ko.observable('');
-        me.everydayTimeError = ko.observable('');
-        me.phoneNumberError = ko.observable('');
-        me.totalJobOpeningError = ko.observable('');
-        me.partTimeJobDaysError = ko.observable('');
-        me.temporaryJobError = ko.observable('');
-        me.allOfficeTypeDetail = ko.observableArray([]);
-        me.headMessage = ko.observable('');
-        me.cancelButtonDelete = ko.observable(true);
-        me.prompt = ko.observable('');
-        me.showModalFooter = ko.observable(true);
 
         me.getProfileDetails = function () {
             jobId = $('#jobIdValue').val();
             $.get('recruiter-profile-details', {}, function (d) {
                 console.log(d);
                 return false;
-                me.jobId(d.jobDetails.id);
-                if (d.jobSeekerStatus != 0) {
-                    me.cannotEdit(true);
-                    me.showEdit(false);
-                } else {
-                    me.cannotEdit(false);
-                    me.showEdit(true);
-                }
                 
-                me.abcd.push(d.jobDetails.address);
-                for (i in d.recruiterOffices) {
-                    me.allLocations.push(d.recruiterOffices[i]);
-                }
-                me.defaultSelectLocation.push(d.jobDetails.address);
-                
-                me.allPartTimeDays(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
-                if (d.jobDetails.job_type == 1) {
-                    me.jobType("Full Time");
-                    me.selectedJobType("Full Time");
-                } else if (d.jobDetails.job_type == 2) {
-                    me.selectedJobType("Part Time");
-                    me.jobType("Part Time");
-                    
-                    if (d.jobDetails.is_monday !== null && d.jobDetails.is_monday !== 0) {
-                        me.partTimeDays.push("Monday");
-                    }
-                    if (d.jobDetails.is_tuesday !== null && d.jobDetails.is_tuesday !== 0) {
-                        me.partTimeDays.push("Tuesday");
-                    }
-                    if (d.jobDetails.is_wednesday !== null && d.jobDetails.is_wednesday !== 0) {
-                        me.partTimeDays.push("Wednesday");
-                    }
-                    if (d.jobDetails.is_thursday !== null && d.jobDetails.is_thursday !== 0) {
-                        me.partTimeDays.push("Thursday");
-                    }
-                    if (d.jobDetails.is_friday !== null && d.jobDetails.is_friday !== 0) {
-                        me.partTimeDays.push("Friday");
-                    }
-                    if (d.jobDetails.is_saturday !== null && d.jobDetails.is_saturday !== 0) {
-                        me.partTimeDays.push("Saturday");
-                    }
-                    if (d.jobDetails.is_sunday !== null && d.jobDetails.is_sunday !== 0) {
-                        me.partTimeDays.push("Sunday");
-                    }
-                } else {
-                    me.selectedJobType("Temporary");
-                    me.jobType("Temporary");
-                    me.showTotalJobOpenings(true);
-                    if(d.jobDetails.temp_job_dates != null){
-                        splitedTempJobDates = d.jobDetails.temp_job_dates.split(',');
-                    }
-                    for(i in splitedTempJobDates){
-                        if(me.tempJobDates().indexOf(splitedTempJobDates[i]) < 0){
-                            me.tempJobDates.push(splitedTempJobDates[i]);
-                        }
-                    }
-                    var selectedDates = [];
-                    for(i in me.tempJobDates()){
-                        splitedDate = me.tempJobDates()[i].split('-');
-                        year = splitedDate[0];
-                        month = splitedDate[1];
-                        day = splitedDate[2];
-                        customCreateDate = new Date(year, month-1, day);
-                        selectedDates.push(customCreateDate);
-//                        $('#CoverStartDateOtherPicker').datepicker({format: 'YYYY-MM-DD'});
-                    }
-                    $('#CoverStartDateOtherPicker').datepicker('setDates', selectedDates);
-                }
-                me.totalJobOpening(d.jobDetails.no_of_jobs);
-                me.jobOfficeId(d.jobDetails.recruiter_office_id);
-                
-                for(i in d.allOfficeTypes){
-                    me.allOfficeTypes.push(d.allOfficeTypes[i].officetype_name);
-                    me.allOfficeTypeDetail.push(d.allOfficeTypes[i]);
-                }
-                office_Id = null;
-                for(i in me.allLocations()){
-                    if(me.abcd()[0] == me.allLocations()[i].address){
-                        office_Id = me.allLocations()[i].id;
-                    }
-                }
-                me.showOfficeDetailsTwo(me, office_Id);
         });
-    };
-    
-    me.showOfficeDetails = function (d, e) {
-        me.selectedOffice([]);
-        selectedId = $(e.target).val();
-        for (i in d.allLocations()) {
-            if (d.allLocations()[i].address == selectedId) {
-                me.selectedOffice.push(new OfficeModel(d.allLocations()[i]));
-            }
-        }
-        $('.ddlCars').multiselect({
-            numberDisplayed: 3,
-        });
-        $(".dropCheck input").after("<div></div>");
-    };
-    me.showOfficeDetailsTwo = function (d, selectedId) {
-        if(selectedId == null){
-            return false;
-        }
-        me.selectedOffice([]);
-        for (i in d.allLocations()) {
-            if (d.allLocations()[i].id == selectedId) {
-                me.selectedOffice.push(new OfficeModel(d.allLocations()[i]));
-            }
-        }
-        $('.ddlCars').multiselect({
-            numberDisplayed: 3,
-        });
-        $(".dropCheck input").after("<div></div>");
     };
 
     var placeSearch, autocomplete, autocomplete1, autocomplete2, officeName;
@@ -343,21 +197,6 @@
         });
     }
     
-    me.selecteJobType = function(d, e){
-        me.totalJobOpeningError('');
-        me.partTimeJobDaysError('');
-        me.temporaryJobError('');
-        checkJobType = $(e.currentTarget).prev().val();
-        if( checkJobType == "Full Time"){
-            me.selectedJobType("Full Time");
-        }else if(checkJobType == "Part Time"){
-            me.selectedJobType("Part Time");
-        }else{
-            me.selectedJobType('Temporary');
-            me.showTotalJobOpenings(true);
-        }
-    };
-    
     me.everyDayWorkHour = function(d, e){
         d.selectedOfficeWorkingHours.isMondayWork(false);
         d.selectedOfficeWorkingHours.isTuesdayWork(false);
@@ -371,175 +210,12 @@
     me.otherDayWorkHour = function (d, e){
         d.selectedOfficeWorkingHours.isEverydayWork(false);
     };
-    
-    me.publishJob = function(){
-        me.mixedWorkHourError('');
-        me.mondayTimeError('');
-        me.tuesdayTimeError('');
-        me.wednesdayTimeError('');
-        me.thursdayTimeError('');
-        me.fridayTimeError('');
-        me.saturdayTimeError('');
-        me.sundayTimeError('');
-        me.everydayTimeError('');
-        me.phoneNumberError('');
-        me.totalJobOpeningError('');
-        me.partTimeJobDaysError('');
-        me.temporaryJobError('');
-        
-        if(me.selectedJobType() == "Full Time"){
-            
-        }else if(me.selectedJobType() == "Part Time"){
-            if(me.partTimeDays().length == 0){
-                me.partTimeJobDaysError('Please select days for part time job.');
-                return false;
-            }
-        }else{
-            if(me.totalJobOpening() == null || me.totalJobOpening() == ''){
-                me.totalJobOpeningError('Total job openings required');
-                return false;
-            }
-            if($('#CoverStartDateOtherPicker').val() == '' || $('#CoverStartDateOtherPicker').val() == null){
-                me.temporaryJobError('Please select dates for part time job.');
-                return false;
-            }
-        }
-        
-        if(me.selectedOffice()[0].selectedOfficeWorkingHours.isEverydayWork() == true && (me.selectedOffice()[0].selectedOfficeWorkingHours.isMondayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isTuesdayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isWednesdayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isThursdayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isFridayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isSaturdayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isSundayWork() == true)){
-            me.mixedWorkHourError('Please select everyday or select individual day at a time.');
-            return false;
-        }else{
-            if(me.selectedOffice()[0].selectedOfficeWorkingHours.isEverydayWork() == true){
-                if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.everydayStart(), 'HH:mm a') > moment(me.selectedOffice()[0].selectedOfficeWorkingHours.everydayEnd(), 'HH:mm a')){
-                    me.everydayTimeError('Start time cannot be greated than end time.');
-                    return false;
-                }
-            }
-            if(me.selectedOffice()[0].selectedOfficeWorkingHours.isMondayWork() == true){
-                if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.mondayStart(), 'HH:mm a') > moment(me.selectedOffice()[0].selectedOfficeWorkingHours.mondayEnd(), 'HH:mm a')){
-                    me.mondayTimeError('Start time cannot be greated than end time.');
-                    return false;
-                }
-            }
-            if(me.selectedOffice()[0].selectedOfficeWorkingHours.isTuesdayWork() == true){
-                if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.tuesdayStart(), 'HH:mm a') > moment(me.selectedOffice()[0].selectedOfficeWorkingHours.tuesdayEnd(), 'HH:mm a')){
-                    me.tuesdayTimeError('Start time cannot be greated than end time.');
-                    return false;
-                }
-            }
-            if(me.selectedOffice()[0].selectedOfficeWorkingHours.isWednesdayWork() == true){
-                if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.wednesdayStart(), 'HH:mm a') > moment(me.selectedOffice()[0].selectedOfficeWorkingHours.wednesdayEnd(), 'HH:mm a')){
-                    me.wednesdayTimeError('Start time cannot be greated than end time.');
-                    return false;
-                }
-            }
-            if(me.selectedOffice()[0].selectedOfficeWorkingHours.isThursdayWork() == true){
-                if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.thursdayStart(), 'HH:mm a') > moment(me.selectedOffice()[0].selectedOfficeWorkingHours.thursdayEnd(), 'HH:mm a')){
-                    me.thursdayTimeError('Start time cannot be greated than end time.');
-                    return false;
-                }
-            }
-            if(me.selectedOffice()[0].selectedOfficeWorkingHours.isFridayWork() == true){
-                if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.fridayStart(), 'HH:mm a') > moment(me.selectedOffice()[0].selectedOfficeWorkingHours.fridayEnd(), 'HH:mm a')){
-                    me.fridayTimeError('Start time cannot be greated than end time.');
-                    return false;
-                }
-            }
-            if(me.selectedOffice()[0].selectedOfficeWorkingHours.isSaturdayWork() == true){
-                if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.saturdayStart(), 'HH:mm a') > moment(me.selectedOffice()[0].selectedOfficeWorkingHours.saturdayEnd(), 'HH:mm a')){
-                    me.saturdayTimeError('Start time cannot be greated than end time.');
-                    return false;
-                }
-            }
-            if(me.selectedOffice()[0].selectedOfficeWorkingHours.isSundayWork() == true){
-                if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.sundayStart(), 'HH:mm a') > moment(me.selectedOffice()[0].selectedOfficeWorkingHours.sundayEnd(), 'HH:mm a')){
-                    me.sundayTimeError('Start time cannot be greated than end time.');
-                    return false;
-                }
-            }
-        }
-        
-        if(me.selectedOffice()[0].selectedOfficePhone() == null || me.selectedOffice()[0].selectedOfficePhone() == ''){
-            me.phoneNumberError('Please enter phone number.');
-            return false;
-        }
-        
-        if(me.errors() == true){
-            return false;
-        }else{
-            me.headMessage('Publishing Job');
-            me.cancelButtonDelete(false);
-            me.prompt('Publishing job please wait.');
-            me.showModalFooter(false);
-            $('#actionModal').modal('show');
-            splitedTempDates = ($('#CoverStartDateOtherPicker').val()).split(',');
-            me.tempJobDates([]);
-            for(i in splitedTempDates){
-                me.tempJobDates.push(splitedTempDates[i]);
-            }
-            
-            formData = new FormData();
-            formData.append('jobDetails', ko.toJSON(me));
-            formData.append('jobId', me.jobId())
-            jQuery.ajax({
-                url: "{{url('edit-job')}}",
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                type: 'POST',
-                success: function (data) {
-                    me.prompt('Job published successfully, please wait redirecting you...');
-                    setTimeout(
-                        function ()
-                        {
-                            if(data.data == null){
-                                location.reload();
-                            }else{
-                                location.replace("/job/edit/"+data.data.id);
-                            }
-                        }, 700);
-                }
-            });
-        }
-    };
-    
-    me.deleteJob = function(d, e){
-        me.headMessage('Delete Job');
-        me.cancelButtonDelete(true);
-        me.prompt('Do you want to delete job ?');
-        me.showModalFooter(true);
-        $('#actionModal').modal('show');
-        
-        $('#actionButton').click(function(){
-            me.cancelButtonDelete(false);
-            me.showModalFooter(false);
-            formData = new FormData();
-            formData.append('jobId', me.jobId())
-            jQuery.ajax({
-                url: "{{url('delete-job')}}",
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                type: 'POST',
-                success: function (data) {
-                    me.prompt('Job delted successfully.');
-                    setTimeout(
-                        function ()
-                        {
-                            location.replace("/job/lists");
-                        }, 700);
-                }
-            });
-        });
-    };
 
     me._init = function () {
         me.getProfileDetails();
     };
     me._init();
 };
-var ejObj = new EditJobVM();
-ko.applyBindings(ejObj, $('#edit-job')[0]);
+var ejObj = new EditProfileVM();
+ko.applyBindings(ejObj, $('#edit-profile')[0]);
 //});
