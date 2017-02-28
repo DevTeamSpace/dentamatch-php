@@ -428,15 +428,15 @@ class RecruiterJobController extends Controller {
                 $jobObj->recruiter_office_id = $office['id'];
             }
             $jobObj->job_type = $jobType;
-            
-                $jobObj->is_monday = config('constants.NullValue');
-                $jobObj->is_tuesday = config('constants.NullValue');
-                $jobObj->is_wednesday = config('constants.NullValue');
-                $jobObj->is_thursday = config('constants.NullValue');
-                $jobObj->is_friday = config('constants.NullValue');
-                $jobObj->is_saturday = config('constants.NullValue');
-                $jobObj->is_sunday = config('constants.NullValue');
-                $jobObj->no_of_jobs = config('constants.NullValue');
+
+            $jobObj->is_monday = config('constants.NullValue');
+            $jobObj->is_tuesday = config('constants.NullValue');
+            $jobObj->is_wednesday = config('constants.NullValue');
+            $jobObj->is_thursday = config('constants.NullValue');
+            $jobObj->is_friday = config('constants.NullValue');
+            $jobObj->is_saturday = config('constants.NullValue');
+            $jobObj->is_sunday = config('constants.NullValue');
+            $jobObj->no_of_jobs = config('constants.NullValue');
             TempJobDates::where(['recruiter_job_id' => $allData->jobId])->delete();
             if ($jobType == config('constants.PartTimeJob')) {
                 $jobObj->is_monday = in_array("Monday", $allData->partTimeDays) ? 1 : 0;
@@ -446,7 +446,7 @@ class RecruiterJobController extends Controller {
                 $jobObj->is_friday = in_array("Friday", $allData->partTimeDays) ? 1 : 0;
                 $jobObj->is_saturday = in_array("Saturday", $allData->partTimeDays) ? 1 : 0;
                 $jobObj->is_sunday = in_array("Sunday", $allData->partTimeDays) ? 1 : 0;
-                $jobObj->no_of_jobs = 0;
+                $jobObj->no_of_jobs = config('constants.NullValue');
                 $jobObj->save();
             } elseif ($jobType == config('constants.TemporaryJob')) {
                 $jobObj->no_of_jobs = $allData->totalJobOpening;
@@ -457,6 +457,8 @@ class RecruiterJobController extends Controller {
                     $newTemJobObj->job_date = date('Y-m-d', strtotime($tempJobDate));
                     $newTemJobObj->save();
                 }
+            } else {
+                $jobObj->save();
             }
             
         } catch (\Exception $e) {

@@ -1112,60 +1112,14 @@ paths:
       tags:
         - Notification
         
-  /users/notification-read:
-    post:
-      summary: Read notification
-      description: Read Notification
-      responses: 
-          200:
-            description: Read notification list
-          default:
-            description: Unexpected error
-            schema:
-             $ref: '#/definitions/Error'
-             
-      parameters:
-        - name: accessToken
-          in: header
-          description: access token
-          type: string
-        - name: notificationId
-          in: formData
-          description: notificationId 
-          type: integer
-  
-      tags:
-        - Notification
-            
-  /users/unread-notification:
-    get:
-      summary: unread notification
-      description: unread notification
-      responses: 
-          200:
-            description: unread notification of  user
-          default:
-            description: Unexpected error
-            schema:
-             $ref: '#/definitions/Error'
-             
-      parameters:
-        - name: accessToken
-          in: header
-          description: access token
-          type: string
         
-  
-      tags:
-        - Notification
-        
-  /users/delete-notification:
+  /users/update-devicetoken:
     post:
-      summary: delete notification
-      description: delete notification
+      summary: Update device token of user
+      description: Update device token of user
       responses: 
           200:
-            description: delete notification of  user
+            description: Update device token of user
           default:
             description: Unexpected error
             schema:
@@ -1176,13 +1130,13 @@ paths:
           in: header
           description: access token
           type: string
-        - name: notificationId
+        - name: updateDeviceToken
           in: formData
-          description: notificationId 
-          type: integer
+          description: updateDeviceToken 
+          type: string
   
       tags:
-        - Notification
+        - User Profile
         
         
   /users/acceptreject-job:
