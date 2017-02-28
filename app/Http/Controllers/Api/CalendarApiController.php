@@ -22,7 +22,7 @@ class CalendarApiController extends Controller {
      * @return type
      */
     public function postJobAvailability(Request $request){
-        try{
+        //try{
             $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
@@ -46,14 +46,20 @@ class CalendarApiController extends Controller {
                         }
                         $userProfileModel->save();
                         JobSeekerTempAvailability::where('user_id', '=', $userId)->where('temp_job_date','>=',date('Y-m-d'))->forceDelete();
+                        
                         if(is_array($reqData['tempdDates']) && count($reqData['tempdDates']) > 0) {
+                            $updateTempDates = [];
                             $tempDateArray = [];
                             $tempJobDate = [];
                             $availability = JobSeekerTempAvailability::select('temp_job_date')->whereIn('temp_job_date',$reqData['tempdDates'])->where('user_id', '=', $userId)->get();
                             if($availability) {
                                 $tempJobDate = $availability->toArray();
+                                foreach($tempJobDate as $value){
+                                    $updateTempDates[] = $value['temp_job_date'];
+                                }
                             }
-                            $insertTempDateArray = array_diff($reqData['tempdDates'], $tempJobDate);
+                            $insertTempDateArray = array_diff($reqData['tempdDates'], $updateTempDates);
+                            
                             if(!empty($insertTempDateArray)) {
                                 foreach($insertTempDateArray as $tempDate) {     
                                         $tempDateArray[] = array('user_id' => $userId , 'temp_job_date' => $tempDate);
@@ -68,12 +74,12 @@ class CalendarApiController extends Controller {
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             } 
-        } catch (ValidationException $e) {
+       /* } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
             $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
-        }
+        }*/
         return $response;
     }
     
