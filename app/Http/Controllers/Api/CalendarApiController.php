@@ -46,15 +46,20 @@ class CalendarApiController extends Controller {
                         }
                         $userProfileModel->save();
                         JobSeekerTempAvailability::where('user_id', '=', $userId)->where('temp_job_date','>=',date('Y-m-d'))->forceDelete();
-                        if(is_array($reqData['tempdDates']) && count($reqData['tempdDates']) > 0){
-                            $tempDateArray = array();
-                            foreach($reqData['tempdDates'] as $tempDate){
-                                $availability = JobSeekerTempAvailability::where('user_id', '=', $userId)->where('temp_job_date','=',$tempDate)->get();
-                                if($availability->count() == 0){        
-                                    $tempDateArray[] = array('user_id' => $userId , 'temp_job_date' => $tempDate);
-                                }
+                        if(is_array($reqData['tempdDates']) && count($reqData['tempdDates']) > 0) {
+                            $tempDateArray = [];
+                            $tempJobDate = [];
+                            $availability = JobSeekerTempAvailability::select('temp_job_date')->whereIn('temp_job_date',$reqData['tempdDates'])->where('user_id', '=', $userId)->get();
+                            if($availability) {
+                                $tempJobDate = $availability->toArray();
                             }
-                            JobSeekerTempAvailability::insert($tempDateArray);
+                            $insertTempDateArray = array_diff($reqData['tempdDates'], $tempJobDate);
+                            if(!empty($insertTempDateArray)) {
+                                foreach($insertTempDateArray as $tempDate) {     
+                                        $tempDateArray[] = array('user_id' => $userId , 'temp_job_date' => $tempDate);
+                                }
+                                JobSeekerTempAvailability::insert($tempDateArray);
+                            }
                         }
                         $response = apiResponse::customJsonResponse(1, 200, trans("messages.availability_add_success"));
                 }else{
