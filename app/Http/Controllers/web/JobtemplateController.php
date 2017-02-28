@@ -9,6 +9,7 @@ use App\Models\Skills;
 use App\Models\JobTitles;
 use App\Models\JobTemplates;
 use App\Models\TemplateSkills;
+use Log;
 
 class JobtemplateController extends Controller
 {
@@ -30,6 +31,7 @@ class JobtemplateController extends Controller
             
             return $this->returnView('list');
         } catch (\Exception $e) {
+            Log::error($e);
             return view('web.error.',["message" => $e->getMessage()]);
         }
     }
@@ -42,6 +44,7 @@ class JobtemplateController extends Controller
             
             return $this->returnView('view');
         } catch (\Exception $e) {
+            Log::error($e);
             return view('web.error.',["message" => $e->getMessage()]);
         }
     }
@@ -50,11 +53,11 @@ class JobtemplateController extends Controller
         try{
             $this->viewData['templateData'] = JobTemplates::findById($templateId,Auth::user()->id);
             $this->viewData['skillsData'] = Skills::getAllParentChildSkillList($templateId);
-            //dd($this->viewData['skillsData']);
             $this->viewData['jobTitleData'] = JobTitles::getAll(JobTitles::ACTIVE);
 
             return $this->returnView('create');
         } catch (\Exception $e) {
+            Log::error($e);
             return view('web.error.',["message" => $e->getMessage()]);
         }
     }
@@ -67,6 +70,7 @@ class JobtemplateController extends Controller
 
             return $this->returnView('create');
         } catch (\Exception $e) {
+            Log::error($e);
             return view('web.error.',["message" => $e->getMessage()]);
         }
     }
@@ -77,6 +81,7 @@ class JobtemplateController extends Controller
             JobTemplates::where('id',$request->templateId)->where('user_id',Auth::user()->id)->delete();
             return redirect('jobtemplates');
         } catch (\Exception $e) {
+            Log::error($e);
             return view('web.error.',["message" => $e->getMessage()]);
         }
     }
@@ -91,7 +96,7 @@ class JobtemplateController extends Controller
                 'id'=>'integer|required_if:action,edit'
             ]);
             try{
-            
+            DB::beginTransaction();
             $jobTemplate = new JobTemplates();
             $redirect = 'jobtemplates';
             if ($request->action=="edit" && !empty($request->id)) {
@@ -113,9 +118,12 @@ class JobtemplateController extends Controller
                 $jobTemplate->templateSkills()->saveMany($skillArrObj);
                 unset($skillArrObj);
             }
+            DB::commit();
             unset($jobTemplate);
             return redirect($redirect);
         } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollback();
             return view('web.error.',["message" => $e->getMessage()]);
         }
     }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\web;
 use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\UserChat;
+use Log;
 use App\Models\ChatUserLists;
 
 class ChatController extends Controller
@@ -25,7 +25,7 @@ class ChatController extends Controller
             
             return $this->returnView('view');
         } catch (\Exception $e) {
-            dd($e);
+            Log::error($e);
             return view('web.error.',["message" => $e->getMessage()]);
         }
     }
