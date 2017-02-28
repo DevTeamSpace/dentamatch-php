@@ -48,6 +48,7 @@ class RecruiterJobController extends Controller {
 
             return $this->returnView('create');
         } catch (\Exception $e) {
+            Log::error($e);
             return view('web.error.', ["message" => $e->getMessage()]);
         }
     }
@@ -76,6 +77,7 @@ class RecruiterJobController extends Controller {
 
             return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData', 'jobId','maxDistance', 'jobTemplateModalData'));
         } catch (\Exception $e) {
+            Log::error($e);
             return view('web.error.', ["message" => $e->getMessage()]);
         }
     }
@@ -130,6 +132,7 @@ class RecruiterJobController extends Controller {
             return redirect('job/lists');
         } catch (\Exception $e) {
             DB::rollback();
+            Log::error($e);
             return view('web.error.', ["message" => $e->getMessage()]);
         }
     }
@@ -146,6 +149,7 @@ class RecruiterJobController extends Controller {
 
             return $this->returnView('list');
         } catch (\Exception $e) {
+            Log::error($e);
             return view('web.error.', ["message" => $e->getMessage()]);
         }
     }
@@ -154,6 +158,7 @@ class RecruiterJobController extends Controller {
         try {
             dd('In progress');
         } catch (\Exception $e) {
+            Log::error($e);
             return view('web.error.', ["message" => $e->getMessage()]);
         }
     }
@@ -167,6 +172,7 @@ class RecruiterJobController extends Controller {
             $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
             return $this->returnView('view');
         } catch (\Exception $e) {
+            Log::error($e);
             return view('web.error.', ["message" => $e->getMessage()]);
         }
     }
@@ -197,7 +203,7 @@ class RecruiterJobController extends Controller {
             }
             return redirect('job/details/'.$requestData['jobId']);
         } catch (\Exception $e) {
-            dd($e);
+            Log::error($e);
             return view('web.error.', ["message" => $e->getMessage()]);
         }
     }
@@ -210,6 +216,7 @@ class RecruiterJobController extends Controller {
 
             return view('web.recuriterJob.seekerdetails', compact('seekerDetails'));
         } catch (\Exception $e) {
+            Log::error($e);
             return view('web.error.', ["message" => $e->getMessage()]);
         }
     }
@@ -275,6 +282,7 @@ class RecruiterJobController extends Controller {
             $allData['allOfficeTypes'] = $allOfficeTypes;
             $response = $allData;
         } catch (\Exception $e) {
+            Log::error($e);
             $response = $e->getMessage();
         }
         return $response;
@@ -297,7 +305,6 @@ class RecruiterJobController extends Controller {
                 $updatedJob = $this->sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj);
             } else {
                 $updatedJob = $this->sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj);
-//                DB::table('recruiter_jobs')->where('id', $allData->jobId)->delete();
             }
             
             DB::commit();
@@ -393,7 +400,6 @@ class RecruiterJobController extends Controller {
     private function updateOffice($allData, $requestType = '') {
         try {
             if ($requestType != '') {
-//                RecruiterOffice::where('id', $allData->selectedOffice[0]->selectedOfficeId)->delete();
                 $recruiterOfficeObj = new RecruiterOffice();
                 $recruiterOfficeObj->address = $allData->selectedOffice[0]->selectedOfficeAddress;
                 $recruiterOfficeObj->latitude = $allData->selectedOffice[0]->selectedOfficeLat;
@@ -417,12 +423,20 @@ class RecruiterJobController extends Controller {
             $jobObj = RecruiterJobs::where(['id' => $allData->jobId])->first();
             $jobTemplateId = $jobObj['job_template_id'];
             if ($office != '') {
-//                DB::table('recruiter_jobs')->where('id', $allData->jobId)->delete();
                 $jobObj = new RecruiterJobs();
                 $jobObj->job_template_id = $jobTemplateId;
                 $jobObj->recruiter_office_id = $office['id'];
             }
             $jobObj->job_type = $jobType;
+
+            $jobObj->is_monday = config('constants.NullValue');
+            $jobObj->is_tuesday = config('constants.NullValue');
+            $jobObj->is_wednesday = config('constants.NullValue');
+            $jobObj->is_thursday = config('constants.NullValue');
+            $jobObj->is_friday = config('constants.NullValue');
+            $jobObj->is_saturday = config('constants.NullValue');
+            $jobObj->is_sunday = config('constants.NullValue');
+            $jobObj->no_of_jobs = config('constants.NullValue');
             TempJobDates::where(['recruiter_job_id' => $allData->jobId])->delete();
             if ($jobType == config('constants.PartTimeJob')) {
                 $jobObj->is_monday = in_array("Monday", $allData->partTimeDays) ? 1 : 0;
@@ -432,16 +446,9 @@ class RecruiterJobController extends Controller {
                 $jobObj->is_friday = in_array("Friday", $allData->partTimeDays) ? 1 : 0;
                 $jobObj->is_saturday = in_array("Saturday", $allData->partTimeDays) ? 1 : 0;
                 $jobObj->is_sunday = in_array("Sunday", $allData->partTimeDays) ? 1 : 0;
-                $jobObj->no_of_jobs = 0;
+                $jobObj->no_of_jobs = config('constants.NullValue');
                 $jobObj->save();
             } elseif ($jobType == config('constants.TemporaryJob')) {
-                $jobObj->is_monday = config('constants.NullValue');
-                $jobObj->is_tuesday = config('constants.NullValue');
-                $jobObj->is_wednesday = config('constants.NullValue');
-                $jobObj->is_thursday = config('constants.NullValue');
-                $jobObj->is_friday = config('constants.NullValue');
-                $jobObj->is_saturday = config('constants.NullValue');
-                $jobObj->is_sunday = config('constants.NullValue');
                 $jobObj->no_of_jobs = $allData->totalJobOpening;
                 $jobObj->save();
                 foreach ($allData->tempJobDates as $tempJobDate) {
@@ -451,21 +458,14 @@ class RecruiterJobController extends Controller {
                     $newTemJobObj->save();
                 }
             } else {
-                $jobObj->is_monday = config('constants.NullValue');
-                $jobObj->is_tuesday = config('constants.NullValue');
-                $jobObj->is_wednesday = config('constants.NullValue');
-                $jobObj->is_thursday = config('constants.NullValue');
-                $jobObj->is_friday = config('constants.NullValue');
-                $jobObj->is_saturday = config('constants.NullValue');
-                $jobObj->is_sunday = config('constants.NullValue');
-                $jobObj->no_of_jobs = config('constants.NullValue');
+                $jobObj->save();
             }
-            $updateJobResult = $jobObj;
+            
         } catch (\Exception $e) {
             Log::error($e);
-            $updateJobResult = $e->getMessage();
+            $jobObj = $e->getMessage();
         }
-        return $updateJobResult;
+        return $jobObj;
     }
 
     public function updateOfficeType($allData, $officeId = '') {
