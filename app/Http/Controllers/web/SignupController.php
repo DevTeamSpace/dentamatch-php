@@ -13,6 +13,7 @@ use Auth;
 use Session;
 use Mail;
 use DB;
+use Log;
 
 class SignupController extends Controller {
 
@@ -129,6 +130,7 @@ class SignupController extends Controller {
                 Session::flash('success', trans("messages.successfully_register"));
             }
         } catch (\Exception $e) {
+            Log::error($e);
             Session::flash('message', $e->getMessage());
         }
         return redirect($redirect);
@@ -152,6 +154,7 @@ class SignupController extends Controller {
                 Session::flash('message', trans("messages.verified_problem"));
             }
         } catch (\Exception $e) {
+            Log::error($e);
             Session::flash('message', trans("messages.verified_problem"));
         }
         return redirect($redirect);
@@ -163,6 +166,7 @@ class SignupController extends Controller {
             RecruiterProfile::where('user_id',Auth::user()->id)->update(['accept_term' => 1]);
             return view('web.dashboard')->with('modal', 1)->with('officeType', $officeType);
         } catch (\Exception $e) {
+            Log::error($e);
             return redirect('terms-conditions');
         }
     }
