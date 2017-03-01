@@ -1,19 +1,19 @@
 <!--Seeker listing-->
 @foreach ($seekersList['paginate'] as $seeker)
 <!--search preference list-->
-    {!! csrf_field() !!}
-    <input type="hidden" name="jobId" value="{{ $jobDetails['id'] }}">
-    <input type="hidden" name="seekerId" value="{{ $seeker['user_id'] }}">
-    <div class="media jobCatbox">
-        <div class="media-left ">
-            <div class="img-holder ">
-                <img class="media-object img-circle" src="{{ url("image/66/66/?src=" .$seeker['profile_pic']) }}" alt="...">
-                @if($jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
-                <span class="star {{ ($seeker['is_favourite']==null)?'star-empty':'star-fill' }}"></span>
-                @endif
-            </div>
+{!! csrf_field() !!}
+<input type="hidden" name="jobId" value="{{ $jobDetails['id'] }}">
+<input type="hidden" name="seekerId" value="{{ $seeker['user_id'] }}">
+<div class="media jobCatbox">
+    <div class="media-left ">
+        <div class="img-holder ">
+            <img class="media-object img-circle" src="{{ url("image/66/66/?src=" .$seeker['profile_pic']) }}" alt="...">
+            @if($jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+            <span class="star {{ ($seeker['is_favourite']==null)?'star-empty':'star-fill' }}"></span>
+            @endif
         </div>
     </div>
+    
     <div class="media-body ">
         <div class="template-job-information mr-t-15">
           <div class="template-job-information-left">
@@ -159,6 +159,7 @@
             @endif
         </div>
     </div>
+</div>
 </div>
 </div>
 </form>
