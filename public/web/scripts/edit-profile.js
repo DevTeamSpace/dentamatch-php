@@ -2,31 +2,32 @@
 
     var OfficeModel = function (data) {
         var me = this;
-        me.selectedOfficeId = ko.observable();
-        me.selectedOfficeAddress = ko.observable('');
-        me.selectedOfficePhone = ko.observable();
-        me.selectedOfficeInfo = ko.observable('');
-        me.selectedOfficeWorkingHours = ko.observable();
-        me.selectedOfficeZipcode = ko.observable();
-        me.datePickerBinding = ko.observable(false);
-        me.selectedOfficeType = ko.observableArray([]);
-        me.selectedOfficeLat = ko.observable();
-        me.selectedOfficeLng = ko.observable();
+        me.officeId = ko.observable();
+        me.officeAddress = ko.observable('');
+        me.officePhone = ko.observable();
+        me.officeInfo = ko.observable('');
+        me.officeWorkingHours = ko.observable();
+        me.officeZipcode = ko.observable();
+        me.officeType = ko.observableArray([]);
+        me.officeLat = ko.observable();
+        me.officeLng = ko.observable();
+        me.showOffice = ko.observable(true);
+        me.showOfficeEditForm = ko.observable(false);
+        me.alreadyAdded = ko.observable(true);
 
         me._init = function (d) {
-            me.selectedOfficeId(d.id);
-            splitOfficeType = d.office_type_name.split(',');
+            me.officeId(d.id);
+            splitOfficeType = d.officetype_names.split(',');
             for (i in splitOfficeType) {
-                me.selectedOfficeType.push(splitOfficeType[i]);
+                me.officeType.push(splitOfficeType[i]);
             }
-            me.selectedOfficeAddress(d.address);
-            me.selectedOfficePhone(d.phone_no);
-            me.selectedOfficeInfo(d.office_location);
-            me.selectedOfficeZipcode(d.zipcode);
-            me.selectedOfficeWorkingHours = new WorkingHourModel(d);
-            me.datePickerBinding(true);
-            me.selectedOfficeLat(d.latitude);
-            me.selectedOfficeLng(d.longitude);
+            me.officeAddress(d.address);
+            me.officePhone(d.phone_no);
+            me.officeInfo(d.office_info);
+            me.officeZipcode(d.zipcode);
+            me.officeWorkingHours = new WorkingHourModel(d);
+            me.officeLat(d.latitude);
+            me.officeLng(d.longitude);
         };
 
         me._init(data);
@@ -59,6 +60,20 @@
         me.isEverydayWork = ko.observable(false);
         me.everydayStart = ko.observable(null);
         me.everydayEnd = ko.observable(null);
+        
+        me.everyDayWorkHour = function(d, e){
+            me.isMondayWork(false);
+            me.isTuesdayWork(false);
+            me.isWednesdayWork(false);
+            me.isThursdayWork(false);
+            me.isFridayWork(false);
+            me.isSaturdayWork(false);
+            me.isSundayWork(false);
+        };
+        
+        me.otherDayWorkHour = function (d, e){
+            me.isEverydayWork(false);
+        };
         
         me._init = function (d) {
             if ((d.work_everyday_start == "00:00:00" && d.work_everyday_end == "00:00:00") || (d.work_everyday_start == null && d.work_everyday_end == null)) {
@@ -138,11 +153,28 @@
 
     var EditProfileVM = function () {
         var me = this;
-
+        me.dentalOfficeName = ko.observable('');
+        me.dentalOfficeDescription = ko.observable('');
+        me.recruiterProfileId = ko.observable();
+        me.allOfficeTypes = ko.observableArray([]);
+        me.offices = ko.observableArray([]);
+        
         me.getProfileDetails = function () {
             jobId = $('#jobIdValue').val();
             $.get('recruiter-profile-details', {}, function (d) {
                 console.log(d);
+                if(typeof d.user != "undefined"){
+                    me.dentalOfficeName(d.user.office_name);
+                    me.dentalOfficeDescription(d.user.office_desc);
+                    me.recruiterProfileId(d.user.id);
+                }
+                for(i in d.officeType){
+                    me.allOfficeTypes.push(d.officeType[i].officetype_name);
+                }
+                for(i in d.offices){
+                    me.offices.push(new OfficeModel(d.offices[i]));
+                }
+                console.log(me.offices());
                 return false;
                 
         });
@@ -196,20 +228,6 @@
             });
         });
     }
-    
-    me.everyDayWorkHour = function(d, e){
-        d.selectedOfficeWorkingHours.isMondayWork(false);
-        d.selectedOfficeWorkingHours.isTuesdayWork(false);
-        d.selectedOfficeWorkingHours.isWednesdayWork(false);
-        d.selectedOfficeWorkingHours.isThursdayWork(false);
-        d.selectedOfficeWorkingHours.isFridayWork(false);
-        d.selectedOfficeWorkingHours.isSaturdayWork(false);
-        d.selectedOfficeWorkingHours.isSundayWork(false);
-    };
-    
-    me.otherDayWorkHour = function (d, e){
-        d.selectedOfficeWorkingHours.isEverydayWork(false);
-    };
 
     me._init = function () {
         me.getProfileDetails();
