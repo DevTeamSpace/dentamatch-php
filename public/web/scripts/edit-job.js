@@ -505,7 +505,7 @@
     me.deleteJob = function(d, e){
         me.headMessage('Delete Job');
         me.cancelButtonDelete(true);
-        me.prompt('Do you want to delete job ?');
+        me.prompt('Do you want to delete this job ?');
         me.showModalFooter(true);
         $('#actionModal').modal('show');
         
