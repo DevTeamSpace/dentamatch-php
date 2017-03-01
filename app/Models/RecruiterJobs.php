@@ -74,99 +74,107 @@ class RecruiterJobs extends Model
         $userProfile = UserProfile::where('user_id', $reqData['userId'])->first();
         $longitude = $userProfile->longitude;
         $latitude = $userProfile->latitude;
-                $searchQueryObj = RecruiterJobs::leftJoin('job_lists','job_lists.recruiter_job_id','=','recruiter_jobs.id')
-                        ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
-                        ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
-                        ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
-                        ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
-                       // ->whereNull('job_lists.id')
-                       // ->where('job_lists.seeker_id','!=', $reqData['userId'])
-                        ->whereIn('job_templates.job_title_id', $reqData['jobTitle']);
-                
-                        //->whereIn('job_titles.id', $reqData['jobTitle']);
-                /*$searchQueryObj = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
-                        ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
-                        ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
-                        ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
-                        ->whereIn('job_templates.job_title_id', $reqData['jobTitle']);*/
-                if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 0){
-                    $searchQueryObj->where('recruiter_jobs.job_type',1);
+        $searchQueryObj = RecruiterJobs::leftJoin('job_lists','job_lists.recruiter_job_id','=','recruiter_jobs.id')
+                ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+                ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
+                ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
+                ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
+               // ->whereNull('job_lists.id')
+               // ->where('job_lists.seeker_id','!=', $reqData['userId'])
+                ->whereIn('job_templates.job_title_id', $reqData['jobTitle']);
+
+                //->whereIn('job_titles.id', $reqData['jobTitle']);
+        /*$searchQueryObj = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+                ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
+                ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
+                ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
+                ->whereIn('job_templates.job_title_id', $reqData['jobTitle']);*/
+
+        $blockedRecruiterModel = ChatUserLists::getBlockedRecruiters($reqData['userId']);
+        if(!empty($blockedRecruiterModel)) {
+            $blockedRecruiter = array_map(function ($value) {
+                        return  $value['recruiter_id'];
+                    }, $blockedRecruiterModel);
+            $searchQueryObj->whereNotIn('recruiter_profiles.user_id',$blockedRecruiter);
+        }
+        if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 0){
+            $searchQueryObj->where('recruiter_jobs.job_type',1);
+        }
+
+        if($reqData['isFulltime'] == 0 && $reqData['isParttime'] == 1){
+            $searchQueryObj->where('recruiter_jobs.job_type',2);
+            $searchQueryObj->where(function($query) use ($reqData){
+                if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
+                    //$daysArray = ['is_monday'=>0, 'is_tuesday'=>0, 'is_wednesday'=>0, 'is_thursday'=>0, 'is_friday'=>0, 'is_saturday'=>0, 'is_sunday'=>0];
+                    foreach($reqData['parttimeDays'] as $day){
+                        $query->orWhere('is_'.$day, 1);
+                    }
                 }
-                
-                if($reqData['isFulltime'] == 0 && $reqData['isParttime'] == 1){
-                    $searchQueryObj->where('recruiter_jobs.job_type',2);
-                    $searchQueryObj->where(function($query) use ($reqData){
-                        if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
-                            //$daysArray = ['is_monday'=>0, 'is_tuesday'=>0, 'is_wednesday'=>0, 'is_thursday'=>0, 'is_friday'=>0, 'is_saturday'=>0, 'is_sunday'=>0];
-                            foreach($reqData['parttimeDays'] as $day){
-                                $query->orWhere('is_'.$day, 1);
+            });
+        }
+
+
+        $searchQueryObj->where(function($query) use ($reqData){
+            if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 1){
+                $query->where('recruiter_jobs.job_type',1);
+                if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
+                    $query->orWhere(function($query1) use ($reqData){
+                        $query1->where('recruiter_jobs.job_type',2);
+                        $query1->where(function($query2) use ($reqData){
+                            foreach($reqData['parttimeDays'] as  $day){
+                                $query2->orWhere('is_'.$day, 1);
                             }
-                        }
+                        });
                     });
                 }
+            }
+        });
+        //$radius = Configs::select('config_data')->where('config_name','=','SEARCHRADIUS')->first();
+        //$searchQueryObj->where('distance','<=',$radius->config_data);
 
-                    
-                $searchQueryObj->where(function($query) use ($reqData){
-                    if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 1){
-                        $query->where('recruiter_jobs.job_type',1);
-                        if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
-                            $query->orWhere(function($query1) use ($reqData){
-                                $query1->where('recruiter_jobs.job_type',2);
-                                $query1->where(function($query2) use ($reqData){
-                                    foreach($reqData['parttimeDays'] as  $day){
-                                        $query2->orWhere('is_'.$day, 1);
-                                    }
-                                });
-                            });
-                        }
-                    }
-                });
-                //$radius = Configs::select('config_data')->where('config_name','=','SEARCHRADIUS')->first();
-                //$searchQueryObj->where('distance','<=',$radius->config_data);
-                
-                $total = $searchQueryObj->count();
-                $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
-                                'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
-                                'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
-                                'recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
-                                'job_titles.jobtitle_name','recruiter_profiles.office_name','job_templates.job_title_id',
-                                'recruiter_offices.address','recruiter_offices.zipcode',
-                                'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
-                                DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
-                                DB::raw("(
-                    3959 * acos (
-                      cos ( radians($latitude) )
-                      * cos( radians( recruiter_offices.latitude) )
-                      * cos( radians( $longitude ) - radians(recruiter_offices.longitude) )
-                      + sin ( radians($latitude) )
-                      * sin( radians( recruiter_offices.latitude ) )
-                     )) AS distance"));
-                
-                $page = $reqData['page'];
-                $limit = RecruiterJobs::LIMIT ;
-                $skip = 0;
-                if($page>1){
-                    $skip = ($page-1)* $limit;
+        $total = $searchQueryObj->count();
+        $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
+                        'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
+                        'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
+                        'recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
+                        'job_titles.jobtitle_name','recruiter_profiles.office_name','job_templates.job_title_id',
+                        'recruiter_offices.address','recruiter_offices.zipcode',
+                        'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
+                        DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
+                        DB::raw("(
+            3959 * acos (
+              cos ( radians($latitude) )
+              * cos( radians( recruiter_offices.latitude) )
+              * cos( radians( $longitude ) - radians(recruiter_offices.longitude) )
+              + sin ( radians($latitude) )
+              * sin( radians( recruiter_offices.latitude ) )
+             )) AS distance"));
+
+        $page = $reqData['page'];
+        $limit = RecruiterJobs::LIMIT ;
+        $skip = 0;
+        if($page>1){
+            $skip = ($page-1)* $limit;
+        }
+        $searchResult = $searchQueryObj->skip($skip)->take($limit)->orderBy('distance', 'asc')->get();
+        $result = array();
+        $updatedResult = array();
+        if($searchResult){
+            $resultArray = $searchResult->toArray();
+            foreach($resultArray as $value){
+                $isSaved = 0;
+                if((count($userSavedJobs) > 0) && (in_array($value['id'],$userSavedJobs))){
+                    $isSaved = 1;
                 }
-                $searchResult = $searchQueryObj->skip($skip)->take($limit)->orderBy('distance', 'asc')->get();
-                $result = array();
-                $updatedResult = array();
-                if($searchResult){
-                    $resultArray = $searchResult->toArray();
-                    foreach($resultArray as $value){
-                        $isSaved = 0;
-                        if((count($userSavedJobs) > 0) && (in_array($value['id'],$userSavedJobs))){
-                            $isSaved = 1;
-                        }
-                        $value['isSaved'] = $isSaved;
-                        $updatedResult[] = $value;
-                    }
-                    $result['list'] = $updatedResult;
-                    //$result['list'] = $searchResult->toArray();
-                    
-                    $result['total'] = $total;
-                }
-                return $result;
+                $value['isSaved'] = $isSaved;
+                $updatedResult[] = $value;
+            }
+            $result['list'] = $updatedResult;
+            //$result['list'] = $searchResult->toArray();
+
+            $result['total'] = $total;
+        }
+        return $result;
     }
     
     public static function getJobDetail($jobId, $userId)
