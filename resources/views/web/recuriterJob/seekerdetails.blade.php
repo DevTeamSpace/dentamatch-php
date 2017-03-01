@@ -64,7 +64,7 @@
               </div>
           </div>
           <form action="{{ url('job/updateStatus') }}" method="post">
-            <div class="col-md-3 text-right"><p>{{round($seekerDetails['distance'])}} miles away
+            <div class="col-md-3 text-right"><p>{{round($seekerDetails['distance'])}} miles away</p>
                 {!! csrf_field() !!}
                 <input type="hidden" name="jobId" value="{{ $jobId }}">
                 <input type="hidden" name="seekerId" value="{{ $seekerDetails['user_id'] }}">
@@ -83,8 +83,7 @@
                 <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Message</button>
                 @else
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pd-l-30 pd-r-30">Invite</button>    
-                @endif 
-            </p>   
+                @endif    
         </div>
     </form>
 </div>
