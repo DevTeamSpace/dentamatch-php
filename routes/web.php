@@ -43,6 +43,14 @@
   Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
     Route::group(['middleware' => 'recruiter'], function () {
         Route::group(['middleware' => 'acceptedTerms'], function () {
+            Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails');
+            Route::post('create-profile', 'web\UserProfileController@createProfile');
+            Route::post('office-details', 'web\UserProfileController@officeDetails');
+            Route::get('get-location/{zip}', 'web\UserProfileController@checkValidLocation');
+            Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
+            Route::get('setting-terms-conditions', 'web\UserProfileController@getTermsConditions');
+            Route::get('change-password', 'web\UserProfileController@getChangePassword');
+            Route::post('change-password', 'web\UserProfileController@postChangePassword');
             Route::group(['middleware' => 'subscription'], function () {
                 Route::get('jobtemplates', 'web\JobtemplateController@listJobTemplates');
                 Route::get('jobtemplates/view/{templateId}', 'web\JobtemplateController@viewTemplate');
@@ -66,12 +74,7 @@
                 Route::post('office-details', 'web\UserProfileController@officeDetails');
 
                 Route::get('favorite-jobseeker','web\FavoriteJobseekerController@getFavJobseeker');
-                Route::post('invite-jobseeker','web\FavoriteJobseekerController@postInviteJobseeker');
-                Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
-
-                Route::get('setting-terms-conditions', 'web\UserProfileController@getTermsConditions');
-                Route::get('change-password', 'web\UserProfileController@getChangePassword');
-                Route::post('change-password', 'web\UserProfileController@postChangePassword');
+                Route::post('invite-jobseeker','web\FavoriteJobseekerController@postInviteJobseeker');              
 
                 Route::get('chat', 'web\ChatController@getChatSeekerList');
                 Route::get('calender', 'web\CalenderController@getCalender');

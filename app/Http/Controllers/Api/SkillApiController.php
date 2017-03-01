@@ -58,7 +58,7 @@ class SkillApiController extends Controller {
                                     'skill_name' => $subskills['skill_name'],
                                     'user_skill'=> $userSkill,
                                 );
-                                if($subskills['skill_name'] == 'Other'){
+                                if($subskills['skill_name'] == 'Other' || $subskills['skill_name'] == 'other'){
                                     $subSkills['other_skill'] = '';
                                     if($userSkill==1 && !empty($UpdatedJobseekerSkills[$subskills['id']])){
                                             $subSkills['other_skill'] = $UpdatedJobseekerSkills[$subskills['id']]['other_skill'];
@@ -227,7 +227,7 @@ class SkillApiController extends Controller {
     public function postUpdateCertificationsValidity(Request $request) {
         try {
             $this->validate($request, [
-                'certificateValidition' => 'required',
+                'certificateValidition.*.value' => 'required|date',
             ]);
             $userId = $request->userServerData->user_id;
             $reqData = $request->all();
@@ -243,7 +243,7 @@ class SkillApiController extends Controller {
                 $response =  apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
+            $messages = ['certificateValidition' => trans("messages.validity_date_empty")];
             $response =  apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
             $response =  apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
