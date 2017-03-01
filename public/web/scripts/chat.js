@@ -1,12 +1,13 @@
 $(document).ready(function () {
     $('.comment').keyup(function(e) {
         if (e.keyCode == 13) {
-            var chatComment = $(this).val();
+            var chatComment = $(this).val().trim();
             chatComment = chatComment.replace(/\n|\r/g, "");
             if(chatComment!=''){
                 $(this).val(chatComment);
                 $('.chatSend').click();
             }else{
+                console.log(chatComment);
                 $(this).val('');
             }
         }
@@ -61,7 +62,7 @@ $(document).ready(function () {
         });
 
         $('.chatSend').click(function(e){
-            var chatMsg = $(this).closest('.msgDiv').find('textarea').val();
+            var chatMsg = $(this).closest('.msgDiv').find('textarea').val().trim();
             //chatMsg = $.emoticons.replace(chatMsg);
 
             var seekerId = $(this).data('seekerid');
