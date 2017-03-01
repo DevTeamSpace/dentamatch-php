@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Location;
 use Yajra\Datatables\Datatables;
 use Session;
-
+use Log;
 class LocationController extends Controller
 {
     /**
@@ -63,6 +63,7 @@ class LocationController extends Controller
     public function store(Request $request)
     {
         // Validate and store the location...
+        try{
         $rules = array(
             'zipcode' => array('required','digits_between:5,8','regex:/[0-9]/','unique:locations,zipcode,NULL,id,deleted_at,NULL'),
         );
@@ -86,6 +87,9 @@ class LocationController extends Controller
         $location->save();
         Session::flash('message',$msg);
         return redirect('cms/location/index');
+        }  catch (\Exception $e) {
+            Log::error($e);
+        }
     }
     
     /**
@@ -101,6 +105,7 @@ class LocationController extends Controller
     }
 
     public function locationsList(){
+        try{
         $locations = Location::SELECT(['zipcode','free_trial_period','is_active','id'])->get();
         
         return Datatables::of($locations)
@@ -116,6 +121,9 @@ class LocationController extends Controller
                        
                 })
                 ->make(true);
+        }  catch (\Exception $e) {
+            Log::error($e);
+        }
                        
     }
 }

@@ -9,7 +9,7 @@ use App\Models\Location;
 use Yajra\Datatables\Datatables;
 use Session;
 use App\Models\JobTitles;
-
+use Log;
 class JobTitleController extends Controller
 {
     /**
@@ -64,6 +64,7 @@ class JobTitleController extends Controller
     public function store(Request $request)
     {
         // Validate and store the location...
+        try{
         $rules = array(
             'jobtitle' => array('required','unique:job_titles,jobtitle_name'),
         );
@@ -86,6 +87,9 @@ class JobTitleController extends Controller
         $jobtitle->save();
         Session::flash('message',$msg);
         return redirect('cms/jobtitle/index');
+        }  catch (\Exception $e) {
+            Log::error($e);
+        }
     }
     
     /**
@@ -101,6 +105,7 @@ class JobTitleController extends Controller
     }
 
     public function jobTitleList(){
+        try{
         $jobtitles = JobTitles::SELECT(['jobtitle_name','is_active','id'])->orderBy('id', 'desc')->get();
         return Datatables::of($jobtitles)
                 ->removeColumn('id')
@@ -115,6 +120,9 @@ class JobTitleController extends Controller
                        
                 })
                 ->make(true);
+        }  catch (\Exception $e) {
+            Log::error($e);
+        }
                        
     }
 }

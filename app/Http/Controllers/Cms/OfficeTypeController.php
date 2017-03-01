@@ -9,7 +9,7 @@ use App\Models\Location;
 use Yajra\Datatables\Datatables;
 use Session;
 use App\Models\OfficeType;
-
+use Log;
 class OfficeTypeController extends Controller
 {
     /**
@@ -64,6 +64,7 @@ class OfficeTypeController extends Controller
     public function store(Request $request)
     {
         // Validate and store the location...
+        try{
         $rules = array(
             'officetype' => array('required','unique:office_types,officetype_name'),
         );
@@ -85,6 +86,9 @@ class OfficeTypeController extends Controller
         $officeType->save();
         Session::flash('message',$msg);
         return redirect('cms/officetype/index');
+        }  catch (\Exception $e) {
+            Log::error($e);
+        }
     }
     
     /**
@@ -100,6 +104,7 @@ class OfficeTypeController extends Controller
     }
 
     public function officeTypeList(){
+        try{
         $officeTypes = OfficeType::SELECT(['officetype_name','is_active','id'])->orderBy('id', 'desc')->get();
         return Datatables::of($officeTypes)
                 ->removeColumn('id')
@@ -114,6 +119,9 @@ class OfficeTypeController extends Controller
                        
                 })
                 ->make(true);
+        }  catch (\Exception $e) {
+            Log::error($e);
+        }
                        
     }
 }

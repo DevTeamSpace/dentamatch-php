@@ -176,7 +176,7 @@
         me.showModalFooter = ko.observable(true);
 
         me.getJobDetails = function () {
-            jobId = <?php echo json_encode($jobId) ?>;
+            jobId = $('#jobIdValue').val();
             $.get('/job/edit-details', {jobId: jobId}, function (d) {
                 me.jobId(d.jobDetails.id);
                 if (d.jobSeekerStatus != 0) {
@@ -467,7 +467,7 @@
         }else{
             me.headMessage('Publishing Job');
             me.cancelButtonDelete(false);
-            me.prompt('Publishing job please wait.');
+            me.prompt('Updating job please wait...');
             me.showModalFooter(false);
             $('#actionModal').modal('show');
             splitedTempDates = ($('#CoverStartDateOtherPicker').val()).split(',');
@@ -487,7 +487,7 @@
                 processData: false,
                 type: 'POST',
                 success: function (data) {
-                    me.prompt('Job published successfully, please wait redirecting you...');
+//                    me.prompt('Job published successfully, please wait redirecting you...');
                     setTimeout(
                         function ()
                         {
@@ -505,7 +505,7 @@
     me.deleteJob = function(d, e){
         me.headMessage('Delete Job');
         me.cancelButtonDelete(true);
-        me.prompt('Do you want to delete job ?');
+        me.prompt('Do you want to delete this job ?');
         me.showModalFooter(true);
         $('#actionModal').modal('show');
         

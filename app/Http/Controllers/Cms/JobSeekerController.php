@@ -17,7 +17,7 @@ use Mail;
 use App\Providers\NotificationServiceProvider;
 use App\Models\Device;
 use App\Models\Notification;
-
+use Log;
 
 class JobSeekerController extends Controller
 {
@@ -79,6 +79,7 @@ class JobSeekerController extends Controller
      */
     public function store(Request $request)
     {
+        try{
         if(isset($request->id)){
             $rules['firstname'] = "Required";
             $rules['lastname'] = "Required";
@@ -121,12 +122,12 @@ class JobSeekerController extends Controller
                 $message->to($reqData['email'], $reqData['firstname'])->subject('Set Password Email');
             });
             $msg = trans('messages.jobseeker_added_success');
-        }
-        
-        
-            
+        }  
         Session::flash('message',$msg);
         return redirect('cms/jobseeker/index');
+        }catch (\Exception $e) {
+            Log::error($e);
+        }
     }
     
     /**
@@ -142,6 +143,7 @@ class JobSeekerController extends Controller
     }
 
     public function jobSeekerList(){
+        try{
         $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                         ->select(
@@ -165,30 +167,14 @@ class JobSeekerController extends Controller
                        
                 })
                 ->make(true);
-                       
-    }
-    public function sendPushAndroid(){
-        $userId = 53;
-        $notificationData = array(
-                    'message' => "The profile completion is still pending.",
-                    'notification_title'=>'Profile Completion Reminder',
-                    'sender_id' => "",
-                    'type' => 1
-                );
-        $params['data'] = $notificationData;
-        //NotificationServiceProvider::sendPushAndroid('fNGa2LzJ4p4:APA91bFKozuiRnK20e5R7lmdyr3vd7ycpC-Ji_PqTdcpUm3yWL3wa5ogc0OOalhE_VPhErXP3oWPnSCf3HtfZvIy', $notificationData['message'], $params);
-        $notificationData['receiver_id'] = $userId;
-        $params['data'] = $notificationData;
-        $deviceModel = Device::getDeviceToken($userId);
-        if($deviceModel) {
-            NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['message'], $params);
-            $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['message']];
-            Notification::createNotification($data);
+        }catch (\Exception $e) {
+            Log::error($e);
         }
-        echo 'test';
+                       
     }
     
     public function jobSeekerVerificationList(){
+        try{
         $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                         ->select(
@@ -221,10 +207,13 @@ class JobSeekerController extends Controller
                        
                 })
                 ->make(true);
-                       
+        }catch (\Exception $e) {
+            Log::error($e);
+        }              
     }
     
     public function jobSeekerVerificationView($id) {
+        try{
         $s3Path = env('AWS_URL');
         $s3Bucket = env('AWS_BUCKET');
         $s3Url = $s3Path.DIRECTORY_SEPARATOR.$s3Bucket.DIRECTORY_SEPARATOR;
@@ -240,10 +229,14 @@ class JobSeekerController extends Controller
                         ->where('users.id', $id)->first();
         
         return view('cms.jobseeker.verificationDetail',['userProfile'=>$userProfile, 's3Url' => $s3Url]);
+        }catch (\Exception $e) {
+            Log::error($e);
+        } 
     }
     
     public function storeVerification(Request $request)
     {
+        try{
         $msg = trans('messages.something_wrong');
         if(!empty($request->verify)) {
             
@@ -267,5 +260,8 @@ class JobSeekerController extends Controller
             
         Session::flash('message',$msg);
         return redirect('cms/jobseeker/index');
+        }catch (\Exception $e) {
+            Log::error($e);
+        } 
     }
 }

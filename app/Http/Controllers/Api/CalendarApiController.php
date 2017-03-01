@@ -27,8 +27,8 @@ class CalendarApiController extends Controller {
             if($userId > 0){
                 $reqData = $request->all();
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
-                $jobCount = JobLists::where('seeker_id','=',$userId)->whereIn('applied_status',[JobLists::HIRED])->get()->count();
-                if($jobCount == 0){
+               // $jobCount = JobLists::where('seeker_id','=',$userId)->whereIn('applied_status',[JobLists::HIRED])->get()->count();
+               // if($jobCount == 0){
                         $userProfileModel->is_fulltime = $reqData['isFulltime'];
                         $userProfileModel->is_parttime_monday = 0;
                         $userProfileModel->is_parttime_tuesday = 0;
@@ -46,14 +46,20 @@ class CalendarApiController extends Controller {
                         }
                         $userProfileModel->save();
                         JobSeekerTempAvailability::where('user_id', '=', $userId)->where('temp_job_date','>=',date('Y-m-d'))->forceDelete();
+                        
                         if(is_array($reqData['tempdDates']) && count($reqData['tempdDates']) > 0) {
+                            $updateTempDates = [];
                             $tempDateArray = [];
                             $tempJobDate = [];
                             $availability = JobSeekerTempAvailability::select('temp_job_date')->whereIn('temp_job_date',$reqData['tempdDates'])->where('user_id', '=', $userId)->get();
                             if($availability) {
                                 $tempJobDate = $availability->toArray();
+                                foreach($tempJobDate as $value){
+                                    $updateTempDates[] = $value['temp_job_date'];
+                                }
                             }
-                            $insertTempDateArray = array_diff($reqData['tempdDates'], $tempJobDate);
+                            $insertTempDateArray = array_diff($reqData['tempdDates'], $updateTempDates);
+                            
                             if(!empty($insertTempDateArray)) {
                                 foreach($insertTempDateArray as $tempDate) {     
                                         $tempDateArray[] = array('user_id' => $userId , 'temp_job_date' => $tempDate);
@@ -62,9 +68,9 @@ class CalendarApiController extends Controller {
                             }
                         }
                         $response = apiResponse::customJsonResponse(1, 200, trans("messages.availability_add_success"));
-                }else{
+                /*}else{
                         $response = apiResponse::customJsonResponse(0, 201, trans("messages.already_job_availability"));
-                }
+                }*/
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             } 

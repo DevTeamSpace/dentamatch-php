@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Session;
 use App\Models\Configs;
-
+use Log; 
 class ConfigurationController extends Controller
 {
     /**
@@ -38,6 +38,7 @@ class ConfigurationController extends Controller
      */
     public function store(Request $request)
     {
+        try{
         $rules = array(
             'radius' => array('required'),
         );
@@ -46,5 +47,8 @@ class ConfigurationController extends Controller
         $msg = trans('messages.radius_update');
         Session::flash('message',$msg);
         return redirect('cms/config/create-radius');
+        }catch (\Exception $e) {
+            Log::error($e);
+        } 
     }
 }
