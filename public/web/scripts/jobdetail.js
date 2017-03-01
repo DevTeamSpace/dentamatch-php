@@ -2,7 +2,7 @@ jQuery(function ($) {
     var socket = io.connect(':3000');
     console.log(socket);
     
-    socket.emit('init', {userId : userId, userName : "{{ $job['office_name'] }}",userType : 2},function(response){
+    socket.emit('init', {userId : userId, userName : officeName,userType : 2},function(response){
             
     });
     
