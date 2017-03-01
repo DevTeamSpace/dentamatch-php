@@ -26,6 +26,8 @@
         me.phoneNumberError = ko.observable('');
         me.errors = ko.observable(false);
         me.locationError = ko.observable('');
+        me.officeTypeError = ko.observable('');
+        me.errorMessage = ko.observable('');
 
         me._init = function (d) {
             if(typeof d == "undefined"){
@@ -225,7 +227,6 @@
         me.getProfileDetails = function () {
             jobId = $('#jobIdValue').val();
             $.get('recruiter-profile-details', {}, function (d) {
-                console.log(d);
                 if(typeof d.user != "undefined"){
                     me.dentalOfficeName(d.user.office_name);
                     me.dentalOfficeDescription(d.user.office_desc);
@@ -259,7 +260,7 @@
 
     me.getOfficeName = function(d, e) {
         officeName = new google.maps.places.SearchBox(
-                (document.getElementById('officeAddressMap')),
+                (e.currentTarget),
                 {types: ['geocode']});
         officeName.addListener('places_changed', function(){
             var place = officeName.getPlaces();
@@ -280,14 +281,14 @@
                 },
                 success: function (data) {
                     if (data == 0) {
-                        me.locationError('Please enter a valid address.');
-                        me.errors(true);
+                        d.locationError('Please enter a valid address.');
+                        d.errors(true);
                     } else if (data == 2) {
-                        me.locationError('Job cannot be currently created for this location. We will soon be available in your area.');
-                        me.errors(true);
+                        d.locationError('Job cannot be currently created for this location. We will soon be available in your area.');
+                        d.errors(true);
                     }else{
-                        me.errors(false);
-                        me.locationError('');
+                        d.errors(false);
+                        d.locationError('');
                     }
                 },
                 error: function (data) {
@@ -364,7 +365,7 @@
                 }
             });
         }else{
-            
+            me.offices.remove(d);
         }
     };
     
@@ -379,6 +380,12 @@
         d.sundayTimeError('');
         d.everydayTimeError('');
         d.phoneNumberError('');
+        d.officeTypeError('');
+        
+        if(d.officeType().length == 0){
+            d.officeTypeError('Please select atleast one type,');
+            return false;
+        }
         if(d.officeWorkingHours.isEverydayWork() == true && (d.officeWorkingHours.isMondayWork() == true || d.officeWorkingHours.isTuesdayWork() == true || d.officeWorkingHours.isWednesdayWork() == true || d.officeWorkingHours.isThursdayWork() == true || d.officeWorkingHours.isFridayWork() == true || d.officeWorkingHours.isSaturdayWork() == true || d.officeWorkingHours.isSundayWork() == true)){
             d.mixedWorkHourError('Please select everyday or select individual day at a time.');
             return false;
@@ -449,6 +456,11 @@
             formData = new FormData();
             formData.append('officeDetails', ko.toJSON(d));
             formData.append('officeId', d.officeId());
+            if(d.alreadyAdded() == false){
+                formData.append('new', true);
+            }else{
+                formData.append('new', false);
+            }
             jQuery.ajax({
                 url: "edit-recruiter-office",
                 data: formData,
@@ -461,11 +473,23 @@
                     if(data.success == true){
                         d.showOffice(true);
                         d.showOfficeEditForm(false);
+                        if(d.alreadyAdded() == false){
+                            d.alreadyAdded(true);
+                            d.officeId(data.recruiterOffice.id);
+                        }
                         setTimeout(
                             function ()
                             {
                                 $('#actionModal').modal('hide');
-                            }, 700);
+                            }, 1000);
+                    }else{
+                        d.errorMessage(data.message);
+                        me.prompt('Error in updating office.');
+                        setTimeout(
+                        function ()
+                        {
+                            $('#actionModal').modal('hide');
+                        }, 1000);
                     }
                 }
             });
@@ -473,8 +497,12 @@
     };
     
     me.cancelUpdateOffice = function(d, e){
-        d.showOfficeEditForm(false);
-        d.showOffice(true);
+        if(d.alreadyAdded == true){
+            me.offices.remove(d);
+        }else{
+            d.showOfficeEditForm(false);
+            d.showOffice(true);
+        }
     };
     
     me.showUpdateNameDescForm = function(d, e){
@@ -488,14 +516,20 @@
     };
     
     me.updateNameDesc = function (d, e){
-        console.log(me);
-    }
+        console.log(d);
+    };
     
     me.addOfficeFunction = function(d, e){
-        d.offices.push(new OfficeModel());
-    }
+        me.offices.push(new OfficeModel());
+        $('.ddlCars').multiselect({
+            numberDisplayed: 3,
+        });
+        $(".dropCheck input").after("<div></div>");
+    };
 
     me._init = function () {
+        $('body').find('#ChildVerticalTab_1').find('li').removeClass('resp-tab-active');
+        $('body').find('#ChildVerticalTab_1').find('li:nth-child(1)').addClass('resp-tab-active')
         me.getProfileDetails();
     };
     me._init();

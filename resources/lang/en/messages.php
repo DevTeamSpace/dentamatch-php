@@ -159,4 +159,5 @@ return [
     'report_seekers' => 'Reports seekers fetched succcessfully',
     'individual_report' => 'Individual report fetched successfully.',
     'office_updated' => 'Office updated successfully',
+    'address_already_associated' => 'Address already associated with another office, please use some other address.',
 ];

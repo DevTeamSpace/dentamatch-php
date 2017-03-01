@@ -15,7 +15,8 @@ class EditRecruiterOfficeRequest extends FormRequest
     {
         return [
             'officeId' => 'required',
-            'officeDetails' => 'required'
+            'officeDetails' => 'required',
+            'new' => 'required'
         ];
     }
     /**
