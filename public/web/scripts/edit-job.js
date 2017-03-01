@@ -467,7 +467,7 @@
         }else{
             me.headMessage('Publishing Job');
             me.cancelButtonDelete(false);
-            me.prompt('Publishing job please wait.');
+            me.prompt('Updating job please wait...');
             me.showModalFooter(false);
             $('#actionModal').modal('show');
             splitedTempDates = ($('#CoverStartDateOtherPicker').val()).split(',');
@@ -487,7 +487,7 @@
                 processData: false,
                 type: 'POST',
                 success: function (data) {
-                    me.prompt('Job published successfully, please wait redirecting you...');
+//                    me.prompt('Job published successfully, please wait redirecting you...');
                     setTimeout(
                         function ()
                         {
