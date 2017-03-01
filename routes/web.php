@@ -43,8 +43,15 @@ Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm
 Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
     Route::group(['middleware' => 'recruiter'], function () {
         Route::group(['middleware' => 'acceptedTerms'], function () {
+            Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails');
+            Route::post('create-profile', 'web\UserProfileController@createProfile');
+            Route::post('office-details', 'web\UserProfileController@officeDetails');
+            Route::get('get-location/{zip}', 'web\UserProfileController@checkValidLocation');
+            Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
+            Route::get('setting-terms-conditions', 'web\UserProfileController@getTermsConditions');
+            Route::get('change-password', 'web\UserProfileController@getChangePassword');
+            Route::post('change-password', 'web\UserProfileController@postChangePassword');
             Route::group(['middleware' => 'subscription'], function () {
-                Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails');
                 Route::get('jobtemplates', 'web\JobtemplateController@listJobTemplates');
                 Route::get('jobtemplates/view/{templateId}', 'web\JobtemplateController@viewTemplate');
                 Route::get('jobtemplates/edit/{templateId}', 'web\JobtemplateController@editJobTemplate');
@@ -63,17 +70,9 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
                 Route::post('job/updateStatus', 'web\RecruiterJobController@updateStatus');
                 Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
                 Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
-                Route::post('create-profile', 'web\UserProfileController@createProfile');
-                Route::post('office-details', 'web\UserProfileController@officeDetails');
-                Route::get('get-location/{zip}', 'web\UserProfileController@checkValidLocation');
-
+                
                 Route::get('favorite-jobseeker','web\FavoriteJobseekerController@getFavJobseeker');
-                Route::post('invite-jobseeker','web\FavoriteJobseekerController@postInviteJobseeker');
-                Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
-
-                Route::get('setting-terms-conditions', 'web\UserProfileController@getTermsConditions');
-                Route::get('change-password', 'web\UserProfileController@getChangePassword');
-                Route::post('change-password', 'web\UserProfileController@postChangePassword');
+                Route::post('invite-jobseeker','web\FavoriteJobseekerController@postInviteJobseeker');              
 
                 Route::get('chat', 'web\ChatController@getChatSeekerList');
                 Route::get('calender', 'web\CalenderController@getCalender');
