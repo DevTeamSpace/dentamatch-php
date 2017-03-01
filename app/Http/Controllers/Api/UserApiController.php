@@ -163,7 +163,7 @@ class UserApiController extends Controller {
                             'accessToken' => $userToken,
                             'profileCompleted' => $userData['is_completed'],
                         );
-                        $userArray['searchFilters'] = SearchFilter::getFiltersOnLogin($userId);
+                        $userArray['searchFilters'] = apiResponse::convertToCamelCase(SearchFilter::getFiltersOnLogin($userId));
                         $response = apiResponse::customJsonResponse(1, 200, trans("messages.user_logged_successful"),$userArray);
                 }else{
                     $response = apiResponse::customJsonResponse(0, 202, trans("messages.user_account_not_active")); 
