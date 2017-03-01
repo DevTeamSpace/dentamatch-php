@@ -10,6 +10,7 @@ use App\Models\JobTitles;
 use App\Models\JobTemplates;
 use App\Models\TemplateSkills;
 use Log;
+use DB;
 
 class JobtemplateController extends Controller
 {

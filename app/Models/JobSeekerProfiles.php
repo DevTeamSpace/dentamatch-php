@@ -18,7 +18,6 @@ class JobSeekerProfiles extends Model
     public static function getJobSeekerProfiles($job,$reqData){
         $obj = JobSeekerProfiles::where('jobseeker_profiles.job_titile_id',$job['job_title_id']);
 
-        $obj->whereNotIn('job_lists.applied_status',[JobLists::SHORTLISTED,  JobLists::APPLIED, JobLists::HIRED]);
         $obj->leftJoin('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id');
 
         if($job['job_type']==RecruiterJobs::FULLTIME){
@@ -67,7 +66,7 @@ class JobSeekerProfiles extends Model
         
         $obj->select('jobseeker_profiles.first_name','jobseeker_profiles.last_name','jobseeker_profiles.profile_pic',
                     'jobseeker_profiles.is_parttime_monday','jobseeker_profiles.is_parttime_tuesday','jobseeker_profiles.is_parttime_tuesday',
-                    'jobseeker_profiles.is_parttime_wednesday','jobseeker_profiles.is_parttime_thursday','jobseeker_profiles.is_parttime_friday','jobseeker_profiles.is_parttime_saturday','jobseeker_profiles.is_parttime_sunday','jobseeker_profiles.is_fulltime','jobseeker_profiles.user_id','jobseeker_profiles.id','job_titles.jobtitle_name','jobseeker_profiles.latitude','jobseeker_profiles.longitude');
+                    'jobseeker_profiles.is_parttime_wednesday','jobseeker_profiles.is_parttime_thursday','jobseeker_profiles.is_parttime_friday','jobseeker_profiles.is_parttime_saturday','jobseeker_profiles.is_parttime_sunday','jobseeker_profiles.is_fulltime','jobseeker_profiles.user_id','jobseeker_profiles.id','job_titles.jobtitle_name','jobseeker_profiles.latitude','jobseeker_profiles.longitude','job_lists.applied_status');
 
         $obj->join('jobseeker_skills as skill_count',function($query) use ($job){
                 $query->on('jobseeker_profiles.user_id', '=', 'skill_count.user_id')
@@ -110,6 +109,7 @@ class JobSeekerProfiles extends Model
             $query->on('job_lists.seeker_id','=','jobseeker_profiles.user_id')
                 ->where('job_lists.recruiter_job_id',$job['id']);
         })
+        ->whereNull('job_lists.applied_status')
         ->addSelect('job_lists.applied_status as job_status')
         ->addSelect('favourites.seeker_id as is_favourite')
         ->addSelect(DB::raw("avg(punctuality) as punctuality"),DB::raw("avg(time_management) as time_management"),
@@ -121,11 +121,13 @@ class JobSeekerProfiles extends Model
         $obj->orderby('distance');
         
         $allProfiles    =   $obj->pluck('user_id');
-
         $allSkills      =   '';
         if(is_object($allProfiles)){
             $allSkills = JobSeekerSkills::getAllJobSeekerSkills($allProfiles->toArray());                  
         }
+
+        dd($obj->paginate(RecruiterJobs::LIMIT));
+        
         return ['allSkills' => $allSkills, 'paginate' => $obj->paginate(RecruiterJobs::LIMIT)];     
     } 
 
