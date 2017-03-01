@@ -13,6 +13,7 @@
                     <label for="templateModal">Choose the template</label>
                     <select  id="templateModal" name="templateModal"  class="selectpicker" required="" data-parsley-required-message="Please select the template." >
                         <option value="" disabled selected>Select </option>
+                        <option data-divider="true"></option>
                         @foreach($jobTemplateModalData as $template)
                         <option value="{{$template['id']}}" data-content="{{$template['template_name']}}">
                             {{$template['template_name']}}
