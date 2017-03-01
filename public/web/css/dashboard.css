@@ -248,6 +248,13 @@ label {
     cursor: pointer;
     color: #0470c0;
 }
+.addProfileBtn1 {
+    display: block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    cursor: pointer;
+    color: #0470c0;
+}
 
 .addBtn:hover,
 .addBtn:focus,

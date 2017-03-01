@@ -10,7 +10,11 @@ use App\Models\RecruiterOffice;
 use DB;
 use App\Models\RecruiterProfile;
 use App\Models\RecruiterOfficeType;
+use App\Http\Requests\EditRecruiterOfficeRequest;
+use App\Models\OfficeType;
+use App\Http\Requests\DeleteOfficeRequest;
 use Hash;
+use Log;
 
 class UserProfileController extends Controller {
     private $result = [];
@@ -123,18 +127,72 @@ class UserProfileController extends Controller {
         }
         return $this->result;
     }
+    
+    public function postEditRecruiterOffice(EditRecruiterOfficeRequest $request){
+        try{
+            $allData = json_decode($request->officeDetails);
+            
+            $recruiterOfficeObj = RecruiterOffice::where(['id' => (int)$request->officeId])->first();
+            $recruiterOfficeObj->address = $allData->officeAddress;
+            $recruiterOfficeObj->phone_no = $allData->officePhone;
+            $recruiterOfficeObj->office_info = $allData->officeInfo;
+            $recruiterOfficeObj->zipcode = $allData->officeZipcode;
+            $recruiterOfficeObj->latitude = $allData->officeLat;
+            $recruiterOfficeObj->longitude = $allData->officeLng;
+            $recruiterOfficeObj->work_everyday_start = ($allData->officeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->everydayStart)) : '';
+            $recruiterOfficeObj->work_everyday_end = ($allData->officeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->everydayEnd)) : '';
+            $recruiterOfficeObj->monday_start = ($allData->officeWorkingHours->isMondayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->mondayStart)) : '';
+            $recruiterOfficeObj->monday_end = ($allData->officeWorkingHours->isMondayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->mondayEnd)) : '';
+            $recruiterOfficeObj->tuesday_start = ($allData->officeWorkingHours->isTuesdayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->tuesdayStart)) : '';
+            $recruiterOfficeObj->tuesday_end = ($allData->officeWorkingHours->isTuesdayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->tuesdayEnd)) : '';
+            $recruiterOfficeObj->wednesday_start = ($allData->officeWorkingHours->isWednesdayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->wednesdayStart)) : '';
+            $recruiterOfficeObj->wednesday_end = ($allData->officeWorkingHours->isWednesdayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->wednesdayEnd)) : '';
+            $recruiterOfficeObj->thursday_start = ($allData->officeWorkingHours->isThursdayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->thursdayStart)) : '';
+            $recruiterOfficeObj->thursday_end = ($allData->officeWorkingHours->isThursdayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->thursdayEnd)) : '';
+            $recruiterOfficeObj->friday_start = ($allData->officeWorkingHours->isFridayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->fridayStart)) : '';
+            $recruiterOfficeObj->friday_end = ($allData->officeWorkingHours->isFridayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->fridayEnd)) : '';
+            $recruiterOfficeObj->saturday_start = ($allData->officeWorkingHours->isSaturdayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->saturdayStart)) : '';
+            $recruiterOfficeObj->saturday_end = ($allData->officeWorkingHours->isSaturdayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->saturdayEnd)) : '';
+            $recruiterOfficeObj->sunday_start = ($allData->officeWorkingHours->isSundayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->sundayStart)) : '';
+            $recruiterOfficeObj->sunday_end = ($allData->officeWorkingHours->isSundayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->sundayEnd)) : '';
+            $recruiterOfficeObj->save();
+            
+            $recruiterOfficeTypeObj = RecruiterOfficeType::where(['recruiter_office_id' => $request->officeId])->delete();
+            $allRecruiterOfficeType = OfficeType::get();
+            $newOfficeType = [];
+            foreach($allRecruiterOfficeType as $officeType){
+                if(in_array($officeType['officetype_name'], $allData->officeType)){
+                    $newRecruiterOfficeType = new RecruiterOfficeType();
+                    $newRecruiterOfficeType->recruiter_office_id = $request->officeId;
+                    $newRecruiterOfficeType->office_type_id = $officeType['id'];
+                    $newRecruiterOfficeType->save();
+                    array_push($newOfficeType, $newRecruiterOfficeType);
+                }
+            }
+            $this->result['recruiterOffice'] = $recruiterOfficeObj;
+            $this->result['recruiterOfficeType'] = $newOfficeType;
+            $this->result['success'] = true;
+            $this->result['message'] = trans('messages.office_updated');
+        } catch (\Exception $e) {
+            Log::error($e);
+            $this->result['message'] = $e->getMessage();
+        }
+        return $this->result;
+    }
 
-    public function deleteOffice($officeId){
+    public function postDeleteOffice(DeleteOfficeRequest $request){
         try {
-            $recruiterOffice = RecruiterOffice::where('id',$officeId)->where('user_id',Auth::id())->first();
+            $recruiterOffice = RecruiterOffice::where('id',$request->officeId)->where('user_id',Auth::id())->first();
             
             if($recruiterOffice){
-                RecruiterOfficeType::where('recruiter_office_id',$officeId)->delete();
-                $recruiterOffice->delete();
-                
+                RecruiterOfficeType::where('recruiter_office_id',(int)$request->officeId)->delete();
+                $recruiterOffice->delete();   
             }
+            $this->result['success'] = true;
         } catch (\Exception $e) {
-            
+            Log::error($e);
+            $this->result['message'] = $e->getMessage();
         }
+        return $this->result;
     }
 }

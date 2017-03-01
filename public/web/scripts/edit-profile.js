@@ -14,20 +14,60 @@
         me.showOffice = ko.observable(true);
         me.showOfficeEditForm = ko.observable(false);
         me.alreadyAdded = ko.observable(true);
+        me.mixedWorkHourError = ko.observable('');
+        me.mondayTimeError = ko.observable('');
+        me.tuesdayTimeError = ko.observable('');
+        me.wednesdayTimeError = ko.observable('');
+        me.thursdayTimeError = ko.observable('');
+        me.fridayTimeError = ko.observable('');
+        me.saturdayTimeError = ko.observable('');
+        me.sundayTimeError = ko.observable('');
+        me.everydayTimeError = ko.observable('');
+        me.phoneNumberError = ko.observable('');
+        me.errors = ko.observable(false);
+        me.locationError = ko.observable('');
 
         me._init = function (d) {
-            me.officeId(d.id);
-            splitOfficeType = d.officetype_names.split(',');
-            for (i in splitOfficeType) {
-                me.officeType.push(splitOfficeType[i]);
+            if(typeof d == "undefined"){
+                me.officeId = ko.observable(Math.floor((Math.random() * 100) + 1));
+                me.officeAddress = ko.observable('');
+                me.officePhone = ko.observable();
+                me.officeInfo = ko.observable('');
+                me.officeWorkingHours = ko.observable();
+                me.officeZipcode = ko.observable();
+                me.officeType = ko.observableArray([]);
+                me.officeLat = ko.observable();
+                me.officeLng = ko.observable();
+                me.showOffice = ko.observable(false);
+                me.showOfficeEditForm = ko.observable(true);
+                me.alreadyAdded = ko.observable(false);
+                me.mixedWorkHourError = ko.observable('');
+                me.mondayTimeError = ko.observable('');
+                me.tuesdayTimeError = ko.observable('');
+                me.wednesdayTimeError = ko.observable('');
+                me.thursdayTimeError = ko.observable('');
+                me.fridayTimeError = ko.observable('');
+                me.saturdayTimeError = ko.observable('');
+                me.sundayTimeError = ko.observable('');
+                me.everydayTimeError = ko.observable('');
+                me.phoneNumberError = ko.observable('');
+                me.errors = ko.observable(false);
+                me.locationError = ko.observable('');
+                me.officeWorkingHours = new WorkingHourModel(d);
+            }else{
+                me.officeId(d.id);
+                splitOfficeType = d.officetype_names.split(',');
+                for (i in splitOfficeType) {
+                    me.officeType.push(splitOfficeType[i]);
+                }
+                me.officeAddress(d.address);
+                me.officePhone(d.phone_no);
+                me.officeInfo(d.office_info);
+                me.officeZipcode(d.zipcode);
+                me.officeWorkingHours = new WorkingHourModel(d);
+                me.officeLat(d.latitude);
+                me.officeLng(d.longitude);
             }
-            me.officeAddress(d.address);
-            me.officePhone(d.phone_no);
-            me.officeInfo(d.office_info);
-            me.officeZipcode(d.zipcode);
-            me.officeWorkingHours = new WorkingHourModel(d);
-            me.officeLat(d.latitude);
-            me.officeLng(d.longitude);
         };
 
         me._init(data);
@@ -76,54 +116,65 @@
         };
         
         me._init = function (d) {
-            if ((d.work_everyday_start == "00:00:00" && d.work_everyday_end == "00:00:00") || (d.work_everyday_start == null && d.work_everyday_end == null)) {
-                if (d.monday_start != "00:00:00" && d.monday_start != null) {
-                    me.isMondayWork(true);
-                    dates = me.getDateFunc(d.monday_start, d.monday_end);
-                    me.mondayStart(moment(dates[0]).format('LT'));
-                    me.mondayEnd(moment(dates[1]).format('LT'));
+            if(typeof d == "undefined"){
+                me.isMondayWork(false);
+                me.isTuesdayWork(false);
+                me.isWednesdayWork(false);
+                me.isThursdayWork(false);
+                me.isFridayWork(false);
+                me.isSaturdayWork(false);
+                me.isSundayWork(false);
+                me.isEverydayWork(false);
+            }else{
+                if ((d.work_everyday_start == "00:00:00" && d.work_everyday_end == "00:00:00") || (d.work_everyday_start == null && d.work_everyday_end == null)) {
+                    if (d.monday_start != "00:00:00" && d.monday_start != null) {
+                        me.isMondayWork(true);
+                        dates = me.getDateFunc(d.monday_start, d.monday_end);
+                        me.mondayStart(moment(dates[0]).format('LT'));
+                        me.mondayEnd(moment(dates[1]).format('LT'));
+                    }
+                    if (d.tuesday_start != "00:00:00" && d.tuesday_start != null) {
+                        me.isTuesdayWork(true);
+                        dates = me.getDateFunc(d.tuesday_start, d.tuesday_end);
+                        me.tuesdayStart(moment(dates[0]).format('LT'));
+                        me.tuesdayEnd(moment(dates[1]).format('LT'));
+                    }
+                    if (d.wednesday_start != "00:00:00" && d.wednesday_start != null) {
+                        me.isWednesdayWork(true);
+                        dates = me.getDateFunc(d.wednesday_start, d.wednesday_end);
+                        me.wednesdayStart(moment(dates[0]).format('LT'));
+                        me.wednesdayEnd(moment(dates[1]).format('LT'));
+                    }
+                    if (d.thursday_start != "00:00:00" && d.thursday_start != null) {
+                        me.isThursdayWork(true);
+                        dates = me.getDateFunc(d.thursday_start, d.thursday_end);
+                        me.thursdayStart(moment(dates[0]).format('LT'));
+                        me.thursdayEnd(moment(dates[1]).format('LT'));
+                    }
+                    if (d.friday_start != "00:00:00" && d.friday_start != null) {
+                        me.isFridayWork(true);
+                        dates = me.getDateFunc(d.friday_start, d.friday_end);
+                        me.fridayStart(moment(dates[0]).format('LT'));
+                        me.fridayEnd(moment(dates[1]).format('LT'));
+                    }
+                    if (d.saturday_start != "00:00:00" && d.saturday_start != null) {
+                        me.isSaturdayWork(true);
+                        dates = me.getDateFunc(d.saturday_start, d.saturday_end);
+                        me.saturdayStart(moment(dates[0]).format('LT'));
+                        me.saturdayEnd(moment(dates[1]).format('LT'));
+                    }
+                    if (d.sunday_start != "00:00:00" && d.sunday_start != null) {
+                        me.isSundayWork(true);
+                        dates = me.getDateFunc(d.sunday_start, d.sunday_end);
+                        me.sundayStart(moment(dates[0]).format('LT'));
+                        me.sundayEnd(moment(dates[1]).format('LT'));
+                    }
+                } else {
+                    me.isEverydayWork(true);
+                    dates = me.getDateFunc(d.work_everyday_start, d.work_everyday_end);
+                    me.everydayStart(moment(dates[0]).format('LT'));
+                    me.everydayEnd(moment(dates[1]).format('LT'));
                 }
-                if (d.tuesday_start != "00:00:00" && d.tuesday_start != null) {
-                    me.isTuesdayWork(true);
-                    dates = me.getDateFunc(d.tuesday_start, d.tuesday_end);
-                    me.tuesdayStart(moment(dates[0]).format('LT'));
-                    me.tuesdayEnd(moment(dates[1]).format('LT'));
-                }
-                if (d.wednesday_start != "00:00:00" && d.wednesday_start != null) {
-                    me.isWednesdayWork(true);
-                    dates = me.getDateFunc(d.wednesday_start, d.wednesday_end);
-                    me.wednesdayStart(moment(dates[0]).format('LT'));
-                    me.wednesdayEnd(moment(dates[1]).format('LT'));
-                }
-                if (d.thursday_start != "00:00:00" && d.thursday_start != null) {
-                    me.isThursdayWork(true);
-                    dates = me.getDateFunc(d.thursday_start, d.thursday_end);
-                    me.thursdayStart(moment(dates[0]).format('LT'));
-                    me.thursdayEnd(moment(dates[1]).format('LT'));
-                }
-                if (d.friday_start != "00:00:00" && d.friday_start != null) {
-                    me.isFridayWork(true);
-                    dates = me.getDateFunc(d.friday_start, d.friday_end);
-                    me.fridayStart(moment(dates[0]).format('LT'));
-                    me.fridayEnd(moment(dates[1]).format('LT'));
-                }
-                if (d.saturday_start != "00:00:00" && d.saturday_start != null) {
-                    me.isSaturdayWork(true);
-                    dates = me.getDateFunc(d.saturday_start, d.saturday_end);
-                    me.saturdayStart(moment(dates[0]).format('LT'));
-                    me.saturdayEnd(moment(dates[1]).format('LT'));
-                }
-                if (d.sunday_start != "00:00:00" && d.sunday_start != null) {
-                    me.isSundayWork(true);
-                    dates = me.getDateFunc(d.sunday_start, d.sunday_end);
-                    me.sundayStart(moment(dates[0]).format('LT'));
-                    me.sundayEnd(moment(dates[1]).format('LT'));
-                }
-            } else {
-                me.isEverydayWork(true);
-                dates = me.getDateFunc(d.work_everyday_start, d.work_everyday_end);
-                me.everydayStart(moment(dates[0]).format('LT'));
-                me.everydayEnd(moment(dates[1]).format('LT'));
             }
         };
 
@@ -157,7 +208,19 @@
         me.dentalOfficeDescription = ko.observable('');
         me.recruiterProfileId = ko.observable();
         me.allOfficeTypes = ko.observableArray([]);
+        me.allOfficeTypeId = ko.observableArray([]);
+        me.allOfficeTypeDetails = ko.observableArray([]);
         me.offices = ko.observableArray([]);
+        me.showNameDescForm = ko.observable(false);
+        me.showNameDesc = ko.observable(true);
+        me.headMessage = ko.observable('');
+        me.cancelButtonDelete = ko.observable(true);
+        me.prompt = ko.observable('');
+        me.showModalFooter = ko.observable(true);
+        me.totalOffice = ko.observable();
+        me.showAddMoreOfficeButton = ko.observable(false);
+        me.addTotalOfText = ko.observable();
+        me.disableAction = ko.observable(false);
         
         me.getProfileDetails = function () {
             jobId = $('#jobIdValue').val();
@@ -170,12 +233,18 @@
                 }
                 for(i in d.officeType){
                     me.allOfficeTypes.push(d.officeType[i].officetype_name);
+                    me.allOfficeTypeId.push(d.officeType[i].id);
+                    me.allOfficeTypeDetails.push(d.officeType[i]);
                 }
                 for(i in d.offices){
                     me.offices.push(new OfficeModel(d.offices[i]));
                 }
-                console.log(me.offices());
-                return false;
+                
+                me.totalOffice(d.offices.length);
+                if(me.totalOffice() < 3){
+                    me.showAddMoreOfficeButton(true);
+                }
+                me.addTotalOfText(3 - me.totalOffice());
                 
         });
     };
@@ -190,18 +259,18 @@
 
     me.getOfficeName = function(d, e) {
         officeName = new google.maps.places.SearchBox(
-                (document.getElementById('officeAddress')),
+                (document.getElementById('officeAddressMap')),
                 {types: ['geocode']});
         officeName.addListener('places_changed', function(){
             var place = officeName.getPlaces();
             if(typeof place == "undefined"){
                 return;
             }
-            d.selectedOfficeLat(place[0].geometry.location.lat());
-            d.selectedOfficeLng(place[0].geometry.location.lng());
-            d.selectedOfficeAddress(place[0].formatted_address);
+            d.officeLat(place[0].geometry.location.lat());
+            d.officeLng(place[0].geometry.location.lng());
+            d.officeAddress(place[0].formatted_address);
             lastAddressComponent = place[0].address_components.pop().short_name;
-            d.selectedOfficeZipcode(lastAddressComponent);
+            d.officeZipcode(lastAddressComponent);
             $.ajax(
             {
                 url: '/get-location/' + lastAddressComponent,
@@ -227,6 +296,203 @@
                 }
             });
         });
+    };
+    
+    me.showOfficeEditForm = function(d, e){
+        $.get('job-applied-or-not', {officeId: d.officeId()}, function(data){
+            if(data.data.length == 0){
+                $('.ddlCars').multiselect({
+                    numberDisplayed: 3,
+                });
+                $(".dropCheck input").after("<div></div>");
+
+                d.showOfficeEditForm(true);
+                d.showOffice(false);
+            }else{
+                me.headMessage('Edit Office');
+                me.cancelButtonDelete(true);
+                me.prompt('You cannot edit this office because this office has jobs.');
+                me.showModalFooter(false);
+                $('#actionModal').modal('show');
+            }
+        });
+    };
+    
+    me.deleteOffice = function(d, e){
+        if(d.alreadyAdded() == true){
+            $.get('job-applied-or-not', {officeId: d.officeId()}, function(data){
+                if(data.data.length == 0){
+                    me.headMessage('Delete Office');
+                    me.cancelButtonDelete(true);
+                    me.prompt('Do you want to delete this office ?');
+                    me.showModalFooter(true);
+                    $('#actionModal').modal('show');
+                    formData = new FormData();
+                    formData.append('officeId', d.officeId());
+                    $('#actionButton').click(function(){
+                        me.prompt('Deleting office...');
+                        me.cancelButtonDelete(false);
+                        me.showModalFooter(false);
+                        me.disableAction(true);
+                        jQuery.ajax({
+                            url: "delete-office",
+                            data: formData,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            type: 'POST',
+                            success: function (data) {
+                                me.prompt('Office deleted successfully.');
+                                if(data.success == true){
+                                    me.offices.remove(d);
+                                    me.disableAction(true);
+                                    setTimeout(
+                                    function ()
+                                    {
+                                        $('#actionModal').modal('hide');
+                                    }, 700);
+                                }
+                            }
+                        });
+                    });
+                }else{
+                    me.headMessage('Delete Office');
+                    me.cancelButtonDelete(true);
+                    me.prompt('You cannot delete this office because this office has jobs.');
+                    me.showModalFooter(false);
+                    $('#actionModal').modal('show');
+                }
+            });
+        }else{
+            
+        }
+    };
+    
+    me.updateOfficeDetails = function(d, e){
+        d.mixedWorkHourError('');
+        d.mondayTimeError('');
+        d.tuesdayTimeError('');
+        d.wednesdayTimeError('');
+        d.thursdayTimeError('');
+        d.fridayTimeError('');
+        d.saturdayTimeError('');
+        d.sundayTimeError('');
+        d.everydayTimeError('');
+        d.phoneNumberError('');
+        if(d.officeWorkingHours.isEverydayWork() == true && (d.officeWorkingHours.isMondayWork() == true || d.officeWorkingHours.isTuesdayWork() == true || d.officeWorkingHours.isWednesdayWork() == true || d.officeWorkingHours.isThursdayWork() == true || d.officeWorkingHours.isFridayWork() == true || d.officeWorkingHours.isSaturdayWork() == true || d.officeWorkingHours.isSundayWork() == true)){
+            d.mixedWorkHourError('Please select everyday or select individual day at a time.');
+            return false;
+        }else{
+            if(d.officeWorkingHours.isEverydayWork() == true){
+                if(moment(d.officeWorkingHours.everydayStart(), 'HH:mm a') > moment(d.officeWorkingHours.everydayEnd(), 'HH:mm a')){
+                    d.everydayTimeError('Start time cannot be greated than end time.');
+                    return false;
+                }
+            }
+            if(d.officeWorkingHours.isMondayWork() == true){
+                if(moment(d.officeWorkingHours.mondayStart(), 'HH:mm a') > moment(d.officeWorkingHours.mondayEnd(), 'HH:mm a')){
+                    d.mondayTimeError('Start time cannot be greated than end time.');
+                    return false;
+                }
+            }
+            if(d.officeWorkingHours.isTuesdayWork() == true){
+                if(moment(d.officeWorkingHours.tuesdayStart(), 'HH:mm a') > moment(d.officeWorkingHours.tuesdayEnd(), 'HH:mm a')){
+                    d.tuesdayTimeError('Start time cannot be greated than end time.');
+                    return false;
+                }
+            }
+            if(d.officeWorkingHours.isWednesdayWork() == true){
+                if(moment(d.officeWorkingHours.wednesdayStart(), 'HH:mm a') > moment(d.officeWorkingHours.wednesdayEnd(), 'HH:mm a')){
+                    d.wednesdayTimeError('Start time cannot be greated than end time.');
+                    return false;
+                }
+            }
+            if(d.officeWorkingHours.isThursdayWork() == true){
+                if(moment(d.officeWorkingHours.thursdayStart(), 'HH:mm a') > moment(d.officeWorkingHours.thursdayEnd(), 'HH:mm a')){
+                    d.thursdayTimeError('Start time cannot be greated than end time.');
+                    return false;
+                }
+            }
+            if(d.officeWorkingHours.isFridayWork() == true){
+                if(moment(d.officeWorkingHours.fridayStart(), 'HH:mm a') > moment(d.officeWorkingHours.fridayEnd(), 'HH:mm a')){
+                    d.fridayTimeError('Start time cannot be greated than end time.');
+                    return false;
+                }
+            }
+            if(d.officeWorkingHours.isSaturdayWork() == true){
+                if(moment(d.officeWorkingHours.saturdayStart(), 'HH:mm a') > moment(d.officeWorkingHours.saturdayEnd(), 'HH:mm a')){
+                    d.saturdayTimeError('Start time cannot be greated than end time.');
+                    return false;
+                }
+            }
+            if(d.officeWorkingHours.isSundayWork() == true){
+                if(moment(d.officeWorkingHours.sundayStart(), 'HH:mm a') > moment(d.officeWorkingHours.sundayEnd(), 'HH:mm a')){
+                    d.sundayTimeError('Start time cannot be greated than end time.');
+                    return false;
+                }
+            }
+        }
+        
+        if(d.officePhone() == null || d.officePhone() == ''){
+            d.phoneNumberError('Please enter phone number.');
+            return false;
+        }
+        
+        if(d.errors() == true){
+            return false;
+        }else{
+            me.headMessage('Updating Office');
+            me.cancelButtonDelete(false);
+            me.prompt('Updating office please wait.');
+            me.showModalFooter(false);
+            $('#actionModal').modal('show');
+            formData = new FormData();
+            formData.append('officeDetails', ko.toJSON(d));
+            formData.append('officeId', d.officeId());
+            jQuery.ajax({
+                url: "edit-recruiter-office",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: 'POST',
+                success: function (data) {
+                    me.prompt('Office updated successfully.');
+                    if(data.success == true){
+                        d.showOffice(true);
+                        d.showOfficeEditForm(false);
+                        setTimeout(
+                            function ()
+                            {
+                                $('#actionModal').modal('hide');
+                            }, 700);
+                    }
+                }
+            });
+        }
+    };
+    
+    me.cancelUpdateOffice = function(d, e){
+        d.showOfficeEditForm(false);
+        d.showOffice(true);
+    };
+    
+    me.showUpdateNameDescForm = function(d, e){
+        d.showNameDescForm(true);
+        d.showNameDesc(false);
+    };
+    
+    me.cancelNameDescForm = function(d, e){
+        d.showNameDescForm(false);
+        d.showNameDesc(true);
+    };
+    
+    me.updateNameDesc = function (d, e){
+        console.log(me);
+    }
+    
+    me.addOfficeFunction = function(d, e){
+        d.offices.push(new OfficeModel());
     }
 
     me._init = function () {

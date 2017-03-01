@@ -7,30 +7,49 @@
     }
 </style>
 <div class="container globalpadder">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Tab-->
     <div class="row" id="edit-profile">
         @include('web.layouts.sidebar')
         <div class="col-sm-8 ">
             <div class="addReplica">
-
-                <form data-parsley-validate="" id="createProfileForm" novalidate=""  class="formdataPart" action="javascript:void(0);">	
-                    <div class="resp-tabs-container commonBox profilePadding cboxbottom ">
-                        <div class="descriptionBox">
-                            <div class="dropdown icon-upload-ctn1">
-                                <span class="icon-upload-detail dropdown-toggle" data-toggle="dropdown" aria-expanded="true"></span>
-                                <ul class="actions text-left dropdown-menu">
-                                    <li><span class="gbllist"><i class="icon icon-edit"></i> Edit</span></li>
-                                </ul>
+                <div class="resp-tabs-container commonBox profilePadding cboxbottom " data-bind="visible: showNameDesc">
+                    <div class="descriptionBox">
+                        <div class="dropdown icon-upload-ctn1">
+                            <span class="icon-upload-detail dropdown-toggle" data-toggle="dropdown" aria-expanded="true"></span>
+                            <ul class="actions text-left dropdown-menu">
+                                <li><span class="gbllist" data-bind="click: $root.showUpdateNameDescForm"><i class="icon icon-edit"></i> Edit</span></li>
+                            </ul>
+                        </div>
+                        <div class="viewProfileRightCard">
+                            <h6>Dental Office Name</h6>
+                            <div class="detailTitleBlock">
+                                <h5 data-bind="text: dentalOfficeName"></h5>
                             </div>
+                            <h6>Dental Office Description</h6>
+                            <p data-bind="text: dentalOfficeDescription"></p>
+                        </div>
+                    </div>
+                </div>
+                <form data-parsley-validate="" novalidate=""  class="formdataPart" data-bind="visible: showNameDescForm">
+                    <div class="resp-tabs-container commonBox profilePadding cboxbottom">
+                        <div class="descriptionBox">
                             <div class="viewProfileRightCard">
-                                <h6>Dental Office Name</h6>
-                                <div class="detailTitleBlock">
-                                    <h5 data-bind="text: dentalOfficeName"></h5>
-                                </div>
-                                <h6>Dental Office Description</h6>
-                                <p data-bind="text: dentalOfficeDescription"></p>
+                                <label>Dental Office Name</label>
+                                <input type="text" id="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="required" data-bind="value: dentalOfficeName()">
+                            </div>
+                            <div class="detailTitleBlock">
+                                <label>Dental Office Description</label>
+                                <textarea class="form-control  txtHeight txtBtnDisable chacterValidtion" data-parsley-required data-parsley-required-message="required" maxlength=500 data-bind="value: dentalOfficeDescription()">
+                                </textarea>
+                            </div>
+                            <div class="pull-right text-right">
+                                <button type="button" class="btn btn-link mr-r-10 cancelled" style="font-weight:500" data-bind="click: $root.cancelNameDescForm">Cancel</button>
+                                <button type="button" id="createProfileButton" class="btn btn-primary pd-l-40 pd-r-40" data-bind="click: $root.updateNameDesc">Update</button>
                             </div>
                         </div>
+                        <br>
+                    <br>
                     </div>
                 </form>
 
@@ -40,8 +59,8 @@
                             <div class="dropdown icon-upload-ctn1">
                                 <span class="icon-upload-detail dropdown-toggle" data-toggle="dropdown" aria-expanded="true"></span>
                                 <ul class="actions text-left dropdown-menu">
-                                    <li><span class="gbllist"><i class="icon icon-edit "></i> Edit</span></li>
-                                    <li><span class="gbllist"><i class="icon icon-deleteicon"></i> Delete</span></li>
+                                    <li><span class="gbllist" data-bind="click: $root.showOfficeEditForm"><i class="icon icon-edit "></i> Edit</span></li>
+                                    <li><span class="gbllist" data-bind="click: $root.deleteOffice"><i class="icon icon-deleteicon"></i> Delete</span></li>
                                 </ul>
                             </div>
                             <div class="descriptionBoxInner">
@@ -105,9 +124,11 @@
                 <!--/ko-->
             </div>
             <br>
+            <!-- ko if: offices().length < 3 -->
             <div class="pull-right text-right">
-                <div class="addProfileBtn "><span class="icon icon-plus"></span>Add total of 1 locations</div>
+                <div class="addProfileBtn1" data-bind="click: $root.addOfficeFunction"><span class="icon icon-plus"></span>You can add upto <span data-bind="text: offices().length-1"></span><span> more location(s)</span></div>
             </div>
+            <!--/ko-->
         </div>
         
         <script type="text/html" id="profileEditForm">
@@ -123,16 +144,17 @@
                 </div>
                 <div class="form-group">
                     <label>Dental Office Address</label>
-                    <input type="text" value="" id="officeAddress" name="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="Required" data-bind="click: $root.getOfficeName, value: officeAddress, event: {change: $root.getOfficeName}">
-                    <p class="error-div" ></p>
+                    <input type="text" value="" id="officeAddress" name="officeName" class="form-control txtBtnDisable officeAddressMap"  data-parsley-required data-parsley-required-message="Required" data-bind="click: $root.getOfficeName, value: officeAddress, event: {change: $root.getOfficeName}">
+                    <p class="error-div" data-bind="text: locationError"></p>
                 </div>
                 <div class="form-group">
                     <label>Phone Number</label>
                     <input type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits" data-bind="value: officePhone" >
+                    <p class="error-div" data-bind="text: phoneNumberError"></p>
                 </div>
                 <div class="form-group dpc">
                     <label >Working Hours</label>
-                    <p class="error-div" ></p>
+                    <p class="error-div" data-bind="text: mixedWorkHourError"></p>
                     <div class="row dayBox EveryDayCheck">
                         <div class="col-sm-4 col-md-3">  
                             <p class="ckBox">
@@ -143,7 +165,7 @@
                         <div class="col-sm-4 col-md-3">
                             <div class="date datetime1">
                                 <input type="text" class="form-control datetime" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: officeWorkingHours.everydayStart, disable: !officeWorkingHours.isEverydayWork(), attr:{'data-parsley-required': officeWorkingHours.isEverydayWork()}">
-                                <p class="error-div" ></p>
+                                <p class="error-div" data-bind="text: everydayTimeError"></p>
                             </div>
                         </div>
                         <div class="col-sm-4 col-md-3">
@@ -163,7 +185,7 @@
                             <div class="col-sm-4 col-md-3">
                                 <div class="date datetime1">
                                     <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: officeWorkingHours.mondayStart, disable: !officeWorkingHours.isMondayWork(), attr:{'data-parsley-required': officeWorkingHours.isMondayWork()}">
-                                    <p class="error-div" ></p>
+                                    <p class="error-div" data-bind="text: mondayTimeError"></p>
                                 </div>    
                             </div>
                             <div class="col-sm-4 col-md-3">
@@ -182,7 +204,7 @@
                             <div class="col-sm-4 col-md-3">
                                 <div class="date datetime1">
                                     <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: officeWorkingHours.tuesdayStart, disable: !officeWorkingHours.isTuesdayWork(), attr:{'data-parsley-required': officeWorkingHours.isTuesdayWork()}">
-                                    <p class="error-div" ></p>
+                                    <p class="error-div" data-bind="text: tuesdayTimeError"></p>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-3">
@@ -201,7 +223,7 @@
                             <div class="col-sm-4 col-md-3">
                                 <div class="date datetime1">
                                     <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: officeWorkingHours.wednesdayStart, disable: !officeWorkingHours.isWednesdayWork(), attr:{'data-parsley-required': officeWorkingHours.isWednesdayWork()}">
-                                    <p class="error-div"></p>
+                                    <p class="error-div" data-bind="text: wednesdayTimeError"></p>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-3">
@@ -220,7 +242,7 @@
                             <div class="col-sm-4 col-md-3">
                                 <div class="date datetime1">
                                     <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required " data-bind="datetimePicker: {optA:'aa'},value: officeWorkingHours.thursdayStart, disable: !officeWorkingHours.isThursdayWork(), attr:{'data-parsley-required': officeWorkingHours.isThursdayWork()}">
-                                    <p class="error-div"></p>
+                                    <p class="error-div" data-bind="text: thursdayTimeError"></p>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-3">
@@ -239,7 +261,7 @@
                             <div class="col-sm-4 col-md-3">
                                 <div class="date datetime1">
                                     <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: officeWorkingHours.fridayStart, disable: !officeWorkingHours.isFridayWork(), attr:{'data-parsley-required': officeWorkingHours.isFridayWork()}">
-                                    <p class="error-div" ></p>
+                                    <p class="error-div" data-bind="text: fridayTimeError"></p>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-3">
@@ -258,7 +280,7 @@
                             <div class="col-sm-4 col-md-3">
                                 <div class="date datetime1">
                                     <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: officeWorkingHours.saturdayStart, disable: !officeWorkingHours.isSaturdayWork(), attr:{'data-parsley-required': officeWorkingHours.isSaturdayWork()}">
-                                    <p class="error-div" ></p>
+                                    <p class="error-div" data-bind="text: saturdayTimeError"></p>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-3">
@@ -277,7 +299,7 @@
                             <div class="col-sm-4 col-md-3">
                                 <div class="date datetime1">
                                     <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: officeWorkingHours.sundayStart, disable: !officeWorkingHours.isSundayWork(), attr:{'data-parsley-required': officeWorkingHours.isSundayWork()}">
-                                    <p class="error-div" ></p>
+                                    <p class="error-div" data-bind="text: sundayTimeError"></p>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-3">
@@ -292,11 +314,44 @@
                     <label>Office Location Information <i class="optional">(Optional)</i></label>
                     <textarea class="form-control txtHeight" data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: officeInfo" ></textarea>
                 </div>
+                <div class="pull-right text-right">
+                    <button type="button" class="btn btn-link mr-r-10 cancelled" style="font-weight:500" data-bind="click: $root.cancelUpdateOffice">Cancel</button>
+                    <button type="button" id="createProfileButton" class="btn btn-primary pd-l-40 pd-r-40" data-bind="click: $root.updateOfficeDetails">Update</button>
+                </div>
+                <br>
+                <br>
         </script>
+        
+        <div id="actionModal" class="modal fade" role="dialog">
+            <div class="modal-dialog custom-modal modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" data-bind="visible:cancelButtonDelete">&times;</button>
+                        <h4 class="modal-title" data-bind="text:headMessage"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-center" data-bind="text:prompt"></p>
+                        <div class="mr-t-20 mr-b-30 dev-pd-l-13p" data-bind="visible: showModalFooter">
+                            <button type="button" class="btn btn-link mr-r-5" data-dismiss="modal">Close</button>
+                            <button type="submit" id="actionButton" class="btn btn-primary pd-l-30 pd-r-30" data-bind="disable: disableAction">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>    
 @section('js')
 <script src="{{asset('web/scripts/multiple-select.js')}}"></script>
+<script>
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
 <script>
     var placeSearch, autocomplete;
     var componentForm = {

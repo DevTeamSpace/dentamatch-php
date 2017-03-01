@@ -157,6 +157,6 @@ return [
 
     'calender_seekers_fetched' => 'Calender seekers fetched successfully',
     'report_seekers' => 'Reports seekers fetched succcessfully',
-    'individual_report' => 'Individual report fetched successfully.'
-
+    'individual_report' => 'Individual report fetched successfully.',
+    'office_updated' => 'Office updated successfully',
 ];

@@ -44,7 +44,6 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
     Route::group(['middleware' => 'recruiter'], function () {
         Route::group(['middleware' => 'acceptedTerms'], function () {
             Route::group(['middleware' => 'subscription'], function () {
-                Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails');
                 Route::get('jobtemplates', 'web\JobtemplateController@listJobTemplates');
                 Route::get('jobtemplates/view/{templateId}', 'web\JobtemplateController@viewTemplate');
                 Route::get('jobtemplates/edit/{templateId}', 'web\JobtemplateController@editJobTemplate');
@@ -84,7 +83,11 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
                 Route::get('reports-temp-jobs', 'web\ReportsController@getReportsTempJobs');
                 Route::get('report-seekers', 'web\ReportsController@getReportSeekers');
                 Route::get('individual-temp-job', 'web\ReportsController@getIndividualTempJob');
+                Route::get('job-applied-or-not', 'web\RecruiterJobController@appliedOrNot');
+                Route::post('edit-recruiter-office', 'web\UserProfileController@postEditRecruiterOffice');
+                Route::post('delete-office', 'web\UserProfileController@postDeleteOffice');
             });
+            Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails');
             Route::get('subscription-detail', 'web\SubscriptionController@getSubscription');
             Route::get('get-subscription-list', 'web\SubscriptionController@getSubscriptionList');
             Route::post('create-subscription', 'web\SubscriptionController@postCreateSubscription');
