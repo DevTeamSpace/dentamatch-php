@@ -77,7 +77,7 @@
                         </div>
                         <div class="message-textarea">
                             <div class="input-group msgDiv">
-                                <textarea {{ ($seeker['recruiterBlock']==1)?'disabled="disabled"':'' }} class="comment type-text" placeholder="Write your response here"></textarea>
+                                <textarea {{ ($seeker['recruiterBlock']==1)?'disabled="disabled"':'' }} class="comment type-text" placeholder="Type your message here"></textarea>
                                 <span class="input-group-btn">
                                     <button {{ ($seeker['recruiterBlock']==1)?'disabled="disabled"':'' }} class="chatSend btn btn-primary {{ ($seeker['recruiterBlock']==1)?'action-disabled':'' }}" type="button" data-seekerid="{{ $seeker['seekerId'] }}">Send</button>
                                 </span>
@@ -98,11 +98,13 @@
 <script src="{{ asset('web/scripts/optionDropDown.js')}}"></script>
 <script src="{{ asset('web/scripts/custom.js')}}"></script>
 <script src="{{ asset('web/plugins/custom-scroller/js/mCustomScrollbar.js')}}"></script>
+
 <script src="{{ url('') }}:3000/socket.io/socket.io.js"></script>
 <script type="text/javascript">
-var fromId = "{{ Auth::id() }}";
-var userName = '{{ Session::get("userData")["profile"]["office_name"] }}';
-var socketUrl = '{{ url('') }}:3000';
+    var fromId = "{{ Auth::id() }}";
+    var userName = '{{ Session::get("userData")["profile"]["office_name"] }}';
+    var socketUrl = '{{ url('') }}:3000';
 </script>
 <script src="{{ asset('web/scripts/chat.js')}}"></script>
 @endsection
+
