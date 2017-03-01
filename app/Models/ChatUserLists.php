@@ -102,7 +102,7 @@ class ChatUserLists extends Model
     
     public function checkAndSaveUserToChatList(){
         $userChatList = static::where('recruiter_id',$this->recruiter_id)->where('seeker_id',$this->seeker_id)->first();
-        if(nullOrEmptyString($userChatList)){
+        if(empty($userChatList)){
             $this->save();
         }
 
