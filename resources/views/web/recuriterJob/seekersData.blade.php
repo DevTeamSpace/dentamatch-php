@@ -17,7 +17,7 @@
     <div class="media-body ">
         <div class="template-job-information mr-t-15">
           <div class="template-job-information-left">
-            <h4 class="pull-left"><a href="{{ url('job/seekerdetails/'.$seeker['id'].'/'.$jobDetails['id']) }}">{{$seeker['first_name'].' '.$seeker['last_name']}}</a></h4>
+            <h4 class="pull-left"><a href="{{ url('job/seekerdetails/'.$seeker['user_id'].'/'.$jobDetails['id']) }}">{{$seeker['first_name'].' '.$seeker['last_name']}}</a></h4>
             @if($jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
             <span class="mr-l-5 dropdown date_drop">
                 @if(round($seeker['avg_rating'],0) > 3)
