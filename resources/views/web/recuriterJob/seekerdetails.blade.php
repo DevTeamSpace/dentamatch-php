@@ -72,12 +72,13 @@
                 <h6>INVITED</h6>
                 @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::APPLIED)
                 <h6></h6>
-                <button type="submit" class="btn btn-primary pd-l-20 pd-r-20">Reject</button>
-                <button type="submit" class="btn btn-primary pd-l-20 pd-r-20">Accept</button>
+                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::REJECTED }}" class="btn btn-primary pd-l-20 pd-r-20">Reject</button>
+                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::SHORTLISTED }}" class="btn btn-primary pd-l-20 pd-r-20">Accept</button>
                 @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::SHORTLISTED)
                 <h6>SHORTLISTED</h6>
-                <button type="submit" class="btn btn-primary pd-l-20 pd-r-20">Message</button>
-                <button type="submit" class="btn btn-primary pd-l-20 pd-r-20">Hire</button>
+                <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30" data-toggle="modal" 
+                                    data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
+                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::HIRED }}" class="btn btn-primary pd-l-20 pd-r-20">Hire</button>
                 @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::HIRED)
                 <h6>HIRED</h6>
                 <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Message</button>

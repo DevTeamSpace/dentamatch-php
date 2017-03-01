@@ -26,7 +26,7 @@ class WorkExperienceApiController extends Controller {
      */
     public function getJobTitlelists(){
         $job_title = JobTitles::where('is_active',1)->get()->toArray();
-        $response = apiResponse::customJsonResponseObject(1, 200, "Jobtitle list",'joblists',$job_title);
+        $response = apiResponse::customJsonResponseObject(1, 200, "Jobtitle list",'joblists',apiResponse::convertToCamelCase($job_title));
         return $response;
     }
     /**
