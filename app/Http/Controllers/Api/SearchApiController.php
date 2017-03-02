@@ -124,8 +124,10 @@ class SearchApiController extends Controller {
                                     ->whereIn('applied_status',[JobLists::APPLIED,JobLists::INVITED])
                                     ->first();
                     if($jobExists){
+                        
                         if($jobExists->applied_status == JobLists::INVITED){
                             JobLists::where('id', $jobExists->id)->update(['applied_status' => JobLists::APPLIED]);
+                            $this->notifyAdmin($reqData['jobId'],$userId,Notification::JOBSEEKERAPPLIED);
                             $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
                         }else{
                            $response = apiResponse::customJsonResponse(0, 201, trans("messages.job_already_applied")); 
@@ -133,6 +135,7 @@ class SearchApiController extends Controller {
                     }else{
                         $applyJobs = array('seeker_id' => $userId , 'recruiter_job_id' => $reqData['jobId'] , 'applied_status' => JobLists::APPLIED);
                         JobLists::insert($applyJobs);
+                        $this->notifyAdmin($reqData['jobId'],$userId,Notification::JOBSEEKERAPPLIED);
                         $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
                     }
                 }else{
@@ -165,6 +168,7 @@ class SearchApiController extends Controller {
                     $jobExists->applied_status = JobLists::CANCELLED;
                     $jobExists->cancel_reason = $reqData['cancelReason'];
                     $jobExists->save();
+                    
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_cancelled_success"));
                 }else{
                     $response = apiResponse::customJsonResponse(0, 201, trans("messages.job_not_applied_by_you"));
@@ -261,7 +265,7 @@ class SearchApiController extends Controller {
             if($userId > 0){
                 $reqData = $request->all();
                 $notificationDetails = Notification::where('id',$reqData['notificationId'])->first();
-                $jobExists = JobLists::select('id')->where('seeker_id','=',$userId)->where('recruiter_job_id','=',$notificationDetails->job_list_id)
+                $jobExists = JobLists::where('seeker_id','=',$userId)->where('recruiter_job_id','=',$notificationDetails->job_list_id)
                         ->where('applied_status',JobLists::INVITED)->first();
                 if($jobExists){
                     if($reqData['acceptStatus'] == 0){
@@ -271,7 +275,13 @@ class SearchApiController extends Controller {
                         $jobExists->applied_status = JobLists::HIRED;
                         $msg = trans("messages.job_hired_success");
                     }
-                    $jobExists->save();
+                    $notificationData = $jobExists->save();
+                    if($reqData['acceptStatus'] == 0){
+                        $this->notifyAdmin($notificationDetails->job_list_id,$userId,Notification::JOBSEEKERREJECTED);
+                    }else{
+                         $this->notifyAdmin($notificationDetails->job_list_id,$userId,Notification::JOBSEEKERACCEPTED);
+                    }
+                    
                     $response = apiResponse::customJsonResponse(1, 200, $msg);
                 }else{
                     $response = apiResponse::customJsonResponse(0, 201, trans("messages.not_invited_job"));
@@ -286,6 +296,24 @@ class SearchApiController extends Controller {
             $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
+    }
+    
+    public function notifyAdmin($jobId,$senderId,$notificationType){
+        $receiverDetails = RecruiterJobs::join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
+                        ->join('job_titles','job_templates.job_title_id','=','job_titles.id')
+                        ->select('job_templates.user_id','job_titles.jobtitle_name')
+                        ->where('recruiter_jobs.id',$jobId)->first();
+        $jobseekerDetails = UserProfile::getUserProfile($senderId);
+        if($notificationType == Notification::JOBSEEKERAPPLIED){
+            $message = $jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'has applied for '.$receiverDetails->jobtitle_name;
+        }else if($notificationType == Notification::JOBSEEKERACCEPTED){
+            $message = $jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'has accepted for '.$receiverDetails->jobtitle_name;
+        }else if($notificationType == Notification::JOBSEEKERREJECTED){
+            $message = $jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'has rejected for '.$receiverDetails->jobtitle_name;
+        }
+        $notificationDetails = ['image' => $jobseekerDetails['profile_pic'],'message' => $message];
+        $data = ['receiver_id'=>$receiverDetails->user_id,'job_list_id' => $jobId,'sender_id' => $senderId, 'notification_data'=>json_encode($notificationDetails),'notification_type' => $notificationType];
+        $notificationDetails = Notification::create($data);
     }
     
     

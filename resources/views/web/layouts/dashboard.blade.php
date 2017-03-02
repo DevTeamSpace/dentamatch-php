@@ -66,7 +66,7 @@
                                 </li>
 
                             </ul>
-                            <a href="#" class="notificationSeeAll text-center">See All</a>
+                            <a href="{{ url('notification-lists') }}" class="notificationSeeAll text-center">See All</a>
 
                         </div>
 
