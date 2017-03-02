@@ -72,10 +72,11 @@ var SeekerModel = function (d) {
 
     ko.bindingHandlers.datetimePicker = {
         init: function (element, valueAccessor, bContext, allBindingsAccessor, bindingContext) {
+            console.log(valueAccessor());
             $(element).datetimepicker({
                 format: 'L',
-            }).on('dp.change', function (a) {
-                bContext().value($(this).val());
+            }).on('dp.change', function (e) {
+                valueAccessor().opt(e.date.format('L'));
             });
         }
     };
