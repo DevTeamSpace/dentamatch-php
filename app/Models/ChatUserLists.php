@@ -108,4 +108,16 @@ class ChatUserLists extends Model
         }
 
     }
+    
+    public static function getBlockedRecruiters($seekerId)
+    {
+        $return = [];
+        $blockedUserModel = static::select('recruiter_id')->where('seeker_block', 1)->where('seeker_id', $seekerId)->get();
+        
+        if($blockedUserModel)
+        {
+            $return = $blockedUserModel->toArray();
+        }
+        return $return;
+    }
 }
