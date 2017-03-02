@@ -42,35 +42,38 @@ class InactiveJobCommand extends Command
      */
     public function handle()
     {
-        $pushList = [];
-        $senderId = User::getAdminUserDetailsForNotification();
-        $recruiterModel = RecruiterJobs::select('recruiter_jobs.id', 'job_templates.user_id', 'job_titles.jobtitle_name', DB::raw('count(seeker_id) as numberOfJobs'))
-                            ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
-                            ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
-                            ->leftjoin('job_lists', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
-                            ->where(DB::raw("DATEDIFF(now(), recruiter_jobs.created_at)"),'=', static::NOTIFICATION_INTERVAL)
-                            ->groupBy('recruiter_jobs.id')
-                            ->get();
-        $list = $recruiterModel->toArray();
-        if(!empty($list)) {
-            $pushList = array_map(function ($value) {
-                            if($value['numberOfJobs']==0) {
-                                return  $value;
-                            }
-                        }, $list);
-        }
-        if(!empty($pushList)) {
-            $insertData = [];
-            foreach($pushList as $listValue)
-            {
-                $data[] = ['image' => url('web/images/dentaMatchLogo.png'),'message' => "No job has been applied for last 30 days on ".$listValue['jobtitle_name']];
-                $insertData[] = ['sender_id' => $senderId->id, 'receiver_id' => $listValue['user_id'], 'notification_data'=> json_encode($data)];
+        try {
+            $pushList = [];
+            $senderId = User::getAdminUserDetailsForNotification();
+            $recruiterModel = RecruiterJobs::select('recruiter_jobs.id', 'job_templates.user_id', 'job_titles.jobtitle_name', DB::raw('count(seeker_id) as numberOfJobs'))
+                                ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
+                                ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
+                                ->leftjoin('job_lists', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
+                                ->where(DB::raw("DATEDIFF(now(), recruiter_jobs.created_at)"),'=', static::NOTIFICATION_INTERVAL)
+                                ->groupBy('recruiter_jobs.id')
+                                ->get();
+            $list = $recruiterModel->toArray();
+            if(!empty($list)) {
+                $pushList = array_map(function ($value) {
+                                if($value['numberOfJobs']==0) {
+                                    return  $value;
+                                }
+                            }, $list);
             }
-            Notification::insert($insertData);
-            $this->info("Records added successfully");
-        } else {
-            $this->info("No records for insert");
+            if(!empty($pushList)) {
+                $insertData = [];
+                foreach($pushList as $listValue)
+                {
+                    $data = ['image' => url('web/images/dentaMatchLogo.png'),'message' => "No job has been applied for last 30 days on ".$listValue['jobtitle_name']];
+                    $insertData[] = ['sender_id' => $senderId->id, 'receiver_id' => $listValue['user_id'], 'notification_data'=> json_encode($data)];
+                }
+                Notification::insert($insertData);
+                $this->info("Records added successfully");
+            } else {
+                $this->info("No records for insert");
+            }
+        } catch(\Exception $e) {
+            $this->info($e->getMessage());
         }
-        
     }
 }
