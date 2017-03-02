@@ -24,6 +24,7 @@ use App\Models\RecruiterOfficeType;
 use DB;
 use App\Http\Requests\DeleteJobRequest;
 use Log;
+use App\Http\Requests\CheckJobAppliedOrNotRequest;
 
 class RecruiterJobController extends Controller {
 
@@ -508,6 +509,20 @@ class RecruiterJobController extends Controller {
         } catch (\Exception $e) {
             Log::error($e);
             $this->result['success'] = false;
+            $this->result['message'] = $e->getMessage();
+        }
+        return $this->result;
+    }
+    
+    public function appliedOrNot(CheckJobAppliedOrNotRequest $request){
+        try{
+            $jobs = RecruiterOffice::join('recruiter_jobs', 'recruiter_jobs.recruiter_office_id' ,'=', 'recruiter_offices.id')
+                    ->join('job_lists', 'job_lists.recruiter_job_id' ,'=', 'recruiter_jobs.id')
+                    ->where('recruiter_offices.id', $request->officeId)
+                    ->select('job_lists.recruiter_job_id as recruiter_job_id')
+                    ->get();
+            $this->result['data'] = $jobs;
+        } catch (\Exception $e) {
             $this->result['message'] = $e->getMessage();
         }
         return $this->result;

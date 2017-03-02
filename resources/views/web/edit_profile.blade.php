@@ -7,218 +7,400 @@
     }
 </style>
 <div class="container globalpadder">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Tab-->
-    <div class="row">
+    <div class="row" id="edit-profile">
         @include('web.layouts.sidebar')
         <div class="col-sm-8 ">
             <div class="addReplica">
-                @if(isset($user->office_name) && !empty($user->office_name && !empty($user->office_desc)))
-                <form data-parsley-validate="" id="createProfileForm" novalidate=""  class="formdataPart" action="javascript:void(0);">	
-                    {{ csrf_field() }}
-                    <div id="createForm-errors"></div>
-                    <div class="resp-tabs-container commonBox profilePadding cboxbottom ">
-                        <div class="descriptionBox">
-                            <div class="dropdown icon-upload-ctn1">
-                                <span class="icon-upload-detail dropdown-toggle" data-toggle="dropdown" aria-expanded="true"></span>
-                                <ul class="actions text-left dropdown-menu">
-                                    <li ><span class="gbllist iconFirstEdit"><i class="icon icon-edit"></i> Edit</span></li>
-                                </ul>
-                            </div>	
-                            <div class="viewProfileRightCard">
-                                <div class="detailTitleBlock">
-                                    <input type="hidden" value="{{ @$user->office_name }}" id="hiddenofficename">
-                                    <h5>{{@$user->office_name}}</h5>
-                                </div>
-                                <h6>Dental Office Description</h6>	
-                                <input type="hidden" value="{{ @$user->office_desc }}" id="hiddenofficedesc">
-                                <p>{{@$user->office_desc}}</p>	
+                <div class="resp-tabs-container commonBox profilePadding cboxbottom " data-bind="visible: showNameDesc">
+                    <div class="descriptionBox">
+                        <div class="dropdown icon-upload-ctn1">
+                            <span class="icon-upload-detail dropdown-toggle" data-toggle="dropdown" aria-expanded="true"></span>
+                            <ul class="actions text-left dropdown-menu">
+                                <li><span class="gbllist" data-bind="click: $root.showUpdateNameDescForm"><i class="icon icon-edit"></i> Edit</span></li>
+                            </ul>
+                        </div>
+                        <div class="viewProfileRightCard">
+                            <h6>Dental Office Name</h6>
+                            <div class="detailTitleBlock">
+                                <h5 data-bind="text: dentalOfficeName"></h5>
                             </div>
+                            <h6>Dental Office Description</h6>
+                            <p data-bind="text: dentalOfficeDescription"></p>
                         </div>
                     </div>
+                </div>
+                <form data-parsley-validate="" novalidate=""  class="formdataPart" data-bind="visible: showNameDescForm">
+                    <div class="resp-tabs-container commonBox profilePadding cboxbottom">
+                        <div class="descriptionBox">
+                            <div class="viewProfileRightCard">
+                                <label>Dental Office Name</label>
+                                <input type="text" id="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="required" data-bind="value: dentalOfficeName">
+                            </div>
+                            <div class="detailTitleBlock">
+                                <label>Dental Office Description</label>
+                                <textarea class="form-control  txtHeight txtBtnDisable chacterValidtion" data-parsley-required data-parsley-required-message="required" maxlength=500 data-bind="value: dentalOfficeDescription, valueUpdate: 'afterkeydown'">
+                                </textarea>
+                            </div>
+                            <div class="pull-right text-right">
+                                <button type="button" class="btn btn-link mr-r-10 cancelled" style="font-weight:500" data-bind="click: $root.cancelNameDescForm">Cancel</button>
+                                <button type="button" id="createProfileButton" class="btn btn-primary pd-l-40 pd-r-40" data-bind="click: $root.updateNameDesc">Update</button>
+                            </div>
+                        </div>
+                        <br>
+                    <br>
+                    </div>
                 </form>
-                @endif
-                                    <input type="hidden" value="{{ json_encode($officeType,true) }}" id="hiddenofficeTypesJson">
 
-                @foreach($offices as $office)
-<!--                <form data-parsley-validate="" id="officedetailform" novalidate=""  class="formdataPart">	-->
-                    <div class="resp-tabs-container commonBox replicaBox profilePadding cboxbottom masterBox">
+                <!--ko foreach: offices-->
+                    <div class="resp-tabs-container commonBox replicaBox profilePadding cboxbottom masterBox" data-bind="visible: showOffice">
                         <div class="descriptionBox">
                             <div class="dropdown icon-upload-ctn1">
                                 <span class="icon-upload-detail dropdown-toggle" data-toggle="dropdown" aria-expanded="true"></span>
                                 <ul class="actions text-left dropdown-menu">
-                                    <li ><span class="gbllist iconEdit"><i class="icon icon-edit "></i> Edit</span></li>
-                                    <li><span class="gbllist iconDel"><i class="icon icon-deleteicon"></i> Delete</span></li>
+                                    <li><span class="gbllist" data-bind="click: $root.showOfficeEditForm"><i class="icon icon-edit "></i> Edit</span></li>
+                                    <li><span class="gbllist" data-bind="click: $root.deleteOffice"><i class="icon icon-deleteicon"></i> Delete</span></li>
                                 </ul>
                             </div>
                             <div class="descriptionBoxInner">
                                 <div class="viewProfileRightCard pd-b-25">
-                                    <input type="hidden" value="{{ $office->officetype_id }}" id="hiddenofficeTypeId{{$office->id}}">
-                                    <input type="hidden" value="{{$office->id}}" id="hiddenEditId">
                                     <div class="detailTitleBlock">
                                         <h5>OFFICE DETAILS</h5>
                                     </div>
-                                    <h6>Dental Office Type</h6>	
-                                    <p>{{$office->officetype_names}}</p>	
+                                    <h6>Dental Office Type</h6>
+                                    <span></span>
+                                    <!--ko foreach: officeType-->
+                                    <span data-bind="text: $data"></span><span data-bind="text: $index() !== ($parent.officeType().length -1) ? ',' : ''"></span>
+                                    <!--/ko-->
                                 </div>
                                 <div class="viewProfileRightCard pd-b-25">
-                                    <h6>Dental Office Address</h6>	
-                                    <input type="hidden" value="{{ $office->address }}" id="hiddenofficeaddress{{$office->id}}">
-                                    <input type="hidden" value="{{ $office->zipcode }}" id="hiddenzipcode{{$office->id}}">
-                                    <input type="hidden" value="{{ $office->latitude }}" id="hiddenlat{{$office->id}}">
-                                    <input type="hidden" value="{{ $office->longitude }}" id="hiddenlng{{$office->id}}">
-                                    <p>{{$office->address}}</p>	
+                                    <h6>Dental Office Address</h6>
+                                    <p data-bind="text: officeAddress"></p>
                                 </div>
                                 <div class="viewProfileRightCard pd-b-25">
-                                    <h6>Phone Number</h6>	
-                                    <input type="hidden" value="{{ preg_replace('/^(\d{3})(\d{3})(\d{4})$/i', '($1) $2-$3', $office->phone_no) }}" id="hiddenphone{{$office->id}}">
-                                    <p>{{ preg_replace('/^(\d{3})(\d{3})(\d{4})$/i', '($1) $2-$3', $office->phone_no) }}</p>	
-                                </div>	
+                                    <h6>Phone Number</h6>
+                                    <p data-bind="text: officePhone"></p>
+                                </div>
                                 <div class="viewProfileRightCard pd-b-25">
                                     <h6>Working Hours</h6>
-                                    @if($office->work_everyday_start!=null)
-                                    <input type="hidden" value="1" id="hiddeneveryday{{$office->id}}">
-                                    <input type="hidden" value="{{date('h:i A', strtotime($office->work_everyday_start))}}" id="hiddeneverystart{{$office->id}}">
-                                    <input type="hidden" value="{{date('h:i A', strtotime($office->work_everyday_end))}}" id="hiddeneveryend{{$office->id}}">
-                                    <p>Eveyday : {{date('h:i A', strtotime($office->work_everyday_start))}} to {{date('h:i A', strtotime($office->work_everyday_end))}}</p>	
-                                    @else
-                                    <input type="hidden" value="" id="hiddeneverystart{{$office->id}}">
-                                    <input type="hidden" value="" id="hiddeneveryend{{$office->id}}">
-                                    @endif
-                                    @if($office->monday_start!=NULL)
-                                    <input type="hidden" value="1" id="hiddenmonday{{$office->id}}">
-                                    <input type="hidden" value="{{date('h:i A', strtotime($office->monday_start))}}" id="hiddenmonstart{{$office->id}}">
-                                    <input type="hidden" value="{{date('h:i A', strtotime($office->monday_end))}}" id="hiddenmonend{{$office->id}}">
-                                    <p>Monday : {{date('h:i A', strtotime($office->monday_start))}} to {{date('h:i A', strtotime($office->monday_end))}}</p>	
-                                    @else
-                                    <input type="hidden" value="" id="hiddenmonstart{{$office->id}}">
-                                    <input type="hidden" value="" id="hiddenmonend{{$office->id}}">
-                                    @endif
-                                    @if($office->tuesday_start!=NULL)
-                                    <input type="hidden" value="1" id="hiddentuesday{{$office->id}}">
-                                    <input type="hidden" value="{{date('h:i A', strtotime($office->tuesday_start))}}" id="hiddentuestart{{$office->id}}">
-                                    <input type="hidden" value="{{date('h:i A', strtotime($office->tuesday_end))}}" id="hiddentueend{{$office->id}}">
-                                    <p>Tuesday : {{date('h:i A', strtotime($office->tuesday_start))}} to {{date('h:i A', strtotime($office->tuesday_end))}}</p>	
-                                    @else
-                                    <input type="hidden" value="" id="hiddentuestart{{$office->id}}">
-                                    <input type="hidden" value="" id="hiddentueend{{$office->id}}">
-                                    @endif
-                                    @if($office->wednesday_start!=NULL)
-                                    <input type="hidden" value="1" id="hiddenwednesday{{$office->id}}">
-                                    <input type="hidden" value="{{date('h:i A', strtotime($office->wednesday_start))}}" id="hiddenwedstart{{$office->id}}">
-                                    <input type="hidden" value="{{date('h:i A', strtotime($office->wednesday_end))}}" id="hiddenwedend{{$office->id}}">
-                                    <p>Wednesday : {{date('h:i A', strtotime($office->wednesday_start))}} to {{date('h:i A', strtotime($office->wednesday_end))}}</p>	
-                                    @else
-                                    <input type="hidden" value="" id="hiddenwedstart{{$office->id}}">
-                                    <input type="hidden" value="" id="hiddenwedend{{$office->id}}">
-                                    @endif
-                                    @if($office->thursday_start!=NULL)
-                                    <input type="hidden" value="1" id="hiddenthursday{{$office->id}}">
-                                    <input type="hidden" value="{{date('h:i A', strtotime($office->thursday_start))}}" id="hiddenthustart{{$office->id}}">
-                                    <input type="hidden" value="{{date('h:i A', strtotime($office->thursday_end))}}" id="hiddenthuend{{$office->id}}">
-                                    <p>Thursday : {{date('h:i A', strtotime($office->thursday_start))}} to {{date('h:i A', strtotime($office->thursday_end))}}</p>	
-                                    @else
-                                    <input type="hidden" value="" id="hiddenthustart{{$office->id}}">
-                                    <input type="hidden" value="" id="hiddenthuend{{$office->id}}">
-                                    @endif
-                                    @if($office->friday_start!=NULL)
-                                    <input type="hidden" value="1" id="hiddenfriday{{$office->id}}">
-                                    <input type="hidden" value="{{date('h:i A', strtotime($office->friday_start))}}" id="hiddenfristart{{$office->id}}">
-                                    <input type="hidden" value="{{date('h:i A', strtotime($office->friday_end))}}" id="hiddenfriend{{$office->id}}">
-                                    <p>Friday : {{date('h:i A', strtotime($office->friday_start))}} to {{date('h:i A', strtotime($office->friday_end))}}</p>	
-                                    @else
-                                    <input type="hidden" value="" id="hiddenfristart{{$office->id}}">
-                                    <input type="hidden" value="" id="hiddenfriend{{$office->id}}">
-                                    @endif
-                                    @if($office->saturday_start!=NULL)
-                                    <input type="hidden" value="1" id="hiddensaturday{{$office->id}}">
-                                    <input type="hidden" value="{{date('h:i A', strtotime($office->saturday_start))}}" id="hiddensatstart{{$office->id}}">
-                                    <input type="hidden" value="{{date('h:i A', strtotime($office->saturday_end))}}" id="hiddensatend{{$office->id}}">
-                                    <p>Saturday : {{date('h:i A', strtotime($office->saturday_start))}} to {{date('h:i A', strtotime($office->saturday_end))}}</p>	
-                                    @else
-                                    <input type="hidden" value="" id="hiddensatstart{{$office->id}}">
-                                    <input type="hidden" value="" id="hiddensatend{{$office->id}}">
-                                    @endif
-                                    @if($office->sunday_start!=NULL)
-                                    <input type="hidden" value="1" id="hiddensunday{{$office->id}}">
-                                    <input type="hidden" value="{{date('h:i A', strtotime($office->sunday_start))}}" id="hiddensunstart{{$office->id}}">
-                                    <input type="hidden" value="{{date('h:i A', strtotime($office->sunday_end))}}" id="hiddensunend{{$office->id}}">
-                                    <p>Sunday : {{date('h:i A', strtotime($office->sunday_start))}} to {{date('h:i A', strtotime($office->sunday_end))}}</p>	
-                                    @else
-                                    <input type="hidden" value="" id="hiddensunstart{{$office->id}}">
-                                    <input type="hidden" value="" id="hiddensunend{{$office->id}}">
-                                    @endif
-                                </div>					
+                                    <!--ko if: officeWorkingHours.isEverydayWork() === true-->
+                                    <p>Everyday : <span data-bind="text: officeWorkingHours.everydayStart() + ' '"></span> to <span data-bind="text: officeWorkingHours.everydayEnd()"></span></p>
+                                    <!--/ko-->
+                                    <!--ko if: officeWorkingHours.isMondayWork() === true-->
+                                    <p>Monday : <span data-bind="text: officeWorkingHours.mondayStart() + ' '"></span> to <span data-bind="text: officeWorkingHours.mondayEnd()"></span></p>
+                                    <!--/ko-->
+                                    <!--ko if: officeWorkingHours.isTuesdayWork() === true-->
+                                    <p>Tuesday : <span data-bind="text: officeWorkingHours.tuesdayStart() + ' '"></span> to <span data-bind="text: officeWorkingHours.tuesdayEnd()"></span></p>
+                                    <!--/ko-->
+                                    <!--ko if: officeWorkingHours.isWednesdayWork() === true-->
+                                    <p>Wednesday : <span data-bind="text: officeWorkingHours.wednesdayStart() + ' '"></span> to <span data-bind="text: officeWorkingHours.wednesdayEnd()"></span></p>
+                                    <!--/ko-->
+                                    <!--ko if: officeWorkingHours.isThursdayWork() === true-->
+                                    <p>Thursday : <span data-bind="text: officeWorkingHours.thursdayStart() + ' '"></span> to <span data-bind="text: officeWorkingHours.thursdayEnd()"></span></p>
+                                    <!--/ko-->
+                                    <!--ko if: officeWorkingHours.isFridayWork() === true-->
+                                    <p>Friday : <span data-bind="text: officeWorkingHours.fridayStart() + ' '"></span> to <span data-bind="text: officeWorkingHours.fridayEnd()"></span></p>
+                                    <!--/ko-->
+                                    <!--ko if: officeWorkingHours.isSaturdayWork() === true-->
+                                    <p>Saturday : <span data-bind="text: officeWorkingHours.saturdayStart() + ' '"></span> to <span data-bind="text: officeWorkingHours.saturdayEnd()"></span></p>
+                                    <!--/ko-->
+                                    <!--ko if: officeWorkingHours.isSundayWork() === true-->
+                                    <p>Sunday : <span data-bind="text: officeWorkingHours.sundayStart() + ' '"></span> to <span data-bind="text: officeWorkingHours.sundayEnd()"></span></p>
+                                    <!--/ko-->
+                                </div>
                                 <div class="viewProfileRightCard pd-b-25">
-                                    <input type="hidden" value="{{ $office->office_location }}" id="hiddenlocation{{$office->id}}">
-                                    <h6>Office Location Information</h6>	
-                                    <p>{{$office->office_location}}</p>	
-                                </div>					
+                                    <h6>Office Location Information</h6>
+                                    <p data-bind="text: officeInfo"></p>
+                                </div>
                             </div>
                         </div>
                     </div>
-<!--                </form>-->
-                @endforeach
+                <form data-parsley-validate novalidate=""  class="formdataPart" data-bind="visible: showOfficeEditForm">
+                    <div class="commonBox cboxbottom masterBox" data-bind="template: {name: 'profileEditForm', data: $data}">
+                        
+                    </div>
+                </form>
+                <!--/ko-->
             </div>
             <br>
-            @if(count($offices)>2)
-            @else
+            <!-- ko if: offices().length < 3 -->
             <div class="pull-right text-right">
-                <div class="addProfileBtn "><span class="icon icon-plus"></span></div>
+                <div class="addProfileBtn1" data-bind="click: $root.addOfficeFunction"><span class="icon icon-plus"></span>You can add upto <span data-bind="text: offices().length-1"></span><span> more location(s)</span></div>
             </div>
-            @endif
+            <!--/ko-->
+        </div>
+        
+        <script type="text/html" id="profileEditForm">
+                <div class="error-div" data-bind="text: errorMessage"></div>
+                <div class="form-group">
+                    <div class="detailTitleBlock">
+                        <h5>OFFICE DETAILS</h5>
+                    </div>
+                    <label >Dental Office Type</label>
+                    <div class="slt">
+                        <select class="ddlCars" multiple="true" data-bind=" options: $root.allOfficeTypes, selectedOptions: officeType ">
+                        </select>
+                        <div class="error-div" data-bind="text: officeTypeError"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Dental Office Address</label>
+                    <input type="text" value="" id="officeAddress" name="officeName" class="form-control txtBtnDisable officeAddressMap"  data-parsley-required data-parsley-required-message="Required" data-bind="click: $root.getOfficeName, value: officeAddress, event: {change: $root.getOfficeName}">
+                    <p class="error-div" data-bind="text: locationError"></p>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits" data-bind="value: officePhone" >
+                    <p class="error-div" data-bind="text: phoneNumberError"></p>
+                </div>
+                <div class="form-group dpc">
+                    <label >Working Hours</label>
+                    <p class="error-div" data-bind="text: mixedWorkHourError"></p>
+                    <div class="row dayBox EveryDayCheck">
+                        <div class="col-sm-4 col-md-3">  
+                            <p class="ckBox">
+                                <input type="checkbox" data-bind="checked: officeWorkingHours.isEverydayWork, event: {change: $parent.officeWorkingHours.everyDayWorkHour}, attr: {id: 'test2'+officeId()}" />
+                                <label data-bind="attr: {for: 'test2'+officeId()}" class="ckColor"> Everyday</label>
+                            </p>    
+                        </div>
+                        <div class="col-sm-4 col-md-3">
+                            <div class="date datetime1">
+                                <input type="text" class="form-control datetime" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: officeWorkingHours.everydayStart, disable: !officeWorkingHours.isEverydayWork(), attr:{'data-parsley-required': officeWorkingHours.isEverydayWork()}">
+                                <p class="error-div" data-bind="text: everydayTimeError"></p>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-md-3">
+                            <div class="date datetime1">
+                                <input type="text" class="form-control datetime" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="datetimePicker: {optA:'bb'}, value: officeWorkingHours.everydayEnd, disable: !officeWorkingHours.isEverydayWork(), attr:{'data-parsley-required': officeWorkingHours.isEverydayWork()}">
+                            </div>                               
+                        </div>
+                    </div>
+                    <div class="allDay">  
+                        <div class="row dayBox">
+                            <div class="col-sm-4 col-md-3">  
+                                <p class="ckBox">
+                                    <input type="checkbox" data-bind="checked: officeWorkingHours.isMondayWork, event: {change: $parent.officeWorkingHours.otherDayWorkHour}, attr: {id: 'mon'+officeId()}"/>
+                                    <label data-bind="attr: {for: 'mon'+officeId()}" class="ckColor"> Monday</label>
+                                </p>    
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: officeWorkingHours.mondayStart, disable: !officeWorkingHours.isMondayWork(), attr:{'data-parsley-required': officeWorkingHours.isMondayWork()}">
+                                    <p class="error-div" data-bind="text: mondayTimeError"></p>
+                                </div>    
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="datetimePicker: {optA:'bb'},value: officeWorkingHours.mondayEnd, disable: !officeWorkingHours.isMondayWork(), attr:{'data-parsley-required': officeWorkingHours.isMondayWork()}" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row dayBox">
+                            <div class="col-sm-4 col-md-3">  
+                                <p class="ckBox">
+                                    <input type="checkbox" id="tue" data-bind="checked: officeWorkingHours.isTuesdayWork, event: {change: $parent.officeWorkingHours.otherDayWorkHour}, attr: {id: 'tue'+officeId()}" />
+                                    <label data-bind="attr: {for: 'tue'+officeId()}" class="ckColor"> Tuesday</label>
+                                </p>    
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: officeWorkingHours.tuesdayStart, disable: !officeWorkingHours.isTuesdayWork(), attr:{'data-parsley-required': officeWorkingHours.isTuesdayWork()}">
+                                    <p class="error-div" data-bind="text: tuesdayTimeError"></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required  data-parsley-required-message="closing hours required" data-bind="datetimePicker: {optA:'bb'},value: officeWorkingHours.tuesdayEnd, disable: !officeWorkingHours.isTuesdayWork(), attr:{'data-parsley-required': officeWorkingHours.isTuesdayWork()}" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row dayBox">
+                            <div class="col-sm-4 col-md-3">  
+                                <p class="ckBox">
+                                    <input type="checkbox" id="wed" data-bind="checked: officeWorkingHours.isWednesdayWork, event: {change: $parent.officeWorkingHours.otherDayWorkHour}, attr: {id: 'wed'+officeId()}"/>
+                                    <label data-bind="attr: {for: 'wed'+officeId()}" class="ckColor"> Wednesday</label>
+                                </p>    
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: officeWorkingHours.wednesdayStart, disable: !officeWorkingHours.isWednesdayWork(), attr:{'data-parsley-required': officeWorkingHours.isWednesdayWork()}">
+                                    <p class="error-div" data-bind="text: wednesdayTimeError"></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="datetimePicker: {optA:'bb'},value: officeWorkingHours.wednesdayEnd, disable: !officeWorkingHours.isWednesdayWork(), attr:{'data-parsley-required': officeWorkingHours.isWednesdayWork()}" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row dayBox">
+                            <div class="col-sm-4 col-md-3">  
+                                <p class="ckBox">
+                                    <input type="checkbox" id="thu" data-bind="checked: officeWorkingHours.isThursdayWork, event: {change: $parent.officeWorkingHours.otherDayWorkHour}, attr: {id: 'thu'+officeId()}"/>
+                                    <label data-bind="attr: {for: 'thu'+officeId()}" class="ckColor"> Thursday</label>
+                                </p>    
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required " data-bind="datetimePicker: {optA:'aa'},value: officeWorkingHours.thursdayStart, disable: !officeWorkingHours.isThursdayWork(), attr:{'data-parsley-required': officeWorkingHours.isThursdayWork()}">
+                                    <p class="error-div" data-bind="text: thursdayTimeError"></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Closing Hours"data-parsley-required data-parsley-required-message="closing hours required" data-bind="datetimePicker: {optA:'bb'},value: officeWorkingHours.thursdayEnd, disable: !officeWorkingHours.isThursdayWork(), attr:{'data-parsley-required': officeWorkingHours.isThursdayWork()}" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row dayBox">
+                            <div class="col-sm-4 col-md-3">  
+                                <p class="ckBox">
+                                    <input type="checkbox" id="fri" data-bind="checked: officeWorkingHours.isFridayWork, event: {change: $parent.officeWorkingHours.otherDayWorkHour}, attr: {id: 'fri'+officeId()}"/>
+                                    <label data-bind="attr: {for: 'fri'+officeId()}" class="ckColor"> Friday</label>
+                                </p>    
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: officeWorkingHours.fridayStart, disable: !officeWorkingHours.isFridayWork(), attr:{'data-parsley-required': officeWorkingHours.isFridayWork()}">
+                                    <p class="error-div" data-bind="text: fridayTimeError"></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="datetimePicker: {optA:'bb'},value: officeWorkingHours.fridayEnd, disable: !officeWorkingHours.isFridayWork(), attr:{'data-parsley-required': officeWorkingHours.isFridayWork()}" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row dayBox">
+                            <div class="col-sm-4 col-md-3">  
+                                <p class="ckBox">
+                                    <input type="checkbox" id="sat" data-bind="checked: officeWorkingHours.isSaturdayWork, event: {change: $parent.officeWorkingHours.otherDayWorkHour}, attr: {id: 'sat'+officeId()}"/>
+                                    <label data-bind="attr: {for: 'sat'+officeId()}" class="ckColor"> Saturday</label>
+                                </p>    
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: officeWorkingHours.saturdayStart, disable: !officeWorkingHours.isSaturdayWork(), attr:{'data-parsley-required': officeWorkingHours.isSaturdayWork()}">
+                                    <p class="error-div" data-bind="text: saturdayTimeError"></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="datetimePicker: {optA:'bb'},value: officeWorkingHours.saturdayEnd, disable: !officeWorkingHours.isSaturdayWork(), attr:{'data-parsley-required': officeWorkingHours.isSaturdayWork()}" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row dayBox">
+                            <div class="col-sm-4 col-md-3">  
+                                <p class="ckBox">
+                                    <input type="checkbox" id="sun" data-bind="checked: officeWorkingHours.isSundayWork, event: {change: $parent.officeWorkingHours.otherDayWorkHour}, attr: {id: 'sun'+officeId()}"/>
+                                    <label data-bind="attr: {for: 'sun'+officeId()}" class="ckColor"> Sunday</label>
+                                </p>    
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Opening Hours" data-parsley-required data-parsley-required-message="opening hours required" data-bind="datetimePicker: {optA:'aa'},value: officeWorkingHours.sundayStart, disable: !officeWorkingHours.isSundayWork(), attr:{'data-parsley-required': officeWorkingHours.isSundayWork()}">
+                                    <p class="error-div" data-bind="text: sundayTimeError"></p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-3">
+                                <div class="date datetime1">
+                                    <input type="text" class="form-control" placeholder="Closing Hours" data-parsley-required data-parsley-required-message="closing hours required" data-bind="datetimePicker: {optA:'bb'},value: officeWorkingHours.sundayEnd, disable: !officeWorkingHours.isSundayWork(), attr:{'data-parsley-required': officeWorkingHours.isSundayWork()}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>	
+                <div class="form-group">
+                    <label>Office Location Information <i class="optional">(Optional)</i></label>
+                    <textarea class="form-control txtHeight" data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: officeInfo" ></textarea>
+                </div>
+                <div class="pull-right text-right">
+                    <button type="button" class="btn btn-link mr-r-10 cancelled" style="font-weight:500" data-bind="click: $root.cancelUpdateOffice">Cancel</button>
+                    <button type="button" id="createProfileButton" class="btn btn-primary pd-l-40 pd-r-40" data-bind="click: $root.updateOfficeDetails">Update</button>
+                </div>
+                <br>
+                <br>
+        </script>
+        
+        <div id="actionModal" class="modal fade" role="dialog">
+            <div class="modal-dialog custom-modal modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" data-bind="visible:cancelButtonDelete">&times;</button>
+                        <h4 class="modal-title" data-bind="text:headMessage"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-center" data-bind="text:prompt"></p>
+                        <div class="mr-t-20 mr-b-30 dev-pd-l-13p" data-bind="visible: showModalFooter">
+                            <button type="button" class="btn btn-link mr-r-5" data-dismiss="modal">Close</button>
+                            <button type="submit" id="actionButton" class="btn btn-primary pd-l-30 pd-r-30" data-bind="disable: disableAction">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>    
-<!--<input id="autocomplete" type="text">
-<input id="postal_code" type="text">-->
 @section('js')
-
+<script src="{{asset('web/scripts/multiple-select.js')}}"></script>
 <script>
-    var placeSearch, autocomplete;
-    var componentForm = {
-        postal_code: 'short_name'
-    };
 
-    function initAutocomplete() {
-        // Create the autocomplete object, restricting the search to geographical
-        // location types.
-        console.log(document.getElementById('autocomplete'));
-        autocomplete = new google.maps.places.SearchBox(
-                /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
-                {types: ['geocode']});
-
-        // When the user selects an address from the dropdown, populate the address
-        // fields in the form.
-        autocomplete.addListener('places_changed', fillInAddress);
-    }
-
-    function fillInAddress() {
-        // Get the place details from the autocomplete object.
-        var allPlace = autocomplete.getPlaces();
-
-        allPlace.forEach(function (place) {
-                    $('#postal_code').val('');
-            // Get each component of the address from the place details
-            // and fill the corresponding field on the form.
-            for (var i = 0; i < place.address_components.length; i++) {
-                var addressType = place.address_components[i].types[0];
-                if (componentForm[addressType]) {
-                    var val = place.address_components[i][componentForm[addressType]];
-                    document.getElementById(addressType).value = val;
-                }
-            }
-                    document.getElementById('full_address').value = place.formatted_address;
-                    document.getElementById('lat').value = place.geometry.location.lat();
-                    document.getElementById('lng').value = place.geometry.location.lng();
-                    $('#autocomplete').val(place.formatted_address);
-                    checkLocation($('#postal_code').val(), '');
-
-        });
-
-    }
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
+<script>
+//    var placeSearch, autocomplete;
+//    var componentForm = {
+//        postal_code: 'short_name'
+//    };
+//
+//    function initAutocomplete() {
+//        // Create the autocomplete object, restricting the search to geographical
+//        // location types.
+//        console.log(document.getElementById('autocomplete'));
+//        autocomplete = new google.maps.places.SearchBox(
+//                /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+//                {types: ['geocode']});
+//
+//        // When the user selects an address from the dropdown, populate the address
+//        // fields in the form.
+//        autocomplete.addListener('places_changed', fillInAddress);
+//    }
+//
+//    function fillInAddress() {
+//        // Get the place details from the autocomplete object.
+//        var allPlace = autocomplete.getPlaces();
+//
+//        allPlace.forEach(function (place) {
+//            $('#postal_code').val('');
+//            // Get each component of the address from the place details
+//            // and fill the corresponding field on the form.
+//            for (var i = 0; i < place.address_components.length; i++) {
+//                var addressType = place.address_components[i].types[0];
+//                if (componentForm[addressType]) {
+//                    var val = place.address_components[i][componentForm[addressType]];
+//                    document.getElementById(addressType).value = val;
+//                }
+//            }
+//            document.getElementById('full_address').value = place.formatted_address;
+//            document.getElementById('lat').value = place.geometry.location.lat();
+//            document.getElementById('lng').value = place.geometry.location.lng();
+//            $('#autocomplete').val(place.formatted_address);
+//            checkLocation($('#postal_code').val(), '');
+//
+//        });
+//
+//    }
 
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsIYaIMo9hd5yEL7pChkVPKPWGX6rFcv8&libraries=places"
 async defer></script>
+<script src="{{asset('web/scripts/edit-profile.js')}}"></script>
 @endsection
 @endsection
