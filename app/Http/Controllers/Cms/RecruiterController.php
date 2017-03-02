@@ -79,7 +79,7 @@ class RecruiterController extends Controller
             if(isset($request->id)){
                 $rules['email'] = "email|required";
                 
-                $validator = Validator::make($request, $rules);
+                $validator = Validator::make($reqData, $rules);
                 if ($validator->fails()) {
                     return redirect()->back()
                                 ->withErrors($validator)
