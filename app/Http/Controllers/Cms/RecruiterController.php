@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\UserProfile;
 use App\Models\PasswordReset;
+use Illuminate\Support\Facades\Validator;
 use Mail;
 use Log;
 
@@ -74,9 +75,16 @@ class RecruiterController extends Controller
     {
         try 
         {
+            $reqData = $request->all();
             if(isset($request->id)){
                 $rules['email'] = "email|required";
-                $this->validate($request, $rules);
+                
+                $validator = Validator::make($request, $rules);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                                ->withErrors($validator)
+                                ->withInput();
+                }
                 $activationStatus  = isset($request->is_active) ? 1 : 0;
 
                 User::where('id',$request->id)->update(['is_active' => $activationStatus]);
@@ -85,8 +93,14 @@ class RecruiterController extends Controller
             else
             {
                 $rules['email'] = "email|required|unique:users";
-                $this->validate($request, $rules);
-                $reqData = $request->all();
+                $validator = Validator::make($reqData, $rules);
+        
+                if ($validator->fails()) {
+                    return redirect()->back()
+                                ->withErrors($validator)
+                                ->withInput();
+                }
+                
                 $user =  ['email' => $reqData['email'], 'password' => '',
                                 'is_verified' => 1, 'is_active' => 1];
 
