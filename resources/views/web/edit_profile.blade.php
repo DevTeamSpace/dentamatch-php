@@ -354,51 +354,6 @@
         }
     });
 </script>
-<script>
-//    var placeSearch, autocomplete;
-//    var componentForm = {
-//        postal_code: 'short_name'
-//    };
-//
-//    function initAutocomplete() {
-//        // Create the autocomplete object, restricting the search to geographical
-//        // location types.
-//        console.log(document.getElementById('autocomplete'));
-//        autocomplete = new google.maps.places.SearchBox(
-//                /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
-//                {types: ['geocode']});
-//
-//        // When the user selects an address from the dropdown, populate the address
-//        // fields in the form.
-//        autocomplete.addListener('places_changed', fillInAddress);
-//    }
-//
-//    function fillInAddress() {
-//        // Get the place details from the autocomplete object.
-//        var allPlace = autocomplete.getPlaces();
-//
-//        allPlace.forEach(function (place) {
-//            $('#postal_code').val('');
-//            // Get each component of the address from the place details
-//            // and fill the corresponding field on the form.
-//            for (var i = 0; i < place.address_components.length; i++) {
-//                var addressType = place.address_components[i].types[0];
-//                if (componentForm[addressType]) {
-//                    var val = place.address_components[i][componentForm[addressType]];
-//                    document.getElementById(addressType).value = val;
-//                }
-//            }
-//            document.getElementById('full_address').value = place.formatted_address;
-//            document.getElementById('lat').value = place.geometry.location.lat();
-//            document.getElementById('lng').value = place.geometry.location.lng();
-//            $('#autocomplete').val(place.formatted_address);
-//            checkLocation($('#postal_code').val(), '');
-//
-//        });
-//
-//    }
-
-</script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsIYaIMo9hd5yEL7pChkVPKPWGX6rFcv8&libraries=places"
 async defer></script>
 <script src="{{asset('web/scripts/edit-profile.js')}}"></script>
