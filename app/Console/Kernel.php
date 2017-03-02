@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
         Commands\CertificateExpiryCommand::class,
         Commands\AppMessageCommand::class,
         Commands\InactiveJobCommand::class,
+        Commands\TempJobExpiryCommand::class,
     ];
 
     /**
@@ -32,7 +33,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('user:profileCompletion')->daily();
         $schedule->command('user:certificateExpiry')->daily();
         $schedule->command('notify:adminNotification')->daily();
-        $schedule->command('notify:inactiveJobNotification')->daily();
+        $schedule->command('notify:tempJobExpiryNotification')->daily();
     }
 
     /**
