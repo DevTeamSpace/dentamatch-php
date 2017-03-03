@@ -282,7 +282,6 @@ class SearchApiController extends Controller {
                     }else{
                          $this->notifyAdmin($notificationDetails->job_list_id,$userId,Notification::JOBSEEKERACCEPTED);
                     }
-                    
                     $response = apiResponse::customJsonResponse(1, 200, $msg);
                 }else{
                     $response = apiResponse::customJsonResponse(0, 201, trans("messages.not_invited_job"));

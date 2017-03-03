@@ -6,9 +6,11 @@ use Illuminate\Console\Command;
 use App\Models\RecruiterJobs;
 use App\Models\User;
 use App\Models\Notification;
+use App\Models\TempJobDates;
+use App\Models\Configs;
 use DB;
 
-class InactiveJobCommand extends Command
+class TempJobExpiryCommand extends Command
 {
     const NOTIFICATION_INTERVAL = 30;
     /**
@@ -16,14 +18,14 @@ class InactiveJobCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'notify:inactiveJobNotification';
+    protected $signature = 'notify:tempJobExpiryNotification';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Cron to notify if a particular job posting is inactive for 30 days';
+    protected $description = 'Cron to notify X days before the temp job expires';
 
     /**
      * Create a new command instance.
@@ -44,28 +46,31 @@ class InactiveJobCommand extends Command
     {
         try {
             $pushList = [];
+            $configModel = Configs::where('config_name', 'RECURITERNOTIFY')->first();
+            $notificationDays = $configModel->config_data;
+            
             $senderId = User::getAdminUserDetailsForNotification();
-            $recruiterModel = RecruiterJobs::select('recruiter_jobs.id', 'job_templates.user_id', 'job_titles.jobtitle_name', DB::raw('count(seeker_id) as numberOfJobs'))
+            $tempJobModel = TempJobDates::select('recruiter_jobs.id', 'job_templates.user_id', 'job_titles.jobtitle_name', 'temp_job_dates.job_date')
+                                ->join('recruiter_jobs', 'recruiter_jobs.id', '=', 'temp_job_dates.recruiter_job_id')
                                 ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
                                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
                                 ->leftjoin('job_lists', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
-                                ->where(DB::raw("DATEDIFF(now(), recruiter_jobs.created_at)"),'=', static::NOTIFICATION_INTERVAL)
-                                ->whereIn('recruiter_jobs.job_type', [1,2])
-                                ->groupBy('recruiter_jobs.id')
+                                ->where(DB::raw("DATEDIFF(temp_job_dates.job_date,now())"),'=', $notificationDays)
+                                ->groupBy('temp_job_dates.id')
+                                ->orderBy('temp_job_dates.job_date', 'desc')
                                 ->get();
-            $list = $recruiterModel->toArray();
+            $list = $tempJobModel->toArray();
             if(!empty($list)) {
                 $pushList = array_map(function ($value) {
-                                if($value['numberOfJobs']==0) {
                                     return  $value;
-                                }
                             }, $list);
             }
+            
             if(!empty($pushList)) {
                 $insertData = [];
                 foreach($pushList as $listValue)
                 {
-                    $data = ['image' => url('web/images/dentaMatchLogo.png'),'message' => "No job has been applied for last 30 days on ".$listValue['jobtitle_name']];
+                    $data = ['image' => url('web/images/dentaMatchLogo.png'),'message' => "Temporary job for ".$listValue['jobtitle_name']." is expiring on ".$listValue['job_date']];
                     $insertData[] = ['sender_id' => $senderId->id, 'receiver_id' => $listValue['user_id'], 'notification_data'=> json_encode($data)];
                 }
                 Notification::insert($insertData);
