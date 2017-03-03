@@ -62,7 +62,6 @@
                 Route::get('job/lists', 'web\RecruiterJobController@listJobs');
                 Route::get('job/search/{jobId}', 'web\RecruiterJobController@searchSeekers');
                 Route::get('job/details/{jobId}', 'web\RecruiterJobController@jobDetails');
-    //            Route::get('job/edit/{jobId}', 'web\RecruiterJobController@editJob');
                 Route::get('job/edit/{jobId}', 'web\RecruiterJobController@jobEdit');
                 Route::get('job/edit-details', 'web\RecruiterJobController@jobEditDetails');
                 Route::post('edit-job', 'web\RecruiterJobController@postEditJob');
@@ -71,8 +70,7 @@
                 Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
                 Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
                 
-                Route::post('office-details', 'web\UserProfileController@officeDetails');
-
+                
                 Route::get('favorite-jobseeker','web\FavoriteJobseekerController@getFavJobseeker');
                 Route::post('invite-jobseeker','web\FavoriteJobseekerController@postInviteJobseeker');              
                 Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
