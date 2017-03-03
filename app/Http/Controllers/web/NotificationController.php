@@ -17,6 +17,7 @@ use App\Http\Requests\ChangeSubscriptionPlanRequest;
 use App\Http\Requests\SubscribeAgainRequest;
 use App\Models\Notification;
 use Log;
+use DB;
 
 class NotificationController extends Controller {
     private $response = [];
@@ -25,11 +26,14 @@ class NotificationController extends Controller {
         $this->middleware('auth');
        
     }
+
     
     public function getNotificationList(){
         $userId = Auth::user()->id;
-        $notificationList = Notification::where('receiver_id', '=', $userId)->orderBy('id', 'DESC');
-        return view('web.notification',['notificationlist' => $notificationList]);
+        $userId = 9;
+        $notificationList = Notification::where('receiver_id', '=', $userId)->orderBy('id', 'DESC')->get();
+        return View('web.notification',['notificationList' => $notificationList]);
+   
     }
     
     

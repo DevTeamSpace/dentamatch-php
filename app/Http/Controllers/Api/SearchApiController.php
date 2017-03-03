@@ -275,7 +275,8 @@ class SearchApiController extends Controller {
                         $jobExists->applied_status = JobLists::HIRED;
                         $msg = trans("messages.job_hired_success");
                     }
-                    $notificationData = $jobExists->save();
+                    $jobExists->save();
+                    Notification::where('id', $reqData['notificationId'])->update(['seen' => 1]);
                     if($reqData['acceptStatus'] == 0){
                         $this->notifyAdmin($notificationDetails->job_list_id,$userId,Notification::JOBSEEKERREJECTED);
                     }else{
