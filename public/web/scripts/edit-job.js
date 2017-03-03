@@ -480,7 +480,7 @@
             formData.append('jobDetails', ko.toJSON(me));
             formData.append('jobId', me.jobId())
             jQuery.ajax({
-                url: "{{url('edit-job')}}",
+                url: "/edit-job",
                 data: formData,
                 cache: false,
                 contentType: false,
@@ -515,7 +515,7 @@
             formData = new FormData();
             formData.append('jobId', me.jobId())
             jQuery.ajax({
-                url: "{{url('delete-job')}}",
+                url: "/delete-job",
                 data: formData,
                 cache: false,
                 contentType: false,
