@@ -4,7 +4,7 @@ $(function () {
     $(".addProfileBtn").addClass("DynamicAddder");
     var globalMasterLen = $('.masterBox').length;
 	  $('.masterBox').addClass('onBox');
-    $('.addProfileBtn').append(`You can add upto ${3 - globalMasterLen} more location`);
+    $('.addProfileBtn').append(``);
     var replicaBoxOne, boxLength, firstBox, secondBox, currentFind, dynamicCount;
     boxLength = 0, dynamicCount = 0;
     function totalCount() {

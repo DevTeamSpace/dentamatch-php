@@ -27,8 +27,8 @@ class CalendarApiController extends Controller {
             if($userId > 0){
                 $reqData = $request->all();
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
-                $jobCount = JobLists::where('seeker_id','=',$userId)->whereIn('applied_status',[JobLists::HIRED])->get()->count();
-                if($jobCount == 0){
+               // $jobCount = JobLists::where('seeker_id','=',$userId)->whereIn('applied_status',[JobLists::HIRED])->get()->count();
+               // if($jobCount == 0){
                         $userProfileModel->is_fulltime = $reqData['isFulltime'];
                         $userProfileModel->is_parttime_monday = 0;
                         $userProfileModel->is_parttime_tuesday = 0;
@@ -68,9 +68,9 @@ class CalendarApiController extends Controller {
                             }
                         }
                         $response = apiResponse::customJsonResponse(1, 200, trans("messages.availability_add_success"));
-                }else{
+                /*}else{
                         $response = apiResponse::customJsonResponse(0, 201, trans("messages.already_job_availability"));
-                }
+                }*/
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             } 

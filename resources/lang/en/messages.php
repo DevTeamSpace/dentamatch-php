@@ -144,7 +144,7 @@ return [
     'already_sent_message' => 'appMessage already sent',
     'admin_recruiter_password_success' => 'Password reset request sent successfully',
     'update_device_token' => 'Device token updated successfully',
-    'invalid_job_location' => 'No Jobs available for this location',
+    'invalid_job_location' => 'There are no jobs yet added to this location',
     'job_cancelled_success' => 'You have successfully denied this job',
     'job_hired_success' => 'You have successfully accepted this job',
     'not_invited_job' => 'You have not invited for this job',
@@ -157,6 +157,8 @@ return [
 
     'calender_seekers_fetched' => 'Calender seekers fetched successfully',
     'report_seekers' => 'Reports seekers fetched succcessfully',
-    'individual_report' => 'Individual report fetched successfully.'
-
+    'individual_report' => 'Individual report fetched successfully.',
+    'validity_date_empty' => "The validity date is either empty or in invalid format",
+    'office_updated' => 'Office updated successfully',
+    'address_already_associated' => 'Address already associated with another office, please use some other address.',
 ];

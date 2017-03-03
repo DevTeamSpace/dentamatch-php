@@ -12,7 +12,7 @@ use Log;
 class PushNotificationApiController extends Controller {
     
     public function __construct() {
-        $this->middleware('ApiAuth');
+        $this->middleware('ApiAuth',['except'=>['userChatNotification']]);
     }
     
     /**

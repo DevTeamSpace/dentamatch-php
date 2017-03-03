@@ -284,6 +284,7 @@
 var urlFav = "{{ url('recruiter/markFavourite') }}";
 var socketUrl = "{{ url('') }}:3000";
 var userId = "{{ Auth::id() }}";
+var officeName = "{{ $job['office_name'] }}";
 </script>
 <script src="{{ url('') }}:3000/socket.io/socket.io.js"></script>
 <script src ="{{asset('web/scripts/jobdetail.js')}}"></script>

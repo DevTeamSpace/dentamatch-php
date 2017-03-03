@@ -39,7 +39,7 @@ class ChatUserLists extends Model
             ->select('chat_user_list.recruiter_id as recruiterId','jobseeker_profiles.profile_pic',
                     DB::raw("concat(jobseeker_profiles.first_name,' ',jobseeker_profiles.last_name) AS name"),
                     DB::raw("max(user_chat.message) AS message"),
-                    DB::raw("TIMEDIFF(now(),max(user_chat.updated_at)) AS timestamp"),
+                    DB::raw("max(user_chat.created_at) AS timestamp"),
                     DB::raw("max(user_chat.id) AS messageId"),'job_titles.jobtitle_name as jobTitle',
                     'chat_user_list.id as messageListId','chat_user_list.seeker_id as seekerId',
                     'chat_user_list.recruiter_block as recruiterBlock','chat_user_list.seeker_block as seekerBlock')
@@ -50,6 +50,7 @@ class ChatUserLists extends Model
         $chatData = UserChat::whereIn('id',$messageIds)->pluck('message','id');
         foreach($responseData as $key=>$row){
             $responseData[$key]['message'] = $chatData[$row['messageId']];
+            $responseData[$key]['timestamp'] = date('M d', strtotime($row['timestamp']));
         }
         return $responseData;
     }
@@ -102,9 +103,21 @@ class ChatUserLists extends Model
     
     public function checkAndSaveUserToChatList(){
         $userChatList = static::where('recruiter_id',$this->recruiter_id)->where('seeker_id',$this->seeker_id)->first();
-        if(nullOrEmptyString($userChatList)){
+        if(empty($userChatList)){
             $this->save();
         }
 
+    }
+    
+    public static function getBlockedRecruiters($seekerId)
+    {
+        $return = [];
+        $blockedUserModel = static::select('recruiter_id')->where('seeker_block', 1)->where('seeker_id', $seekerId)->get();
+        
+        if($blockedUserModel)
+        {
+            $return = $blockedUserModel->toArray();
+        }
+        return $return;
     }
 }

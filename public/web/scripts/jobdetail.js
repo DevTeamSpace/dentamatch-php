@@ -1,34 +1,36 @@
 jQuery(function ($) {
-    var socket = io.connect(':3000');
-    console.log(socket);
+    var socket = io(socketUrl);
+    socket.on('connect', function () {
+        console.log(socket);
+
+        socket.emit('init', {userId : userId, userName : officeName,userType : 2},function(response){
+
+        });
+
+        $('.modalClick').click(function(e){
+            $('#seekerId').val($(this).data('seekerid'));
+            $('#chatMsg').val('');
+        });
+
+        $('#sendChat').click(function(e){
+            e.preventDefault();
+            var chatMsg = $('#chatMsg').val();
+            var seekerId = $('#seekerId').val();
+            console.log(seekerId);
+            var data = {fromId:userId, toId:seekerId, message:chatMsg, messageFrom:1};
+            if(chatMsg!=''){
+                socket.emit('sendMessage', data, function(msgObj){
+                    console.log(msgObj);
+                    $('.modal .close').click();
+                });
+            }
+        });
+        socket.on('receiveMessage', function (data) {
+
+            console.log(data);
+        });
     
-    socket.emit('init', {userId : userId, userName : "{{ $job['office_name'] }}",userType : 2},function(response){
-            
     });
-    
-    $('.modalClick').click(function(e){
-        $('#seekerId').val($(this).data('seekerid'));
-        $('#chatMsg').val('');
-    });
-            
-    $('#sendChat').click(function(e){
-        e.preventDefault();
-        var chatMsg = $('#chatMsg').val();
-        var seekerId = $('#seekerId').val();
-        console.log(seekerId);
-        var data = {fromId:userId, toId:seekerId, message:chatMsg, messageFrom:1};
-        if(chatMsg!=''){
-            socket.emit('sendMessage', data, function(msgObj){
-                console.log(msgObj);
-                $('.modal .close').click();
-            });
-        }
-    });
-    socket.on('receiveMessage', function (data) {
-        
-        console.log(data);
-    });
-    
 });
 
     $(function () {
