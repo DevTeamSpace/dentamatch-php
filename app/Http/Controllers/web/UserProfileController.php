@@ -10,10 +10,14 @@ use App\Models\RecruiterOffice;
 use DB;
 use App\Models\RecruiterProfile;
 use App\Models\RecruiterOfficeType;
+use App\Http\Requests\EditRecruiterOfficeRequest;
+use App\Models\OfficeType;
+use App\Http\Requests\DeleteOfficeRequest;
 use Hash;
+use Log;
 
 class UserProfileController extends Controller {
-
+    private $result = [];
     public function officeDetails(Request $request) {
         
         if (isset($request->phoneNumber) && !empty($request->phoneNumber)) {
@@ -102,27 +106,128 @@ class UserProfileController extends Controller {
     }
 
     public function getEditProfile() {
-        $user = RecruiterProfile::where('user_id', Auth::user()->id)->first();
-        $officeType = \App\Models\OfficeType::all();
-        $offices = RecruiterOffice::join('recruiter_office_types', 'recruiter_office_types.recruiter_office_id', '=', 'recruiter_offices.id')
-                        ->join('office_types', 'recruiter_office_types.office_type_id', '=', 'office_types.id')
-                        ->where('user_id', Auth::user()->id)
-                        ->select('recruiter_offices.*', DB::raw('group_concat(office_types.officetype_name) as officetype_names'), DB::raw('group_concat(office_types.id) as officetype_id'))
-                        ->groupby('recruiter_offices.id')->get();
-        return view('web.edit_profile', ['user' => $user, 'offices' => $offices, 'officeType' => $officeType]);
+        return view('web.edit_profile', ['activeTab'=>'3']);
     }
-
-    public function deleteOffice($officeId){
-        try {
-            $recruiterOffice = RecruiterOffice::where('id',$officeId)->where('user_id',Auth::id())->first();
+    
+    public function getRecruiterProfileDetails(){
+        try{
+            $user = RecruiterProfile::where('user_id', Auth::user()->id)->select('id', 'user_id', 'office_name', 'office_desc')->first();
+            $officeType = \App\Models\OfficeType::all();
+            $offices = RecruiterOffice::join('recruiter_office_types', 'recruiter_office_types.recruiter_office_id', '=', 'recruiter_offices.id')
+                            ->join('office_types', 'recruiter_office_types.office_type_id', '=', 'office_types.id')
+                            ->where('user_id', Auth::user()->id)
+                            ->select('recruiter_offices.*', DB::raw('group_concat(office_types.officetype_name) as officetype_names'), DB::raw('group_concat(office_types.id) as officetype_id'))
+                            ->groupby('recruiter_offices.id')->get();
+            $this->result['user'] = $user;
+            $this->result['officeType'] = $officeType;
+            $this->result['offices'] = $offices;
+            $this->result['success'] = true;
+        } catch (\Exception $e) {
+            $this->result['message'] = $e->getMessage();
+        }
+        return $this->result;
+    }
+    
+    public function postEditRecruiterOffice(EditRecruiterOfficeRequest $request){
+        try{
+            DB::beginTransaction();
+            $allData = json_decode($request->officeDetails);
             
-            if($recruiterOffice){
-                RecruiterOfficeType::where('recruiter_office_id',$officeId)->delete();
-                $recruiterOffice->delete();
+            $recruiterOfficeObj = RecruiterOffice::where(['id' => (int)$request->officeId])->first();
+            
+            if($request->new == "true"){
+                $recruiterOfficeObj = new RecruiterOffice();
+            }
+            
+            $recruiterOfficeObj->user_id = Auth::user()->id;
+            $recruiterOfficeObj->phone_no = $allData->officePhone;
+            $recruiterOfficeObj->work_everyday_start = ($allData->officeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->everydayStart)) : '';
+            $recruiterOfficeObj->work_everyday_end = ($allData->officeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->everydayEnd)) : '';
+            $recruiterOfficeObj->monday_start = ($allData->officeWorkingHours->isMondayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->mondayStart)) : '';
+            $recruiterOfficeObj->monday_end = ($allData->officeWorkingHours->isMondayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->mondayEnd)) : '';
+            $recruiterOfficeObj->tuesday_start = ($allData->officeWorkingHours->isTuesdayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->tuesdayStart)) : '';
+            $recruiterOfficeObj->tuesday_end = ($allData->officeWorkingHours->isTuesdayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->tuesdayEnd)) : '';
+            $recruiterOfficeObj->wednesday_start = ($allData->officeWorkingHours->isWednesdayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->wednesdayStart)) : '';
+            $recruiterOfficeObj->wednesday_end = ($allData->officeWorkingHours->isWednesdayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->wednesdayEnd)) : '';
+            $recruiterOfficeObj->thursday_start = ($allData->officeWorkingHours->isThursdayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->thursdayStart)) : '';
+            $recruiterOfficeObj->thursday_end = ($allData->officeWorkingHours->isThursdayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->thursdayEnd)) : '';
+            $recruiterOfficeObj->friday_start = ($allData->officeWorkingHours->isFridayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->fridayStart)) : '';
+            $recruiterOfficeObj->friday_end = ($allData->officeWorkingHours->isFridayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->fridayEnd)) : '';
+            $recruiterOfficeObj->saturday_start = ($allData->officeWorkingHours->isSaturdayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->saturdayStart)) : '';
+            $recruiterOfficeObj->saturday_end = ($allData->officeWorkingHours->isSaturdayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->saturdayEnd)) : '';
+            $recruiterOfficeObj->sunday_start = ($allData->officeWorkingHours->isSundayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->sundayStart)) : '';
+            $recruiterOfficeObj->sunday_end = ($allData->officeWorkingHours->isSundayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->sundayEnd)) : '';
+            
+            $checkRecruiterOfficeExistence = RecruiterOffice::where([
+                'latitude' => (string)$allData->officeLat,
+                'longitude' => (string)$allData->officeLng,
+                'user_id' => Auth::user()->id
+                    ])
+                ->where('id', '!=' ,$request->officeId)->first();
+            if($checkRecruiterOfficeExistence != null){
+                $this->result['success'] = false;
+                $this->result['message'] = trans('messages.address_already_associated');
+            }else{
+                $recruiterOfficeObj->address = $allData->officeAddress;
+                $recruiterOfficeObj->office_info = $allData->officeInfo;
+                $recruiterOfficeObj->zipcode = (int)$allData->officeZipcode;
+                $recruiterOfficeObj->latitude = $allData->officeLat;
+                $recruiterOfficeObj->longitude = $allData->officeLng;
+                $recruiterOfficeObj->save();
                 
+                $newOfficeType = $this->addOfficeType($recruiterOfficeObj, $allData, $request->new);
+                DB::commit();
+                $this->result['recruiterOffice'] = $recruiterOfficeObj;
+                $this->result['recruiterOfficeType'] = $newOfficeType['data'];
+                $this->result['success'] = true;
+                $this->result['message'] = trans('messages.office_updated');
             }
         } catch (\Exception $e) {
-            
+            DB::rollback();
+            Log::error($e);
+            $this->result['message'] = $e->getMessage();
         }
+        return $this->result;
+    }
+    
+    private function addOfficeType($office, $allData, $new){
+        try{
+            if($new != "true"){
+                RecruiterOfficeType::where(['recruiter_office_id' => $office['id']])->delete();
+            }
+            $allRecruiterOfficeType = OfficeType::get();
+            $newOfficeType = [];
+            foreach($allRecruiterOfficeType as $officeType){
+                if(in_array($officeType['officetype_name'], $allData->officeType)){
+                    $newRecruiterOfficeType = new RecruiterOfficeType();
+                    $newRecruiterOfficeType->recruiter_office_id = $office['id'];
+                    $newRecruiterOfficeType->office_type_id = $officeType['id'];
+                    $newRecruiterOfficeType->save();
+                    array_push($newOfficeType, $newRecruiterOfficeType);
+                }
+            }
+            $this->result['success'] = false;
+            $this->result['data'] = $newOfficeType;
+        } catch (\Exception $e) {
+            Log::error($e);
+            $this->result['message'] = $e->getMessage();
+        }
+        $this->result;
+    }
+
+    public function postDeleteOffice(DeleteOfficeRequest $request){
+        try {
+            $recruiterOffice = RecruiterOffice::where('id',$request->officeId)->where('user_id',Auth::id())->first();
+            
+            if($recruiterOffice){
+                RecruiterOfficeType::where('recruiter_office_id',(int)$request->officeId)->delete();
+                $recruiterOffice->delete();   
+            }
+            $this->result['success'] = true;
+        } catch (\Exception $e) {
+            Log::error($e);
+            $this->result['message'] = $e->getMessage();
+        }
+        return $this->result;
     }
 }

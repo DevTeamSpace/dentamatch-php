@@ -50,7 +50,7 @@ class ChatUserLists extends Model
         $chatData = UserChat::whereIn('id',$messageIds)->pluck('message','id');
         foreach($responseData as $key=>$row){
             $responseData[$key]['message'] = $chatData[$row['messageId']];
-            $responseData[$key]['timestamp'] = date('h:i a', strtotime($row['timestamp']));
+            $responseData[$key]['timestamp'] = date('M d', strtotime($row['timestamp']));
         }
         return $responseData;
     }

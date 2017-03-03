@@ -62,7 +62,6 @@
                 Route::get('job/lists', 'web\RecruiterJobController@listJobs');
                 Route::get('job/search/{jobId}', 'web\RecruiterJobController@searchSeekers');
                 Route::get('job/details/{jobId}', 'web\RecruiterJobController@jobDetails');
-    //            Route::get('job/edit/{jobId}', 'web\RecruiterJobController@editJob');
                 Route::get('job/edit/{jobId}', 'web\RecruiterJobController@jobEdit');
                 Route::get('job/edit-details', 'web\RecruiterJobController@jobEditDetails');
                 Route::post('edit-job', 'web\RecruiterJobController@postEditJob');
@@ -71,11 +70,15 @@
                 Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
                 Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
                 
-                Route::post('office-details', 'web\UserProfileController@officeDetails');
-
+                
                 Route::get('favorite-jobseeker','web\FavoriteJobseekerController@getFavJobseeker');
                 Route::post('invite-jobseeker','web\FavoriteJobseekerController@postInviteJobseeker');              
+                Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
+                Route::get('recruiter-profile-details', 'web\UserProfileController@getRecruiterProfileDetails');
 
+                Route::get('setting-terms-conditions', 'web\UserProfileController@getTermsConditions');
+                Route::get('change-password', 'web\UserProfileController@getChangePassword');
+                Route::post('change-password', 'web\UserProfileController@postChangePassword');
                 Route::get('chat', 'web\ChatController@getChatSeekerList');
                 Route::get('calender', 'web\CalenderController@getCalender');
                 Route::get('calender-details', 'web\CalenderController@getCalenderDetails');
@@ -84,6 +87,9 @@
                 Route::get('reports-temp-jobs', 'web\ReportsController@getReportsTempJobs');
                 Route::get('report-seekers', 'web\ReportsController@getReportSeekers');
                 Route::get('individual-temp-job', 'web\ReportsController@getIndividualTempJob');
+                Route::get('job-applied-or-not', 'web\RecruiterJobController@appliedOrNot');
+                Route::post('edit-recruiter-office', 'web\UserProfileController@postEditRecruiterOffice');
+                Route::post('delete-office', 'web\UserProfileController@postDeleteOffice');
             });
             Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails');
             Route::get('/get-location/{zip}', 'web\UserProfileController@checkValidLocation');
