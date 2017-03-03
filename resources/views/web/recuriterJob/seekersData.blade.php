@@ -102,9 +102,9 @@
 </div> 
 <div class="job-type-detail">
     <p class="nopadding">{{$seeker['jobtitle_name']}}</p>
-    @if($seeker['is_fulltime'])
+    @if($seeker['is_fulltime'] && $jobDetails['job_type']==App\Models\RecruiterJobs::FULLTIME)
     <span class="drk-green statusBtn mr-r-5">Full Time</span>
-    @elseif($seeker['is_parttime_monday'] || $seeker['is_parttime_tuesday'] || $seeker['is_parttime_wednesday'] || $seeker['is_parttime_thursday'] || $seeker['is_parttime_friday'] || $seeker['is_parttime_saturday'] || $seeker['is_parttime_sunday'])
+    @elseif(($seeker['is_parttime_monday'] || $seeker['is_parttime_tuesday'] || $seeker['is_parttime_wednesday'] || $seeker['is_parttime_thursday'] || $seeker['is_parttime_friday'] || $seeker['is_parttime_saturday'] || $seeker['is_parttime_sunday']) && $jobDetails['job_type']==App\Models\RecruiterJobs::PARTTIME)
     <span class="bg-ltgreen statusBtn mr-r-5">Part Time</span>
     <span> | 
         @php 
@@ -119,7 +119,7 @@
         @endphp
         {{ implode(', ',$dayArr) }}
     </span>
-    @else
+    @elseif($jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
     <span class="bg-ember statusBtn mr-r-5">Temporary</span>
     @if($seeker['temp_job_dates'])
     <span class="dropdown date-drop">
