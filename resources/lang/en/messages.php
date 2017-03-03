@@ -161,4 +161,5 @@ return [
     'validity_date_empty' => "The validity date is either empty or in invalid format",
     'office_updated' => 'Office updated successfully',
     'address_already_associated' => 'Address already associated with another office, please use some other address.',
+    'temp_job_pending_rating_command' => 'Pending rating for jobseekeer for job : ',
 ];
