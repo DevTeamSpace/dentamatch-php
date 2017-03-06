@@ -15,6 +15,7 @@ use App\Models\Notification;
 use App\Providers\NotificationServiceProvider;
 use App\Models\JobLists;
 use App\Models\RecruiterJobs;
+use App\Models\Device;
 
 class FavoriteJobseekerController extends Controller {
 
@@ -34,6 +35,7 @@ class FavoriteJobseekerController extends Controller {
         $jobDetail = JobTemplates::join('recruiter_jobs', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                 ->join('job_titles', 'job_templates.job_title_id', '=', 'job_titles.id')
                 ->where('recruiter_jobs.job_type', '3')
+                ->where('job_templates.user_id', Auth::user()->id)
                 ->select('job_titles.jobtitle_name', 'recruiter_jobs.id as recruiterId')
                 ->get();
         
