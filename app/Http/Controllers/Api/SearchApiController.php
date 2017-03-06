@@ -261,6 +261,7 @@ class SearchApiController extends Controller {
             if($userId > 0){
                 $reqData = $request->all();
                 $notificationDetails = Notification::where('id',$reqData['notificationId'])->first();
+                
                 $jobExists = JobLists::select('id')->where('seeker_id','=',$userId)->where('recruiter_job_id','=',$notificationDetails->job_list_id)
                         ->where('applied_status',JobLists::INVITED)->first();
                 if($jobExists){
@@ -272,6 +273,7 @@ class SearchApiController extends Controller {
                         $msg = trans("messages.job_hired_success");
                     }
                     $jobExists->save();
+                    Notification::where('id', $reqData['notificationId'])->update(['seen' => 1]);
                     $response = apiResponse::customJsonResponse(1, 200, $msg);
                 }else{
                     $response = apiResponse::customJsonResponse(0, 201, trans("messages.not_invited_job"));
