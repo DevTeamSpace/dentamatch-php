@@ -1,9 +1,7 @@
 <!--Seeker listing-->
 @foreach ($seekersList['paginate'] as $seeker)
 <!--search preference list-->
-<form action="{{ url('job/updateStatus') }}" method="post">
 {!! csrf_field() !!}
-
 <input type="hidden" name="jobId" value="{{ $jobDetails['id'] }}">
 <input type="hidden" name="seekerId" value="{{ $seeker['user_id'] }}">
 <div class="media jobCatbox">

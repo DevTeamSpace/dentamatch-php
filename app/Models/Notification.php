@@ -25,6 +25,9 @@ class Notification extends Model {
     const CHATMESSAGE = 7;
     const OTHER = 8;
     const INVITED = 9;
+    const JOBSEEKERAPPLIED = 10;
+    const JOBSEEKERACCEPTED = 11;
+    const JOBSEEKERREJECTED = 12;
     
     public static function userNotificationList($reqData)
     {
