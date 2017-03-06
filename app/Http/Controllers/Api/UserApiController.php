@@ -167,7 +167,7 @@ class UserApiController extends Controller {
                         if($searchArray){
                         $userArray['searchFilters'] = apiResponse::convertToCamelCase($searchArray);
                         }else{
-                           $userArray['searchFilters'] = array(); 
+                           $userArray['searchFilters'] = $searchArray; 
                         }
                         $response = apiResponse::customJsonResponse(1, 200, trans("messages.user_logged_successful"),$userArray);
                 }else{

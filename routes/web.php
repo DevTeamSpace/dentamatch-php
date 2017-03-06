@@ -91,6 +91,7 @@
                 Route::post('edit-recruiter-office', 'web\UserProfileController@postEditRecruiterOffice');
                 Route::post('delete-office', 'web\UserProfileController@postDeleteOffice');
                 Route::get('notification-lists', 'web\NotificationController@getNotificationList');
+                Route::delete('{id}/delete-notification', 'web\NotificationController@deleteNotification');
             });
             Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails');
             Route::get('/get-location/{zip}', 'web\UserProfileController@checkValidLocation');

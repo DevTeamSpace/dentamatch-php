@@ -3,6 +3,9 @@
 @section('content')
 <div class="container globalpadder">
         <h3>Notifications</h3>
+        @if(Session::has('message'))
+            <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+        @endif
         <div class="viewdentaltemplate cardShadow borderNone notificationPadder">
             <ul class="notificationListContainer">
                 @foreach ($notificationList as $notification)
@@ -11,7 +14,7 @@
                 @endphp
                 <li>
                     <div class="onlineDot border-radius"></div>
-                    <p class="deleteCard pull-right notificationDel"><span class="icon icon-deleteicon "></span><a href="">Delete</a></p>
+                    <p class="deleteCard pull-right notificationDel"><span class="icon icon-deleteicon "></span><a href="{{ url('reports') }}">Delete</a></p>
                     <div class="media notificationList">
                         <div class="media-left ">
                             <a href="#">
@@ -26,6 +29,7 @@
                 </li>
                 @endforeach
             </ul>
+            {{ $notificationList->links() }}
         </div>
     </div>
 @endsection

@@ -18,6 +18,7 @@ use App\Http\Requests\SubscribeAgainRequest;
 use App\Models\Notification;
 use Log;
 use DB;
+use Illuminate\Pagination\Paginator;
 
 class NotificationController extends Controller {
     private $response = [];
@@ -31,9 +32,13 @@ class NotificationController extends Controller {
     public function getNotificationList(){
         $userId = Auth::user()->id;
         $userId = 9;
-        $notificationList = Notification::where('receiver_id', '=', $userId)->orderBy('id', 'DESC')->get();
-        return View('web.notification',['notificationList' => $notificationList]);
+        $notificationList = Notification::where('receiver_id', '=', $userId)->orderBy('id', 'DESC')->paginate(5);
+        return View('web.notification')->with('notificationList' , $notificationList);
    
+    }
+    public function deleteNotification($id){
+        Notification::findOrFail($id)->delete();
+        Session::flash('message',trans('messages.location_deleted'));
     }
     
     
