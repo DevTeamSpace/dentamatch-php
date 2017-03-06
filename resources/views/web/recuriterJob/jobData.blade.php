@@ -26,14 +26,14 @@
                 <span class="bg-ltgreen statusBtn mr-r-5">Part Time</span>
                 <span> | 
                     @php 
-                        $dayArr = [];
-                        ($job['is_monday']==1)?array_push($dayArr,'Monday'):'';
-                        ($job['is_tuesday']==1)?array_push($dayArr,'Tuseday'):'';
-                        ($job['is_wednesday']==1)?array_push($dayArr,'Wednesday'):'';
-                        ($job['is_thursday']==1)?array_push($dayArr,'Thursday'):'';
-                        ($job['is_friday']==1)?array_push($dayArr,'Friday'):'';
-                        ($job['is_saturday']==1)?array_push($dayArr,'Saturday'):'';
-                        ($job['is_sunday']==1)?array_push($dayArr,'Sunday'):'';
+                    $dayArr = [];
+                    ($job['is_monday']==1)?array_push($dayArr,'Monday'):'';
+                    ($job['is_tuesday']==1)?array_push($dayArr,'Tuseday'):'';
+                    ($job['is_wednesday']==1)?array_push($dayArr,'Wednesday'):'';
+                    ($job['is_thursday']==1)?array_push($dayArr,'Thursday'):'';
+                    ($job['is_friday']==1)?array_push($dayArr,'Friday'):'';
+                    ($job['is_saturday']==1)?array_push($dayArr,'Saturday'):'';
+                    ($job['is_sunday']==1)?array_push($dayArr,'Sunday'):'';
                     @endphp
                     {{ implode(', ',$dayArr) }}
                 </span>
@@ -44,7 +44,7 @@
                     $dates = explode(',',$job['temp_job_dates']);
                     @endphp
                     <span class=" dropdown-toggle"  data-toggle="dropdown"><span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
-                        <span class="caret"></span></span>
+                    <span class="caret"></span></span>
                     <ul class="dropdown-menu">
                         @foreach ($dates as $date)
                         <li>{{ date('l, d M Y',strtotime($date)) }}</li>
@@ -67,13 +67,7 @@
                 </address> 
 
             </div>    
-            <div class="template-job-information-right j-i-m-r">           
-                <div class="job-information-detail">
-                    <div class="search-seeker">
-                        <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-30 pull-right">Search Seekers</a>
-                    </div>
-                </div> 
-            </div>
+
         </div> 
         <div class="template-job-information mr-t-15 width-job-info">
 
@@ -93,27 +87,35 @@
                     @php
                     $valueCountArr = array("1"=>0, "2"=>0);
                     if($job['applied_status']!=null){
-                        $valueArr = explode(',',$job['applied_status']);
+                    $valueArr = explode(',',$job['applied_status']);
 
-                        if($valueArr && count($valueArr)>0){
-                            foreach($valueArr as $val){
-                                $statusArr = explode('_',$val);
-                                $valueCountArr[$statusArr[1]]++ ;
-                            }
-                        }
-                    }
-                    @endphp
-                    @if($valueCountArr["2"]>0)
-                    <li><a href="{{ url('job/details/'.$job['id']) }}">{{ $valueCountArr['2'] }} Seeker{{ ($valueCountArr['2']>1)?'s':'' }} Applied</a> </li>
-                    @endif
-                    @if($valueCountArr["1"]>0)
-                    <li><a href="{{ url('job/details/'.$job['id']) }}">{{ $valueCountArr['1'] }} Seeker{{ ($valueCountArr['1']>1)?'s':'' }} Invited </a></li>
-                    @endif
-                    <li><a href="{{ url('job/details/'.$job['id']) }}"> View Detail</a></li>
-                </ul>
-            </div>
-        </div>
+                    if($valueArr && count($valueArr)>0){
+                    foreach($valueArr as $val){
+                    $statusArr = explode('_',$val);
+                    $valueCountArr[$statusArr[1]]++ ;
+                }
+            }
+        }
+        @endphp
+        @if($valueCountArr["2"]>0)
+        <li><a href="{{ url('job/details/'.$job['id']) }}">{{ $valueCountArr['2'] }} Seeker{{ ($valueCountArr['2']>1)?'s':'' }} Applied</a> </li>
+        @endif
+        @if($valueCountArr["1"]>0)
+        <li><a href="{{ url('job/details/'.$job['id']) }}">{{ $valueCountArr['1'] }} Seeker{{ ($valueCountArr['1']>1)?'s':'' }} Invited </a></li>
+        @endif
+        <li><a href="{{ url('job/details/'.$job['id']) }}"> View Detail</a></li>
+    </ul>
+</div>
+<div class="col-sm-4 ">
+   
+    <div class="search-seeker">
+        <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-30 pull-right">Search Seekers</a>
+    </div>
+</div>
 
-    </div>  
-    @endforeach 
+
+</div>
+
+</div>  
+@endforeach 
 {{ $jobList->links() }}
