@@ -58,7 +58,6 @@ jQuery(function ($) {
     
     function markFavourite(seekerId) {
         url = urlFav+'/'+seekerId;
-        
         $.ajax({
             url: url
         }).done(function (data) {
