@@ -14,6 +14,7 @@ use App\Models\Favourite;
 use App\Models\Notification;
 use App\Providers\NotificationServiceProvider;
 use App\Models\JobLists;
+use App\Models\RecruiterJobs;
 
 class FavoriteJobseekerController extends Controller {
 
