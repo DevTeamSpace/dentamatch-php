@@ -11,6 +11,9 @@ use Exception;
 use DB;
 use App\Models\JobTemplates;
 use App\Models\Favourite;
+use App\Models\Notification;
+use App\Providers\NotificationServiceProvider;
+use App\Models\JobLists;
 
 class FavoriteJobseekerController extends Controller {
 
@@ -57,6 +60,7 @@ class FavoriteJobseekerController extends Controller {
                         'seeker_id' => $request->seekerId,
                         'applied_status' => '1',
                     ]);
+                    $this->sendPushUser(JobLists::INVITED, Auth::user()->id, $request->seekerId, $request->selectJobSeeker);
                 }
             } else {
                 \App\Models\JobLists::create([
@@ -64,6 +68,7 @@ class FavoriteJobseekerController extends Controller {
                     'seeker_id' => $request->seekerId,
                     'applied_status' => '1',
                 ]);
+                $this->sendPushUser(JobLists::INVITED, Auth::user()->id, $request->seekerId, $request->selectJobSeeker);
             }
             return redirect('favorite-jobseeker');
         } catch (Exception $ex) {
@@ -97,6 +102,32 @@ class FavoriteJobseekerController extends Controller {
         }
         
         return $return;
+    }
+    
+    public function sendPushUser($jobstatus, $sender, $receiverId, $jobId) {
+        $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
+        if ($jobstatus == JobLists::INVITED) {
+            $notificationData = array(
+                'notificationData' => $jobDetails['office_name'] . " has sent you a job invitation for " . $jobDetails['jobtitle_name'],
+                'notification_title' => 'User invited',
+                'sender_id' => $sender,
+                'type' => 1,
+                'notificationType' => Notification::INVITED,
+            );
+        }
+        $data = ['receiver_id'=>$receiverId,'job_list_id' => $jobId,'sender_id' => $sender, 'notification_data'=>$notificationData['notificationData'],'notification_type' => $notificationData['notificationType']];
+        $notificationDetails = Notification::create($data);
+        $notificationData['id'] = $notificationDetails->id;
+        $notificationData['receiverId'] = $receiverId;
+        $notificationData['senderId'] = $sender;
+        $params['data'] = $notificationData;
+        $params['jobDetails'] = $jobDetails;
+        $params['notification_details'] = $notificationDetails;
+        $deviceModel = Device::getDeviceToken($receiverId);
+        if ($deviceModel) {
+            //$this->info($userId);
+            NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params);
+        }
     }
 
 }
