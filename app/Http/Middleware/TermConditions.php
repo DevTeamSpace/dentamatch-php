@@ -16,8 +16,9 @@ class TermConditions {
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null) {
-        $term = \App\Models\RecruiterProfile::where('user_id', Auth::user()->id)->first();
-        if (!empty($term) && isset($term)) {
+        $user = $request->session()->get('userData');
+        
+        if (!empty($user) && isset($user) && $user['profile']['accept_term']==1) {
             return redirect('home');
         } else {
             return $next($request);
