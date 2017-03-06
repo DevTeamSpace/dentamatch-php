@@ -30,6 +30,7 @@
         <title>DentaMatch| Home</title>
     </head>
     <body>
+        <?php $notificationList = \App\Helpers\NotificationHelper::topNotificationList(Auth::user()->id); ?>
         <nav class="customNav navbar navbar-default navbar-fixed-top">
         <div class="container pos-rel">
                 <!-- Brand and toggle get grouped for better mobile display -->
@@ -48,23 +49,23 @@
 
                 <ul class=" topIconBox navbar-right customnavRight">
                     <li><a href="{{ url('chat') }}"><span class="icon icon-message"></span></a></li>
-                <li class="notificaionbell dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="icon icon-bell "></span><div class="notificationCircle ">2</div></a>
+                <li class="notificaionbell dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="icon icon-bell "></span>
+                        <div class="notificationCircle "> {{ $notificationList['total'] }}</div>
+                    </a>
                     <div class="dropdown-menu noficationListContainer small-border-radius box-shadow">
                             <span class="fa fa-caret-up notificationCaret"></span>
                             <ul class="notificationList">
-                                <li><p><b>Horward Patterson</b> has applied for the <b>Dental Hygienists</b></p>
-                                    <span>Just now</span>
-                                    <i class="icon icon-deleteicon notificationdelIcon"></i>
-                                </li>
-                                <li><p><b>Horward Patterson</b> has applied for the <b>Dental Hygienists</b></p>
-                                    <span>Just now</span>
-                                    <i class="icon icon-deleteicon notificationdelIcon"></i>
-                                </li>
-                                <li><p><b>Horward Patterson</b> has applied for the <b>Dental Hygienists</b></p>
-                                    <span>Just now</span>
-                                    <i class="icon icon-deleteicon notificationdelIcon"></i>
-                                </li>
-
+                                @if(!empty($notificationList['data']))
+                                    @foreach($notificationList['data'] as $notification)
+                                        <?php $data = json_decode($notification->notification_data) ?>
+                                        <li><p><strong>{{ $data->message }}</strong></p>
+                                            <span>{{ $notification->created_at->diffForHumans() }}</span>
+                                            <i class="icon icon-deleteicon notificationdelIcon"></i>
+                                        </li>
+                                    @endforeach
+                                @endif
                             </ul>
                             <a href="{{ url('notification-lists') }}" class="notificationSeeAll text-center">See All</a>
 

@@ -50,4 +50,19 @@ class Notification extends Model {
     {
         static::insert($data);
     }
+    
+    public static function userTopNotification($userId) {
+        $return = ['data' => [], 'total' => '0'];
+        $query = static::where('receiver_id', $userId)
+                    ->where('seen',0)
+                    ->orderBy('created_at', 'DESC');
+        
+        $total = $query->count('receiver_id');
+        $return['total'] = $total;
+        $data = $query->take(3)->get();
+        if($data) {
+            $return['data'] = $data;
+        }
+        return $return;
+    }
 }
