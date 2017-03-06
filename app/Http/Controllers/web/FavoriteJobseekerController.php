@@ -26,8 +26,9 @@ class FavoriteJobseekerController extends Controller {
         $favJobSeeker = Favourite::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'favourites.seeker_id')
                 ->leftjoin('job_lists', 'favourites.seeker_id', '=', 'job_lists.seeker_id')
                 ->leftjoin('job_ratings', 'favourites.seeker_id', '=', 'job_ratings.seeker_id')
+                ->leftjoin('job_titles','job_titles.id', '=' , 'jobseeker_profiles.job_titile_id')
                 ->where('favourites.recruiter_id', Auth::user()->id)
-                ->select(DB::raw('(avg(job_ratings.punctuality) + avg(job_ratings.time_management) + avg(job_ratings.skills) + avg(job_ratings.teamwork) + avg(job_ratings.onemore))/5 as sum'), 'jobseeker_profiles.user_id as seeker_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'job_lists.applied_status')
+                ->select(DB::raw('(avg(job_ratings.punctuality) + avg(job_ratings.time_management) + avg(job_ratings.skills) + avg(job_ratings.teamwork) + avg(job_ratings.onemore))/5 as sum'), 'jobseeker_profiles.user_id as seeker_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'job_lists.applied_status','job_titles.jobtitle_name')
                 ->groupby('favourites.seeker_id')
                 ->simplePaginate(15);
         
