@@ -248,6 +248,12 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('create', 'Cms\AppMessageController@create');
         Route::post('store', 'Cms\AppMessageController@store');
     });
+    Route::group(['prefix' => 'report/'], function() {
+        Route::get('index', 'Cms\ReportController@index');
+        Route::get('list', 'Cms\ReportController@jobLists');
+        Route::get('{id}/view', 'Cms\ReportController@appliedSeekers');
+        Route::get('seekerlist/{id}', 'Cms\ReportController@seekerList');
+    });
     
     Route::get('push-notification', 'Cms\JobSeekerController@sendPushAndroid');
 });
