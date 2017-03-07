@@ -2,9 +2,6 @@
 namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
-use DB;
-use App\Models\JobTitles;
 use App\Helpers\apiResponse;
 use App\Models\Skills;
 

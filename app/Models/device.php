@@ -13,29 +13,29 @@ class Device extends Model  {
     protected $fillable     = ['id','device_id','user_id','device_token','device_type','device_os','application_version','user_token'];
     
 
-    public static function unRegister_single($request){
+    public static function unRegisterSingle($request){
        Device::where('user_id',$request->input('user_id'))->where('device_id',$request->input('deviceId'))->delete();
        return true;
     }
-    public static function unRegister_all($user_id){
-       Device::where('user_id',$user_id)->delete();
+    public static function unRegisterAll($userId){
+       Device::where('user_id',$userId)->delete();
        return true;
     }
-    public function register_device($device_id, $user_id, $device_token, $device_type,$deviceOs='',$appVersion='') {
-        $user_token = md5($device_id.$user_id);
+    public function registerDevice($deviceId, $userId, $deviceToken, $deviceType,$deviceOs='',$appVersion='') {
+        $userToken = md5($device_id.$user_id);
         $data = array(
-            'device_id' => $device_id,
-            'user_id' => $user_id,
-            'device_token' => $device_token,
-            'device_type' => $device_type,
-            'user_token'=>$user_token,
+            'device_id' => $deviceId,
+            'user_id' => $userId,
+            'device_token' => $deviceToken,
+            'device_type' => $deviceType,
+            'user_token'=>$userToken,
             'device_os'=>$deviceOs,
             'application_version'=>$appVersion
                 );
-        $device = Device::firstOrNew(array('device_id' => $device_id, 'user_id' => $user_id));
+        $device = Device::firstOrNew(array('device_id' => $deviceId, 'user_id' => $userId));
         $device->fill($data);
         $device->save();
-        return $user_token;
+        return $userToken;
     }
     
     public static function getDeviceToken($user_id) {

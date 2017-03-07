@@ -35,7 +35,7 @@ class JobSeekerAffiliation extends Model
     
     public static function getJobSeekerAffiliation($userId)
     {   
-        $query = $query = static::select('affiliation_id as affiliationId', 'affiliations.affiliation_name as affiliationName', 'other_affiliation as otherAffiliation')
+         $query = static::select('affiliation_id as affiliationId', 'affiliations.affiliation_name as affiliationName', 'other_affiliation as otherAffiliation')
                             ->join('affiliations', 'affiliations.id', '=', 'jobseeker_affiliations.affiliation_id')
                             ->where('user_id',$userId)
                             ->where('affiliations.is_active',1)

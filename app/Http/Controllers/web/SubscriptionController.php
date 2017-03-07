@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\web;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RecruiterProfile;
 use App\Models\RecruiterOffice;
@@ -14,7 +12,6 @@ use App\Http\Requests\DeleteCardRequest;
 use App\Http\Requests\UnsubscribeRequest;
 use App\Http\Requests\EditCardRequest;
 use App\Http\Requests\ChangeSubscriptionPlanRequest;
-use App\Http\Requests\SubscribeAgainRequest;
 use Log;
 
 class SubscriptionController extends Controller {
