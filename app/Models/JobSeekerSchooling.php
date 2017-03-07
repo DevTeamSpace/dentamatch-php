@@ -32,8 +32,8 @@ class JobSeekerSchooling extends Model
     public static function getJobSeekerSchooling($userId)
     {   
         $query = static::select('schoolings.id as parentId', 'schoolingsChild.id as childId', 
-                    'schoolings.school_name as schoolName', 'schoolingsChild.school_name as schoolChildName',
-                    'jobseeker_schoolings.year_of_graduation as yearOfGraduation', 'jobseeker_schoolings.other_schooling as otherSchooling')
+                    'schoolings.school_name', 'schoolingsChild.school_name as school_title',
+                    'jobseeker_schoolings.year_of_graduation', 'jobseeker_schoolings.other_schooling as otherSchooling')
                 ->join('schoolings AS schoolingsChild','jobseeker_schoolings.schooling_id', '=', 'schoolingsChild.id')
                 ->join('schoolings', 'schoolings.id','=', 'schoolingsChild.parent_id')
                 ->where('schoolings.is_active', 1)
@@ -55,9 +55,9 @@ class JobSeekerSchooling extends Model
             $schoolId[] = $value['id'];
         }
         
-        $query = static::select('jobseeker_schoolings.schooling_id as parentId', 'jobseeker_schoolings.schooling_id as childId', 
-                                'schoolings.school_name as schoolName', 'jobseeker_schoolings.other_schooling as schoolChildName',
-                                'jobseeker_schoolings.year_of_graduation as yearOfGraduation', 'jobseeker_schoolings.other_schooling as otherSchooling')
+        $query = static::select('schoolings.id', 
+                    'schoolings.school_name', 
+                    'jobseeker_schoolings.year_of_graduation', 'jobseeker_schoolings.other_schooling as school_title')
                             ->join('schoolings', 'schoolings.id','=', 'jobseeker_schoolings.schooling_id')
                             ->whereIn('schooling_id', $schoolId)
                             ->where('user_id', $userId);
@@ -67,18 +67,39 @@ class JobSeekerSchooling extends Model
     }
 
     public static function getParentJobSeekerSchooling($userId){
-        $schoolings = array();
+        $schoolings = [];
+        $listParent = [];
+        $listOther = [];
         if($userId){
-            $schoolings = static::where('jobseeker_schoolings.user_id',$userId)
-                            ->leftJoin('schoolings','jobseeker_schoolings.schooling_id','=','schoolings.id')
-                            ->leftJoin('schoolings as school_title','schoolings.parent_id','=','school_title.id')
-                            ->select('jobseeker_schoolings.other_schooling','jobseeker_schoolings.year_of_graduation','schoolings.school_name','school_title.school_name as school_title')
-                            ->groupby('schoolings.parent_id')
-                            ->whereNotNull('schoolings.parent_id')
-                            ->where('schoolings.is_active', 1)
-                            ->addSelect(DB::raw("group_concat(schoolings.school_name SEPARATOR ', ') AS school_name"))
-                            ->get()
-                            ->toArray();
+            $queryParent = static::select('schoolings.id as parentId', 'schoolingsChild.id as childId', 
+                        'schoolings.school_name as school_name', 'schoolingsChild.school_name as school_title',
+                        'jobseeker_schoolings.year_of_graduation as year_of_graduation', 'jobseeker_schoolings.other_schooling as otherSchooling')
+                    ->join('schoolings AS schoolingsChild','jobseeker_schoolings.schooling_id', '=', 'schoolingsChild.id')
+                    ->join('schoolings', 'schoolings.id','=', 'schoolingsChild.parent_id')
+                    ->where('schoolings.is_active', 1)
+                    ->where('jobseeker_schoolings.user_id', $userId)
+                    ->whereNull('schoolings.parent_id')
+                    ->orderBy('schoolings.id')
+                    ->orderBy('schoolingsChild.id');
+
+            $listParent = $queryParent->get()->toArray();
+            
+            $schoolId = [];
+            $schoolingModel = Schooling::select('id')->whereNull('parent_id')->get()->toArray();
+            foreach($schoolingModel as $value) {
+                $schoolId[] = $value['id'];
+            }
+
+            $queryOther = static::select('schoolings.id as parentId', 
+                        'schoolings.school_name as school_name', 
+                        'jobseeker_schoolings.year_of_graduation as year_of_graduation', 'jobseeker_schoolings.other_schooling as school_title')
+                                ->join('schoolings', 'schoolings.id','=', 'jobseeker_schoolings.schooling_id')
+                                ->whereIn('schooling_id', $schoolId)
+                                ->where('user_id', $userId);
+            $listOther = $queryOther->get()->toArray();
+
+            $schoolings = array_merge($listParent, $listOther);
+            
         }
 
         return $schoolings;
