@@ -253,6 +253,7 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('list', 'Cms\ReportController@jobLists');
         Route::get('{id}/view', 'Cms\ReportController@appliedSeekers');
         Route::get('seekerlist/{id}', 'Cms\ReportController@seekerList');
+        Route::get('list', 'Cms\ReportController@jobLists');
     });
     
     Route::get('push-notification', 'Cms\JobSeekerController@sendPushAndroid');
