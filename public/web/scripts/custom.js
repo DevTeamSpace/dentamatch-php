@@ -92,7 +92,7 @@ $(function() {
 
                 var date = $(this).data('date');
 
-                $(this).parents(".row").find('.datetimepicker2').data('DateTimePicker').minDate('12:00 AM');
+                $(this).parents(".row").find('.datetimepicker2').data('DateTimePicker').minDate(date);
                 console.log(date);
             });
             $('.datetimepicker2').on("dp.change", function() {
