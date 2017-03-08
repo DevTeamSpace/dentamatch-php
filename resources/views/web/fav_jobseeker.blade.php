@@ -14,7 +14,7 @@
         <div class="media-body row">
             <div class="col-sm-8 pd-t-10 ">
                 <div ><a href="#" class="media-heading">{{$fav->first_name}} {{$fav->last_name}}</a> <span class="mr-l-5 label label-success">{{number_format($fav->sum,1)}}</span></div>
-                <p>Dental Assistant</p>
+                <p>{{ $fav->jobtitle_name}}</p>
             </div>
             <div class="col-sm-4 pd-t-15 text-right">
                 <button type="submit" class="btn btn-primary-outline pd-l-30 pd-r-30 " onclick="putValue('{{$fav->seeker_id}}')" data-toggle="modal" data-target=".select_list">Invite</button>

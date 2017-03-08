@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\web;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\RecruiterJobs;
 use App\Models\JobLists;

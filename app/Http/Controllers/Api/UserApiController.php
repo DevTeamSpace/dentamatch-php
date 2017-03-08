@@ -16,7 +16,7 @@ use App\Helpers\apiResponse;
 class UserApiController extends Controller {
     
     public function __construct() {
-        
+        $this->middleware('xss');
     }
     
     /**
@@ -73,7 +73,7 @@ class UserApiController extends Controller {
             $deviceModel =  new Device();
             $reqData['deviceOs'] = isset($reqData['deviceOs'])?$reqData['deviceOs']:'';
             $reqData['appVersion'] = isset($reqData['appVersion'])?$reqData['appVersion']:'';
-            $deviceModel->register_device(
+            $deviceModel->registerDevice(
                     $reqData['deviceId'], $userDetails->id, $reqData['deviceToken'],
                     $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']
                 );
@@ -139,11 +139,11 @@ class UserApiController extends Controller {
                          if (is_object($device) && ($device->device_id != $reqData['deviceId'] || $device->user_id != $userId)) {
                             Device::where('device_id', $device->device_id)->orWhere('user_id', $userId)->delete();
                             $deviceModel = new Device();
-                            $userToken = $deviceModel->register_device($reqData['deviceId'], $userId, $reqData['deviceToken'], $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']);
+                            $userToken = $deviceModel->registerDevice($reqData['deviceId'], $userId, $reqData['deviceToken'], $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']);
 
                         } else {
                             $deviceModel = new Device();
-                            $userToken = $deviceModel->register_device($reqData['deviceId'], $userId, $reqData['deviceToken'], $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']);
+                            $userToken = $deviceModel->registerDevice($reqData['deviceId'], $userId, $reqData['deviceToken'], $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']);
 
                         }
                         $imgUrl = "";
@@ -294,7 +294,7 @@ class UserApiController extends Controller {
             
             $userId = apiResponse::loginUserId($request->header('accessToken'));
             if($userId>0) {
-                Device::unRegister_all($userId);
+                Device::unRegisterAll($userId);
                 $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.user_signout"));
             } else {
                 $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 

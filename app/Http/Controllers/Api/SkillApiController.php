@@ -7,7 +7,6 @@ use App\Helpers\apiResponse;
 use App\Models\Skills;
 use App\Models\JobSeekerSkills;
 use App\Models\Certifications;
-use App\Services\UploadsManager;
 use App\Repositories\File\FileRepositoryS3;
 use App\Models\JobseekerCertificates;
 
@@ -15,6 +14,7 @@ class SkillApiController extends Controller {
     use FileRepositoryS3;
     public function __construct() {
         $this->middleware('ApiAuth');
+        $this->middleware('xss');
     }
     /**
      * Description : Show skill lists with user skill

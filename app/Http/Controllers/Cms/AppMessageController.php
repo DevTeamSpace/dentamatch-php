@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Models\AppMessage;
 use Yajra\Datatables\Datatables;
 use Session;
-use App\Providers\NotificationServiceProvider;
 use Log;
 class AppMessageController extends Controller
 {

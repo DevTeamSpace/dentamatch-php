@@ -8,7 +8,6 @@ use Illuminate\Validation\ValidationException;
 use App\Models\WorkExperience;
 use App\Models\Schooling;
 use App\Helpers\apiResponse;
-use Auth;
 use App\Models\JobTitles;
 use App\Models\JobSeekerSchooling;
 
@@ -16,6 +15,7 @@ class WorkExperienceApiController extends Controller {
 
     public function __construct() {
         $this->middleware('ApiAuth');
+        $this->middleware('xss');
     }
     /**
      * Description : Get joblisting
