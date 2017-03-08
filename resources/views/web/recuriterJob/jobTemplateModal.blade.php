@@ -1,5 +1,5 @@
 @if(!empty($jobTemplateModalData))
-<div id="jobTemplate" class="modal fade select_list " role="dialog">
+<div id="jobTemplate" class="modal fade " role="dialog">
     <div class="modal-dialog custom-modal popup-wd522">
 
         <!-- Modal content-->

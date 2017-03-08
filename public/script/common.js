@@ -150,6 +150,38 @@ $(function () {
         ]
     });
     
+    $('#job_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'report/list',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'office_name', name: 'recruiter_profiles.office_name',searchable:true},
+            {data: 'address', name: 'address',searchable:false},
+            {data: 'jobtitle_name', name: 'job_titles.jobtitle_name',searchable:false},
+            {data: 'jobtype', name: 'jobtype',searchable:false},
+            {data: 'action', name: 'action',searchable:false}
+        ]
+    });
+    
+    $('#seeker_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'report/seekerlist/'+$('#jobId').val(),
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
+            {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
+            {data: 'applied_status', name: 'job_lists.applied_status',searchable:false},
+        ]
+    });
+    
     $('#jobseeker_verification').DataTable({
         processing: true,
         serverSide: true,

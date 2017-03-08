@@ -11,18 +11,25 @@ use Exception;
 use DB;
 use App\Models\JobTemplates;
 use App\Models\Favourite;
+use App\Models\Notification;
+use App\Providers\NotificationServiceProvider;
+use App\Models\JobLists;
 
 class FavoriteJobseekerController extends Controller {
 
     public function getFavJobseeker(Request $request) {
-        $userId = Auth::user()->id;$rating = "(avg(job_ratings.punctuality) + avg(job_ratings.time_management) + avg(job_ratings.skills) + avg(job_ratings.teamwork) + avg(job_ratings.onemore))/5";
-        $favJobSeeker = JobSeekerProfile::join('favourites', 'jobseeker_profiles.user_id', '=', 'favourites.seeker_id')
-                ->leftjoin('job_lists', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
-                ->leftjoin('job_ratings', 'jobseeker_profiles.user_id', '=', 'job_ratings.seeker_id')
+        $userId = Auth::user()->id;
+        $rating = "(avg(job_ratings.punctuality) + avg(job_ratings.time_management) + avg(job_ratings.skills) + avg(job_ratings.teamwork) + avg(job_ratings.onemore))/5";
+        
+        $favJobSeeker = Favourite::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'favourites.seeker_id')
+                ->leftjoin('job_lists', 'favourites.seeker_id', '=', 'job_lists.seeker_id')
+                ->leftjoin('job_ratings', 'favourites.seeker_id', '=', 'job_ratings.seeker_id')
                 ->where('favourites.recruiter_id', Auth::user()->id)
                 ->select(DB::raw('(avg(job_ratings.punctuality) + avg(job_ratings.time_management) + avg(job_ratings.skills) + avg(job_ratings.teamwork) + avg(job_ratings.onemore))/5 as sum'), 'jobseeker_profiles.user_id as seeker_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'job_lists.applied_status')
-                ->groupby('job_ratings.seeker_id')
+                ->groupby('favourites.seeker_id')
                 ->simplePaginate(15);
+        
+        
         $jobDetail = JobTemplates::join('recruiter_jobs', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                 ->join('job_titles', 'job_templates.job_title_id', '=', 'job_titles.id')
                 ->where('recruiter_jobs.job_type', '3')
@@ -53,6 +60,7 @@ class FavoriteJobseekerController extends Controller {
                         'seeker_id' => $request->seekerId,
                         'applied_status' => '1',
                     ]);
+                    $this->sendPushUser(JobLists::INVITED, Auth::user()->id, $request->seekerId, $request->selectJobSeeker);
                 }
             } else {
                 \App\Models\JobLists::create([
@@ -60,6 +68,7 @@ class FavoriteJobseekerController extends Controller {
                     'seeker_id' => $request->seekerId,
                     'applied_status' => '1',
                 ]);
+                $this->sendPushUser(JobLists::INVITED, Auth::user()->id, $request->seekerId, $request->selectJobSeeker);
             }
             return redirect('favorite-jobseeker');
         } catch (Exception $ex) {
@@ -93,6 +102,32 @@ class FavoriteJobseekerController extends Controller {
         }
         
         return $return;
+    }
+    
+    public function sendPushUser($jobstatus, $sender, $receiverId, $jobId) {
+        $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
+        if ($jobstatus == JobLists::INVITED) {
+            $notificationData = array(
+                'notificationData' => $jobDetails['office_name'] . " has sent you a job invitation for " . $jobDetails['jobtitle_name'],
+                'notification_title' => 'User invited',
+                'sender_id' => $sender,
+                'type' => 1,
+                'notificationType' => Notification::INVITED,
+            );
+        }
+        $data = ['receiver_id'=>$receiverId,'job_list_id' => $jobId,'sender_id' => $sender, 'notification_data'=>$notificationData['notificationData'],'notification_type' => $notificationData['notificationType']];
+        $notificationDetails = Notification::create($data);
+        $notificationData['id'] = $notificationDetails->id;
+        $notificationData['receiverId'] = $receiverId;
+        $notificationData['senderId'] = $sender;
+        $params['data'] = $notificationData;
+        $params['jobDetails'] = $jobDetails;
+        $params['notification_details'] = $notificationDetails;
+        $deviceModel = Device::getDeviceToken($receiverId);
+        if ($deviceModel) {
+            //$this->info($userId);
+            NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params);
+        }
     }
 
 }

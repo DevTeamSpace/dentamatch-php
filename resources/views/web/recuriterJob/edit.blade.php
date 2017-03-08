@@ -35,7 +35,7 @@
             <div class="form-group custom-select">
                 <input hidden value="{{$jobId}}" id="jobIdValue">
                 <label >Dental Office Address</label>
-                <select id="select-office-address" data-bind="options: allLocations, optionsText: 'address', optionsValue: 'address', selectedOptions: defaultSelectLocation, event: {change: showOfficeDetails}">
+                <select class="selectpicker" id="select-office-address" data-bind="options: allLocations, optionsText: 'address', optionsValue: 'address', selectedOptions: defaultSelectLocation, event: {change: showOfficeDetails}">
                 </select>
 <!--                <select  id="officeAddress" class="selectpicker" data-bind="options: selectedLocations, selectedOptions: location">
                 </select>-->
