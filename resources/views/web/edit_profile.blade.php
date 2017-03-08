@@ -37,11 +37,13 @@
                             <div class="viewProfileRightCard">
                                 <label>Dental Office Name</label>
                                 <input type="text" id="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="required" data-bind="value: dentalOfficeName">
+                                <p class="error-div" data-bind="text: officeNameError"></p>
                             </div>
                             <div class="detailTitleBlock">
                                 <label>Dental Office Description</label>
                                 <textarea class="form-control  txtHeight txtBtnDisable chacterValidtion" data-parsley-required data-parsley-required-message="required" maxlength=500 data-bind="value: dentalOfficeDescription, valueUpdate: 'afterkeydown'">
                                 </textarea>
+                                <p class="error-div" data-bind="text: officeDescError"></p>
                             </div>
                             <div class="pull-right text-right">
                                 <button type="button" class="btn btn-link mr-r-10 cancelled" style="font-weight:500" data-bind="click: $root.cancelNameDescForm">Cancel</button>
@@ -125,8 +127,8 @@
             </div>
             <br>
             <!-- ko if: offices().length < 3 -->
-            <div class="pull-right text-right">
-                <div class="addProfileBtn1" data-bind="click: $root.addOfficeFunction"><span class="icon icon-plus"></span>You can add upto <span data-bind="text: offices().length-1"></span><span> more location(s)</span></div>
+            <div class="pull-right text-right" data-bind="visible: showAddMoreOfficeButton">
+                <div class="addProfileBtn1" data-bind="click: $root.addOfficeFunction"><span class="icon icon-plus"></span>You can add upto <span data-bind="text: 3-offices().length"></span><span> more location(s)</span></div>
             </div>
             <!--/ko-->
         </div>

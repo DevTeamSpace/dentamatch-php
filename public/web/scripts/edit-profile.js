@@ -223,6 +223,44 @@
         me.showAddMoreOfficeButton = ko.observable(false);
         me.addTotalOfText = ko.observable();
         me.disableAction = ko.observable(false);
+        me.officeNameError = ko.observable('');
+        me.officeDescError = ko.observable('');
+        me.prevOfficeName = ko.observable('');
+        me.prevOfficeDescription = ko.observable('');
+        
+        me.prevOfficeId = ko.observable();
+        me.prevOfficeAddress = ko.observable('');
+        me.prevOfficePhone = ko.observable();
+        me.prevOfficeInfo = ko.observable('');
+        me.prevOfficeZipcode = ko.observable();
+        me.prevOfficeType = ko.observableArray([]);
+        me.prevOfficeLat = ko.observable();
+        me.prevOfficeLng = ko.observable();
+        me.prevIsMondayWork = ko.observable(false);
+        me.prevMondayStart = ko.observable(null);
+        me.prevMondayEnd = ko.observable(null);
+        me.prevIsTuesdayWork = ko.observable(false);
+        me.prevTuesdayStart = ko.observable(null);
+        me.prevTuesdayEnd = ko.observable(null);
+        me.prevIsWednesdayWork = ko.observable(false);
+        me.prevWednesdayStart = ko.observable(null);
+        me.prevWednesdayEnd = ko.observable(null);
+        me.prevIsThursdayWork = ko.observable(false);
+        me.prevThursdayStart = ko.observable(null);
+        me.prevThursdayEnd = ko.observable(null);
+        me.prevIsFridayWork = ko.observable(false);
+        me.prevFridayStart = ko.observable(null);
+        me.prevFridayEnd = ko.observable(null);
+        me.prevIsSaturdayWork = ko.observable(false);
+        me.prevSaturdayStart = ko.observable(null);
+        me.prevSaturdayEnd = ko.observable(null);
+        me.prevIsSundayWork = ko.observable(false);
+        me.prevSundayStart = ko.observable(null);
+        me.prevSundayEnd = ko.observable(null);
+        me.prevIsEverydayWork = ko.observable(false);
+        me.prevEverydayStart = ko.observable(null);
+        me.prevEverydayEnd = ko.observable(null);
+        
         
         me.getProfileDetails = function () {
             jobId = $('#jobIdValue').val();
@@ -300,13 +338,81 @@
     };
     
     me.showOfficeEditForm = function(d, e){
+        me.prevOfficeId();
+        me.prevOfficeAddress('');
+        me.prevOfficePhone();
+        me.prevOfficeInfo('');
+        me.prevOfficeZipcode();
+        me.prevOfficeType([]);
+        me.prevOfficeLat();
+        me.prevOfficeLng();
+        me.prevIsMondayWork(false);
+        me.prevMondayStart(null);
+        me.prevMondayEnd(null);
+        me.prevIsTuesdayWork(false);
+        me.prevTuesdayStart(null);
+        me.prevTuesdayEnd(null);
+        me.prevIsWednesdayWork(false);
+        me.prevWednesdayStart(null);
+        me.prevWednesdayEnd(null);
+        me.prevIsThursdayWork(false);
+        me.prevThursdayStart(null);
+        me.prevThursdayEnd(null);
+        me.prevIsFridayWork(false);
+        me.prevFridayStart(null);
+        me.prevFridayEnd(null);
+        me.prevIsSaturdayWork(false);
+        me.prevSaturdayStart(null);
+        me.prevSaturdayEnd(null);
+        me.prevIsSundayWork(false);
+        me.prevSundayStart(null);
+        me.prevSundayEnd(null);
+        me.prevIsEverydayWork(false);
+        me.prevEverydayStart(null);
+        me.prevEverydayEnd(null);
+
         $.get('job-applied-or-not', {officeId: d.officeId()}, function(data){
             if(data.data.length == 0){
                 $('.ddlCars').multiselect({
                     numberDisplayed: 3,
                 });
                 $(".dropCheck input").after("<div></div>");
-
+                
+                me.prevOfficeId(d.officeId());
+                me.prevOfficeAddress(d.officeAddress());
+                me.prevOfficePhone(d.officePhone());
+                me.prevOfficeInfo(d.officeInfo());
+                me.prevOfficeZipcode(d.officeZipcode());
+                for(i in d.officeType()){
+                    me.prevOfficeType.push(d.officeType()[i]);
+                }
+                me.prevOfficeLat(d.officeLat());
+                me.prevOfficeLng(d.officeLng());
+                me.prevIsMondayWork(d.officeWorkingHours.isMondayWork());
+                me.prevMondayStart(d.officeWorkingHours.mondayStart());
+                me.prevMondayEnd(d.officeWorkingHours.mondayEnd());
+                me.prevIsTuesdayWork(d.officeWorkingHours.isTuesdayWork());
+                me.prevTuesdayStart(d.officeWorkingHours.tuesdayStart());
+                me.prevTuesdayEnd(d.officeWorkingHours.tuesdayEnd());
+                me.prevIsWednesdayWork(d.officeWorkingHours.isWednesdayWork());
+                me.prevWednesdayStart(d.officeWorkingHours.wednesdayStart());
+                me.prevWednesdayEnd(d.officeWorkingHours.wednesdayEnd());
+                me.prevIsThursdayWork(d.officeWorkingHours.isThursdayWork());
+                me.prevThursdayStart(d.officeWorkingHours.thursdayStart());
+                me.prevThursdayEnd(d.officeWorkingHours.thursdayEnd());
+                me.prevIsFridayWork(d.officeWorkingHours.isFridayWork());
+                me.prevFridayStart(d.officeWorkingHours.fridayStart());
+                me.prevFridayEnd(d.officeWorkingHours.fridayEnd());
+                me.prevIsSaturdayWork(d.officeWorkingHours.isSaturdayWork());
+                me.prevSaturdayStart(d.officeWorkingHours.saturdayStart());
+                me.prevSaturdayEnd(d.officeWorkingHours.saturdayEnd());
+                me.prevIsSundayWork(d.officeWorkingHours.isSundayWork());
+                me.prevSundayStart(d.officeWorkingHours.sundayStart());
+                me.prevSundayEnd(d.officeWorkingHours.sundayEnd());
+                me.prevIsEverydayWork(d.officeWorkingHours.isEverydayWork());
+                me.prevEverydayStart(d.officeWorkingHours.everydayStart());
+                me.prevEverydayEnd(d.officeWorkingHours.everydayEnd());
+                
                 d.showOfficeEditForm(true);
                 d.showOffice(false);
             }else{
@@ -334,7 +440,7 @@
                         me.prompt('Deleting office...');
                         me.cancelButtonDelete(false);
                         me.showModalFooter(false);
-                        me.disableAction(true);
+                        me.disableAction(false);
                         jQuery.ajax({
                             url: "delete-office",
                             data: formData,
@@ -346,7 +452,7 @@
                                 me.prompt('Office deleted successfully.');
                                 if(data.success == true){
                                     me.offices.remove(d);
-                                    me.disableAction(true);
+                                    me.disableAction(false);
                                     setTimeout(
                                     function ()
                                     {
@@ -367,6 +473,7 @@
         }else{
             me.offices.remove(d);
         }
+        me.showAddMoreOfficeButton(true);
     };
     
     me.updateOfficeDetails = function(d, e){
@@ -497,26 +604,116 @@
     };
     
     me.cancelUpdateOffice = function(d, e){
-        if(d.alreadyAdded == true){
-            me.offices.remove(d);
-        }else{
+        if(d.alreadyAdded() == true){
+            d.officeId(me.prevOfficeId());
+            d.officeAddress(me.prevOfficeAddress());
+            d.officePhone(me.prevOfficePhone());
+            d.officeInfo(me.prevOfficeInfo());
+            d.officeZipcode(me.prevOfficeZipcode());
+            d.officeType([]);
+            for(i in me.prevOfficeType()){
+                d.officeType.push(me.prevOfficeType()[i]);
+            }
+            d.officeLat(me.prevOfficeLat());
+            d.officeLng(me.prevOfficeLng());
+            d.officeWorkingHours.isMondayWork(me.prevIsMondayWork());
+            d.officeWorkingHours.mondayStart(me.prevMondayStart());
+            d.officeWorkingHours.mondayEnd(me.prevMondayEnd());
+            d.officeWorkingHours.isTuesdayWork(me.prevIsTuesdayWork());
+            d.officeWorkingHours.tuesdayStart(me.prevTuesdayStart());
+            d.officeWorkingHours.tuesdayEnd(me.prevTuesdayEnd());
+            d.officeWorkingHours.isWednesdayWork(me.prevIsWednesdayWork());
+            d.officeWorkingHours.wednesdayStart(me.prevWednesdayStart());
+            d.officeWorkingHours.wednesdayEnd(me.prevWednesdayEnd());
+            d.officeWorkingHours.isThursdayWork(me.prevIsThursdayWork());
+            d.officeWorkingHours.thursdayStart(me.prevThursdayStart());
+            d.officeWorkingHours.thursdayEnd(me.prevThursdayEnd());
+            d.officeWorkingHours.isFridayWork(me.prevIsFridayWork());
+            d.officeWorkingHours.fridayStart(me.prevFridayStart());
+            d.officeWorkingHours.fridayEnd(me.prevFridayEnd());
+            d.officeWorkingHours.isSaturdayWork(me.prevIsSaturdayWork());
+            d.officeWorkingHours.saturdayStart(me.prevSaturdayStart());
+            d.officeWorkingHours.saturdayEnd(me.prevSaturdayEnd());
+            d.officeWorkingHours.isSundayWork(me.prevIsSundayWork());
+            d.officeWorkingHours.sundayStart(me.prevSundayStart());
+            d.officeWorkingHours.sundayEnd(me.prevSundayEnd());
+            d.officeWorkingHours.isEverydayWork(me.prevIsEverydayWork());
+            d.officeWorkingHours.everydayStart(me.prevEverydayStart());
+            d.officeWorkingHours.everydayEnd(me.prevEverydayEnd());
+            
             d.showOfficeEditForm(false);
             d.showOffice(true);
+        }else{
+            me.offices.remove(d);
         }
     };
     
     me.showUpdateNameDescForm = function(d, e){
+        console.log();
+        d.prevOfficeName(d.dentalOfficeName());
+        d.prevOfficeDescription(d.dentalOfficeDescription());
         d.showNameDescForm(true);
         d.showNameDesc(false);
     };
     
     me.cancelNameDescForm = function(d, e){
+        me.officeDescError('');
+        me.officeNameError('');
+        d.dentalOfficeName(d.prevOfficeName());
+        d.dentalOfficeDescription(d.prevOfficeDescription());
         d.showNameDescForm(false);
         d.showNameDesc(true);
     };
     
     me.updateNameDesc = function (d, e){
-        console.log(d);
+        me.officeDescError('');
+        me.officeNameError('');
+        if(d.dentalOfficeName() == "" || d.dentalOfficeName() == null){
+            me.officeNameError('Name cannot be empty.');
+            return false;
+        }
+        if(d.dentalOfficeDescription() == "" || d.dentalOfficeDescription() == null){
+            me.officeDescError('Decscription cannot be empty.');
+            return false;
+        }
+        
+        me.headMessage('Updating Office Info');
+        me.cancelButtonDelete(false);
+        me.prompt('Updating office info please wait.');
+        me.showModalFooter(false);
+        $('#actionModal').modal('show');
+        
+        formData = new FormData();
+        formData.append('profileId', d.recruiterProfileId());
+        formData.append('officeName', d.dentalOfficeName());
+        formData.append('officeDescription', d.dentalOfficeDescription());
+        jQuery.ajax({
+            url: "update-recruiter-info",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+            success: function (data) {
+                me.prompt('Office Info updated successfully.');
+                if(data.success == true){
+                    d.showNameDescForm(false);
+                    d.showNameDesc(true);
+                    setTimeout(
+                        function ()
+                        {
+                            $('#actionModal').modal('hide');
+                        }, 1000);
+                }else{
+                    me.prompt('Error in updating office info.');
+                    setTimeout(
+                    function ()
+                    {
+                        $('#actionModal').modal('hide');
+                    }, 1000);
+                }
+            }
+        });
     };
     
     me.addOfficeFunction = function(d, e){

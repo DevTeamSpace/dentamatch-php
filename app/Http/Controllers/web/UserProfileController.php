@@ -13,6 +13,7 @@ use App\Models\RecruiterOfficeType;
 use App\Http\Requests\EditRecruiterOfficeRequest;
 use App\Models\OfficeType;
 use App\Http\Requests\DeleteOfficeRequest;
+use App\Http\Requests\UpdateRecruiterProfileRequest;
 use Hash;
 use Log;
 
@@ -222,6 +223,22 @@ class UserProfileController extends Controller {
             if($recruiterOffice){
                 RecruiterOfficeType::where('recruiter_office_id',(int)$request->officeId)->delete();
                 $recruiterOffice->delete();   
+            }
+            $this->result['success'] = true;
+        } catch (\Exception $e) {
+            Log::error($e);
+            $this->result['message'] = $e->getMessage();
+        }
+        return $this->result;
+    }
+    
+    public function postUpdateRecruiterProfile(UpdateRecruiterProfileRequest $request){
+        try {
+            $recruiterProfile = RecruiterProfile::where('id',$request->profileId)->where('user_id',Auth::id())->first();
+            if($recruiterProfile){
+                $recruiterProfile->office_name = $request->officeName;
+                $recruiterProfile->office_desc = $request->officeDescription;
+                $recruiterProfile->save();
             }
             $this->result['success'] = true;
         } catch (\Exception $e) {
