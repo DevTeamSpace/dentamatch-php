@@ -48,105 +48,74 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <ul class=" topIconBox navbar-right customnavRight">
-                <li><a href="{{ url('chat') }}"><span class="icon icon-message"></span></a></li>
+                <li>
+                    <a href="{{ url('chat') }}"><span class="icon icon-message"></span></a>
+                </li>
                 <li class="notificaionbell dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         <span class="icon icon-bell "></span>
                         <div class="notificationCircle "> {{ $notificationList['total'] }}</div>
                     </a>
                     <div class="dropdown-menu noficationListContainer small-border-radius box-shadow">
-<<<<<<< HEAD
-                            <span class="fa fa-caret-up notificationCaret"></span>
-                            <ul class="notificationList">
-                                @if(!empty($notificationList['data']))
-                                    @foreach($notificationList['data'] as $notification)
-                                        <?php $data = json_decode($notification->notification_data) ?>
-                                        <li><p><strong>{{ $data->message }}</strong></p>
-                                            <span>{{ $notification->created_at->diffForHumans() }}</span>
-                                            <i class="icon icon-deleteicon notificationdelIcon"></i>
-                                        </li>
-                                    @endforeach
-                                @endif
-                            </ul>
-                            <a href="{{ url('notification-lists') }}" class="notificationSeeAll text-center">See All</a>
 
-                        </div>
-
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Smiley Care <span class="caret"></span></a>
-                        <ul class="dropdown-menu menuLastBox borderNone">
-							<span class="fa fa-caret-up notificationCaret"></span>
-							  <li><span class="icon icon-account-circle navRightIcon"></span><a href="{{ url('edit-profile') }}"><b>{{Auth::user()->email}}</b><br>	<button type="button" class="btn btn-primary rghtMenuBtn pd-l-10 pd-r-10">View Profile</button></a>
-						
-							</li>
-                            <li><span class="icon icon-drive-document navRightIcon"></span><a href="{{ url('reports') }}">Reports</a></li>
-                            <li><span class="icon icon-lock navRightIcon"><a href="#"></a></span><a href="{{ url('change-password') }}">Change Password</a></li>
-                            <li><span class="icon icon-text-document-black-interface-symbol navRightIcon"></span><a href="{{ url('setting-subscription') }}">Subscription Details</a></li>
-                            <li><span class="icon icon-drive-form navRightIcon"></span><a href="{{ url('setting-terms-conditions') }}">Terms &amp; Conditions</a></li>
-                            <li><span class="icon icon-logout-web-button navRightIcon"></span><a href="{{ url('logout') }}">Logout</a></li>
-
-=======
                         <span class="fa fa-caret-up notificationCaret"></span>
                         <ul class="notificationList">
                             @if(!empty($notificationList['data']))
                             @foreach($notificationList['data'] as $notification)
                             <?php $data = json_decode($notification->notification_data) ?>
-                            <li><p><strong>{{ $data->message }}</strong></p>
+                            <li>
+                                <p><strong>{{ $data->message }}</strong></p>
                                 <span>{{ $notification->created_at->diffForHumans() }}</span>
                                 <i class="icon icon-deleteicon notificationdelIcon"></i>
                             </li>
                             @endforeach
                             @endif
->>>>>>> d2f6d691164286fd78b059e38817715d2cdfa2ae
                         </ul>
                         <a href="{{ url('notification-lists') }}" class="notificationSeeAll text-center">See All</a>
 
                     </div>
 
+                </li>
+                
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Smiley Care <span class="caret"></span></a>
+                    <ul class="dropdown-menu menuLastBox borderNone">
+                       <span class="fa fa-caret-up notificationCaret"></span>
+                       <li><span class="icon icon-account-circle navRightIcon"></span><a href="#"><b>{{Auth::user()->email}}</b><br>	<button type="button" class="btn btn-primary rghtMenuBtn pd-l-10 pd-r-10">View Profile</button></a>
 
-                </div>
+                       </li>
+                       <li><span class="icon icon-drive-document navRightIcon"></span><a href="{{ url('reports') }}">Reports</a></li>
+                       <li><span class="icon icon-lock navRightIcon"><a href="#"></a></span><a href="{{ url('change-password') }}">Change Password</a></li>
+                       <li><span class="icon icon-text-document-black-interface-symbol navRightIcon"></span><a href="{{ url('setting-subscription') }}">Subscription Details</a></li>
+                       <li><span class="icon icon-drive-form navRightIcon"></span><a href="{{ url('setting-terms-conditions') }}">Terms &amp; Conditions</a></li>
+                       <li><span class="icon icon-logout-web-button navRightIcon"></span><a href="{{ url('logout') }}">Logout</a></li>
 
-            </li>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Smiley Care <span class="caret"></span></a>
-                <ul class="dropdown-menu menuLastBox borderNone">
-                 <span class="fa fa-caret-up notificationCaret"></span>
-                 <li><span class="icon icon-account-circle navRightIcon"></span><a href="#"><b>{{Auth::user()->email}}</b><br>	<button type="button" class="btn btn-primary rghtMenuBtn pd-l-10 pd-r-10">View Profile</button></a>
-                  
-                 </li>
-                 <li><span class="icon icon-drive-document navRightIcon"></span><a href="{{ url('reports') }}">Reports</a></li>
-                 <li><span class="icon icon-lock navRightIcon"><a href="#"></a></span><a href="{{ url('change-password') }}">Change Password</a></li>
-                 <li><span class="icon icon-text-document-black-interface-symbol navRightIcon"></span><a href="{{ url('setting-subscription') }}">Subscription Details</a></li>
-                 <li><span class="icon icon-drive-form navRightIcon"></span><a href="{{ url('setting-terms-conditions') }}">Terms &amp; Conditions</a></li>
-                 <li><span class="icon icon-logout-web-button navRightIcon"></span><a href="{{ url('logout') }}">Logout</a></li>
-
-             </ul>
-         </li>
-     </ul>
-     @php 
-     $navActive = isset($navActive)?$navActive:'';
-     @endphp
-     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-            <li class="{{ ($navActive=='calendar')?'active':''}}">
-                <a href="{{ url('calender') }}">Calendar</a>
-            </li>
-            <li class="{{ ($navActive=='joblisting')?'active':''}}">
-                <a href="{{ url('job/lists') }}">Job Listing</a>
-            </li>
-            <li class="{{ ($navActive=='favseeker')?'active':''}}">
-                <a href="{{url('favorite-jobseeker')}}">Favourite Jobseeker</a>
-            </li>
-            <li class="{{ ($navActive=='template')?'active':''}}">
-                <a href="{{ url('jobtemplates') }}">Template</a>
-            </li>
-        </ul>
-    </div><!-- /.navbar-collapse -->
-    @if(!empty($jobTemplateModalData))
-    <a class="modalClick add-on-nav" data-toggle="modal" data-target="#jobTemplate" >+</a>
-    @endif
-</div><!-- /.container-fluid -->
+                   </ul>
+               </li>
+           </ul>
+           @php 
+           $navActive = isset($navActive)?$navActive:'';
+           @endphp
+           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="{{ ($navActive=='calendar')?'active':''}}">
+                    <a href="{{ url('calender') }}">Calendar</a>
+                </li>
+                <li class="{{ ($navActive=='joblisting')?'active':''}}">
+                    <a href="{{ url('job/lists') }}">Job Listing</a>
+                </li>
+                <li class="{{ ($navActive=='favseeker')?'active':''}}">
+                    <a href="{{url('favorite-jobseeker')}}">Favourite Jobseeker</a>
+                </li>
+                <li class="{{ ($navActive=='template')?'active':''}}">
+                    <a href="{{ url('jobtemplates') }}">Template</a>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+        @if(!empty($jobTemplateModalData))
+        <a class="modalClick add-on-nav" data-toggle="modal" data-target="#jobTemplate" >+</a>
+        @endif
+    </div><!-- /.container-fluid -->
 </nav>
 @yield('content')
 
