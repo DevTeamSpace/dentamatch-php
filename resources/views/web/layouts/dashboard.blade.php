@@ -78,23 +78,23 @@
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Smiley Care <span class="caret"></span></a>
                 <ul class="dropdown-menu menuLastBox borderNone">
-                   <span class="fa fa-caret-up notificationCaret"></span>
-                   <li><span class="icon icon-account-circle navRightIcon"></span><a href="#"><b>{{Auth::user()->email}}</b><br>	<button type="button" class="btn btn-primary rghtMenuBtn pd-l-10 pd-r-10">View Profile</button></a>
-                      
-                   </li>
-                   <li><span class="icon icon-drive-document navRightIcon"></span><a href="{{ url('reports') }}">Reports</a></li>
-                   <li><span class="icon icon-lock navRightIcon"><a href="#"></a></span><a href="{{ url('change-password') }}">Change Password</a></li>
-                   <li><span class="icon icon-text-document-black-interface-symbol navRightIcon"></span><a href="{{ url('setting-subscription') }}">Subscription Details</a></li>
-                   <li><span class="icon icon-drive-form navRightIcon"></span><a href="{{ url('setting-terms-conditions') }}">Terms &amp; Conditions</a></li>
-                   <li><span class="icon icon-logout-web-button navRightIcon"></span><a href="{{ url('logout') }}">Logout</a></li>
+                 <span class="fa fa-caret-up notificationCaret"></span>
+                 <li><span class="icon icon-account-circle navRightIcon"></span><a href="#"><b>{{Auth::user()->email}}</b><br>	<button type="button" class="btn btn-primary rghtMenuBtn pd-l-10 pd-r-10">View Profile</button></a>
+                  
+                 </li>
+                 <li><span class="icon icon-drive-document navRightIcon"></span><a href="{{ url('reports') }}">Reports</a></li>
+                 <li><span class="icon icon-lock navRightIcon"><a href="#"></a></span><a href="{{ url('change-password') }}">Change Password</a></li>
+                 <li><span class="icon icon-text-document-black-interface-symbol navRightIcon"></span><a href="{{ url('setting-subscription') }}">Subscription Details</a></li>
+                 <li><span class="icon icon-drive-form navRightIcon"></span><a href="{{ url('setting-terms-conditions') }}">Terms &amp; Conditions</a></li>
+                 <li><span class="icon icon-logout-web-button navRightIcon"></span><a href="{{ url('logout') }}">Logout</a></li>
 
-               </ul>
-           </li>
-       </ul>
-       @php 
-       $navActive = isset($navActive)?$navActive:'';
-       @endphp
-       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+             </ul>
+         </li>
+     </ul>
+     @php 
+     $navActive = isset($navActive)?$navActive:'';
+     @endphp
+     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
             <li class="{{ ($navActive=='calendar')?'active':''}}">
                 <a href="{{ url('calender') }}">Calendar</a>
