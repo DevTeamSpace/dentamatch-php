@@ -11,6 +11,8 @@ use App\Models\RecruiterJobs;
 use Log;
 use App\Models\JobLists;
 use DB;
+use App\Models\SearchFilter;
+
 
 class ReportController extends Controller
 {
@@ -185,6 +187,44 @@ class ReportController extends Controller
             
         }catch (\Exception $e) {
             Log::error($e);
+        }
+    }
+    
+    public function searchJobByLocation(){
+        return view('cms.report.locationlist');
+    }
+    
+    public function searchCountbyLocation(){
+        try{
+            $searchList = SearchFilter::select('city')
+                ->addSelect(DB::raw("count(id) as searchcount"))
+                ->groupby('city')
+                ->orderBy('city', 'asc')->get();
+            return Datatables::of($searchList)
+                    ->make(true);
+        } catch (\Exception $e) {
+            Log::error($e);
+        }
+    }
+    
+    public function downloadCsv($type){
+        if($type == 'cancellist'){
+            $data = JobLists::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
+                ->where('job_lists.applied_status', JobLists::CANCELLED)
+                ->select('jobseeker_profiles.user_id',
+                        'jobseeker_profiles.first_name','jobseeker_profiles.last_name')
+                ->addSelect(DB::raw("count(job_lists.id) as cancelno"))
+                ->groupby('jobseeker_profiles.user_id')
+                ->orderBy('jobseeker_profiles.first_name', 'asc')->get();
+        }
+        if($data){
+            $excelMOdel = new Excel();
+            return $excelModel->create('export_to_excel_example', function($excel) use ($data) {
+			$excel->sheet('mySheet', function($sheet) use ($data)
+	        {
+				$sheet->fromArray($data);
+	        });
+		})->download($type);
         }
     }
 

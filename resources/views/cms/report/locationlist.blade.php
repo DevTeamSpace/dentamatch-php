@@ -8,21 +8,17 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
-                <div class="panel-heading">Cancel List
-                    <table  class="display responsive nowrap" cellspacing="0" >
-                              <tr>
-                                  <td align="right"><a href="{{ url('cms/report/download/cancellist') }}">Download CSV</a></td>
-                              </tr>
-                    </table>
+                <div class="panel-heading">Job by location list
+                    
                 </div>
 
                 <div class="panel-body">
-                    <table id="cancel_list" class="display responsive nowrap" cellspacing="0" width="100%">
+                    <table id="jobbylocation_list" class="display responsive nowrap" cellspacing="0" width="100%">
                           <thead>
                               <tr>
-                                  <th>First Name</th>
-                                  <th>Last Name</th>
-                                  <th>Cancel Count</th>
+                                  <th>Location</th>
+                                  <th>Search Count</th>
+                                  
                               </tr>
                           </thead>
 

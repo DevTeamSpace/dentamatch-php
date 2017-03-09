@@ -185,6 +185,17 @@ $(function () {
     $('#cancel_list').DataTable({
         processing: true,
         serverSide: true,
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'collection',
+                text: 'Export',
+                buttons: [
+                    'excel'
+                    
+                ]
+            }
+        ],
         //responsive: true,
         //autoWidth: false,
         ajax: public_path+'report/cancel',
@@ -215,6 +226,20 @@ $(function () {
             {data: 'hired', name: 'hired',searchable:false},
             {data: 'rejected', name: 'rejected',searchable:false},
             {data: 'cancelled', name: 'cancelled',searchable:false},
+        ]
+    });
+    
+    $('#jobbylocation_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'report/location',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'city', name: 'city',searchable:false},
+            {data: 'searchcount', name: 'searchcount',searchable:false},
         ]
     });
     
