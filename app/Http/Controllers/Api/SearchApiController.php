@@ -11,6 +11,7 @@ use App\Models\JobLists;
 use App\Models\UserProfile;
 use App\Models\SearchFilter;
 use App\Models\Notification;
+use App\Models\ChatUserLists;
 
 class SearchApiController extends Controller {
     
@@ -266,7 +267,9 @@ class SearchApiController extends Controller {
             if($userId > 0){
                 $reqData = $request->all();
                 $notificationDetails = Notification::where('id',$reqData['notificationId'])->first();
-                $jobExists = JobLists::where('seeker_id','=',$userId)->where('recruiter_job_id','=',$notificationDetails->job_list_id)
+                $jobExists = JobLists::join('recruiter_jobs','recruiter_jobs.id','=','job_lists.recruiter_job_id')
+                        ->join('job_templates','job_lists.user_id','=','recruiter_jobs.job_template_id')
+                        ->where('seeker_id','=',$userId)->where('recruiter_job_id','=',$notificationDetails->job_list_id)
                         ->where('applied_status',JobLists::INVITED)->first();
                 if($jobExists){
                     if($reqData['acceptStatus'] == 0){
@@ -274,6 +277,10 @@ class SearchApiController extends Controller {
                         $msg = trans("messages.job_cancelled_success");
                     }else{
                         $jobExists->applied_status = JobLists::HIRED;
+                        $userChat = new ChatUserLists();
+                        $userChat->recruiter_id = $jobExists->userId;
+                        $userChat->seeker_id = $userId;
+                        $userChat->checkAndSaveUserToChatList();
                         $msg = trans("messages.job_hired_success");
                     }
                     $jobExists->save();
