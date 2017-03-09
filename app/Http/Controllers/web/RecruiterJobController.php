@@ -167,7 +167,7 @@ class RecruiterJobController extends Controller {
             $userId = Auth::user()->id;
             $this->viewData['job'] = RecruiterJobs::getRecruiterJobDetails($jobId);
             $this->viewData['skills'] = TemplateSkills::getTemplateSkills($this->viewData['job']['job_template_id']);
-            $this->viewData['seekerList'] = JobLists::getJobSeekerList($this->viewData['job']);
+            $this->viewData['seekerList'] = JobLists::getJobSeekerWithRatingList($this->viewData['job']);
             $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
             return $this->returnView('view');
         } catch (\Exception $e) {
