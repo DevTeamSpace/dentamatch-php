@@ -2,34 +2,34 @@
 
 @section('content')
 <div class="container globalpadder">
-        <h3>Notifications</h3>
-        @if(Session::has('message'))
-            <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
-        @endif
-        <div class="viewdentaltemplate cardShadow borderNone notificationPadder">
-            <ul class="notificationListContainer">
-                @foreach ($notificationList as $notification)
-                @php 
-                    $notificationDetails = json_decode($notification->notification_data);
-                @endphp
-                <li>
-                    <div class="onlineDot border-radius"></div>
-                    <p class="deleteCard pull-right notificationDel"><span class="icon icon-deleteicon "></span><a href="{{ url('reports') }}">Delete</a></p>
-                    <div class="media notificationList">
-                        <div class="media-left ">
-                            <a href="#">
-                                <img class="media-object img-circle" src="{{ $notificationDetails->image }}" width="80" height="80" alt="...">
-                            </a>
-                        </div>
-                        <div class="media-body">
-                            <h6 class="media-heading"><p>{{ $notificationDetails->message }}</p></h6>
-                            <p class="justNow"><span class="icon-clock"></span>{{ $notification->created_at->diffForHumans()}}</p>
-                        </div>
+    <h3>Notifications</h3>
+    @if(Session::has('message'))
+    <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+    @endif
+    <div class="viewdentaltemplate cardShadow borderNone notificationPadder">
+        <ul class="notificationListContainer">
+            @foreach ($notificationList as $notification)
+            @php 
+            $notificationDetails = json_decode($notification->notification_data);
+            @endphp
+            <li>
+                <div class="onlineDot border-radius"></div>
+                <p class="deleteCard pull-right notificationDel"><span class="icon icon-deleteicon "></span><a href="{{ url('reports') }}">Delete</a></p>
+                <div class="media notificationList">
+                    <div class="media-left ">
+                        <a href="#">
+                            <img class="media-object img-circle cir-36" src="{{ $notificationDetails->image }}" width="80" height="80" alt="...">
+                        </a>
                     </div>
-                </li>
-                @endforeach
-            </ul>
-            {{ $notificationList->links() }}
-        </div>
+                    <div class="media-body">
+                        <h6 class="media-heading"><p>{{ $notificationDetails->message }}</p></h6>
+                        <p class="justNow"><span class="icon-clock"></span>{{ $notification->created_at->diffForHumans()}}</p>
+                    </div>
+                </div>
+            </li>
+            @endforeach
+        </ul>
+        {{ $notificationList->links() }}
     </div>
+</div>
 @endsection
