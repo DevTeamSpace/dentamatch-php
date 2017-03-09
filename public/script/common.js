@@ -182,6 +182,42 @@ $(function () {
         ]
     });
     
+    $('#cancel_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'report/cancel',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
+            {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
+            {data: 'cancelno', name: 'cancelno',searchable:false},
+        ]
+    });
+    
+    $('#response_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'report/response',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'office_name', name: 'recruiter_profiles.office_name',searchable:false},
+            {data: 'jobtitle_name', name: 'jobtitle_name',searchable:false},
+            {data: 'jobtype', name: 'jobtype',searchable:false},
+            {data: 'invited', name: 'invited',searchable:false},
+            {data: 'applied', name: 'applied',searchable:false},
+            {data: 'sortlisted', name: 'sortlisted',searchable:false},
+            {data: 'hired', name: 'hired',searchable:false},
+            {data: 'rejected', name: 'rejected',searchable:false},
+            {data: 'cancelled', name: 'cancelled',searchable:false},
+        ]
+    });
+    
     $('#jobseeker_verification').DataTable({
         processing: true,
         serverSide: true,

@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\RecruiterJobs;
 use Log;
 use App\Models\JobLists;
+use DB;
 
 class ReportController extends Controller
 {
@@ -43,6 +44,68 @@ class ReportController extends Controller
                 ->first();       
         return view('cms.report.seekerlist',['jobDetail' => $jobDetail]);
     }
+    
+    public function cancelLists(){
+        return view('cms.report.cancellist');
+    }
+    
+    public function jobResponse(){
+        return view('cms.report.responselist');
+    }
+    
+    public function jobResponseList(){
+        try{
+            $jobLists = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+                ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
+                ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
+                ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
+                ->leftjoin('job_lists','job_lists.recruiter_job_id','=','recruiter_jobs.id')
+                ->select('recruiter_jobs.id','recruiter_jobs.job_type',
+                        'job_titles.jobtitle_name','recruiter_profiles.office_name')
+                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 1, 1,0)) AS invited"))
+                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 2, 1,0)) AS applied"))
+                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 3, 1,0)) AS sortlisted"))
+                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 4, 1,0)) AS hired"))
+                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 5, 1,0)) AS rejected"))
+                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 6, 1,0)) AS cancelled"))
+                ->groupby('recruiter_jobs.id')
+                ->orderBy('recruiter_jobs.id', 'desc')->get();
+            return Datatables::of($jobLists)
+                    ->removeColumn('id')
+                    ->addColumn('jobtype', function ($jobLists) {
+                            $jobType = "";
+                            if($jobLists->job_type == 1){
+                                $jobType = 'Fulltime';
+                            }else if($jobLists->job_type == 2){
+                                $jobType = 'Parttime';
+                            }else{
+                                $jobType = 'Temporary';
+                            }
+                        return $jobType;
+                    })
+                    ->make(true);
+        } catch (Exception $ex) {
+            Log::error($e);
+        }
+    }
+    
+   public function listCancel(){
+       try{
+       $seekerList = JobLists::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
+                ->where('job_lists.applied_status', JobLists::CANCELLED)
+                ->select('jobseeker_profiles.user_id',
+                        'jobseeker_profiles.first_name','jobseeker_profiles.last_name')
+                ->addSelect(DB::raw("count(job_lists.id) as cancelno"))
+                ->groupby('jobseeker_profiles.user_id')
+                ->orderBy('jobseeker_profiles.first_name', 'asc')->get();
+       
+       return Datatables::of($seekerList)
+                    ->removeColumn('user_id')
+                    ->make(true);
+       }catch (\Exception $e) {
+            Log::error($e);
+        }
+   }
     
     public function jobLists(){
         try{

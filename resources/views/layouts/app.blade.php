@@ -87,6 +87,8 @@
                                 <li><a href="{{ url('cms/recruiter/index') }}">Recruiter</a></li>
                                 <li><a href="{{ url('cms/notify/index') }}">Notify Users</a></li>
                                 <li><a href="{{ url('cms/report/index') }}">Job Lists</a></li>
+                                <li><a href="{{ url('cms/report/cancellist') }}">Cancel Lists</a></li>
+                                <li><a href="{{ url('cms/report/responselist') }}">Response Rate</a></li>
                             </ul>
                         </li>
                         
