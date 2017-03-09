@@ -12,6 +12,7 @@ use App\Models\UserProfile;
 use App\Models\SearchFilter;
 use App\Models\Notification;
 use App\Models\ChatUserLists;
+use Log;
 
 class SearchApiController extends Controller {
     
@@ -268,7 +269,7 @@ class SearchApiController extends Controller {
                 $reqData = $request->all();
                 $notificationDetails = Notification::where('id',$reqData['notificationId'])->first();
                 $jobExists = JobLists::join('recruiter_jobs','recruiter_jobs.id','=','job_lists.recruiter_job_id')
-                        ->join('job_templates','job_lists.user_id','=','recruiter_jobs.job_template_id')
+                        ->join('job_templates','job_templates.user_id','=','recruiter_jobs.job_template_id')
                         ->where('seeker_id','=',$userId)->where('recruiter_job_id','=',$notificationDetails->job_list_id)
                         ->where('applied_status',JobLists::INVITED)->first();
                 if($jobExists){
@@ -298,9 +299,11 @@ class SearchApiController extends Controller {
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
+            Log::error($e);
             $messages = json_decode($e->getResponse()->content(), true);
             $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
+            Log::error($e);
             $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
