@@ -41,7 +41,7 @@
                                         </tr>	 	 
                                     </tbody>
                                 </table>
-                                <p>Your next half yearly charge of <span data-bind="text: subscriptionAmount"></span> will be applied to your primary payment method on <span data-bind="text: subscriptionAutoRenewal"></span>( i.e. <span data-bind="text: leftDays"></span> Days).</p>
+                                <p>Your next <span data-bind="text: subscriptionPlan"></span> charge of <span data-bind="text: subscriptionAmount"></span> will be applied to your primary payment method on <span data-bind="text: subscriptionAutoRenewal"></span>( i.e. <span data-bind="text: leftDays"></span> Days).</p>
                                 <!--/ko-->
                                 <div class="text-right" data-bind="visible: switchVisible">
                                     <button type="submit" class="btn btn-primary pd-l-30 pd-r-30 mr-t-10" data-bind="text: switchToText, click: $root.switchTo"></button>
