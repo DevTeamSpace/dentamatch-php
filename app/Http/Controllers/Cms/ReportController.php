@@ -216,16 +216,31 @@ class ReportController extends Controller
                 ->addSelect(DB::raw("count(job_lists.id) as cancelno"))
                 ->groupby('jobseeker_profiles.user_id')
                 ->orderBy('jobseeker_profiles.first_name', 'asc')->get();
+            
+            $list = $data->toArray();
         }
-        if($data){
-            $excelMOdel = new Excel();
-            return $excelModel->create('export_to_excel_example', function($excel) use ($data) {
-			$excel->sheet('mySheet', function($sheet) use ($data)
-	        {
-				$sheet->fromArray($data);
-	        });
-		})->download($type);
+        
+        $arr = []; 
+        header("Content-type: application/octet-stream");
+        header("Content-Disposition: attachment; filename=exportData.csv");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        $outstream = fopen("php://output", 'r+');
+        $arr['user_id'] ="User ID";
+        $arr['first_name'] = "FirstName Name";
+        $arr['last_name'] = 'Last Name';
+        $arr['cancelno'] = 'No of cancellation';
+        fputcsv($outstream, $arr, ',', '"');
+        
+        if(!empty($list)) {
+            foreach($list as $key=>$value) {
+                fputcsv($outstream, $value, ',', '"');
+            }
         }
+        
+        fgets($outstream);
+        fclose($outstream);
     }
 
 }
