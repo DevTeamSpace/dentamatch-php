@@ -279,7 +279,7 @@ class SearchApiController extends Controller {
                     }else{
                         $jobExists->applied_status = JobLists::HIRED;
                         $userChat = new ChatUserLists();
-                        $userChat->recruiter_id = $jobExists->userId;
+                        $userChat->recruiter_id = $jobExists->user_id;
                         $userChat->seeker_id = $userId;
                         $userChat->checkAndSaveUserToChatList();
                         $msg = trans("messages.job_hired_success");
