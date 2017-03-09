@@ -218,8 +218,8 @@ class ReportController extends Controller
                 ->groupby('jobseeker_profiles.user_id')
                 ->orderBy('jobseeker_profiles.first_name', 'asc')->get();
            
-        $arr['user_id'] ="User ID";
-        $arr['first_name'] = "FirstName Name";
+        $arr['user_id'] ="User Id";
+        $arr['first_name'] = "First Name";
         $arr['last_name'] = 'Last Name';
         $arr['cancelno'] = 'No of cancellation';   
         }else if ($type == 'responselist'){
