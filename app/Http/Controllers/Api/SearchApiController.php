@@ -11,6 +11,8 @@ use App\Models\JobLists;
 use App\Models\UserProfile;
 use App\Models\SearchFilter;
 use App\Models\Notification;
+use App\Models\ChatUserLists;
+use Log;
 
 class SearchApiController extends Controller {
     
@@ -274,6 +276,10 @@ class SearchApiController extends Controller {
                         $msg = trans("messages.job_cancelled_success");
                     }else{
                         $jobExists->applied_status = JobLists::HIRED;
+                        $userChat = new ChatUserLists();
+                        $userChat->recruiter_id = $notificationDetails->sender_id;
+                        $userChat->seeker_id = $userId;
+                        $userChat->checkAndSaveUserToChatList();
                         $msg = trans("messages.job_hired_success");
                     }
                     $jobExists->save();
@@ -291,9 +297,11 @@ class SearchApiController extends Controller {
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
+            Log::error($e);
             $messages = json_decode($e->getResponse()->content(), true);
             $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
+            Log::error($e);
             $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;

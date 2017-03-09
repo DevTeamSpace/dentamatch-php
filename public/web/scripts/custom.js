@@ -88,16 +88,16 @@ $(function() {
             });
 
 
-            $('.datetimepicker1').on("dp.change", function() {
+            $('.datetimepicker1').on("dp.change", function(e) {
 
                 var date = $(this).data('date');
 
-                $(this).parents(".row").find('.datetimepicker2').data('DateTimePicker').minDate(date);
+                $(this).parents(".row").find('.datetimepicker2').data('DateTimePicker').minDate(e.date);
                 console.log(date);
             });
-            $('.datetimepicker2').on("dp.change", function() {
+            $('.datetimepicker2').on("dp.change", function(e) {
                 var date = $(this).data('date');
-                $(this).parents(".row").find('.datetimepicker1').data('DateTimePicker').maxDate(date);
+                $(this).parents(".row").find('.datetimepicker1').data('DateTimePicker').maxDate(e.date);
                 console.log(date);
             });
 

@@ -116,6 +116,7 @@
             Route::get('calender', 'web\CalenderController@getCalender');
             Route::get('calender-details', 'web\CalenderController@getCalenderDetails');
             Route::get('recruiter/markFavourite/{seekerId}', 'web\FavoriteJobseekerController@getMarkFavourite');
+            Route::post('recruiter/rating', 'web\RatingController@createOrUpdate');
         });
 
 Route::group(['middleware' => 'termCondition'], function () {
