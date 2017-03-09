@@ -158,8 +158,8 @@
                                     <li><div class="rating_on"> Time management</div>
                                         <ul class="rate_me">
                                             {{ $timeManagement = round($seeker['avg_time_management'],1) }}
-                                            <li ><span {{ (!empty($timeManagement)) ? (floor($timeManagement)>1 ? "class=bg-ember" : "") : "" }}></span></li>
-                                            <li><span {{ (!empty($timeManagement)) ? (floor($timeManagement)>2 ? "class=bg-ember" : "") : "" }}></span></li>
+                                            <li ><span {{ (!empty($timeManagement)) ? (floor($timeManagement)>=1 ? "class=bg-ember" : "") : "" }}></span></li>
+                                            <li><span {{ (!empty($timeManagement)) ? (floor($timeManagement)>=2 ? "class=bg-ember" : "") : "" }}></span></li>
                                             <li><span {{ (!empty($timeManagement) && floor($timeManagement)>=3) ? "class=bg-ember" : "" }}></span></li>
                                             <li ><span {{ (!empty($timeManagement) && floor($timeManagement)>=4) ? "class=bg-ember" : "" }}></span></li>
                                             <li><span {{ (!empty($timeManagement) && floor($timeManagement)>=5) ? "class=bg-ember" : "" }} ></span></li>
