@@ -215,6 +215,11 @@ strong {
     color: #383838 !important;
 }
 
+.cir-36 {
+    width: 36px;
+    height: 36px;
+}
+
 
 /*-------------------------*/
 
@@ -1056,7 +1061,6 @@ strong {
     border: none;
     height: 100px;
     overflow: scroll;
-    left: auto;
 }
 
 .date-drop .dropdown-menu::before {
@@ -1174,6 +1178,7 @@ strong {
     width: 225px;
     white-space: nowrap;
     text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .user-chat-details {

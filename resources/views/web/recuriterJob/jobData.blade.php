@@ -28,7 +28,7 @@
                     @php 
                     $dayArr = [];
                     ($job['is_monday']==1)?array_push($dayArr,'Monday'):'';
-                    ($job['is_tuesday']==1)?array_push($dayArr,'Tuseday'):'';
+                    ($job['is_tuesday']==1)?array_push($dayArr,'Tuesday'):'';
                     ($job['is_wednesday']==1)?array_push($dayArr,'Wednesday'):'';
                     ($job['is_thursday']==1)?array_push($dayArr,'Thursday'):'';
                     ($job['is_friday']==1)?array_push($dayArr,'Friday'):'';
@@ -107,7 +107,7 @@
     </ul>
 </div>
 <div class="col-sm-4 ">
-   
+ 
     <div class="search-seeker">
         <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-30 pull-right">Search Seekers</a>
     </div>

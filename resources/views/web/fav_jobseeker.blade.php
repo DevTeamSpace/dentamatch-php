@@ -8,7 +8,7 @@
         <div class="media-left ">
             <div class="img-holder">
 
-                <img class="media-object img-circle" src="http://placehold.it/66x66" alt="...">
+                <img class="media-object img-circle wd-66" src="http://placehold.it/66x66" alt="...">
             </div>
         </div>
         <div class="media-body row">
@@ -29,13 +29,13 @@
     </div>
     @endforeach
     @else
-        <div class="jobCatbox mr-b-20">
-            <div class="template-job-information ">
-                <div class="template-job-information-left">
-                    <h4>No favorites added</h4>
-                </div>
-            </div>  
-        </div>
+    <div class="jobCatbox mr-b-20">
+        <div class="template-job-information ">
+            <div class="template-job-information-left">
+                <h4>No favorites added</h4>
+            </div>
+        </div>  
+    </div>
     @endif
     <!-- Modal -->
     <div class="modal fade select_list " role="dialog">
@@ -78,12 +78,12 @@
 
 <script>
     $(document).ready(function () {
-    $('#selectJobSeeker, #selectTemplate').selectpicker({
-    style: 'btn btn-primary'
-    });
+        $('#selectJobSeeker, #selectTemplate').selectpicker({
+            style: 'btn btn-primary'
+        });
     });
     function putValue(v){
-    $('#seekerId').val(v);
+        $('#seekerId').val(v);
     }
 </script>
 @endsection

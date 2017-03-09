@@ -78,7 +78,7 @@ and open the template in the editor.
     color: #686868;
 }
 
-.search-seeker button {
+.search-seeker button .search-seeker a.btn {
     width: 144px;
 }
 
