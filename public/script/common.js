@@ -185,17 +185,6 @@ $(function () {
     $('#cancel_list').DataTable({
         processing: true,
         serverSide: true,
-        dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'collection',
-                text: 'Export',
-                buttons: [
-                    'excel'
-                    
-                ]
-            }
-        ],
         //responsive: true,
         //autoWidth: false,
         ajax: public_path+'report/cancel',
