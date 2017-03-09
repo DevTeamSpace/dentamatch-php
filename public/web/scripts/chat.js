@@ -182,7 +182,7 @@ $(document).ready(function () {
             }
             //console.log(msgDateArr);
         });
-
+        socket.off('receiveMessage');
         socket.on('receiveMessage', function (data) {
             console.log(data);
             var appendHtml = writeHtmlBlock(data);
