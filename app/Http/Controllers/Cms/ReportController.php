@@ -11,6 +11,8 @@ use App\Models\RecruiterJobs;
 use Log;
 use App\Models\JobLists;
 use DB;
+use App\Models\SearchFilter;
+
 
 class ReportController extends Controller
 {
@@ -186,6 +188,59 @@ class ReportController extends Controller
         }catch (\Exception $e) {
             Log::error($e);
         }
+    }
+    
+    public function searchJobByLocation(){
+        return view('cms.report.locationlist');
+    }
+    
+    public function searchCountbyLocation(){
+        try{
+            $searchList = SearchFilter::select('city')
+                ->addSelect(DB::raw("count(id) as searchcount"))
+                ->groupby('city')
+                ->orderBy('city', 'asc')->get();
+            return Datatables::of($searchList)
+                    ->make(true);
+        } catch (\Exception $e) {
+            Log::error($e);
+        }
+    }
+    
+    public function downloadCsv($type){
+        if($type == 'cancellist'){
+            $data = JobLists::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
+                ->where('job_lists.applied_status', JobLists::CANCELLED)
+                ->select('jobseeker_profiles.user_id',
+                        'jobseeker_profiles.first_name','jobseeker_profiles.last_name')
+                ->addSelect(DB::raw("count(job_lists.id) as cancelno"))
+                ->groupby('jobseeker_profiles.user_id')
+                ->orderBy('jobseeker_profiles.first_name', 'asc')->get();
+            
+            $list = $data->toArray();
+        }
+        
+        $arr = []; 
+        header("Content-type: application/octet-stream");
+        header("Content-Disposition: attachment; filename=exportData.csv");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        $outstream = fopen("php://output", 'r+');
+        $arr['user_id'] ="User ID";
+        $arr['first_name'] = "FirstName Name";
+        $arr['last_name'] = 'Last Name';
+        $arr['cancelno'] = 'No of cancellation';
+        fputcsv($outstream, $arr, ',', '"');
+        
+        if(!empty($list)) {
+            foreach($list as $key=>$value) {
+                fputcsv($outstream, $value, ',', '"');
+            }
+        }
+        
+        fgets($outstream);
+        fclose($outstream);
     }
 
 }

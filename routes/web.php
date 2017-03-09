@@ -260,6 +260,9 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('cancel', 'Cms\ReportController@listCancel');
         Route::get('responselist', 'Cms\ReportController@jobResponse');
         Route::get('response', 'Cms\ReportController@jobResponseList');
+        Route::get('search-location', 'Cms\ReportController@searchJobByLocation');
+        Route::get('location', 'Cms\ReportController@searchCountbyLocation');
+        Route::get('download/{type}', 'Cms\ReportController@downloadCsv');
     });
     
     Route::get('push-notification', 'Cms\JobSeekerController@sendPushAndroid');
