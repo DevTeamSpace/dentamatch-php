@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <div class="commonBox cboxbottom padding-dentaltemplate">
+        <div class="commonBox cboxbottom ">
 
             <div class="form-group custom-select">
                 <input hidden value="{{$jobId}}" id="jobIdValue">

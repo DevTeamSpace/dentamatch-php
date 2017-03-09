@@ -248,6 +248,7 @@ label {
     cursor: pointer;
     color: #0470c0;
 }
+
 .addProfileBtn1 {
     display: block;
     margin-bottom: 20px;
@@ -1248,6 +1249,13 @@ input[type='checkbox'] {
 @media(max-width:767px) {
     .add-on-nav {
         bottom: -33px;
+    }
+    .dayBox .input-group {
+        display: block;
+        margin-bottom: 3px;
+    }
+    .customsel .form-control {
+        margin-bottom: 3px;
     }
 }
 

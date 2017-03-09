@@ -180,7 +180,7 @@ $(function() {
 
     }
 
-    function checkBoxValidation() {
+    function checkBoxValidation(e) {
         var parentBx = $(this).parents(".dayBox");
         if ($(this).prop("checked") == true) {
             selVal = parentBx.find(".customsel");
@@ -209,15 +209,15 @@ $(function() {
                 minDate: moment().startOf('day'),
                 maxDate: moment().endOf('day')
             });
-            $('.datetimepicker1').on("dp.change", function() {
+            $('.datetimepicker1').on("dp.change", function(e) {
                 $(this).addClass("chetan");
                 var date = $(this).data('date');
-                $(this).closest(".row").find('.datetimepicker2').data('DateTimePicker').minDate(date);
+                $(this).closest(".row").find('.datetimepicker2').data('DateTimePicker').minDate(e.date);
                 console.log(date);
             });
-            $('.datetimepicker2').on("dp.change", function() {
+            $('.datetimepicker2').on("dp.change", function(e) {
                 var date = $(this).data('date');
-                $(this).closest(".row").find('.datetimepicker1').data('DateTimePicker').maxDate(date);
+                $(this).closest(".row").find('.datetimepicker1').data('DateTimePicker').maxDate(e.date);
                 console.log(date);
             });
             //-----datePicker---//
