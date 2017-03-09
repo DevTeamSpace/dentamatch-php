@@ -269,7 +269,7 @@ class SearchApiController extends Controller {
                 $reqData = $request->all();
                 $notificationDetails = Notification::where('id',$reqData['notificationId'])->first();
                 $jobExists = JobLists::join('recruiter_jobs','recruiter_jobs.id','=','job_lists.recruiter_job_id')
-                        ->join('job_templates','job_templates.user_id','=','recruiter_jobs.job_template_id')
+                        ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
                         ->where('seeker_id','=',$userId)->where('recruiter_job_id','=',$notificationDetails->job_list_id)
                         ->where('applied_status',JobLists::INVITED)->first();
                 if($jobExists){
