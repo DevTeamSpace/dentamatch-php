@@ -268,9 +268,7 @@ class SearchApiController extends Controller {
             if($userId > 0){
                 $reqData = $request->all();
                 $notificationDetails = Notification::where('id',$reqData['notificationId'])->first();
-                $jobExists = JobLists::join('recruiter_jobs','recruiter_jobs.id','=','job_lists.recruiter_job_id')
-                        ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
-                        ->where('seeker_id','=',$userId)->where('recruiter_job_id','=',$notificationDetails->job_list_id)
+                $jobExists = JobLists::where('seeker_id','=',$userId)->where('recruiter_job_id','=',$notificationDetails->job_list_id)
                         ->where('applied_status',JobLists::INVITED)->first();
                 if($jobExists){
                     if($reqData['acceptStatus'] == 0){
@@ -279,7 +277,7 @@ class SearchApiController extends Controller {
                     }else{
                         $jobExists->applied_status = JobLists::HIRED;
                         $userChat = new ChatUserLists();
-                        $userChat->recruiter_id = $jobExists->user_id;
+                        $userChat->recruiter_id = $notificationDetails->sender_id;
                         $userChat->seeker_id = $userId;
                         $userChat->checkAndSaveUserToChatList();
                         $msg = trans("messages.job_hired_success");
