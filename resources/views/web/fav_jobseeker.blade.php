@@ -65,7 +65,7 @@
                             </select>
                         </div>
                         <div class="text-right mr-t-20 mr-b-30">
-                            <button type="button" class="btn btn-link mr-r-20">Create Job</button>
+                            <button type="button" class="modalClick btn btn-link mr-r-20" data-toggle="modal" data-target="#jobTemplate">Create Job</button>
                             <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Send</button>
                         </div>
                     </form>
