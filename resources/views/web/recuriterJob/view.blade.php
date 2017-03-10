@@ -1,9 +1,5 @@
 @extends('web.layouts.dashboard')
 
-@section('css')
-<link rel="stylesheet" href="{{asset('web/css/style.css')}}">
-
-@endsection
 @section('content')
 <div class="container padding-container-template">
     <!--breadcrumb-->
@@ -21,58 +17,58 @@
             </div>
             <div class="template-job-information-right">
                 <span >Posted : 
-                     @if($job['days']>0)
-                    {{ $job['days'].' day'.(($job['days']>1)?'s':'') }} ago
-                    @else
-                    Today
-                    @endif
-                </span>
-            </div> 
-        </div>    
-        <div class="job-type-detail">
-            @if($job['job_type']==\App\Models\RecruiterJobs::FULLTIME)
-            <span class="drk-green statusBtn mr-r-5">Full Time</span>
-            @elseif($job['job_type']==\App\Models\RecruiterJobs::PARTTIME)
-            <span class="bg-ltgreen statusBtn mr-r-5">Part Time</span>
-            <span> | 
-                @php 
-                $dayArr = [];
-                ($job['is_monday']==1)?array_push($dayArr,'Monday'):'';
-                ($job['is_tuesday']==1)?array_push($dayArr,'Tuesday'):'';
-                ($job['is_wednesday']==1)?array_push($dayArr,'Wednesday'):'';
-                ($job['is_thursday']==1)?array_push($dayArr,'Thursday'):'';
-                ($job['is_friday']==1)?array_push($dayArr,'Friday'):'';
-                ($job['is_saturday']==1)?array_push($dayArr,'Saturday'):'';
-                ($job['is_sunday']==1)?array_push($dayArr,'Sunday'):'';
-                @endphp
-                {{ implode(', ',$dayArr) }}
-            </span>
-            @else
-            <span class="bg-ember statusBtn mr-r-5">Temporary</span>
-            <span class="dropdown date-drop">
-                @php 
-                $dates = explode(',',$job['temp_job_dates']);
-                @endphp
-                <span class=" dropdown-toggle"  data-toggle="dropdown"><span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
-                    <span class="caret"></span></span>
-                <ul class="dropdown-menu">
-                    @foreach ($dates as $date)
-                    <li>{{ date('l, d M Y',strtotime($date)) }}</li>
-                    @endforeach
-                </ul>
-            </span>
-            @endif
-        </div>
-        <div class="template-job-information mr-t-30">
-            <div class="template-job-information-left j-i-m-l">
-                <address>
-                    <strong>{{ $job['office_name'] }}</strong><br>
-                    {{ $job['officetype_name'] }}<br>
-                    {{ $job['address'].' '.$job['zipcode'] }}<br>
-                    @if($job['job_type']==\App\Models\RecruiterJobs::TEMPORARY)
-                    <span>Total Job Opening: {{ $job['no_of_jobs'] }}</span>
-                    @endif
-                </address> 
+                 @if($job['days']>0)
+                 {{ $job['days'].' day'.(($job['days']>1)?'s':'') }} ago
+                 @else
+                 Today
+                 @endif
+             </span>
+         </div> 
+     </div>    
+     <div class="job-type-detail">
+        @if($job['job_type']==\App\Models\RecruiterJobs::FULLTIME)
+        <span class="drk-green statusBtn mr-r-5">Full Time</span>
+        @elseif($job['job_type']==\App\Models\RecruiterJobs::PARTTIME)
+        <span class="bg-ltgreen statusBtn mr-r-5">Part Time</span>
+        <span> | 
+            @php 
+            $dayArr = [];
+            ($job['is_monday']==1)?array_push($dayArr,'Monday'):'';
+            ($job['is_tuesday']==1)?array_push($dayArr,'Tuesday'):'';
+            ($job['is_wednesday']==1)?array_push($dayArr,'Wednesday'):'';
+            ($job['is_thursday']==1)?array_push($dayArr,'Thursday'):'';
+            ($job['is_friday']==1)?array_push($dayArr,'Friday'):'';
+            ($job['is_saturday']==1)?array_push($dayArr,'Saturday'):'';
+            ($job['is_sunday']==1)?array_push($dayArr,'Sunday'):'';
+            @endphp
+            {{ implode(', ',$dayArr) }}
+        </span>
+        @else
+        <span class="bg-ember statusBtn mr-r-5">Temporary</span>
+        <span class="dropdown date-drop">
+            @php 
+            $dates = explode(',',$job['temp_job_dates']);
+            @endphp
+            <span class=" dropdown-toggle"  data-toggle="dropdown"><span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
+            <span class="caret"></span></span>
+            <ul class="dropdown-menu">
+                @foreach ($dates as $date)
+                <li>{{ date('l, d M Y',strtotime($date)) }}</li>
+                @endforeach
+            </ul>
+        </span>
+        @endif
+    </div>
+    <div class="template-job-information mr-t-30">
+        <div class="template-job-information-left j-i-m-l">
+            <address>
+                <strong>{{ $job['office_name'] }}</strong><br>
+                {{ $job['officetype_name'] }}<br>
+                {{ $job['address'].' '.$job['zipcode'] }}<br>
+                @if($job['job_type']==\App\Models\RecruiterJobs::TEMPORARY)
+                <span>Total Job Opening: {{ $job['no_of_jobs'] }}</span>
+                @endif
+            </address> 
 
             </div>    
             <div class="template-job-information-right j-i-m-r">
@@ -129,6 +125,9 @@
         <div class="jobseeker-statebox mr-t-25">
             <label class="fnt-16 textcolr-38">Jobseeker {{ \App\Models\JobLists::APPLIED_STATUS[$key] }} ({{ count($seekerGroup) }})</label>
             @foreach($seekerGroup as $seeker)
+            @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+                @include('web.recuriterJob.ratingModal')
+            @endif
             <div class="media jobCatbox">
                 <div class="media-left ">
                     <div class="img-holder ">
@@ -144,33 +143,37 @@
                             <a href="{{ url('job/seekerdetails/'.$seeker['seeker_id'].'/'.$job['id']) }}" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
                             @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
                             <span class="mr-l-5 dropdown date_drop">
-                                <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{ ($seeker['avg_rating']!='')?round($seeker['avg_rating'],1):'' }}</span>
+                                <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{ ($seeker['avg_rating']!='')?round($seeker['avg_rating'],1): '0' }}</span>
                                 <ul class="dropdown-menu rating-info">
-                                    <li><div class="rating_on"> Punctuality</div>
+                                    <li><div class="rating_on"> Punctuality </div>
                                         <ul class="rate_me">
-                                            <li><span></span></li>
-                                            <li class="active"><span></span></li>
-                                            <li><span></span></li>
-                                            <li><span></span></li>
-                                            <li><span></span></li>
+                                            {{ $punctuality = round($seeker['avg_punctuality'],1) }}
+                                            <li ><span {{ (!empty($punctuality)) ? (floor($punctuality)>1 ? "class=bg-green" : "") : "" }}></span></li>
+                                            <li><span {{ (!empty($punctuality)) ? (floor($punctuality)>2 ? "class=bg-green" : "") : "" }}></span></li>
+                                            <li><span {{ (!empty($punctuality) && floor($punctuality)>=3) ? "class=bg-green" : "" }}></span></li>
+                                            <li ><span {{ (!empty($punctuality) && floor($punctuality)>=4) ? "class=bg-green" : "" }}></span></li>
+                                            <li><span {{ (!empty($punctuality) && floor($punctuality)>=5) ? "class=bg-green" : "" }} ></span></li>
                                         </ul>
                                     </li>
                                     <li><div class="rating_on"> Time management</div>
                                         <ul class="rate_me">
-                                            <li><span></span></li>
-                                            <li class="active"><span></span></li>
-                                            <li><span></span></li>
-                                            <li><span></span></li>
-                                            <li><span></span></li>
-                                        </ul></li>
+                                            {{ $timeManagement = round($seeker['avg_time_management'],1) }}
+                                            <li ><span {{ (!empty($timeManagement)) ? (floor($timeManagement)>=1 ? "class=bg-ember" : "") : "" }}></span></li>
+                                            <li><span {{ (!empty($timeManagement)) ? (floor($timeManagement)>=2 ? "class=bg-ember" : "") : "" }}></span></li>
+                                            <li><span {{ (!empty($timeManagement) && floor($timeManagement)>=3) ? "class=bg-ember" : "" }}></span></li>
+                                            <li ><span {{ (!empty($timeManagement) && floor($timeManagement)>=4) ? "class=bg-ember" : "" }}></span></li>
+                                            <li><span {{ (!empty($timeManagement) && floor($timeManagement)>=5) ? "class=bg-ember" : "" }} ></span></li>
+                                        </ul>
+                                    </li>
                                     <li>
                                         <div class="rating_on">  Personal/Professional skill</div>
                                         <ul class="rate_me">
-                                            <li><span></span></li>
-                                            <li class="active"><span></span></li>
-                                            <li><span></span></li>
-                                            <li><span></span></li>
-                                            <li><span></span></li>
+                                            {{ $skillsRating = round($seeker['avg_skills'],1) }}
+                                            <li ><span {{ (!empty($skillsRating)) ? (floor($skillsRating)>1 ? "class=bg-red" : "") : "" }}></span></li>
+                                            <li><span {{ (!empty($skillsRating)) ? (floor($skillsRating)>2 ? "class=bg-red" : "") : "" }}></span></li>
+                                            <li><span {{ (!empty($skillsRating) && floor($skillsRating)>=3) ? "class=bg-red" : "" }}></span></li>
+                                            <li><span {{ (!empty($skillsRating) && floor($skillsRating)>=4) ? "class=bg-red" : "" }}></span></li>
+                                            <li><span {{ (!empty($skillsRating) && floor($skillsRating)>=5) ? "class=bg-red" : "" }}></span></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -223,7 +226,7 @@
                             <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
                                     data-target="#ShortListMessageBox" data-seekerId="{{ $seeker['seeker_id'] }}">Message</button>
                             @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY && $seeker['avg_rating']==null)
-                            <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-l-5" >Rate seeker</button>
+                            <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" data-target="#ratesekeerPopup_{{ $seeker['seeker_id'] }}">Rate seeker</button>
                             @endif
                             @elseif($key==\App\Models\JobLists::SHORTLISTED)
                             <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30" data-toggle="modal" 
@@ -280,7 +283,7 @@
 
 @section('js')
 <script type="text/javascript">
-    
+
 var urlFav = "{{ url('recruiter/markFavourite') }}";
 var socketUrl = "{{ url('') }}:3000";
 var userId = "{{ Auth::id() }}";

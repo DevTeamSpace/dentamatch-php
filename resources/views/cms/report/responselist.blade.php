@@ -9,7 +9,8 @@
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
                 <div class="panel-heading">Job List
-                    
+                    <div class="span6 pull-right" style="text-align:right"><a href="{{ url('cms/report/download/responselist') }}">Download CSV</a></div>
+                </div>
                 </div>
 
                 <div class="panel-body">

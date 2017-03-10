@@ -34,7 +34,7 @@
                         @php 
                         $dayArr = [];
                         ($seekerDetails['is_parttime_monday']==1)?array_push($dayArr,'Monday'):'';
-                        ($seekerDetails['is_parttime_tuesday']==1)?array_push($dayArr,'Tuseday'):'';
+                        ($seekerDetails['is_parttime_tuesday']==1)?array_push($dayArr,'Tuesday'):'';
                         ($seekerDetails['is_parttime_wednesday']==1)?array_push($dayArr,'Wednesday'):'';
                         ($seekerDetails['is_parttime_thursday']==1)?array_push($dayArr,'Thursday'):'';
                         ($seekerDetails['is_parttime_friday']==1)?array_push($dayArr,'Friday'):'';
@@ -77,7 +77,7 @@
                 @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::SHORTLISTED)
                 <h6>SHORTLISTED</h6>
                 <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30" data-toggle="modal" 
-                                    data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
+                data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::HIRED }}" class="btn btn-primary pd-l-20 pd-r-20">Hire</button>
                 @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::HIRED)
                 <h6>HIRED</h6>
@@ -85,108 +85,108 @@
                 @else
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pd-l-30 pd-r-30">Invite</button>    
                 @endif    
-        </div>
-    </form>
-</div>
-
-<div class="pd-t-60">
-    <div class="leftCircle">
-        <div class="searchResultHeading">
-            <h5>ABOUT ME</h5>
-            <p>{{$seekerDetails['about_me']}}</p>
-        </div>
-
-        <div class="searchResultHeading pd-t-20">
-            <h5>LOCATION</h5>
-            <p>{{$seekerDetails['preferred_job_location']}}</p>
-        </div>
-
-        <div class="searchResultHeading pd-t-20">
-            <h5>EXPERIENCE</h5>
-            @if(!empty($seekerDetails['experience']))
-            @foreach($seekerDetails['experience'] as $experience)
-                <div class="row">   
-                <div class="col-sm-4 exprience">
-                    <dl>
-                        <dt>
-                            <div class="expTitle">{{$experience['jobtitle_name']}} 
-                                <span>({{(round($experience['months_of_expereince']/12,0)!=0?round($experience['months_of_expereince']/12,0)." year":"")." ".(round($experience['months_of_expereince']%12,0)!=0?round($experience['months_of_expereince']%12,0)." month":"")}})</span>
-                            </div>
-                            {{$experience['office_name']}}
-                        </dt>
-                        <dd>{{$experience['office_address']}}</dd>
-                        <dd>{{$experience['city']}}</dd> 
-                    </dl>
-                </div>
-                <div class="col-sm-4 exprience">
-                    <dl>
-                        <dt>
-                            <div class="expTitle">Reference 1</div>
-                            {{$experience['reference1_name']}}
-                        </dt>
-                        <dd>{{$experience['reference1_mobile']}}</dd>
-                        <dd>{{$experience['reference1_email']}}</dd>                 
-                    </dl>
-                </div>
-                <div class="col-sm-4 exprience">
-                    <dl>
-                        <dt>
-                            <div class="expTitle">Reference 2</div>
-                            {{$experience['reference2_name']}}
-                        </dt>
-                        <dd>{{$experience['reference2_mobile']}}</dd>
-                        <dd>{{$experience['reference2_email']}}</dd>                 
-                    </dl>
-                </div>
             </div>
-            @endforeach
-            @endif
-        </div>    
-
-
-        <div class="searchResultHeading pd-t-20">
-            <h5>DENTAL SCHOOL / TRAINING / GRADUATIONS</h5>
-            @if(!empty($seekerDetails['schoolings']))
-            @foreach($seekerDetails['schoolings'] as $schoolings)
-            <div class="pd-t-10 keySkills">
-                <b>{{$schoolings['school_title']." (".$schoolings['year_of_graduation'].")"}}</b>
-                <p>{{$schoolings['school_name']}}</p>
-            </div>
-            @endforeach
-            @endif
-        </div>
-
-        <div class="searchResultHeading pd-t-20">
-            <h5>KEY SKILLS</h5>
-        </div>
-
-        @if(!empty($seekerDetails['skills']))
-        @foreach($seekerDetails['skills'] as $skills)
-        <div class="pd-t-10 keySkills">
-            <b>{{$skills['skill_title']}}</b>
-            <p>{{$skills['skill_name']}}</p>
-        </div>
-        @endforeach
-        @endif
-        
-        <div class="searchResultHeading pd-t-20">
-            <h5>AFFILIATIONS</h5>
-            <P>{{$seekerDetails['affiliations']}}</P>
-        </div>
-
-        @if(!empty($seekerDetails['certificate']))
-        @foreach($seekerDetails['certificate'] as $certificate)
-        <div class="searchResultHeading pd-t-20 smallSquare">
-            <h5>{{$certificate['certificate_name']}}</h5>
-            <P>
-                <img class="img-rounded" src="{{ url('image/66/66/?src=' .$certificate['image_path']) }}">
-                Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span></P>
-            </div>
-            @endforeach
-            @endif
-        </div>  
+        </form>
     </div>
-</div>  
+
+    <div class="pd-t-60">
+        <div class="leftCircle">
+            <div class="searchResultHeading">
+                <h5>ABOUT ME</h5>
+                <p>{{$seekerDetails['about_me']}}</p>
+            </div>
+
+            <div class="searchResultHeading pd-t-20">
+                <h5>LOCATION</h5>
+                <p>{{$seekerDetails['preferred_job_location']}}</p>
+            </div>
+
+            <div class="searchResultHeading pd-t-20">
+                <h5>EXPERIENCE</h5>
+                @if(!empty($seekerDetails['experience']))
+                @foreach($seekerDetails['experience'] as $experience)
+                <div class="row">   
+                    <div class="col-sm-4 exprience">
+                        <dl>
+                            <dt>
+                                <div class="expTitle">{{$experience['jobtitle_name']}} 
+                                    <span>({{(round($experience['months_of_expereince']/12,0)!=0?round($experience['months_of_expereince']/12,0)." year":"")." ".(round($experience['months_of_expereince']%12,0)!=0?round($experience['months_of_expereince']%12,0)." month":"")}})</span>
+                                </div>
+                                {{$experience['office_name']}}
+                            </dt>
+                            <dd>{{$experience['office_address']}}</dd>
+                            <dd>{{$experience['city']}}</dd> 
+                        </dl>
+                    </div>
+                    <div class="col-sm-4 exprience">
+                        <dl>
+                            <dt>
+                                <div class="expTitle">Reference 1</div>
+                                {{$experience['reference1_name']}}
+                            </dt>
+                            <dd>{{$experience['reference1_mobile']}}</dd>
+                            <dd>{{$experience['reference1_email']}}</dd>                 
+                        </dl>
+                    </div>
+                    <div class="col-sm-4 exprience">
+                        <dl>
+                            <dt>
+                                <div class="expTitle">Reference 2</div>
+                                {{$experience['reference2_name']}}
+                            </dt>
+                            <dd>{{$experience['reference2_mobile']}}</dd>
+                            <dd>{{$experience['reference2_email']}}</dd>                 
+                        </dl>
+                    </div>
+                </div>
+                @endforeach
+                @endif
+            </div>    
+
+
+            <div class="searchResultHeading pd-t-20">
+                <h5>DENTAL SCHOOL / TRAINING / GRADUATIONS</h5>
+                @if(!empty($seekerDetails['schoolings']))
+                @foreach($seekerDetails['schoolings'] as $schoolings)
+                <div class="pd-t-10 keySkills">
+                    <b>{{$schoolings['school_title']." (".$schoolings['year_of_graduation'].")"}}</b>
+                    <p>{{$schoolings['school_name']}}</p>
+                </div>
+                @endforeach
+                @endif
+            </div>
+
+            <div class="searchResultHeading pd-t-20">
+                <h5>KEY SKILLS</h5>
+            </div>
+
+            @if(!empty($seekerDetails['skills']))
+            @foreach($seekerDetails['skills'] as $skills)
+            <div class="pd-t-10 keySkills">
+                <b>{{$skills['skill_title']}}</b>
+                <p>{{$skills['skill_name']}}</p>
+            </div>
+            @endforeach
+            @endif
+            
+            <div class="searchResultHeading pd-t-20">
+                <h5>AFFILIATIONS</h5>
+                <P>{{$seekerDetails['affiliations']}}</P>
+            </div>
+
+            @if(!empty($seekerDetails['certificate']))
+            @foreach($seekerDetails['certificate'] as $certificate)
+            <div class="searchResultHeading pd-t-20 smallSquare">
+                <h5>{{$certificate['certificate_name']}}</h5>
+                <P>
+                    <img class="img-rounded" src="{{ url('image/66/66/?src=' .$certificate['image_path']) }}">
+                    Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span></P>
+                </div>
+                @endforeach
+                @endif
+            </div>  
+        </div>
+    </div>  
 </div>
 @endsection
 

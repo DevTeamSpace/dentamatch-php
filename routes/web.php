@@ -116,6 +116,7 @@
             Route::get('calender', 'web\CalenderController@getCalender');
             Route::get('calender-details', 'web\CalenderController@getCalenderDetails');
             Route::get('recruiter/markFavourite/{seekerId}', 'web\FavoriteJobseekerController@getMarkFavourite');
+            Route::post('recruiter/rating', 'web\RatingController@createOrUpdate');
         });
 
 Route::group(['middleware' => 'termCondition'], function () {
@@ -259,6 +260,9 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('cancel', 'Cms\ReportController@listCancel');
         Route::get('responselist', 'Cms\ReportController@jobResponse');
         Route::get('response', 'Cms\ReportController@jobResponseList');
+        Route::get('search-location', 'Cms\ReportController@searchJobByLocation');
+        Route::get('location', 'Cms\ReportController@searchCountbyLocation');
+        Route::get('download/{type}', 'Cms\ReportController@downloadCsv');
     });
     
     Route::get('push-notification', 'Cms\JobSeekerController@sendPushAndroid');

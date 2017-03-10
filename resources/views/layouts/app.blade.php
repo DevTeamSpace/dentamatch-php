@@ -18,6 +18,8 @@
     <link href="{{ asset('bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{{ asset('styles/jquery.dataTables.css')}}" >
 <link rel="stylesheet" type="text/css" href="{{ asset('styles/dataTables.responsive.css')}}" >
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
 @yield('css')
 @yield('innerViewCss')
     <style>
@@ -89,6 +91,7 @@
                                 <li><a href="{{ url('cms/report/index') }}">Job Lists</a></li>
                                 <li><a href="{{ url('cms/report/cancellist') }}">Cancel Lists</a></li>
                                 <li><a href="{{ url('cms/report/responselist') }}">Response Rate</a></li>
+                                <li><a href="{{ url('cms/report/search-location') }}">Search Location</a></li>
                             </ul>
                         </li>
                         
@@ -121,6 +124,7 @@
     <script type="text/javascript" src="{{ asset('script/jquery.dataTables.min.js')}}" ></script>
     <script type="text/javascript" src="{{ asset('script/dataTables.responsive.js')}}"></script>
     <script type="text/javascript" src="{{ asset('script/datepicker/js/bootstrap-datepicker.js')}}"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
 <link rel="stylesheet" type="text/css" href="{{ asset('script/datepicker/css/datepicker.css')}}" >
 <script type="text/javascript" src="{{ asset('script/common.js')}}" ></script>
     @yield('js')

@@ -29,6 +29,7 @@ class SearchFilter extends Model
         }
         $searchFilterModel->search_filter = json_encode($data);
         $searchFilterModel->user_id = $userId;
+        $searchFilterModel->city = $data['city'];
         $searchFilterModel->save();
     }
     

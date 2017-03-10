@@ -218,6 +218,20 @@ $(function () {
         ]
     });
     
+    $('#jobbylocation_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'report/location',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'city', name: 'city',searchable:false},
+            {data: 'searchcount', name: 'searchcount',searchable:false},
+        ]
+    });
+    
     $('#jobseeker_verification').DataTable({
         processing: true,
         serverSide: true,

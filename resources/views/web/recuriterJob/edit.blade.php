@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <div class="commonBox cboxbottom padding-dentaltemplate">
+        <div class="commonBox cboxbottom ">
 
             <div class="form-group custom-select">
                 <input hidden value="{{$jobId}}" id="jobIdValue">
@@ -103,7 +103,7 @@
         </div>
         <div class="form-group">
             <label>Dental Office Address</label>
-            <input type="text" value="" data-bind="click: $root.getOfficeName, value: selectedOfficeAddress, event: {change: $root.getOfficeName}" id="officeAddress" name="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="Required">
+            <input type="text" value="" data-bind="value: selectedOfficeAddress, event: {focus: $root.getOfficeName}" id="officeAddress" name="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="Required">
             <p class="error-div" data-bind="text: $root.locationError"></p>
             <!--<input type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="office address required" data-bind="value: selectedOfficeAddress">-->
         </div>

@@ -104,6 +104,10 @@
         me.everydayEnd = ko.observable(null);
         
         me.everyDayWorkHour = function(d, e){
+            if(d.officeWorkingHours.everydayStart() == null || d.officeWorkingHours.everydayStart() == ""){
+                d.officeWorkingHours.everydayStart('06:00 AM');
+                d.officeWorkingHours.everydayEnd('09:00 PM');
+            }
             me.isMondayWork(false);
             me.isTuesdayWork(false);
             me.isWednesdayWork(false);
@@ -114,6 +118,48 @@
         };
         
         me.otherDayWorkHour = function (d, e){
+            if($(e.target).attr('id').indexOf('mon') >= 0){
+                if(d.officeWorkingHours.mondayStart() == null || d.officeWorkingHours.mondayStart() == "undefined"){
+                    d.officeWorkingHours.mondayStart('06:00 AM');
+                    d.officeWorkingHours.mondayEnd('09:00 PM');
+                }
+            }
+            if($(e.target).attr('id').indexOf('tue') >= 0){
+                if(d.officeWorkingHours.tuesdayStart() == null || d.officeWorkingHours.tuesdayStart() == "undefined"){
+                    d.officeWorkingHours.tuesdayStart('06:00 AM');
+                    d.officeWorkingHours.tuesdayEnd('09:00 PM');
+                }
+            }
+            if($(e.target).attr('id').indexOf('wed') >= 0){
+                if(d.officeWorkingHours.wednesdayStart() == null || d.officeWorkingHours.wednesdayStart() == "undefined"){
+                    d.officeWorkingHours.wednesdayStart('06:00 AM');
+                    d.officeWorkingHours.wednesdayEnd('09:00 PM');
+                }
+            }
+            if($(e.target).attr('id').indexOf('thu') >= 0){
+                if(d.officeWorkingHours.thursdayStart() == null || d.officeWorkingHours.thursdayStart() == "undefined"){
+                    d.officeWorkingHours.thursdayStart('06:00 AM');
+                    d.officeWorkingHours.thursdayEnd('09:00 PM');
+                }
+            }
+            if($(e.target).attr('id').indexOf('fri') >= 0){
+                if(d.officeWorkingHours.fridayStart() == null || d.officeWorkingHours.fridayStart() == "undefined"){
+                    d.officeWorkingHours.fridayStart('06:00 AM');
+                    d.officeWorkingHours.fridayEnd('09:00 PM');
+                }
+            }
+            if($(e.target).attr('id').indexOf('sat') >= 0){
+                if(d.officeWorkingHours.saturdayStart() == null || d.officeWorkingHours.saturdayStart() == "undefined"){
+                    d.officeWorkingHours.saturdayStart('06:00 AM');
+                    d.officeWorkingHours.saturdayEnd('09:00 PM');
+                }
+            }
+            if($(e.target).attr('id').indexOf('sun') >= 0){
+                if(d.officeWorkingHours.sundayStart() == null || d.officeWorkingHours.sundayStart() == "undefined"){
+                    d.officeWorkingHours.sundayStart('06:00 AM');
+                    d.officeWorkingHours.sundayEnd('09:00 PM');
+                }
+            }
             me.isEverydayWork(false);
         };
         

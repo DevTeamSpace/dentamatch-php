@@ -1,0 +1,48 @@
+div.tipi {
+    background-color: #1f1f1f;
+    color: #f1f1f1;
+    position: absolute;
+    padding: 5px;
+    display: none;
+    font-size: 12px;
+}
+
+div.rating-container {
+    text-align: center;
+    /* padding-top: 20px;
+    */
+}
+
+div.rating-container div.stars {
+    display: inline-block;
+}
+
+div.rating-container div.stars i:first-child {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-left: 1px solid #d7d7d7;
+}
+
+div.rating-container div.stars i:last-child {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+div.rating-container div.stars i {
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+    width: 29px;
+    height: 27px;
+    border-width: 1px 1px 1px 0;
+    border-color: #d7d7d7;
+    border-style: solid;
+    /*  padding: 3px; */
+}
+
+div.rating-container span {
+    display: inline-block;
+    margin-left: 5px;
+    position: relative;
+    top: -10px;
+}
