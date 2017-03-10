@@ -70,9 +70,11 @@ $(document).ready(function () {
 
             if(chatMsg!=''){
                 socket.emit('sendMessage', data, function(msgObj){
-                    var appendHtml = writeHtmlBlock(msgObj);
-                    $('#user-chat-content_'+seekerId).append(appendHtml);
-                    chatScroll();
+                    if(!msgObj.blocked){
+                        var appendHtml = writeHtmlBlock(msgObj);
+                        $('#user-chat-content_'+seekerId).append(appendHtml);
+                        chatScroll();
+                    }
                 });
                 $(this).closest('.msgDiv').find('textarea').val('');
             }
@@ -137,7 +139,7 @@ $(document).ready(function () {
         }
 
         function blockUnblockSeeker(blockStatus){
-            socket.emit('blockUnblock',{ fromId:fromId, toId:currentSel, blockStatus:blockStatus });
+            socket.emit('blockUnblock',{ fromId:fromId, toId:currentSel, blockStatus:blockStatus },function(callBackObj){});
         }
 
         socket.on('getMessages', function (msgDateArr) {
