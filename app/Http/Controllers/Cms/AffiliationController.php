@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Cms;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use Yajra\Datatables\Datatables;
@@ -65,6 +65,7 @@ class AffiliationController extends Controller
     public function store(Request $request)
     {
         try{
+            $reqData = $request->all();
             $rules = array(
                 'affiliation' => array('required','unique:affiliations,affiliation_name'),
             );
@@ -79,7 +80,12 @@ class AffiliationController extends Controller
                 $msg = trans('messages.affiliation_added');
             }
 
-            $this->validate($request, $rules);
+            $validator = Validator::make($reqData, $rules);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                                ->withErrors($validator)
+                                ->withInput();
+                }
 
             $affiliation->affiliation_name = trim($request->affiliation);
             $affiliation->is_active = ($request->is_active)?1:0;

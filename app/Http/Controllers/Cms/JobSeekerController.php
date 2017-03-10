@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Cms;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use Yajra\Datatables\Datatables;
@@ -77,10 +77,16 @@ class JobSeekerController extends Controller
     public function store(Request $request)
     {
         try{
+        $reqData = $request->all();
         if(isset($request->id)){
             $rules['firstname'] = "Required";
             $rules['lastname'] = "Required";
-            $this->validate($request, $rules);
+            $validator = Validator::make($reqData, $rules);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                                ->withErrors($validator)
+                                ->withInput();
+                }
             UserProfile::where('user_id', $request->id)->update(['first_name' => $request->firstname,'last_name' => $request->lastname]);
             $activationStatus  = ($request->is_active)?1:0;
             User::where('id',$request->id)->update(['is_active' => $activationStatus]);
@@ -90,7 +96,12 @@ class JobSeekerController extends Controller
             $rules['firstname'] = "Required";
             $rules['lastname'] = "Required";
             $rules['email'] = 'required|email|Unique:users,email';
-            $this->validate($request, $rules);
+            $validator = Validator::make($reqData, $rules);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                                ->withErrors($validator)
+                                ->withInput();
+                }
             $reqData = $request->all();
             $user =  array(
                 'email' => $reqData['email'],

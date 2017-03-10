@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Cms;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Session;
 use App\Models\Configs;
@@ -39,10 +39,16 @@ class ConfigurationController extends Controller
     public function store(Request $request)
     {
         try{
+        $reqData = $request->all();
         $rules = array(
             'radius' => array('required'),
         );
-        $this->validate($request, $rules);
+        $validator = Validator::make($reqData, $rules);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                                ->withErrors($validator)
+                                ->withInput();
+                }
         Configs::where('config_name', 'SEARCHRADIUS')->update(['config_data' => $request->radius]);
         $msg = trans('messages.radius_update');
         Session::flash('message',$msg);
