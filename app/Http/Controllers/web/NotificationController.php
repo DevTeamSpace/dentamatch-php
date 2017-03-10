@@ -17,7 +17,7 @@ class NotificationController extends Controller {
     
     public function getNotificationList(){
         $userId = Auth::user()->id;
-        $notificationList = Notification::where('receiver_id', '=', $userId)->orderBy('id', 'DESC')->paginate(5);
+        $notificationList = Notification::where('receiver_id', '=', $userId)->orderBy('id', 'DESC')->paginate(10);
         Notification::where('receiver_id', '=', $userId)->update(['seen'=>1]);
         
         return View('web.notification')->with('notificationList' , $notificationList);
@@ -26,7 +26,7 @@ class NotificationController extends Controller {
     
     public function deleteNotification($id){
         Notification::findOrFail($id)->delete();
-        Session::flash('message',trans('messages.location_deleted'));
+        return redirect('notification-lists');
     }
     
     

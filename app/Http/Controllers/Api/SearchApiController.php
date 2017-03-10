@@ -314,11 +314,11 @@ class SearchApiController extends Controller {
                         ->where('recruiter_jobs.id',$jobId)->first();
         $jobseekerDetails = UserProfile::getUserProfile($senderId);
         if($notificationType == Notification::JOBSEEKERAPPLIED){
-            $message = $jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'has applied for '.$receiverDetails->jobtitle_name;
+            $message = '<a href="/job/details/'.$jobId.'" ><b>'.$jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'</b> has applied for '.$receiverDetails->jobtitle_name;
         }else if($notificationType == Notification::JOBSEEKERACCEPTED){
-            $message = $jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'has accepted for '.$receiverDetails->jobtitle_name;
+            $message = '<a href="/job/details/'.$jobId.'" ><b>'.$jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'</b> has accepted for '.$receiverDetails->jobtitle_name;
         }else if($notificationType == Notification::JOBSEEKERREJECTED){
-            $message = $jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'has rejected for '.$receiverDetails->jobtitle_name;
+            $message = '<a href="/job/details/'.$jobId.'" ><b>'.$jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'</b> has rejected for '.$receiverDetails->jobtitle_name;
         }
         $notificationDetails = ['image' => $jobseekerDetails['profile_pic'],'message' => $message];
         $data = ['receiver_id'=>$receiverDetails->user_id,'job_list_id' => $jobId,'sender_id' => $senderId, 'notification_data'=>json_encode($notificationDetails),'notification_type' => $notificationType];
