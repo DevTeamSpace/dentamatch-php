@@ -138,7 +138,9 @@ $(document).ready(function() {
             socket.emit('getHistory', { fromId: fromId, toId: currentSel, pageNo: datapage, source: 1 });
         }
         function blockUnblockSeeker(blockStatus){
-            socket.emit('blockUnblock',{ fromId:fromId, toId:currentSel, blockStatus:blockStatus },function(callBackObj){});
+            socket.emit('blockUnblock',{ fromId:fromId, toId:currentSel, blockStatus:blockStatus },function(callback){
+                console.log(callback);
+            });
         }
 
         socket.on('getMessages', function(msgDateArr) {
