@@ -228,7 +228,8 @@ class JobLists extends Model {
                 ->addSelect(DB::raw("group_concat(temp_job_dates.job_date) AS temp_job_dates"))
                 ->addSelect(DB::raw("avg(punctuality) as avg_punctuality"),DB::raw("avg(time_management) as avg_time_management"),
                         DB::raw("avg(skills) as avg_skills"),DB::raw("avg(teamwork) as avg_teamwork"),DB::raw("avg(onemore) as avg_onemore"))
-                ->addSelect(DB::raw("(avg(punctuality)+avg(time_management)+avg(skills)+avg(teamwork)+avg(onemore))/5 AS avg_rating"))
+                ->addSelect(DB::raw("(avg(punctuality)+avg(time_management)+avg(skills))/3 AS avg_rating"))
+                //->addSelect(DB::raw("(avg(punctuality)+avg(time_management)+avg(skills)+avg(teamwork)+avg(onemore))/5 AS avg_rating"))
                 ->groupby('job_lists.applied_status','job_lists.seeker_id','job_lists.recruiter_job_id');
             /*$obj->leftjoin('jobseeker_temp_availability',function($query) use ($job){
                 $query->on('jobseeker_temp_availability.user_id', '=', 'job_lists.seeker_id')
