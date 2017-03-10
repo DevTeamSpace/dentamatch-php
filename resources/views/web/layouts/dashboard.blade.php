@@ -83,7 +83,7 @@
                 </li>
                 
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Smiley Care <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Session::get('userData.profile.office_name') }} <span class="caret"></span></a>
                     <ul class="dropdown-menu menuLastBox borderNone">
                        <span class="fa fa-caret-up notificationCaret"></span>
                        <li><span class="icon icon-account-circle navRightIcon"></span><a href="{{ url('edit-profile') }}"><b>{{Auth::user()->email}}</b><br>	<button type="button" class="btn btn-primary rghtMenuBtn pd-l-10 pd-r-10">View Profile</button></a>
