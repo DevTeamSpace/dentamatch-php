@@ -209,7 +209,7 @@ class JobLists extends Model {
             $obj->addSelect('jobseeker_profiles.is_parttime_monday', 'jobseeker_profiles.is_parttime_tuesday', 'jobseeker_profiles.is_parttime_wednesday', 'jobseeker_profiles.is_parttime_thursday', 'jobseeker_profiles.is_parttime_friday', 'jobseeker_profiles.is_parttime_saturday', 'jobseeker_profiles.is_parttime_sunday');
         } elseif ($job['job_type'] == RecruiterJobs::TEMPORARY) {
             $obj->leftjoin('job_ratings', function($query) {
-                        $query->on('job_ratings.seeker_id', '=', 'job_lists.seeker_id');
+                        $query->on('job_ratings.recruiter_job_id', '=', 'job_lists.recruiter_job_id');
                         //->where('job_ratings.recruiter_job_id', '=', 'job_lists.recruiter_job_id')
                         //->whereNotNull('job_lists.temp_job_id');
                 })
@@ -217,7 +217,7 @@ class JobLists extends Model {
                     $query->on('favourites.seeker_id','=','job_lists.seeker_id')
                         ->where('favourites.recruiter_id',Auth::user()->id);
                 })
-                ->addSelect('job_ratings.id as ratingId')
+                ->addSelect('job_ratings.seeker_id as ratingId')
                 ->addSelect('punctuality')
                 ->addSelect('time_management')
                 ->addSelect('skills')
