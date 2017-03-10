@@ -119,7 +119,7 @@ class UserApiController extends Controller {
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                         ->select(
                                 'user_groups.group_id', 
-                                'users.email','users.id',
+                                'users.email','users.id','users.is_active',
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name',
                                 'jobseeker_profiles.profile_pic',
@@ -132,7 +132,7 @@ class UserApiController extends Controller {
                         ->where('users.id', $userId)
                         ->first();
             if($userData['group_id'] == 3){
-                if($userData['is_verified'] == 1){
+                if($userData['is_verified'] == 1 && $userData['is_active'] == 1){
                         $device = Device::where('user_id', $userId)->orWhere('device_id', $reqData['deviceId'])->first();
                         $reqData['deviceOs'] = isset($reqData['deviceOs'])?$reqData['deviceOs']:'';
                         $reqData['appVersion'] = isset($reqData['appVersion'])?$reqData['appVersion']:'';
