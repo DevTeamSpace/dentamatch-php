@@ -67,11 +67,11 @@
                         <ul class="notificationList">
                             @if(!empty($notificationList['data']))
                             @foreach($notificationList['data'] as $notification)
-                            <?php $data = json_decode($notification->notification_data) ?>
+                            <?php $data = json_decode($notification->notification_data); ?>
                             <li>
-                                <p><strong>{{ $data->message }}</strong></p>
+                                <p ><strong><?php echo strip_tags($data->message); ?></strong></p>
                                 <span>{{ $notification->created_at->diffForHumans() }}</span>
-                                <i class="icon icon-deleteicon notificationdelIcon"></i>
+                                <a href="{{ url($notification->id.'/delete-notification') }}"><i class="icon icon-deleteicon notificationdelIcon"></i></a>
                             </li>
                             @endforeach
                             @endif

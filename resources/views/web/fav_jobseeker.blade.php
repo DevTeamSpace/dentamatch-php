@@ -8,7 +8,7 @@
         <div class="media-left ">
             <div class="img-holder">
 
-                <img class="media-object img-circle wd-66" src="http://placehold.it/66x66" alt="...">
+                <img class="media-object img-circle wd-66" src="{{ url("image/66/66/?src=" .$fav->profile_pic) }}" alt="...">
             </div>
         </div>
         <div class="media-body row">
@@ -65,7 +65,7 @@
                             </select>
                         </div>
                         <div class="text-right mr-t-20 mr-b-30">
-                            <button type="button" class="btn btn-link mr-r-20">Create Job</button>
+                            <button type="button" class="modalClick btn btn-link mr-r-20" data-toggle="modal" data-target="#jobTemplate">Create Job</button>
                             <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Send</button>
                         </div>
                     </form>

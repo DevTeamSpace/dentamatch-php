@@ -147,14 +147,14 @@ class JobSeekerController extends Controller
                                 'users.email','users.id',
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name',
-                                'users.is_verified'
+                                'users.is_verified','users.is_active'
                                 )
                         ->where('user_groups.group_id', 3)
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
                 ->removeColumn('id')
                 ->addColumn('active', function ($userData) {
-                	$active = ($userData->is_verified == 1) ? 'Yes':'No';
+                	$active = ($userData->is_active == 1) ? 'Yes':'No';
                     return $active;
                 })
                 ->addColumn('action', function ($userData) {
