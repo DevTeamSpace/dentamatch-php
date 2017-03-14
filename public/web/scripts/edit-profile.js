@@ -535,7 +535,7 @@
         d.everydayTimeError('');
         d.phoneNumberError('');
         d.officeTypeError('');
-        d.locationError('');
+//        d.locationError('');
         d.officeInfoError('');
         
         if(d.officeType().length == 0){
@@ -616,7 +616,6 @@
                 d.officeInfoError('Office info cannot be greater than 500 characters.');
             }
         }
-        return false;
         
         if(d.errors() == true){
             return false;
