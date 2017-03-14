@@ -28,6 +28,7 @@
         me.locationError = ko.observable('');
         me.officeTypeError = ko.observable('');
         me.errorMessage = ko.observable('');
+        me.officeInfoError = ko.observable('');
 
         me._init = function (d) {
             if(typeof d == "undefined"){
@@ -534,6 +535,8 @@
         d.everydayTimeError('');
         d.phoneNumberError('');
         d.officeTypeError('');
+        d.locationError('');
+        d.officeInfoError('');
         
         if(d.officeType().length == 0){
             d.officeTypeError('Please select atleast one type,');
@@ -593,10 +596,27 @@
             }
         }
         
+        if(d.officeAddress() == null || d.officeAddress() == ""){
+            d.locationError('Please enter address');
+            return false;
+        }
+        
         if(d.officePhone() == null || d.officePhone() == ''){
             d.phoneNumberError('Please enter phone number.');
             return false;
         }
+        
+        if(d.officePhone().length > 10){
+            d.phoneNumberError('Phone number should be of 10 digits.');
+            return false;
+        }
+        
+        if(d.officeInfo() != ""){
+            if(d.officeInfo().length > 500){
+                d.officeInfoError('Office info cannot be greater than 500 characters.');
+            }
+        }
+        return false;
         
         if(d.errors() == true){
             return false;
