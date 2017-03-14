@@ -171,7 +171,7 @@ class SearchApiController extends Controller {
                     $jobExists->applied_status = JobLists::CANCELLED;
                     $jobExists->cancel_reason = $reqData['cancelReason'];
                     $jobExists->save();
-                    
+                    $this->notifyAdmin($reqData['jobId'],$userId,Notification::JOBSEEKERCANCELLED);
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_cancelled_success"));
                 }else{
                     $response = apiResponse::customJsonResponse(0, 201, trans("messages.job_not_applied_by_you"));
@@ -318,6 +318,8 @@ class SearchApiController extends Controller {
         }else if($notificationType == Notification::JOBSEEKERACCEPTED){
             $message = '<a href="/job/details/'.$jobId.'" ><b>'.$jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'</a></b> has accepted for '.$receiverDetails->jobtitle_name;
         }else if($notificationType == Notification::JOBSEEKERREJECTED){
+            $message = '<a href="/job/details/'.$jobId.'" ><b>'.$jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'</a></b> has rejected for '.$receiverDetails->jobtitle_name;
+        }else if($notificationType == Notification::JOBSEEKERCANCELLED){
             $message = '<a href="/job/details/'.$jobId.'" ><b>'.$jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'</a></b> has rejected for '.$receiverDetails->jobtitle_name;
         }
         $notificationDetails = ['image' => $jobseekerDetails['profile_pic'],'message' => $message];
