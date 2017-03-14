@@ -116,7 +116,7 @@ class JobSeekerProfiles extends Model
                 DB::raw("avg(skills) as skills"),DB::raw("avg(teamwork) as teamwork"),DB::raw("avg(onemore) as onemore"))
         ->addSelect(DB::raw("(avg(punctuality)+avg(time_management)+avg(skills)+avg(teamwork)+avg(onemore))/5 AS avg_rating"))
         ->groupby('jobseeker_profiles.user_id');
-
+        $obj->orderby('is_favourite','desc');
         $obj->orderby('matched_skills','desc');
         $obj->orderby('distance');
         
