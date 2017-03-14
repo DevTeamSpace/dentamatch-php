@@ -2,6 +2,11 @@
 
 @section('content')
 <div class="container mr-b-60 padding-container-template">
+    @if(Session::has('message'))
+    <p class="alert {{ Session::get('alert-class', 'alert-info') }}">
+        {{ Session::get('message') }} 
+    </p>
+    @endif
     @if(count($favJobSeeker)>0)
     @foreach($favJobSeeker as $fav)
     <div class="media jobCatbox">

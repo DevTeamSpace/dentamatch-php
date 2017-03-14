@@ -15,6 +15,7 @@ use App\Providers\NotificationServiceProvider;
 use App\Models\JobLists;
 use App\Models\RecruiterJobs;
 use App\Models\Device;
+use Session;
 
 class FavoriteJobseekerController extends Controller {
 
@@ -64,6 +65,7 @@ class FavoriteJobseekerController extends Controller {
                         'applied_status' => '1',
                     ]);
                     $this->sendPushUser(JobLists::INVITED, Auth::user()->id, $request->seekerId, $request->selectJobSeeker);
+                    Session::flash('message', trans('messages.invite_sent_success'));
                 }
             } else {
                 \App\Models\JobLists::create([
@@ -72,6 +74,7 @@ class FavoriteJobseekerController extends Controller {
                     'applied_status' => '1',
                 ]);
                 $this->sendPushUser(JobLists::INVITED, Auth::user()->id, $request->seekerId, $request->selectJobSeeker);
+                Session::flash('message', trans('messages.invite_sent_success'));
             }
             return redirect('favorite-jobseeker');
         } catch (Exception $ex) {
