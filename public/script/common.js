@@ -145,6 +145,7 @@ $(function () {
         //bFilter: false,
         columns: [
             {data: 'email', name: 'email',searchable:true},
+            {data: 'office_name', name: 'recruiter_profiles.office_name',searchable:true},
             {data: 'active', name: 'active',searchable:false},
             {data: 'action', name: 'action',searchable:false}
         ]
