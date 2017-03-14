@@ -18,7 +18,7 @@ use App\Models\Device;
 use Session;
 
 class FavoriteJobseekerController extends Controller {
-
+    
     public function getFavJobseeker(Request $request) {
         $userId = Auth::user()->id;
         $rating = "(avg(job_ratings.punctuality) + avg(job_ratings.time_management) + avg(job_ratings.skills) + avg(job_ratings.teamwork) + avg(job_ratings.onemore))/5";
@@ -41,7 +41,7 @@ class FavoriteJobseekerController extends Controller {
                 ->get();
         
         $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
-        return view('web.fav_jobseeker', ['favJobSeeker' => $favJobSeeker, 'jobDetail' => $jobDetail, 'jobTemplateModalData' => $jobTemplateModalData]);
+        return view('web.fav_jobseeker', ['favJobSeeker' => $favJobSeeker, 'jobDetail' => $jobDetail, 'jobTemplateModalData' => $jobTemplateModalData, 'navActive'=>'favseeker']);
     }
 
     public function postInviteJobseeker(Request $request) {
