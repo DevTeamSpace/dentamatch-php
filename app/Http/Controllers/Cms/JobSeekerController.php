@@ -173,7 +173,9 @@ class JobSeekerController extends Controller
                 })
                 ->addColumn('action', function ($userData) {
                     $edit = url('cms/jobseeker/'.$userData->id.'/edit');
+                    $resetPassword = url('cms/recruiter/'.$userData->id.'/adminResetPassword');
                     $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
+                    $action .= '<a href="'.$resetPassword.'"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;';
                     return $action;
                        
                 })

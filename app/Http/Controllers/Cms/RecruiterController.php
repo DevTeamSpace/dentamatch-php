@@ -205,8 +205,12 @@ class RecruiterController extends Controller
                 $msg = trans('messages.admin_recruiter_password_success');
             }
             Session::flash('message',$msg);
-
-        return redirect('cms/recruiter/index');
+            $user = UserGroup::where('user_id', $userId)->first();
+            if($user->group_id == 2){
+                return redirect('cms/recruiter/index');
+            }else{
+                return redirect('cms/jobseeker/index');
+            }
         } catch(\Exception $e) {
             Log::error($e);
             Session::flash('message',$e->getMessage());
