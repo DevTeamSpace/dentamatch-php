@@ -143,7 +143,7 @@ class RecruiterController extends Controller
     public function recruiterList(){
         try{
         $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
-                        ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'users.id')
+                        ->leftjoin('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'users.id')
                         ->select(
                                 'recruiter_profiles.office_name',
                                 'users.email','users.id',
@@ -225,7 +225,7 @@ class RecruiterController extends Controller
     public function recruiterView($id) {
         try{
             $userProfile = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
-                        ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'users.id')
+                        ->leftjoin('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'users.id')
                         ->select(
                                 'recruiter_profiles.office_name',
                                 'recruiter_profiles.office_desc',
