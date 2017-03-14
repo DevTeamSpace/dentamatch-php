@@ -180,7 +180,11 @@
                 <h5>{{$certificate['certificate_name']}}</h5>
                 <P>
                     <img class="img-rounded" src="{{ url('image/66/66/?src=' .$certificate['image_path']) }}">
-                    Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span></P>
+                    @if(!empty($certificate['validity_date']))
+                        Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span></P>
+                    @else
+                        Valid Till: N/A
+                    @endif
                 </div>
                 @endforeach
                 @endif
