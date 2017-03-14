@@ -192,6 +192,8 @@ class JobSeekerController extends Controller
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                         ->select(
                                 'users.id',
+                                'jobseeker_profiles.first_name',
+                                'jobseeker_profiles.last_name',
                                 'jobseeker_profiles.dental_state_board',
                                 'jobseeker_profiles.license_number',
                                 'jobseeker_profiles.is_job_seeker_verified'
