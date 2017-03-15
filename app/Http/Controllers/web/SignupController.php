@@ -76,7 +76,8 @@ class SignupController extends Controller {
         return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
     }
 
-    public function getTermsAndCondition() {
+    public function getTermsAndCondition(Request $request) {
+        $request->session()->set('tutorial', 1);
         return view('web.terms-conditions');
     }
 
@@ -161,11 +162,16 @@ class SignupController extends Controller {
         return redirect($redirect);
     }
 
-    public function getTutorial() {
+    public function getTutorial(Request $request) {
         try {
-            $officeType = \App\Models\OfficeType::all();
-            RecruiterProfile::where('user_id',Auth::user()->id)->update(['accept_term' => 1]);
-            return view('web.dashboard')->with('modal', 1)->with('officeType', $officeType);
+            $tutorial = $request->session()->pull('tutorial', 0);
+            if($tutorial == 1){
+                $officeType = \App\Models\OfficeType::all();
+                RecruiterProfile::where('user_id',Auth::user()->id)->update(['accept_term' => 1]);
+                return view('web.dashboard')->with('modal', 1)->with('officeType', $officeType);
+            }else{
+                return redirect('home');
+            }
         } catch (\Exception $e) {
             Log::error($e);
             return redirect('terms-conditions');
