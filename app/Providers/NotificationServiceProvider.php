@@ -93,15 +93,20 @@ class NotificationServiceProvider extends ServiceProvider {
         $notification = ['text' => $message];
         //$body = json_encode($params);
 
-        $fields = array
+        /*$fields = array
             (
             'notification' => $notification,
             'data'=>$params,
             'to' => $device_token
+        );*/
+        $fields = array
+            (
+            'data'=>$params,
+            'to' => $device_token
         );
-        $fields['data']['notificationSound'] = 'defaut';
-        $fields['data']['notificationIcon'] = 'bg_notification_icon';
-        $fields['data']['action'] = 'home';
+        //$fields['data']['notificationSound'] = 'defaut';
+        //$fields['data']['notificationIcon'] = 'bg_notification_icon';
+        //$fields['data']['action'] = 'home';
         $headers = array
             (
             'Authorization: key=' . $config['server_key'],
