@@ -92,7 +92,7 @@
                 Route::post('edit-recruiter-office', 'web\UserProfileController@postEditRecruiterOffice');
                 Route::post('delete-office', 'web\UserProfileController@postDeleteOffice');
                 Route::get('notification-lists', 'web\NotificationController@getNotificationList');
-                Route::delete('{id}/delete-notification', 'web\NotificationController@deleteNotification');
+                Route::get('{id}/delete-notification', 'web\NotificationController@deleteNotification');
             });
             Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails');
             Route::get('/get-location/{zip}', 'web\UserProfileController@checkValidLocation');
@@ -121,7 +121,7 @@
 
 Route::group(['middleware' => 'termCondition'], function () {
     Route::get('terms-conditions', 'web\SignupController@getTermsAndCondition');
-    Route::get('tutorial', 'web\SignupController@getTutorial');
+    Route::get('tutorial', 'web\SignupController@getTutorial')->middleware('officeDetails');;
 });
 });
 });
@@ -239,6 +239,7 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::post('store', 'Cms\RecruiterController@store');
         Route::post('storeAdminResetPassword', 'Cms\RecruiterController@storeAdminResetPassword');
         Route::get('{id}/adminResetPassword', 'Cms\RecruiterController@adminResetPassword');
+        Route::get('{id}/view', 'Cms\RecruiterController@recruiterView');
     });
     
     Route::group(['prefix' => 'notify/'], function() {

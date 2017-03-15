@@ -162,4 +162,9 @@ return [
     'office_updated' => 'Office updated successfully',
     'address_already_associated' => 'Address already associated with another office, please use some other address.',
     'temp_job_pending_rating_command' => 'Pending rating for jobseekeer for job : ',
+    'rate_previous_jobseeker' => 'Please rate the hired job seeker for the previous job first',
+    
+    'invite_sent_success' => 'Invitation sent',
+    
+    'already_register_as_recruiter'=>'You are already registered as recruiter',
 ];

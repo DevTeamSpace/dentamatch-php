@@ -19,6 +19,7 @@
                           <thead>
                               <tr>
                                   <th>Email</th>
+                                  <th>Dental Office Name</th>
                                   <th>Active</th>
                                   <th>Action</th>
                               </tr>

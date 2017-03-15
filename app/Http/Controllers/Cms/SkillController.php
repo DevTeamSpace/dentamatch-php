@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Cms;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use Yajra\Datatables\Datatables;
@@ -66,6 +66,7 @@ class SkillController extends Controller
     public function store(Request $request)
     {
         try{
+        $reqData = $request->all();
         $rules = array(
             'parent_skill' => array('required','integer'),
             'skill' => array('required','unique:skills,skill_name,parent_id')
@@ -81,7 +82,12 @@ class SkillController extends Controller
             $skill = new Skills;
             $msg = trans('messages.skill_added');
         }
-        $this->validate($request, $rules);
+        $validator = Validator::make($reqData, $rules);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                                ->withErrors($validator)
+                                ->withInput();
+                }
         $skill->parent_id = trim($request->parent_skill);
         $skill->skill_name = trim($request->skill);
         $skill->is_active = ($request->is_active)?1:0;

@@ -208,6 +208,7 @@ class ReportController extends Controller
     }
     
     public function downloadCsv($type){
+        $arr = []; 
         if($type == 'cancellist'){
             $data = JobLists::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
                 ->where('job_lists.applied_status', JobLists::CANCELLED)
@@ -216,21 +217,52 @@ class ReportController extends Controller
                 ->addSelect(DB::raw("count(job_lists.id) as cancelno"))
                 ->groupby('jobseeker_profiles.user_id')
                 ->orderBy('jobseeker_profiles.first_name', 'asc')->get();
-            
-            $list = $data->toArray();
+           
+        $arr['user_id'] ="User Id";
+        $arr['first_name'] = "First Name";
+        $arr['last_name'] = 'Last Name';
+        $arr['cancelno'] = 'No of cancellation';   
+        }else if ($type == 'responselist'){
+            $data = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+                ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
+                ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
+                ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
+                ->leftjoin('job_lists','job_lists.recruiter_job_id','=','recruiter_jobs.id')
+                ->select('recruiter_jobs.id','recruiter_jobs.job_type',
+                        'job_titles.jobtitle_name','recruiter_profiles.office_name')
+                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 1, 1,0)) AS invited"))
+                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 2, 1,0)) AS applied"))
+                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 3, 1,0)) AS sortlisted"))
+                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 4, 1,0)) AS hired"))
+                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 5, 1,0)) AS rejected"))
+                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 6, 1,0)) AS cancelled"))
+                ->groupby('recruiter_jobs.id')
+                ->orderBy('recruiter_jobs.id', 'desc')->get();
+            $arr['office_name'] ="Office Name";
+            $arr['job_titles'] = "Job Title";
+            $arr['invited'] = 'Invited';
+            $arr['applied'] = 'Applied';
+            $arr['sortlisted'] = 'Sortlisted';
+            $arr['hired'] = 'Hired';
+            $arr['rejected'] = 'Rejected';
+            $arr['cancelled'] = 'Cancelled';
+        }else{
+            $data = SearchFilter::select('city')
+                ->addSelect(DB::raw("count(id) as searchcount"))
+                ->groupby('city')
+                ->orderBy('city', 'asc')->get();
+            $arr['city'] ="City";
+            $arr['searchcount'] = "Count";
         }
+        $list = $data->toArray();
         
-        $arr = []; 
         header("Content-type: application/octet-stream");
-        header("Content-Disposition: attachment; filename=exportData.csv");
+        header("Content-Disposition: attachment; filename=".$type.time().".csv");
         header("Pragma: no-cache");
         header("Expires: 0");
 
         $outstream = fopen("php://output", 'r+');
-        $arr['user_id'] ="User ID";
-        $arr['first_name'] = "FirstName Name";
-        $arr['last_name'] = 'Last Name';
-        $arr['cancelno'] = 'No of cancellation';
+        
         fputcsv($outstream, $arr, ',', '"');
         
         if(!empty($list)) {

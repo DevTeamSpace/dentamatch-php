@@ -68,11 +68,13 @@ $(document).ready(function() {
             var seekerId = $(this).data('seekerid');
             var data = { fromId: fromId, toId: seekerId, message: chatMsg };
 
-            if (chatMsg != '') {
-                socket.emit('sendMessage', data, function(msgObj) {
-                    var appendHtml = writeHtmlBlock(msgObj);
-                    $('#user-chat-content_' + seekerId).append(appendHtml);
-                    chatScroll();
+            if(chatMsg!=''){
+                socket.emit('sendMessage', data, function(msgObj){
+                    if(!msgObj.blocked){
+                        var appendHtml = writeHtmlBlock(msgObj);
+                        $('#user-chat-content_'+seekerId).append(appendHtml);
+                        chatScroll();
+                    }
                 });
                 $(this).closest('.msgDiv').find('textarea').val('');
             }
@@ -135,9 +137,10 @@ $(document).ready(function() {
         function loadMessages(datapage) {
             socket.emit('getHistory', { fromId: fromId, toId: currentSel, pageNo: datapage, source: 1 });
         }
-
-        function blockUnblockSeeker(blockStatus) {
-            socket.emit('blockUnblock', { fromId: fromId, toId: currentSel, blockStatus: blockStatus });
+        function blockUnblockSeeker(blockStatus){
+            socket.emit('blockUnblock',{ fromId:fromId, toId:currentSel, blockStatus:blockStatus },function(callback){
+                console.log(callback);
+            });
         }
 
         socket.on('getMessages', function(msgDateArr) {

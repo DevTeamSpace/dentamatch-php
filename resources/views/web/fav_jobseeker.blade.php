@@ -2,13 +2,18 @@
 
 @section('content')
 <div class="container mr-b-60 padding-container-template">
+    @if(Session::has('message'))
+    <p class="alert {{ Session::get('alert-class', 'alert-info') }}">
+        {{ Session::get('message') }} 
+    </p>
+    @endif
     @if(count($favJobSeeker)>0)
     @foreach($favJobSeeker as $fav)
     <div class="media jobCatbox">
         <div class="media-left ">
             <div class="img-holder">
 
-                <img class="media-object img-circle wd-66" src="http://placehold.it/66x66" alt="...">
+                <img class="media-object img-circle wd-66" src="{{ url("image/66/66/?src=" .$fav->profile_pic) }}" alt="...">
             </div>
         </div>
         <div class="media-body row">
@@ -32,7 +37,7 @@
     <div class="jobCatbox mr-b-20">
         <div class="template-job-information ">
             <div class="template-job-information-left">
-                <h4>No favorites added</h4>
+                <h4>No favourites to show</h4>
             </div>
         </div>  
     </div>
@@ -65,7 +70,7 @@
                             </select>
                         </div>
                         <div class="text-right mr-t-20 mr-b-30">
-                            <button type="button" class="btn btn-link mr-r-20">Create Job</button>
+                            <button type="button" class="modalClick btn btn-link mr-r-20" data-toggle="modal" data-target="#jobTemplate">Create Job</button>
                             <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Send</button>
                         </div>
                     </form>

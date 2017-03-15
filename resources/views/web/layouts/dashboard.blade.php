@@ -59,7 +59,9 @@
                 <li class="notificaionbell dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         <span class="icon icon-bell "></span>
-                        <div class="notificationCircle "> {{ $notificationList['total'] }}</div>
+                        @if(!empty($notificationList['total']))
+                            <div class="notificationCircle "> {{ $notificationList['total'] }}</div>
+                        @endif
                     </a>
                     <div class="dropdown-menu noficationListContainer small-border-radius box-shadow">
 
@@ -67,11 +69,11 @@
                         <ul class="notificationList">
                             @if(!empty($notificationList['data']))
                             @foreach($notificationList['data'] as $notification)
-                            <?php $data = json_decode($notification->notification_data) ?>
+                            <?php $data = json_decode($notification->notification_data); ?>
                             <li>
-                                <p><strong>{{ $data->message }}</strong></p>
+                                <p ><strong><?php echo strip_tags($data->message); ?></strong></p>
                                 <span>{{ $notification->created_at->diffForHumans() }}</span>
-                                <i class="icon icon-deleteicon notificationdelIcon"></i>
+                                <a href="{{ url($notification->id.'/delete-notification') }}"><i class="icon icon-deleteicon notificationdelIcon"></i></a>
                             </li>
                             @endforeach
                             @endif
@@ -83,7 +85,7 @@
                 </li>
                 
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Smiley Care <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Session::get('userData.profile.office_name') }} <span class="caret"></span></a>
                     <ul class="dropdown-menu menuLastBox borderNone">
                        <span class="fa fa-caret-up notificationCaret"></span>
                        <li><span class="icon icon-account-circle navRightIcon"></span><a href="{{ url('edit-profile') }}"><b>{{Auth::user()->email}}</b><br>	<button type="button" class="btn btn-primary rghtMenuBtn pd-l-10 pd-r-10">View Profile</button></a>

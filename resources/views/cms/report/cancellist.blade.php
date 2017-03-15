@@ -9,11 +9,7 @@
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
                 <div class="panel-heading">Cancel List
-                    <table  class="display responsive nowrap" cellspacing="0" >
-                              <tr>
-                                  <td align="right"><a href="{{ url('cms/report/download/cancellist') }}">Download CSV</a></td>
-                              </tr>
-                    </table>
+                    <div class="span6 pull-right" style="text-align:right"><a href="{{ url('cms/report/download/cancellist') }}">Download CSV</a></div>
                 </div>
 
                 <div class="panel-body">

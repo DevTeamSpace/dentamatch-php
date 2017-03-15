@@ -17,7 +17,7 @@ class CalenderController extends Controller
     }
     
     public function getCalender(){
-        return view('web.calender');
+        return view('web.calender',['navActive'=>'calendar']);
     }
     
     public function getCalenderDetails(){

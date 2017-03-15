@@ -253,7 +253,11 @@ class RecruiterJobs extends Model
             ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
             ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id');
         
-        $jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
+        //$jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
+            $jobObj ->leftJoin('temp_job_dates',function($query){
+                $query->on('temp_job_dates.recruiter_job_id','=','recruiter_jobs.id')
+                ->whereDate('temp_job_dates.job_date','>=',date('Y-m-d').' 00:00:00');
+            })
             ->leftJoin('job_lists',function($query){
                 $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
                 ->whereIn('job_lists.applied_status',[JobLists::INVITED,  JobLists::APPLIED]);
@@ -318,7 +322,8 @@ class RecruiterJobs extends Model
             ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
             ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id');
         
-        $jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
+            $jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
+           
             ->leftJoin('job_lists',function($query){
                 $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
                 ->whereIn('job_lists.applied_status',[RecruiterJobs::HIRED]);
@@ -359,6 +364,19 @@ class RecruiterJobs extends Model
                 ->orderBy('recruiter_jobs.created_at', 'desc');
         $jobs->select('recruiter_jobs.created_at as job_created_at', 'recruiter_jobs.id as recruiter_job_id', 'recruiter_jobs.job_type');
         return $jobs->get();
+    }
+    
+    public static function checkPendingTempJobsRating() {
+        $jobs = RecruiterJobs::select(['recruiter_jobs.id as recruitedJobId', 'job_lists.seeker_id as jobSeekerId', 'job_ratings.seeker_id as ratedJobSeekerId'])
+                ->where(['applied_status' => JobLists::HIRED,'recruiter_jobs.job_type' => RecruiterJobs::TEMPORARY, 'job_templates.user_id' => Auth::user()->id])
+                ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
+                ->join('job_lists', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
+                ->leftjoin('job_ratings', 'job_ratings.recruiter_job_id', '=', 'recruiter_jobs.id')
+                ->distinct();
+        
+        $jobSeekerCount = $jobs->get()->count();
+        $ratedSeekerCount = $jobs->whereNotNull('job_ratings.seeker_id')->get()->count();
+        return ['seekerCount' => $jobSeekerCount, 'ratedSeekerCount' => $ratedSeekerCount];
     }
 }
     

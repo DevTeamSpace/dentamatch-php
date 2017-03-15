@@ -209,7 +209,7 @@ class JobLists extends Model {
             $obj->addSelect('jobseeker_profiles.is_parttime_monday', 'jobseeker_profiles.is_parttime_tuesday', 'jobseeker_profiles.is_parttime_wednesday', 'jobseeker_profiles.is_parttime_thursday', 'jobseeker_profiles.is_parttime_friday', 'jobseeker_profiles.is_parttime_saturday', 'jobseeker_profiles.is_parttime_sunday');
         } elseif ($job['job_type'] == RecruiterJobs::TEMPORARY) {
             $obj->leftjoin('job_ratings', function($query) {
-                        $query->on('job_ratings.seeker_id', '=', 'job_lists.seeker_id');
+                        $query->on('job_ratings.recruiter_job_id', '=', 'job_lists.recruiter_job_id');
                         //->where('job_ratings.recruiter_job_id', '=', 'job_lists.recruiter_job_id')
                         //->whereNotNull('job_lists.temp_job_id');
                 })
@@ -217,7 +217,7 @@ class JobLists extends Model {
                     $query->on('favourites.seeker_id','=','job_lists.seeker_id')
                         ->where('favourites.recruiter_id',Auth::user()->id);
                 })
-                ->addSelect('job_ratings.id as ratingId')
+                ->addSelect('job_ratings.seeker_id as ratingId')
                 ->addSelect('punctuality')
                 ->addSelect('time_management')
                 ->addSelect('skills')
@@ -228,7 +228,8 @@ class JobLists extends Model {
                 ->addSelect(DB::raw("group_concat(temp_job_dates.job_date) AS temp_job_dates"))
                 ->addSelect(DB::raw("avg(punctuality) as avg_punctuality"),DB::raw("avg(time_management) as avg_time_management"),
                         DB::raw("avg(skills) as avg_skills"),DB::raw("avg(teamwork) as avg_teamwork"),DB::raw("avg(onemore) as avg_onemore"))
-                ->addSelect(DB::raw("(avg(punctuality)+avg(time_management)+avg(skills)+avg(teamwork)+avg(onemore))/5 AS avg_rating"))
+                ->addSelect(DB::raw("(avg(punctuality)+avg(time_management)+avg(skills))/3 AS avg_rating"))
+                //->addSelect(DB::raw("(avg(punctuality)+avg(time_management)+avg(skills)+avg(teamwork)+avg(onemore))/5 AS avg_rating"))
                 ->groupby('job_lists.applied_status','job_lists.seeker_id','job_lists.recruiter_job_id');
             /*$obj->leftjoin('jobseeker_temp_availability',function($query) use ($job){
                 $query->on('jobseeker_temp_availability.user_id', '=', 'job_lists.seeker_id')
