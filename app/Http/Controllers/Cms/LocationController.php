@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Cms;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use Yajra\Datatables\Datatables;
@@ -64,6 +64,7 @@ class LocationController extends Controller
     {
         // Validate and store the location...
         try{
+        $reqData = $request->all();
         $rules = array(
             'zipcode' => array('required','digits_between:5,8','regex:/[0-9]/','unique:locations,zipcode,NULL,id,deleted_at,NULL'),
         );
@@ -78,7 +79,12 @@ class LocationController extends Controller
             $msg = trans('messages.location_added');
         }
         
-        $this->validate($request, $rules);
+        $validator = Validator::make($reqData, $rules);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                                ->withErrors($validator)
+                                ->withInput();
+                }
         
         $location->zipcode = trim($request->zipcode);
         $location->description = trim($request->description);
@@ -106,7 +112,7 @@ class LocationController extends Controller
 
     public function locationsList(){
         try{
-        $locations = Location::SELECT(['zipcode','free_trial_period','is_active','id'])->get();
+        $locations = Location::SELECT(['zipcode','free_trial_period','is_active','id'])->orderBy('id', 'desc')->get();
         
         return Datatables::of($locations)
                 ->removeColumn('id')

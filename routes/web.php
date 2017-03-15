@@ -239,6 +239,7 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::post('store', 'Cms\RecruiterController@store');
         Route::post('storeAdminResetPassword', 'Cms\RecruiterController@storeAdminResetPassword');
         Route::get('{id}/adminResetPassword', 'Cms\RecruiterController@adminResetPassword');
+        Route::get('{id}/view', 'Cms\RecruiterController@recruiterView');
     });
     
     Route::group(['prefix' => 'notify/'], function() {

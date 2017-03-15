@@ -143,7 +143,9 @@ class RecruiterController extends Controller
     public function recruiterList(){
         try{
         $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+                        ->leftjoin('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'users.id')
                         ->select(
+                                'recruiter_profiles.office_name',
                                 'users.email','users.id',
                                 'users.is_active'
                                 )
@@ -159,7 +161,9 @@ class RecruiterController extends Controller
                     $edit = url('cms/recruiter/'.$userData->id.'/edit');
                     $delete =url('cms/recruiter/'.$userData->id.'/delete');
                     $resetPassword = url('cms/recruiter/'.$userData->id.'/adminResetPassword');
-                    $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
+                    $view = url('cms/recruiter/'.$userData->id.'/view');
+                    $action = '<a href="'.$view.'"  class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> View</a>&nbsp;';
+                    $action .= '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
                     $action .= '<a href="'.$delete.'" class="delete btn btn-xs btn-primary" onclick="return confirm(\'Are you sure you want to delete this recruiter?\');"><i class="fa fa-remove"></i> Delete</a>&nbsp;';
                     $action .= '<a href="'.$resetPassword.'"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;';
                     return $action;
@@ -205,13 +209,35 @@ class RecruiterController extends Controller
                 $msg = trans('messages.admin_recruiter_password_success');
             }
             Session::flash('message',$msg);
-
-        return redirect('cms/recruiter/index');
+            $user = UserGroup::where('user_id', $userId)->first();
+            if($user->group_id == 2){
+                return redirect('cms/recruiter/index');
+            }else{
+                return redirect('cms/jobseeker/index');
+            }
         } catch(\Exception $e) {
             Log::error($e);
             Session::flash('message',$e->getMessage());
         }
         
+    }
+    
+    public function recruiterView($id) {
+        try{
+            $userProfile = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+                        ->leftjoin('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'users.id')
+                        ->select(
+                                'recruiter_profiles.office_name',
+                                'recruiter_profiles.office_desc',
+                                'users.email','users.id',
+                                'users.is_active'
+                                )
+                        ->where('users.id', $id)->first();
+        
+        return view('cms.recruiter.view',['userProfile'=>$userProfile]);
+        }catch (\Exception $e) {
+            Log::error($e);
+        } 
     }
 
 }

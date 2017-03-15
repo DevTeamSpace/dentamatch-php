@@ -145,6 +145,7 @@ $(function () {
         //bFilter: false,
         columns: [
             {data: 'email', name: 'email',searchable:true},
+            {data: 'office_name', name: 'recruiter_profiles.office_name',searchable:true},
             {data: 'active', name: 'active',searchable:false},
             {data: 'action', name: 'action',searchable:false}
         ]
@@ -241,7 +242,9 @@ $(function () {
         ordering:false,
         //bFilter: false,
         columns: [
-            {data: 'dental_state_board', name: 'dental_state_board',searchable:true},
+            {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
+            {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
+            {data: 'dental_state_board', name: 'dental_state_board',searchable:false},
             {data: 'license_number', name: 'license_number',searchable:false},
             {data: 'is_job_seeker_verified', name: 'is_job_seeker_verified',searchable:false},
             {data: 'action', name: 'action',searchable:false}

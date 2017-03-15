@@ -15,9 +15,10 @@ use App\Providers\NotificationServiceProvider;
 use App\Models\JobLists;
 use App\Models\RecruiterJobs;
 use App\Models\Device;
+use Session;
 
 class FavoriteJobseekerController extends Controller {
-
+    
     public function getFavJobseeker(Request $request) {
         $userId = Auth::user()->id;
         $rating = "(avg(job_ratings.punctuality) + avg(job_ratings.time_management) + avg(job_ratings.skills) + avg(job_ratings.teamwork) + avg(job_ratings.onemore))/5";
@@ -27,7 +28,7 @@ class FavoriteJobseekerController extends Controller {
                 ->leftjoin('job_ratings', 'favourites.seeker_id', '=', 'job_ratings.seeker_id')
                 ->leftjoin('job_titles','job_titles.id', '=' , 'jobseeker_profiles.job_titile_id')
                 ->where('favourites.recruiter_id', Auth::user()->id)
-                ->select(DB::raw('(avg(job_ratings.punctuality) + avg(job_ratings.time_management) + avg(job_ratings.skills) + avg(job_ratings.teamwork) + avg(job_ratings.onemore))/5 as sum'), 'jobseeker_profiles.user_id as seeker_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'job_lists.applied_status','job_titles.jobtitle_name', 'jobseeker_profiles.profile_pic')
+                ->select(DB::raw('(avg(job_ratings.punctuality) + avg(job_ratings.time_management) + avg(job_ratings.skills))/3 as sum'), 'jobseeker_profiles.user_id as seeker_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'job_lists.applied_status','job_titles.jobtitle_name', 'jobseeker_profiles.profile_pic')
                 ->groupby('favourites.seeker_id')
                 ->simplePaginate(15);
         
@@ -40,7 +41,7 @@ class FavoriteJobseekerController extends Controller {
                 ->get();
         
         $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
-        return view('web.fav_jobseeker', ['favJobSeeker' => $favJobSeeker, 'jobDetail' => $jobDetail, 'jobTemplateModalData' => $jobTemplateModalData]);
+        return view('web.fav_jobseeker', ['favJobSeeker' => $favJobSeeker, 'jobDetail' => $jobDetail, 'jobTemplateModalData' => $jobTemplateModalData, 'navActive'=>'favseeker']);
     }
 
     public function postInviteJobseeker(Request $request) {
@@ -64,6 +65,7 @@ class FavoriteJobseekerController extends Controller {
                         'applied_status' => '1',
                     ]);
                     $this->sendPushUser(JobLists::INVITED, Auth::user()->id, $request->seekerId, $request->selectJobSeeker);
+                    Session::flash('message', trans('messages.invite_sent_success'));
                 }
             } else {
                 \App\Models\JobLists::create([
@@ -72,6 +74,7 @@ class FavoriteJobseekerController extends Controller {
                     'applied_status' => '1',
                 ]);
                 $this->sendPushUser(JobLists::INVITED, Auth::user()->id, $request->seekerId, $request->selectJobSeeker);
+                Session::flash('message', trans('messages.invite_sent_success'));
             }
             return redirect('favorite-jobseeker');
         } catch (Exception $ex) {

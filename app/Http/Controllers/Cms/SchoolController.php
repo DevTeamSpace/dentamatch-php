@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Cms;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use Yajra\Datatables\Datatables;
@@ -67,6 +67,7 @@ class SchoolController extends Controller
     public function store(Request $request)
     {
         try{
+        $reqData = $request->all();
         $rules = array(
             'parent_school' => array('required','integer'),
             'school' => array('required','unique:schoolings,school_name,parent_id')
@@ -82,7 +83,12 @@ class SchoolController extends Controller
             $school = new Schooling;
             $msg = trans('messages.skill_added');
         }
-        $this->validate($request, $rules);
+        $validator = Validator::make($reqData, $rules);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                                ->withErrors($validator)
+                                ->withInput();
+                }
         if($request->parent_school > 0){
             $school->parent_id = trim($request->parent_school);
         }

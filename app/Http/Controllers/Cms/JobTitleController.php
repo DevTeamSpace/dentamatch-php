@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Cms;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use Yajra\Datatables\Datatables;
@@ -65,6 +65,7 @@ class JobTitleController extends Controller
     {
         // Validate and store the location...
         try{
+        $reqData = $request->all();
         $rules = array(
             'jobtitle' => array('required','unique:job_titles,jobtitle_name'),
         );
@@ -80,7 +81,12 @@ class JobTitleController extends Controller
         }
             $msg = 
         
-        $this->validate($request, $rules);
+        $validator = Validator::make($reqData, $rules);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                                ->withErrors($validator)
+                                ->withInput();
+                }
         
         $jobtitle->jobtitle_name = trim($request->jobtitle);
         $jobtitle->is_active = ($request->is_active)?1:0;

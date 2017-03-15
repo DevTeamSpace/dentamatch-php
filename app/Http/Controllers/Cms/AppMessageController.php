@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\cms;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\AppMessage;
 use Yajra\Datatables\Datatables;
@@ -63,11 +63,17 @@ class AppMessageController extends Controller
     public function store(Request $request)
     {
         try{
+            $reqData = $request->all();
             $rules = array(
                 'message' => array('required','min:2','max:255'),
             );
 
-            $this->validate($request, $rules);
+            $validator = Validator::make($reqData, $rules);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                                ->withErrors($validator)
+                                ->withInput();
+                }
             if(isset($request->id)){
                 $appMessage = AppMessage::find($request->id); 
                 $appMessage->messageSent = isset($request->message_sent) ? 1 : 0;

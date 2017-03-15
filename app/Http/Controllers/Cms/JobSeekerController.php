@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Cms;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use Yajra\Datatables\Datatables;
+use App\Providers\NotificationServiceProvider;
+use App\Models\Device;
+use App\Models\Notification;
 use Session;
 use App\Models\Affiliation;
 use App\Models\User;
@@ -77,10 +80,16 @@ class JobSeekerController extends Controller
     public function store(Request $request)
     {
         try{
+        $reqData = $request->all();
         if(isset($request->id)){
             $rules['firstname'] = "Required";
             $rules['lastname'] = "Required";
-            $this->validate($request, $rules);
+            $validator = Validator::make($reqData, $rules);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                                ->withErrors($validator)
+                                ->withInput();
+                }
             UserProfile::where('user_id', $request->id)->update(['first_name' => $request->firstname,'last_name' => $request->lastname]);
             $activationStatus  = ($request->is_active)?1:0;
             User::where('id',$request->id)->update(['is_active' => $activationStatus]);
@@ -90,7 +99,12 @@ class JobSeekerController extends Controller
             $rules['firstname'] = "Required";
             $rules['lastname'] = "Required";
             $rules['email'] = 'required|email|Unique:users,email';
-            $this->validate($request, $rules);
+            $validator = Validator::make($reqData, $rules);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                                ->withErrors($validator)
+                                ->withInput();
+                }
             $reqData = $request->all();
             $user =  array(
                 'email' => $reqData['email'],
@@ -159,7 +173,9 @@ class JobSeekerController extends Controller
                 })
                 ->addColumn('action', function ($userData) {
                     $edit = url('cms/jobseeker/'.$userData->id.'/edit');
+                    $resetPassword = url('cms/recruiter/'.$userData->id.'/adminResetPassword');
                     $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
+                    $action .= '<a href="'.$resetPassword.'"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;';
                     return $action;
                        
                 })
@@ -176,6 +192,8 @@ class JobSeekerController extends Controller
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                         ->select(
                                 'users.id',
+                                'jobseeker_profiles.first_name',
+                                'jobseeker_profiles.last_name',
                                 'jobseeker_profiles.dental_state_board',
                                 'jobseeker_profiles.license_number',
                                 'jobseeker_profiles.is_job_seeker_verified'
@@ -253,6 +271,7 @@ class JobSeekerController extends Controller
             }
             
             UserProfile::where('user_id', $request->user_id)->update(['is_job_seeker_verified' => $statusCode]);
+            $this->sendPushUser($request->user_id,$request->verify);
         }
             
         Session::flash('message',$msg);
@@ -260,5 +279,48 @@ class JobSeekerController extends Controller
         }catch (\Exception $e) {
             Log::error($e);
         } 
+    }
+    
+    public function sendPushUser( $receiverId, $verificationStatus) {
+        $user = User::getAdminUserDetailsForNotification();
+        if ($verificationStatus == "Approve") {
+            $notificationData = array(
+                'notificationData' => 'Your dental state board and license number approved by admin',
+                'notification_title' => 'Dental certificate verified',
+                'sender_id' => $user->id,
+                'type' => 1,
+                'notificationType' => Notification::OTHER,
+            );
+        } else if ($verificationStatus == 'Reject') {
+            $notificationData = array(
+                'notificationData' => 'Your dental state board and license number rejected by admin',
+                'notification_title' => 'Dental certificate rejected',
+                'sender_id' => $user->id,
+                'type' => 1,
+                'notificationType' => Notification::OTHER,
+            );
+        } 
+        $params['data'] = $notificationData;
+        $devices = Device::getAllDeviceToken($receiverId);
+        if(!empty($devices)) {
+            
+            $insertData = [];
+            if(!empty($devices)) {
+                foreach ($devices as $deviceData){
+                    if ($deviceData->device_token && strlen($deviceData->device_token) >= 22) {
+                        $insertData[] = ['receiver_id'=>$deviceData->user_id,
+                            'sender_id'=>$user->id,
+                            'notification_data'=>$notificationData['notificationData'],
+                            'created_at'=>date('Y-m-d h:i:s'),
+                            'notification_type' => Notification::OTHER,
+                            ];
+                    }
+                    NotificationServiceProvider::sendPushNotification($deviceData, $notificationData['notificationData'], $params);
+                }
+            }
+            if(!empty($insertData)){
+                Notification::insert($insertData);
+            }
+        }
     }
 }

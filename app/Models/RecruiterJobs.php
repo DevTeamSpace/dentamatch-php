@@ -360,5 +360,18 @@ class RecruiterJobs extends Model
         $jobs->select('recruiter_jobs.created_at as job_created_at', 'recruiter_jobs.id as recruiter_job_id', 'recruiter_jobs.job_type');
         return $jobs->get();
     }
+    
+    public static function checkPendingTempJobsRating() {
+        $jobs = RecruiterJobs::select(['recruiter_jobs.id as recruitedJobId', 'job_lists.seeker_id as jobSeekerId', 'job_ratings.seeker_id as ratedJobSeekerId'])
+                ->where(['applied_status' => JobLists::HIRED,'recruiter_jobs.job_type' => RecruiterJobs::TEMPORARY, 'job_templates.user_id' => Auth::user()->id])
+                ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
+                ->join('job_lists', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
+                ->leftjoin('job_ratings', 'job_ratings.recruiter_job_id', '=', 'recruiter_jobs.id')
+                ->distinct();
+        
+        $jobSeekerCount = $jobs->get()->count();
+        $ratedSeekerCount = $jobs->whereNull('job_ratings.seeker_id')->get()->count();
+        return ['seekerCount' => $jobSeekerCount, 'ratedSeekerCount' => $ratedSeekerCount];
+    }
 }
     

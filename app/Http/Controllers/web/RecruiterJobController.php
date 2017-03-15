@@ -23,6 +23,7 @@ use DB;
 use App\Http\Requests\DeleteJobRequest;
 use Log;
 use App\Http\Requests\CheckJobAppliedOrNotRequest;
+use Session;
 
 class RecruiterJobController extends Controller {
 
@@ -99,7 +100,14 @@ class RecruiterJobController extends Controller {
             if ($request->action == "edit" && !empty($request->id)) {
                 $recruiterJobObj = RecruiterJobs::findById($request->id);
             }
-
+            
+            if($request->jobType == RecruiterJobs::TEMPORARY) {
+                $isPreviousTempJobRated = RecruiterJobs::checkPendingTempJobsRating();
+                if($isPreviousTempJobRated['seekerCount'] != $isPreviousTempJobRated['ratedSeekerCount']) {
+                    Session::flash('message', trans('messages.rate_previous_jobseeker'));
+                    return redirect('createJob/'.$request->templateId);
+                }
+            }
             $recruiterJobObj->job_template_id = $request->templateId;
             $recruiterJobObj->recruiter_office_id = $request->dentalOfficeId;
             $recruiterJobObj->job_type = $request->jobType;
@@ -213,7 +221,6 @@ class RecruiterJobController extends Controller {
             $seekerDetails = JobSeekerProfiles::getJobSeekerDetails($seekerId,$this->viewData['job']);
             return view('web.recuriterJob.seekerdetails',compact('seekerDetails', 'jobId'));
 
-            return view('web.recuriterJob.seekerdetails', compact('seekerDetails'));
         } catch (\Exception $e) {
             Log::error($e);
             return view('web.error.', ["message" => $e->getMessage()]);

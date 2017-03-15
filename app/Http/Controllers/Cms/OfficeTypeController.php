@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Cms;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use Yajra\Datatables\Datatables;
@@ -65,6 +65,7 @@ class OfficeTypeController extends Controller
     {
         // Validate and store the location...
         try{
+        $reqData = $request->all();
         $rules = array(
             'officetype' => array('required','unique:office_types,officetype_name'),
         );
@@ -79,7 +80,12 @@ class OfficeTypeController extends Controller
             $msg = trans('messages.officetype_added');
         }
         
-        $this->validate($request, $rules);
+        $validator = Validator::make($reqData, $rules);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                                ->withErrors($validator)
+                                ->withInput();
+                }
         
         $officeType->officetype_name = trim($request->officetype);
         $officeType->is_active = ($request->is_active)?1:0;

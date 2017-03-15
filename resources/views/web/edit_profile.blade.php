@@ -118,7 +118,7 @@
                         </div>
                     </div>
                 </div>
-                <form data-parsley-validate novalidate=""  class="formdataPart" data-bind="visible: showOfficeEditForm">
+                <form data-parsley-validate class="formdataPart" data-bind="visible: showOfficeEditForm">
                     <div class="commonBox cboxbottom masterBox" data-bind="template: {name: 'profileEditForm', data: $data}">
 
                     </div>
@@ -317,6 +317,7 @@
             <div class="form-group">
                 <label>Office Location Information <i class="optional">(Optional)</i></label>
                 <textarea class="form-control txtHeight" data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: officeInfo" ></textarea>
+                <p class="error-div" data-bind="text: officeInfoError"></p>
             </div>
             <div class="pull-right text-right">
                 <button type="button" class="btn btn-link mr-r-10 cancelled" style="font-weight:500" data-bind="click: $root.cancelUpdateOffice">Cancel</button>

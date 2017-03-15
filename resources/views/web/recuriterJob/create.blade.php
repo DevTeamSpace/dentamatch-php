@@ -17,7 +17,12 @@
     </ul>
     <!--/breadcrumb-->
 
-
+    @if(Session::has('message'))
+    <p class="alert {{ Session::get('alert-class', 'alert-info') }}">
+        {{ Session::get('message') }} 
+        <span class="close" data-dismiss="alert">&times;</span>
+    </p>
+    @endif
     <form data-parsley-validate method="post" action="{{ url('createJob/saveOrUpdate') }}">
         <div class="row sec-mob">
             <div class="col-sm-6 mr-b-10 col-xs-6">

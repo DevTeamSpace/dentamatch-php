@@ -174,6 +174,10 @@ paths:
           in: formData
           description: Firstname of the user
           type: string
+        - name: lastName
+          in: formData
+          description: Firstname of the user
+          type: string
         - name: email
           in: formData
           description: Email  of the user
