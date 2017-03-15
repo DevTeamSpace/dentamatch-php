@@ -136,8 +136,8 @@
 <script src ="{{asset('web/scripts/bootstrap-datetimepicker.js')}}"></script>
 <script src ="{{asset('web/scripts/main.js')}}"></script>
 
-<script src ="{{asset('web/scripts/tabScript1.js')}}"></script>
-
+<!-- <script src ="{{asset('web/scripts/tabScript1.js')}}"></script>
+-->
 
 <script type="text/javascript" src="{{asset('web/scripts/knockout-3.4.1.js')}}"></script>
 <script src ="{{asset('web/plugins/custom-scroller/js/mCustomScrollbar.js')}}"></script>

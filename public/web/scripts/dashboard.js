@@ -38,16 +38,17 @@ $(document).ready(function() {
         format: 'hh:mm A',
         'allowInputToggle': true,
 
-
+        stepping: 15,
         minDate: moment().startOf('day'),
         maxDate: moment().endOf('day')
+
     });
 
     $endTime1.datetimepicker({
         format: 'hh:mm A',
         'allowInputToggle': true,
-
-
+        stepping: 15,
+        useCurrent: false,
         minDate: moment().startOf('day'),
 
         maxDate: moment().endOf('day')
@@ -63,6 +64,7 @@ $(document).ready(function() {
         var date = $(this).data('date');
 
         $(this).parents(".row").find('.datetimepicker2').data('DateTimePicker').minDate(e.date);
+
         console.log(date);
     });
     $('.datetimepicker2').on("dp.change", function(e) {
