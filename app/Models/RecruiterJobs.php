@@ -375,7 +375,7 @@ class RecruiterJobs extends Model
                 ->distinct();
         
         $jobSeekerCount = $jobs->get()->count();
-        $ratedSeekerCount = $jobs->whereNull('job_ratings.seeker_id')->get()->count();
+        $ratedSeekerCount = $jobs->whereNotNull('job_ratings.seeker_id')->get()->count();
         return ['seekerCount' => $jobSeekerCount, 'ratedSeekerCount' => $ratedSeekerCount];
     }
 }
