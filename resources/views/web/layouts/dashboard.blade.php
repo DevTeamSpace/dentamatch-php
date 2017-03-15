@@ -59,7 +59,9 @@
                 <li class="notificaionbell dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         <span class="icon icon-bell "></span>
-                        <div class="notificationCircle "> {{ $notificationList['total'] }}</div>
+                        @if(!empty($notificationList['total']))
+                            <div class="notificationCircle "> {{ $notificationList['total'] }}</div>
+                        @endif
                     </a>
                     <div class="dropdown-menu noficationListContainer small-border-radius box-shadow">
 
