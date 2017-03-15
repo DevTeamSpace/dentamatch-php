@@ -71,18 +71,19 @@ $(function() {
             $startTime1.datetimepicker({
                 format: 'hh:mm A',
                 'allowInputToggle': true,
-                //      defaultDate: new Date(),
-                //ignoreReadonly: true,
+
+                stepping: 15,
+
                 minDate: moment().startOf('day'),
                 maxDate: moment().endOf('day')
+
             });
 
             $endTime1.datetimepicker({
                 format: 'hh:mm A',
                 'allowInputToggle': true,
-                //      defaultDate: $startTime1.data("DateTimePicker").date().add(1, 'minutes'),
-                //      useCurrent: false,
-                //ignoreReadonly: true,
+                useCurrent: false,
+                stepping: 15,
                 minDate: moment().startOf('day'),
                 maxDate: moment().endOf('day')
             });
@@ -137,8 +138,8 @@ $(function() {
             selVal = parentBx.find(".customsel");
             selLen = parentBx.find(".customsel").length;
             $(selVal).find("input").prop("disabled", false);
-            $(e.currentTarget).parents('.dayBox').find(".datetimepicker1 input").val("09:00 AM");
-            $(e.currentTarget).parents('.dayBox').find(".datetimepicker2 input").val("06:00 PM");
+            $(e.currentTarget).parents('.dayBox').find(".datetimepicker1 input").val("08:00 AM");
+            $(e.currentTarget).parents('.dayBox').find(".datetimepicker2 input").val("05:00 PM");
 
 
             //blackValueCheck()
@@ -267,13 +268,15 @@ $(function() {
 
 
     //==== all input stop action by clicking===//
-    $(document).on("keypress", 'form', function(e) {
-        var code = e.keyCode || e.which;
-        if (code == 13) {
-            e.preventDefault();
-            return false;
-        }
-    });
+    // $(document).on("keypress", 'form', function(e) {
+    //     var code = e.keyCode || e.which;
+    //     if (code == 13) {
+    //         e.preventDefault();
+    //         return false;
+    //     }
+    // });
+
+
     //=== all input stop action by clicking===//
 
 

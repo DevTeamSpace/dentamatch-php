@@ -20,16 +20,16 @@
             <div class="col-md-2 col-sm-2 resultImage">
                 <img src="{{ url('image/120/120/?src=' .$seekerDetails['profile_pic']) }}" class="img-circle">
             </div> 
-            <div class="col-md-7 col-sm-6">
+            <div class="col-md-6 col-sm-6">
                 <h4>{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']}}</h4>
                 <h6>{{$seekerDetails['jobtitle_name']}}</h6> 
-                <div class="job-type-detail">
-                    
+                <div class="job-type-detail seeker-detail-temp">
+
                     @if($seekerDetails['is_fulltime'])
-                    <span class="statusBtn drk-green text-center statusBtnMargin">Full Time</span>
+                    <span class="statusBtn drk-green text-center statusBtnMargin mr-b-5">Full Time</span>
                     @endif
                     @if($seekerDetails['is_parttime_monday'] || $seekerDetails['is_parttime_tuesday'] || $seekerDetails['is_parttime_wednesday'] || $seekerDetails['is_parttime_thursday'] || $seekerDetails['is_parttime_friday'] || $seekerDetails['is_parttime_saturday'] || $seekerDetails['is_parttime_sunday'])
-                    <span class="statusBtn bg-ltgreen text-center statusBtnMargin">Part Time</span>
+                    <span class="statusBtn bg-ltgreen text-center statusBtnMargin mr-b-5">Part Time</span>
                     <span> | 
                         @php 
                         $dayArr = [];
@@ -181,9 +181,9 @@
                 <P>
                     <img class="img-rounded" src="{{ url('image/66/66/?src=' .$certificate['image_path']) }}">
                     @if(!empty($certificate['validity_date']))
-                        Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span></P>
+                    Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span></P>
                     @else
-                        Valid Till: N/A
+                    Valid Till: N/A
                     @endif
                 </div>
                 @endforeach

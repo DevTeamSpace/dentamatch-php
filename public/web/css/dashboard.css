@@ -1059,6 +1059,10 @@ input[type='checkbox'] {
     background: #fff;
 }
 
+.seeker-detail-temp .date-drop .dropdown-menu {
+    cursor: not-allowed;
+}
+
 
 /*------------sagar Kapoor------------*/
 
