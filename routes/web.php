@@ -121,7 +121,7 @@
 
 Route::group(['middleware' => 'termCondition'], function () {
     Route::get('terms-conditions', 'web\SignupController@getTermsAndCondition');
-    Route::get('tutorial', 'web\SignupController@getTutorial');
+    Route::get('tutorial', 'web\SignupController@getTutorial')->middleware('officeDetails');;
 });
 });
 });
