@@ -88,7 +88,7 @@ class SignupController extends Controller {
     public function postSignUp(Request $request) {
         $redirect = 'login';
         try {
-
+            DB::beginTransaction();
             $validation_rules = array('email' => 'required|email', 'password' => 'required');
             $validator = Validator::make($request->all(), $validation_rules);
             if ($validator->fails()) {
@@ -126,11 +126,12 @@ class SignupController extends Controller {
                     $message->to($reqData['email'])
                             ->subject(trans("messages.confirmation_link"));
                 });
-
+                DB::commit();
                 Session::flash('success', trans("messages.successfully_register"));
             }
         } catch (\Exception $e) {
             Log::error($e);
+            DB::rollback();
             Session::flash('message', $e->getMessage());
         }
         return redirect($redirect);
