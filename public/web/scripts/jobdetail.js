@@ -1,4 +1,4 @@
-jQuery(function ($) {
+$(document).ready(function() {
     var socket = io(socketUrl);
     socket.on('connect', function () {
         console.log(socket);
