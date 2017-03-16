@@ -54,7 +54,7 @@
                 </div>
                 <div class="modal-body ">
 
-                    <form data-parsley-validate action="invite-jobseeker" method="post">
+                    <form data-parsley-validate action="/invite-jobseeker" id="invite_seeker" method="post">
                         {{ csrf_field() }}
                         <div class="form-group custom-select">
                             <label for="selectJobSeeker">Choose the job you want to invite for</label>
@@ -71,7 +71,7 @@
                         </div>
                         <div class="text-right mr-t-20 mr-b-30">
                             <button type="button" class="modalClick btn btn-link mr-r-20" data-toggle="modal" data-target="#jobTemplate">Create Job</button>
-                            <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Send</button>
+                            <button type="submit" id="btnSubmit" class="btn btn-primary pd-l-30 pd-r-30">Send</button>
                         </div>
                     </form>
                 </div>
@@ -84,8 +84,9 @@
 <script>
     $(document).ready(function () {
         $('#selectJobSeeker, #selectTemplate').selectpicker({
-            style: 'btn btn-primary'
+            style: 'btn btn-default'
         });
+        
     });
     function putValue(v){
         $('#seekerId').val(v);
