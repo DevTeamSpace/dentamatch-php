@@ -28,7 +28,7 @@
                         <h6 class="media-heading"><p><?php 
                         echo  $notificationDetails->message; ?></p></h6>
                         @if($notification->notification_type == App\Models\Notification::JOBSEEKERCANCELLED)
-                            <p><?php  echo  $notificationDetails->cancel_reason; ?></p>
+                        <p class="mr-b-5 mr-t-5"><?php  echo  $notificationDetails->cancel_reason; ?></p>
                         @endif
                         <p class="justNow"><span class="icon-clock"></span>{{ $notification->created_at->diffForHumans()}}</p>
                     </div>

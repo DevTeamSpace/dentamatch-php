@@ -332,10 +332,10 @@ class SearchApiController extends Controller {
                         ->where('recruiter_jobs.id',$jobId)->first();
         $jobseekerDetails = UserProfile::getUserProfile($senderId);
         
-            $message = '<a href="/job/details/'.$jobId.'" ><b>'.$jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'</a></b> has rejected for '.$receiverDetails->jobtitle_name;
+            $message = '<a href="/job/details/'.$jobId.'" ><b>'.$jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'</a></b> has cancelled for '.$receiverDetails->jobtitle_name;
         
         $notificationDetails = ['image' => $jobseekerDetails['profile_pic'],'message' => $message,'cancel_reason' => $cancelReason];
-        $data = ['receiver_id'=>$receiverDetails->user_id,'job_list_id' => $jobId,'sender_id' => $senderId, 'notification_data'=>json_encode($notificationDetails),'notification_type' => Notification::JOBSEEKERREJECTED];
+        $data = ['receiver_id'=>$receiverDetails->user_id,'job_list_id' => $jobId,'sender_id' => $senderId, 'notification_data'=>json_encode($notificationDetails),'notification_type' => Notification::JOBSEEKERCANCELLED];
         $notificationDetails = Notification::create($data);
     }
     
