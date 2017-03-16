@@ -42,9 +42,16 @@ class UserApiController extends Controller {
             ]);
         
         $reqData = $request->all();
-        $userExists = User::where('email', $reqData['email'])->first();
+        $userExists = User::with('userGroup')->where('email', $reqData['email'])->first();
         if($userExists){
-            $response = apiResponse::customJsonResponse(0, 201, trans("messages.user_exist_same_email"));      
+            if (isset($userExists->userGroup) && !empty($userExists->userGroup)) {
+                    if ($userExists->userGroup->group_id == 2) {
+                        $msg = trans("messages.already_register_as_recruiter");
+                    } else {
+                        $msg = trans("messages.user_exist_same_email");
+                    }
+                }
+            $response = apiResponse::customJsonResponse(0, 201,$msg);      
         }else{
             $uniqueCode = uniqid();
             $user =  array(

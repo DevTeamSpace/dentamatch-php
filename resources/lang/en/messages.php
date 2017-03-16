@@ -165,4 +165,6 @@ return [
     'rate_previous_jobseeker' => 'Please rate the hired job seeker for the previous job first',
     
     'invite_sent_success' => 'Invitation sent',
+    
+    'already_register_as_recruiter'=>'You are already registered as recruiter',
 ];

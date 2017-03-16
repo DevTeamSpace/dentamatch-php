@@ -206,7 +206,7 @@ class RecruiterJobs extends Model
                             'recruiter_offices.friday_start', 'recruiter_offices.friday_start', 
                             'recruiter_offices.saturday_start', 'recruiter_offices.saturday_end', 
                             'recruiter_offices.sunday_start', 'recruiter_offices.sunday_end', 
-                            'job_titles.jobtitle_name','recruiter_profiles.office_name',
+                            'job_titles.jobtitle_name','recruiter_profiles.office_name','recruiter_profiles.office_desc',
                             'recruiter_offices.address','recruiter_offices.zipcode',
                             'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
                             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS job_posted_time_gap"),
@@ -253,7 +253,11 @@ class RecruiterJobs extends Model
             ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
             ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id');
         
-        $jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
+        //$jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
+            $jobObj ->leftJoin('temp_job_dates',function($query){
+                $query->on('temp_job_dates.recruiter_job_id','=','recruiter_jobs.id')
+                ->whereDate('temp_job_dates.job_date','>=',date('Y-m-d').' 00:00:00');
+            })
             ->leftJoin('job_lists',function($query){
                 $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
                 ->whereIn('job_lists.applied_status',[JobLists::INVITED,  JobLists::APPLIED]);
@@ -318,7 +322,8 @@ class RecruiterJobs extends Model
             ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
             ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id');
         
-        $jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
+            $jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
+           
             ->leftJoin('job_lists',function($query){
                 $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
                 ->whereIn('job_lists.applied_status',[RecruiterJobs::HIRED]);
@@ -370,7 +375,7 @@ class RecruiterJobs extends Model
                 ->distinct();
         
         $jobSeekerCount = $jobs->get()->count();
-        $ratedSeekerCount = $jobs->whereNull('job_ratings.seeker_id')->get()->count();
+        $ratedSeekerCount = $jobs->whereNotNull('job_ratings.seeker_id')->get()->count();
         return ['seekerCount' => $jobSeekerCount, 'ratedSeekerCount' => $ratedSeekerCount];
     }
 }

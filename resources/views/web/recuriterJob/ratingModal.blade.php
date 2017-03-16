@@ -22,8 +22,12 @@
                     <div class="media-body row">
                         <div class="col-sm-8 pd-t-10 ">
                             <div>
-                                <a href="#" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
-                                <span class="mr-l-5 label label-success">{{ ($seeker['avg_rating']!='')?round($seeker['avg_rating'],1): '0' }}</span>
+                                <a href="#" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a>
+                                @if(!empty($seeker['avg_rating']))
+                                    <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{ number_format($seeker['avg_rating'], 1, '.', '') }}</span>
+                                @else
+                                    <span class=" dropdown-toggle label label-success">Not Yet Rated</span>
+                                @endif
                             </div>
                             <p class="nopadding">{{ $job['jobtitle_name'] }}</p>
                             @php 

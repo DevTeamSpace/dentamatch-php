@@ -76,7 +76,8 @@ class SignupController extends Controller {
         return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
     }
 
-    public function getTermsAndCondition() {
+    public function getTermsAndCondition(Request $request) {
+        $request->session()->set('tutorial', 1);
         return view('web.terms-conditions');
     }
 
@@ -88,7 +89,7 @@ class SignupController extends Controller {
     public function postSignUp(Request $request) {
         $redirect = 'login';
         try {
-
+            DB::beginTransaction();
             $validation_rules = array('email' => 'required|email', 'password' => 'required');
             $validator = Validator::make($request->all(), $validation_rules);
             if ($validator->fails()) {
@@ -126,11 +127,12 @@ class SignupController extends Controller {
                     $message->to($reqData['email'])
                             ->subject(trans("messages.confirmation_link"));
                 });
-
+                DB::commit();
                 Session::flash('success', trans("messages.successfully_register"));
             }
         } catch (\Exception $e) {
             Log::error($e);
+            DB::rollback();
             Session::flash('message', $e->getMessage());
         }
         return redirect($redirect);
@@ -160,11 +162,16 @@ class SignupController extends Controller {
         return redirect($redirect);
     }
 
-    public function getTutorial() {
+    public function getTutorial(Request $request) {
         try {
-            $officeType = \App\Models\OfficeType::all();
-            RecruiterProfile::where('user_id',Auth::user()->id)->update(['accept_term' => 1]);
-            return view('web.dashboard')->with('modal', 1)->with('officeType', $officeType);
+            $tutorial = $request->session()->pull('tutorial', 0);
+            if($tutorial == 1){
+                $officeType = \App\Models\OfficeType::all();
+                RecruiterProfile::where('user_id',Auth::user()->id)->update(['accept_term' => 1]);
+                return view('web.dashboard')->with('modal', 1)->with('officeType', $officeType);
+            }else{
+                return redirect('home');
+            }
         } catch (\Exception $e) {
             Log::error($e);
             return redirect('terms-conditions');

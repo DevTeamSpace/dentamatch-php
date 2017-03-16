@@ -7,6 +7,7 @@
     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
     @endif
     <div class="viewdentaltemplate cardShadow borderNone notificationPadder">
+        @if(count($notificationList))
         <ul class="notificationListContainer">
             @foreach ($notificationList as $notification)
             @php 
@@ -32,6 +33,13 @@
             @endforeach
         </ul>
         {{ $notificationList->links() }}
+        @else
+        <ul class="notificationListContainer">
+             <li>
+                <h4>No notifications to show</h4>
+             </li>
+        </ul>
+        @endif
     </div>
 </div>
 @endsection

@@ -59,7 +59,9 @@
                 <li class="notificaionbell dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         <span class="icon icon-bell "></span>
-                        <div class="notificationCircle "> {{ $notificationList['total'] }}</div>
+                        @if(!empty($notificationList['total']))
+                            <div class="notificationCircle "> {{ $notificationList['total'] }}</div>
+                        @endif
                     </a>
                     <div class="dropdown-menu noficationListContainer small-border-radius box-shadow">
 
@@ -136,8 +138,8 @@
 <script src ="{{asset('web/scripts/bootstrap-datetimepicker.js')}}"></script>
 <script src ="{{asset('web/scripts/main.js')}}"></script>
 
-<script src ="{{asset('web/scripts/tabScript1.js')}}"></script>
-
+<!-- <script src ="{{asset('web/scripts/tabScript1.js')}}"></script>
+-->
 
 <script type="text/javascript" src="{{asset('web/scripts/knockout-3.4.1.js')}}"></script>
 <script src ="{{asset('web/plugins/custom-scroller/js/mCustomScrollbar.js')}}"></script>
