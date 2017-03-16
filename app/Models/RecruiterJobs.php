@@ -206,7 +206,7 @@ class RecruiterJobs extends Model
                             'recruiter_offices.friday_start', 'recruiter_offices.friday_start', 
                             'recruiter_offices.saturday_start', 'recruiter_offices.saturday_end', 
                             'recruiter_offices.sunday_start', 'recruiter_offices.sunday_end', 
-                            'job_titles.jobtitle_name','recruiter_profiles.office_name',
+                            'job_titles.jobtitle_name','recruiter_profiles.office_name','recruiter_profiles.office_desc',
                             'recruiter_offices.address','recruiter_offices.zipcode',
                             'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
                             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS job_posted_time_gap"),

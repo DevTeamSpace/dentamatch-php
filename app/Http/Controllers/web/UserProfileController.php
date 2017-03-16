@@ -75,7 +75,9 @@ class UserProfileController extends Controller {
         $this->validate($request, ['officeName' => 'required|max:100', 'officeDescription' => 'required|max:500']);
 
         try {
-            RecruiterProfile::updateOfficeDetail($request);
+            $profile = RecruiterProfile::updateOfficeDetail($request);
+            $request->session()->put('userData', ['basic'=>$user->toArray(),'profile'=>$profile->toArray()]);
+                
             return 'success';
         } catch (\Exception $e) {
             return 'fail';
