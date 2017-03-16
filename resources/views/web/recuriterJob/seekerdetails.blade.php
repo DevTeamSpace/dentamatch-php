@@ -183,10 +183,12 @@
             @foreach($seekerDetails['certificate'] as $certificate)
             <div class="searchResultHeading pd-t-20 smallSquare">
                 <h5>{{$certificate['certificate_name']}}</h5>
-                <P>
-                    <img class="img-rounded" src="{{ url('image/66/66/?src=' .$certificate['image_path']) }}">
+                <p>
+                    <a href="javascript:void(0)" >
+                        <img data-toggle="modal" data-target="#certificateModal" class="img-rounded thumb-certificate" data-image="{{ $certificate['image_path'] }}" src="{{ url('image/66/66/?src='.$certificate['image_path']) }}">
+                    </a>
                     @if(!empty($certificate['validity_date']))
-                    Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span></P>
+                    Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span></p>
                     @else
                     Valid Till: N/A
                     @endif
@@ -198,6 +200,33 @@
         </div>
     </div>  
 </div>
+
+<!--  Modal content for the mixer image example -->
+<div id="certificateModal" class="modal fade" role="dialog">
+    <div class="modal-dialog custom-modal popup-wd522">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Certificate</h4>
+      </div>
+      <div class="modal-body">
+          <img id="certificateModalImg" class="img-rounded img-responsive" src="">
+
+      </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal mixer image -->
+
+<script>
+    $('.thumb-certificate').click(function(){
+        var imgUrl = "{{ url('image/550/500/?src=') }}";
+        $('#certificateModal').modal({show:true});
+        $('#certificateModalImg').attr('src', imgUrl+$(this).data('image'));
+        return false;
+    });
+    
+</script>
 @endsection
 
 @section('js')
