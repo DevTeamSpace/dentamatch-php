@@ -118,6 +118,7 @@
                             <dd>{{$experience['city']}}</dd> 
                         </dl>
                     </div>
+                    @if(!empty($experience['reference1_name']))
                     <div class="col-sm-4 exprience">
                         <dl>
                             <dt>
@@ -128,6 +129,8 @@
                             <dd>{{$experience['reference1_email']}}</dd>                 
                         </dl>
                     </div>
+                    @endif
+                    @if(!empty($experience['reference2_name']))
                     <div class="col-sm-4 exprience">
                         <dl>
                             <dt>
@@ -138,7 +141,9 @@
                             <dd>{{$experience['reference2_email']}}</dd>                 
                         </dl>
                     </div>
+                    @endif
                 </div>
+                
                 @endforeach
                 @endif
             </div>    
