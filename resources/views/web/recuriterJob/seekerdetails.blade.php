@@ -179,7 +179,9 @@
             <div class="searchResultHeading pd-t-20 smallSquare">
                 <h5>{{$certificate['certificate_name']}}</h5>
                 <P>
-                    <img class="img-rounded" src="{{ url('image/66/66/?src=' .$certificate['image_path']) }}">
+                    <a href="javascript:void(0)" >
+                        <img  data-toggle="modal" data-target=".pop-up-1" class="img-rounded thumb-certificate" src="{{ url('image/66/66/?src=' .$certificate['image_path']) }}">
+                    </a>
                     @if(!empty($certificate['validity_date']))
                     Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span></P>
                     @else
@@ -196,3 +198,28 @@
 
 @section('js')
 @endsection
+
+
+<!--  Modal content for the mixer image example -->
+<div class="modal fade pop-up-1" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel-1" aria-hidden="true">
+    <div class="modal-dialog ">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title" id="myLargeModalLabel-1">Certificate</h4>
+      </div>
+      <div class="modal-body">
+          <img id="certificateModalImg" class="img-rounded" src="{{ url('image?src=' .$certificate['image_path']) }}">
+
+      </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal mixer image -->
+
+<script>
+    $('.thumb-certificate').click(function(){
+        $('#certificateModalImg').attr('src', $(this).attr('src'));
+        $('.pop-up-1').modal({show:true})
+    });
+</script>
