@@ -52,8 +52,13 @@
                     @elseif(round($seeker['skills'],0) < 3)
                     @php $skillClass = 'bg-red'  @endphp
                     @endif   
-
-                    <span class=" dropdown-toggle label {{$avgrateClass}}" data-toggle="dropdown">{{number_format($seeker['avg_rating'], 1, '.', '')}}</span>
+                    
+                    @if(!empty($seeker['avg_rating']))
+                        <span class=" dropdown-toggle label {{$avgrateClass}}" data-toggle="dropdown">{{number_format($seeker['avg_rating'], 1, '.', '')}}</span>
+                    @else
+                        <span class=" dropdown-toggle label label-success">Not Yet Rated</span>
+                    @endif
+                    
                     
                     <ul class="dropdown-menu rating-info">
                       <li><div class="rating_on"> Punctuality</div>

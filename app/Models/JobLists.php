@@ -210,6 +210,7 @@ class JobLists extends Model {
         } elseif ($job['job_type'] == RecruiterJobs::TEMPORARY) {
             $obj->leftjoin('job_ratings', function($query) {
                         $query->on('job_ratings.recruiter_job_id', '=', 'job_lists.recruiter_job_id');
+                        $query->on('job_ratings.seeker_id', '=', 'job_lists.seeker_id');
                         //->where('job_ratings.recruiter_job_id', '=', 'job_lists.recruiter_job_id')
                         //->whereNotNull('job_lists.temp_job_id');
                 })
