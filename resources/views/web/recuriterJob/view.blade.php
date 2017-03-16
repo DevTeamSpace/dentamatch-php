@@ -143,7 +143,11 @@
                             <a href="{{ url('job/seekerdetails/'.$seeker['seeker_id'].'/'.$job['id']) }}" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
                             @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
                             <span class="mr-l-5 dropdown date_drop">
-                                <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{ ($seeker['avg_rating']!='')?round($seeker['avg_rating'],1): '0' }}</span>
+                                @if(!empty($seeker['avg_rating']))
+                                    <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{ number_format($seeker['avg_rating'], 1, '.', '') }}</span>
+                                @else
+                                    <span class=" dropdown-toggle label label-success">Not Yet Rated</span>
+                                @endif
                                 <ul class="dropdown-menu rating-info">
                                     <li><div class="rating_on"> Punctuality </div>
                                         <ul class="rate_me">
