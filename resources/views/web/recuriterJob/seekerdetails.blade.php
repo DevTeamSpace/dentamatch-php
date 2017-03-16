@@ -178,7 +178,7 @@
                 <h5>AFFILIATIONS</h5>
                 <P>{{$seekerDetails['affiliations']}}</P>
             </div>
-
+            @if($seekerDetails['applied_status'] == \App\Models\JobLists::HIRED)
             @if(!empty($seekerDetails['certificate']))
             @foreach($seekerDetails['certificate'] as $certificate)
             <div class="searchResultHeading pd-t-20 smallSquare">
@@ -193,6 +193,7 @@
                 </div>
                 @endforeach
                 @endif
+             @endif
             </div>  
         </div>
     </div>  
