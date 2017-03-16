@@ -128,13 +128,13 @@ class SearchApiController extends Controller {
                                     ->first();
                     if($jobExists){
                         
-                        if($jobExists->applied_status == JobLists::INVITED){
+                        //if($jobExists->applied_status == JobLists::INVITED){
                             JobLists::where('id', $jobExists->id)->update(['applied_status' => JobLists::APPLIED]);
                             $this->notifyAdmin($reqData['jobId'],$userId,Notification::JOBSEEKERAPPLIED);
                             $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
-                        }else{
+                        /*}else{
                            $response = apiResponse::customJsonResponse(0, 201, trans("messages.job_already_applied")); 
-                        }
+                        }*/
                     }else{
                         $applyJobs = array('seeker_id' => $userId , 'recruiter_job_id' => $reqData['jobId'] , 'applied_status' => JobLists::APPLIED);
                         JobLists::insert($applyJobs);
