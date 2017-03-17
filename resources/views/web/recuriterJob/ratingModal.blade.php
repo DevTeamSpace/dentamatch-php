@@ -78,7 +78,7 @@
                             <div class="col-sm-8 pd-t-10 ">
                                 <div>
                                     <a href="#" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
-                                    <span class="mr-l-5 label label-success">{{ ($seeker['avg_rating']!='')?round($seeker['avg_rating'],1): '0' }}</span>
+                                    <span class="mr-l-5 label label-success">{{ ($seeker['avg_rating']!='')?round($seeker['avg_rating'],1): 'Not Yet Rated' }}</span>
                                 </div>
                                 <p class="nopadding">{{ $job['jobtitle_name'] }}</p>
                                 @php 

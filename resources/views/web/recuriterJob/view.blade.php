@@ -153,8 +153,8 @@
                                     <li><div class="rating_on"> Punctuality </div>
                                         <ul class="rate_me">
                                             {{ $punctuality = round($seeker['avg_punctuality'],1) }}
-                                            <li ><span {{ (!empty($punctuality)) ? (floor($punctuality)>1 ? "class=bg-green" : "") : "" }}></span></li>
-                                            <li><span {{ (!empty($punctuality)) ? (floor($punctuality)>2 ? "class=bg-green" : "") : "" }}></span></li>
+                                            <li ><span {{ (!empty($punctuality)) ? (floor($punctuality)>=1 ? "class=bg-green" : "") : "" }}></span></li>
+                                            <li><span {{ (!empty($punctuality)) ? (floor($punctuality)>=2 ? "class=bg-green" : "") : "" }}></span></li>
                                             <li><span {{ (!empty($punctuality) && floor($punctuality)>=3) ? "class=bg-green" : "" }}></span></li>
                                             <li ><span {{ (!empty($punctuality) && floor($punctuality)>=4) ? "class=bg-green" : "" }}></span></li>
                                             <li><span {{ (!empty($punctuality) && floor($punctuality)>=5) ? "class=bg-green" : "" }} ></span></li>
@@ -174,8 +174,8 @@
                                         <div class="rating_on">  Personal/Professional skill</div>
                                         <ul class="rate_me">
                                             {{ $skillsRating = round($seeker['avg_skills'],1) }}
-                                            <li ><span {{ (!empty($skillsRating)) ? (floor($skillsRating)>1 ? "class=bg-red" : "") : "" }}></span></li>
-                                            <li><span {{ (!empty($skillsRating)) ? (floor($skillsRating)>2 ? "class=bg-red" : "") : "" }}></span></li>
+                                            <li ><span {{ (!empty($skillsRating)) ? (floor($skillsRating)>=1 ? "class=bg-red" : "") : "" }}></span></li>
+                                            <li><span {{ (!empty($skillsRating)) ? (floor($skillsRating)>=2 ? "class=bg-red" : "") : "" }}></span></li>
                                             <li><span {{ (!empty($skillsRating) && floor($skillsRating)>=3) ? "class=bg-red" : "" }}></span></li>
                                             <li><span {{ (!empty($skillsRating) && floor($skillsRating)>=4) ? "class=bg-red" : "" }}></span></li>
                                             <li><span {{ (!empty($skillsRating) && floor($skillsRating)>=5) ? "class=bg-red" : "" }}></span></li>
