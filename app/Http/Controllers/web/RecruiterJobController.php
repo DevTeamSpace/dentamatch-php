@@ -508,7 +508,7 @@ class RecruiterJobController extends Controller {
             if($jobObj['job_type'] == config('constants.TemporaryJob')){
                 TempJobDates::where(['recruiter_job_id' => $jobObj['id']])->delete();
             }
-            DB::table('recruiter_jobs')->where('id', $request->jobId)->delete();
+            RecruiterJobs::where('id', $request->jobId)->delete();
             $this->result['success'] = true;
             $this->result['message'] = trans('messages.job_deleted');
         } catch (\Exception $e) {

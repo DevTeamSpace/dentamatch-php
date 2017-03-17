@@ -503,6 +503,10 @@
         }
     };
     
+    me.cancelJob = function(d, e){
+        location.replace("/job/details/"+me.jobId());
+    };
+    
     me.deleteJob = function(d, e){
         me.headMessage('Delete Job');
         me.cancelButtonDelete(true);
