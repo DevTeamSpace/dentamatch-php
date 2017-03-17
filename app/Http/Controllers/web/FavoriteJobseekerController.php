@@ -56,22 +56,23 @@ class FavoriteJobseekerController extends Controller {
                             ->withInput();
         }
         try {
-            $jobList = \App\Models\JobLists::where('seeker_id', $request->seekerId)->first();
+            $jobList = \App\Models\JobLists::where('seeker_id', $request->seekerId)->where('recruiter_job_id',$request->selectJobSeeker)->first();
             if (isset($jobList) && !empty($jobList)) {
-                if ($jobList->recruiter_job_id != $request->selectJobSeeker) {
-                    \App\Models\JobLists::create([
+                //if ($jobList->recruiter_job_id != $request->selectJobSeeker) {
+                    /*\App\Models\JobLists::create([
                         'recruiter_job_id' => $request->selectJobSeeker,
                         'seeker_id' => $request->seekerId,
                         'applied_status' => '1',
-                    ]);
+                    ]);*/
+                    \App\Models\JobLists::where('id', $jobList->id)->update(['applied_status' => JobLists::INVITED]);
                     $this->sendPushUser(JobLists::INVITED, Auth::user()->id, $request->seekerId, $request->selectJobSeeker);
                     Session::flash('message', trans('messages.invite_sent_success'));
-                }
+                //}
             } else {
                 \App\Models\JobLists::create([
                     'recruiter_job_id' => $request->selectJobSeeker,
                     'seeker_id' => $request->seekerId,
-                    'applied_status' => '1',
+                    'applied_status' => JobLists::INVITED,
                 ]);
                 $this->sendPushUser(JobLists::INVITED, Auth::user()->id, $request->seekerId, $request->selectJobSeeker);
                 Session::flash('message', trans('messages.invite_sent_success'));
