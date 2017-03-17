@@ -56,7 +56,10 @@ class FavoriteJobseekerController extends Controller {
                             ->withInput();
         }
         try {
-            $jobList = \App\Models\JobLists::where('seeker_id', $request->seekerId)->where('recruiter_job_id',$request->selectJobSeeker)->first();
+            $jobList = \App\Models\JobLists::where('seeker_id', $request->seekerId)
+                    ->where('recruiter_job_id',$request->selectJobSeeker)
+                    ->whereIn('applied_status',[JobLists::INVITED,JobLists::APPLIED,JobLists::SHORTLISTED])
+                    ->first();
             if (isset($jobList) && !empty($jobList)) {
                 //if ($jobList->recruiter_job_id != $request->selectJobSeeker) {
                     /*\App\Models\JobLists::create([
