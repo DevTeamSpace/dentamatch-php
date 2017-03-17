@@ -124,7 +124,7 @@ class SearchApiController extends Controller {
                 if($profileComplete->is_completed == 1){
                     $jobExists = JobLists::where('seeker_id','=',$userId)
                                     ->where('recruiter_job_id','=',$reqData['jobId'])
-                                    //->whereIn('applied_status',[JobLists::APPLIED,JobLists::INVITED])
+                                    ->whereIn('applied_status',[JobLists::INVITED])
                                     ->first();
                     if($jobExists){
                         
