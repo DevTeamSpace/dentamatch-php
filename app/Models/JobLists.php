@@ -77,6 +77,7 @@ class JobLists extends Model {
         $jobExists = static::where('seeker_id', '=', $userId)
                 ->where('recruiter_job_id', '=', $jobId)
                 /*->where('applied_status', '=', JobLists::APPLIED)*/
+                ->orderby('id', 'desc')
                 ->first();
         if ($jobExists) {
             $return = $jobExists->applied_status;
