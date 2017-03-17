@@ -24,6 +24,7 @@ use App\Http\Requests\DeleteJobRequest;
 use Log;
 use App\Http\Requests\CheckJobAppliedOrNotRequest;
 use Session;
+use App\Models\JobRatings;
 
 class RecruiterJobController extends Controller {
 
@@ -502,13 +503,19 @@ class RecruiterJobController extends Controller {
         return $updateOfficeTypeResult;
     }
     
-    public function postDeleteJob(DeleteJobRequest $request){
+    public function postDeleteJob(Request $request){
         try{
             $jobObj = RecruiterJobs::where('id', $request->jobId)->first();
-            if($jobObj['job_type'] == config('constants.TemporaryJob')){
+            if($jobObj) {
+                JobLists::where('recruiter_job_id', $request->jobId)->delete();
+                JobRatings::where('recruiter_job_id', $request->jobId)->delete();
                 TempJobDates::where(['recruiter_job_id' => $jobObj['id']])->delete();
+                RecruiterJobs::where('id', $request->jobId)->delete();
             }
-            RecruiterJobs::where('id', $request->jobId)->delete();
+            if(!empty($request->requestOrigin)) {
+                Session::flash('message', trans('messages.job_deleted'));
+                return redirect('job/lists');
+            }
             $this->result['success'] = true;
             $this->result['message'] = trans('messages.job_deleted');
         } catch (\Exception $e) {
