@@ -183,7 +183,8 @@ class JobLists extends Model {
     }
     
     public static function getJobInfo($seekerId,$jobId) {
-        return static::where('seeker_id',$seekerId)->where('recruiter_job_id',$jobId)->first();
+        return static::where('seeker_id',$seekerId)->where('recruiter_job_id',$jobId)
+                ->whereIn('applied_status',[JobLists::INVITED,  JobLists::APPLIED,  JobLists::SHORTLISTED])->first();
     }
     
     public static function getJobSeekerStatus($jobId){
