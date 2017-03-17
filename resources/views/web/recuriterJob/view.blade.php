@@ -75,6 +75,7 @@
                 <div class="job-information-detail">
                     <div class="search-seeker">
                         <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-20 btn-block">Search Seekers</a>
+                        <button type="button" class="btn btn-primary pd-l-30 pd-r-20 btn-block deleteJobModal" data-target="#actionModal" data-toggle="modal" data-job-id="{{ $job['id'] }}">Delete</button>
                         @if(count($seekerList)==0)
                         <a href="{{ url('job/edit',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-20 btn-block">Edit</a>
                         @endif
@@ -282,7 +283,29 @@
     </div>
 </div>
 
-
+<div id="actionModal" class="modal fade" role="dialog">
+    <div class="modal-dialog custom-modal modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Job</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url('/delete-job') }}" method="post">
+                    {!! csrf_field() !!}
+                    <input type="hidden" name="jobId" id="jobId" value="" />
+                    <input type="hidden" name="requestOrigin" value="web" />
+                    <p class="text-center">Do you want to delete this job?</p>
+                    <div class="mr-t-20 mr-b-30 dev-pd-l-13p">
+                        <button type="button" class="btn btn-link mr-r-5" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('js')
@@ -292,6 +315,11 @@ var urlFav = "{{ url('recruiter/markFavourite') }}";
 var socketUrl = "{{ config('app.socketUrl') }}";
 var userId = "{{ Auth::id() }}";
 var officeName = "{{ $job['office_name'] }}";
+
+$(".deleteJobModal").click(function() {
+    jobId = $(this).data('jobId');
+    $("#jobId").val(jobId);
+});
 </script>
 <script src="{{ config('app.socketUrl') }}/socket.io/socket.io.js"></script>
 <script src ="{{asset('web/scripts/jobdetail.js')}}"></script>
