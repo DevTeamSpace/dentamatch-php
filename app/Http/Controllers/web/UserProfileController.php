@@ -76,7 +76,7 @@ class UserProfileController extends Controller {
 
         try {
             $profile = RecruiterProfile::updateOfficeDetail($request);
-            $request->session()->put('userData', ['basic'=>$user->toArray(),'profile'=>$profile->toArray()]);
+            $request->session()->put('userData.profile.office_name', $request->officeName);
                 
             return 'success';
         } catch (\Exception $e) {
