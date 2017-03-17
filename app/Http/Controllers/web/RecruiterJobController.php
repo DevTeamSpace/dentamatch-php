@@ -505,12 +505,54 @@ class RecruiterJobController extends Controller {
     
     public function postDeleteJob(Request $request){
         try{
-            $jobObj = RecruiterJobs::where('id', $request->jobId)->first();
+            $insertData = [];
+            $jobId = $request->jobId;
+            $jobObj = RecruiterJobs::where('id', $jobId)->first();
             if($jobObj) {
-                JobLists::where('recruiter_job_id', $request->jobId)->delete();
-                JobRatings::where('recruiter_job_id', $request->jobId)->delete();
-                TempJobDates::where(['recruiter_job_id' => $jobObj['id']])->delete();
-                RecruiterJobs::where('id', $request->jobId)->delete();
+                $jobData = RecruiterJobs::where('recruiter_jobs.id',$jobId)
+                                ->select('job_lists.seeker_id', 'job_templates.user_id', 'job_titles.jobtitle_name')
+                                ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
+                                ->join('job_lists', 'job_lists.recruiter_job_id', 'recruiter_jobs.id')
+                                ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
+                                ->get();
+                $list = $jobData->toArray();
+                if(!empty($list)) {
+                    $pushList = array_map(function ($value) {
+                                        return  $value;
+                                }, $list);
+                }
+                //echo "<pre>"; print_r($pushList); die;
+                if(!empty($pushList)) {
+                    foreach($pushList as $value) {
+                        $message = $value['jobtitle_name']. " has been deleted by the recruiter.";
+                        $userId = $value['seeker_id'];
+                        $senderId = $value['user_id'];
+
+                        $notificationData['receiver_id'] = $userId;
+                        $params['data'] = $notificationData;
+
+                        $deviceModel = Device::getDeviceToken($userId);
+                        if($deviceModel) {
+                            $insertData[] = ['receiver_id'=>$userId,
+                            'sender_id'=>$senderId,
+                            'notification_data'=>$message,
+                            'created_at'=>date('Y-m-d h:i:s'),
+                            'notification_type' => Notification::OTHER,
+                            ];
+                            
+                           NotificationServiceProvider::sendPushNotification($deviceModel, $message);
+                        }
+                    }
+                    
+                    if(!empty($insertData)) {
+                        Notification::createNotification($insertData);
+                    }
+                }
+                
+                JobLists::where('recruiter_job_id', $jobId)->delete();
+                JobRatings::where('recruiter_job_id', $jobId)->delete();
+                TempJobDates::where('recruiter_job_id', $jobId)->delete();
+                RecruiterJobs::where('id', $jobId)->delete();
             }
             if(!empty($request->requestOrigin)) {
                 Session::flash('message', trans('messages.job_deleted'));
