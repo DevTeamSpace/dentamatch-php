@@ -76,12 +76,11 @@
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::SHORTLISTED }}" class="btn btn-primary pd-l-20 pd-r-20">Accept</button>
                 @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::SHORTLISTED)
                 <h6>SHORTLISTED</h6>
-                <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30" data-toggle="modal" 
-                data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
+                <a href="{{ url('chat') }}" class="btn btn-primary pd-l-30 pd-r-30">Message</a>
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::HIRED }}" class="btn btn-primary pd-l-20 pd-r-20">Hire</button>
                 @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::HIRED)
                 <h6>HIRED</h6>
-                <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Message</button>
+                <a href="{{ url('chat') }}" class="btn btn-primary pd-l-30 pd-r-30">Message</a>
                 @else
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pd-l-30 pd-r-30">Invite</button>    
                 @endif    
