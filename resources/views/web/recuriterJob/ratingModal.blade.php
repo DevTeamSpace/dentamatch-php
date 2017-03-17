@@ -15,7 +15,7 @@
                 <div class="media nopadding">
                     <div class="media-left ">
                         <div class="img-holder pos-rel">
-                            <img class="media-object img-circle" src="http://placehold.it/66x66" alt="...">
+                            <img class="media-object img-circle" src="{{ url("image/66/66/?src=" .$seeker['profile_pic']) }}" alt="...">
                             <span class="star star-fill"></span>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                     <div class="media nopadding">
                         <div class="media-left ">
                             <div class="img-holder pos-rel">
-                                <img class="media-object img-circle" src="http://placehold.it/66x66" alt="...">
+                                <img class="media-object img-circle" src="{{ url("image/66/66/?src=" .$seeker['profile_pic']) }}" alt="...">
                                 <span class="star star-fill"></span>
                             </div>
                         </div>
