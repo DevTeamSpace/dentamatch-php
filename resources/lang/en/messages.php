@@ -151,7 +151,7 @@ return [
     'reports_temp_jobs' => 'Temp jobs for reports fetched successfully',
     'office_type_update' => 'Office type updated successfylly.',
     'job_edited' => 'Job updated successfully.',
-    'job_deleted' => 'Job deleted successfully.',
+    'job_deleted' => 'Job successfully deleted.',
 
     'notification_delete' => 'Notification deleted successfully',
 
