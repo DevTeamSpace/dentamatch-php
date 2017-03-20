@@ -37,6 +37,7 @@ class FavoriteJobseekerController extends Controller {
                 ->join('job_titles', 'job_templates.job_title_id', '=', 'job_titles.id')
                 ->where('recruiter_jobs.job_type', '3')
                 ->where('job_templates.user_id', Auth::user()->id)
+                ->whereNull('recruiter_jobs.deleted_at')
                 ->select('job_titles.jobtitle_name', 'recruiter_jobs.id as recruiterId')
                 ->get();
         
