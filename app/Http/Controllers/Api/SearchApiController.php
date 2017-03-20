@@ -244,9 +244,10 @@ class SearchApiController extends Controller {
                 if(!empty($data)) {
                     $data['is_applied'] = JobLists::isJobApplied($jobId,$userId);
                     $data['is_saved'] = SavedJobs::getJobSavedStatus($jobId, $userId);
+                    $returnResponse = apiResponse::customJsonResponse(1, 200, trans('messages.job_detail_success'), apiResponse::convertToCamelCase($data));
+                }else{
+                    $returnResponse = apiResponse::customJsonResponse(0, 201, trans("messages.job_not_exists"));
                 }
-                
-                $returnResponse = apiResponse::customJsonResponse(1, 200, trans('messages.job_detail_success'), apiResponse::convertToCamelCase($data));
             }else{
                 $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }

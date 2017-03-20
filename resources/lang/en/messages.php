@@ -167,4 +167,6 @@ return [
     'invite_sent_success' => 'Invitation sent',
     
     'already_register_as_recruiter'=>'You are already registered as recruiter',
+    
+    'job_not_exists' => 'This job no longer exists',
 ];
