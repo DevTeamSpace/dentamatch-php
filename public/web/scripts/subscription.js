@@ -54,6 +54,14 @@ var FirstSubscriptionVM = function () {
     me.addCard = function(d, e){
         me.cardNumber();
         me.expiry();
+        me.expiryWithSlash = ko.computed(function(){
+            if(me.expiry().length == 2){
+                me.expiry(me.expiry()+'/');
+            }else{
+                me.expiry();
+            }
+            return me.expiry();
+        });
         me.cvv();
         me.trailPeriod(d.trailPeriod);
         subType = $(e.currentTarget).parent().find('#stype').val();
