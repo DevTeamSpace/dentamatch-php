@@ -136,7 +136,7 @@ class RecruiterJobs extends Model
         //$searchQueryObj->where('distance','<=',$radius->config_data);
         //$searchQueryObj->groupby('recruiter_jobs.id');
         
-        $total = $searchQueryObj->count();
+        $total = $searchQueryObj->distinct('recruiter_jobs.id')->count();
         $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
                         'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
                         'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
@@ -160,7 +160,7 @@ class RecruiterJobs extends Model
         if($page>1){
             $skip = ($page-1)* $limit;
         }
-        $searchResult = $searchQueryObj->skip($skip)->take($limit)->orderBy('distance', 'asc')->get();
+        $searchResult = $searchQueryObj->distinct('recruiter_jobs.id')->skip($skip)->take($limit)->orderBy('distance', 'asc')->get();
         $result = array();
         $updatedResult = array();
         if($searchResult){
