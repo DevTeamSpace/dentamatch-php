@@ -515,6 +515,8 @@ class RecruiterJobController extends Controller {
                                 ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
                                 ->join('job_lists', 'job_lists.recruiter_job_id', 'recruiter_jobs.id')
                                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
+                                ->groupby('recruiter_jobs.id')
+                                ->groupby('job_lists.seeker_id')
                                 ->get();
                 $list = $jobData->toArray();
                 if(!empty($list)) {
