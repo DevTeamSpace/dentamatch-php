@@ -153,14 +153,14 @@ class RecruiterJobs extends Model
               + sin ( radians($latitude) )
               * sin( radians( recruiter_offices.latitude ) )
              )) AS distance"));
-        $total = $searchQueryObj->count();
+        $total = $searchQueryObj->distinct('recruiter_jobs.id')->count();
         $page = $reqData['page'];
         $limit = RecruiterJobs::LIMIT ;
         $skip = 0;
         if($page>1){
             $skip = ($page-1)* $limit;
         }
-        $searchResult = $searchQueryObj->skip($skip)->take($limit)->orderBy('distance', 'asc')->get();
+        $searchResult = $searchQueryObj->distinct('recruiter_jobs.id')->skip($skip-1)->take($limit)->orderBy('distance', 'asc')->get();
         $result = array();
         $updatedResult = array();
         if($searchResult){
