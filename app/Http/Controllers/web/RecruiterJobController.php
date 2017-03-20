@@ -25,6 +25,7 @@ use Log;
 use App\Http\Requests\CheckJobAppliedOrNotRequest;
 use Session;
 use App\Models\JobRatings;
+use App\Models\SavedJobs;
 
 class RecruiterJobController extends Controller {
 
@@ -553,6 +554,8 @@ class RecruiterJobController extends Controller {
                 JobRatings::where('recruiter_job_id', $jobId)->delete();
                 TempJobDates::where('recruiter_job_id', $jobId)->delete();
                 RecruiterJobs::where('id', $jobId)->delete();
+                SavedJobs::where('recruiter_job_id', $jobId)->delete();
+                Notification::where('job_list_id', $jobId)->delete();
             }
             if(!empty($request->requestOrigin)) {
                 Session::flash('message', trans('messages.job_deleted'));
