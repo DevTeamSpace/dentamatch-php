@@ -20,7 +20,7 @@
             <div class="col-md-2 col-sm-2 resultImage">
                 <img src="{{ url('image/120/120/?src=' .$seekerDetails['profile_pic']) }}" class="img-circle">
             </div> 
-            <div class="col-md-6 col-sm-6">
+            <div class="col-md-7 col-sm-6">
                 <h4>{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']}}</h4>
                 <h6>{{$seekerDetails['jobtitle_name']}}</h6> 
                 <div class="job-type-detail seeker-detail-temp">
@@ -45,26 +45,28 @@
                     </span>
                     @endif
                     @if($seekerDetails['temp_job_dates'])
-                    <span class="bg-ember statusBtn mr-r-5">Temporary</span>
-                    <span class="dropdown date-drop">
-                        @php 
-                        $dates = explode(' | ',$seekerDetails['temp_job_dates']);
-                        @endphp
-                        <span class=" dropdown-toggle"  data-toggle="dropdown">
-                            <span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
-                            <span class="caret"></span>
-                        </span>
-                        <ul class="dropdown-menu">
-                          @foreach ($dates as $date)
-                          <li>{{ date('l, d M Y',strtotime($date)) }}</li>
-                          @endforeach
-                      </ul>
-                  </span>
+                    <label>
+                        <span class="bg-ember statusBtn mr-r-5">Temporary</span>
+                        <span class="dropdown date-drop">
+                            @php 
+                            $dates = explode(' | ',$seekerDetails['temp_job_dates']);
+                            @endphp
+                            <span class=" dropdown-toggle"  data-toggle="dropdown">
+                                <span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
+                                <span class="caret"></span>
+                            </span>
+                            <ul class="dropdown-menu">
+                              @foreach ($dates as $date)
+                              <li>{{ date('l, d M Y',strtotime($date)) }}</li>
+                              @endforeach
+                          </ul>
+                      </span>
+                  </label>
                   @endif
               </div>
           </div>
           <form action="{{ url('job/updateStatus') }}" method="post">
-            <div class="col-md-3 text-right"><p>{{round($seekerDetails['distance'])}} miles away</p>
+            <div class="col-md-3 text-right"><p>{{round($seekerDetails['distance'],1)}} miles away</p>
                 {!! csrf_field() !!}
                 <input type="hidden" name="jobId" value="{{ $jobId }}">
                 <input type="hidden" name="seekerId" value="{{ $seekerDetails['user_id'] }}">
@@ -196,7 +198,7 @@
                 </div>
                 @endforeach
                 @endif
-             @endif
+                @endif
             </div>  
         </div>
     </div>  

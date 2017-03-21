@@ -136,7 +136,7 @@ class RecruiterJobs extends Model
         //$searchQueryObj->where('distance','<=',$radius->config_data);
         //$searchQueryObj->groupby('recruiter_jobs.id');
         
-        $total = $searchQueryObj->count();
+        
         $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
                         'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
                         'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
@@ -153,7 +153,7 @@ class RecruiterJobs extends Model
               + sin ( radians($latitude) )
               * sin( radians( recruiter_offices.latitude ) )
              )) AS distance"));
-
+        $total = $searchQueryObj->distinct('recruiter_jobs.id')->count('recruiter_jobs.id');
         $page = $reqData['page'];
         $limit = RecruiterJobs::LIMIT ;
         $skip = 0;

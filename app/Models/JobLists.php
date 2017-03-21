@@ -90,7 +90,12 @@ class JobLists extends Model {
         $result = [];
         $jobTypeCount = [];
 
-        $searchQueryObj = static::join('recruiter_jobs','job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
+        $searchQueryObj = static::leftJoin('temp_job_dates',function($query) use ($jobStartDate,$jobEndDate){
+            $query->on('job_lists.recruiter_job_id','=','temp_job_dates.recruiter_job_id')
+                  ->where(DB::raw("DATE_FORMAT(temp_job_dates.job_date, '%Y-%m-%d')"), ">=",$jobStartDate)
+                  ->where(DB::raw("DATE_FORMAT(temp_job_dates.job_date, '%Y-%m-%d')"), "<=",$jobEndDate);
+        })
+                        ->join('recruiter_jobs','job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
                         ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                         ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
                         ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')

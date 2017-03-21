@@ -25,6 +25,7 @@ use Log;
 use App\Http\Requests\CheckJobAppliedOrNotRequest;
 use Session;
 use App\Models\JobRatings;
+use App\Models\SavedJobs;
 
 class RecruiterJobController extends Controller {
 
@@ -308,11 +309,7 @@ class RecruiterJobController extends Controller {
             }
             $jobDetails = RecruiterJobs::getRecruiterJobDetails($allData->jobId);
             $recruiterOfficeObj = RecruiterOffice::where(['id' => $jobDetails['recruiter_office_id']])->first();
-            if ($jobDetails['job_type'] == $allData->selectedJobType) {
-                $updatedJob = $this->sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj);
-            } else {
-                $updatedJob = $this->sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj);
-            }
+            $updatedJob = $this->sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj);
             
             DB::commit();
             $this->result['data'] = $updatedJob['data'];
@@ -375,7 +372,7 @@ class RecruiterJobController extends Controller {
     
     private function saveOffice($recruiterOfficeId, $allData){
         try{
-            $recruiterOfficeObj = RecruiterOffice::where(['id', $recruiterOfficeId])->first();
+            $recruiterOfficeObj = RecruiterOffice::where(['id' => $recruiterOfficeId])->first();
             $recruiterOfficeObj->work_everyday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->everydayStart)) : '';
             $recruiterOfficeObj->work_everyday_end = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->everydayEnd)) : '';
             $recruiterOfficeObj->monday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isMondayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->mondayStart)) : '';
@@ -412,6 +409,9 @@ class RecruiterJobController extends Controller {
                 $recruiterOfficeObj->latitude = $allData->selectedOffice[0]->selectedOfficeLat;
                 $recruiterOfficeObj->longitude = $allData->selectedOffice[0]->selectedOfficeLng;
                 $recruiterOfficeObj->zipcode = $allData->selectedOffice[0]->selectedOfficeZipcode;
+                $recruiterOfficeObj->phone_no = $allData->selectedOffice[0]->selectedOfficePhone;
+                $recruiterOfficeObj->office_info = $allData->selectedOffice[0]->selectedOfficeInfo;
+                $recruiterOfficeObj->save();
             } else {
                 $recruiterOfficeObj = RecruiterOffice::where(['id' => $allData->selectedOffice[0]->selectedOfficeId])->first();
             }
@@ -514,6 +514,8 @@ class RecruiterJobController extends Controller {
                                 ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
                                 ->join('job_lists', 'job_lists.recruiter_job_id', 'recruiter_jobs.id')
                                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
+                                ->groupby('recruiter_jobs.id')
+                                ->groupby('job_lists.seeker_id')
                                 ->get();
                 $list = $jobData->toArray();
                 if(!empty($list)) {
@@ -553,6 +555,8 @@ class RecruiterJobController extends Controller {
                 JobRatings::where('recruiter_job_id', $jobId)->delete();
                 TempJobDates::where('recruiter_job_id', $jobId)->delete();
                 RecruiterJobs::where('id', $jobId)->delete();
+                SavedJobs::where('recruiter_job_id', $jobId)->delete();
+                Notification::where('job_list_id', $jobId)->delete();
             }
             if(!empty($request->requestOrigin)) {
                 Session::flash('message', trans('messages.job_deleted'));

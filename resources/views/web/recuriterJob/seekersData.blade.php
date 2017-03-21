@@ -103,7 +103,7 @@
             @endif  
         </div>
         <div class="template-job-information-right">
-            <span >{{round($seeker['distance'],0)}} miles away</span>
+            <span >{{round($seeker['distance'],1)}} miles away</span>
         </div> 
     </div> 
     <div class="job-type-detail">
