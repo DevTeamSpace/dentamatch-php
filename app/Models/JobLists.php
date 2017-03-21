@@ -116,6 +116,7 @@ class JobLists extends Model {
                         'recruiter_offices.latitude','recruiter_offices.longitude',
                         'recruiter_jobs.created_at as job_created_at', 'job_lists.created_at as job_applied_on',
                         DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
+                        DB::raw("DATE_FORMAT(temp_job_dates.job_date, '%Y-%m-%d') AS tempDates"),
                         DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d') AS jobDate"));
 
         //$searchResult = $searchQueryObj->with('tempJobDates')->get();
@@ -125,7 +126,6 @@ class JobLists extends Model {
         if ($searchResult) {
             foreach ($searchResult as $value) {
                 $value->job_type_string = static::$jobTypeName[$value->job_type];
-                $jobTypeCount[] = $value->job_type;
             }
             $list = $searchResult->toArray();
             $result['list'] = $list;
