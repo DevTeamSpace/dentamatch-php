@@ -169,8 +169,13 @@
             @if(!empty($seekerDetails['skills']))
             @foreach($seekerDetails['skills'] as $skills)
             <div class="pd-t-10 keySkills">
+                @if($skills['skill_name'] == 'Other' || $skills['skill_name'] == 'other')
+                <b>{{$skills['skill_name']}}</b>
+                <p>{{$skills['other_skill']}}</p>
+                @else
                 <b>{{$skills['skill_title']}}</b>
                 <p>{{$skills['skill_name']}}</p>
+                 @endif
             </div>
             @endforeach
             @endif

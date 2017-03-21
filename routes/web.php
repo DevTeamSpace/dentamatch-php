@@ -93,6 +93,7 @@
                 Route::post('delete-office', 'web\UserProfileController@postDeleteOffice');
                 Route::get('notification-lists', 'web\NotificationController@getNotificationList');
                 Route::get('{id}/delete-notification', 'web\NotificationController@deleteNotification');
+                Route::get('checknotratedjobs', 'web\RatingController@getRating');
             });
             Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails');
             Route::get('/get-location/{zip}', 'web\UserProfileController@checkValidLocation');

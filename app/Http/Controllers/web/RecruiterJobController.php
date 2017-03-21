@@ -102,14 +102,14 @@ class RecruiterJobController extends Controller {
             if ($request->action == "edit" && !empty($request->id)) {
                 $recruiterJobObj = RecruiterJobs::findById($request->id);
             }
-            
-            if($request->jobType == RecruiterJobs::TEMPORARY) {
-                $isPreviousTempJobRated = RecruiterJobs::checkPendingTempJobsRating();
-                if($isPreviousTempJobRated['seekerCount'] != $isPreviousTempJobRated['ratedSeekerCount']) {
-                    Session::flash('message', trans('messages.rate_previous_jobseeker'));
-                    return redirect('createJob/'.$request->templateId);
-                }
+            $isPreviousTempJobRated = RecruiterJobs::checkPendingTempJobsRating();
+            if($isPreviousTempJobRated['seekerCount'] != $isPreviousTempJobRated['ratedSeekerCount']) {
+                Session::flash('message', trans('messages.rate_previous_jobseeker'));
+                return redirect('createJob/'.$request->templateId);
             }
+            /*if($request->jobType == RecruiterJobs::TEMPORARY) {
+                
+            }*/
             $recruiterJobObj->job_template_id = $request->templateId;
             $recruiterJobObj->recruiter_office_id = $request->dentalOfficeId;
             $recruiterJobObj->job_type = $request->jobType;

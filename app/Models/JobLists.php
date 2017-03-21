@@ -261,4 +261,6 @@ class JobLists extends Model {
 
         return ($data->groupBy('applied_status')->toArray());
     }
+    
+    
 }
