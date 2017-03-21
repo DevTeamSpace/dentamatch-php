@@ -128,6 +128,7 @@
             $(element).datetimepicker({
                 format: 'hh:mm A',
                 'allowInputToggle': true,
+                stepping: 15,
                 minDate: moment().startOf('day'),
                 maxDate: moment().endOf('day')
             }).on('dp.change',function(a){
@@ -169,6 +170,7 @@
         me.totalJobOpeningError = ko.observable('');
         me.partTimeJobDaysError = ko.observable('');
         me.temporaryJobError = ko.observable('');
+        me.officeTypeError = ko.observable('');
         me.allOfficeTypeDetail = ko.observableArray([]);
         me.headMessage = ko.observable('');
         me.cancelButtonDelete = ko.observable(true);
@@ -385,6 +387,7 @@
         me.totalJobOpeningError('');
         me.partTimeJobDaysError('');
         me.temporaryJobError('');
+        me.officeTypeError('');
         
         if(me.selectedJobType() == "Full Time"){
             
@@ -402,6 +405,11 @@
                 me.temporaryJobError('Please select dates for part time job.');
                 return false;
             }
+        }
+        
+        if(me.selectedOffice()[0].selectedOfficeType().length == 0){
+            me.officeTypeError('Please select office type.');
+            return false;
         }
         
         if(me.selectedOffice()[0].selectedOfficeWorkingHours.isEverydayWork() == true && (me.selectedOffice()[0].selectedOfficeWorkingHours.isMondayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isTuesdayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isWednesdayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isThursdayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isFridayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isSaturdayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isSundayWork() == true)){
@@ -460,6 +468,11 @@
         
         if(me.selectedOffice()[0].selectedOfficePhone() == null || me.selectedOffice()[0].selectedOfficePhone() == ''){
             me.phoneNumberError('Please enter phone number.');
+            return false;
+        }
+        
+        if(me.selectedOffice()[0].selectedOfficePhone().length > 10){
+            me.phoneNumberError('Phone number should be of 10 digits.');
             return false;
         }
         
