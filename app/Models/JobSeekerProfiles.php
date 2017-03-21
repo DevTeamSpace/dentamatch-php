@@ -110,6 +110,7 @@ class JobSeekerProfiles extends Model
                 ->where('job_lists.recruiter_job_id',$job['id']);
         })
         ->whereNull('job_lists.applied_status')
+        ->where('jobseeker_profiles.is_job_seeker_verified',1)
         ->addSelect('job_lists.applied_status as job_status')
         ->addSelect('favourites.seeker_id as is_favourite')
         ->addSelect(DB::raw("avg(punctuality) as punctuality"),DB::raw("avg(time_management) as time_management"),
