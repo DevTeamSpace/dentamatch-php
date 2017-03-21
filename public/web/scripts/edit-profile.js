@@ -243,6 +243,7 @@ ko.bindingHandlers.datetimePicker = {
         $(element).datetimepicker({
             format: 'hh:mm A',
             'allowInputToggle': true,
+            stepping: 15,
             minDate: moment().startOf('day'),
             maxDate: moment().endOf('day')
         }).on('dp.change', function(a) {

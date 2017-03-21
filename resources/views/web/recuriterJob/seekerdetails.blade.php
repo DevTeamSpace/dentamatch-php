@@ -78,11 +78,13 @@
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::SHORTLISTED }}" class="btn btn-primary pd-l-20 pd-r-20">Accept</button>
                 @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::SHORTLISTED)
                 <h6>SHORTLISTED</h6>
-                <a href="{{ url('chat') }}" class="btn btn-primary pd-l-30 pd-r-30">Message</a>
+                <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
+                                    data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::HIRED }}" class="btn btn-primary pd-l-20 pd-r-20">Hire</button>
                 @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::HIRED)
                 <h6>HIRED</h6>
-                <a href="{{ url('chat') }}" class="btn btn-primary pd-l-30 pd-r-30">Message</a>
+                <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
+                                    data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
                 @else
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pd-l-30 pd-r-30">Invite</button>    
                 @endif    
@@ -224,16 +226,45 @@
 </div><!-- /.modal-dialog -->
 </div><!-- /.modal mixer image -->
 
-<script>
-    $('.thumb-certificate').click(function(){
+
+<div id="ShortListMessageBox" class="modal fade" role="dialog">
+    <div class="modal-dialog custom-modal popup-wd522">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Messgae</h4>
+            </div>
+            <div class="modal-body ">
+                <form>
+                    <div class="form-group custom-select">
+                        <textarea id="chatMsg" class="form-control messageBoxTextArea" placeholder="Type your message here"></textarea>
+                    </div>
+                    <div class="text-right mr-t-20 mr-b-30">
+                        <input type="hidden" id="seekerId" value="{{ $seekerDetails['user_id'] }}">
+                        <button id="sendChat" type="submit" class="btn btn-primary pd-l-30 pd-r-30">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection
+
+@section('js')
+<script type="text/javascript">
+$('.thumb-certificate').click(function(){
         var imgUrl = "{{ url('image/550/500/?src=') }}";
         $('#certificateModal').modal({show:true});
         $('#certificateModalImg').attr('src', imgUrl+$(this).data('image'));
         return false;
     });
-    
-</script>
-@endsection
+var socketUrl = "{{ config('app.socketUrl') }}";
+var userId = "{{ Auth::id() }}";
+var officeName = "{{ Session::get('userData.profile.office_name') }}";
 
-@section('js')
+</script>
+<script src="{{ config('app.socketUrl') }}/socket.io/socket.io.js"></script>
+<script src ="{{ asset('web/scripts/jobdetail.js') }}"></script>
 @endsection
