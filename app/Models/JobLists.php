@@ -105,8 +105,7 @@ class JobLists extends Model {
                         ->where(DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d')"), ">=",$jobStartDate)
                         ->where(DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d')"), "<=",$jobEndDate);        
         
-        $total = $searchQueryObj->count();
-        $total = $searchQueryObj->distinct('recruiter_jobs.id')->count('recruiter_jobs.id');
+        
         $searchQueryObj->select('job_lists.recruiter_job_id','recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
                         'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
                         'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
@@ -118,18 +117,18 @@ class JobLists extends Model {
                         DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
                         DB::raw("DATE_FORMAT(temp_job_dates.job_date, '%Y-%m-%d') AS tempDates"),
                         DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d') AS jobDate"));
-
-        //$searchResult = $searchQueryObj->with('tempJobDates')->get();
+        $searchQueryObj = $searchQueryObj->groupby('recruiter_jobs.id')->groupby('tempDates');
+        
+        
         
        $searchResult = $searchQueryObj->distinct('recruiter_jobs.id')->get();
-
         if ($searchResult) {
             foreach ($searchResult as $value) {
                 $value->job_type_string = static::$jobTypeName[$value->job_type];
             }
             $list = $searchResult->toArray();
             $result['list'] = $list;
-            $result['total'] = $total;
+            $result['total'] = count($list);
         }
         return $result;
     }
