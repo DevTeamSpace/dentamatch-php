@@ -236,6 +236,7 @@
                         <textarea id="chatMsg" class="form-control messageBoxTextArea" placeholder="Type your message here"></textarea>
                     </div>
                     <div class="text-right mr-t-20 mr-b-30">
+                        <input type="hidden" id="seekerId" value="{{ $seekerDetails['user_id'] }}">
                         <button id="sendChat" type="submit" class="btn btn-primary pd-l-30 pd-r-30">Send</button>
                     </div>
                 </form>
