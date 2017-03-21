@@ -309,11 +309,7 @@ class RecruiterJobController extends Controller {
             }
             $jobDetails = RecruiterJobs::getRecruiterJobDetails($allData->jobId);
             $recruiterOfficeObj = RecruiterOffice::where(['id' => $jobDetails['recruiter_office_id']])->first();
-            if ($jobDetails['job_type'] == $allData->selectedJobType) {
-                $updatedJob = $this->sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj);
-            } else {
-                $updatedJob = $this->sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj);
-            }
+            $updatedJob = $this->sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj);
             
             DB::commit();
             $this->result['data'] = $updatedJob['data'];
@@ -376,7 +372,7 @@ class RecruiterJobController extends Controller {
     
     private function saveOffice($recruiterOfficeId, $allData){
         try{
-            $recruiterOfficeObj = RecruiterOffice::where(['id', $recruiterOfficeId])->first();
+            $recruiterOfficeObj = RecruiterOffice::where(['id' => $recruiterOfficeId])->first();
             $recruiterOfficeObj->work_everyday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->everydayStart)) : '';
             $recruiterOfficeObj->work_everyday_end = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->everydayEnd)) : '';
             $recruiterOfficeObj->monday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isMondayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->mondayStart)) : '';
@@ -413,6 +409,9 @@ class RecruiterJobController extends Controller {
                 $recruiterOfficeObj->latitude = $allData->selectedOffice[0]->selectedOfficeLat;
                 $recruiterOfficeObj->longitude = $allData->selectedOffice[0]->selectedOfficeLng;
                 $recruiterOfficeObj->zipcode = $allData->selectedOffice[0]->selectedOfficeZipcode;
+                $recruiterOfficeObj->phone_no = $allData->selectedOffice[0]->selectedOfficePhone;
+                $recruiterOfficeObj->office_info = $allData->selectedOffice[0]->selectedOfficeInfo;
+                $recruiterOfficeObj->save();
             } else {
                 $recruiterOfficeObj = RecruiterOffice::where(['id' => $allData->selectedOffice[0]->selectedOfficeId])->first();
             }
