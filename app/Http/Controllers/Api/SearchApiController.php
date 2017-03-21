@@ -120,7 +120,7 @@ class SearchApiController extends Controller {
             $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
-                $profileComplete = UserProfile::select('is_completed')->where('user_id', $userId)->first();
+                $profileComplete = UserProfile::select('is_completed', 'is_job_seeker_verified')->where('user_id', $userId)->first();
                 
                 if($profileComplete->is_job_seeker_verified != UserProfile::JOBSEEKER_VERIFY_APPROVED) {
                     return apiResponse::customJsonResponse(0, 202, trans("messages.jobseeker_not_verified"));
