@@ -585,5 +585,16 @@ class RecruiterJobController extends Controller {
         }
         return $this->result;
     }
+    
+    public function jobSeekerProfile($seekerId) {
+        try {
+            $seekerDetails = JobSeekerProfiles::getJobSeekerProfile($seekerId);
+            return view('web.recuriterJob.seekerProfile',compact('seekerDetails'));
+
+        } catch (\Exception $e) {
+            Log::error($e);
+            return view('web.error.', ["message" => $e->getMessage()]);
+        }
+    }
 
 }

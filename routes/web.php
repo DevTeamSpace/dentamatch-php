@@ -68,6 +68,7 @@
                 Route::post('delete-job', 'web\RecruiterJobController@postDeleteJob');
                 Route::post('job/updateStatus', 'web\RecruiterJobController@updateStatus');
                 Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
+                Route::get('/jobseeker/{seekerId}', 'web\RecruiterJobController@jobSeekerProfile');
                 Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
                 
                 
