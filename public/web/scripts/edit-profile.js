@@ -550,10 +550,18 @@ var EditProfileVM = function () {
                     d.everydayTimeError('Start time cannot be greated than end time.');
                     return false;
                 }
+                if (moment(d.officeWorkingHours.everydayStart(), 'HH:mm a').isSame(moment(d.officeWorkingHours.everydayEnd(), 'HH:mm a'))) {
+                    d.everydayTimeError('Start time cannot be equal to end time.');
+                    return false;
+                }
             }
             if (d.officeWorkingHours.isMondayWork() == true) {
                 if (moment(d.officeWorkingHours.mondayStart(), 'HH:mm a') > moment(d.officeWorkingHours.mondayEnd(), 'HH:mm a')) {
                     d.mondayTimeError('Start time cannot be greated than end time.');
+                    return false;
+                }
+                if (moment(d.officeWorkingHours.mondayStart(), 'HH:mm a').isSame(moment(d.officeWorkingHours.mondayEnd(), 'HH:mm a'))) {
+                    d.mondayTimeError('Start time cannot be equal to end time.');
                     return false;
                 }
             }
@@ -562,10 +570,18 @@ var EditProfileVM = function () {
                     d.tuesdayTimeError('Start time cannot be greated than end time.');
                     return false;
                 }
+                if (moment(d.officeWorkingHours.tuesdayStart(), 'HH:mm a').isSame(moment(d.officeWorkingHours.tuesdayEnd(), 'HH:mm a'))) {
+                    d.tuesdayTimeError('Start time cannot be equal to end time.');
+                    return false;
+                }
             }
             if (d.officeWorkingHours.isWednesdayWork() == true) {
                 if (moment(d.officeWorkingHours.wednesdayStart(), 'HH:mm a') > moment(d.officeWorkingHours.wednesdayEnd(), 'HH:mm a')) {
                     d.wednesdayTimeError('Start time cannot be greated than end time.');
+                    return false;
+                }
+                if (moment(d.officeWorkingHours.wednesdayStart(), 'HH:mm a').isSame(moment(d.officeWorkingHours.wednesdayEnd(), 'HH:mm a'))) {
+                    d.wednesdayTimeError('Start time cannot be equal to end time.');
                     return false;
                 }
             }
@@ -574,10 +590,18 @@ var EditProfileVM = function () {
                     d.thursdayTimeError('Start time cannot be greated than end time.');
                     return false;
                 }
+                if (moment(d.officeWorkingHours.thursdayStart(), 'HH:mm a').isSame(moment(d.officeWorkingHours.thursdayEnd(), 'HH:mm a'))) {
+                    d.thursdayTimeError('Start time cannot be equal to end time.');
+                    return false;
+                }
             }
             if (d.officeWorkingHours.isFridayWork() == true) {
                 if (moment(d.officeWorkingHours.fridayStart(), 'HH:mm a') > moment(d.officeWorkingHours.fridayEnd(), 'HH:mm a')) {
                     d.fridayTimeError('Start time cannot be greated than end time.');
+                    return false;
+                }
+                if (moment(d.officeWorkingHours.fridayStart(), 'HH:mm a').isSame(moment(d.officeWorkingHours.fridayEnd(), 'HH:mm a'))) {
+                    d.fridayTimeError('Start time cannot be equal to end time.');
                     return false;
                 }
             }
@@ -586,10 +610,18 @@ var EditProfileVM = function () {
                     d.saturdayTimeError('Start time cannot be greated than end time.');
                     return false;
                 }
+                if (moment(d.officeWorkingHours.saturdayStart(), 'HH:mm a').isSame(moment(d.officeWorkingHours.saturdayEnd(), 'HH:mm a'))) {
+                    d.saturdayTimeError('Start time cannot be equal to end time.');
+                    return false;
+                }
             }
             if (d.officeWorkingHours.isSundayWork() == true) {
                 if (moment(d.officeWorkingHours.sundayStart(), 'HH:mm a') > moment(d.officeWorkingHours.sundayEnd(), 'HH:mm a')) {
                     d.sundayTimeError('Start time cannot be greated than end time.');
+                    return false;
+                }
+                if (moment(d.officeWorkingHours.sundayStart(), 'HH:mm a').isSame(moment(d.officeWorkingHours.sundayEnd(), 'HH:mm a'))) {
+                    d.sundayTimeError('Start time cannot be equal to end time.');
                     return false;
                 }
             }
