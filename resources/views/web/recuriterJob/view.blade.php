@@ -75,6 +75,7 @@
                 <div class="job-information-detail">
                     <div class="search-seeker">
                         <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-20 btn-block">Search Seekers</a>
+                        <button type="button" class="btn btn-primary pd-l-30 pd-r-20 btn-block deleteJobModal" data-target="#actionModal" data-toggle="modal" data-job-id="{{ $job['id'] }}">Delete</button>
                         @if(count($seekerList)==0)
                         <a href="{{ url('job/edit',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-20 btn-block">Edit</a>
                         @endif
@@ -143,13 +144,17 @@
                             <a href="{{ url('job/seekerdetails/'.$seeker['seeker_id'].'/'.$job['id']) }}" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
                             @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
                             <span class="mr-l-5 dropdown date_drop">
-                                <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{ ($seeker['avg_rating']!='')?round($seeker['avg_rating'],1): '0' }}</span>
+                                @if(!empty($seeker['avg_rating']))
+                                    <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{ number_format($seeker['avg_rating'], 1, '.', '') }}</span>
+                                @else
+                                    <span class=" dropdown-toggle label label-success">Not Yet Rated</span>
+                                @endif
                                 <ul class="dropdown-menu rating-info">
                                     <li><div class="rating_on"> Punctuality </div>
                                         <ul class="rate_me">
                                             {{ $punctuality = round($seeker['avg_punctuality'],1) }}
-                                            <li ><span {{ (!empty($punctuality)) ? (floor($punctuality)>1 ? "class=bg-green" : "") : "" }}></span></li>
-                                            <li><span {{ (!empty($punctuality)) ? (floor($punctuality)>2 ? "class=bg-green" : "") : "" }}></span></li>
+                                            <li ><span {{ (!empty($punctuality)) ? (floor($punctuality)>=1 ? "class=bg-green" : "") : "" }}></span></li>
+                                            <li><span {{ (!empty($punctuality)) ? (floor($punctuality)>=2 ? "class=bg-green" : "") : "" }}></span></li>
                                             <li><span {{ (!empty($punctuality) && floor($punctuality)>=3) ? "class=bg-green" : "" }}></span></li>
                                             <li ><span {{ (!empty($punctuality) && floor($punctuality)>=4) ? "class=bg-green" : "" }}></span></li>
                                             <li><span {{ (!empty($punctuality) && floor($punctuality)>=5) ? "class=bg-green" : "" }} ></span></li>
@@ -169,8 +174,8 @@
                                         <div class="rating_on">  Personal/Professional skill</div>
                                         <ul class="rate_me">
                                             {{ $skillsRating = round($seeker['avg_skills'],1) }}
-                                            <li ><span {{ (!empty($skillsRating)) ? (floor($skillsRating)>1 ? "class=bg-red" : "") : "" }}></span></li>
-                                            <li><span {{ (!empty($skillsRating)) ? (floor($skillsRating)>2 ? "class=bg-red" : "") : "" }}></span></li>
+                                            <li ><span {{ (!empty($skillsRating)) ? (floor($skillsRating)>=1 ? "class=bg-red" : "") : "" }}></span></li>
+                                            <li><span {{ (!empty($skillsRating)) ? (floor($skillsRating)>=2 ? "class=bg-red" : "") : "" }}></span></li>
                                             <li><span {{ (!empty($skillsRating) && floor($skillsRating)>=3) ? "class=bg-red" : "" }}></span></li>
                                             <li><span {{ (!empty($skillsRating) && floor($skillsRating)>=4) ? "class=bg-red" : "" }}></span></li>
                                             <li><span {{ (!empty($skillsRating) && floor($skillsRating)>=5) ? "class=bg-red" : "" }}></span></li>
@@ -217,7 +222,7 @@
                         @endif
                     </div>
                     <div class="col-sm-5 pd-t-5 text-right">
-                        <p>{{ round($seeker['distance'],2) }} miles away</p>
+                        <p>{{ round($seeker['distance'],1) }} miles away</p>
                         <form action="{{ url('job/updateStatus') }}" method="post">
                             {!! csrf_field() !!}
                             <input type="hidden" name="jobId" value="{{ $job['id'] }}">
@@ -261,7 +266,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Invite Jobseeker</h4>
+                <h4 class="modal-title">Messgae</h4>
             </div>
             <div class="modal-body ">
                 <form>
@@ -278,17 +283,44 @@
     </div>
 </div>
 
-
+<div id="actionModal" class="modal fade" role="dialog">
+    <div class="modal-dialog custom-modal modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Job</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url('/delete-job') }}" method="post">
+                    {!! csrf_field() !!}
+                    <input type="hidden" name="jobId" id="jobId" value="" />
+                    <input type="hidden" name="requestOrigin" value="web" />
+                    <p class="text-center">Do you want to delete this job?</p>
+                    <div class="mr-t-20 mr-b-30 dev-pd-l-13p">
+                        <button type="button" class="btn btn-link mr-r-5" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('js')
 <script type="text/javascript">
 
 var urlFav = "{{ url('recruiter/markFavourite') }}";
-var socketUrl = "{{ url('') }}:3000";
+var socketUrl = "{{ config('app.socketUrl') }}";
 var userId = "{{ Auth::id() }}";
 var officeName = "{{ $job['office_name'] }}";
+
+$(".deleteJobModal").click(function() {
+    jobId = $(this).data('jobId');
+    $("#jobId").val(jobId);
+});
 </script>
-<script src="{{ url('') }}:3000/socket.io/socket.io.js"></script>
+<script src="{{ config('app.socketUrl') }}/socket.io/socket.io.js"></script>
 <script src ="{{asset('web/scripts/jobdetail.js')}}"></script>
 @endsection

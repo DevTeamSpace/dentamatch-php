@@ -54,6 +54,14 @@ var FirstSubscriptionVM = function () {
     me.addCard = function(d, e){
         me.cardNumber();
         me.expiry();
+        me.expiryWithSlash = ko.computed(function(){
+            if(me.expiry().length == 2){
+                me.expiry(me.expiry()+'/');
+            }else{
+                me.expiry();
+            }
+            return me.expiry();
+        });
         me.cvv();
         me.trailPeriod(d.trailPeriod);
         subType = $(e.currentTarget).parent().find('#stype').val();
@@ -162,6 +170,10 @@ var FirstSubscriptionVM = function () {
     
     me._init = function () {
         me.getSubscriptionList();
+        $(document).ready(function () {
+            $('#card-number').inputmask("9999 9999 9999 9999");  //static mask
+            $('#expiry, #editExpiry').inputmask("99/9999");  //static mask
+        });
     };
     me._init();
 };

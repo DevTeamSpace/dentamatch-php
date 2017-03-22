@@ -77,6 +77,7 @@ class JobLists extends Model {
         $jobExists = static::where('seeker_id', '=', $userId)
                 ->where('recruiter_job_id', '=', $jobId)
                 /*->where('applied_status', '=', JobLists::APPLIED)*/
+                ->orderby('id', 'desc')
                 ->first();
         if ($jobExists) {
             $return = $jobExists->applied_status;
@@ -89,7 +90,12 @@ class JobLists extends Model {
         $result = [];
         $jobTypeCount = [];
 
-        $searchQueryObj = static::join('recruiter_jobs','job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
+        $searchQueryObj = static::leftJoin('temp_job_dates',function($query) use ($jobStartDate,$jobEndDate){
+            $query->on('job_lists.recruiter_job_id','=','temp_job_dates.recruiter_job_id')
+                  ->where(DB::raw("DATE_FORMAT(temp_job_dates.job_date, '%Y-%m-%d')"), ">=",$jobStartDate)
+                  ->where(DB::raw("DATE_FORMAT(temp_job_dates.job_date, '%Y-%m-%d')"), "<=",$jobEndDate);
+        })
+                        ->join('recruiter_jobs','job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
                         ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                         ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
                         ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
@@ -99,7 +105,7 @@ class JobLists extends Model {
                         ->where(DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d')"), ">=",$jobStartDate)
                         ->where(DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d')"), "<=",$jobEndDate);        
         
-        $total = $searchQueryObj->count();
+        
         $searchQueryObj->select('job_lists.recruiter_job_id','recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
                         'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
                         'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
@@ -109,18 +115,20 @@ class JobLists extends Model {
                         'recruiter_offices.latitude','recruiter_offices.longitude',
                         'recruiter_jobs.created_at as job_created_at', 'job_lists.created_at as job_applied_on',
                         DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
+                        DB::raw("DATE_FORMAT(temp_job_dates.job_date, '%Y-%m-%d') AS tempDates"),
                         DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d') AS jobDate"));
-
-        $searchResult = $searchQueryObj->with('tempJobDates')->get();
-
+        $searchQueryObj = $searchQueryObj->groupby('recruiter_jobs.id')->groupby('tempDates');
+        
+        
+        
+       $searchResult = $searchQueryObj->distinct('recruiter_jobs.id')->get();
         if ($searchResult) {
             foreach ($searchResult as $value) {
                 $value->job_type_string = static::$jobTypeName[$value->job_type];
-                $jobTypeCount[] = $value->job_type;
             }
             $list = $searchResult->toArray();
             $result['list'] = $list;
-            $result['total'] = $total;
+            $result['total'] = count($list);
         }
         return $result;
     }
@@ -183,7 +191,8 @@ class JobLists extends Model {
     }
     
     public static function getJobInfo($seekerId,$jobId) {
-        return static::where('seeker_id',$seekerId)->where('recruiter_job_id',$jobId)->first();
+        return static::where('seeker_id',$seekerId)->where('recruiter_job_id',$jobId)
+                ->whereIn('applied_status',[JobLists::INVITED,  JobLists::APPLIED,  JobLists::SHORTLISTED])->first();
     }
     
     public static function getJobSeekerStatus($jobId){
@@ -210,6 +219,7 @@ class JobLists extends Model {
         } elseif ($job['job_type'] == RecruiterJobs::TEMPORARY) {
             $obj->leftjoin('job_ratings', function($query) {
                         $query->on('job_ratings.recruiter_job_id', '=', 'job_lists.recruiter_job_id');
+                        $query->on('job_ratings.seeker_id', '=', 'job_lists.seeker_id');
                         //->where('job_ratings.recruiter_job_id', '=', 'job_lists.recruiter_job_id')
                         //->whereNotNull('job_lists.temp_job_id');
                 })
@@ -253,4 +263,6 @@ class JobLists extends Model {
 
         return ($data->groupBy('applied_status')->toArray());
     }
+    
+    
 }

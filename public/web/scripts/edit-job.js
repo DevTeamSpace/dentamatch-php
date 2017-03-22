@@ -128,6 +128,7 @@
             $(element).datetimepicker({
                 format: 'hh:mm A',
                 'allowInputToggle': true,
+                stepping: 15,
                 minDate: moment().startOf('day'),
                 maxDate: moment().endOf('day')
             }).on('dp.change',function(a){
@@ -169,6 +170,7 @@
         me.totalJobOpeningError = ko.observable('');
         me.partTimeJobDaysError = ko.observable('');
         me.temporaryJobError = ko.observable('');
+        me.officeTypeError = ko.observable('');
         me.allOfficeTypeDetail = ko.observableArray([]);
         me.headMessage = ko.observable('');
         me.cancelButtonDelete = ko.observable(true);
@@ -276,6 +278,7 @@
             numberDisplayed: 3,
         });
         $(".dropCheck input").after("<div></div>");
+        $('#editPhoneNumber').inputmask("(999)999 9999");  //static mask
     };
     me.showOfficeDetailsTwo = function (d, selectedId) {
         if(selectedId == null){
@@ -291,6 +294,7 @@
             numberDisplayed: 3,
         });
         $(".dropCheck input").after("<div></div>");
+        $('#editPhoneNumber').inputmask("(999)999 9999");  //static mask
     };
 
     var placeSearch, autocomplete, autocomplete1, autocomplete2, officeName;
@@ -358,6 +362,10 @@
     };
     
     me.everyDayWorkHour = function(d, e){
+        if (d.selectedOfficeWorkingHours.everydayStart() == null || d.selectedOfficeWorkingHours.everydayStart() == "") {
+            d.selectedOfficeWorkingHours.everydayStart('08:00 AM');
+            d.selectedOfficeWorkingHours.everydayEnd('05:00 PM');
+        }
         d.selectedOfficeWorkingHours.isMondayWork(false);
         d.selectedOfficeWorkingHours.isTuesdayWork(false);
         d.selectedOfficeWorkingHours.isWednesdayWork(false);
@@ -368,6 +376,48 @@
     };
     
     me.otherDayWorkHour = function (d, e){
+        if ($(e.target).attr('id').indexOf('mon') >= 0) {
+            if (d.selectedOfficeWorkingHours.mondayStart() == null || d.selectedOfficeWorkingHours.mondayStart() == "undefined") {
+                d.selectedOfficeWorkingHours.mondayStart('08:00 AM');
+                d.selectedOfficeWorkingHours.mondayEnd('05:00 PM');
+            }
+        }
+        if ($(e.target).attr('id').indexOf('tue') >= 0) {
+            if (d.selectedOfficeWorkingHours.tuesdayStart() == null || d.selectedOfficeWorkingHours.tuesdayStart() == "undefined") {
+                d.selectedOfficeWorkingHours.tuesdayStart('08:00 AM');
+                d.selectedOfficeWorkingHours.tuesdayEnd('05:00 PM');
+            }
+        }
+        if ($(e.target).attr('id').indexOf('wed') >= 0) {
+            if (d.selectedOfficeWorkingHours.wednesdayStart() == null || d.selectedOfficeWorkingHours.wednesdayStart() == "undefined") {
+                d.selectedOfficeWorkingHours.wednesdayStart('08:00 AM');
+                d.selectedOfficeWorkingHours.wednesdayEnd('05:00 PM');
+            }
+        }
+        if ($(e.target).attr('id').indexOf('thu') >= 0) {
+            if (d.selectedOfficeWorkingHours.thursdayStart() == null || d.selectedOfficeWorkingHours.thursdayStart() == "undefined") {
+                d.selectedOfficeWorkingHours.thursdayStart('08:00 AM');
+                d.selectedOfficeWorkingHours.thursdayEnd('05:00 PM');
+            }
+        }
+        if ($(e.target).attr('id').indexOf('fri') >= 0) {
+            if (d.selectedOfficeWorkingHours.fridayStart() == null || d.selectedOfficeWorkingHours.fridayStart() == "undefined") {
+                d.selectedOfficeWorkingHours.fridayStart('08:00 AM');
+                d.selectedOfficeWorkingHours.fridayEnd('05:00 PM');
+            }
+        }
+        if ($(e.target).attr('id').indexOf('sat') >= 0) {
+            if (d.selectedOfficeWorkingHours.saturdayStart() == null || d.selectedOfficeWorkingHours.saturdayStart() == "undefined") {
+                d.selectedOfficeWorkingHours.saturdayStart('08:00 AM');
+                d.selectedOfficeWorkingHours.saturdayEnd('05:00 PM');
+            }
+        }
+        if ($(e.target).attr('id').indexOf('sun') >= 0) {
+            if (d.selectedOfficeWorkingHours.sundayStart() == null || d.selectedOfficeWorkingHours.sundayStart() == "undefined") {
+                d.selectedOfficeWorkingHours.sundayStart('08:00 AM');
+                d.selectedOfficeWorkingHours.sundayEnd('05:00 PM');
+            }
+        }
         d.selectedOfficeWorkingHours.isEverydayWork(false);
     };
     
@@ -385,6 +435,7 @@
         me.totalJobOpeningError('');
         me.partTimeJobDaysError('');
         me.temporaryJobError('');
+        me.officeTypeError('');
         
         if(me.selectedJobType() == "Full Time"){
             
@@ -404,6 +455,11 @@
             }
         }
         
+        if(me.selectedOffice()[0].selectedOfficeType().length == 0){
+            me.officeTypeError('Please select office type.');
+            return false;
+        }
+        
         if(me.selectedOffice()[0].selectedOfficeWorkingHours.isEverydayWork() == true && (me.selectedOffice()[0].selectedOfficeWorkingHours.isMondayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isTuesdayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isWednesdayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isThursdayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isFridayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isSaturdayWork() == true || me.selectedOffice()[0].selectedOfficeWorkingHours.isSundayWork() == true)){
             me.mixedWorkHourError('Please select everyday or select individual day at a time.');
             return false;
@@ -413,10 +469,18 @@
                     me.everydayTimeError('Start time cannot be greated than end time.');
                     return false;
                 }
+                if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.everydayStart(), 'HH:mm a').isSame(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.everydayEnd(), 'HH:mm a'))){
+                    me.everydayTimeError('Start time cannot be equal to end time.');
+                    return false;
+                }
             }
             if(me.selectedOffice()[0].selectedOfficeWorkingHours.isMondayWork() == true){
                 if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.mondayStart(), 'HH:mm a') > moment(me.selectedOffice()[0].selectedOfficeWorkingHours.mondayEnd(), 'HH:mm a')){
                     me.mondayTimeError('Start time cannot be greated than end time.');
+                    return false;
+                }
+                if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.mondayStart(), 'HH:mm a').isSame(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.mondayEnd(), 'HH:mm a'))){
+                    me.mondayTimeError('Start time cannot be equal to end time.');
                     return false;
                 }
             }
@@ -425,10 +489,18 @@
                     me.tuesdayTimeError('Start time cannot be greated than end time.');
                     return false;
                 }
+                if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.tuesdayStart(), 'HH:mm a').isSame(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.tuesdayEnd(), 'HH:mm a'))){
+                    me.tuesdayTimeError('Start time cannot be equal to end time.');
+                    return false;
+                }
             }
             if(me.selectedOffice()[0].selectedOfficeWorkingHours.isWednesdayWork() == true){
                 if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.wednesdayStart(), 'HH:mm a') > moment(me.selectedOffice()[0].selectedOfficeWorkingHours.wednesdayEnd(), 'HH:mm a')){
                     me.wednesdayTimeError('Start time cannot be greated than end time.');
+                    return false;
+                }
+                if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.wednesdayStart(), 'HH:mm a').isSame(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.wednesdayEnd(), 'HH:mm a'))){
+                    me.wednesdayTimeError('Start time cannot be equal to end time.');
                     return false;
                 }
             }
@@ -437,10 +509,18 @@
                     me.thursdayTimeError('Start time cannot be greated than end time.');
                     return false;
                 }
+                if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.thursdayStart(), 'HH:mm a').isSame(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.thursdayEnd(), 'HH:mm a'))){
+                    me.thursdayTimeError('Start time cannot be equal to end time.');
+                    return false;
+                }
             }
             if(me.selectedOffice()[0].selectedOfficeWorkingHours.isFridayWork() == true){
                 if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.fridayStart(), 'HH:mm a') > moment(me.selectedOffice()[0].selectedOfficeWorkingHours.fridayEnd(), 'HH:mm a')){
                     me.fridayTimeError('Start time cannot be greated than end time.');
+                    return false;
+                }
+                if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.fridayStart(), 'HH:mm a').isSame(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.fridayEnd(), 'HH:mm a'))){
+                    me.fridayTimeError('Start time cannot be equal to end time.');
                     return false;
                 }
             }
@@ -449,10 +529,18 @@
                     me.saturdayTimeError('Start time cannot be greated than end time.');
                     return false;
                 }
+                if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.saturdayStart(), 'HH:mm a').isSame(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.saturdayEnd(), 'HH:mm a'))){
+                    me.saturdayTimeError('Start time cannot be equal to end time.');
+                    return false;
+                }
             }
             if(me.selectedOffice()[0].selectedOfficeWorkingHours.isSundayWork() == true){
                 if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.sundayStart(), 'HH:mm a') > moment(me.selectedOffice()[0].selectedOfficeWorkingHours.sundayEnd(), 'HH:mm a')){
                     me.sundayTimeError('Start time cannot be greated than end time.');
+                    return false;
+                }
+                if(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.sundayStart(), 'HH:mm a').isSame(moment(me.selectedOffice()[0].selectedOfficeWorkingHours.sundayEnd(), 'HH:mm a'))){
+                    me.sundayTimeError('Start time cannot be equal to end time.');
                     return false;
                 }
             }
@@ -460,6 +548,11 @@
         
         if(me.selectedOffice()[0].selectedOfficePhone() == null || me.selectedOffice()[0].selectedOfficePhone() == ''){
             me.phoneNumberError('Please enter phone number.');
+            return false;
+        }
+        
+        if(me.selectedOffice()[0].selectedOfficePhone().length > 10){
+            me.phoneNumberError('Phone number should be of 10 digits.');
             return false;
         }
         
@@ -501,6 +594,10 @@
                 }
             });
         }
+    };
+    
+    me.cancelJob = function(d, e){
+        location.replace("/job/details/"+me.jobId());
     };
     
     me.deleteJob = function(d, e){

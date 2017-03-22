@@ -110,6 +110,7 @@ class JobSeekerProfiles extends Model
                 ->where('job_lists.recruiter_job_id',$job['id']);
         })
         ->whereNull('job_lists.applied_status')
+        ->where('jobseeker_profiles.is_job_seeker_verified',1)
         ->addSelect('job_lists.applied_status as job_status')
         ->addSelect('favourites.seeker_id as is_favourite')
         ->addSelect(DB::raw("avg(punctuality) as punctuality"),DB::raw("avg(time_management) as time_management"),
@@ -226,4 +227,45 @@ class JobSeekerProfiles extends Model
                     ->get();
       dd($data->groupBy('applied_status')->toArray());  
     }
+    
+    public static function getJobSeekerProfile($seekerId){
+        $obj = JobSeekerProfiles::where('jobseeker_profiles.user_id',$seekerId);
+
+        $obj->leftJoin('jobseeker_affiliations','jobseeker_profiles.user_id','=','jobseeker_affiliations.user_id')
+            ->leftJoin('affiliations','jobseeker_affiliations.affiliation_id','=','affiliations.id');
+
+        $obj->leftJoin('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id');
+
+
+        $obj->leftJoin('jobseeker_temp_availability','jobseeker_profiles.user_id','=','jobseeker_temp_availability.user_id')
+            ->groupby('jobseeker_profiles.user_id');
+        
+        $obj->select('jobseeker_profiles.first_name','jobseeker_profiles.last_name','jobseeker_profiles.profile_pic',
+                    'jobseeker_profiles.is_parttime_monday','jobseeker_profiles.is_parttime_tuesday','jobseeker_profiles.is_parttime_tuesday',
+                    'jobseeker_profiles.is_parttime_wednesday','jobseeker_profiles.is_parttime_thursday','jobseeker_profiles.is_parttime_friday','jobseeker_profiles.is_parttime_saturday','jobseeker_profiles.is_parttime_sunday','jobseeker_profiles.is_fulltime','jobseeker_profiles.user_id','jobseeker_profiles.id','job_titles.jobtitle_name','jobseeker_profiles.about_me', 'jobseeker_profiles.preferred_job_location')
+            ->groupby('jobseeker_profiles.user_id', 'jobseeker_affiliations.user_id');
+
+        $obj->addSelect(DB::raw("group_concat(distinct(affiliations.affiliation_name) SEPARATOR ', ') AS affiliations"));
+
+        $obj->addSelect(DB::raw("group_concat(distinct(jobseeker_temp_availability.temp_job_date) SEPARATOR ' | ') AS temp_job_dates"));
+
+        $searchResult   =   $obj->first();
+        
+        $result = array();
+        if($searchResult){
+            $seekerUserId = $searchResult->user_id;                        
+
+            $schoolings     =   JobSeekerSchooling::getParentJobSeekerSchooling($seekerUserId); 
+            $skills         =   JobSeekerSkills::getParentJobSeekerSkills($seekerUserId); 
+            $certificate    =   JobseekerCertificates::getParentJobSeekerCertificates($seekerUserId); 
+            $experience     =   JobSeekerWorkExperiences::getParentWorkExperiences($seekerUserId); 
+            
+            $result                 =   $searchResult->toArray();
+            $result['schoolings']   =   $schoolings;
+            $result['skills']       =   $skills;
+            $result['experience']   =   $experience;
+            $result['certificate']  =   $certificate;
+        }
+        return $result;        
+    } 
 }

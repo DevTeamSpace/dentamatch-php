@@ -20,12 +20,26 @@ $(document).ready(function() {
     socket.on('connect', function() {
         console.info('Socket ');
         socket.send("Hello World");
-
+        socket.on('disconnect', function() {
+            console.info('Socket disconnect');
+            socketConnectTimeInterval = setInterval(function () {
+                socket.socket.reconnect();
+                console.info('Socket try reconnect');
+                if(socket.socket.connected) {
+                    console.info('Socket reconnected');
+                    initSocket();
+                    clearInterval(socketConnectTimeInterval);
+                }
+            }, 3000);
+        });
 
         var currentSel = '';
-        socket.emit('init', { userId: fromId, userName: userName, userType: 2 }, function(response) {
+        function initSocket(){
+            socket.emit('init', { userId: fromId, userName: userName, userType: 2 }, function(response) {
 
-        });
+            });
+        }
+        initSocket();
         $('.leftSeekerPanelRow').click(function(e) {
             var dataLoaded = $(this).attr('data-loaded');
             var toId = $(this).data('user');

@@ -20,7 +20,7 @@
             <div class="col-md-2 col-sm-2 resultImage">
                 <img src="{{ url('image/120/120/?src=' .$seekerDetails['profile_pic']) }}" class="img-circle">
             </div> 
-            <div class="col-md-6 col-sm-6">
+            <div class="col-md-7 col-sm-6">
                 <h4>{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']}}</h4>
                 <h6>{{$seekerDetails['jobtitle_name']}}</h6> 
                 <div class="job-type-detail seeker-detail-temp">
@@ -45,26 +45,28 @@
                     </span>
                     @endif
                     @if($seekerDetails['temp_job_dates'])
-                    <span class="bg-ember statusBtn mr-r-5">Temporary</span>
-                    <span class="dropdown date-drop">
-                        @php 
-                        $dates = explode(' | ',$seekerDetails['temp_job_dates']);
-                        @endphp
-                        <span class=" dropdown-toggle"  data-toggle="dropdown">
-                            <span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
-                            <span class="caret"></span>
-                        </span>
-                        <ul class="dropdown-menu">
-                          @foreach ($dates as $date)
-                          <li>{{ date('l, d M Y',strtotime($date)) }}</li>
-                          @endforeach
-                      </ul>
-                  </span>
+                    <label>
+                        <span class="bg-ember statusBtn mr-r-5">Temporary</span>
+                        <span class="dropdown date-drop">
+                            @php 
+                            $dates = explode(' | ',$seekerDetails['temp_job_dates']);
+                            @endphp
+                            <span class=" dropdown-toggle"  data-toggle="dropdown">
+                                <span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
+                                <span class="caret"></span>
+                            </span>
+                            <ul class="dropdown-menu">
+                              @foreach ($dates as $date)
+                              <li>{{ date('l, d M Y',strtotime($date)) }}</li>
+                              @endforeach
+                          </ul>
+                      </span>
+                  </label>
                   @endif
               </div>
           </div>
           <form action="{{ url('job/updateStatus') }}" method="post">
-            <div class="col-md-3 text-right"><p>{{round($seekerDetails['distance'])}} miles away</p>
+            <div class="col-md-3 text-right"><p>{{round($seekerDetails['distance'],1)}} miles away</p>
                 {!! csrf_field() !!}
                 <input type="hidden" name="jobId" value="{{ $jobId }}">
                 <input type="hidden" name="seekerId" value="{{ $seekerDetails['user_id'] }}">
@@ -76,12 +78,13 @@
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::SHORTLISTED }}" class="btn btn-primary pd-l-20 pd-r-20">Accept</button>
                 @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::SHORTLISTED)
                 <h6>SHORTLISTED</h6>
-                <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30" data-toggle="modal" 
-                data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
+                <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
+                                    data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::HIRED }}" class="btn btn-primary pd-l-20 pd-r-20">Hire</button>
                 @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::HIRED)
                 <h6>HIRED</h6>
-                <button type="submit" class="btn btn-primary pd-l-30 pd-r-30">Message</button>
+                <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
+                                    data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
                 @else
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pd-l-30 pd-r-30">Invite</button>    
                 @endif    
@@ -118,6 +121,7 @@
                             <dd>{{$experience['city']}}</dd> 
                         </dl>
                     </div>
+                    @if(!empty($experience['reference1_name']))
                     <div class="col-sm-4 exprience">
                         <dl>
                             <dt>
@@ -128,6 +132,8 @@
                             <dd>{{$experience['reference1_email']}}</dd>                 
                         </dl>
                     </div>
+                    @endif
+                    @if(!empty($experience['reference2_name']))
                     <div class="col-sm-4 exprience">
                         <dl>
                             <dt>
@@ -138,7 +144,9 @@
                             <dd>{{$experience['reference2_email']}}</dd>                 
                         </dl>
                     </div>
+                    @endif
                 </div>
+                
                 @endforeach
                 @endif
             </div>    
@@ -163,8 +171,13 @@
             @if(!empty($seekerDetails['skills']))
             @foreach($seekerDetails['skills'] as $skills)
             <div class="pd-t-10 keySkills">
+                @if($skills['skill_name'] == 'Other' || $skills['skill_name'] == 'other')
+                <b>{{$skills['skill_name']}}</b>
+                <p>{{$skills['other_skill']}}</p>
+                @else
                 <b>{{$skills['skill_title']}}</b>
                 <p>{{$skills['skill_name']}}</p>
+                 @endif
             </div>
             @endforeach
             @endif
@@ -173,26 +186,85 @@
                 <h5>AFFILIATIONS</h5>
                 <P>{{$seekerDetails['affiliations']}}</P>
             </div>
-
+            @if($seekerDetails['applied_status'] == \App\Models\JobLists::HIRED)
             @if(!empty($seekerDetails['certificate']))
             @foreach($seekerDetails['certificate'] as $certificate)
             <div class="searchResultHeading pd-t-20 smallSquare">
                 <h5>{{$certificate['certificate_name']}}</h5>
-                <P>
-                    <img class="img-rounded" src="{{ url('image/66/66/?src=' .$certificate['image_path']) }}">
+                <p>
+                    <a href="javascript:void(0)" >
+                        <img data-toggle="modal" data-target="#certificateModal" class="img-rounded thumb-certificate" data-image="{{ $certificate['image_path'] }}" src="{{ url('image/66/66/?src='.$certificate['image_path']) }}">
+                    </a>
                     @if(!empty($certificate['validity_date']))
-                    Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span></P>
+                    Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span></p>
                     @else
                     Valid Till: N/A
                     @endif
                 </div>
                 @endforeach
                 @endif
+                @endif
             </div>  
         </div>
     </div>  
 </div>
+
+<!--  Modal content for the mixer image example -->
+<div id="certificateModal" class="modal fade" role="dialog">
+    <div class="modal-dialog custom-modal popup-wd522">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Certificate</h4>
+      </div>
+      <div class="modal-body">
+          <img id="certificateModalImg" class="img-rounded img-responsive" src="">
+
+      </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal mixer image -->
+
+
+<div id="ShortListMessageBox" class="modal fade" role="dialog">
+    <div class="modal-dialog custom-modal popup-wd522">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Messgae</h4>
+            </div>
+            <div class="modal-body ">
+                <form>
+                    <div class="form-group custom-select">
+                        <textarea id="chatMsg" class="form-control messageBoxTextArea" placeholder="Type your message here"></textarea>
+                    </div>
+                    <div class="text-right mr-t-20 mr-b-30">
+                        <input type="hidden" id="seekerId" value="{{ $seekerDetails['user_id'] }}">
+                        <button id="sendChat" type="submit" class="btn btn-primary pd-l-30 pd-r-30">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('js')
+<script type="text/javascript">
+$('.thumb-certificate').click(function(){
+        var imgUrl = "{{ url('image/550/500/?src=') }}";
+        $('#certificateModal').modal({show:true});
+        $('#certificateModalImg').attr('src', imgUrl+$(this).data('image'));
+        return false;
+    });
+var socketUrl = "{{ config('app.socketUrl') }}";
+var userId = "{{ Auth::id() }}";
+var officeName = "{{ Session::get('userData.profile.office_name') }}";
+
+</script>
+<script src="{{ config('app.socketUrl') }}/socket.io/socket.io.js"></script>
+<script src ="{{ asset('web/scripts/jobdetail.js') }}"></script>
 @endsection

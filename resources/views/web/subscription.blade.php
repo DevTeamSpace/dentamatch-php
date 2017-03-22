@@ -69,11 +69,11 @@
                   <p class="text-center" style="color: green;" data-bind="text: successMessage"></p>
                     <div class="form-group">
                         <label class="sr-only" for="card-number">Card number</label>
-                        <input type="number" class="form-control" id="card-number" placeholder="Card number" data-bind="value: cardNumber, disable: disableInput">
+                        <input type="text" class="form-control" id="card-number" placeholder="Card number" data-bind="value: cardNumber, disable: disableInput">
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="expiry">Expiry</label>
-                        <input type="text" class="form-control" id="expiry" placeholder="MM/YY" data-bind="value: expiry, disable: disableInput">
+                        <input type="text" class="form-control" id="expiry" placeholder="MM/YY" data-bind="value: expiry, valueUpdate: 'keyup' disable: disableInput">
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="cvv">CVV</label>
@@ -130,6 +130,7 @@
         }
     });
 </script>
+<script src="{{asset('web/plugins/inputmask/dist/jquery.inputmask.bundle.js')}}"></script>
 <script src="{{asset('web/scripts/subscription.js')}}"></script>
 @endsection
 

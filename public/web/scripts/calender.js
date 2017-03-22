@@ -15,15 +15,13 @@ var JobModel = function (data) {
             me.officeAddress = d.address;
             me.officeName = d.office_name;
             me.jobId = d.id;
-            $.get('calender-seeker-details', {jobId: me.jobId}, function(d){
-                for (i in d.data) {
-                    for (j in d.data[i]) {
-                        d.data[i][j].pic = d.data[i][j].profile_pic;
-                        d.data[i][j].name = d.data[i][j].first_name + ' ' + d.data[i][j].last_name;
-                        me.userDetails.push(d.data[i][j]);
-                    }
+            for (i in d.seekers) {
+                for (j in d.seekers[i]) {
+                    d.seekers[i][j].pic = d.seekers[i][j].profile_pic;
+                    d.seekers[i][j].name = d.seekers[i][j].first_name + ' ' + d.seekers[i][j].last_name;
                 }
-            });
+                me.userDetails.push(d.seekers[i]);
+            }
         };
         me._init(data);
     };
@@ -71,7 +69,6 @@ var JobModel = function (data) {
                         me.datesData()[i].userDetails = [];
                     }
                 }
-                
                 $('#calendar').fullCalendar({
                     header: {
                         left: 'prev',
@@ -143,8 +140,6 @@ var JobModel = function (data) {
             me.allJobs([]);
             me.jobCreated(moment(d.date).format('LL'));
             for(i in d.segs){
-//                console.log(d.segs[i].event);
-//                d.segs[i].event.userDetails = d.segs[i].event.userDetails[0];
                 me.allJobs.push(d.segs[i].event);
             }
             $('.calendar_list').modal();

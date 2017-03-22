@@ -53,55 +53,55 @@
                                     <p class="pull-left"><span data-bind="text: brand"></span> ending in <span data-bind="text: last4"></span> - <span data-bind="text: exp_month"></span>/<span data-bind="text: exp_year"></span></p>
                                     <div class="masterEDOPtion pull-right"><span class="gbllist dev_edit_button" data-bind="click: $root.editCard"><i class="icon icon-edit"></i> Edit</span>
                                         <span class="gbllist" data-bind="click: $root.deleteCard"><i class="icon icon-deleteicon"></i> Delete</span></div>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <!--/ko-->
-                                <a href="#" class="pull-right pd-t-10 pd-b-20" data-bind="visible: addCardVisible,click: addCard"><b>Add Payment Method</b></a>	
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <!--/ko-->
+                                    <a href="#" class="pull-right pd-t-10 pd-b-20" data-bind="visible: addCardVisible,click: addCard"><b>Add Payment Method</b></a>	
 
-                            </div>		
+                                </div>		
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="resp-tabs-container commonBox profilePadding cboxbottom " data-bind="visible: noSubscription">
-                <p class="text-center" data-bind="text: noSubscriptionDetails"></p>
-            </div>
-            <div class="resp-tabs-container commonBox profilePadding cboxbottom " data-bind="visible: isLoadingSubscription">
-                <p class="text-center" data-bind="text: loadingSubscription"></p>
-            </div>
-            <div id="addCardModal" class="modal fade" tabindex="-1" role="dialog">
-                <div class="modal-dialog custom-modal modal-sm" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bind="visible: cancelButton"><span aria-hidden="true">&times;</span></button>
-                          <h4 class="modal-title">Add Card</h4>
-                        </div>
-                        <form id="addCardForm" data-bind="submit: $root.addCardFunction">
-                        <div class="modal-body">
-                          <p class="text-center">Please provide card details.</p>
-                          <br>
-                          <p class="text-center" style="color: blue" data-bind="text: creatingMessage"></p>
-                          <p class="text-center" style="color: red;" data-bind="text: errorMessage"></p>
-                          <p class="text-center" style="color: green;" data-bind="text: successMessage"></p>
-                          <br>
-                            <div class="form-group">
-                                <label class="sr-only" for="card-number">Card number</label>
-                                <input type="number" class="form-control" id="card-number" placeholder="Card number" data-bind="value: cardNumber, disable: disableInput">
+                <div class="resp-tabs-container commonBox profilePadding cboxbottom " data-bind="visible: noSubscription">
+                    <p class="text-center" data-bind="text: noSubscriptionDetails"></p>
+                </div>
+                <div class="resp-tabs-container commonBox profilePadding cboxbottom " data-bind="visible: isLoadingSubscription">
+                    <p class="text-center" data-bind="text: loadingSubscription"></p>
+                </div>
+                <div id="addCardModal" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog custom-modal modal-sm" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bind="visible: cancelButton"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Add Card</h4>
                             </div>
-                            <div class="form-group">
-                                <label class="sr-only" for="expiry">Expiry</label>
-                                <input type="text" class="form-control" id="expiry" placeholder="MM/YY" data-bind="value: expiry, disable: disableInput">
+                            <form id="addCardForm" data-bind="submit: $root.addCardFunction">
+                                <div class="modal-body">
+                                  <p class="text-center">Please provide card details.</p>
+                                  <br>
+                                  <p class="text-center" style="color: blue" data-bind="text: creatingMessage"></p>
+                                  <p class="text-center" style="color: red;" data-bind="text: errorMessage"></p>
+                                  <p class="text-center" style="color: green;" data-bind="text: successMessage"></p>
+                                  <br>
+                                  <div class="form-group">
+                                    <label class="sr-only" for="card-number">Card number</label>
+                                    <input type="text" class="form-control" id="card-number" placeholder="Card number" data-bind="value: cardNumber, disable: disableInput">
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="expiry">Expiry</label>
+                                    <input type="text" class="form-control" id="expiry" placeholder="MM/YY" data-bind="value: expiry, valueUpdate: 'keyup', disable: disableInput">
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="cvv">CVV</label>
+                                    <input type="number" class="form-control" id="cvv" placeholder="CVV" data-bind="value: cvv, disable: disableInput">
+                                </div>
+                                <div class="mr-t-20 mr-b-30 dev-pd-l-13p">
+                                    <button type="button" class="btn btn-link mr-r-5" data-dismiss="modal">Close</button>
+                                    <button type="submit" id="addCardButton" class="btn btn-primary pd-l-30 pd-r-30">Add Card</button>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label class="sr-only" for="cvv">CVV</label>
-                                <input type="number" class="form-control" id="cvv" placeholder="CVV" data-bind="value: cvv, disable: disableInput">
-                            </div>
-                            <div class="mr-t-20 mr-b-30 dev-pd-l-13p">
-                                <button type="button" class="btn btn-link mr-r-5" data-dismiss="modal">Close</button>
-                                <button type="submit" id="addCardButton" class="btn btn-primary pd-l-30 pd-r-30">Add Card</button>
-                            </div>
-                        </div>
-                          </form>
+                        </form>
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
@@ -113,20 +113,20 @@
                             <h4 class="modal-title">Update</h4>
                         </div>
                         <form id="addCardForm" data-bind="submit: $root.editCardFunction">
-                        <div class="modal-body">
-                          <p class="text-center">Please provide expiry details to update card.</p>
-                          <br>
-                          <p class="text-center" style="color: blue" data-bind="text: creatingMessage"></p>
-                          <p class="text-center" style="color: red;" data-bind="text: errorMessage"></p>
-                          <p class="text-center" style="color: green;" data-bind="text: successMessage"></p>
-                          <br>
+                            <div class="modal-body">
+                              <p class="text-center">Please provide expiry details to update card.</p>
+                              <br>
+                              <p class="text-center" style="color: blue" data-bind="text: creatingMessage"></p>
+                              <p class="text-center" style="color: red;" data-bind="text: errorMessage"></p>
+                              <p class="text-center" style="color: green;" data-bind="text: successMessage"></p>
+                              <br>
 <!--                            <div class="form-group">
                                 <label class="sr-only" for="card-number">Card number</label>
                                 <input type="number" class="form-control" placeholder="Card number" data-bind="value: editCardNumber" disabled="disable">
                             </div>-->
                             <div class="form-group">
                                 <label class="sr-only" for="expiry">Expiry</label>
-                                <input type="text" class="form-control" id="editCvv" placeholder="MM/YY" data-bind="value: editExpiry">
+                                <input type="text" class="form-control" id="editExpiry" placeholder="MM/YY" data-bind="value: editExpiry">
                             </div>
 <!--                            <div class="form-group">
                                 <label class="sr-only" for="cvv">CVV</label>
@@ -137,30 +137,30 @@
                                 <button type="submit" id="editCardButton" class="btn btn-primary pd-l-30 pd-r-30">Update Card</button>
                             </div>
                         </div>
-                          </form>
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
-            <div id="actionModal" class="modal fade" role="dialog">
-                <div class="modal-dialog custom-modal modal-sm">
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" data-bind="visible:cancelButtonDelete">&times;</button>
-                            <h4 class="modal-title" data-bind="text:headMessage"></h4>
-                        </div>
-                        <div class="modal-body">
-                            <p class="text-center" data-bind="text:prompt"></p>
-                            <div class="mr-t-20 mr-b-30 dev-pd-l-13p" data-bind="visible: showModalFooter">
-                                <button type="button" class="btn btn-link mr-r-5" data-dismiss="modal">Close</button>
-                                <button type="submit" id="actionButton" class="btn btn-primary pd-l-30 pd-r-30" data-bind="text: actionButtonText"></button>
-                            </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        <div id="actionModal" class="modal fade" role="dialog">
+            <div class="modal-dialog custom-modal modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" data-bind="visible:cancelButtonDelete">&times;</button>
+                        <h4 class="modal-title" data-bind="text:headMessage"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-center" data-bind="text:prompt"></p>
+                        <div class="mr-t-20 mr-b-30 dev-pd-l-13p" data-bind="visible: showModalFooter">
+                            <button type="button" class="btn btn-link mr-r-5" data-dismiss="modal">Close</button>
+                            <button type="submit" id="actionButton" class="btn btn-primary pd-l-30 pd-r-30" data-bind="text: actionButtonText"></button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 @endsection
 @section('js')

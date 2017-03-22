@@ -302,6 +302,7 @@ class JobSeekerController extends Controller
         }
 
         $params['data'] = $notificationData;
+<<<<<<< HEAD
         $device = Device::getDeviceToken($receiverId);
         
         if(!empty($device)) {
@@ -320,7 +321,24 @@ class JobSeekerController extends Controller
             }
             if(!empty($insertData)){
                 Notification::insert($insertData);
+=======
+        $devices = Device::getDeviceToken($receiverId);
+        if(!empty($devices)) {
+            $insertData = [];
+            if ($devices->device_token && strlen($devices->device_token) >= 22) {
+                $insertData[] = ['receiver_id'=>$devices->user_id,
+                    'sender_id'=>$user->id,
+                    'notification_data'=>$notificationData['notificationData'],
+                    'created_at'=>date('Y-m-d h:i:s'),
+                    'notification_type' => Notification::OTHER,
+                    ];
+>>>>>>> d93c6282eb6c3ea985efb442195a0a29c679efaf
             }
+            NotificationServiceProvider::sendPushNotification($devices, $notificationData['notificationData'], $params);
+        }
+            
+        if(!empty($insertData)) {
+            Notification::insert($insertData);
         }
     }
 }

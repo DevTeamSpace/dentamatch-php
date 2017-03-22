@@ -38,7 +38,7 @@ class RecruiterOffice extends Model {
             $recOfficeArrObj->latitude = $request->lat;
             $recOfficeArrObj->longitude = $request->lng;
             $recOfficeArrObj->phone_no = $request->contactNumber;
-            $recOfficeArrObj->office_info = $request->officeAddress;
+            $recOfficeArrObj->office_info = $request->officeLocation;
             $recOfficeArrObj->work_everyday_start = ($request->everydayStart != '') ? date('H:i:s', strtotime($request->everydayStart)) : null;
             $recOfficeArrObj->work_everyday_end = ($request->everydayEnd != '') ? date('H:i:s', strtotime($request->everydayEnd)) : null;
             $recOfficeArrObj->monday_start = ($request->mondayStart != '') ? date('H:i:s', strtotime($request->mondayStart)) : null;
@@ -65,7 +65,7 @@ class RecruiterOffice extends Model {
                         'latitude' => $request->lat,
                         'longitude' => $request->lng,
                         'phone_no' => $request->contactNumber,
-                        'office_info' => $request->officeAddress,
+                        'office_info' => $request->officeLocation,
                         'work_everyday_start' => ($request->everydayStart != '') ? date('H:i:s', strtotime($request->everydayStart)) : null,
                         'work_everyday_end' => ($request->everydayEnd != '') ? date('H:i:s', strtotime($request->everydayEnd)) : null,
                         'monday_start' => ($request->mondayStart != '') ? date('H:i:s', strtotime($request->mondayStart)) : null,

@@ -10,8 +10,8 @@
 <div class="container padding-container-template" id="edit-job">
     <!--breadcrumb-->
     <ul class="breadcrumb ">
-        <li><a href="#">Jobs Listing</a></li>
-        <li><a href="#">Jobs Detail</a></li>
+        <li><a href="{{ url('job/lists') }}">Jobs Listing</a></li>
+        <li><a href="{{ url('job/details/'.$jobId) }}">Jobs Detail</a></li>
         <li class="active">Edit Jobs Detail</li>
     </ul>
     <!--/breadcrumb-->
@@ -22,7 +22,7 @@
                 <div class="section-title">Edit Job</div>
             </div>
             <div class="col-sm-6 text-right mr-b-10 col-xs-6" data-bind="visible: showEdit">
-                <button type="button" class="btn-link mr-r-5">Cancel</button>
+                <button type="button" class="btn-link mr-r-5" data-bind="click: $root.cancelJob">Cancel</button>
                 <button type="button" class="btn pd-l-25 pd-r-25 btn-primary-outline" data-bind="click: $root.deleteJob">Delete</button>
                 <button type="submit" class="btn btn-primary pd-l-25 pd-r-25">Publish</button>
             </div>
@@ -98,6 +98,7 @@
             <div class="slt">
                 <select class="ddlCars" multiple="true" data-bind=" options: $parent.allOfficeTypes, selectedOptions: selectedOfficeType ">
                 </select>
+                <p class="error-div" data-bind="text: $root.officeTypeError"></p>
                 <!--<p class="error-div">Job cannot be currently created for this location. We will soon be available in your area.</p>-->
             </div>
         </div>
@@ -109,7 +110,8 @@
         </div>
         <div class="form-group">
             <label>Phone Number</label>
-            <input type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits"  data-bind="value: selectedOfficePhone">
+            <input type="text" id="editPhoneNumber" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits"  data-bind="value: selectedOfficePhone">
+            <p class="error-div" data-bind="text: $root.phoneNumberError"></p>
         </div>
         <div class="form-group dpc">
             <label >Working Hours</label>
@@ -271,7 +273,7 @@
         </div>	
         <div class="form-group">
             <label>Office Location Information <i class="optional">(Optional)</i></label>
-            <textarea class="form-control txtHeight" data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: selectedOfficeInfo"></textarea>
+            <textarea class="form-control txtHeight" id="optionalInfo" data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: selectedOfficeInfo"></textarea>
         </div>	
     </div>
     <!--/ko-->

@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TempJobDates extends Model
 {   
-    use Eloquence, Mappable;
+    use Eloquence, Mappable, SoftDeletes;
     
     protected $table = 'temp_job_dates';
     protected $primaryKey = 'id';

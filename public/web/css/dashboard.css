@@ -335,6 +335,10 @@ label {
     position: relative;
 }
 
+.notify-desc {
+    width: 95%;
+}
+
 .notificationList>li>p {
     color: #686868;
 }

@@ -10,6 +10,9 @@ class UserProfile extends Model {
 
     protected $table = 'jobseeker_profiles';
     protected $primaryKey = 'id';
+    const JOBSEEKER_VERIFY_DEFAULT = 0;
+    const JOBSEEKER_VERIFY_APPROVED = 1;
+    const JOBSEEKER_VERIFY_REJECT = 2;
     
 
     public function user() {

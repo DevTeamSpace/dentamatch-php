@@ -37,6 +37,7 @@ class FavoriteJobseekerController extends Controller {
                 ->join('job_titles', 'job_templates.job_title_id', '=', 'job_titles.id')
                 ->where('recruiter_jobs.job_type', '3')
                 ->where('job_templates.user_id', Auth::user()->id)
+                ->whereNull('recruiter_jobs.deleted_at')
                 ->select('job_titles.jobtitle_name', 'recruiter_jobs.id as recruiterId')
                 ->get();
         
@@ -56,22 +57,38 @@ class FavoriteJobseekerController extends Controller {
                             ->withInput();
         }
         try {
-            $jobList = \App\Models\JobLists::where('seeker_id', $request->seekerId)->first();
+            $jobList = \App\Models\JobLists::where('seeker_id', $request->seekerId)
+                    ->where('recruiter_job_id',$request->selectJobSeeker)
+                    ->whereIn('applied_status',[JobLists::INVITED,JobLists::APPLIED,JobLists::SHORTLISTED,JobLists::HIRED])
+                    ->orderBy('id', 'DESC')
+                    ->first();
             if (isset($jobList) && !empty($jobList)) {
-                if ($jobList->recruiter_job_id != $request->selectJobSeeker) {
-                    \App\Models\JobLists::create([
+                //if ($jobList->recruiter_job_id != $request->selectJobSeeker) {
+                    /*\App\Models\JobLists::create([
                         'recruiter_job_id' => $request->selectJobSeeker,
                         'seeker_id' => $request->seekerId,
                         'applied_status' => '1',
-                    ]);
+                    ]);*/
+                    /*\App\Models\JobLists::where('id', $jobList->id)->update(['applied_status' => JobLists::INVITED]);
                     $this->sendPushUser(JobLists::INVITED, Auth::user()->id, $request->seekerId, $request->selectJobSeeker);
-                    Session::flash('message', trans('messages.invite_sent_success'));
+                    Session::flash('message', trans('messages.invite_sent_success'));*/
+                //}
+                $message = "";
+                if($jobList->applied_status == JobLists::INVITED){
+                    $message = "You have already invited for this job";
+                }else if($jobList->applied_status == JobLists::APPLIED){
+                    $message = "You have already applied for this job";
+                }else if($jobList->applied_status == JobLists::SHORTLISTED){
+                    $message = "You have already shortlisted for this job";
+                }else if($jobList->applied_status == JobLists::HIRED){
+                    $message = "You have already hired for this job";
                 }
+                Session::flash('message', $message);
             } else {
                 \App\Models\JobLists::create([
                     'recruiter_job_id' => $request->selectJobSeeker,
                     'seeker_id' => $request->seekerId,
-                    'applied_status' => '1',
+                    'applied_status' => JobLists::INVITED,
                 ]);
                 $this->sendPushUser(JobLists::INVITED, Auth::user()->id, $request->seekerId, $request->selectJobSeeker);
                 Session::flash('message', trans('messages.invite_sent_success'));

@@ -120,21 +120,28 @@ class SearchApiController extends Controller {
             $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
-                $profileComplete = UserProfile::select('is_completed')->where('user_id', $userId)->first();
+                $profileComplete = UserProfile::select('is_completed', 'is_job_seeker_verified')->where('user_id', $userId)->first();
+                
+                
                 if($profileComplete->is_completed == 1){
+                    
+                    if($profileComplete->is_job_seeker_verified != UserProfile::JOBSEEKER_VERIFY_APPROVED) {
+                        return apiResponse::customJsonResponse(0, 200, trans("messages.jobseeker_not_verified"));
+                    }
+                    
                     $jobExists = JobLists::where('seeker_id','=',$userId)
                                     ->where('recruiter_job_id','=',$reqData['jobId'])
-                                    ->whereIn('applied_status',[JobLists::APPLIED,JobLists::INVITED])
+                                    ->whereIn('applied_status',[JobLists::INVITED])
                                     ->first();
                     if($jobExists){
                         
-                        if($jobExists->applied_status == JobLists::INVITED){
+                        //if($jobExists->applied_status == JobLists::INVITED){
                             JobLists::where('id', $jobExists->id)->update(['applied_status' => JobLists::APPLIED]);
                             $this->notifyAdmin($reqData['jobId'],$userId,Notification::JOBSEEKERAPPLIED);
                             $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
-                        }else{
+                        /*}else{
                            $response = apiResponse::customJsonResponse(0, 201, trans("messages.job_already_applied")); 
-                        }
+                        }*/
                     }else{
                         $applyJobs = array('seeker_id' => $userId , 'recruiter_job_id' => $reqData['jobId'] , 'applied_status' => JobLists::APPLIED);
                         JobLists::insert($applyJobs);
@@ -171,7 +178,7 @@ class SearchApiController extends Controller {
                     $jobExists->applied_status = JobLists::CANCELLED;
                     $jobExists->cancel_reason = $reqData['cancelReason'];
                     $jobExists->save();
-                    $this->notifyAdmin($reqData['jobId'],$userId,Notification::JOBSEEKERCANCELLED);
+                    $this->notifyAdminForCancelJob($reqData['jobId'],$userId,$reqData['cancelReason']);
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_cancelled_success"));
                 }else{
                     $response = apiResponse::customJsonResponse(0, 201, trans("messages.job_not_applied_by_you"));
@@ -244,9 +251,10 @@ class SearchApiController extends Controller {
                 if(!empty($data)) {
                     $data['is_applied'] = JobLists::isJobApplied($jobId,$userId);
                     $data['is_saved'] = SavedJobs::getJobSavedStatus($jobId, $userId);
+                    $returnResponse = apiResponse::customJsonResponse(1, 200, trans('messages.job_detail_success'), apiResponse::convertToCamelCase($data));
+                }else{
+                    $returnResponse = apiResponse::customJsonResponse(0, 201, trans("messages.job_not_exists"));
                 }
-                
-                $returnResponse = apiResponse::customJsonResponse(1, 200, trans('messages.job_detail_success'), apiResponse::convertToCamelCase($data));
             }else{
                 $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
@@ -319,11 +327,23 @@ class SearchApiController extends Controller {
             $message = '<a href="/job/details/'.$jobId.'" ><b>'.$jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'</a></b> has accepted for '.$receiverDetails->jobtitle_name;
         }else if($notificationType == Notification::JOBSEEKERREJECTED){
             $message = '<a href="/job/details/'.$jobId.'" ><b>'.$jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'</a></b> has rejected for '.$receiverDetails->jobtitle_name;
-        }else if($notificationType == Notification::JOBSEEKERCANCELLED){
-            $message = '<a href="/job/details/'.$jobId.'" ><b>'.$jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'</a></b> has rejected for '.$receiverDetails->jobtitle_name;
         }
         $notificationDetails = ['image' => $jobseekerDetails['profile_pic'],'message' => $message];
         $data = ['receiver_id'=>$receiverDetails->user_id,'job_list_id' => $jobId,'sender_id' => $senderId, 'notification_data'=>json_encode($notificationDetails),'notification_type' => $notificationType];
+        $notificationDetails = Notification::create($data);
+    }
+    
+    public function notifyAdminForCancelJob($jobId,$senderId,$cancelReason){
+        $receiverDetails = RecruiterJobs::join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
+                        ->join('job_titles','job_templates.job_title_id','=','job_titles.id')
+                        ->select('job_templates.user_id','job_titles.jobtitle_name')
+                        ->where('recruiter_jobs.id',$jobId)->first();
+        $jobseekerDetails = UserProfile::getUserProfile($senderId);
+        
+            $message = '<a href="/job/details/'.$jobId.'" ><b>'.$jobseekerDetails['first_name'].' '.$jobseekerDetails['last_name'].'</a></b> has cancelled for '.$receiverDetails->jobtitle_name;
+        
+        $notificationDetails = ['image' => $jobseekerDetails['profile_pic'],'message' => $message,'cancel_reason' => $cancelReason];
+        $data = ['receiver_id'=>$receiverDetails->user_id,'job_list_id' => $jobId,'sender_id' => $senderId, 'notification_data'=>json_encode($notificationDetails),'notification_type' => Notification::JOBSEEKERCANCELLED];
         $notificationDetails = Notification::create($data);
     }
     

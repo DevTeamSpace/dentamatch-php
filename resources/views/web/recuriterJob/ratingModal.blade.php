@@ -15,15 +15,19 @@
                 <div class="media nopadding">
                     <div class="media-left ">
                         <div class="img-holder pos-rel">
-                            <img class="media-object img-circle" src="http://placehold.it/66x66" alt="...">
+                            <img class="media-object img-circle" src="{{ url("image/66/66/?src=" .$seeker['profile_pic']) }}" alt="...">
                             <span class="star star-fill"></span>
                         </div>
                     </div>
                     <div class="media-body row">
                         <div class="col-sm-8 pd-t-10 ">
                             <div>
-                                <a href="#" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
-                                <span class="mr-l-5 label label-success">{{ ($seeker['avg_rating']!='')?round($seeker['avg_rating'],1): '0' }}</span>
+                                <a href="#" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a>
+                                @if(!empty($seeker['avg_rating']))
+                                    <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{ number_format($seeker['avg_rating'], 1, '.', '') }}</span>
+                                @else
+                                    <span class=" dropdown-toggle label label-success">Not Yet Rated</span>
+                                @endif
                             </div>
                             <p class="nopadding">{{ $job['jobtitle_name'] }}</p>
                             @php 
@@ -66,7 +70,7 @@
                     <div class="media nopadding">
                         <div class="media-left ">
                             <div class="img-holder pos-rel">
-                                <img class="media-object img-circle" src="http://placehold.it/66x66" alt="...">
+                                <img class="media-object img-circle" src="{{ url("image/66/66/?src=" .$seeker['profile_pic']) }}" alt="...">
                                 <span class="star star-fill"></span>
                             </div>
                         </div>
@@ -74,7 +78,7 @@
                             <div class="col-sm-8 pd-t-10 ">
                                 <div>
                                     <a href="#" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
-                                    <span class="mr-l-5 label label-success">{{ ($seeker['avg_rating']!='')?round($seeker['avg_rating'],1): '0' }}</span>
+                                    <span class="mr-l-5 label label-success">{{ ($seeker['avg_rating']!='')?round($seeker['avg_rating'],1): 'Not Yet Rated' }}</span>
                                 </div>
                                 <p class="nopadding">{{ $job['jobtitle_name'] }}</p>
                                 @php 

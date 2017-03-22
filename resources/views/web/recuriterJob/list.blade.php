@@ -6,6 +6,9 @@
 @endsection
 @section('content')
 <div id="ajaxData" class="container padding-container-template">
+    @if(Session::has('message'))
+        <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+    @endif
     @if(count($jobList)>0)
     @include('web.recuriterJob.jobData')
     @else

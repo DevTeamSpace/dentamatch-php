@@ -24,6 +24,8 @@ use App\Http\Requests\DeleteJobRequest;
 use Log;
 use App\Http\Requests\CheckJobAppliedOrNotRequest;
 use Session;
+use App\Models\JobRatings;
+use App\Models\SavedJobs;
 
 class RecruiterJobController extends Controller {
 
@@ -100,14 +102,14 @@ class RecruiterJobController extends Controller {
             if ($request->action == "edit" && !empty($request->id)) {
                 $recruiterJobObj = RecruiterJobs::findById($request->id);
             }
-            
-            if($request->jobType == RecruiterJobs::TEMPORARY) {
-                $isPreviousTempJobRated = RecruiterJobs::checkPendingTempJobsRating();
-                if($isPreviousTempJobRated['seekerCount'] != $isPreviousTempJobRated['ratedSeekerCount']) {
-                    Session::flash('message', trans('messages.rate_previous_jobseeker'));
-                    return redirect('createJob/'.$request->templateId);
-                }
+            $isPreviousTempJobRated = RecruiterJobs::checkPendingTempJobsRating();
+            if($isPreviousTempJobRated['seekerCount'] != $isPreviousTempJobRated['ratedSeekerCount']) {
+                Session::flash('message', trans('messages.rate_previous_jobseeker'));
+                return redirect('createJob/'.$request->templateId);
             }
+            /*if($request->jobType == RecruiterJobs::TEMPORARY) {
+                
+            }*/
             $recruiterJobObj->job_template_id = $request->templateId;
             $recruiterJobObj->recruiter_office_id = $request->dentalOfficeId;
             $recruiterJobObj->job_type = $request->jobType;
@@ -307,11 +309,7 @@ class RecruiterJobController extends Controller {
             }
             $jobDetails = RecruiterJobs::getRecruiterJobDetails($allData->jobId);
             $recruiterOfficeObj = RecruiterOffice::where(['id' => $jobDetails['recruiter_office_id']])->first();
-            if ($jobDetails['job_type'] == $allData->selectedJobType) {
-                $updatedJob = $this->sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj);
-            } else {
-                $updatedJob = $this->sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj);
-            }
+            $updatedJob = $this->sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj);
             
             DB::commit();
             $this->result['data'] = $updatedJob['data'];
@@ -374,7 +372,7 @@ class RecruiterJobController extends Controller {
     
     private function saveOffice($recruiterOfficeId, $allData){
         try{
-            $recruiterOfficeObj = RecruiterOffice::where(['id', $recruiterOfficeId])->first();
+            $recruiterOfficeObj = RecruiterOffice::where(['id' => $recruiterOfficeId])->first();
             $recruiterOfficeObj->work_everyday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->everydayStart)) : '';
             $recruiterOfficeObj->work_everyday_end = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isEverydayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->everydayEnd)) : '';
             $recruiterOfficeObj->monday_start = ($allData->selectedOffice[0]->selectedOfficeWorkingHours->isMondayWork == true) ? date('H:i:s', strtotime($allData->selectedOffice[0]->selectedOfficeWorkingHours->mondayStart)) : '';
@@ -411,6 +409,9 @@ class RecruiterJobController extends Controller {
                 $recruiterOfficeObj->latitude = $allData->selectedOffice[0]->selectedOfficeLat;
                 $recruiterOfficeObj->longitude = $allData->selectedOffice[0]->selectedOfficeLng;
                 $recruiterOfficeObj->zipcode = $allData->selectedOffice[0]->selectedOfficeZipcode;
+                $recruiterOfficeObj->phone_no = $allData->selectedOffice[0]->selectedOfficePhone;
+                $recruiterOfficeObj->office_info = $allData->selectedOffice[0]->selectedOfficeInfo;
+                $recruiterOfficeObj->save();
             } else {
                 $recruiterOfficeObj = RecruiterOffice::where(['id' => $allData->selectedOffice[0]->selectedOfficeId])->first();
             }
@@ -502,13 +503,67 @@ class RecruiterJobController extends Controller {
         return $updateOfficeTypeResult;
     }
     
-    public function postDeleteJob(DeleteJobRequest $request){
+    public function postDeleteJob(Request $request){
         try{
-            $jobObj = RecruiterJobs::where('id', $request->jobId)->first();
-            if($jobObj['job_type'] == config('constants.TemporaryJob')){
-                TempJobDates::where(['recruiter_job_id' => $jobObj['id']])->delete();
+            $insertData = [];
+            $jobId = $request->jobId;
+            $jobObj = RecruiterJobs::where('id', $jobId)->first();
+            if($jobObj) {
+                $jobData = RecruiterJobs::where('recruiter_jobs.id',$jobId)
+                                ->select('job_lists.seeker_id', 'job_templates.user_id', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name')
+                                ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
+                                ->join('job_lists', 'job_lists.recruiter_job_id', 'recruiter_jobs.id')
+                                ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
+                                ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
+                                ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'job_templates.user_id')
+                                ->groupby('recruiter_jobs.id')
+                                ->groupby('job_lists.seeker_id')
+                                ->get();
+                $list = $jobData->toArray();
+                if(!empty($list)) {
+                    $pushList = array_map(function ($value) {
+                                        return  $value;
+                                }, $list);
+                }
+                //echo "<pre>"; print_r($pushList); die;
+                if(!empty($pushList)) {
+                    foreach($pushList as $value) {
+                        $message = "Delete job notification | ".$value['office_name']." has deleted the temporary job vacancy for ".$value['jobtitle_name'];
+                        $userId = $value['seeker_id'];
+                        $senderId = $value['user_id'];
+
+                        $notificationData['receiver_id'] = $userId;
+                        $params['data'] = $notificationData;
+
+                        $deviceModel = Device::getDeviceToken($userId);
+                        if($deviceModel) {
+                            $insertData[] = ['receiver_id'=>$userId,
+                            'sender_id'=>$senderId,
+                            'notification_data'=>$message,
+                            'created_at'=>date('Y-m-d h:i:s'),
+                            'notification_type' => Notification::OTHER,
+                            ];
+                            
+                           NotificationServiceProvider::sendPushNotification($deviceModel, $message);
+                        }
+                    }
+                    
+                    if(!empty($insertData)) {
+                        Notification::createNotification($insertData);
+                    }
+                }
+                
+                JobLists::where('recruiter_job_id', $jobId)->delete();
+                JobRatings::where('recruiter_job_id', $jobId)->delete();
+                TempJobDates::where('recruiter_job_id', $jobId)->delete();
+                RecruiterJobs::where('id', $jobId)->delete();
+                SavedJobs::where('recruiter_job_id', $jobId)->delete();
+                Notification::where('job_list_id', $jobId)->delete();
             }
-            DB::table('recruiter_jobs')->where('id', $request->jobId)->delete();
+            if(!empty($request->requestOrigin)) {
+                Session::flash('message', trans('messages.job_deleted'));
+                return redirect('job/lists');
+            }
             $this->result['success'] = true;
             $this->result['message'] = trans('messages.job_deleted');
         } catch (\Exception $e) {
@@ -531,6 +586,17 @@ class RecruiterJobController extends Controller {
             $this->result['message'] = $e->getMessage();
         }
         return $this->result;
+    }
+    
+    public function jobSeekerProfile($seekerId) {
+        try {
+            $seekerDetails = JobSeekerProfiles::getJobSeekerProfile($seekerId);
+            return view('web.recuriterJob.seekerProfile',compact('seekerDetails'));
+
+        } catch (\Exception $e) {
+            Log::error($e);
+            return view('web.error.', ["message" => $e->getMessage()]);
+        }
     }
 
 }
