@@ -13,7 +13,7 @@
   Route::post('stripe-test', 'web\SubscriptionController@getStripeTest');
   Route::get('image/{w}/{h}/', function(League\Glide\Server $server, $w, $h) {
     $server->outputImage($_GET['src'], ['w' => $w, 'h' => $h, 'fit' => 'crop']);
-});
+    });
   Route::get('/', 'web\SignupController@getLogin');
 
   Route::get('signup', 'web\SignupController@getLogin');
@@ -114,7 +114,7 @@
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
             Route::post('change-password', 'web\UserProfileController@postChangePassword');
 
-            Route::get('chat', 'web\ChatController@getChatSeekerList');
+            //Route::get('chat', 'web\ChatController@getChatSeekerList');
             Route::get('calender', 'web\CalenderController@getCalender');
             Route::get('calender-details', 'web\CalenderController@getCalenderDetails');
             Route::get('recruiter/markFavourite/{seekerId}', 'web\FavoriteJobseekerController@getMarkFavourite');
