@@ -514,7 +514,6 @@ class RecruiterJobController extends Controller {
                                 ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
                                 ->join('job_lists', 'job_lists.recruiter_job_id', 'recruiter_jobs.id')
                                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
-                                ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
                                 ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'job_templates.user_id')
                                 ->groupby('recruiter_jobs.id')
                                 ->groupby('job_lists.seeker_id')
@@ -525,7 +524,6 @@ class RecruiterJobController extends Controller {
                                         return  $value;
                                 }, $list);
                 }
-                //echo "<pre>"; print_r($pushList); die;
                 if(!empty($pushList)) {
                     foreach($pushList as $value) {
                         $message = "Delete job notification | ".$value['office_name']." has deleted the temporary job vacancy for ".$value['jobtitle_name'];
@@ -547,7 +545,6 @@ class RecruiterJobController extends Controller {
                            NotificationServiceProvider::sendPushNotification($deviceModel, $message);
                         }
                     }
-                    
                     if(!empty($insertData)) {
                         Notification::createNotification($insertData);
                     }
