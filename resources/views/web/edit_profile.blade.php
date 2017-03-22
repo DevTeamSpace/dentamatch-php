@@ -153,7 +153,7 @@
             </div>
             <div class="form-group">
                 <label>Phone Number</label>
-                <input type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits" data-bind="value: officePhone" >
+                <input type="text" class="form-control phoneNumberInput" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits" data-bind="value: officePhone" >
                 <p class="error-div" data-bind="text: phoneNumberError"></p>
             </div>
             <div class="form-group dpc">

@@ -222,7 +222,7 @@
                         @endif
                     </div>
                     <div class="col-sm-5 pd-t-5 text-right">
-                        <p>{{ round($seeker['distance'],2) }} miles away</p>
+                        <p>{{ round($seeker['distance'],1) }} miles away</p>
                         <form action="{{ url('job/updateStatus') }}" method="post">
                             {!! csrf_field() !!}
                             <input type="hidden" name="jobId" value="{{ $job['id'] }}">

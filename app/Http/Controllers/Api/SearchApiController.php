@@ -122,11 +122,13 @@ class SearchApiController extends Controller {
                 $reqData = $request->all();
                 $profileComplete = UserProfile::select('is_completed', 'is_job_seeker_verified')->where('user_id', $userId)->first();
                 
-                if($profileComplete->is_job_seeker_verified != UserProfile::JOBSEEKER_VERIFY_APPROVED) {
-                    return apiResponse::customJsonResponse(0, 200, trans("messages.jobseeker_not_verified"));
-                }
                 
                 if($profileComplete->is_completed == 1){
+                    
+                    if($profileComplete->is_job_seeker_verified != UserProfile::JOBSEEKER_VERIFY_APPROVED) {
+                        return apiResponse::customJsonResponse(0, 200, trans("messages.jobseeker_not_verified"));
+                    }
+                    
                     $jobExists = JobLists::where('seeker_id','=',$userId)
                                     ->where('recruiter_job_id','=',$reqData['jobId'])
                                     ->whereIn('applied_status',[JobLists::INVITED])

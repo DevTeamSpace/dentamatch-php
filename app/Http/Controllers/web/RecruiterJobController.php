@@ -102,14 +102,14 @@ class RecruiterJobController extends Controller {
             if ($request->action == "edit" && !empty($request->id)) {
                 $recruiterJobObj = RecruiterJobs::findById($request->id);
             }
-            
-            if($request->jobType == RecruiterJobs::TEMPORARY) {
-                $isPreviousTempJobRated = RecruiterJobs::checkPendingTempJobsRating();
-                if($isPreviousTempJobRated['seekerCount'] != $isPreviousTempJobRated['ratedSeekerCount']) {
-                    Session::flash('message', trans('messages.rate_previous_jobseeker'));
-                    return redirect('createJob/'.$request->templateId);
-                }
+            $isPreviousTempJobRated = RecruiterJobs::checkPendingTempJobsRating();
+            if($isPreviousTempJobRated['seekerCount'] != $isPreviousTempJobRated['ratedSeekerCount']) {
+                Session::flash('message', trans('messages.rate_previous_jobseeker'));
+                return redirect('createJob/'.$request->templateId);
             }
+            /*if($request->jobType == RecruiterJobs::TEMPORARY) {
+                
+            }*/
             $recruiterJobObj->job_template_id = $request->templateId;
             $recruiterJobObj->recruiter_office_id = $request->dentalOfficeId;
             $recruiterJobObj->job_type = $request->jobType;
@@ -510,10 +510,11 @@ class RecruiterJobController extends Controller {
             $jobObj = RecruiterJobs::where('id', $jobId)->first();
             if($jobObj) {
                 $jobData = RecruiterJobs::where('recruiter_jobs.id',$jobId)
-                                ->select('job_lists.seeker_id', 'job_templates.user_id', 'job_titles.jobtitle_name')
+                                ->select('job_lists.seeker_id', 'job_templates.user_id', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name')
                                 ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
                                 ->join('job_lists', 'job_lists.recruiter_job_id', 'recruiter_jobs.id')
                                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
+                                ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'job_templates.user_id')
                                 ->groupby('recruiter_jobs.id')
                                 ->groupby('job_lists.seeker_id')
                                 ->get();
@@ -523,10 +524,9 @@ class RecruiterJobController extends Controller {
                                         return  $value;
                                 }, $list);
                 }
-                //echo "<pre>"; print_r($pushList); die;
                 if(!empty($pushList)) {
                     foreach($pushList as $value) {
-                        $message = $value['jobtitle_name']. " has been deleted by the recruiter.";
+                        $message = "Delete job notification | ".$value['office_name']." has deleted the temporary job vacancy for ".$value['jobtitle_name'];
                         $userId = $value['seeker_id'];
                         $senderId = $value['user_id'];
 
@@ -545,7 +545,6 @@ class RecruiterJobController extends Controller {
                            NotificationServiceProvider::sendPushNotification($deviceModel, $message);
                         }
                     }
-                    
                     if(!empty($insertData)) {
                         Notification::createNotification($insertData);
                     }
@@ -584,6 +583,17 @@ class RecruiterJobController extends Controller {
             $this->result['message'] = $e->getMessage();
         }
         return $this->result;
+    }
+    
+    public function jobSeekerProfile($seekerId) {
+        try {
+            $seekerDetails = JobSeekerProfiles::getJobSeekerProfile($seekerId);
+            return view('web.recuriterJob.seekerProfile',compact('seekerDetails'));
+
+        } catch (\Exception $e) {
+            Log::error($e);
+            return view('web.error.', ["message" => $e->getMessage()]);
+        }
     }
 
 }
