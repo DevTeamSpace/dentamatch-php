@@ -86,7 +86,7 @@
                                   <br>
                                   <div class="form-group">
                                     <label class="sr-only" for="card-number">Card number</label>
-                                    <input type="number" class="form-control" id="card-number" placeholder="Card number" data-bind="value: cardNumber, disable: disableInput">
+                                    <input type="text" class="form-control" id="card-number" placeholder="Card number" data-bind="value: cardNumber, disable: disableInput">
                                 </div>
                                 <div class="form-group">
                                     <label class="sr-only" for="expiry">Expiry</label>
@@ -126,7 +126,7 @@
                             </div>-->
                             <div class="form-group">
                                 <label class="sr-only" for="expiry">Expiry</label>
-                                <input type="text" class="form-control" id="editCvv" placeholder="MM/YY" data-bind="value: editExpiry">
+                                <input type="text" class="form-control" id="editExpiry" placeholder="MM/YY" data-bind="value: editExpiry">
                             </div>
 <!--                            <div class="form-group">
                                 <label class="sr-only" for="cvv">CVV</label>

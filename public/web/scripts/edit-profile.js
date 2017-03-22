@@ -1,6 +1,6 @@
 //$(function () {
 
-var OfficeModel = function(data) {
+var OfficeModel = function (data) {
     var me = this;
     me.officeId = ko.observable();
     me.officeAddress = ko.observable('');
@@ -30,7 +30,7 @@ var OfficeModel = function(data) {
     me.errorMessage = ko.observable('');
     me.officeInfoError = ko.observable('');
 
-    me._init = function(d) {
+    me._init = function (d) {
         if (typeof d == "undefined") {
             me.officeId = ko.observable(Math.floor((Math.random() * 100) + 1));
             me.officeAddress = ko.observable('');
@@ -77,7 +77,7 @@ var OfficeModel = function(data) {
 };
 
 
-var WorkingHourModel = function(data) {
+var WorkingHourModel = function (data) {
     var me = this;
     me.isMondayWork = ko.observable(false);
     me.mondayStart = ko.observable(null);
@@ -104,7 +104,7 @@ var WorkingHourModel = function(data) {
     me.everydayStart = ko.observable(null);
     me.everydayEnd = ko.observable(null);
 
-    me.everyDayWorkHour = function(d, e) {
+    me.everyDayWorkHour = function (d, e) {
         if (d.officeWorkingHours.everydayStart() == null || d.officeWorkingHours.everydayStart() == "") {
             d.officeWorkingHours.everydayStart('08:00 AM');
             d.officeWorkingHours.everydayEnd('05:00 PM');
@@ -118,7 +118,7 @@ var WorkingHourModel = function(data) {
         me.isSundayWork(false);
     };
 
-    me.otherDayWorkHour = function(d, e) {
+    me.otherDayWorkHour = function (d, e) {
         if ($(e.target).attr('id').indexOf('mon') >= 0) {
             if (d.officeWorkingHours.mondayStart() == null || d.officeWorkingHours.mondayStart() == "undefined") {
                 d.officeWorkingHours.mondayStart('08:00 AM');
@@ -164,7 +164,7 @@ var WorkingHourModel = function(data) {
         me.isEverydayWork(false);
     };
 
-    me._init = function(d) {
+    me._init = function (d) {
         if (typeof d == "undefined") {
             me.isMondayWork(false);
             me.isTuesdayWork(false);
@@ -227,7 +227,7 @@ var WorkingHourModel = function(data) {
         }
     };
 
-    me.getDateFunc = function(start, end) {
+    me.getDateFunc = function (start, end) {
         splited1 = start.split(':');
         splited2 = end.split(':');
         date1 = new Date('', '', '', splited1[0], splited1[1]);
@@ -239,20 +239,20 @@ var WorkingHourModel = function(data) {
 };
 
 ko.bindingHandlers.datetimePicker = {
-    init: function(element, valueAccessor, bContext) {
+    init: function (element, valueAccessor, bContext) {
         $(element).datetimepicker({
             format: 'hh:mm A',
             'allowInputToggle': true,
             stepping: 15,
             minDate: moment().startOf('day'),
             maxDate: moment().endOf('day')
-        }).on('dp.change', function(a) {
+        }).on('dp.change', function (a) {
             bContext().value($(this).val());
         });
     }
 };
 
-var EditProfileVM = function() {
+var EditProfileVM = function () {
     var me = this;
     me.dentalOfficeName = ko.observable('');
     me.dentalOfficeDescription = ko.observable('');
@@ -310,9 +310,9 @@ var EditProfileVM = function() {
     me.prevEverydayEnd = ko.observable(null);
 
 
-    me.getProfileDetails = function() {
+    me.getProfileDetails = function () {
         jobId = $('#jobIdValue').val();
-        $.get('recruiter-profile-details', {}, function(d) {
+        $.get('recruiter-profile-details', {}, function (d) {
             if (typeof d.user != "undefined") {
                 me.dentalOfficeName(d.user.office_name);
                 me.dentalOfficeDescription(d.user.office_desc);
@@ -344,10 +344,10 @@ var EditProfileVM = function() {
     var autocomplete = {};
     var autocompletesWraps = ['autocomplete', 'autocomplete1', 'autocomplete2'];
 
-    me.getOfficeName = function(d, e) {
+    me.getOfficeName = function (d, e) {
         officeName = new google.maps.places.SearchBox(
-            (e.currentTarget), { types: ['geocode'] });
-        officeName.addListener('places_changed', function() {
+                (e.currentTarget), {types: ['geocode']});
+        officeName.addListener('places_changed', function () {
             var place = officeName.getPlaces();
             if (typeof place == "undefined") {
                 return;
@@ -360,10 +360,10 @@ var EditProfileVM = function() {
             $.ajax({
                 url: '/get-location/' + lastAddressComponent,
                 type: "GET",
-                before: function() {
+                before: function () {
                     me.locationError('');
                 },
-                success: function(data) {
+                success: function (data) {
                     if (data == 0) {
                         d.locationError('Please enter a valid address.');
                         d.errors(true);
@@ -375,7 +375,7 @@ var EditProfileVM = function() {
                         d.locationError('');
                     }
                 },
-                error: function(data) {
+                error: function (data) {
                     me.locationError('Please enter a valid address.');
                     me.errors(true);
                 }
@@ -383,7 +383,8 @@ var EditProfileVM = function() {
         });
     };
 
-    me.showOfficeEditForm = function(d, e) {
+    me.showOfficeEditForm = function (d, e) {
+        $(".phoneNumberInput").inputmask('(999)999 9999');
         me.prevOfficeId();
         me.prevOfficeAddress('');
         me.prevOfficePhone();
@@ -417,7 +418,7 @@ var EditProfileVM = function() {
         me.prevEverydayStart(null);
         me.prevEverydayEnd(null);
 
-        $.get('job-applied-or-not', { officeId: d.officeId() }, function(data) {
+        $.get('job-applied-or-not', {officeId: d.officeId()}, function (data) {
             if (data.data.length == 0) {
                 $('.ddlCars').multiselect({
                     numberDisplayed: 3,
@@ -471,9 +472,9 @@ var EditProfileVM = function() {
         });
     };
 
-    me.deleteOffice = function(d, e) {
+    me.deleteOffice = function (d, e) {
         if (d.alreadyAdded() == true) {
-            $.get('job-applied-or-not', { officeId: d.officeId() }, function(data) {
+            $.get('job-applied-or-not', {officeId: d.officeId()}, function (data) {
                 if (data.data.length == 0) {
                     me.headMessage('Delete Office');
                     me.cancelButtonDelete(true);
@@ -482,7 +483,7 @@ var EditProfileVM = function() {
                     $('#actionModal').modal('show');
                     formData = new FormData();
                     formData.append('officeId', d.officeId());
-                    $('#actionButton').click(function() {
+                    $('#actionButton').click(function () {
                         me.prompt('Deleting office...');
                         me.cancelButtonDelete(false);
                         me.showModalFooter(false);
@@ -494,15 +495,15 @@ var EditProfileVM = function() {
                             contentType: false,
                             processData: false,
                             type: 'POST',
-                            success: function(data) {
+                            success: function (data) {
                                 me.prompt('Office deleted successfully.');
                                 if (data.success == true) {
                                     me.offices.remove(d);
                                     me.disableAction(false);
                                     setTimeout(
-                                        function() {
-                                            $('#actionModal').modal('hide');
-                                        }, 700);
+                                            function () {
+                                                $('#actionModal').modal('hide');
+                                            }, 700);
                                 }
                             }
                         });
@@ -521,7 +522,7 @@ var EditProfileVM = function() {
         me.showAddMoreOfficeButton(true);
     };
 
-    me.updateOfficeDetails = function(d, e) {
+    me.updateOfficeDetails = function (d, e) {
         d.mixedWorkHourError('');
         d.mondayTimeError('');
         d.tuesdayTimeError('');
@@ -638,7 +639,7 @@ var EditProfileVM = function() {
                 contentType: false,
                 processData: false,
                 type: 'POST',
-                success: function(data) {
+                success: function (data) {
                     me.prompt('Office updated successfully.');
                     if (data.success == true) {
                         d.showOffice(true);
@@ -648,23 +649,23 @@ var EditProfileVM = function() {
                             d.officeId(data.recruiterOffice.id);
                         }
                         setTimeout(
-                            function() {
-                                $('#actionModal').modal('hide');
-                            }, 1000);
+                                function () {
+                                    $('#actionModal').modal('hide');
+                                }, 1000);
                     } else {
                         d.errorMessage(data.message);
                         me.prompt('Error in updating office.');
                         setTimeout(
-                            function() {
-                                $('#actionModal').modal('hide');
-                            }, 1000);
+                                function () {
+                                    $('#actionModal').modal('hide');
+                                }, 1000);
                     }
                 }
             });
         }
     };
 
-    me.cancelUpdateOffice = function(d, e) {
+    me.cancelUpdateOffice = function (d, e) {
         if (d.alreadyAdded() == true) {
             d.officeId(me.prevOfficeId());
             d.officeAddress(me.prevOfficeAddress());
@@ -709,15 +710,14 @@ var EditProfileVM = function() {
         }
     };
 
-    me.showUpdateNameDescForm = function(d, e) {
-        console.log();
+    me.showUpdateNameDescForm = function (d, e) {
         d.prevOfficeName(d.dentalOfficeName());
         d.prevOfficeDescription(d.dentalOfficeDescription());
         d.showNameDescForm(true);
         d.showNameDesc(false);
     };
 
-    me.cancelNameDescForm = function(d, e) {
+    me.cancelNameDescForm = function (d, e) {
         me.officeDescError('');
         me.officeNameError('');
         d.dentalOfficeName(d.prevOfficeName());
@@ -726,7 +726,7 @@ var EditProfileVM = function() {
         d.showNameDesc(true);
     };
 
-    me.updateNameDesc = function(d, e) {
+    me.updateNameDesc = function (d, e) {
         me.officeDescError('');
         me.officeNameError('');
         if (d.dentalOfficeName() == "" || d.dentalOfficeName() == null) {
@@ -755,37 +755,38 @@ var EditProfileVM = function() {
             contentType: false,
             processData: false,
             type: 'POST',
-            success: function(data) {
+            success: function (data) {
                 me.prompt('Office Info updated successfully.');
                 if (data.success == true) {
                     d.showNameDescForm(false);
                     d.showNameDesc(true);
                     setTimeout(
-                        function() {
-                            $('#actionModal').modal('hide');
-                        }, 1000);
+                            function () {
+                                $('#actionModal').modal('hide');
+                            }, 1000);
                 } else {
                     me.prompt('Error in updating office info.');
                     setTimeout(
-                        function() {
-                            $('#actionModal').modal('hide');
-                        }, 1000);
+                            function () {
+                                $('#actionModal').modal('hide');
+                            }, 1000);
                 }
             }
         });
     };
 
-    me.addOfficeFunction = function(d, e) {
+    me.addOfficeFunction = function (d, e) {
         me.offices.push(new OfficeModel());
         $('.ddlCars').multiselect({
             numberDisplayed: 3,
         });
         $(".dropCheck input").after("<div></div>");
+        $(".phoneNumberInput").inputmask('(999)999 9999');
     };
 
-    me._init = function() {
+    me._init = function () {
         $('body').find('#ChildVerticalTab_1').find('li').removeClass('resp-tab-active');
-        $('body').find('#ChildVerticalTab_1').find('li:nth-child(1)').addClass('resp-tab-active')
+        $('body').find('#ChildVerticalTab_1').find('li:nth-child(1)').addClass('resp-tab-active');
         me.getProfileDetails();
     };
     me._init();

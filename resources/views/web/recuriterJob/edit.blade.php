@@ -110,7 +110,7 @@
         </div>
         <div class="form-group">
             <label>Phone Number</label>
-            <input type="text" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits"  data-bind="value: selectedOfficePhone">
+            <input type="text" id="editPhoneNumber" class="form-control" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits"  data-bind="value: selectedOfficePhone">
             <p class="error-div" data-bind="text: $root.phoneNumberError"></p>
         </div>
         <div class="form-group dpc">
@@ -273,7 +273,7 @@
         </div>	
         <div class="form-group">
             <label>Office Location Information <i class="optional">(Optional)</i></label>
-            <textarea class="form-control txtHeight" data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: selectedOfficeInfo"></textarea>
+            <textarea class="form-control txtHeight" id="optionalInfo" data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: selectedOfficeInfo"></textarea>
         </div>	
     </div>
     <!--/ko-->

@@ -144,7 +144,7 @@
 <script type="text/javascript" src="{{asset('web/scripts/knockout-3.4.1.js')}}"></script>
 <script src ="{{asset('web/plugins/custom-scroller/js/mCustomScrollbar.js')}}"></script>
 <script src="{{asset('web/plugins/calender/js/fullcalendar.js')}}"></script>
-
+<script src="{{asset('web/plugins/inputmask/dist/jquery.inputmask.bundle.js')}}"></script>
 @yield('js')
 
 @if(!empty($jobTemplateModalData))

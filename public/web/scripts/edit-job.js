@@ -278,6 +278,7 @@
             numberDisplayed: 3,
         });
         $(".dropCheck input").after("<div></div>");
+        $('#editPhoneNumber').inputmask("(999)999 9999");  //static mask
     };
     me.showOfficeDetailsTwo = function (d, selectedId) {
         if(selectedId == null){
@@ -293,6 +294,7 @@
             numberDisplayed: 3,
         });
         $(".dropCheck input").after("<div></div>");
+        $('#editPhoneNumber').inputmask("(999)999 9999");  //static mask
     };
 
     var placeSearch, autocomplete, autocomplete1, autocomplete2, officeName;
