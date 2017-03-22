@@ -68,6 +68,7 @@
                 Route::post('delete-job', 'web\RecruiterJobController@postDeleteJob');
                 Route::post('job/updateStatus', 'web\RecruiterJobController@updateStatus');
                 Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
+                Route::get('/jobseeker/{seekerId}', 'web\RecruiterJobController@jobSeekerProfile');
                 Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
                 
                 
@@ -93,6 +94,7 @@
                 Route::post('delete-office', 'web\UserProfileController@postDeleteOffice');
                 Route::get('notification-lists', 'web\NotificationController@getNotificationList');
                 Route::get('{id}/delete-notification', 'web\NotificationController@deleteNotification');
+                Route::get('checknotratedjobs', 'web\RatingController@getRating');
             });
             Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails');
             Route::get('/get-location/{zip}', 'web\UserProfileController@checkValidLocation');

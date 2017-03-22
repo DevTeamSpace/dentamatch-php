@@ -77,3 +77,5 @@ Route::post('chat/send-message', 'Api\PushNotificationApiController@userChatNoti
 Route::post('users/update-devicetoken', 'Api\PushNotificationApiController@PostUpdateDeviceToken');
 
 Route::post('admin/forgot-password', 'Api\UserApiController@postAdminForgotPassword');
+
+

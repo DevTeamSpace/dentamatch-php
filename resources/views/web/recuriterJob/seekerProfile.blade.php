@@ -5,12 +5,11 @@
 @endsection
 @section('content')
 
+@if(!empty($seekerDetails))
 <div class="container padding-container-template">
     <!--breadcrumb-->
     <ul class="breadcrumb">
-        <li><a href="{{ url('job/lists') }}">Jobs Listing</a></li>
-        <li><a href="{{ url('job/details/'.$jobId) }}">Jobs Detail</a></li>
-        <li><a href="{{ url('job/search/'.$jobId) }}">Search Preference</a></li>
+        <li><a href="{{ url('job/lists') }}">Favourites Listing</a></li>
         <li class="active">{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']." Profile"}}</li>
     </ul>
     <!--/breadcrumb-->
@@ -65,31 +64,6 @@
                   @endif
               </div>
           </div>
-          <form action="{{ url('job/updateStatus') }}" method="post">
-            <div class="col-md-3 text-right"><p>{{round($seekerDetails['distance'],1)}} miles away</p>
-                {!! csrf_field() !!}
-                <input type="hidden" name="jobId" value="{{ $jobId }}">
-                <input type="hidden" name="seekerId" value="{{ $seekerDetails['user_id'] }}">
-                @if($seekerDetails['applied_status'] == \App\Models\JobLists::INVITED)
-                <h6>INVITED</h6>
-                @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::APPLIED)
-                <h6></h6>
-                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::REJECTED }}" class="btn btn-primary pd-l-20 pd-r-20">Reject</button>
-                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::SHORTLISTED }}" class="btn btn-primary pd-l-20 pd-r-20">Accept</button>
-                @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::SHORTLISTED)
-                <h6>SHORTLISTED</h6>
-                <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
-                                    data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
-                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::HIRED }}" class="btn btn-primary pd-l-20 pd-r-20">Hire</button>
-                @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::HIRED)
-                <h6>HIRED</h6>
-                <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
-                                    data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
-                @else
-                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pd-l-30 pd-r-30">Invite</button>    
-                @endif    
-            </div>
-        </form>
     </div>
 
     <div class="pd-t-60">
@@ -186,29 +160,36 @@
                 <h5>AFFILIATIONS</h5>
                 <P>{{$seekerDetails['affiliations']}}</P>
             </div>
-            @if($seekerDetails['applied_status'] == \App\Models\JobLists::HIRED)
             @if(!empty($seekerDetails['certificate']))
-            @foreach($seekerDetails['certificate'] as $certificate)
-            <div class="searchResultHeading pd-t-20 smallSquare">
-                <h5>{{$certificate['certificate_name']}}</h5>
-                <p>
-                    <a href="javascript:void(0)" >
-                        <img data-toggle="modal" data-target="#certificateModal" class="img-rounded thumb-certificate" data-image="{{ $certificate['image_path'] }}" src="{{ url('image/66/66/?src='.$certificate['image_path']) }}">
-                    </a>
-                    @if(!empty($certificate['validity_date']))
-                    Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span></p>
-                    @else
-                    Valid Till: N/A
-                    @endif
+                @foreach($seekerDetails['certificate'] as $certificate)
+                    <div class="searchResultHeading pd-t-20 smallSquare">
+                    <h5>{{$certificate['certificate_name']}}</h5>
+                    <p>
+                        <a href="javascript:void(0)" >
+                            <img data-toggle="modal" data-target="#certificateModal" class="img-rounded thumb-certificate" data-image="{{ $certificate['image_path'] }}" src="{{ url('image/66/66/?src='.$certificate['image_path']) }}">
+                        </a>
+                        @if(!empty($certificate['validity_date']))
+                        Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span>
+                        @else
+                        Valid Till: N/A
+                        @endif
+                    </p>
                 </div>
                 @endforeach
-                @endif
                 @endif
             </div>  
         </div>
     </div>  
 </div>
-
+@else
+    <div class="jobCatbox mr-b-20">
+        <div class="template-job-information ">
+            <div class="template-job-information-left">
+                <h4>No Jobseeker Profile to show</h4>
+            </div>
+        </div>  
+    </div>
+@endif
 <!--  Modal content for the mixer image example -->
 <div id="certificateModal" class="modal fade" role="dialog">
     <div class="modal-dialog custom-modal popup-wd522">
@@ -225,30 +206,6 @@
   </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
 </div><!-- /.modal mixer image -->
-
-
-<div id="ShortListMessageBox" class="modal fade" role="dialog">
-    <div class="modal-dialog custom-modal popup-wd522">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Messgae</h4>
-            </div>
-            <div class="modal-body ">
-                <form>
-                    <div class="form-group custom-select">
-                        <textarea id="chatMsg" class="form-control messageBoxTextArea" placeholder="Type your message here"></textarea>
-                    </div>
-                    <div class="text-right mr-t-20 mr-b-30">
-                        <input type="hidden" id="seekerId" value="{{ $seekerDetails['user_id'] }}">
-                        <button id="sendChat" type="submit" class="btn btn-primary pd-l-30 pd-r-30">Send</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 @endsection
 
