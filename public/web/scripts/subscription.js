@@ -170,6 +170,10 @@ var FirstSubscriptionVM = function () {
     
     me._init = function () {
         me.getSubscriptionList();
+        $(document).ready(function () {
+            $('#card-number').inputmask("9999 9999 9999 9999");  //static mask
+            $('#expiry, #editExpiry').inputmask("99/9999");  //static mask
+        });
     };
     me._init();
 };

@@ -1,4 +1,4 @@
-var SubscriptionModel = function(data) {
+var SubscriptionModel = function (data) {
     var me = this;
     me.subscriptionAmount = ko.observable();
     me.subscriptionPlan = ko.observable('');
@@ -7,7 +7,7 @@ var SubscriptionModel = function(data) {
     me.subscriptionId = ko.observable('');
     me.leftDays = ko.observable('');
 
-    me._init = function(d) {
+    me._init = function (d) {
         if (typeof d == "undefined") {
             return false;
         }
@@ -26,7 +26,7 @@ var SubscriptionModel = function(data) {
     return me;
 };
 
-var SubscriptionVM = function() {
+var SubscriptionVM = function () {
     var me = this;
     me.isLoading = ko.observable(false);
     me.loadingSubscription = ko.observable('');
@@ -63,14 +63,14 @@ var SubscriptionVM = function() {
     me.switchVisible = ko.observable(false);
     me.switchToText = ko.observable('');
 
-    me.getSubscription = function() {
+    me.getSubscription = function () {
         me.isLoadingSubscription(true);
         me.loadingSubscription('Loading subscription please wait.');
         if (me.isLoading()) {
             return false;
         }
         me.isLoading(true);
-        $.get('get-subscription-details', {}, function(d) {
+        $.get('get-subscription-details', {}, function (d) {
             me.isLoadingSubscription(false);
             if (d.success == false || d.data.data.data.subscriptions.data.length == 0) {
                 me.noSubscription(true);
@@ -108,22 +108,25 @@ var SubscriptionVM = function() {
                     }
                 }
                 for (i in d.data.data.data.sources.data) {
+                    if(d.data.data.data.sources.data[i].exp_month <= 9){
+                        d.data.data.data.sources.data[i].exp_month = '0'+d.data.data.data.sources.data[i].exp_month;
+                    }
                     me.cards.push(d.data.data.data.sources.data[i]);
                 }
                 me.allData.push(me.subscription(), me.cards()[0]);
             }
-        }).error(function(xhr, e) {
+        }).error(function (xhr, e) {
             me.isLoading(false);
         });
     };
 
-    me.addCard = function(d, e) {
+    me.addCard = function (d, e) {
         me.cardNumber();
         me.expiry();
-        me.expiryWithSlash = ko.computed(function(){
-            if(me.expiry().length == 2){
-                me.expiry(me.expiry()+'/');
-            }else{
+        me.expiryWithSlash = ko.computed(function () {
+            if (me.expiry().length == 2) {
+                me.expiry(me.expiry() + '/');
+            } else {
                 me.expiry();
             }
             return me.expiry();
@@ -136,7 +139,7 @@ var SubscriptionVM = function() {
         $('#addCardModal').modal('show');
     };
 
-    $(".modal").on("hidden.bs.modal", function() {
+    $(".modal").on("hidden.bs.modal", function () {
         //        me.errorMessage('');
         //        me.successMessage('');
         //        me.cardNumber('');
@@ -153,7 +156,7 @@ var SubscriptionVM = function() {
         //        me.editExpiry('');
     });
 
-    me.addCardFunction = function(d, e) {
+    me.addCardFunction = function (d, e) {
         me.errorMessage('');
         me.successMessage('');
 
@@ -177,7 +180,7 @@ var SubscriptionVM = function() {
                 backdrop: 'static',
                 keyboard: false
             });
-            $.post('add-card', { cardNumber: me.cardNumber(), expiry: me.expiry(), cvv: me.cvv() }, function(d) {
+            $.post('add-card', {cardNumber: me.cardNumber(), expiry: me.expiry(), cvv: me.cvv()}, function (d) {
                 me.creatingMessage('');
                 if (d.success == false) {
                     me.errorMessage(d.message);
@@ -189,9 +192,9 @@ var SubscriptionVM = function() {
                     me.errorMessage('');
                     me.successMessage(d.message);
                     setTimeout(
-                        function() {
-                            location.reload();
-                        }, 700);
+                            function () {
+                                location.reload();
+                            }, 700);
                 }
             });
         } else {
@@ -206,7 +209,7 @@ var SubscriptionVM = function() {
         }
     };
 
-    me.deleteCard = function(d, e) {
+    me.deleteCard = function (d, e) {
         if (me.cards().length <= 1) {
             me.prompt('Cannot delete card, you should have atleast one card added to continue the subscription.');
             me.headMessage('Delete Card');
@@ -221,12 +224,12 @@ var SubscriptionVM = function() {
             me.showModalFooter(true);
             me.cancelButtonDelete(true);
             $('#actionModal').modal('show');
-            $('#actionButton').on('click', function() {
+            $('#actionButton').on('click', function () {
                 me.prompt('Deleting card please wait.');
                 me.headMessage('Delete Card');
                 me.cancelButtonDelete(false);
                 me.showModalFooter(false);
-                $.post('delete-card', { cardId: d.id }, function(d) {
+                $.post('delete-card', {cardId: d.id}, function (d) {
                     if (d.success == false) {
                         me.prompt('Cannot delete card, please contact admin.');
                         me.headMessage('Delete Card');
@@ -235,41 +238,41 @@ var SubscriptionVM = function() {
                     } else {
                         me.prompt('Card deleted successfully.');
                         setTimeout(
-                            function() {
-                                location.reload();
-                            }, 400);
+                                function () {
+                                    location.reload();
+                                }, 400);
                     }
                 });
             });
         }
     };
 
-    me.unsubscribePlan = function(d, e) {
+    me.unsubscribePlan = function (d, e) {
         me.prompt('Do you want to unsubscribe ?');
         me.headMessage('Unsubscribe');
         me.showModalFooter(true);
         me.cancelButtonDelete(true);
         me.actionButtonText('Unsubscribe');
         $('#actionModal').modal('show');
-        $('#actionButton').on('click', function() {
+        $('#actionButton').on('click', function () {
             me.prompt('Unsubscribing please wait.');
             me.cancelButtonDelete(false);
             me.showModalFooter(false);
             subscriptionId = d.subscription()[0].subscriptionId;
-            $.post('unsubscribe', { subscriptionId: subscriptionId }, function(d) {
+            $.post('unsubscribe', {subscriptionId: subscriptionId}, function (d) {
                 if (d.success == true) {
                     me.prompt('Unsubscribed successfully.');
                 } else {
                     me.prompt(d.message);
                 }
-                setTimeout(function() {
+                setTimeout(function () {
                     location.reload();
                 }, 700);
             });
         });
     };
 
-    me.subscribeAgain = function(d, e) {
+    me.subscribeAgain = function (d, e) {
         me.subscriptionType();
         me.prompt('Do you want to subscribe again ?');
         me.headMessage('Subscribe Again');
@@ -283,24 +286,24 @@ var SubscriptionVM = function() {
             me.subscriptionType(1);
         }
         $('#actionModal').modal('show');
-        $('#actionButton').on('click', function() {
+        $('#actionButton').on('click', function () {
             me.prompt('Subscribing please wait.');
             me.cancelButtonDelete(false);
             me.showModalFooter(false);
-            $.post('change-subscription-plan', { plan: me.subscriptionType(), subscriptionId: d.subscription()[0].subscriptionId, type: "resubscribe" }, function(d) {
+            $.post('change-subscription-plan', {plan: me.subscriptionType(), subscriptionId: d.subscription()[0].subscriptionId, type: "resubscribe"}, function (d) {
                 if (d.success == true) {
                     me.prompt('Subscribed successfully.');
                 } else {
                     me.prompt(d.message);
                 }
-                setTimeout(function() {
+                setTimeout(function () {
                     location.reload();
                 }, 700);
             });
         });
     };
 
-    me.switchTo = function(d, e) {
+    me.switchTo = function (d, e) {
         me.headMessage('Change Plan');
         me.showModalFooter(true);
         me.cancelButtonDelete(true);
@@ -312,7 +315,7 @@ var SubscriptionVM = function() {
             me.prompt('Do you want to change plan to annually. ?');
         }
         $('#actionModal').modal('show');
-        $('#actionButton').on('click', function() {
+        $('#actionButton').on('click', function () {
             me.prompt('Changing please wait.');
             me.cancelButtonDelete(false);
             me.showModalFooter(false);
@@ -321,20 +324,20 @@ var SubscriptionVM = function() {
             } else {
                 plan = 2;
             }
-            $.post('change-subscription-plan', { subscriptionId: d.subscription()[0].subscriptionId, plan: plan, type: "change" }, function(d) {
+            $.post('change-subscription-plan', {subscriptionId: d.subscription()[0].subscriptionId, plan: plan, type: "change"}, function (d) {
                 if (d.success == true) {
                     me.prompt('Plan changed successfully.');
                 } else {
                     me.prompt(d.message);
                 }
-                setTimeout(function() {
+                setTimeout(function () {
                     location.reload();
                 }, 700);
             });
         });
     }
 
-    me.editCard = function(d, e) {
+    me.editCard = function (d, e) {
         me.editCvv();
         me.editCardNumber('XXXX-XXXX-XXXX-' + d.last4);
         me.editExpiry(d.exp_month + '/' + d.exp_year);
@@ -345,7 +348,7 @@ var SubscriptionVM = function() {
         $('#editCardModal').modal('show');
     };
 
-    me.editCardFunction = function(d, e) {
+    me.editCardFunction = function (d, e) {
         me.errorMessage('');
         me.successMessage('');
         if (me.editExpiry() !== null && me.editExpiry().indexOf('/') >= 0) {
@@ -363,7 +366,7 @@ var SubscriptionVM = function() {
                 backdrop: 'static',
                 keyboard: false
             });
-            $.post('edit-card', { expiry: me.editExpiry(), cardId: me.editCardId() }, function(d) {
+            $.post('edit-card', {expiry: me.editExpiry(), cardId: me.editCardId()}, function (d) {
                 me.creatingMessage('');
                 if (d.success == false) {
                     me.errorMessage(d.message);
@@ -374,9 +377,9 @@ var SubscriptionVM = function() {
                     me.errorMessage('');
                     me.successMessage(d.message);
                     setTimeout(
-                        function() {
-                            location.reload();
-                        }, 700);
+                            function () {
+                                location.reload();
+                            }, 700);
                 }
             });
         } else {
@@ -390,10 +393,14 @@ var SubscriptionVM = function() {
         }
     };
 
-    me._init = function() {
+    me._init = function () {
         $('body').find('#ChildVerticalTab_1').find('li').removeClass('resp-tab-active');
         $('body').find('#ChildVerticalTab_1').find('li:nth-child(4)').addClass('resp-tab-active')
         me.getSubscription();
+        $(document).ready(function () {
+            $('#card-number').inputmask("9999 9999 9999 9999");  //static mask
+            $('#expiry, #editExpiry').inputmask("99/9999");  //static mask
+        });
     };
     me._init();
 };
