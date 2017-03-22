@@ -23,9 +23,9 @@ $(document).ready(function() {
         socket.on('disconnect', function() {
             console.info('Socket disconnect');
             socketConnectTimeInterval = setInterval(function () {
-                socket.socket.reconnect();
+                socket.reconnect();
                 console.info('Socket try reconnect');
-                if(socket.socket.connected) {
+                if(socket.connected) {
                     console.info('Socket reconnected');
                     initSocket();
                     clearInterval(socketConnectTimeInterval);
@@ -35,6 +35,7 @@ $(document).ready(function() {
 
         var currentSel = '';
         function initSocket(){
+            console.info('Socket Init');
             socket.emit('init', { userId: fromId, userName: userName, userType: 2 }, function(response) {
 
             });
