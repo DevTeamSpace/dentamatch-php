@@ -59,7 +59,8 @@ class FavoriteJobseekerController extends Controller {
         try {
             $jobList = \App\Models\JobLists::where('seeker_id', $request->seekerId)
                     ->where('recruiter_job_id',$request->selectJobSeeker)
-                    ->whereIn('applied_status',[JobLists::INVITED,JobLists::APPLIED,JobLists::SHORTLISTED])
+                    ->whereIn('applied_status',[JobLists::INVITED,JobLists::APPLIED,JobLists::SHORTLISTED,JobLists::HIRED])
+                    ->orderBy('id', 'DESC')
                     ->first();
             if (isset($jobList) && !empty($jobList)) {
                 //if ($jobList->recruiter_job_id != $request->selectJobSeeker) {
@@ -68,10 +69,21 @@ class FavoriteJobseekerController extends Controller {
                         'seeker_id' => $request->seekerId,
                         'applied_status' => '1',
                     ]);*/
-                    \App\Models\JobLists::where('id', $jobList->id)->update(['applied_status' => JobLists::INVITED]);
+                    /*\App\Models\JobLists::where('id', $jobList->id)->update(['applied_status' => JobLists::INVITED]);
                     $this->sendPushUser(JobLists::INVITED, Auth::user()->id, $request->seekerId, $request->selectJobSeeker);
-                    Session::flash('message', trans('messages.invite_sent_success'));
+                    Session::flash('message', trans('messages.invite_sent_success'));*/
                 //}
+                $message = "";
+                if($jobList->applied_status == JobLists::INVITED){
+                    $message = "You have already invited for this job";
+                }else if($jobList->applied_status == JobLists::APPLIED){
+                    $message = "You have already applied for this job";
+                }else if($jobList->applied_status == JobLists::SHORTLISTED){
+                    $message = "You have already shortlisted for this job";
+                }else if($jobList->applied_status == JobLists::HIRED){
+                    $message = "You have already hired for this job";
+                }
+                Session::flash('message', $message);
             } else {
                 \App\Models\JobLists::create([
                     'recruiter_job_id' => $request->selectJobSeeker,
