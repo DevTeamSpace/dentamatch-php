@@ -34,10 +34,6 @@
                     <div class="form-group custom-select">
                         You have logged in to some other browser.
                     </div>
-                    <div class="text-right mr-t-20 mr-b-30">
-                        <input type="hidden" id="seekerId" value="">
-                        <button id="sendChat" type="submit" class="btn btn-primary pd-l-30 pd-r-30">Send</button>
-                    </div>
                 </form>
             </div>
         </div>
