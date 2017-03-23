@@ -97,9 +97,15 @@ class PushNotificationApiController extends Controller {
         $this->success = 0;
         try{
             $requestData = $request->all();
-            $this->validate($request, ['fromId' => 'required','toId' => 'required',
+            $validateKeys = ['fromId' => 'required','toId' => 'required',
             'fromName' => 'required','message' => 'required',
-            'sentTime' => 'required','messageId' => 'required']);
+            'sentTime' => 'required','messageId' => 'required'];
+            if(isset($request['recruiterId'])){
+                $validateKeys = ['name' => 'required','recruiterId' => 'required','message' => 'required',
+            'messageListId' => 'required','seekerId' => 'required','messageId' => 'required',
+            'timestamp' => 'required','recruiterBlock' => 'required','seekerBlock' => 'required'];
+            }
+            $this->validate($request, $validateKeys);
             $deviceModel = Device::getDeviceToken($requestData['toId']);
             if($deviceModel) {
                 NotificationServiceProvider::sendPushNotification($deviceModel, $requestData['message'], ["data" => $requestData]);
