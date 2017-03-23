@@ -45,16 +45,15 @@ $(function() {
         var masterCLone, dynamicDiv, currentEvent;
         if ($(this).hasClass('DynamicAddder')) {
             currentEvent = $(this);
-            dynamicDiv = $(document.body).find(".profieBox").append('<div class="mainMasterBox"><form method="post" id="officeDetailForm' + dynamicLength + '" action="javascript:void(0);" data-parsley-validate><div class="commonBox cboxbottom masterBox"></div><div class="pull-right text-right pd-b-15" id="removeButton' + dynamicLength + '"><button  id="officeDetailButton' + dynamicLength + '" type="submit" class="btn btn-primary pd-l-40 pd-r-40 formBtnAction">Save</button></div><div class="clearfix"></div></form></div> ');
+            dynamicDiv = $(document.body).find(".profieBox").append('<div class="mainMasterBox"><div class="commonBox cboxbottom masterBox"></div><div class="pull-right text-right pd-b-15" id="removeButton' + dynamicLength + '"></div><div class="clearfix"></div></div> ');
             //masterCLone = $(".masterBox:first").children().clone()
             var officeTypes = $.parseJSON($('#officeTypesJson').val());
             var options = "";
             $.each(officeTypes, function(index, value) {
                 options += "<option value='" + value.id + "'>" + value.officetype_name + "</option>";
             });
-            var tokenValue = $("input[name=_token]").val();
-            var hiddenFields = '<input type="hidden" name="_token" value="' + tokenValue + '" ><div id="officeDetail-errors' + dynamicLength + '"></div><input type="hidden" id="postal_code' + dynamicLength + '" name="postal_code"data-parsley-required  ><input type="hidden" name="lat" id="lat' + dynamicLength + '"><input type="hidden" name="lng" id="lng' + dynamicLength + '"><input type="hidden" name="full_address" id="full_address' + dynamicLength + '">';
-            masterCLone = hiddenFields + '<p class="deleteCard pull-right"><span class="icon icon-deleteicon"></span>Delete<div class=form-group><div class=detailTitleBlock><h5>OFFICE DETAILS</h5></div><label>Dental Office Type</label><div class=slt><select name="officeType[]" class=ddlCars data-parsley-required data-parsley-required-message=" required"multiple>' + options + ' </select></div></div><div class=form-group><label>Dental Office Address</label><input id="autocomplete' + dynamicLength + '" name="officeAddress" class=form-control data-parsley-required data-parsley-required-message="required"placeholder="Office name, Street, City, Zip Code and Country"><div id="location-msg' + dynamicLength + '"></div></div><div class=form-group><label>Phone Number</label><input  id="phoneNumber' + dynamicLength + '" name="phoneNumber" type="text" class="form-control phone-number" data-parsley-required data-parsley-required-message="Please, Provide a valid Phone number of 10 digits"   data-parsley-trigger="keyup" data-parsley-minlength="14"   data-parsley-minlength-message="phone number should be 10 digit"></div><div class=allCheckBox><div class=form-group><label>Working Hours</label><div class=weekBox><div class="dayBox row EveryDayCheck"><div class=col-sm-4><p class=ckBox><input id=test2 type=checkbox name="everyday" value="1" ><label class=ckColor for=test2>Everyday</label></div><div class=col-sm-4><div class="customsel date input-group datetimepicker1"><input name="everydayStart" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class=col-sm-4><div class="customsel date input-group datetimepicker2"><input name="everydayEnd" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class=allDay><div class="dayBox row"><div class=col-sm-4><p class=ckBox><input id=mon name="monday" value="1" type=checkbox><label class=ckColor for=mon>Monday</label></div><div class=col-sm-4><div class="customsel date input-group datetimepicker1"><input name="mondayStart"class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class=col-sm-4><div class="customsel date input-group datetimepicker2"><input name="mondayEnd" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class=col-sm-4><p class=ckBox><input id=tue name="tuesday" value="1" type=checkbox><label class=ckColor for=tue>Tuesday</label></div><div class=col-sm-4><div class="customsel date input-group datetimepicker1"><input name="tuesdayStart" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class=col-sm-4><div class="customsel date input-group datetimepicker2"><input name="tuesdayEnd" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class=col-sm-4><p class=ckBox><input id=wed name="wednesday" value="1" type=checkbox><label class=ckColor for=wed>Wednesday</label></div><div class=col-sm-4><div class="customsel date input-group datetimepicker1"><input name="wednesdayStart" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class=col-sm-4><div class="customsel date input-group datetimepicker2"><input name="wednesdayEnd" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class=col-sm-4><p class=ckBox><input id=thu name="thrusday" value="1" type=checkbox><label class=ckColor for=thu>Thursday</label></div><div class=col-sm-4><div class="customsel date input-group datetimepicker1"><input name="thrusdayStart" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class=col-sm-4><div class="customsel date input-group datetimepicker2"><input name="thrusdayEnd" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class=col-sm-4><p class=ckBox><input id=fri name="friday" value="1" type=checkbox><label class=ckColor for=fri>Friday</label></div><div class=col-sm-4><div class="customsel date input-group datetimepicker1"><input name="fridayStart" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class=col-sm-4><div class="customsel date input-group datetimepicker2"><input name="fridayEnd" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class=col-sm-4><p class=ckBox><input id=sat name="saturday" value="1" type=checkbox><label class=ckColor for=sat>Saturday</label></div><div class=col-sm-4><div class="customsel date input-group datetimepicker1"><input name="saturdayStart" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class=col-sm-4><div class="customsel date input-group datetimepicker2"><input name="saturdayEnd" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class=col-sm-4><p class=ckBox><input name="sunday" value="1" id=sun type=checkbox><label class=ckColor for=sun>Sunday</label></div><div class=col-sm-4><div class="customsel date input-group datetimepicker1"><input name="sundayStart" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class=col-sm-4><div class="customsel date input-group datetimepicker2"><input name="sundayEnd" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div></div></div></div></div></div><div class=form-group><label>Office Location Information (Optional)</label><textarea name="officeLocation" class="form-control txtHeight"data-parsley-maxlength=500 data-parsley-maxlength-message="Charcter should be 500"  ></textarea></div>';
+            var hiddenFields = '<div id="officeDetail-errors' + dynamicLength + '"></div><input type="hidden" id="postal_code' + dynamicLength + '" name="postal_code' + dynamicLength + '" data-parsley-required  ><input type="hidden" name="lat' + dynamicLength + '" id="lat' + dynamicLength + '"><input type="hidden" name="lng' + dynamicLength + '" id="lng' + dynamicLength + '"><input type="hidden" name="full_address' + dynamicLength + '" id="full_address' + dynamicLength + '">';
+            masterCLone = hiddenFields + '<p class="deleteCard pull-right"><span class="icon icon-deleteicon"></span>Delete<div class=form-group><div class=detailTitleBlock><h5>OFFICE DETAILS</h5></div><label>Dental Office Type</label><div class=slt><select name="officeType' + dynamicLength + '[]" class=ddlCars data-parsley-required data-parsley-required-message=" required"multiple>' + options + ' </select></div></div><div class=form-group><label>Dental Office Address</label><input id="autocomplete' + dynamicLength + '" name="officeAddress' + dynamicLength + '" class=form-control data-parsley-required data-parsley-required-message="required"placeholder="Office name, Street, City, Zip Code and Country"><div id="location-msg' + dynamicLength + '"></div></div><div class=form-group><label>Phone Number</label><input  id="phoneNumber' + dynamicLength + '" name="phoneNumber' + dynamicLength + '" type="text" class="form-control phone-number" data-parsley-required data-parsley-required-message="Please, Provide a valid Phone number of 10 digits"   data-parsley-trigger="keyup" data-parsley-minlength="14"   data-parsley-minlength-message="phone number should be 10 digit"></div><div class=allCheckBox><div class=form-group><label>Working Hours</label><div class=weekBox><div class="dayBox row EveryDayCheck"><div class=col-sm-4><p class=ckBox><input id=test2 type=checkbox name="everyday' + dynamicLength + '" value="1" ><label class=ckColor for=test2>Everyday</label></div><div class=col-sm-4><div class="customsel date input-group datetimepicker1"><input name="everydayStart' + dynamicLength + '" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class=col-sm-4><div class="customsel date input-group datetimepicker2"><input name="everydayEnd' + dynamicLength + '" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class=allDay><div class="dayBox row"><div class=col-sm-4><p class=ckBox><input id=mon name="monday' + dynamicLength + '" value="1" type=checkbox><label class=ckColor for=mon>Monday</label></div><div class=col-sm-4><div class="customsel date input-group datetimepicker1"><input name="mondayStart' + dynamicLength + '"class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class=col-sm-4><div class="customsel date input-group datetimepicker2"><input name="mondayEnd' + dynamicLength + '" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class=col-sm-4><p class=ckBox><input id=tue name="tuesday' + dynamicLength + '" value="1" type=checkbox><label class=ckColor for=tue>Tuesday</label></div><div class=col-sm-4><div class="customsel date input-group datetimepicker1"><input name="tuesdayStart' + dynamicLength + '" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class=col-sm-4><div class="customsel date input-group datetimepicker2"><input name="tuesdayEnd' + dynamicLength + '" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class=col-sm-4><p class=ckBox><input id=wed name="wednesday' + dynamicLength + '" value="1" type=checkbox><label class=ckColor for=wed>Wednesday</label></div><div class=col-sm-4><div class="customsel date input-group datetimepicker1"><input name="wednesdayStart' + dynamicLength + '" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class=col-sm-4><div class="customsel date input-group datetimepicker2"><input name="wednesdayEnd' + dynamicLength + '" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class=col-sm-4><p class=ckBox><input id=thu name="thrusday' + dynamicLength + '" value="1" type=checkbox><label class=ckColor for=thu>Thursday</label></div><div class=col-sm-4><div class="customsel date input-group datetimepicker1"><input name="thrusdayStart' + dynamicLength + '" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class=col-sm-4><div class="customsel date input-group datetimepicker2"><input name="thrusdayEnd' + dynamicLength + '" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class=col-sm-4><p class=ckBox><input id=fri name="friday' + dynamicLength + '" value="1" type=checkbox><label class=ckColor for=fri>Friday</label></div><div class=col-sm-4><div class="customsel date input-group datetimepicker1"><input name="fridayStart' + dynamicLength + '" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class=col-sm-4><div class="customsel date input-group datetimepicker2"><input name="fridayEnd' + dynamicLength + '" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class=col-sm-4><p class=ckBox><input id=sat name="saturday' + dynamicLength + '" value="1" type=checkbox><label class=ckColor for=sat>Saturday</label></div><div class=col-sm-4><div class="customsel date input-group datetimepicker1"><input name="saturdayStart' + dynamicLength + '" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class=col-sm-4><div class="customsel date input-group datetimepicker2"><input name="saturdayEnd' + dynamicLength + '" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div></div><div class="dayBox row"><div class=col-sm-4><p class=ckBox><input name="sunday' + dynamicLength + '" value="1" id=sun type=checkbox><label class=ckColor for=sun>Sunday</label></div><div class=col-sm-4><div class="customsel date input-group datetimepicker1"><input name="sundayStart' + dynamicLength + '" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div><div class=col-sm-4><div class="customsel date input-group datetimepicker2"><input name="sundayEnd' + dynamicLength + '" class=form-control disabled><ul class=parsley-errors-list></ul><span class=input-group-addon><span class="glyphicon glyphicon-calendar"></span></span></div></div></div></div></div></div></div><div class=form-group><label>Office Location Information (Optional)</label><textarea name="officeLocation' + dynamicLength + '" class="form-control txtHeight"data-parsley-maxlength=500 data-parsley-maxlength-message="Charcter should be 500"  ></textarea></div>';
 
 
             $(".masterBox:last").html(masterCLone);
@@ -112,18 +111,6 @@ $(function() {
     WeekOption();
 
     function deleteBox() {
-        var officeId = $(this).attr('data-officeId');
-        var tokenValue = $("input[name=_token]").val();
-        if (officeId) {
-            $.ajax({
-                url: '/office-delete/' + officeId,
-                type: "DELETE",
-                data: { _token: tokenValue },
-                success: function(response) {
-
-                }
-            });
-        }
         $(this).parents(".mainMasterBox").remove();
         dynamicLength = $(".mainMasterBox").length;
         $(".addBtn").addClass("DynamicAddder");
@@ -213,48 +200,52 @@ $(function() {
 
     });
 
-    $('#officeDetailForm').on('submit', function() {
-        var currentBtn = $(this);
-        if ($('#createProfileForm').parsley().isValid() && currentBtn.parsley().isValid()) {
-            createProfile();
-            $('#officeDetailButton').attr('disabled', 'disabled');
-            officeDetail();
-        } else {
-
-            $('#createProfileForm').parsley().validate();
-            $(currentBtn).parsley().validate();
-        }
-
-    });
-
-
-    $(document).on('submit', '#officeDetailForm1', function() {
-        var currentBtn = $(this);
-        if ($('#createProfileForm').parsley().isValid() && currentBtn.parsley().isValid()) {
-            createProfile();
-            $('#officeDetailButton1').attr('disabled', 'disabled');
-            officeDetail1();
-
-        } else {
-
-            $(currentBtn).parsley().validate();
-            $('#createProfileForm').parsley().validate();
-        }
-    });
+//    $('#officeDetailForm').on('submit', function() {
+//        var currentBtn = $(this);
+//        if ($('#createProfileForm').parsley().isValid() && currentBtn.parsley().isValid()) {
+//            createProfile();
+//            $('#officeDetailButton').attr('disabled', 'disabled');
+//            officeDetail();
+//            officeDetail1();
+//        } else {
+//
+//            $('#createProfileForm').parsley().validate();
+//            $(currentBtn).parsley().validate();
+//        }
+//
+//    });
 
 
-    $(document).on('submit', '#officeDetailForm2', function() {
-        var currentBtn = $(this);
-        if ($('#createProfileForm').parsley().isValid() && currentBtn.parsley().isValid()) {
-            createProfile();
-            $('#officeDetailButton2').attr('disabled', 'disabled');
-            officeDetail2();
+//    $(document).on('submit', '#officeDetailForm1', function() {
+//        var currentBtn = $(this);
+//        if ($('#createProfileForm').parsley().isValid() && currentBtn.parsley().isValid()) {
+//            createProfile();
+//            //$('#officeDetailButton1').attr('disabled', 'disabled');
+//            officeDetail1();
+//            officeDetail2();
+//            $('#officeDetailButton1').attr('disabled', 'disabled');
+//            $('#officeDetailButton2').attr('disabled', 'disabled');
+//
+//        } else {
+//
+//            $(currentBtn).parsley().validate();
+//            $('#createProfileForm').parsley().validate();
+//        }
+//    });
 
-        } else {
-            $(currentBtn).parsley().validate();
-            $('#createProfileForm').parsley().validate();
-        }
-    });
+
+//    $(document).on('submit', '#officeDetailForm2', function() {
+//        var currentBtn = $(this);
+//        if ($('#createProfileForm').parsley().isValid() && currentBtn.parsley().isValid()) {
+//            createProfile();
+//            $('#officeDetailButton2').attr('disabled', 'disabled');
+//            officeDetail2();
+//
+//        } else {
+//            $(currentBtn).parsley().validate();
+//            $('#createProfileForm').parsley().validate();
+//        }
+//    });
 
 
 
