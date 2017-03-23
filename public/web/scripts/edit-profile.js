@@ -637,7 +637,7 @@ var EditProfileVM = function () {
             return false;
         }
         
-        if (d.officePhone().length > 13) {
+        if (d.officePhone().length > 14) {
             d.phoneNumberError('Phone number should be of 10 digits.');
             return false;
         }
