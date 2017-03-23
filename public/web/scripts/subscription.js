@@ -36,10 +36,14 @@ var FirstSubscriptionVM = function () {
                 d.data['fullYearPrice'] = 99;
                 me.visibleSubcription(true);
                 me.subscriptionDetails.push(d.data);
-                if(d.customer[0].sources.data.length == 0){
-                    me.cardExist(false);
+                if(d.customer.length != 0){
+                    if(d.customer[0].sources.data.length == 0){
+                        me.cardExist(false);
+                    }else{
+                        me.cardExist(true);
+                    }
                 }else{
-                    me.cardExist(true);
+                    me.cardExist(false);
                 }
             }else{
                 me.visibleSubcription(false);
@@ -54,14 +58,14 @@ var FirstSubscriptionVM = function () {
     me.addCard = function(d, e){
         me.cardNumber();
         me.expiry();
-        me.expiryWithSlash = ko.computed(function(){
-            if(me.expiry().length == 2){
-                me.expiry(me.expiry()+'/');
-            }else{
-                me.expiry();
-            }
-            return me.expiry();
-        });
+//        me.expiryWithSlash = ko.computed(function(){
+//            if(me.expiry().length == 2){
+//                me.expiry(me.expiry()+'/');
+//            }else{
+//                me.expiry();
+//            }
+//            return me.expiry();
+//        });
         me.cvv();
         me.trailPeriod(d.trailPeriod);
         subType = $(e.currentTarget).parent().find('#stype').val();
@@ -87,6 +91,7 @@ var FirstSubscriptionVM = function () {
     });
     
     me.addCardFunction = function(d, e){
+        console.log(me.expiry());
         me.errorMessage('');
         me.successMessage('');
         if(me.expiry() != null && (me.expiry().indexOf('/') >= 0 || me.expiry().indexOf('/') < 0)){
