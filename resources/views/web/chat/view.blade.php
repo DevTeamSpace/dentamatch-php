@@ -91,7 +91,7 @@
         </div>
     </div>
 </div> 
-
+@include('web.chat.chat_modal')
 @endsection
 
 @section('js')
