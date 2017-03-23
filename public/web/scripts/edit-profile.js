@@ -636,8 +636,8 @@ var EditProfileVM = function () {
             d.phoneNumberError('Please enter phone number.');
             return false;
         }
-
-        if (d.officePhone().length > 10) {
+        
+        if (d.officePhone().length > 13) {
             d.phoneNumberError('Phone number should be of 10 digits.');
             return false;
         }
