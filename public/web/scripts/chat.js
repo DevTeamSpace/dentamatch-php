@@ -49,7 +49,7 @@ $(document).ready(function() {
         }
         socket.on('logoutPreviousSession',function(response){
             $('#logoutMessageBox').modal('show');
-            setTimeout(function(){ location.reload(); }, 3000);
+            setTimeout(function(){ window.location.href='logout'; }, 3000);
         });
         $('.leftSeekerPanelRow').click(function(e) {
             var dataLoaded = $(this).attr('data-loaded');
