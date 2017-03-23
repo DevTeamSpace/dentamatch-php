@@ -47,6 +47,10 @@ $(document).ready(function() {
                 chatScroll();
             });
         }
+        socket.on('logoutPreviousSession',function(response){
+            $('#logoutMessageBox').modal('show');
+            setTimeout(function(){ location.reload(); }, 3000);
+        });
         $('.leftSeekerPanelRow').click(function(e) {
             var dataLoaded = $(this).attr('data-loaded');
             var toId = $(this).data('user');
