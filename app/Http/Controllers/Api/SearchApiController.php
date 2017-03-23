@@ -303,9 +303,9 @@ class SearchApiController extends Controller {
                         $response = apiResponse::customJsonResponse(1, 200, $msg);
                     }else{
                         if($jobExists->applied_status == JobLists::HIRED){
-                            $msg = "You have already hired for this job";
+                            $msg = "This seeker is already hired for this job";
                         }else{
-                            $msg = "You have already cancelled this job invitation";
+                            $msg = "This seeker is already cancelled for this job";
                         }
                         $response = apiResponse::customJsonResponse(0, 201, $msg);
                     }
