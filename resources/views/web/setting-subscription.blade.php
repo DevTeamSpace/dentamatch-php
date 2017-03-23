@@ -90,7 +90,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="sr-only" for="expiry">Expiry</label>
-                                    <input type="text" class="form-control" id="expiry" placeholder="MM/YY" data-bind="value: expiry, valueUpdate: 'keyup', disable: disableInput">
+                                    <input type="text" class="form-control" id="expiry" placeholder="MM/YYYY" data-bind="value: expiry, valueUpdate: 'keyup', disable: disableInput">
                                 </div>
                                 <div class="form-group">
                                     <label class="sr-only" for="cvv">CVV</label>
@@ -126,7 +126,7 @@
                             </div>-->
                             <div class="form-group">
                                 <label class="sr-only" for="expiry">Expiry</label>
-                                <input type="text" class="form-control" id="editExpiry" placeholder="MM/YY" data-bind="value: editExpiry">
+                                <input type="text" class="form-control" id="editExpiry" placeholder="MM/YYYY" data-bind="value: editExpiry">
                             </div>
 <!--                            <div class="form-group">
                                 <label class="sr-only" for="cvv">CVV</label>

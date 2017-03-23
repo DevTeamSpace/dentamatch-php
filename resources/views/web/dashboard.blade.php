@@ -9,7 +9,7 @@
 </style>
 
 <div class="customContainer center-block containerBottom">
-    <div class="profieBox">
+    <div class="profieBoxAbc">
         <h3>Create Profile</h3>
         @if (count($errors) > 0)
         <div class="alert alert-danger">
@@ -34,243 +34,242 @@
                     <textarea class="form-control  txtHeight txtBtnDisable chacterValidtion"  name="officeDescription"  data-parsley-required data-parsley-required-message="Required" maxlength=500 >{{ old('officeDescription') }}</textarea>
                 </div>
             </div>	
-            <div  class="pull-right text-right pd-b-20">
-                <button id="createProfileButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
-            </div>
             <div class="clearfix"></div>
-        </form>
-        <div class="mainMasterBox">
-            <form data-parsley-validate method="post" id="officeDetailForm" action="javascript:void(0);">
-                {{ csrf_field() }}
-                <div id="officeDetail-errors"></div>
-                <input type="hidden" name="lat" id="lat">
-                <input type="hidden" name="lng" id="lng">
-                <input type="hidden" name="full_address" id="full_address">
-                <input type="text" style="display:none;"  id="postal_code" data-parsley-required data-parsley-required-message=""  name="postal_code">
+            <div class="mainMasterBox">
+                <div data-parsley-validate id="officeDetailForm">
+                    <div id="officeDetail-errors"></div>
+                    <input type="hidden" name="lat" id="lat">
+                    <input type="hidden" name="lng" id="lng">
+                    <input type="hidden" name="full_address" id="full_address">
+                    <input type="text" style="display:none;"  id="postal_code" data-parsley-required data-parsley-required-message=""  name="postal_code">
 
-                <div class="commonBox cboxbottom masterBox">
-                    <div class="form-group">
-                        <div class="detailTitleBlock">
-                            <h5>OFFICE DETAILS</h5>
+                    <div class="commonBox cboxbottom masterBox">
+                        <div class="form-group">
+                            <div class="detailTitleBlock">
+                                <h5>OFFICE DETAILS</h5>
+                            </div>
+                            <label >Dental Office Type</label>
+                            <div class="slt">
+                                <select  name="officeType[]" value="" class="ddlCars" multiple="multiple" data-parsley-required data-parsley-required-message="required">
+                                    @foreach($officeType as $office)
+                                    <option value="{{$office->id}}" >{{$office->officetype_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <input type="hidden" value="{{ json_encode($officeType,true) }}" id="officeTypesJson">
                         </div>
-                        <label >Dental Office Type</label>
-                        <div class="slt">
-                            <select  name="officeType[]" value="" class="ddlCars" multiple="multiple" data-parsley-required data-parsley-required-message="required">
-                                @foreach($officeType as $office)
-                                <option value="{{$office->id}}" >{{$office->officetype_name}}</option>
-                                @endforeach
-                            </select>
+                        <div class="form-group">
+                            <label>Dental Office Address</label>
+                            <div id="locationField">
+                                <input  id="autocomplete" name="officeAddress" value="{{ old('officeAddress') }}" type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="Required">
+                                <div id="location-msg"></div>
+                            </div>
                         </div>
-                        <input type="hidden" value="{{ json_encode($officeType,true) }}" id="officeTypesJson">
+
+
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control phone-number" data-parsley-required data-parsley-required-message="Please, Provide a valid Phone number of 10 digits" data-parsley-minlength-message="Please, Provide a valid Phone number of 10 digits"   data-parsley-trigger="keyup" data-parsley-minlength="14"  >
+
+                        </div>
+
+                        <div class="form-group">
+                            <label >Working Hours</label>
+                            <div class="row dayBox EveryDayCheck">
+                                <div class="col-sm-4">  
+                                    <p class="ckBox">
+                                        <input type="checkbox" id="test2" name="everyday" value="1"  @if (old('everyday') == "1") checked @endif />
+                                        <label for="test2" class="ckColor"> Everyday</label>
+                                    </p>    
+                                </div>
+
+                                <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
+                                    <input type='text' value="{{ old('everydayStart') }}" name="everydayStart" class="form-control" disabled />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div></div>
+                                <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
+                                    <input type='text' value="{{ old('everydayEnd') }}" name="everydayEnd" class="form-control " disabled/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div></div>
+                            </div>
+
+                            <div class="allDay">  
+                                <div class="row dayBox">
+                                    <div class="col-sm-4">  
+                                        <p class="ckBox">
+                                            <input type="checkbox" id="mon" name="monday" value="1"  @if (old('monday') == "1") checked @endif  />
+                                            <label for="mon" class="ckColor"> Monday</label>
+                                        </p>    
+                                    </div>
+
+
+                                    <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
+                                        <input type='text' value="{{ old('mondayStart') }}" name="mondayStart" class="form-control" disabled />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div></div>
+                                    <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
+                                        <input type='text' value="{{ old('mondayEnd') }}" name="mondayEnd" class="form-control " disabled/>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div></div>
+                                </div>
+
+                                <div class="row dayBox">
+                                    <div class="col-sm-4">  
+                                        <p class="ckBox">
+                                            <input type="checkbox" id="tue" name="tuesday" value="1"  @if (old('tuesday') == "1") checked @endif   />
+                                            <label for="tue" class="ckColor"> Tuesday</label>
+                                        </p>    
+                                    </div>
+
+                                    <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
+                                        <input type='text' value="{{ old('tuesdayStart') }}" name="tuesdayStart" class="form-control" disabled />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div></div>
+                                    <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
+                                        <input type='text' value="{{ old('tuesdayEnd') }}" name="tuesdayEnd" class="form-control " disabled/>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div></div>
+
+                                </div>
+
+                                <div class="row dayBox">
+                                    <div class="col-sm-4">  
+                                        <p class="ckBox">
+                                            <input type="checkbox" id="wed" name="wednesday" value="1"  @if (old('wednesday') == "1") checked @endif  />
+                                            <label for="wed" class="ckColor"> Wednesday</label>
+                                        </p>    
+                                    </div>
+
+                                    <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
+                                        <input type='text' value="{{ old('wednesdayStart') }}" name="wednesdayStart" class="form-control" disabled />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div></div>
+                                    <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
+                                        <input type='text' value="{{ old('wednesdayEnd') }}" name="wednesdayEnd" class="form-control " disabled/>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div></div>
+
+                                </div>
+
+                                <div class="row dayBox">
+                                    <div class="col-sm-4">  
+                                        <p class="ckBox">
+                                            <input type="checkbox" id="thu" name="thrusday"  value="1"  @if (old('thrusday') == "1") checked @endif   />
+                                            <label for="thu" class="ckColor"> Thursday</label>
+                                        </p>    
+                                    </div>
+
+                                    <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
+                                        <input type='text' value="{{ old('thrusdayStart') }}" name="thrusdayStart" class="form-control" disabled />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div></div>
+                                    <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
+                                        <input type='text' value="{{ old('thrusdayEnd') }}" name="thrusdayEnd" class="form-control " disabled/>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div></div>
+                                </div>
+
+                                <div class="row dayBox">
+                                    <div class="col-sm-4">  
+                                        <p class="ckBox">
+                                            <input type="checkbox" id="fri" name="friday" value="1"  @if (old('friday') == "1") checked @endif  />
+                                            <label for="fri" class="ckColor"> Friday</label>
+                                        </p>    
+                                    </div>
+
+                                    <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
+                                        <input type='text' value="{{ old('fridayStart') }}" name="fridayStart" class="form-control" disabled />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div></div>
+                                    <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
+                                        <input type='text' value="{{ old('fridayEnd') }}" name="fridayEnd" class="form-control " disabled/>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div></div>
+                                </div>
+
+                                <div class="row dayBox">
+                                    <div class="col-sm-4">  
+                                        <p class="ckBox">
+                                            <input type="checkbox" id="sat" name="saturday" value="1"  @if (old('saturday') == "1") checked @endif  />
+                                            <label for="sat" class="ckColor"> Saturday</label>
+                                        </p>    
+                                    </div>
+
+                                    <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
+                                        <input type='text' value="{{ old('saturdayStart') }}" name="saturdayStart" class="form-control" disabled />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div></div>
+                                    <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
+                                        <input type='text' value="{{ old('saturdayEnd') }}" name="saturdayEnd" class="form-control " disabled/>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div></div>
+                                </div>
+
+                                <div class="row dayBox">
+                                    <div class="col-sm-4">  
+                                        <p class="ckBox">
+                                            <input type="checkbox" id="sun" name="sunday" value="1"  @if (old('sunday') == "1") checked @endif  />
+                                            <label for="sun" class="ckColor"> Sunday</label>
+                                        </p>    
+                                    </div>
+
+                                    <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
+                                        <input type='text' value="{{ old('sundayStart') }}" name="sundayStart" class="form-control" disabled />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div></div>
+                                    <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
+                                        <input type='text' value="{{ old('sundayEnd') }}" name="sundayEnd" class="form-control " disabled/>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div></div>
+                                </div>
+                            </div>
+                        </div>	
+                        <div class="form-group">
+                            <label>Office Location Information <i class="optional">(Optional)</i></label>
+                            <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="Required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
+
+                        </div>	
                     </div>
-                    <div class="form-group">
-                        <label>Dental Office Address</label>
-                        <div id="locationField">
-                            <input  id="autocomplete" name="officeAddress" value="{{ old('officeAddress') }}" type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="Required">
-                            <div id="location-msg"></div>
-                        </div>
+
+                    <div class="clearfix"></div>
                     </div>
-                    
-
-                    <div class="form-group">
-                        <label>Phone Number</label>
-                        <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control phone-number" data-parsley-required data-parsley-required-message="Please, Provide a valid Phone number of 10 digits" data-parsley-minlength-message="Please, Provide a valid Phone number of 10 digits"   data-parsley-trigger="keyup" data-parsley-minlength="10"  >
-                        
-                    </div>
-
-                    <div class="form-group">
-                        <label >Working Hours</label>
-                        <div class="row dayBox EveryDayCheck">
-                            <div class="col-sm-4">  
-                                <p class="ckBox">
-                                    <input type="checkbox" id="test2" name="everyday" value="1"  @if (old('everyday') == "1") checked @endif />
-                                    <label for="test2" class="ckColor"> Everyday</label>
-                                </p>    
-                            </div>
-                            
-                            <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
-                                <input type='text' value="{{ old('everydayStart') }}" name="everydayStart" class="form-control" disabled />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div></div>
-                            <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
-                                <input type='text' value="{{ old('everydayEnd') }}" name="everydayEnd" class="form-control " disabled/>
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div></div>
-                        </div>
-
-                        <div class="allDay">  
-                            <div class="row dayBox">
-                                <div class="col-sm-4">  
-                                    <p class="ckBox">
-                                        <input type="checkbox" id="mon" name="monday" value="1"  @if (old('monday') == "1") checked @endif  />
-                                        <label for="mon" class="ckColor"> Monday</label>
-                                    </p>    
-                                </div>
-
-
-                                <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
-                                    <input type='text' value="{{ old('mondayStart') }}" name="mondayStart" class="form-control" disabled />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div></div>
-                                <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
-                                    <input type='text' value="{{ old('mondayEnd') }}" name="mondayEnd" class="form-control " disabled/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div></div>
-                            </div>
-
-                            <div class="row dayBox">
-                                <div class="col-sm-4">  
-                                    <p class="ckBox">
-                                        <input type="checkbox" id="tue" name="tuesday" value="1"  @if (old('tuesday') == "1") checked @endif   />
-                                        <label for="tue" class="ckColor"> Tuesday</label>
-                                    </p>    
-                                </div>
-
-                                <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
-                                    <input type='text' value="{{ old('tuesdayStart') }}" name="tuesdayStart" class="form-control" disabled />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div></div>
-                                <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
-                                    <input type='text' value="{{ old('tuesdayEnd') }}" name="tuesdayEnd" class="form-control " disabled/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div></div>
-
-                            </div>
-
-                            <div class="row dayBox">
-                                <div class="col-sm-4">  
-                                    <p class="ckBox">
-                                        <input type="checkbox" id="wed" name="wednesday" value="1"  @if (old('wednesday') == "1") checked @endif  />
-                                        <label for="wed" class="ckColor"> Wednesday</label>
-                                    </p>    
-                                </div>
-
-                                <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
-                                    <input type='text' value="{{ old('wednesdayStart') }}" name="wednesdayStart" class="form-control" disabled />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div></div>
-                                <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
-                                    <input type='text' value="{{ old('wednesdayEnd') }}" name="wednesdayEnd" class="form-control " disabled/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div></div>
-
-                            </div>
-
-                            <div class="row dayBox">
-                                <div class="col-sm-4">  
-                                    <p class="ckBox">
-                                        <input type="checkbox" id="thu" name="thrusday"  value="1"  @if (old('thrusday') == "1") checked @endif   />
-                                        <label for="thu" class="ckColor"> Thursday</label>
-                                    </p>    
-                                </div>
-
-                                <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
-                                    <input type='text' value="{{ old('thrusdayStart') }}" name="thrusdayStart" class="form-control" disabled />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div></div>
-                                <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
-                                    <input type='text' value="{{ old('thrusdayEnd') }}" name="thrusdayEnd" class="form-control " disabled/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div></div>
-                            </div>
-
-                            <div class="row dayBox">
-                                <div class="col-sm-4">  
-                                    <p class="ckBox">
-                                        <input type="checkbox" id="fri" name="friday" value="1"  @if (old('friday') == "1") checked @endif  />
-                                        <label for="fri" class="ckColor"> Friday</label>
-                                    </p>    
-                                </div>
-
-                                <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
-                                    <input type='text' value="{{ old('fridayStart') }}" name="fridayStart" class="form-control" disabled />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div></div>
-                                <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
-                                    <input type='text' value="{{ old('fridayEnd') }}" name="fridayEnd" class="form-control " disabled/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div></div>
-                            </div>
-
-                            <div class="row dayBox">
-                                <div class="col-sm-4">  
-                                    <p class="ckBox">
-                                        <input type="checkbox" id="sat" name="saturday" value="1"  @if (old('saturday') == "1") checked @endif  />
-                                        <label for="sat" class="ckColor"> Saturday</label>
-                                    </p>    
-                                </div>
-
-                                <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
-                                    <input type='text' value="{{ old('saturdayStart') }}" name="saturdayStart" class="form-control" disabled />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div></div>
-                                <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
-                                    <input type='text' value="{{ old('saturdayEnd') }}" name="saturdayEnd" class="form-control " disabled/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div></div>
-                            </div>
-
-                            <div class="row dayBox">
-                                <div class="col-sm-4">  
-                                    <p class="ckBox">
-                                        <input type="checkbox" id="sun" name="sunday" value="1"  @if (old('sunday') == "1") checked @endif  />
-                                        <label for="sun" class="ckColor"> Sunday</label>
-                                    </p>    
-                                </div>
-
-                                <div class="col-sm-4">  <div class='input-group date datetimepicker1 customsel' >
-                                    <input type='text' value="{{ old('sundayStart') }}" name="sundayStart" class="form-control" disabled />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div></div>
-                                <div class="col-sm-4"> <div class='input-group date datetimepicker2 customsel' >
-                                    <input type='text' value="{{ old('sundayEnd') }}" name="sundayEnd" class="form-control " disabled/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div></div>
-                            </div>
-                        </div>
-                    </div>	
-                    <div class="form-group">
-                        <label>Office Location Information <i class="optional">(Optional)</i></label>
-                        <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="Required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
-
-                    </div>	
-                </div>
+            </div>
+            <div class="profieBox"></div>
+            <div  class="pull-right text-right pd-b-20">
                 <div id="removeButton" class="pull-right text-right pd-b-15">
-                    <button  id="officeDetailButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40 formBtnAction">Save</button>
-                </div>
-                <div class="clearfix"></div>
+                <button id="createProfileButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
             </div>
         </form>
     </div>

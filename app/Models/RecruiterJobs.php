@@ -212,7 +212,7 @@ class RecruiterJobs extends Model
                             'recruiter_offices.tuesday_start', 'recruiter_offices.tuesday_end', 
                             'recruiter_offices.wednesday_start', 'recruiter_offices.wednesday_end', 
                             'recruiter_offices.thursday_start', 'recruiter_offices.thursday_end', 
-                            'recruiter_offices.friday_start', 'recruiter_offices.friday_start', 
+                            'recruiter_offices.friday_start', 'recruiter_offices.friday_end', 
                             'recruiter_offices.saturday_start', 'recruiter_offices.saturday_end', 
                             'recruiter_offices.sunday_start', 'recruiter_offices.sunday_end', 
                             'job_titles.jobtitle_name','recruiter_profiles.office_name','recruiter_profiles.office_desc',

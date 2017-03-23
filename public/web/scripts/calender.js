@@ -91,7 +91,7 @@ var JobModel = function (data) {
                     eventRender: function (event, element, view) {
                         for (var i = 0; i <= event.userDetails.length - 1; i++) {
                             if (i < 2) {
-                                $(element).find('span.fc-title').after('<img class="img-circle mr-r-2" src="' + event.userDetails[i].pic + '" />');
+                                $(element).find('span.fc-title').after('<img class="img-circle wd-22 mr-r-2" src="' + event.userDetails[i].pic + '" />');
                             }
 
                         }
