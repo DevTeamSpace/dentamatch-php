@@ -258,7 +258,7 @@
                         </div>	
                         <div class="form-group">
                             <label>Office Location Information <i class="optional">(Optional)</i></label>
-                            <textarea name="officeLocation" class="form-control txtHeight"   data-parsley-required-message="Required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
+                            <textarea name="officeLocation" id="officeLocation" class="form-control txtHeight"   data-parsley-required-message="Required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
 
                         </div>	
                     </div>
@@ -360,6 +360,10 @@
 <script src ="{{asset('web/scripts/dashboard.js')}}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsIYaIMo9hd5yEL7pChkVPKPWGX6rFcv8&libraries=places"
 async defer></script>
+
+<script>
+    $("#officeLocation").Editor();
+</script>
 
 <!--&callback=initAutocomplete-->
 @endsection
