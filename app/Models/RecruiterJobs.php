@@ -140,7 +140,7 @@ class RecruiterJobs extends Model
         //$radius = Configs::select('config_data')->where('config_name','=','SEARCHRADIUS')->first();
         //$searchQueryObj->where('distance','<=',$radius->config_data);
         //$searchQueryObj->groupby('recruiter_jobs.id');
-        
+        $maxDistance = Configs::getSearchRadius();
         
         $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
                         'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
@@ -158,6 +158,18 @@ class RecruiterJobs extends Model
               + sin ( radians($latitude) )
               * sin( radians( recruiter_offices.latitude ) )
              )) AS distance"));
+        
+        
+            $searchQueryObj->where(DB::raw("(
+            3959 * acos (
+              cos ( radians($latitude) )
+              * cos( radians( recruiter_offices.latitude) )
+              * cos( radians( $longitude ) - radians(recruiter_offices.longitude) )
+              + sin ( radians($latitude) )
+              * sin( radians( recruiter_offices.latitude ) )
+             )) "), '<=', $maxDistance);
+       
+        
         $total = $searchQueryObj->distinct('recruiter_jobs.id')->count('recruiter_jobs.id');
         $page = $reqData['page'];
         $limit = RecruiterJobs::LIMIT ;
