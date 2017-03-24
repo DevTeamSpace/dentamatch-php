@@ -57,7 +57,7 @@ $(function() {
 
 
             $(".masterBox:last").html(masterCLone);
-            //$("#officeLocation"+ dynamicLength).Editor();
+            $("#officeLocation"+ dynamicLength).Editor();
             dropDownDynamic();
             $(".masterBox:last").find(".dropCheck input").after("<div></div>");
             DynamicTickName();
