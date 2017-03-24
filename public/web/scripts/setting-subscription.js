@@ -157,6 +157,8 @@ var SubscriptionVM = function () {
     });
 
     me.addCardFunction = function (d, e) {
+        me.cardNumber(me.cardNumber().replace(/\_/g , ""));
+        me.expiry(me.expiry().replace(/\_/g , ""));
         me.errorMessage('');
         me.successMessage('');
 
@@ -349,6 +351,7 @@ var SubscriptionVM = function () {
     };
 
     me.editCardFunction = function (d, e) {
+        me.editExpiry(me.editExpiry().replace(/\_/g , ""));
         me.errorMessage('');
         me.successMessage('');
         if (me.editExpiry() !== null && me.editExpiry().indexOf('/') >= 0) {
@@ -366,16 +369,16 @@ var SubscriptionVM = function () {
                 backdrop: 'static',
                 keyboard: false
             });
-            $.post('edit-card', {expiry: me.editExpiry(), cardId: me.editCardId()}, function (d) {
+            $.post('edit-card', {expiry: me.editExpiry(), cardId: me.editCardId()}, function (data) {
                 me.creatingMessage('');
-                if (d.success == false) {
-                    me.errorMessage(d.message);
+                if (data.success == false) {
+                    me.errorMessage(data.message);
                     me.successMessage('');
                     me.cancelButtonEdit(true);
                     $('#editCardButton').removeAttr('disabled');
                 } else {
                     me.errorMessage('');
-                    me.successMessage(d.message);
+                    me.successMessage(data.message);
                     setTimeout(
                             function () {
                                 location.reload();

@@ -35,10 +35,15 @@ class FavoriteJobseekerController extends Controller {
         
         $jobDetail = JobTemplates::join('recruiter_jobs', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                 ->join('job_titles', 'job_templates.job_title_id', '=', 'job_titles.id')
+                ->leftJoin('temp_job_dates',function($query){
+                    $query->on('temp_job_dates.recruiter_job_id','=','recruiter_jobs.id')
+                    ->whereDate('temp_job_dates.job_date','>=',date('Y-m-d').' 00:00:00');
+                })
                 ->where('recruiter_jobs.job_type', '3')
                 ->where('job_templates.user_id', Auth::user()->id)
                 ->whereNull('recruiter_jobs.deleted_at')
-                ->select('job_titles.jobtitle_name', 'recruiter_jobs.id as recruiterId')
+                ->select('job_titles.jobtitle_name', 'recruiter_jobs.id as recruiterId',DB::raw("group_concat(distinct(temp_job_dates.job_date) ORDER BY temp_job_dates.job_date ASC) AS temp_job_dates"))
+                ->groupby('temp_job_dates.recruiter_job_id')
                 ->get();
         
         $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
