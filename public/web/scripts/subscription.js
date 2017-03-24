@@ -117,7 +117,7 @@ var FirstSubscriptionVM = function () {
             $.post('create-subscription', {cardNumber: me.cardNumber(), expiry: me.expiry(), cvv: me.cvv(), subscriptionType: me.subscriptionType(), trailPeriod: me.trailPeriod(), cardExist: me.cardExist()}, function(d){
                 me.creatingMessage('');
                 if(d.success == false){
-                    me.errorMessage('Cannot subscribe please contact admin.');
+                    me.errorMessage(d.message);
                     me.successMessage('');
                     me.cancelButton(true);
                     $('#addCardButton').removeAttr('disabled');
