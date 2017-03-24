@@ -20,7 +20,7 @@
                     <div class="tab-content">
                         <div id="signup" class="tab-pane fade">
                             <form id="signup-frm" method="post" action="signup" name="signupform" autocomplete="off" data-parsley-validate="" >
-                                {{ csrf_field() }}
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <div class="floating-label">
                                     <div class="form-group ">
                                         <label class=" control-label" for="signup-email">Email </label>
@@ -51,7 +51,7 @@
                                     {{ Session::get('success') }}</h6>
                             @endif
                             <form id="signin-frm" method="post" action="login" name="loginform" autocomplete="off" data-parsley-validate="" >
-                                {{ csrf_field() }}
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <div class="floating-label">
                                     <div class="form-group ">
                                         <label class=" control-label" for="email">Email </label>
