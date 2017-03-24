@@ -13,6 +13,7 @@ use App\Http\Requests\UnsubscribeRequest;
 use App\Http\Requests\EditCardRequest;
 use App\Http\Requests\ChangeSubscriptionPlanRequest;
 use Log;
+use DB;
 
 class SubscriptionController extends Controller {
     private $response = [];

@@ -31,20 +31,33 @@ $(document).ready(function() {
             socket.emit('init', { userId: fromId, userName: userName, userType: 2 }, function(response) {
                 if(loadPage==true && currentSel!=''){
                     loadPage=false;
-                    var lastMsgId = $('#li_' + currentSel).attr('data-last');
-                    loadLeftMessages(lastMsgId);
+                    $('.leftSeekerPanelRow').each(function(index,obj){
+                        var lastMsgId = obj.attr('data-last');
+                        var userId = obj.attr('data-user');
+                        loadLeftMessages(lastMsgId,userId);
+                    });
+                    
                 }
             });
         }
         initSocket();
-        function loadLeftMessages(lastMsgId){
-            socket.emit('getLeftMessages', {messageId: lastMsgId, fromId: fromId, toId: currentSel }, function(response) {
+        function loadLeftMessages(lastMsgId,appendToId){
+            socket.emit('getLeftMessages', {messageId: lastMsgId, fromId: fromId, toId: appendToId }, function(response) {
                 var appendHtml = '';
                 $.each(response, function(index, msgObj) {
                     appendHtml = writeHtmlBlock(msgObj) + appendHtml;
                 });
-                $('#user-chat-content_'+currentSel).append(appendHtml);
-                chatScroll();
+                $('#user-chat-content_'+appendToId).append(appendHtml);
+                if(appendToId==currentSel){
+                    chatScroll();
+                }else {
+                    var badgeObj = $('#li_' + appendToId).find('.badge');
+                    var badgeCount = parseInt(badgeObj.html(), 10) + response.length;
+                    if(badgeCount>0){
+                        badgeObj.removeClass('hide');
+                        badgeObj.html(badgeCount);
+                    }
+                }
             });
         }
         socket.on('logoutPreviousSession',function(response){

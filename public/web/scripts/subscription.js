@@ -91,7 +91,8 @@ var FirstSubscriptionVM = function () {
     });
     
     me.addCardFunction = function(d, e){
-        console.log(me.expiry());
+        me.cardNumber(me.cardNumber().replace(/\_/g , ""));
+        me.expiry(me.expiry().replace(/\_/g , ""));
         me.errorMessage('');
         me.successMessage('');
         if(me.expiry() != null && (me.expiry().indexOf('/') >= 0 || me.expiry().indexOf('/') < 0)){
@@ -117,7 +118,7 @@ var FirstSubscriptionVM = function () {
             $.post('create-subscription', {cardNumber: me.cardNumber(), expiry: me.expiry(), cvv: me.cvv(), subscriptionType: me.subscriptionType(), trailPeriod: me.trailPeriod(), cardExist: me.cardExist()}, function(d){
                 me.creatingMessage('');
                 if(d.success == false){
-                    me.errorMessage('Cannot subscribe please contact admin.');
+                    me.errorMessage(d.message);
                     me.successMessage('');
                     me.cancelButton(true);
                     $('#addCardButton').removeAttr('disabled');
