@@ -53,6 +53,7 @@ class SubscriptionController extends Controller {
     
     public function postCreateSubscription(CreateSubscriptionRequest $request){
         try{
+            DB::beginTransaction();
             $recruiter = RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
             if($request->cardExist === "true"){
                 $createSubscription = $this->addUserTOSubscription($recruiter['customer_id'], $request->subscriptionType, $request->trailPeriod);
@@ -91,8 +92,10 @@ class SubscriptionController extends Controller {
                     $this->response['message'] = trans('messages.cannot_subscribe');
                 }
             }
+            DB::commit();
         } catch (\Exception $e) {
-            Log::error($e);
+            DB::rollback();
+            Log::error($e->getMessage());
             $this->response['success'] = false;
             $this->response['data'] = null;
             $this->response['message'] = $e->getMessage();
@@ -119,7 +122,7 @@ class SubscriptionController extends Controller {
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.user_added_to_subscription');
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::error($e->getMessage());
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
@@ -186,7 +189,7 @@ class SubscriptionController extends Controller {
                 $this->response['message'] = trans('messages.cannot_add_card');
             }
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::error($e->getMessage());
             $this->response['success'] = false;
             $this->response['data'] = null;
             $this->response['message'] = $e->getMessage();
@@ -205,7 +208,7 @@ class SubscriptionController extends Controller {
             $this->response['data'] = $createCustomer;
             $this->response['message'] = trans('messages.customer_created');
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::error($e->getMessage());
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
@@ -222,7 +225,7 @@ class SubscriptionController extends Controller {
             $this->response['success'] = true;
             $this->response['data'] = $subscriptions;
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::error($e->getMessage());
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
@@ -243,7 +246,7 @@ class SubscriptionController extends Controller {
                 $this->response['message'] = trans('messages.customer_fetched');
             }
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::error($e->getMessage());
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
@@ -261,7 +264,7 @@ class SubscriptionController extends Controller {
             $this->response['data'] = $customer;
             $this->response['message'] = trans('messages.customer_fetched');
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::error($e->getMessage());
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
@@ -285,7 +288,7 @@ class SubscriptionController extends Controller {
                 $this->response['message'] = trans('messages.cannot_delete_card');
             }
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::error($e->getMessage());
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
@@ -304,7 +307,7 @@ class SubscriptionController extends Controller {
                 $this->response['message'] = trans('messages.no_subscription');
             }
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::error($e->getMessage());
             $this->response['success'] = false;
             $this->response['message'] = trans('messages.no_subscription');
         }
@@ -325,7 +328,7 @@ class SubscriptionController extends Controller {
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.card_edidted');
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::error($e->getMessage());
             $this->response['success'] = false;
             $this->response['message'] = $e->getMessage();
         }
@@ -347,7 +350,7 @@ class SubscriptionController extends Controller {
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.subscription_plan_changed');
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::error($e->getMessage());
             $this->response['success'] = true;
             $this->response['message'] = $e->getMessage();
         }

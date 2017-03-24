@@ -7,11 +7,17 @@ function createProfile() {
         type: "POST",
         data: form_data,
         success: function(data) {
-            $("#createProfileButton").prop('disabled', true);
+            $("#createProfileButton").remove();
             errorsHtml = '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert">&times;</a><ul><li>Saved Successfully.</li></ul></div>';
             $('#createForm-errors').html(errorsHtml);
             $('div.alert').delay(1000).slideUp(300);
-
+            setTimeout(
+                function () {
+                    window.location.href = '/subscription-detail';
+                }, 300
+            );
+            
+            //$("#removeButton").append('<a id="countinueLink" href="/subscription-detail" class="btn btn-primary pd-l-40 pd-r-40">Continue</a>');
         },
         error: function(data) {
             if (data.status === 422) {

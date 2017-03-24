@@ -29,13 +29,15 @@ $(document).ready(function() {
         function initSocket(){
             console.info('Socket Init');
             socket.emit('init', { userId: fromId, userName: userName, userType: 2 }, function(response) {
-
+                if(loadPage==true && currentSel!=''){
+                    loadPage=false;
+                    var lastMsgId = $('#li_' + currentSel).attr('data-last');
+                    loadLeftMessages(lastMsgId);
+                }
             });
         }
         initSocket();
-        if(loadPage==true && currentSel!=''){
-            loadPage=false;
-            var lastMsgId = $('#li_' + currentSel).attr('data-last');
+        function loadLeftMessages(lastMsgId){
             socket.emit('getLeftMessages', {messageId: lastMsgId, fromId: fromId, toId: currentSel }, function(response) {
                 var appendHtml = '';
                 $.each(response, function(index, msgObj) {
@@ -45,6 +47,10 @@ $(document).ready(function() {
                 chatScroll();
             });
         }
+        socket.on('logoutPreviousSession',function(response){
+            $('#logoutMessageBox').modal('show');
+            setTimeout(function(){ window.location.href='logout'; }, 3000);
+        });
         $('.leftSeekerPanelRow').click(function(e) {
             var dataLoaded = $(this).attr('data-loaded');
             var toId = $(this).data('user');

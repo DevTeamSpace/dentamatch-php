@@ -29,7 +29,10 @@ $(document).ready(function() {
 
             console.log(data);
         });
-    
+        socket.on('logoutPreviousSession',function(response){
+            $('#logoutMessageBox').modal('show');
+            setTimeout(function(){ window.location.href='logout'; }, 3000);
+        });
     });
 });
 
