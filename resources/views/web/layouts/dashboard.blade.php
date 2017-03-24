@@ -25,12 +25,12 @@
     <link rel="stylesheet" href="{{asset('web/plugins/custom-scroller/css/mCustomScrollbar.min.css')}}">
     <link rel="stylesheet" href="{{asset('web/css/custom.css')}}">
     <link rel="stylesheet" href="{{asset('web/css/style.css')}}">
-    <link rel="stylesheet" href="{{asset('web/css/editor.css')}}">
+<!--    <link rel="stylesheet" href="{{asset('web/css/editor.css')}}">-->
     <link rel="stylesheet" href="{{asset('web/plugins/rating/tipi.css')}}">
     <script src="{{asset('web/scripts/jQuery-2.2.0.min.js')}}"></script>
     <script src="{{asset('web/plugins/rating/tipi.jquery.js')}}"></script>
     <script src="{{asset('web/plugins/rating/rating.jquery.js')}}"></script>
-    <script src="{{asset('web/scripts/editor.js')}}"></script>
+<!--    <script src="{{asset('web/scripts/editor.js')}}"></script>-->
     @yield('css')
 
     <title>DentaMatch| Home</title>
