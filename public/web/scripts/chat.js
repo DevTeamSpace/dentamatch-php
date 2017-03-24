@@ -29,7 +29,7 @@ $(document).ready(function() {
         function initSocket(){
             console.info('Socket Init');
             socket.emit('init', { userId: fromId, userName: userName, userType: 2 }, function(response) {
-                if(loadPage==true && currentSel!=''){
+                if(loadPage==true){
                     loadPage=false;
                     $('.leftSeekerPanelRow').each(function(index,obj){
                         var lastMsgId = obj.attr('data-last');
