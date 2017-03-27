@@ -353,10 +353,12 @@ var EditProfileVM = function () {
             if (typeof place == "undefined") {
                 return;
             }
+            //console.log(place[0]);
             d.officeLat(place[0].geometry.location.lat());
             d.officeLng(place[0].geometry.location.lng());
             d.officeAddress(place[0].formatted_address);
-            lastAddressComponent = place[0].address_components.pop().short_name;
+            //lastAddressComponent = place[0].address_components.pop().short_name;
+            lastAddressComponent = place[0].address_components[0].short_name;
             d.officeZipcode(lastAddressComponent);
             $.ajax({
                 url: '/get-location/' + lastAddressComponent,
