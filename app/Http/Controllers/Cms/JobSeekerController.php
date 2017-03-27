@@ -202,10 +202,10 @@ class JobSeekerController extends Controller
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
                 ->removeColumn('id')
-                ->addColumn('dental_state_board', function ($userData) {
+                /*->addColumn('dental_state_board', function ($userData) {
                 	$dentalStateBoard = !empty($userData->dental_state_board) ? $userData->dental_state_board :'N/A';
                     return $dentalStateBoard;
-                })
+                })*/
                 ->addColumn('license_number', function ($userData) {
                 	$licenseNumber = !empty($userData->license_number) ? $userData->license_number : "N/A";
                     return $licenseNumber;

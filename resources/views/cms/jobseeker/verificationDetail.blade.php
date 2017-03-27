@@ -25,17 +25,7 @@
                                 <td>Last Name</td>
                                 <td>{{ $userProfile->last_name }}</td>
                             </tr>
-                             @if(!empty($userProfile->dental_state_board))
-                            <tr>
-                                <td>Dental State Board</td>
-                                <td><a href="{{$s3Url}}{{ $userProfile->dental_state_board }}" target="_blank" ><img src="{{$s3Url}}{{ $userProfile->dental_state_board }}" title="Dental State Board" style="width: 120px; height: 120px;" /></a></td>
-                            </tr>
-                            @else
-                            <tr>
-                                <td>Dental State Board</td>
-                                <td>N/A</td>
-                            </tr>
-                            @endif
+                            
                             @if(!empty($userProfile->license_number))
                             <tr>
                                 <td>License Number</td>
@@ -60,7 +50,7 @@
                 </div>
                     <div class="form-group">
                         <div class="col-md-6 col-md-offset-4">
-                            @if(!empty($userProfile->dental_state_board) && !empty($userProfile->license_number))
+                            @if( !empty($userProfile->license_number))
                                 @if($userProfile->is_job_seeker_verified == 0)
                                 <input type="submit" name="verify"  value="Approve" class="btn btn-primary" />
                                 <input type="submit" name="verify"  value="Reject" class="btn btn-primary" />
