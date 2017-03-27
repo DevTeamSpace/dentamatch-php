@@ -89,6 +89,7 @@ class RecruiterJobs extends Model
                 ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
                // ->whereNull('job_lists.id')
                 //->where('job_lists.seeker_id','!=', $reqData['userId'])
+                ->where('recruiter_profiles.is_subscribed','=', 1)
                 ->whereIn('job_templates.job_title_id', $reqData['jobTitle']);
 
                 //->whereIn('job_titles.id', $reqData['jobTitle']);
