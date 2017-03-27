@@ -106,7 +106,6 @@ class apiResponse {
         $certificationStatus = (count($jobSeekerCertifications) > 0) ? 1 : 0;
         if($userProfileModel['job_titile_id'] > 0 && 
                 $userProfileModel['profile_pic'] != "" && 
-                $userProfileModel['dental_state_board'] != "" && 
                 $userProfileModel['license_number'] != "" && 
                 $userProfileModel['state'] != "" && 
                 $userProfileModel['about_me'] != "" 

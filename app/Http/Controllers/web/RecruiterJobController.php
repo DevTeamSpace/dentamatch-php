@@ -203,6 +203,8 @@ class RecruiterJobController extends Controller {
                     $userChat->seeker_id = $jobData->seeker_id;
                     $userChat->checkAndSaveUserToChatList();
                     $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $jobData->seeker_id, $requestData['jobId']);
+                }else if ($requestData['appliedStatus'] == JobLists::REJECTED){
+                    $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $jobData->seeker_id, $requestData['jobId']);
                 }
             }else{
                 $inviteJobs = array('seeker_id' => $requestData['seekerId'] , 'recruiter_job_id' => $requestData['jobId'] , 'applied_status' => JobLists::INVITED);
@@ -237,6 +239,14 @@ class RecruiterJobController extends Controller {
                 'sender_id' => $sender,
                 'type' => 1,
                 'notificationType' => Notification::ACCEPTJOB,
+            );
+        }else if ($jobstatus == JobLists::REJECTED) {
+            $notificationData = array(
+                'notificationData' => $jobDetails['office_name'] . " has rejected your job application for " . $jobDetails['jobtitle_name'],
+                'notification_title' => 'User shortlisted',
+                'sender_id' => $sender,
+                'type' => 1,
+                'notificationType' => Notification::REJECTED,
             );
         } else if ($jobstatus == JobLists::HIRED) {
             $notificationData = array(

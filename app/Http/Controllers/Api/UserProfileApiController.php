@@ -118,7 +118,7 @@ class UserProfileApiController extends Controller {
             ]);
             $userId = $request->userServerData->user_id;
             if($userId > 0){
-                UserProfile::where('user_id', $userId)->update(['license_number' => $request->license, 'state' => $request->state]);
+                UserProfile::where('user_id', $userId)->update(['license_number' => $request->license, 'state' => $request->state,'is_job_seeker_verified' => 0]);
                 if(($request->jobTitleId != "") && ($request->jobTitleId > 0)){
                     UserProfile::where('user_id', $userId)->update(['job_titile_id' => $request->jobTitleId]);
                 }
