@@ -20,7 +20,6 @@ use App\Models\OfficeType;
 use App\Models\Configs;
 use App\Models\RecruiterOfficeType;
 use DB;
-use App\Http\Requests\DeleteJobRequest;
 use Log;
 use App\Http\Requests\CheckJobAppliedOrNotRequest;
 use Session;
@@ -309,7 +308,7 @@ class RecruiterJobController extends Controller {
             }
             $jobDetails = RecruiterJobs::getRecruiterJobDetails($allData->jobId);
             $recruiterOfficeObj = RecruiterOffice::where(['id' => $jobDetails['recruiter_office_id']])->first();
-            $updatedJob = $this->sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj);
+            $updatedJob = $this->sameOfficeOrNot($allData, $recruiterOfficeObj);
             
             DB::commit();
             $this->result['data'] = $updatedJob['data'];
@@ -324,7 +323,7 @@ class RecruiterJobController extends Controller {
         return $this->result;
     }
 
-    private function sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj) {
+    private function sameOfficeOrNot($allData, $recruiterOfficeObj) {
         try {
             if ((string) $recruiterOfficeObj['latitude'] == (string) $allData->selectedOffice[0]->selectedOfficeLat && (string) $recruiterOfficeObj['longitude'] == (string) $allData->selectedOffice[0]->selectedOfficeLng) {
                 $updatedJob = $this->updateJob($allData->selectedJobType, $allData);
@@ -531,7 +530,6 @@ class RecruiterJobController extends Controller {
                         $senderId = $value['user_id'];
 
                         $notificationData['receiver_id'] = $userId;
-                        $params['data'] = $notificationData;
 
                         $deviceModel = Device::getDeviceToken($userId);
                         if($deviceModel) {

@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Notification;
 
 class NotificationController extends Controller {
-    private $response = [];
     
     public function __construct(){
         $this->middleware('auth');
@@ -28,6 +27,4 @@ class NotificationController extends Controller {
         Notification::findOrFail($id)->delete();
         return redirect('notification-lists');
     }
-    
-    
 }

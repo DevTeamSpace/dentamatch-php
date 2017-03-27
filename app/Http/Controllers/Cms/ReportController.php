@@ -266,7 +266,7 @@ class ReportController extends Controller
         fputcsv($outstream, $arr, ',', '"');
         
         if(!empty($list)) {
-            foreach($list as $key=>$value) {
+            foreach($list as $value) {
                 fputcsv($outstream, $value, ',', '"');
             }
         }

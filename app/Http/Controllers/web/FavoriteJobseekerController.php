@@ -21,7 +21,6 @@ class FavoriteJobseekerController extends Controller {
     
     public function getFavJobseeker(Request $request) {
         $userId = Auth::user()->id;
-        $rating = "(avg(job_ratings.punctuality) + avg(job_ratings.time_management) + avg(job_ratings.skills) + avg(job_ratings.teamwork) + avg(job_ratings.onemore))/5";
         
         $favJobSeeker = Favourite::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'favourites.seeker_id')
                 ->leftjoin('job_lists', 'favourites.seeker_id', '=', 'job_lists.seeker_id')

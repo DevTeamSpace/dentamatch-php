@@ -189,7 +189,6 @@ class PushNotificationApiController extends Controller {
     public function GetunreadNotification(Request $request){
         try{
             $userId = $request->userServerData->user_id;
-            $reqData = $request->all();
             if($userId > 0){
                 $query = Notification::where('receiver_id', '=', $userId)->where('seen','=',0);
                 $total = $query->count();
