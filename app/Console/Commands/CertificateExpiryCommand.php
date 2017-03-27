@@ -58,7 +58,7 @@ class CertificateExpiryCommand extends Command
                 $notificationData = array(
                     'message' => "7 days remaining before the expiry of ".$value->certificate_name,
                     'notification_title'=>'Certification expairy Reminder',
-                    'sender_id' => "",
+                    'sender_id' => $adminModel->id,
                     'type' => 1
                 );
                 
