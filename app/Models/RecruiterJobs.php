@@ -199,13 +199,13 @@ class RecruiterJobs extends Model
         return $result;
     }
     
-    public static function getJobDetail($jobId, $userId)
+    public static function getJobDetail($jobId, $userId, $lat = "",$lng = "")
     {
         $tempJob = [];
         $searchResult = [];
         $userProfile = UserProfile::where('user_id', $userId)->first();
-        $longitude = $userProfile->longitude;
-        $latitude = $userProfile->latitude;
+        $longitude = !empty($lng) ? $lng : $userProfile->longitude;
+        $latitude = !empty($lat) ? $lat : $userProfile->latitude;
         $searchQueryObj = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                         ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
                         ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
