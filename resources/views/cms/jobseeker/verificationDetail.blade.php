@@ -61,9 +61,16 @@
                     <div class="form-group">
                         <div class="col-md-6 col-md-offset-4">
                             @if(!empty($userProfile->dental_state_board) && !empty($userProfile->license_number))
+                                @if($userProfile->is_job_seeker_verified == 0)
                                 <input type="submit" name="verify"  value="Approve" class="btn btn-primary" />
+                                <input type="submit" name="verify"  value="Reject" class="btn btn-primary" />
+                                @elseif($userProfile->is_job_seeker_verified == 1)
+                                <input type="submit" name="verify"  value="Reject" class="btn btn-primary" />
+                                @else 
+                                <input type="submit" name="verify"  value="Approve" class="btn btn-primary" />
+                                @endif
                             @endif
-                            <input type="submit" name="verify"  value="Reject" class="btn btn-primary" />
+                            
                             <a href="<?php echo e(url('cms/jobseeker/index')); ?>"  class="btn btn-primary">
                                 <i class="fa fa-backward"></i> Return to list
                             </a>
