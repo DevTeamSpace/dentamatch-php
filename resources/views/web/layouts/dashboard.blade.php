@@ -58,12 +58,16 @@
                     <a href="{{ url('chat') }}"><span class="icon icon-message"></span></a>
                 </li>
                 <li class="notificaionbell dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        <span class="icon icon-bell "></span>
-                        @if(!empty($notificationList['total']))
-                            <div class="notificationCircle "> {{ $notificationList['total'] }}</div>
-                        @endif
-                    </a>
+                    @if(!empty($notificationList['total']))
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <span class="icon icon-bell "></span>
+                            @if(!empty($notificationList['total']))
+                                <div class="notificationCircle "> {{ $notificationList['total'] }}</div>
+                            @endif
+                        </a>
+                    @else
+                        <a href="{{ url('notification-lists') }}" ><span class="icon icon-bell "></span></a>
+                    @endif
                     <div class="dropdown-menu noficationListContainer small-border-radius box-shadow">
 
                         <span class="fa fa-caret-up notificationCaret"></span>
