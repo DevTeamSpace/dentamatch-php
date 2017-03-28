@@ -277,6 +277,7 @@ class RecruiterJobs extends Model
                 }
             }
         }
+        
         $jobObj = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
             ->join('job_templates',function($query){
                 $query->on('job_templates.id','=','recruiter_jobs.job_template_id')
@@ -292,7 +293,7 @@ class RecruiterJobs extends Model
         //$jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
             $jobObj ->leftJoin('temp_job_dates',function($query){
                 $query->on('temp_job_dates.recruiter_job_id','=','recruiter_jobs.id')
-                ->whereDate('temp_job_dates.job_date','>=',date('Y-m-d').' 00:00:00');
+                ->whereDate('temp_job_dates.job_date','>=',date('Y-m-d'));
             })
             ->leftJoin('job_lists',function($query){
                 $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
@@ -424,7 +425,7 @@ class RecruiterJobs extends Model
                 ->join('temp_job_dates','temp_job_dates.recruiter_job_id','=','recruiter_jobs.id')
                 ->where('recruiter_jobs.job_type','=' , RecruiterJobs::TEMPORARY)
                 ->whereDate('temp_job_dates.job_date','<=',date('Y-m-d'))
-                ->leftjoin('job_lists',function($query){
+                ->join('job_lists',function($query){
                     $query->on('temp_job_dates.recruiter_job_id','=','job_lists.recruiter_job_id')
                         ->where('job_lists.applied_status',JobLists::HIRED);
                 })
