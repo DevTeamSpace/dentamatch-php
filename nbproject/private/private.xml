@@ -3,10 +3,40 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Applications/XAMPP/xamppfiles/htdocs/dentamatch_php/public/web/scripts/calender.js</file>
-            <file>file:/Applications/XAMPP/xamppfiles/htdocs/dentamatch_php/app/Http/Controllers/web/SignupController.php</file>
-            <file>file:/Applications/XAMPP/xamppfiles/htdocs/dentamatch_php/app/Http/Controllers/web/CalenderController.php</file>
-            <file>file:/Applications/XAMPP/xamppfiles/htdocs/dentamatch_php/resources/views/web/calender.blade.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Controllers/web/SignupController.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/public/web/scripts/dashboard.js</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Models/User.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Models/RecruiterOffice.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Models/RecruiterProfile.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/public/web/scripts/custom.js</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Controllers/Cms/ReportController.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/public/web/scripts/edit-profile.js</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Controllers/web/NotificationController.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/public/web/css/editor.css</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/public/web/scripts/web.js</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Models/RecruiterOfficeType.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/routes/api.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Models/JobSeekerSchooling.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Console/Commands/CertificateExpiryCommand.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Controllers/Api/PushNotificationApiController.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Controllers/web/FavoriteJobseekerController.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Controllers/Api/WorkExperienceApiController.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/resources/views/web/layouts/dashboard.blade.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Models/Notification.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Helpers/apiResponse.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Models/Schooling.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Console/Commands/TempJobExpiryCommand.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Models/JobLists.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/resources/views/web/dashboard.blade.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Controllers/Api/UserProfileApiController.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Models/Location.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Controllers/web/RecruiterJobController.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Console/Commands/AppMessageCommand.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/routes/web.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Middleware/VerifyCsrfToken.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Controllers/web/UserProfileController.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Http/Controllers/Api/SearchApiController.php</file>
+            <file>file:/Library/WebServer/Documents/git/dentamatch/app/Providers/NotificationServiceProvider.php</file>
         </group>
     </open-files>
 </project-private>
