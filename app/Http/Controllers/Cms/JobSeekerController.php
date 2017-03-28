@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\UserProfile;
 use App\Models\PasswordReset;
+use App\Models\JobSeekerProfiles;
 use Mail;
 use Log;
 
@@ -174,8 +175,10 @@ class JobSeekerController extends Controller
                 ->addColumn('action', function ($userData) {
                     $edit = url('cms/jobseeker/'.$userData->id.'/edit');
                     $resetPassword = url('cms/recruiter/'.$userData->id.'/adminResetPassword');
+                    $viewDetails = url('cms/jobseeker/'.$userData->id.'/viewdetails');
                     $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
                     $action .= '<a href="'.$resetPassword.'"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;';
+                    $action .= '<a href="'.$viewDetails.'"  class="btn btn-xs btn-primary">View Details</a>&nbsp;';
                     return $action;
                        
                 })
@@ -319,5 +322,14 @@ class JobSeekerController extends Controller
         if(!empty($insertData)) {
             Notification::insert($insertData);
         }
+    }
+    
+    public function jobSeekerDetailView($id) {
+        try{
+            $seekerDetails = JobSeekerProfiles::getJobSeekerProfile($id);
+            return view('cms.jobseeker.jobseekerDetail',['seekerDetails'=>$seekerDetails]);
+        }catch (\Exception $e) {
+            Log::error($e);
+        } 
     }
 }
