@@ -539,8 +539,6 @@ class RecruiterJobController extends Controller {
                         $userId = $value['seeker_id'];
                         $senderId = $value['user_id'];
 
-                        $notificationData['receiver_id'] = $userId;
-
                         $deviceModel = Device::getDeviceToken($userId);
                         if($deviceModel) {
                             $insertData[] = ['receiver_id'=>$userId,
