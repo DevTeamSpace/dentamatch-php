@@ -2,7 +2,9 @@ $(document).ready(function() {
     var socket = io(socketUrl);
     socket.on('connect', function () {
         console.log(socket);
-
+        socket.on('disconnect', function() {
+            console.info('Socket disconnect');
+        });
         socket.emit('init', {userId : userId, userName : officeName,userType : 2},function(response){
 
         });
@@ -11,8 +13,8 @@ $(document).ready(function() {
             $('#seekerId').val($(this).data('seekerid'));
             $('#chatMsg').val('');
         });
-
-        $('#sendChat').click(function(e){
+        $('#sendChat').off('click');
+        $('#sendChat').on('click',function(e){
             e.preventDefault();
             var chatMsg = $('#chatMsg').val();
             var seekerId = $('#seekerId').val();
@@ -25,6 +27,7 @@ $(document).ready(function() {
                 });
             }
         });
+        socket.off('receiveMessage');
         socket.on('receiveMessage', function (data) {
 
             console.log(data);
