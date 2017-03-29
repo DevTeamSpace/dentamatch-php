@@ -289,7 +289,7 @@ class JobSeekerController extends Controller
         $user = User::getAdminUserDetailsForNotification();
         if ($verificationStatus == "Approve") {
             $notificationData = array(
-                'notificationData' => 'Your dental state board and license number approved by admin',
+                'notificationData' => 'Your license number has been approved by admin',
                 'notification_title' => 'Dental certificate verified',
                 'sender_id' => $user->id,
                 'type' => 1,
@@ -297,7 +297,7 @@ class JobSeekerController extends Controller
             );
         } else if ($verificationStatus == 'Reject') {
             $notificationData = array(
-                'notificationData' => 'Your dental state board and license number rejected by admin',
+                'notificationData' => 'Your dental state board has been rejected by admin',
                 'notification_title' => 'Dental certificate rejected',
                 'sender_id' => $user->id,
                 'type' => 1,

@@ -166,5 +166,5 @@ return [
     'invite_sent_success' => 'Invitation sent',
     'already_register_as_recruiter'=>'You are already registered as recruiter',
     'job_not_exists' => 'This job no longer exists',
-    'jobseeker_not_verified' => "You cannot apply for a job as the admin has not yet approved your Dental State Board."
+    'jobseeker_not_verified' => "You cannot apply for a job as the admin has not yet approved your lisence"
 ];
