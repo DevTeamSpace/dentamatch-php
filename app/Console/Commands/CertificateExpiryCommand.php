@@ -12,7 +12,7 @@ use App\Providers\NotificationServiceProvider;
 
 class CertificateExpiryCommand extends Command
 {
-    const NOTIFICATION_INTERVAL = 7;
+    const NOTIFICATION_INTERVAL = 1;
     /**
      * The name and signature of the console command.
      *
