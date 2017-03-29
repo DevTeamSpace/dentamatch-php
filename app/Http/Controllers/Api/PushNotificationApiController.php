@@ -104,6 +104,7 @@ class PushNotificationApiController extends Controller {
                 $validateKeys = ['name' => 'required','recruiterId' => 'required','message' => 'required',
             'messageListId' => 'required','seekerId' => 'required','messageId' => 'required',
             'timestamp' => 'required','recruiterBlock' => 'required','seekerBlock' => 'required'];
+                $requestData['toId'] = $requestData['seekerId'];
             }
             $this->validate($request, $validateKeys);
             $deviceModel = Device::getDeviceToken($requestData['toId']);
