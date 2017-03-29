@@ -279,6 +279,8 @@ class RecruiterJobs extends Model
         }
         
         $jobObj = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+            ->join('recruiter_office_types', 'recruiter_office_types.recruiter_office_id', '=', 'recruiter_offices.id')
+            ->join('office_types', 'office_types.id', 'recruiter_office_types.office_type_id')
             ->join('job_templates',function($query){
                 $query->on('job_templates.id','=','recruiter_jobs.job_template_id')
                 ->where('job_templates.user_id',Auth::user()->id);
@@ -309,6 +311,7 @@ class RecruiterJobs extends Model
             'job_templates.template_name','job_templates.template_desc','job_templates.job_title_id',
             'job_titles.jobtitle_name',
             DB::raw("group_concat(distinct concat(job_lists.seeker_id,'_', job_lists.applied_status)) AS applied_status"),
+            DB::raw("group_concat(distinct concat(office_types.officetype_name)) AS office_types_name"),
             DB::raw("group_concat(distinct(temp_job_dates.job_date) ORDER BY temp_job_dates.job_date ASC) AS temp_job_dates"),
             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"))
             ->orderBy('recruiter_jobs.id','desc');
