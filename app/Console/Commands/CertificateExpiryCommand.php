@@ -60,7 +60,7 @@ class CertificateExpiryCommand extends Command
                     'message' => "7 days remaining for the expiry of ".$value->certificate_name,
                     'notification_title'=>'Certification Expiry Reminder',
                     'sender_id' => $adminModel->id,
-                    'type' => 1
+                    'type' => Notification::OTHER
                 );
                 
                 $params['data'] = $notificationData;
@@ -69,7 +69,7 @@ class CertificateExpiryCommand extends Command
                 if($deviceModel) {
                     $this->info($userId);
                     NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['message'], $params);
-                    $data = ['sender_id'=>$adminModel->id,'receiver_id'=>$userId, 'notification_data'=>$notificationData['message']];
+                    $data = ['sender_id'=>$adminModel->id,'receiver_id'=>$userId, 'notification_data'=>$notificationData['message'],'notification_type'=>Notification::OTHER];
                     Notification::createNotification($data);
                 }
             }
