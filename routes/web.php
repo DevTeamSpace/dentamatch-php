@@ -225,6 +225,7 @@ Route::group(['middleware' => ['web', 'xss'], 'prefix' => 'cms/'], function () {
         Route::get('list', 'Cms\JobSeekerController@jobSeekerList');
         Route::delete('{id}/delete', 'Cms\JobSeekerController@delete');
         Route::get('{id}/edit', 'Cms\JobSeekerController@edit');
+        Route::get('{id}/viewdetails', 'Cms\JobSeekerController@jobSeekerDetailView');
         Route::get('create', 'Cms\JobSeekerController@create');
         Route::post('store', 'Cms\JobSeekerController@store');
         Route::get('verification-list', 'Cms\JobSeekerController@jobSeekerVerificationList');

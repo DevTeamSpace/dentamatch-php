@@ -35,7 +35,7 @@
                               <tr>
                                   <th>First Name</th>
                                   <th>Last Name</th>
-                                  <th>Dental State Board</th>
+                                  
                                   <th>License Number</th>
                                   <th>Status</th>
                                   <th>Action</th>

@@ -98,36 +98,21 @@ class apiResponse {
         $affiliations = JobSeekerAffiliation::getJobSeekerAffiliation($userId);
         $jobSeekerCertifications = JobseekerCertificates::getJobSeekerCertificates($userId);
         $chkProfileStatus = 0;
-        $workExperienceStatus = 0;
-        $schoolingStatus = 0;
-        $skillStatus = 0;
-        $affiliationStatus = 0;
-        $certificationStatus = 0;
+        $completionStatus = 0;
+        $workExperienceStatus = ($userWorkExperience['total'] > 0) ? 1 : 0;
+        $schoolingStatus = (count($schooling) > 0) ? 1 : 0;
+        $skillStatus = (count($skills) > 0) ? 1 : 0;
+        $affiliationStatus = (count($affiliations) > 0) ? 1 : 0;
+        $certificationStatus = (count($jobSeekerCertifications) > 0) ? 1 : 0;
         if($userProfileModel['job_titile_id'] > 0 && 
                 $userProfileModel['profile_pic'] != "" && 
-                $userProfileModel['dental_state_board'] != "" && 
                 $userProfileModel['license_number'] != "" && 
                 $userProfileModel['state'] != "" && 
                 $userProfileModel['about_me'] != "" 
                 ){
             $chkProfileStatus = 1;
         }
-        if($userWorkExperience['total'] > 0){
-            $workExperienceStatus = 1;
-        }
-        if(count($schooling) > 0){
-            $schoolingStatus = 1;
-        }
-        if(count($skills) > 0){
-            $skillStatus = 1;
-        }
-        if(count($affiliations) > 0){
-            $affiliationStatus = 1;
-        }
-        if(count($jobSeekerCertifications) > 0){
-            $certificationStatus = 1;
-        }
-        $completionStatus = 0;
+        
         if($chkProfileStatus == 1 && $workExperienceStatus == 1 && $schoolingStatus == 1 && $skillStatus == 1 && $affiliationStatus == 1 && $certificationStatus == 1){
             $completionStatus = 1;
         }

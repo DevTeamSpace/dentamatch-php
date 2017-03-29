@@ -20,7 +20,6 @@ use App\Models\OfficeType;
 use App\Models\Configs;
 use App\Models\RecruiterOfficeType;
 use DB;
-use App\Http\Requests\DeleteJobRequest;
 use Log;
 use App\Http\Requests\CheckJobAppliedOrNotRequest;
 use Session;
@@ -102,10 +101,12 @@ class RecruiterJobController extends Controller {
             if ($request->action == "edit" && !empty($request->id)) {
                 $recruiterJobObj = RecruiterJobs::findById($request->id);
             }
-            $isPreviousTempJobRated = RecruiterJobs::checkPendingTempJobsRating();
-            if($isPreviousTempJobRated['seekerCount'] != $isPreviousTempJobRated['ratedSeekerCount']) {
-                Session::flash('message', trans('messages.rate_previous_jobseeker'));
-                return redirect('createJob/'.$request->templateId);
+            if($request->jobType == RecruiterJobs::TEMPORARY){
+                $isPreviousTempJobRated = RecruiterJobs::checkPendingTempJobsRating();
+                if($isPreviousTempJobRated['seekerCount'] != $isPreviousTempJobRated['ratedSeekerCount']) {
+                    Session::flash('message', trans('messages.rate_previous_jobseeker'));
+                    return redirect('createJob/'.$request->templateId);
+                }
             }
             /*if($request->jobType == RecruiterJobs::TEMPORARY) {
                 
@@ -204,6 +205,8 @@ class RecruiterJobController extends Controller {
                     $userChat->seeker_id = $jobData->seeker_id;
                     $userChat->checkAndSaveUserToChatList();
                     $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $jobData->seeker_id, $requestData['jobId']);
+                }else if ($requestData['appliedStatus'] == JobLists::REJECTED){
+                    $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $jobData->seeker_id, $requestData['jobId']);
                 }
             }else{
                 $inviteJobs = array('seeker_id' => $requestData['seekerId'] , 'recruiter_job_id' => $requestData['jobId'] , 'applied_status' => JobLists::INVITED);
@@ -238,6 +241,14 @@ class RecruiterJobController extends Controller {
                 'sender_id' => $sender,
                 'type' => 1,
                 'notificationType' => Notification::ACCEPTJOB,
+            );
+        }else if ($jobstatus == JobLists::REJECTED) {
+            $notificationData = array(
+                'notificationData' => $jobDetails['office_name'] . " has rejected your job application for " . $jobDetails['jobtitle_name'],
+                'notification_title' => 'User shortlisted',
+                'sender_id' => $sender,
+                'type' => 1,
+                'notificationType' => Notification::REJECTED,
             );
         } else if ($jobstatus == JobLists::HIRED) {
             $notificationData = array(
@@ -309,7 +320,7 @@ class RecruiterJobController extends Controller {
             }
             $jobDetails = RecruiterJobs::getRecruiterJobDetails($allData->jobId);
             $recruiterOfficeObj = RecruiterOffice::where(['id' => $jobDetails['recruiter_office_id']])->first();
-            $updatedJob = $this->sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj);
+            $updatedJob = $this->sameOfficeOrNot($allData, $recruiterOfficeObj);
             
             DB::commit();
             $this->result['data'] = $updatedJob['data'];
@@ -324,7 +335,7 @@ class RecruiterJobController extends Controller {
         return $this->result;
     }
 
-    private function sameOfficeOrNot($jobDetails, $allData, $recruiterOfficeObj) {
+    private function sameOfficeOrNot($allData, $recruiterOfficeObj) {
         try {
             if ((string) $recruiterOfficeObj['latitude'] == (string) $allData->selectedOffice[0]->selectedOfficeLat && (string) $recruiterOfficeObj['longitude'] == (string) $allData->selectedOffice[0]->selectedOfficeLng) {
                 $updatedJob = $this->updateJob($allData->selectedJobType, $allData);
@@ -529,9 +540,6 @@ class RecruiterJobController extends Controller {
                         $message = "Delete job notification | ".$value['office_name']." has deleted the temporary job vacancy for ".$value['jobtitle_name'];
                         $userId = $value['seeker_id'];
                         $senderId = $value['user_id'];
-
-                        $notificationData['receiver_id'] = $userId;
-                        $params['data'] = $notificationData;
 
                         $deviceModel = Device::getDeviceToken($userId);
                         if($deviceModel) {

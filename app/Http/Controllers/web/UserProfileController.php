@@ -16,6 +16,7 @@ use App\Http\Requests\DeleteOfficeRequest;
 use App\Http\Requests\UpdateRecruiterProfileRequest;
 use Hash;
 use Log;
+use App\Models\Location;
 
 class UserProfileController extends Controller {
     private $result = [];
@@ -171,13 +172,14 @@ class UserProfileController extends Controller {
 
     public function checkValidLocation(Request $request) {
         try {
+            $return = 0;
             if (isset($request->zip) && !empty($request->zip)) {
-                if (in_array($request->zip, \App\Models\Location::getList())) {
-                    return 1;
+                $return = 2;
+                if (in_array($request->zip, Location::getList())) {
+                    $return = 1;
                 }
-                return 2;
             }
-            return 0;
+            return $return;
         } catch (\Exception $e) {
             return 0;
         }
@@ -187,7 +189,7 @@ class UserProfileController extends Controller {
         $this->validate($request, ['officeName' => 'required|max:100', 'officeDescription' => 'required|max:500']);
 
         try {
-            $profile = RecruiterProfile::updateOfficeDetail($request);
+            RecruiterProfile::updateOfficeDetail($request);
             $request->session()->put('userData.profile.office_name', $request->officeName);
             
             static::createRecruiterOfficeAddress($request);
