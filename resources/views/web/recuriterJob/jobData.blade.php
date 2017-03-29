@@ -43,11 +43,11 @@
                     @php 
                     $dates = explode(',',$job['temp_job_dates']);
                     @endphp
-                    <span class=" dropdown-toggle"  data-toggle="dropdown"><span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
+                    <span class=" dropdown-toggle"  data-toggle="dropdown"><span class="day-drop">{{ date('l, M d, Y',strtotime($dates[0])) }}</span>
                     <span class="caret"></span></span>
                     <ul class="dropdown-menu">
                         @foreach ($dates as $date)
-                        <li>{{ date('l, d M Y',strtotime($date)) }}</li>
+                        <li>{{ date('l, M d, Y',strtotime($date)) }}</li>
                         @endforeach
                     </ul>
                 </span>

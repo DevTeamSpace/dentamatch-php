@@ -52,12 +52,12 @@
                             $dates = explode(' | ',$seekerDetails['temp_job_dates']);
                             @endphp
                             <span class=" dropdown-toggle"  data-toggle="dropdown">
-                                <span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
+                                <span class="day-drop">{{ date('l, M d, Y',strtotime($dates[0])) }}</span>
                                 <span class="caret"></span>
                             </span>
                             <ul class="dropdown-menu">
                               @foreach ($dates as $date)
-                              <li>{{ date('l, d M Y',strtotime($date)) }}</li>
+                              <li>{{ date('l, M d, Y',strtotime($date)) }}</li>
                               @endforeach
                           </ul>
                       </span>
@@ -196,7 +196,7 @@
                         <img data-toggle="modal" data-target="#certificateModal" class="img-rounded thumb-certificate" data-image="{{ $certificate['image_path'] }}" src="{{ url('image/66/66/?src='.$certificate['image_path']) }}">
                     </a>
                     @if(!empty($certificate['validity_date']))
-                    Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span></p>
+                    Valid Till: <span>{{date('M d, Y',strtotime($certificate['validity_date']))}}</span></p>
                     @else
                     Valid Till: N/A
                     @endif
