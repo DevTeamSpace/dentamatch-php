@@ -292,8 +292,8 @@ class RecruiterJobs extends Model
         
         //$jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
             $jobObj ->leftJoin('temp_job_dates',function($query){
-                $query->on('temp_job_dates.recruiter_job_id','=','recruiter_jobs.id')
-                ->whereDate('temp_job_dates.job_date','>=',date('Y-m-d'));
+                $query->on('temp_job_dates.recruiter_job_id','=','recruiter_jobs.id');
+                //->whereDate('temp_job_dates.job_date','>=',date('Y-m-d'));
             })
             ->leftJoin('job_lists',function($query){
                 $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
