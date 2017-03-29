@@ -44,11 +44,12 @@ class CertificateExpiryCommand extends Command
      */
     public function handle()
     {
+        $todayDate = date('Y-m-d', strtotime("-". static::NOTIFICATION_INTERVAL." days"));
         $adminModel = User::getAdminUserDetailsForNotification();
         $certificateModel = JobseekerCertificates::select('jobseeker_certificates.certificate_id','jobseeker_certificates.user_id','certifications.certificate_name')
                         ->join('certifications', 'certifications.id', '=', 'jobseeker_certificates.certificate_id')
                         ->whereNull('jobseeker_certificates.deleted_at')
-                        ->where(DB::raw("DATEDIFF(now(), jobseeker_certificates.validity_date)"),'<=', static::NOTIFICATION_INTERVAL)
+                        ->where('jobseeker_certificates.validity_date',$todayDate)
                         ->get();
         
         if(!empty($certificateModel)) {
