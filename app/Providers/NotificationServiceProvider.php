@@ -200,6 +200,42 @@ class NotificationServiceProvider extends ServiceProvider {
     public static function notificationFromAdmin(AppMessage $appMessage){
         $message = $appMessage->message;
         $user = User::getAdminUserDetailsForNotification();
+        
+        if($appMessage->messageTo==1) {
+            static::getAppRecruiterNotification($user, $message, 2);
+            static::getAppDeviceNotification($user, $message, 3);
+        }
+        else if($appMessage->messageTo==2) {
+            static::getAppRecruiterNotification($user, $message, $appMessage->messageTo);
+            
+        } else if($appMessage->messageTo==3) {
+            static::getAppDeviceNotification($user, $message, $appMessage->messageTo);
+        }
+        
+    }
+    
+    public static function getAppRecruiterNotification($user, $message, $groupId)
+    {
+        $insertData = [];
+        $devices = User::getAllUserByRole($groupId);
+        if(!empty($devices)) {
+            foreach ($devices as $deviceData){
+                $insertData[] = ['receiver_id'=>$deviceData->id,
+                                'sender_id'=>$user->id,
+                                'notification_data'=>$message,
+                                'created_at'=>date('Y-m-d h:i:s'),
+                                'notification_type' => Notification::OTHER,
+                                ];
+            }
+
+            if(!empty($insertData)){
+                Notification::insert($insertData);
+            }
+        }
+    }
+    
+    public static function getAppDeviceNotification($user, $message, $groupId)
+    {
         $params['data'] = [
                             'notificationData' => $message,
                             'notification_title'=>'App Admin Update',
@@ -207,9 +243,10 @@ class NotificationServiceProvider extends ServiceProvider {
                             'type' => 1,
                             'notificationType' => Notification::OTHER,
                         ];
-        $devices = Device::getAllDeviceToken($appMessage->messageTo);
+        
+        $devices = Device::getAllDeviceToken($groupId);
         if(!empty($devices)) {
-            
+
             $insertData = [];
             if(!empty($devices)) {
                 foreach ($devices as $deviceData){
