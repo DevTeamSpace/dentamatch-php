@@ -198,10 +198,11 @@ class ReportController extends Controller
         try{
             $searchList = SearchFilter::select('city')
                 ->addSelect(DB::raw("count(id) as searchcount"))
+                ->where('city','!=', "")
                 ->groupby('city')
                 ->orderBy('city', 'asc')->get();
             return Datatables::of($searchList)
-                    ->make(true);
+            ->make(true);
         } catch (\Exception $e) {
             Log::error($e);
         }
