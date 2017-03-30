@@ -427,7 +427,7 @@ class RecruiterJobs extends Model
                 })
                 ->join('temp_job_dates','temp_job_dates.recruiter_job_id','=','recruiter_jobs.id')
                 ->where('recruiter_jobs.job_type','=' , RecruiterJobs::TEMPORARY)
-                ->whereDate('temp_job_dates.job_date','<=',date('Y-m-d'))
+                
                 ->join('job_lists',function($query){
                     $query->on('temp_job_dates.recruiter_job_id','=','job_lists.recruiter_job_id')
                         ->where('job_lists.applied_status',JobLists::HIRED);
@@ -438,8 +438,10 @@ class RecruiterJobs extends Model
                 
            ->select('recruiter_jobs.id','recruiter_jobs.job_type',
             DB::raw("count(distinct job_lists.seeker_id) as total_hired"),
-            DB::raw("count(distinct job_ratings.seeker_id) as total_rating")
+            DB::raw("count(distinct job_ratings.seeker_id) as total_rating"),
+            DB::raw("max(temp_job_dates.job_date) as job_date")
             )
+            ->whereDate('job_date','<',date('Y-m-d'))
             ->groupBy('temp_job_dates.recruiter_job_id')
             ->orderBy('recruiter_jobs.id','desc');  
         return $jobObj->get();
