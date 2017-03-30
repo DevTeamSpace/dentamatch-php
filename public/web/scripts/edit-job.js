@@ -21,7 +21,7 @@
             }
             me.selectedOfficeAddress(d.address);
             me.selectedOfficePhone(d.phone_no);
-            me.selectedOfficeInfo(d.office_location);
+            me.selectedOfficeInfo(d.office_info);
             me.selectedOfficeZipcode(d.zipcode);
             me.selectedOfficeWorkingHours = new WorkingHourModel(d);
             me.datePickerBinding(true);
@@ -332,7 +332,7 @@
                         me.errors(true);
                     } else if (data == 2) {
                         me.locationError('Job cannot be currently created for this location. We will soon be available in your area.');
-                        me.errors(true);
+                        //me.errors(true);
                     }else{
                         me.errors(false);
                         me.locationError('');
@@ -551,7 +551,7 @@
             return false;
         }
         
-        if(me.selectedOffice()[0].selectedOfficePhone().length > 10){
+        if(me.selectedOffice()[0].selectedOfficePhone().length > 14){
             me.phoneNumberError('Phone number should be of 10 digits.');
             return false;
         }
