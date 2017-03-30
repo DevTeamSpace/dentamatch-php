@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AppMessage;
 use App\Models\User;
-use Illuminate\Support\Facades\URL;
 /**
  * NotificationServiceProvider class contains methods for notification management
  */
@@ -220,9 +219,10 @@ class NotificationServiceProvider extends ServiceProvider {
         $devices = User::getAllUserByRole($groupId);
         if(!empty($devices)) {
             foreach ($devices as $deviceData){
+                $data = ['image'=> url('web/images/dentaMatchLogo.png'), 'message' => $message];
                 $insertData[] = ['receiver_id'=>$deviceData->id,
                                 'sender_id'=>$user->id,
-                                'notification_data'=> json_encode(['image'=> URL::to('web/images/dentaMatchLogo.png'), 'message' => $message]),
+                                'notification_data'=> json_encode($data),
                                 'created_at'=>date('Y-m-d h:i:s'),
                                 'notification_type' => Notification::OTHER,
                                 ];
