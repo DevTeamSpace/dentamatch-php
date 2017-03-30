@@ -24,6 +24,11 @@
                                     </ul>
                                 </div>
                                 @endif
+                                 @if(Session::has('success'))
+                                <h6 class="alert alert-success">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    {{ Session::get('success') }}</h6>
+                                @endif
                                 <div class="form-group profieBox">
                                     <label for="oldpassword">Old Password</label>
                                     <input type="password" name="oldPassword" class="form-control" id="oldpassword" data-parsley-required-message="Old password required" required >

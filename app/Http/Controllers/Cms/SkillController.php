@@ -115,9 +115,7 @@ class SkillController extends Controller
         try{
         $skills =  Skills::leftJoin('skills as sk','sk.id','=','skills.parent_id')
                     ->select('skills.id','skills.skill_name','skills.is_active','skills.parent_id','sk.skill_name as parent_skill_name')
-                    ->orderBy('skills.id', 'asc')
-                    ->get();
-        
+                    ->orderBy('skills.id', 'asc');
         return Datatables::of($skills)
                 ->removeColumn('id')
                 ->removeColumn('parent_id')

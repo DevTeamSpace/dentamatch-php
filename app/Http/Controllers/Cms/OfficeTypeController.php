@@ -111,7 +111,7 @@ class OfficeTypeController extends Controller
 
     public function officeTypeList(){
         try{
-        $officeTypes = OfficeType::SELECT(['officetype_name','is_active','id'])->orderBy('id', 'desc')->get();
+        $officeTypes = OfficeType::SELECT('officetype_name','is_active','id')->orderBy('id', 'desc');
         return Datatables::of($officeTypes)
                 ->removeColumn('id')
                 ->addColumn('active', function ($officeTypes) {
