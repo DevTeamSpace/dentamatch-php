@@ -1,15 +1,17 @@
 $(document).ready(function() {
+    $('.modalClick').hide();
     var socket = io(socketUrl);
     socket.on('connect', function () {
         console.log(socket);
         socket.on('disconnect', function() {
+            $('.modalClick').hide();
             console.info('Socket disconnect');
         });
         socket.emit('init', {userId : userId, userName : officeName,userType : 2},function(response){
-
+            $('.modalClick').show();
         });
-
-        $('.modalClick').click(function(e){
+        $('.modalClick').off('click');
+        $('.modalClick').on('click',function(e){
             $('#seekerId').val($(this).data('seekerid'));
             $('#chatMsg').val('');
         });
@@ -34,7 +36,7 @@ $(document).ready(function() {
         });
         socket.on('logoutPreviousSession',function(response){
             $('#logoutMessageBox').modal('show');
-            setTimeout(function(){ window.location.href='logout'; }, 3000);
+            setTimeout(function(){ window.location.href='/logout'; }, 3000);
         });
     });
 });
