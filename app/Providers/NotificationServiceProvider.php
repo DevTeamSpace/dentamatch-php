@@ -219,7 +219,7 @@ class NotificationServiceProvider extends ServiceProvider {
         $devices = User::getAllUserByRole($groupId);
         if(!empty($devices)) {
             foreach ($devices as $deviceData){
-                $data = ['image'=> url('web/images/dentaMatchLogo.png'), 'message' => $message];
+                $data = ['image'=> 'web/images/dentaMatchLogo.png', 'message' => $message];
                 $insertData[] = ['receiver_id'=>$deviceData->id,
                                 'sender_id'=>$user->id,
                                 'notification_data'=> json_encode($data),
