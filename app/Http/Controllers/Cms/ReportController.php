@@ -202,7 +202,7 @@ class ReportController extends Controller
                 ->groupby('city')
                 ->orderBy('city', 'asc')->get();
             return Datatables::of($searchList)
-                    ->make(true);
+            ->make(true);
         } catch (\Exception $e) {
             Log::error($e);
         }

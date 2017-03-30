@@ -227,6 +227,7 @@ $(function () {
         ajax: public_path+'report/location',
         ordering:false,
         //bFilter: false,
+        
         columns: [
             {data: 'city', name: 'city',searchable:true},
             {data: 'searchcount', name: 'searchcount',searchable:false},
