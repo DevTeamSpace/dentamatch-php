@@ -219,7 +219,7 @@ class NotificationServiceProvider extends ServiceProvider {
         $devices = User::getAllUserByRole($groupId);
         if(!empty($devices)) {
             foreach ($devices as $deviceData){
-                $data = ['image'=> 'web/images/dentaMatchLogo.png', 'message' => $message];
+                $data = ['image'=> 'web/images/dentaMatchLogo.png', 'message' => "Admin Notification | ".$message];
                 $insertData[] = ['receiver_id'=>$deviceData->id,
                                 'sender_id'=>$user->id,
                                 'notification_data'=> json_encode($data),
@@ -253,7 +253,7 @@ class NotificationServiceProvider extends ServiceProvider {
                     if ($deviceData->device_token && strlen($deviceData->device_token) >= 22) {
                         $insertData[] = ['receiver_id'=>$deviceData->user_id,
                             'sender_id'=>$user->id,
-                            'notification_data'=>$message,
+                            'notification_data'=>"Admin Notification | ".$message,
                             'created_at'=>date('Y-m-d h:i:s'),
                             'notification_type' => Notification::OTHER,
                             ];
