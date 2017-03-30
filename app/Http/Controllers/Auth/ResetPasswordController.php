@@ -93,8 +93,10 @@ use ResetsPasswords;
             return redirect('/cms/login');
         }
         else {
-            return redirect($this->redirectPath())
-                            ->with('status', trans($response));
+            /*return redirect($this->redirectPath())
+                            ->with('status', trans($response));*/
+             Auth::logout();
+            return redirect('/');
         }
     }
 }
