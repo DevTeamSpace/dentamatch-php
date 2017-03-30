@@ -36,7 +36,7 @@ $(document).ready(function() {
         });
         socket.on('logoutPreviousSession',function(response){
             $('#logoutMessageBox').modal('show');
-            setTimeout(function(){ window.location.href='logout'; }, 3000);
+            setTimeout(function(){ window.location.href='/logout'; }, 3000);
         });
     });
 });
