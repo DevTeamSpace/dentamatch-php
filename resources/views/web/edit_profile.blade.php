@@ -41,7 +41,7 @@
                             </div>
                             <div class="detailTitleBlock">
                                 <label>Dental Office Description</label>
-                                <textarea class="form-control  txtHeight txtBtnDisable chacterValidtion" data-parsley-required data-parsley-required-message="required" maxlength=500 data-bind="value: dentalOfficeDescription, valueUpdate: 'afterkeydown'">
+                                <textarea class="form-control  txtHeight txtBtnDisable chacterValidtion" data-parsley-required data-parsley-required-message="required" maxlength=500 data-bind="value: dentalOfficeDescription, valueUpdate: 'blur'">
                                 </textarea>
                                 <p class="error-div" data-bind="text: officeDescError"></p>
                             </div>

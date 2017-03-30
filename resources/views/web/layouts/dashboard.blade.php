@@ -25,11 +25,12 @@
     <link rel="stylesheet" href="{{asset('web/plugins/custom-scroller/css/mCustomScrollbar.min.css')}}">
     <link rel="stylesheet" href="{{asset('web/css/custom.css')}}">
     <link rel="stylesheet" href="{{asset('web/css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('web/css/editor.css')}}">
     <link rel="stylesheet" href="{{asset('web/plugins/rating/tipi.css')}}">
     <script src="{{asset('web/scripts/jQuery-2.2.0.min.js')}}"></script>
     <script src="{{asset('web/plugins/rating/tipi.jquery.js')}}"></script>
     <script src="{{asset('web/plugins/rating/rating.jquery.js')}}"></script>
-
+    <script src="{{asset('web/scripts/editor.js')}}"></script>
     @yield('css')
 
     <title>DentaMatch| Home</title>
@@ -57,12 +58,16 @@
                     <a href="{{ url('chat') }}"><span class="icon icon-message"></span></a>
                 </li>
                 <li class="notificaionbell dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        <span class="icon icon-bell "></span>
-                        @if(!empty($notificationList['total']))
-                            <div class="notificationCircle "> {{ $notificationList['total'] }}</div>
-                        @endif
-                    </a>
+                    @if(!empty($notificationList['total']))
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <span class="icon icon-bell "></span>
+                            @if(!empty($notificationList['total']))
+                                <div class="notificationCircle "> {{ $notificationList['total'] }}</div>
+                            @endif
+                        </a>
+                    @else
+                        <a href="{{ url('notification-lists') }}" ><span class="icon icon-bell "></span></a>
+                    @endif
                     <div class="dropdown-menu noficationListContainer small-border-radius box-shadow">
 
                         <span class="fa fa-caret-up notificationCaret"></span>

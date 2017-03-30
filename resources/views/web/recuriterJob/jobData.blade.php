@@ -43,11 +43,11 @@
                     @php 
                     $dates = explode(',',$job['temp_job_dates']);
                     @endphp
-                    <span class=" dropdown-toggle"  data-toggle="dropdown"><span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
+                    <span class=" dropdown-toggle"  data-toggle="dropdown"><span class="day-drop">{{ date('l, M d, Y',strtotime($dates[0])) }}</span>
                     <span class="caret"></span></span>
                     <ul class="dropdown-menu">
                         @foreach ($dates as $date)
-                        <li>{{ date('l, d M Y',strtotime($date)) }}</li>
+                        <li>{{ date('l, M d, Y',strtotime($date)) }}</li>
                         @endforeach
                     </ul>
                 </span>
@@ -59,7 +59,7 @@
             <div class="template-job-information-left">
                 <address>
                     <strong>{{ $job['office_name'] }}</strong><br>
-                    {{ $job['office_desc'] }}<br>
+                    {{ $job['office_types_name'] }}<br>
                     {{ $job['address'].' '.$job['zipcode'] }}<br>
                     @if($job['job_type']==\App\Models\RecruiterJobs::TEMPORARY)
                     <span>Total Job Opening: {{ $job['no_of_jobs'] }}</span>

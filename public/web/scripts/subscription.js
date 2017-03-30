@@ -91,7 +91,8 @@ var FirstSubscriptionVM = function () {
     });
     
     me.addCardFunction = function(d, e){
-        console.log(me.expiry());
+        me.cardNumber(me.cardNumber().replace(/\_/g , ""));
+        me.expiry(me.expiry().replace(/\_/g , ""));
         me.errorMessage('');
         me.successMessage('');
         if(me.expiry() != null && (me.expiry().indexOf('/') >= 0 || me.expiry().indexOf('/') < 0)){

@@ -60,7 +60,8 @@ class JobSeekerSchooling extends Model
                     'jobseeker_schoolings.year_of_graduation', 'jobseeker_schoolings.other_schooling as school_title')
                             ->join('schoolings', 'schoolings.id','=', 'jobseeker_schoolings.schooling_id')
                             ->whereIn('schooling_id', $schoolId)
-                            ->where('user_id', $userId);
+                            ->where('user_id', $userId)
+                            ->orderBy('schoolings.id');
         $list = $query->get()->toArray();
 
         return $list;

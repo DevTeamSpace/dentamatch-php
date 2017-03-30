@@ -69,7 +69,7 @@
                   <p class="text-center" style="color: green;" data-bind="text: successMessage"></p>
                     <div class="form-group">
                         <label class="sr-only" for="card-number">Card number</label>
-                        <input type="text" class="form-control" id="card-number" placeholder="Card number" data-bind="value: cardNumber, disable: disableInput">
+                        <input type="text" class="form-control" id="card-number" placeholder="Card number" data-bind="value: cardNumber, disable: disableInput, valueUpdate: 'keyup'">
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="expiry">Expiry</label>
@@ -77,7 +77,7 @@
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="cvv">CVV</label>
-                        <input type="number" class="form-control" id="cvv" placeholder="CVV" data-bind="value: cvv, disable: disableInput">
+                        <input type="number" class="form-control" id="cvv" placeholder="CVV" data-bind="value: cvv, disable: disableInput, valueUpdate: 'keyup'">
                     </div>
                     <div class="mr-t-20 mr-b-30 dev-pd-l-13p">
                         <button type="button" class="btn btn-link mr-r-5" data-dismiss="modal">Close</button>

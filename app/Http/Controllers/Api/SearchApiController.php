@@ -241,13 +241,18 @@ class SearchApiController extends Controller {
     {
         try{
             $this->validate($request, [
-                'jobId' => 'required'
+                'jobId' => 'required',
+                'lat' => 'required',
+                'lng' => 'required'
             ]);
             $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
                 $jobId = $reqData['jobId'];
-                $data = RecruiterJobs::getJobDetail($jobId, $userId);
+                $lat = $reqData['lat'];
+                $lng = $reqData['lng'];
+                
+                $data = RecruiterJobs::getJobDetail($jobId, $userId, $lat, $lng);
                 if(!empty($data)) {
                     $data['is_applied'] = JobLists::isJobApplied($jobId,$userId);
                     $data['is_saved'] = SavedJobs::getJobSavedStatus($jobId, $userId);
@@ -303,9 +308,9 @@ class SearchApiController extends Controller {
                         $response = apiResponse::customJsonResponse(1, 200, $msg);
                     }else{
                         if($jobExists->applied_status == JobLists::HIRED){
-                            $msg = "You have already hired for this job";
+                            $msg = "This seeker is already hired for this job";
                         }else{
-                            $msg = "You have already cancelled this job invitation";
+                            $msg = "This seeker is already cancelled for this job";
                         }
                         $response = apiResponse::customJsonResponse(0, 201, $msg);
                     }

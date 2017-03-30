@@ -11,7 +11,9 @@
             </div>
             <div class="col-sm-6 nopadding col">
                 <div class="frm-inr-credbox bg-white ">
-                    User verified successfully. You can login.
+                    @if(Session::has('message'))
+                                    <?php print_r(Session::get('message')) ?>
+                            @endif
                 </div>
             </div>
         </div>

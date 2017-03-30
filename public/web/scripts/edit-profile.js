@@ -64,6 +64,7 @@ var OfficeModel = function (data) {
                 me.officeType.push(splitOfficeType[i]);
             }
             me.officeAddress(d.address);
+            d.phone_no = '('+d.phone_no.substr(0, 3)+')'+d.phone_no.substr(3,3)+' '+d.phone_no.substr(6,10);
             me.officePhone(d.phone_no);
             me.officeInfo(d.office_info);
             me.officeZipcode(d.zipcode);
@@ -352,10 +353,12 @@ var EditProfileVM = function () {
             if (typeof place == "undefined") {
                 return;
             }
+            //console.log(place[0]);
             d.officeLat(place[0].geometry.location.lat());
             d.officeLng(place[0].geometry.location.lng());
             d.officeAddress(place[0].formatted_address);
-            lastAddressComponent = place[0].address_components.pop().short_name;
+            //lastAddressComponent = place[0].address_components.pop().short_name;
+            lastAddressComponent = place[0].address_components[0].short_name;
             d.officeZipcode(lastAddressComponent);
             $.ajax({
                 url: '/get-location/' + lastAddressComponent,
@@ -636,8 +639,8 @@ var EditProfileVM = function () {
             d.phoneNumberError('Please enter phone number.');
             return false;
         }
-
-        if (d.officePhone().length > 10) {
+        
+        if (d.officePhone().length > 14) {
             d.phoneNumberError('Phone number should be of 10 digits.');
             return false;
         }
@@ -647,10 +650,13 @@ var EditProfileVM = function () {
                 d.officeInfoError('Office info cannot be greater than 500 characters.');
             }
         }
-
+        var tempOfficePhone = d.officePhone();
         if (d.errors() == true) {
             return false;
         } else {
+            d.officePhone(d.officePhone().replace(/\(/g , ""));
+            d.officePhone(d.officePhone().replace(/\)/g , ""));
+            d.officePhone(d.officePhone().replace(/\ /g , ""));
             me.headMessage('Updating Office');
             me.cancelButtonDelete(false);
             me.prompt('Updating office please wait.');
@@ -676,6 +682,7 @@ var EditProfileVM = function () {
                     if (data.success == true) {
                         d.showOffice(true);
                         d.showOfficeEditForm(false);
+                        d.officePhone(tempOfficePhone);
                         if (d.alreadyAdded() == false) {
                             d.alreadyAdded(true);
                             d.officeId(data.recruiterOffice.id);

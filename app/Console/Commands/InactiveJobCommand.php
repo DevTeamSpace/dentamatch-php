@@ -65,7 +65,7 @@ class InactiveJobCommand extends Command
                 $insertData = [];
                 foreach($pushList as $listValue)
                 {
-                    $data = ['image' => url('web/images/dentaMatchLogo.png'),'message' => "No job has been applied for last 30 days on ".$listValue['jobtitle_name']];
+                    $data = ['image' => url('web/images/dentaMatchLogo.png'),'message' => 'No job has been applied for last 30 days on <a href="/job/details/'.$listValue['id'].'"><b>'.$listValue['jobtitle_name'].'</b></a>'];
                     $insertData[] = ['sender_id' => $senderId->id, 'receiver_id' => $listValue['user_id'], 'notification_data'=> json_encode($data)];
                 }
                 Notification::insert($insertData);

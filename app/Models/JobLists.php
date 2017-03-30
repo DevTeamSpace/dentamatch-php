@@ -88,7 +88,6 @@ class JobLists extends Model {
     public static function postJobCalendar($userId, $jobStartDate, $jobEndDate)
     {
         $result = [];
-        $jobTypeCount = [];
 
         $searchQueryObj = static::leftJoin('temp_job_dates',function($query) use ($jobStartDate,$jobEndDate){
             $query->on('job_lists.recruiter_job_id','=','temp_job_dates.recruiter_job_id')

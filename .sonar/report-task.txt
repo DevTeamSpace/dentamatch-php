@@ -1,5 +1,5 @@
 projectKey=Dentamatch-php
 serverUrl=http://54.152.88.149:9000/sonar
 dashboardUrl=http://54.152.88.149:9000/sonar/dashboard/index/Dentamatch-php
-ceTaskId=AVp-E-nBROOMfOPYoyfF
-ceTaskUrl=http://54.152.88.149:9000/sonar/api/ce/task?id=AVp-E-nBROOMfOPYoyfF
+ceTaskId=AVsN--HQROOMfOPYoymu
+ceTaskUrl=http://54.152.88.149:9000/sonar/api/ce/task?id=AVsN--HQROOMfOPYoymu

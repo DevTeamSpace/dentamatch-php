@@ -21,7 +21,6 @@ class FavoriteJobseekerController extends Controller {
     
     public function getFavJobseeker(Request $request) {
         $userId = Auth::user()->id;
-        $rating = "(avg(job_ratings.punctuality) + avg(job_ratings.time_management) + avg(job_ratings.skills) + avg(job_ratings.teamwork) + avg(job_ratings.onemore))/5";
         
         $favJobSeeker = Favourite::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'favourites.seeker_id')
                 ->leftjoin('job_lists', 'favourites.seeker_id', '=', 'job_lists.seeker_id')
@@ -35,10 +34,15 @@ class FavoriteJobseekerController extends Controller {
         
         $jobDetail = JobTemplates::join('recruiter_jobs', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                 ->join('job_titles', 'job_templates.job_title_id', '=', 'job_titles.id')
+                ->leftJoin('temp_job_dates',function($query){
+                    $query->on('temp_job_dates.recruiter_job_id','=','recruiter_jobs.id')
+                    ->whereDate('temp_job_dates.job_date','>=',date('Y-m-d').' 00:00:00');
+                })
                 ->where('recruiter_jobs.job_type', '3')
                 ->where('job_templates.user_id', Auth::user()->id)
                 ->whereNull('recruiter_jobs.deleted_at')
-                ->select('job_titles.jobtitle_name', 'recruiter_jobs.id as recruiterId')
+                ->select('job_titles.jobtitle_name', 'recruiter_jobs.id as recruiterId',DB::raw("group_concat(distinct(temp_job_dates.job_date) ORDER BY temp_job_dates.job_date ASC) AS temp_job_dates"))
+                ->groupby('temp_job_dates.recruiter_job_id')
                 ->get();
         
         $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);

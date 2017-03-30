@@ -1,18 +1,22 @@
 $(document).ready(function() {
+    $('.modalClick').hide();
     var socket = io(socketUrl);
     socket.on('connect', function () {
         console.log(socket);
-
-        socket.emit('init', {userId : userId, userName : officeName,userType : 2},function(response){
-
+        socket.on('disconnect', function() {
+            $('.modalClick').hide();
+            console.info('Socket disconnect');
         });
-
-        $('.modalClick').click(function(e){
+        socket.emit('init', {userId : userId, userName : officeName,userType : 2},function(response){
+            $('.modalClick').show();
+        });
+        $('.modalClick').off('click');
+        $('.modalClick').on('click',function(e){
             $('#seekerId').val($(this).data('seekerid'));
             $('#chatMsg').val('');
         });
-
-        $('#sendChat').click(function(e){
+        $('#sendChat').off('click');
+        $('#sendChat').on('click',function(e){
             e.preventDefault();
             var chatMsg = $('#chatMsg').val();
             var seekerId = $('#seekerId').val();
@@ -25,11 +29,15 @@ $(document).ready(function() {
                 });
             }
         });
+        socket.off('receiveMessage');
         socket.on('receiveMessage', function (data) {
 
             console.log(data);
         });
-    
+        socket.on('logoutPreviousSession',function(response){
+            $('#logoutMessageBox').modal('show');
+            setTimeout(function(){ window.location.href='/logout'; }, 3000);
+        });
     });
 });
 

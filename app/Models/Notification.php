@@ -29,6 +29,7 @@ class Notification extends Model {
     const JOBSEEKERACCEPTED = 11;
     const JOBSEEKERREJECTED = 12;
     const JOBSEEKERCANCELLED = 13;
+    const REJECTED = 14;
     public static function userNotificationList($reqData)
     {
         $array = array("list" => [], "total" => 0);
