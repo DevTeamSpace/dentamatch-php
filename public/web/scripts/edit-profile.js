@@ -357,8 +357,7 @@ var EditProfileVM = function () {
             d.officeLat(place[0].geometry.location.lat());
             d.officeLng(place[0].geometry.location.lng());
             d.officeAddress(place[0].formatted_address);
-            //lastAddressComponent = place[0].address_components.pop().short_name;
-            lastAddressComponent = place[0].address_components[0].short_name;
+            lastAddressComponent = place[0].address_components.pop().short_name;
             d.officeZipcode(lastAddressComponent);
             $.ajax({
                 url: '/get-location/' + lastAddressComponent,
@@ -372,7 +371,7 @@ var EditProfileVM = function () {
                         d.errors(true);
                     } else if (data == 2) {
                         d.locationError('Job cannot be currently created for this location. We will soon be available in your area.');
-                        d.errors(true);
+                        //d.errors(true);
                     } else {
                         d.errors(false);
                         d.locationError('');
