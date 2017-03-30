@@ -222,7 +222,7 @@ class NotificationServiceProvider extends ServiceProvider {
             foreach ($devices as $deviceData){
                 $insertData[] = ['receiver_id'=>$deviceData->id,
                                 'sender_id'=>$user->id,
-                                'notification_data'=>$message,
+                                'notification_data'=> json_encode(['image'=>"", 'message' => $message]),
                                 'created_at'=>date('Y-m-d h:i:s'),
                                 'notification_type' => Notification::OTHER,
                                 ];
