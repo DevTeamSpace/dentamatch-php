@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
+use Session;
 
 class ResetPasswordController extends Controller {
     /*
@@ -93,8 +94,12 @@ use ResetsPasswords;
             return redirect('/cms/login');
         }
         else {
-            return redirect($this->redirectPath())
-                            ->with('status', trans($response));
+            /*return redirect($this->redirectPath())
+                            ->with('status', trans($response));*/
+            $message = 'Password Reset successfully';
+            Session::flash('success', $message);
+             Auth::logout();
+            return redirect('/');
         }
     }
 }

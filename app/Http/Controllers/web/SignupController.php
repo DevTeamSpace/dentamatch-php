@@ -14,6 +14,7 @@ use Session;
 use Mail;
 use DB;
 use Log;
+use App\Models\UserProfile;
 
 class SignupController extends Controller {
 
@@ -141,21 +142,25 @@ class SignupController extends Controller {
     public function getVerificationCode($code) {
         $user = DB::table('users')
                 ->join('user_groups', 'users.id', '=', 'user_groups.user_id')
-                ->select('user_groups.group_id')
+                ->select('user_groups.group_id','users.id')
                 ->where('users.verification_code', $code)
                 ->first();
+        
         $redirect = 'login';
         try {
             if (isset($user) && !empty($user)) {
                 User::where('verification_code', $code)->update(['is_verified' => 1, 'is_active' => 1]);
                 Session::flash('success', trans("messages.verified_user"));
                 if ($user->group_id == 3) {
+                    $userProfileModel = UserProfile::getUserProfile($user->id);
+                    $msg = "Hi ".$userProfileModel['first_name']." , <br />Your account has been activated successfully. Now you can login in DentaMatch app";
+                    Session::flash('message', $msg);
                     $redirect = 'success-active';
                 }
             } else {
                 Session::flash('message', trans("messages.verified_problem"));
             }
-        } catch (\Exception $e) {
+       } catch (\Exception $e) {
             Log::error($e);
             Session::flash('message', trans("messages.verified_problem"));
         }
