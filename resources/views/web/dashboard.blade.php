@@ -363,6 +363,9 @@ async defer></script>
 
 <script>
     $("#officeLocation").Editor();
+    $("button:submit").click(function(){
+        $('#officeLocation').text($('#officeLocation').Editor("getText"));
+    });
 </script>
 
 <!--&callback=initAutocomplete-->
