@@ -365,6 +365,8 @@ async defer></script>
     $("#officeLocation").Editor();
     $("button:submit").click(function(){
         $('#officeLocation').text($('#officeLocation').Editor("getText"));
+        $('#officeLocation1').text($('#officeLocation1').Editor("getText"));
+        $('#officeLocation2').text($('#officeLocation2').Editor("getText"));
     });
 </script>
 
