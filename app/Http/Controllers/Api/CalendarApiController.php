@@ -93,7 +93,7 @@ class CalendarApiController extends Controller {
      */
     public function postHiredJobsByDate(Request $request)
     {
-        try{
+        //try{
             $this->validate($request, [
                 'jobStartDate' => 'required',
                 'jobEndDate' => 'required'
@@ -105,7 +105,8 @@ class CalendarApiController extends Controller {
                 $jobStartDate = $reqData['jobStartDate'];
                 $jobEndDate = $reqData['jobEndDate'];
                 $listHiredJobs = JobLists::postJobCalendar($userId, $jobStartDate, $jobEndDate);
-                if(count($listHiredJobs['list']) > 0){
+                
+                if(count($listHiredJobs) > 0 && count($listHiredJobs['list']) > 0){
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"),  apiResponse::convertToCamelCase($listHiredJobs));
                 }else{
                     $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
@@ -114,12 +115,12 @@ class CalendarApiController extends Controller {
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             } 
-        } catch (ValidationException $e) {
+       /* } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
             $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
-        }
+        }*/
         return $response;
     }
     
