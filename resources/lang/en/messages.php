@@ -68,7 +68,7 @@ return [
     
     'password_saved_successfully'=>'Password changed successfully',
     'old_not_match'=>'Old Password not matched.',
-    'invalid_cred_or_not_active' => 'Please, provide valid credentials or not active yet.',
+    'invalid_cred_or_not_active' => 'Invalid Credentials or your account is not activated yet',
     'already_register_as_seeker'=>'You are already registered as job seeker',
     'email_already_regisered' => 'Email already registered',
     'confirmation_link'=>'Confirmation Link for new user',
