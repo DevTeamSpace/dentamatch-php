@@ -64,7 +64,6 @@ var OfficeModel = function (data) {
                 me.officeType.push(splitOfficeType[i]);
             }
             me.officeAddress(d.address);
-            //d.phone_no = '('+d.phone_no.substr(0, 3)+')'+d.phone_no.substr(3,3)+' '+d.phone_no.substr(6,10);
             d.phone_no = d.phone_no.replace(/\(/g , "")
             d.phone_no = d.phone_no.replace(/\)/g , "")
             d.phone_no = d.phone_no.replace(/\ /g , "");
