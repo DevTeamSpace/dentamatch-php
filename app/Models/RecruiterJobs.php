@@ -72,6 +72,14 @@ class RecruiterJobs extends Model
                         return  $value['recruiter_job_id'];
                     }, $savedJobsArray);
                 }
+        $rejectedJobs = JobLists::where('seeker_id', '=', $reqData['userId'])->where('applied_status', '=', JobLists::REJECTED)->get();
+        $rejectedJobsArray = array();      
+        if($rejectedJobs){
+                    $rejectedJobsData = $rejectedJobs->toArray();
+                    $rejectedJobsArray = array_map(function ($value) {
+                        return  $value['recruiter_job_id'];
+                    }, $rejectedJobsData);
+                }   
         $latitude = $reqData['lat'];
         $longitude = $reqData['lng'];
         
@@ -91,6 +99,10 @@ class RecruiterJobs extends Model
                 //->where('job_lists.seeker_id','!=', $reqData['userId'])
                 ->where('recruiter_profiles.is_subscribed','=', 1)
                 ->whereIn('job_templates.job_title_id', $reqData['jobTitle']);
+            
+            if(count($rejectedJobsArray) > 0){
+                $searchQueryObj->whereNotIn('recruiter_jobs.id',$rejectedJobsArray);
+            }
 
                 //->whereIn('job_titles.id', $reqData['jobTitle']);
         /*$searchQueryObj = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
