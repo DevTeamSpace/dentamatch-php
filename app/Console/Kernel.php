@@ -31,11 +31,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('user:profileCompletion')->daily();
-        $schedule->command('user:certificateExpiry')->daily();
-        $schedule->command('notify:adminNotification')->daily();
-        $schedule->command('notify:tempJobExpiryNotification')->daily();
-        $schedule->command('notify:tempJobRatingNotification')->daily();
+        $schedule->command('user:profileCompletion')->hourly();
+        $schedule->command('user:certificateExpiry')->hourly();
+        $schedule->command('notify:adminNotification')->hourly();
+        $schedule->command('notify:tempJobExpiryNotification')->hourly();
+        $schedule->command('notify:tempJobRatingNotification')->hourly();
     }
 
     /**
