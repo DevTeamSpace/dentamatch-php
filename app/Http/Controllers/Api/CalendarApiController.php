@@ -93,7 +93,7 @@ class CalendarApiController extends Controller {
      */
     public function postHiredJobsByDate(Request $request)
     {
-        //try{
+        try{
             $this->validate($request, [
                 'jobStartDate' => 'required',
                 'jobEndDate' => 'required'
@@ -115,12 +115,12 @@ class CalendarApiController extends Controller {
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             } 
-       /* } catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
             $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
-        }*/
+        }
         return $response;
     }
     
