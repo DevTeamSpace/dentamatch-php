@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('user:profileCompletion')->everyMinute()->withoutOverlapping();
-        $schedule->command('user:certificateExpiry')->everyMinute()->withoutOverlapping();
+        $schedule->command('user:certificateExpiry')->daily()->withoutOverlapping();
         $schedule->command('notify:adminNotification')->everyMinute()->withoutOverlapping();
         $schedule->command('notify:tempJobExpiryNotification')->everyMinute()->withoutOverlapping();
         $schedule->command('notify:tempJobRatingNotification')->everyMinute()->withoutOverlapping();
