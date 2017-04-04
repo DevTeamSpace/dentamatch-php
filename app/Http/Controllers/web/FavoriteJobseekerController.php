@@ -79,13 +79,13 @@ class FavoriteJobseekerController extends Controller {
                 //}
                 $message = "";
                 if($jobList->applied_status == JobLists::INVITED){
-                    $message = "You have already invited for this job";
+                    $message = "This seeker is already invited for this job";
                 }else if($jobList->applied_status == JobLists::APPLIED){
-                    $message = "You have already applied for this job";
+                    $message = "This seeker is already applied for this job";
                 }else if($jobList->applied_status == JobLists::SHORTLISTED){
-                    $message = "You have already shortlisted for this job";
+                    $message = "This seeker is already shortlisted for this job";
                 }else if($jobList->applied_status == JobLists::HIRED){
-                    $message = "You have already hired for this job";
+                    $message = "This seeker is already hired for this job";
                 }
                 Session::flash('message', $message);
             } else {

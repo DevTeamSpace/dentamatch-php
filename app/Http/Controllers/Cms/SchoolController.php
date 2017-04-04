@@ -118,8 +118,8 @@ class SchoolController extends Controller
         try{
         $schools =  Schooling::leftJoin('schoolings as sc','sc.id','=','schoolings.parent_id')
                     ->select('schoolings.id','schoolings.school_name','schoolings.is_active','schoolings.parent_id','sc.school_name as parent_school_name')
-                    ->orderBy('schoolings.id', 'desc')
-                    ->get();
+                    ->orderBy('schoolings.id', 'desc');
+                    
         
         return Datatables::of($schools)
                 ->removeColumn('id')

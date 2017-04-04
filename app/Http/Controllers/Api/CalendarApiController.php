@@ -105,7 +105,8 @@ class CalendarApiController extends Controller {
                 $jobStartDate = $reqData['jobStartDate'];
                 $jobEndDate = $reqData['jobEndDate'];
                 $listHiredJobs = JobLists::postJobCalendar($userId, $jobStartDate, $jobEndDate);
-                if(count($listHiredJobs['list']) > 0){
+                
+                if(count($listHiredJobs) > 0 && count($listHiredJobs['list']) > 0){
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"),  apiResponse::convertToCamelCase($listHiredJobs));
                 }else{
                     $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));

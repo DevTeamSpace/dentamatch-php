@@ -64,6 +64,9 @@ var OfficeModel = function (data) {
                 me.officeType.push(splitOfficeType[i]);
             }
             me.officeAddress(d.address);
+            d.phone_no = d.phone_no.replace(/\(/g , "")
+            d.phone_no = d.phone_no.replace(/\)/g , "")
+            d.phone_no = d.phone_no.replace(/\ /g , "");
             d.phone_no = '('+d.phone_no.substr(0, 3)+')'+d.phone_no.substr(3,3)+' '+d.phone_no.substr(6,10);
             me.officePhone(d.phone_no);
             me.officeInfo(d.office_info);
@@ -357,8 +360,7 @@ var EditProfileVM = function () {
             d.officeLat(place[0].geometry.location.lat());
             d.officeLng(place[0].geometry.location.lng());
             d.officeAddress(place[0].formatted_address);
-            //lastAddressComponent = place[0].address_components.pop().short_name;
-            lastAddressComponent = place[0].address_components[0].short_name;
+            lastAddressComponent = place[0].address_components.pop().short_name;
             d.officeZipcode(lastAddressComponent);
             $.ajax({
                 url: '/get-location/' + lastAddressComponent,
@@ -372,7 +374,7 @@ var EditProfileVM = function () {
                         d.errors(true);
                     } else if (data == 2) {
                         d.locationError('Job cannot be currently created for this location. We will soon be available in your area.');
-                        d.errors(true);
+                        //d.errors(true);
                     } else {
                         d.errors(false);
                         d.locationError('');
