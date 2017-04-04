@@ -16,7 +16,7 @@ $(document).ready(function() {
     //$.emoticons.define(definition);
     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var loadPage = false;
-    var socket = io(socketUrl);
+    var socket = io(socketUrl,{reconnection:true,reconnectionAttempts:'Infinity'});
     socket.on('connect', function() {
         console.info('Socket ');
         socket.send("Hello World");
