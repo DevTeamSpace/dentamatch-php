@@ -231,11 +231,7 @@
                             <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
                                     data-target="#ShortListMessageBox" data-seekerId="{{ $seeker['seeker_id'] }}">Message</button>
                             @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY && ($seeker['ratingId']!=$seeker['seeker_id']))
-                                @if(!empty($dates[0]) && date("Y-m-d")>$dates[0])
-                                    <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" data-target="#ratesekeerPopup_{{ $seeker['seeker_id'] }}">Rate seeker</button>
-                                @else
-                                    <button type="button" class="btn btn-primary-outline pd-l-30 pd-r-30 mr-r-5">Rate seeker</button>
-                                @endif
+                            <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" data-target="#ratesekeerPopup_{{ $seeker['seeker_id'] }}">Rate seeker</button>
                             @endif
                             @elseif($key==\App\Models\JobLists::SHORTLISTED)
                             <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30" data-toggle="modal" 
