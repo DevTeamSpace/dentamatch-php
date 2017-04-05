@@ -253,6 +253,8 @@ class UserProfileController extends Controller {
         try{
             DB::beginTransaction();
             $allData = json_decode($request->officeDetails);
+            $officeLat = !empty($allData->officeLat) ? (string) $allData->officeLat : 0;
+            $officeLng = !empty($allData->officeLng) ? (string) $allData->officeLng : 0;
             
             $recruiterOfficeObj = RecruiterOffice::where(['id' => (int)$request->officeId])->first();
             
@@ -280,8 +282,8 @@ class UserProfileController extends Controller {
             $recruiterOfficeObj->sunday_end = ($allData->officeWorkingHours->isSundayWork == true) ? date('H:i:s', strtotime($allData->officeWorkingHours->sundayEnd)) : '';
             
             $checkRecruiterOfficeExistence = RecruiterOffice::where([
-                'latitude' => (string)$allData->officeLat,
-                'longitude' => (string)$allData->officeLng,
+                'latitude' => $officeLat,
+                'longitude' => $officeLng,
                 'user_id' => Auth::user()->id
                     ])
                 ->where('id', '!=' ,$request->officeId)->first();
@@ -292,8 +294,8 @@ class UserProfileController extends Controller {
                 $recruiterOfficeObj->address = $allData->officeAddress;
                 $recruiterOfficeObj->office_info = $allData->officeInfo;
                 $recruiterOfficeObj->zipcode = (int)$allData->officeZipcode;
-                $recruiterOfficeObj->latitude = $allData->officeLat;
-                $recruiterOfficeObj->longitude = $allData->officeLng;
+                $recruiterOfficeObj->latitude = $officeLat;
+                $recruiterOfficeObj->longitude = $officeLng;
                 $recruiterOfficeObj->save();
                 
                 $newOfficeType = $this->addOfficeType($recruiterOfficeObj, $allData, $request->new);
