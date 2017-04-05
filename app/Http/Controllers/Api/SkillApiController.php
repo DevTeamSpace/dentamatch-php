@@ -39,7 +39,7 @@ class SkillApiController extends Controller {
                         $UpdatedJobseekerSkills[$skill['skill_id']] = array('skill_id' => $skill['skill_id'] , 'other_skill' => $skill['other_skill']); 
                     }
                 }
-                $skillLists = Skills::where('parent_id',0)->with('children')->get()->toArray();
+                $skillLists = Skills::where('parent_id',0)->where('is_active',1)->with('children')->get()->toArray();
                 $update_skills = array();
                 foreach($skillLists as $key => $skill){
                     if($skill['skill_name'] != 'Other'){
