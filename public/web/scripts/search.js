@@ -11,12 +11,12 @@
         });
 
         $('#availAllBtn').click(function(){
-            $('#avail_all').val(1);
+            var availableAll = ($('#avail_all').val()==1 ? 0 : 1);
             $('.loader-box').show();
             var distance    =   $('#range_slider').val();
             var url         =   window.location.href;
             var mainUrl     =   url.split("?")[0]; 
-            url = mainUrl+'?distance='+distance+'&avail_all=1';
+            url = mainUrl+'?distance='+distance+'&avail_all='+availableAll;
             getArticles(url);
             window.history.pushState("", "", url);
         });
