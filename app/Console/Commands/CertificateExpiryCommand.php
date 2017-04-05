@@ -12,7 +12,7 @@ use App\Providers\NotificationServiceProvider;
 
 class CertificateExpiryCommand extends Command
 {
-    const NOTIFICATION_INTERVAL = 1;
+    const NOTIFICATION_INTERVAL = 30;
     /**
      * The name and signature of the console command.
      *
@@ -25,7 +25,7 @@ class CertificateExpiryCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Cron to send push notification on certificate expiry before 7 days';
+    protected $description = 'Cron to send push notification on certificate expiry before 30 days';
 
     /**
      * Create a new command instance.
