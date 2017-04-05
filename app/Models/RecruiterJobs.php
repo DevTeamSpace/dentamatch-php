@@ -413,8 +413,9 @@ class RecruiterJobs extends Model
                 ->join('recruiter_offices', 'recruiter_offices.id', '=', 'recruiter_jobs.recruiter_office_id')
                 ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
-                ->orderBy('recruiter_jobs.created_at', 'desc');
-        $jobs->select('recruiter_jobs.created_at as job_created_at', 'recruiter_jobs.id as recruiter_job_id', 'recruiter_jobs.job_type');
+                ->join('temp_job_dates', 'temp_job_dates.recruiter_job_id', '=', 'recruiter_jobs.id')
+                ->orderBy('temp_job_dates.job_date', 'desc');
+        $jobs->select('temp_job_dates.job_date as job_created_at', 'recruiter_jobs.id as recruiter_job_id', 'recruiter_jobs.job_type');
         return $jobs->get();
     }
     
