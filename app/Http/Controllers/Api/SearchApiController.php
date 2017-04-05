@@ -12,6 +12,7 @@ use App\Models\UserProfile;
 use App\Models\SearchFilter;
 use App\Models\Notification;
 use App\Models\ChatUserLists;
+use DB;
 use Log;
 
 class SearchApiController extends Controller {
