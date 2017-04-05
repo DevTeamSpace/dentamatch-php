@@ -281,41 +281,52 @@ class SearchApiController extends Controller {
             if($userId > 0){
                 $reqData = $request->all();
                 $notificationDetails = Notification::where('id',$reqData['notificationId'])->first();
-                $jobExists = JobLists::where('seeker_id','=',$userId)
-                                        ->where('recruiter_job_id','=',$notificationDetails->job_list_id)
-                                        ->orderBy('id','desc')
-                                        ->first();
-                if($jobExists){
-                    if($jobExists->applied_status == JobLists::INVITED){
-                        if($reqData['acceptStatus'] == 0){
-                            $jobExists->applied_status = JobLists::CANCELLED;
-                            $msg = trans("messages.job_cancelled_success");
+                
+                $getSeekerDetails = RecruiterJobs::join('job_lists', 'recruiter_jobs.id', '=', 'job_lists.recruiter_job_id')
+                                ->where('job_lists.applied_status',JobLists::HIRED)
+                                ->where('recruiter_jobs.id',$notificationDetails->job_list_id)
+                                ->select('recruiter_jobs.id','recruiter_jobs.no_of_jobs')
+                                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 4, 1,0)) AS hired"))
+                                ->groupby('recruiter_jobs.id')->first();
+                if($getSeekerDetails->hired < $getSeekerDetails->no_of_jobs){
+                    $jobExists = JobLists::where('seeker_id','=',$userId)
+                                            ->where('recruiter_job_id','=',$notificationDetails->job_list_id)
+                                            ->orderBy('id','desc')
+                                            ->first();
+                    if($jobExists){
+                        if($jobExists->applied_status == JobLists::INVITED){
+                            if($reqData['acceptStatus'] == 0){
+                                $jobExists->applied_status = JobLists::CANCELLED;
+                                $msg = trans("messages.job_cancelled_success");
+                            }else{
+                                $jobExists->applied_status = JobLists::HIRED;
+                                $userChat = new ChatUserLists();
+                                $userChat->recruiter_id = $notificationDetails->sender_id;
+                                $userChat->seeker_id = $userId;
+                                $userChat->checkAndSaveUserToChatList();
+                                $msg = trans("messages.job_hired_success");
+                            }
+                            $jobExists->save();
+                            Notification::where('id', $reqData['notificationId'])->update(['seen' => 1]);
+                            if($reqData['acceptStatus'] == 0){
+                                $this->notifyAdmin($notificationDetails->job_list_id,$userId,Notification::JOBSEEKERREJECTED);
+                            }else{
+                                 $this->notifyAdmin($notificationDetails->job_list_id,$userId,Notification::JOBSEEKERACCEPTED);
+                            }
+                            $response = apiResponse::customJsonResponse(1, 200, $msg);
                         }else{
-                            $jobExists->applied_status = JobLists::HIRED;
-                            $userChat = new ChatUserLists();
-                            $userChat->recruiter_id = $notificationDetails->sender_id;
-                            $userChat->seeker_id = $userId;
-                            $userChat->checkAndSaveUserToChatList();
-                            $msg = trans("messages.job_hired_success");
+                            if($jobExists->applied_status == JobLists::HIRED){
+                                $msg = "This seeker is already hired for this job";
+                            }else{
+                                $msg = "This seeker is already cancelled for this job";
+                            }
+                            $response = apiResponse::customJsonResponse(0, 201, $msg);
                         }
-                        $jobExists->save();
-                        Notification::where('id', $reqData['notificationId'])->update(['seen' => 1]);
-                        if($reqData['acceptStatus'] == 0){
-                            $this->notifyAdmin($notificationDetails->job_list_id,$userId,Notification::JOBSEEKERREJECTED);
-                        }else{
-                             $this->notifyAdmin($notificationDetails->job_list_id,$userId,Notification::JOBSEEKERACCEPTED);
-                        }
-                        $response = apiResponse::customJsonResponse(1, 200, $msg);
                     }else{
-                        if($jobExists->applied_status == JobLists::HIRED){
-                            $msg = "This seeker is already hired for this job";
-                        }else{
-                            $msg = "This seeker is already cancelled for this job";
-                        }
-                        $response = apiResponse::customJsonResponse(0, 201, $msg);
+                        $response = apiResponse::customJsonResponse(0, 201, trans("messages.not_invited_job"));
                     }
                 }else{
-                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.not_invited_job"));
+                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.not_job_exists"));
                 }
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
