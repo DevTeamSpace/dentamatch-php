@@ -273,7 +273,7 @@ class SearchApiController extends Controller {
         return $returnResponse;
     }
     public function postAcceptRejectInvitedJob(Request $request){
-        //try{
+        try{
             $this->validate($request, [
                 'notificationId' => 'required',
                 'acceptStatus' => 'required',
@@ -287,11 +287,15 @@ class SearchApiController extends Controller {
                     $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
                   ->where('job_lists.applied_status',JobLists::HIRED);
                 })->where('recruiter_jobs.id',$notificationDetails->job_list_id)
-                  ->select('recruiter_jobs.id','recruiter_jobs.no_of_jobs')
+                  ->select('recruiter_jobs.id','recruiter_jobs.no_of_jobs','recruiter_jobs.job_type')
                   ->addSelect(DB::raw("count(job_lists.id) AS hired"))
                   ->groupby('recruiter_jobs.id')->first()->toarray();
+                $allowaccept = 1;
+                if($getSeekerDetails['hired'] >= $getSeekerDetails['no_of_jobs'] && $getSeekerDetails['job_type'] == 3){
+                    $allowaccept = 0;
+                }
                 
-                if($getSeekerDetails['hired'] < $getSeekerDetails['no_of_jobs']){
+                if($allowaccept == 1){
                     $jobExists = JobLists::where('seeker_id','=',$userId)
                                             ->where('recruiter_job_id','=',$notificationDetails->job_list_id)
                                             ->orderBy('id','desc')
@@ -334,14 +338,14 @@ class SearchApiController extends Controller {
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
-        /*} catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             Log::error($e);
             $messages = json_decode($e->getResponse()->content(), true);
             $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
             Log::error($e);
             $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
-        }*/
+        }
         return $response;
     }
     
