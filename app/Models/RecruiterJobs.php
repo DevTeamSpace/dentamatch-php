@@ -244,7 +244,7 @@ class RecruiterJobs extends Model
                             'recruiter_offices.address','recruiter_offices.zipcode',
                             'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
                             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS job_posted_time_gap"),
-                            DB::raw("GROUP_CONCAT(office_types.officetype_name) AS office_type_name"),
+                            DB::raw("GROUP_CONCAT(office_types.officetype_name SEPARATOR ', ') AS office_type_name"),
                             DB::raw("(
                     3959 * acos (
                       cos ( radians($latitude) )
