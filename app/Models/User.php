@@ -45,4 +45,9 @@ class User extends Authenticatable
         return static::where('is_active',1)->where('group_id',1)
                 ->join('user_groups','users.id','=','user_groups.user_id')->first();
     }
+    
+    public static function getAllUserByRole($groupId) {
+        return static::where('is_active',1)->where('group_id',$groupId)
+                ->join('user_groups','users.id','=','user_groups.user_id')->get();
+    }
 }

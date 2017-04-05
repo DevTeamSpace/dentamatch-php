@@ -12,7 +12,7 @@ use App\Providers\NotificationServiceProvider;
 
 class CertificateExpiryCommand extends Command
 {
-    const NOTIFICATION_INTERVAL = 1;
+    const NOTIFICATION_INTERVAL = 30;
     /**
      * The name and signature of the console command.
      *
@@ -25,7 +25,7 @@ class CertificateExpiryCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Cron to send push notification on certificate expiry before 7 days';
+    protected $description = 'Cron to send push notification on certificate expiry before 30 days';
 
     /**
      * Create a new command instance.
@@ -44,7 +44,7 @@ class CertificateExpiryCommand extends Command
      */
     public function handle()
     {
-        $todayDate = date('Y-m-d', strtotime("-". static::NOTIFICATION_INTERVAL." days"));
+        $todayDate = date('Y-m-d', strtotime("+". static::NOTIFICATION_INTERVAL." days"));
         $adminModel = User::getAdminUserDetailsForNotification();
         $certificateModel = JobseekerCertificates::select('jobseeker_certificates.certificate_id','jobseeker_certificates.user_id','certifications.certificate_name')
                         ->join('certifications', 'certifications.id', '=', 'jobseeker_certificates.certificate_id')
@@ -67,7 +67,6 @@ class CertificateExpiryCommand extends Command
                 
                 $deviceModel = Device::getDeviceToken($userId);
                 if($deviceModel) {
-                    $this->info($userId);
                     NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['message'], $params);
                     $data = ['sender_id'=>$adminModel->id,'receiver_id'=>$userId, 'notification_data'=>$notificationData['message'],'notification_type'=>Notification::OTHER];
                     Notification::createNotification($data);

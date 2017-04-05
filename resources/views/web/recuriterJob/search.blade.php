@@ -17,7 +17,11 @@
 <?php //dd($jobDetails); ?>
     
     <div class="col-sm-12 mr-b-55">
-        <div class="row section-title mr-b-10">Search Preference</div>
+        <div class="row section-title mr-b-10">
+            Search Preference
+            <a href="{{ url('job/details/'.$jobId) }}" class="btn btn-primary pd-l-30 pd-r-30 pull-right">Back</a>
+        </div>
+        
         <div class="jobCatbox row searchpreference">
             <div class="col-sm-4 mr-b-5">
                 <label class="fnt-16 nopadding">Job Title</label>
@@ -53,7 +57,7 @@
         <div class="section-title">{{$seekersList['paginate']->total()}} Results Found</div>
     </div>
     <div class="col-sm-6 text-right mr-b-10 col-xs-6">
-        <button type="button" class="btn btn-primary-outline " id="availAllBtn">Available all days </button>
+        <button type="button" class="btn {{ !empty($searchData['avail_all']) ? "btn-primary" : "btn-primary-outline" }}" id="availAllBtn">Available all days </button>
     </div>
     </div>
 

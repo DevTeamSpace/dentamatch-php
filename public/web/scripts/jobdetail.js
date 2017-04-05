@@ -1,6 +1,6 @@
 $(document).ready(function() {
     $('.modalClick').hide();
-    var socket = io(socketUrl);
+    var socket = io(socketUrl,{reconnection:true,reconnectionAttempts:'Infinity'});
     socket.on('connect', function () {
         console.log(socket);
         socket.on('disconnect', function() {

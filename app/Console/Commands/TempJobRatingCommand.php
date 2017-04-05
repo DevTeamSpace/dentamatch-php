@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Notification;
 use App\Models\TempJobDates;
 use App\Models\Configs;
+use App\Models\JobLists;
 use DB;
 
 class TempJobRatingCommand extends Command
@@ -48,6 +49,7 @@ class TempJobRatingCommand extends Command
             $pushList = [];
             $configModel = Configs::where('config_name', 'RATESEEKER')->first();
             $notificationDays = $configModel->config_data;
+            $cronDate = date('Y-m-d', strtotime("+".$notificationDays." days"));
             
             $senderId = User::getAdminUserDetailsForNotification();
             $tempJobModel = TempJobDates::select('recruiter_jobs.id', 'job_templates.user_id', 'job_titles.jobtitle_name', 'temp_job_dates.job_date')
@@ -55,7 +57,9 @@ class TempJobRatingCommand extends Command
                                 ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
                                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
                                 ->leftjoin('job_lists', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
-                                ->where(DB::raw("DATEDIFF(now(),temp_job_dates.job_date)"),'=', $notificationDays)
+                                ->where('temp_job_dates.job_date','=', $cronDate)
+                                ->where("recruiter_jobs.job_type",  RecruiterJobs::TEMPORARY)
+                                ->where('job_lists.applied_status', JobLists::HIRED)
                                 ->groupBy('temp_job_dates.id')
                                 ->orderBy('temp_job_dates.job_date', 'desc')
                                 ->get();

@@ -68,7 +68,7 @@ return [
     
     'password_saved_successfully'=>'Password changed successfully',
     'old_not_match'=>'Old Password not matched.',
-    'invalid_cred_or_not_active' => 'Please, provide valid credentials or not active yet.',
+    'invalid_cred_or_not_active' => 'Invalid Credentials or your account is not activated yet',
     'already_register_as_seeker'=>'You are already registered as job seeker',
     'email_already_regisered' => 'Email already registered',
     'confirmation_link'=>'Confirmation Link for new user',
@@ -166,5 +166,6 @@ return [
     'invite_sent_success' => 'Invitation sent',
     'already_register_as_recruiter'=>'You are already registered as recruiter',
     'job_not_exists' => 'This job no longer exists',
-    'jobseeker_not_verified' => "You cannot apply for a job as the admin has not yet approved your license"
+    'jobseeker_not_verified' => "You cannot apply for a job as the admin has not yet approved your license",
+    'not_job_exists' => 'This job no longer exists',
 ];

@@ -72,6 +72,14 @@ class RecruiterJobs extends Model
                         return  $value['recruiter_job_id'];
                     }, $savedJobsArray);
                 }
+        $rejectedJobs = JobLists::where('seeker_id', '=', $reqData['userId'])->where('applied_status', '=', JobLists::REJECTED)->get();
+        $rejectedJobsArray = array();      
+        if($rejectedJobs){
+                    $rejectedJobsData = $rejectedJobs->toArray();
+                    $rejectedJobsArray = array_map(function ($value) {
+                        return  $value['recruiter_job_id'];
+                    }, $rejectedJobsData);
+                }   
         $latitude = $reqData['lat'];
         $longitude = $reqData['lng'];
         
@@ -91,6 +99,10 @@ class RecruiterJobs extends Model
                 //->where('job_lists.seeker_id','!=', $reqData['userId'])
                 ->where('recruiter_profiles.is_subscribed','=', 1)
                 ->whereIn('job_templates.job_title_id', $reqData['jobTitle']);
+            
+            if(count($rejectedJobsArray) > 0){
+                $searchQueryObj->whereNotIn('recruiter_jobs.id',$rejectedJobsArray);
+            }
 
                 //->whereIn('job_titles.id', $reqData['jobTitle']);
         /*$searchQueryObj = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
@@ -232,7 +244,7 @@ class RecruiterJobs extends Model
                             'recruiter_offices.address','recruiter_offices.zipcode',
                             'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
                             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS job_posted_time_gap"),
-                            DB::raw("GROUP_CONCAT(office_types.officetype_name) AS office_type_name"),
+                            DB::raw("GROUP_CONCAT(office_types.officetype_name SEPARATOR ', ') AS office_type_name"),
                             DB::raw("(
                     3959 * acos (
                       cos ( radians($latitude) )
@@ -401,8 +413,9 @@ class RecruiterJobs extends Model
                 ->join('recruiter_offices', 'recruiter_offices.id', '=', 'recruiter_jobs.recruiter_office_id')
                 ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
-                ->orderBy('recruiter_jobs.created_at', 'desc');
-        $jobs->select('recruiter_jobs.created_at as job_created_at', 'recruiter_jobs.id as recruiter_job_id', 'recruiter_jobs.job_type');
+                ->join('temp_job_dates', 'temp_job_dates.recruiter_job_id', '=', 'recruiter_jobs.id')
+                ->orderBy('temp_job_dates.job_date', 'desc');
+        $jobs->select('temp_job_dates.job_date as job_created_at', 'recruiter_jobs.id as recruiter_job_id', 'recruiter_jobs.job_type');
         return $jobs->get();
     }
     

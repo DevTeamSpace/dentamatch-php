@@ -1,16 +1,16 @@
-var JobModel = function (data) {
+var JobModel = function (data, tempJobDate) {
         var me = this;
         me.title = ko.observable('');
-        me.start = ko.observable('');
+        me.start = ko.observable();
         me.officeTypeName = ko.observable('');
         me.userDetails = ko.observableArray([]);
         me.officeAddress = ko.observable('');
         me.officeName = ko.observable('');
         me.jobId = ko.observable();
 
-        me._init = function (d) {
+        me._init = function (d, tempJobDate) {
             me.title = d.jobtitle_name;
-            me.start = moment(d.created_at).format('YYYY-MM-DD');
+            me.start = moment(new Date(tempJobDate)).format('YYYY-MM-DD');
             me.officeTypeName = d.office_type_name;
             me.officeAddress = d.address;
             me.officeName = d.office_name;
@@ -23,7 +23,7 @@ var JobModel = function (data) {
                 me.userDetails.push(d.seekers[i]);
             }
         };
-        me._init(data);
+        me._init(data, tempJobDate);
     };
 
     var SeekersModel = function (data, jobId) {
@@ -59,9 +59,25 @@ var JobModel = function (data) {
         me.getCalenderDetails = function () {
             $.get('calender-details', {}, function (d) {
                 if (d.jobs.length !== 0 || typeof d.jobs !== "undefined") {
-                    for (i in d.jobs)
-                        me.datesData.push(new JobModel(d.jobs[i]));
+                    for (i in d.jobs){
+                        tempJobDates = [];
+                        if(d.jobs[i].temp_job_dates){
+                            exploadeTempJobs = d.jobs[i].temp_job_dates.split(',');
+                            for(j in exploadeTempJobs){
+                                if(tempJobDates.indexOf(exploadeTempJobs[j]) < 0){
+                                    tempJobDates.push(exploadeTempJobs[j]);
+                                }
+                            }
+                        }
+                        for(k in tempJobDates){
+                            console.log(tempJobDates[k]);
+                            if(typeof d.jobs[i] != "undefined"){
+                                me.datesData.push(new JobModel(d.jobs[i], tempJobDates[k]));
+                            }
+                        }
+                    }
                 }
+                
                 for(i in me.datesData()){
                     if(me.datesData()[i].userDetails().length != 0){
                         me.datesData()[i].userDetails = me.datesData()[i].userDetails()[0]
@@ -95,7 +111,7 @@ var JobModel = function (data) {
                             }
 
                         }
-                        ;
+                        
                         if (event.userDetails.length > 2) {
                             $(element).find('.fc-content').append('<span class="cir-22">' + (event.userDetails.length - 2) + "+" + '<span>');
                         }
@@ -114,7 +130,7 @@ var JobModel = function (data) {
 
         me.showSeekers = function (d, e, fw) {
             if(fw !== "undefined"){
-                console.log(fw);
+//                console.log(fw);
             }
             me.particularJobTitle('');
             me.particularOfficeName('');
