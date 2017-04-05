@@ -286,9 +286,10 @@ class SearchApiController extends Controller {
                 $getSeekerDetails = RecruiterJobs::join('job_lists', 'recruiter_jobs.id', '=', 'job_lists.recruiter_job_id')
                                 ->where('job_lists.applied_status',JobLists::HIRED)
                                 ->where('recruiter_jobs.id',$notificationDetails->job_list_id)
-                                ->select('recruiter_jobs.id','recruiter_jobs.no_of_jobs')
+                                ->select('recruiter_jobs.ids','recruiter_jobs.no_of_jobs')
                                 ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 4, 1,0)) AS hired"))
-                                ->groupby('recruiter_jobs.id')->first();
+                                ->groupby('recruiter_jobs.id')->get()->toarray();
+                print_r($getSeekerDetails);exit();
                 if($getSeekerDetails->hired < $getSeekerDetails->no_of_jobs){
                     $jobExists = JobLists::where('seeker_id','=',$userId)
                                             ->where('recruiter_job_id','=',$notificationDetails->job_list_id)

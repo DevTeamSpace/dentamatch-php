@@ -10,6 +10,15 @@ var JobModel = function (data) {
 
         me._init = function (d) {
             me.title = d.jobtitle_name;
+            exploadeTempJobs = d.temp_job_dates.split(',');
+            tempJobDates = [];
+            console.log(d.temp_job_dates);
+            for(i in exploadeTempJobs){
+                if(tempJobDates.indexOf(exploadeTempJobs[i]) < 0){
+                    tempJobDates.push(exploadeTempJobs[i]);
+                }
+            }
+            console.log(tempJobDates);
             me.start = moment(d.created_at).format('YYYY-MM-DD');
             me.officeTypeName = d.office_type_name;
             me.officeAddress = d.address;
@@ -89,6 +98,7 @@ var JobModel = function (data) {
                         me.showSeekers(event, fw = 1);
                     },
                     eventRender: function (event, element, view) {
+//                        console.log(event);
                         for (var i = 0; i <= event.userDetails.length - 1; i++) {
                             if (i < 2) {
                                 $(element).find('span.fc-title').after('<img class="img-circle wd-22 mr-r-2" src="' + event.userDetails[i].pic + '" />');
