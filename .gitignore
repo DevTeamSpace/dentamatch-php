@@ -10,3 +10,4 @@ Homestead.yaml
 sonar-project.properties
 /storage
 composer.lock
+/nbproject/private/
