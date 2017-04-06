@@ -131,8 +131,9 @@ class JobSeekerProfiles extends Model
         if(is_object($allProfiles)){
             $allSkills = JobSeekerSkills::getAllJobSeekerSkills($allProfiles->toArray());                  
         }
-        $obj->paginate(RecruiterJobs::LIMIT);
-        DB::enableQueryLog();
+        
+        //$obj->paginate(RecruiterJobs::LIMIT);
+        //DB::enableQueryLog();
 
         return ['allSkills' => $allSkills, 'paginate' => $obj->paginate(RecruiterJobs::LIMIT)];     
     } 
