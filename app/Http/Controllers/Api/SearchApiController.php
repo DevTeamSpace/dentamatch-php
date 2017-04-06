@@ -12,6 +12,9 @@ use App\Models\UserProfile;
 use App\Models\SearchFilter;
 use App\Models\Notification;
 use App\Models\ChatUserLists;
+use App\Models\JobSeekerTempAvailability;
+use App\Models\TempJobDates;
+use App\Models\JobSeekerTempHired;
 use DB;
 use Log;
 
@@ -282,43 +285,72 @@ class SearchApiController extends Controller {
             if($userId > 0){
                 $reqData = $request->all();
                 $notificationDetails = Notification::where('id',$reqData['notificationId'])->first();
-                
-                $getSeekerDetails =  RecruiterJobs::leftJoin('job_lists',function($query) use ($notificationDetails){
-                    $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
-                  ->where('job_lists.applied_status',JobLists::HIRED);
-                })->where('recruiter_jobs.id',$notificationDetails->job_list_id)
-                  ->select('recruiter_jobs.id','recruiter_jobs.no_of_jobs','recruiter_jobs.job_type')
-                  ->addSelect(DB::raw("count(job_lists.id) AS hired"))
-                  ->groupby('recruiter_jobs.id')->first()->toarray();
-                $allowaccept = 1;
-                if($getSeekerDetails['hired'] >= $getSeekerDetails['no_of_jobs'] && $getSeekerDetails['job_type'] == 3){
-                    $allowaccept = 0;
+                $jobDetails = RecruiterJobs::where('recruiter_jobs.id',$notificationDetails->job_list_id);
+                if($jobDetails->job_type == RecruiterJobs::FULLTIME || $jobDetails->job_type == RecruiterJobs::PARTTIME){
+                    $response = $this->acceptRejectJob($userId,$notificationDetails->job_list_id,$reqData['acceptStatus'],$notificationDetails->sender_id,$reqData['notificationId']);
+                }else{
+                    $tempAvailability = JobSeekerTempAvailability::select('temp_job_date')->where('user_id', '=', $userId)->get();
+                    $tempAvailabilityArray = [];
+                    if($tempAvailability){
+                        $tempAvailabilityArray = $tempAvailability->toArray();
+                    }
+                    $tempDates = TempJobDates::where('recruiter_job_id', $notificationDetails->job_list_id)->get()->toArray();
+                    $insertDates = [];
+                    foreach($tempDates as $tempDate){
+                        if(in_array($tempDate,$tempAvailabilityArray)){
+                            $insertDates[] = $tempDate;
+                        }
+                    }
+                    if(count($insertDates) > 0){
+                        foreach($insertDates as $insertDate){
+                            $hiredJobDates[] = array('jobseeker_id' => $userId , 'job_id' => $notificationDetails->job_list_id,'job_date' => $insertDate);
+                        }
+                        JobSeekerTempHired::insert($hiredJobDates);
+                        $response = $this->acceptRejectJob($userId,$notificationDetails->job_list_id,$reqData['acceptStatus'],$notificationDetails->sender_id,$reqData['notificationId']);
+                    }else{
+                        $response = apiResponse::customJsonResponse(0, 201, trans("messages.mismatch_availability"));
+                    }
                 }
                 
-                if($allowaccept == 1){
-                    $jobExists = JobLists::where('seeker_id','=',$userId)
-                                            ->where('recruiter_job_id','=',$notificationDetails->job_list_id)
+            }else{
+                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+            }
+        } catch (ValidationException $e) {
+            Log::error($e);
+            $messages = json_decode($e->getResponse()->content(), true);
+            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+        } catch (\Exception $e) {
+            Log::error($e);
+            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+        return $response;
+    }
+    
+    public function acceptRejectJob($userId,$jobId,$acceptstatus,$recruiterId,$notificationId){
+        $jobExists = JobLists::where('seeker_id','=',$userId)
+                                            ->where('recruiter_job_id','=',$jobId)
                                             ->orderBy('id','desc')
                                             ->first();
-                    if($jobExists){
+        
+        if($jobExists){
                         if($jobExists->applied_status == JobLists::INVITED){
-                            if($reqData['acceptStatus'] == 0){
+                            if($acceptstatus == 0){
                                 $jobExists->applied_status = JobLists::CANCELLED;
                                 $msg = trans("messages.job_cancelled_success");
                             }else{
                                 $jobExists->applied_status = JobLists::HIRED;
                                 $userChat = new ChatUserLists();
-                                $userChat->recruiter_id = $notificationDetails->sender_id;
+                                $userChat->recruiter_id = $recruiterId;
                                 $userChat->seeker_id = $userId;
                                 $userChat->checkAndSaveUserToChatList();
                                 $msg = trans("messages.job_hired_success");
                             }
                             $jobExists->save();
-                            Notification::where('id', $reqData['notificationId'])->update(['seen' => 1]);
-                            if($reqData['acceptStatus'] == 0){
-                                $this->notifyAdmin($notificationDetails->job_list_id,$userId,Notification::JOBSEEKERREJECTED);
+                            Notification::where('id', $notificationId)->update(['seen' => 1]);
+                            if($acceptstatus == 0){
+                                $this->notifyAdmin($jobId,$userId,Notification::JOBSEEKERREJECTED);
                             }else{
-                                 $this->notifyAdmin($notificationDetails->job_list_id,$userId,Notification::JOBSEEKERACCEPTED);
+                                 $this->notifyAdmin($jobId,$userId,Notification::JOBSEEKERACCEPTED);
                             }
                             $response = apiResponse::customJsonResponse(1, 200, $msg);
                         }else{
@@ -332,22 +364,8 @@ class SearchApiController extends Controller {
                     }else{
                         $response = apiResponse::customJsonResponse(0, 201, trans("messages.not_invited_job"));
                     }
-                }else{
-                    Notification::where('id', $reqData['notificationId'])->update(['seen' => 1]);
-                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.not_job_exists"));
-                }
-            }else{
-                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
-            }
-        } catch (ValidationException $e) {
-            Log::error($e);
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
-        } catch (\Exception $e) {
-            Log::error($e);
-            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
-        }
-        return $response;
+                    return $response;
+                
     }
     
     public function notifyAdmin($jobId,$senderId,$notificationType){
