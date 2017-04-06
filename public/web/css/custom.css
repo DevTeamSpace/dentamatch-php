@@ -1432,6 +1432,16 @@ strong {
 
 /*------------report-----*/
 
+.scroll-table {
+    height: 250px;
+    overflow-y: scroll;
+    padding-bottom: 20px;
+}
+
+.scroll-table tr td {
+    border: 0 !important;
+}
+
 #report-table tr th {
     font-weight: 400;
     color: #383838;
@@ -1439,12 +1449,14 @@ strong {
     background: #F3F5F7;
     padding: 10px 12px;
     border-bottom: 0;
+    width: 25%;
 }
 
 #report-table tr td {
     height: 75px;
-    vertical-align: middle;
+    vertical-align: top;
     padding: 10px 12px;
+    width: 25%;
 }
 
 #report-table tr td strong {
