@@ -136,6 +136,8 @@
 <script src="{{asset('web/scripts/bootstrap-select.js')}}"></script>
 <script src="{{asset('web/scripts/bootstrap-datepicker.js')}}"></script>
 <script src="{{asset('web/scripts/bootstrap-multiselect.js')}}"></script>
+<script src ="{{asset('web/plugins/range-slider/js/bootstrap-slider.js')}}"></script>
+
 <script src="{{asset('web/plugins/parsley/js/parsley.js')}}"></script>
 <script src="{{asset('web/scripts/custom.js')}}"></script>
 <script src ="{{asset('web/scripts/web.js')}}"></script>
