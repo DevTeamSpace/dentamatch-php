@@ -333,6 +333,7 @@ class SearchApiController extends Controller {
                         $response = apiResponse::customJsonResponse(0, 201, trans("messages.not_invited_job"));
                     }
                 }else{
+                    Notification::where('id', $reqData['notificationId'])->update(['seen' => 1]);
                     $response = apiResponse::customJsonResponse(0, 201, trans("messages.not_job_exists"));
                 }
             }else{

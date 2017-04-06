@@ -70,8 +70,7 @@
                 Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
                 Route::get('/jobseeker/{seekerId}', 'web\RecruiterJobController@jobSeekerProfile');
                 Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
-                
-                
+                                
                 Route::get('favorite-jobseeker','web\FavoriteJobseekerController@getFavJobseeker');
                 Route::post('invite-jobseeker','web\FavoriteJobseekerController@postInviteJobseeker');              
                 Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
