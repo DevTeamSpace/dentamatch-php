@@ -50,31 +50,40 @@
                                     <tbody>
                                         <!--ko foreach: filterJobList-->
                                         <tr>
-                                            <td><strong data-bind="text: jobTitle"></strong></td>
-                                            <td data-bind="text: noOfJobs"></td>
-                                            <td>
-                                                <!--ko foreach: jobs-->
-                                                <p data-bind="text: jobDate"></p>
-                                                <!--/ko-->
+                                            <td colspan="4">
+                                                <div class="scroll-table">
+                                                    <table class="table ">
+                                                        <td><strong data-bind="text: jobTitle"></strong></td>
+                                                        <td data-bind="text: noOfJobs"></td>
+                                                        <td>
+
+                                                            <!--ko foreach: jobs-->
+                                                            <p data-bind="text: jobDate"></p>
+                                                            <!--/ko-->
+
+                                                        </td>
+                                                        <td>
+                                                            <!--ko foreach: jobs-->
+                                                            <ul class="list-hired">
+                                                                <!--ko foreach: jobSeekers-->
+                                                                <!--ko if: $index() <= 3-->
+                                                                <li>
+                                                                    <a href="#" data-toggle="tooltip" data-placement="bottom" data-bind="attr: {title: seekerName, 'href': seekerUrl}, event: {mouseover: $root.showToolTip}">
+                                                                        <img class="cir-28 img-circle" src="http://placehold.it/28x28" onerror="this.src = 'http://placehold.it/28x28'" data-bind="attr: {src: seekerProfilePic}">
+                                                                    </a>
+                                                                </li>
+                                                                <!--/ko-->
+                                                                <!--/ko-->
+                                                                <!--ko if: extraJobSeekers !== undefined-->
+                                                                <span data-bind="text: extraJobSeekers, click: $root.showHiredJobSeekers"></span>
+                                                                <!--/ko-->
+                                                            </ul>
+                                                            <!--/ko-->
+                                                        </td>
+                                                    </table>
+                                                </div>
                                             </td>
-                                            <td>
-                                                <!--ko foreach: jobs-->
-                                                <ul class="list-hired">
-                                                    <!--ko foreach: jobSeekers-->
-                                                    <!--ko if: $index() <= 3-->
-                                                    <li>
-                                                        <a href="#" data-toggle="tooltip" data-placement="bottom" data-bind="attr: {title: seekerName, 'href': seekerUrl}, event: {mouseover: $root.showToolTip}">
-                                                            <img class="cir-28 img-circle" src="http://placehold.it/28x28" onerror="this.src = 'http://placehold.it/28x28'" data-bind="attr: {src: seekerProfilePic}">
-                                                        </a>
-                                                    </li>
-                                                    <!--/ko-->
-                                                    <!--/ko-->
-                                                    <!--ko if: extraJobSeekers !== undefined-->
-                                                    <span data-bind="text: extraJobSeekers, click: $root.showHiredJobSeekers"></span>
-                                                    <!--/ko-->
-                                                </ul>
-                                                <!--/ko-->
-                                            </td>
+
                                         </tr>
                                         <!--/ko-->
                                     </tbody>
