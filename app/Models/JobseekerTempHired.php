@@ -12,11 +12,7 @@ class JobSeekerTempHired extends Model
     protected $table  = 'jobseeker_temp_hired';
     protected $primaryKey = 'id';
     protected $dates = ['deleted_at'];
-    /**
-    * The attributes that should be hidden for arrays.
-    *
-    * @var array
-    */
+    
     protected $hidden = [
        'updated_at', 'deleted_at'
     ];
