@@ -115,13 +115,6 @@ class RecruiterJobController extends Controller {
                     }
                 }
             }
-            if($request->jobType == RecruiterJobs::TEMPORARY){
-                $isPreviousTempJobRated = JobSeekerTempHired::hiredTempJobPendingRating();
-                if($isPreviousTempJobRated['seekerCount'] != $isPreviousTempJobRated['ratedSeekerCount']) {
-                    Session::flash('message', trans('messages.rate_previous_jobseeker'));
-                    return redirect('createJob/'.$request->templateId);
-                }
-            }
             
             $recruiterJobObj->job_template_id = $request->templateId;
             $recruiterJobObj->recruiter_office_id = $request->dentalOfficeId;
