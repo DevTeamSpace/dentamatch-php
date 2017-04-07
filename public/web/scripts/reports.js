@@ -30,7 +30,7 @@ var SeekerModel = function (d) {
             }
             me.jobDate(moment(d.job_created_at).format('ll'));
             me.jobId(d.recruiter_job_id);
-            $.get('calender-seeker-details', {jobId: me.jobId}, function(d){
+            $.get('calender-seeker-details', {jobId: me.jobId,jobDate: me.jobDate}, function(d){
                 for (i in d.data) {
                     if (d.data[i].length > 4) {
                         me.extraJobSeekers((d.data[i].length - 4).toString() + '+');

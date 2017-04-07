@@ -170,5 +170,6 @@
 </form>
 <!--/search preference list-->
 @endforeach 
-
+<input type="hidden" name="resultCount" id="resultCount" value="{{ $seekersList['paginate']->total() }}">
+    
 {{ $seekersList['paginate']->appends(['distance' => $searchData['distance'],'avail_all' => $searchData['avail_all']])->links() }}

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\web;
 use App\Http\Controllers\Controller;
 use App\Models\RecruiterJobs;
 use App\Models\JobLists;
+use App\Models\JobSeekerTempHired;
 use Log;
 use App\Http\Requests\CalenderSeekerRequest;
 
@@ -26,7 +27,13 @@ class CalenderController extends Controller
             foreach($allJobs as $job){
                 $jobDetails['id'] = $job['id'];
                 $jobDetails['job_type'] = $job['job_type'];
-                $seekers = JobLists::getJobSeekerList($jobDetails, 1);
+                $jobDetails['job_date'] = $request->jobDate;
+            
+                if($job['job_type'] == RecruiterJobs::TEMPORARY)
+                    $seekers = JobSeekerTempHired::getTempJobSeekerList($jobDetails, config('constants.OneValue'));
+                else        
+                    $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));
+                
                 foreach($seekers as &$seeker){
                     foreach($seeker as &$seek){
                         $seek['profile_pic'] = url("image/" . 60 . "/" . 60 . "/?src=" .$seek['profile_pic']);
