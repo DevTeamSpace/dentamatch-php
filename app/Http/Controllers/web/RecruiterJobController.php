@@ -510,7 +510,7 @@ class RecruiterJobController extends Controller {
             $jobObj->is_saturday = config('constants.NullValue');
             $jobObj->is_sunday = config('constants.NullValue');
             $jobObj->no_of_jobs = config('constants.NullValue');
-            TempJobDates::where(['recruiter_job_id' => $allData->jobId])->delete();
+            TempJobDates::where(['recruiter_job_id' => $allData->jobId])->forceDelete();
             if ($jobType == config('constants.PartTimeJob')) {
                 $jobObj->is_monday = in_array("Monday", $allData->partTimeDays) ? 1 : 0;
                 $jobObj->is_tuesday = in_array("Tuesday", $allData->partTimeDays) ? 1 : 0;
