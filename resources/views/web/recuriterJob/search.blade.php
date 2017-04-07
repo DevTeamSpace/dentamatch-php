@@ -85,7 +85,6 @@
 @endsection
 
 @section('js')
-<script src ="{{asset('web/plugins/range-slider/js/bootstrap-slider.js')}}"></script>
 <script type="text/javascript">
     var urlFav = "{{ url('recruiter/markFavourite') }}";
     maxSliderRange = "<?php echo $maxDistance; ?>";
