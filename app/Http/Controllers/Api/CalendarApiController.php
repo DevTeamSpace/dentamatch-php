@@ -7,6 +7,7 @@ use App\Helpers\apiResponse;
 use App\Models\UserProfile;
 use App\Models\JobSeekerTempAvailability;
 use App\Models\JobLists;
+use App\Models\JobSeekerTempHired;
 
 class CalendarApiController extends Controller {
     
@@ -28,8 +29,20 @@ class CalendarApiController extends Controller {
             if($userId > 0){
                 $reqData = $request->all();
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
-               // $jobCount = JobLists::where('seeker_id','=',$userId)->whereIn('applied_status',[JobLists::HIRED])->get()->count();
-               // if($jobCount == 0){
+                $countExistingjob = 0;
+                // check if job seeker is already hired for any temp job for these dates
+                if(count($reqData['tempdDates']) > 0){
+                    $tempAvailability = JobSeekerTempHired::where('jobseeker_id',$userId)->where('job_date','>=',date('Y-m-d'))->select('job_date')->get();
+                    if($tempAvailability){
+                        $tempDate = $tempAvailability->toArray();
+                            foreach($tempDate as $value ){
+                                if(in_array($value['job_date'], $reqData['tempdDates'])){
+                                    $countExistingjob++;
+                                }
+                            }
+                        }
+                    }
+                if($countExistingjob == 0){
                         $userProfileModel->is_fulltime = $reqData['isFulltime'];
                         $userProfileModel->is_parttime_monday = 0;
                         $userProfileModel->is_parttime_tuesday = 0;
@@ -69,9 +82,9 @@ class CalendarApiController extends Controller {
                             }
                         }
                         $response = apiResponse::customJsonResponse(1, 200, trans("messages.availability_add_success"));
-                /*}else{
+                }else{
                         $response = apiResponse::customJsonResponse(0, 201, trans("messages.already_job_availability"));
-                }*/
+                }
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             } 

@@ -182,6 +182,8 @@ class SearchApiController extends Controller {
                     $jobExists->applied_status = JobLists::CANCELLED;
                     $jobExists->cancel_reason = $reqData['cancelReason'];
                     $jobExists->save();
+                    //delete from temp hired jobs
+                    JobSeekerTempHired::where('jobseeker_id',$userId)->forceDelete();
                     $this->notifyAdminForCancelJob($reqData['jobId'],$userId,$reqData['cancelReason']);
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_cancelled_success"));
                 }else{
@@ -290,6 +292,7 @@ class SearchApiController extends Controller {
                 if($jobDetails->job_type == RecruiterJobs::FULLTIME || $jobDetails->job_type == RecruiterJobs::PARTTIME){
                     $response = $this->acceptRejectJob($userId,$notificationDetails->job_list_id,$reqData['acceptStatus'],$notificationDetails->sender_id,$reqData['notificationId']);
                 }else{
+                    // job seeker availability for temp job
                     $tempAvailability = JobSeekerTempAvailability::select('temp_job_date')->where('user_id', '=', $userId)->get();
                     $tempAvailabilityArray = [];
                     $tempJobDates = [];
@@ -300,12 +303,25 @@ class SearchApiController extends Controller {
                         }
                         
                     }
+                    // recruiter temp job dates
                     $tempDates = TempJobDates::where('recruiter_job_id', $notificationDetails->job_list_id)->get()->toArray();
-                    
                     $insertDates = [];
                     foreach($tempDates as $tempDate){
                         if(in_array($tempDate['job_date'],$tempJobDates)){
                             $insertDates[] = $tempDate['job_date'];
+                        }
+                    }
+                    
+                    // check if job seeker is already hired for any temp job for these dates
+                    $tempAvailability = JobSeekerTempHired::where('jobseeker_id',$userId)->select('job_date')->get();
+                    if($tempAvailability){
+                        $tempDate = $tempAvailability->toArray();
+                        if(count($insertDates) > 0){
+                            foreach($tempDate as $value ){
+                                if(in_array($value['job_date'], $insertDates)){
+                                    $insertDates = array_diff($insertDates,[$value['job_date']]);
+                                }
+                            }
                         }
                     }
                     
@@ -330,7 +346,6 @@ class SearchApiController extends Controller {
                                 $response = apiResponse::customJsonResponse(0, 202, trans("messages.not_job_exists"));
                             }
                         }else{
-                            
                             foreach($insertDates as $insertDate){
                                 $hiredJobDates[] = array('jobseeker_id' => $userId , 'job_id' => $notificationDetails->job_list_id,'job_date' => $insertDate);
                             }
