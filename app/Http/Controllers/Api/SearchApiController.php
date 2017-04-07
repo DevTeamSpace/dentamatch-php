@@ -303,6 +303,7 @@ class SearchApiController extends Controller {
                         }
                         
                     }
+                    $userTempAvail = count($tempJobDates);
                     // recruiter temp job dates
                     $tempDates = TempJobDates::where('recruiter_job_id', $notificationDetails->job_list_id)->get()->toArray();
                     $insertDates = [];
@@ -325,6 +326,7 @@ class SearchApiController extends Controller {
                         }
                     }
                     $hiredAval = count($insertDates);
+                    //
                     if(count($insertDates) > 0){
                         $countHiredJobs = JobseekerTempHired::where('job_id',$notificationDetails->job_list_id)
                                 ->whereIn('job_date',$insertDates)
@@ -354,10 +356,14 @@ class SearchApiController extends Controller {
                         }
                         
                     }else{
-                        if($userAvail == $hiredAval){
-                            $response = apiResponse::customJsonResponse(0, 201, trans("messages.mismatch_availability"));
-                        }else{
+                        if($userTempAvail == 0){
                             $response = apiResponse::customJsonResponse(0, 201, trans("messages.set_availability"));
+                        }else{
+                            if($userAvail == $hiredAval){
+                                $response = apiResponse::customJsonResponse(0, 201, trans("messages.mismatch_availability"));
+                            }else{
+                                $response = apiResponse::customJsonResponse(0, 201, trans("messages.set_availability"));
+                            }
                         }
                     }
                 }
