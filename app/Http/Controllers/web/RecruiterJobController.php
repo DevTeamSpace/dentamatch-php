@@ -25,7 +25,6 @@ use App\Http\Requests\CheckJobAppliedOrNotRequest;
 use Session;
 use App\Models\JobRatings;
 use App\Models\SavedJobs;
-use App\Models\JobSeekerTempHired;
 
 class RecruiterJobController extends Controller {
 
@@ -104,12 +103,11 @@ class RecruiterJobController extends Controller {
             }
             
             $tempPrevious = RecruiterJobs::chkTempJObRatingPending();
-            $excludeJob = [];
-            if($tempPrevious){
-                $tempJobLastDate = date("Y-m-d", strtotime("-1 days"));
+            if($tempPrevious) {
                 $tempPreviousArray = $tempPrevious->toArray();
                 foreach($tempPreviousArray as $previousTempJob){
-                    if(($previousTempJob['total_hired'] != $previousTempJob['total_rating']) && ($previousTempJob['job_date'] == $tempJobLastDate)){
+                    $tempJobLastDate = date("Y-m-d", strtotime($previousTempJob['job_date']." +1 days"));
+                    if(($previousTempJob['total_hired'] != $previousTempJob['total_rating']) && ($tempJobLastDate <= date("Y-m-d"))){
                         Session::flash('message', trans('messages.rate_previous_jobseeker'));
                         return redirect('createJob/'.$request->templateId);
                     }
