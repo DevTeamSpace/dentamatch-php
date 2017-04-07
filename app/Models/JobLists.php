@@ -90,90 +90,37 @@ class JobLists extends Model {
     {
         $result = [];
 
-        /*$searchQueryObj = static::leftJoin('temp_job_dates',function($query) use ($jobStartDate,$jobEndDate){
-            $query->on('job_lists.recruiter_job_id','=','temp_job_dates.recruiter_job_id')
-                  ->where(DB::raw("DATE_FORMAT(temp_job_dates.job_date, '%Y-%m-%d')"), ">=",$jobStartDate)
-                  ->where(DB::raw("DATE_FORMAT(temp_job_dates.job_date, '%Y-%m-%d')"), "<=",$jobEndDate);
-            })
-                        ->join('recruiter_jobs','job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
-                        ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
-                        ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
-                        ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
-                        ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
-                        ->where('job_lists.seeker_id','=' ,$userId)
-                        ->where('job_lists.applied_status', '=' , JobLists::HIRED)
-                        ->whereIn('recruiter_jobs.job_type',[2,3])
-                        ->where(DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d')"), ">=",$jobStartDate)
-                        ->where(DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d')"), "<=",$jobEndDate); */ 
-        
-        $searchQueryObj = static::join('recruiter_jobs','job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
-                        ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
-                        ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
-                        ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
-                        ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
-                        ->where('job_lists.seeker_id','=' ,$userId)
-                        ->where('job_lists.applied_status', '=' , JobLists::HIRED)
-                        ->where('recruiter_jobs.job_type',2)
-                        ->where(DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d')"), ">=",$jobStartDate)
-                        ->where(DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d')"), "<=",$jobEndDate);
-        
-         $searchQueryObj->select('job_lists.recruiter_job_id','recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
-                        'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
-                        'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
-                        'recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
-                        'job_titles.jobtitle_name','recruiter_profiles.office_name',
-                        'recruiter_offices.address','recruiter_offices.zipcode',
-                        'recruiter_offices.latitude','recruiter_offices.longitude',
-                        'recruiter_jobs.created_at as job_created_at', 'job_lists.created_at as job_applied_on',
-                        DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
-                        DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d') AS jobDate"));
-         
-         $searchResult = $searchQueryObj->distinct('recruiter_jobs.id')->get();
-         
-         $partJobArray = $searchResult->toArray();
-        
         $tempQueryObj = static::join('recruiter_jobs','job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
+                        ->join('jobseeker_temp_hired', 'jobseeker_temp_hired.job_id', '=', 'recruiter_jobs.id')
                         ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                         ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
                         ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
                         ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
-                        ->join('temp_job_dates','temp_job_dates.recruiter_job_id','=','job_lists.recruiter_job_id')
-                        ->where('job_lists.seeker_id','=' ,$userId)
+                        ->where('jobseeker_temp_hired.jobseeker_id','=' ,$userId)
                         ->where('job_lists.applied_status', '=' , JobLists::HIRED)
-                        ->where('recruiter_jobs.job_type',3)
-                        ->where(DB::raw("DATE_FORMAT(temp_job_dates.job_date, '%Y-%m-%d')"), ">=",$jobStartDate)
-                        ->where(DB::raw("DATE_FORMAT(temp_job_dates.job_date, '%Y-%m-%d')"), "<=",$jobEndDate);
-                        
-        $tempQueryObj->select('job_lists.recruiter_job_id','recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
-                        'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
-                        'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
-                        'recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
-                        'job_titles.jobtitle_name','recruiter_profiles.office_name',
-                        'recruiter_offices.address','recruiter_offices.zipcode',
-                        'recruiter_offices.latitude','recruiter_offices.longitude',
-                        'recruiter_jobs.created_at as job_created_at', 'job_lists.created_at as job_applied_on',
-                        DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
-                        DB::raw("DATE_FORMAT(temp_job_dates.job_date, '%Y-%m-%d') AS tempDates"),
-                        DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d') AS jobDate"));
+                        ->where('recruiter_jobs.job_type', RecruiterJobs::TEMPORARY)
+                        ->where('jobseeker_temp_hired.job_date', ">=",$jobStartDate)
+                        ->where('jobseeker_temp_hired.job_date', "<=",$jobEndDate)
+                        ->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
+                            'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
+                            'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
+                            'recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
+                            'job_titles.jobtitle_name','recruiter_profiles.office_name',
+                            'recruiter_offices.address','recruiter_offices.zipcode',
+                            'recruiter_offices.latitude','recruiter_offices.longitude',
+                            'recruiter_jobs.created_at as job_created_at', 'job_lists.created_at as job_applied_on',
+                            DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
+                            DB::raw("DATE_FORMAT(jobseeker_temp_hired.job_date, '%Y-%m-%d') AS tempDates"),
+                            DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d') AS jobDate")
+                        )
+                        ->get();
         
-        $searchResult = $tempQueryObj->get();
-        
-        $tempJobArray = $searchResult->toArray();
-       
-        /*print_r($partJobArray);
-        
-        print_r($tempJobArray);exit();
-        
-        $searchQueryObj = $searchQueryObj->merge($tempQueryObj);
-        $searchQueryObj = $searchQueryObj->groupby('recruiter_jobs.id')->groupby('tempDates');
-        $searchResult = $searchQueryObj->distinct('recruiter_jobs.id')->get();*/
-        $searchResults = array_merge($partJobArray,$tempJobArray);
-        
-        if ($searchResults) {
-            foreach ($searchResults as $value) {
-                $value['job_type_string'] = static::$jobTypeName[$value['job_type']];
+        if ($tempQueryObj) {
+            $searchResults = $tempQueryObj->toArray();
+            foreach ($searchResults as $key=>$value) {
+                $searchResults[$key]['job_type_string'] = static::$jobTypeName[$value['job_type']];
             }
-            //$list = $searchResult->toArray();
+            
             $result['list'] = $searchResults;
             $result['total'] = count($searchResults);
         }

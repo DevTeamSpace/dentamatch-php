@@ -58,7 +58,7 @@
                                                         <td>
 
                                                             <!--ko foreach: jobs-->
-                                                            <p data-bind="text: jobDate"></p>
+                                                            <p class="mr-b-10" data-bind="text: jobDate"></p>
                                                             <!--/ko-->
 
                                                         </td>
