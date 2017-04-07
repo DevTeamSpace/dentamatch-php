@@ -10,7 +10,7 @@ var JobModel = function (data, tempJobDate) {
 
         me._init = function (d, tempJobDate) {
             me.title = d.jobtitle_name;
-            me.start = moment(new Date(tempJobDate)).format('YYYY-MM-DD');
+            me.start = moment(new Date(tempJobDate)).utc().format('YYYY-MM-DD');
             me.officeTypeName = d.office_type_name;
             me.officeAddress = d.address;
             me.officeName = d.office_name;
