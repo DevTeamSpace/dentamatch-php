@@ -9,7 +9,7 @@ use Auth;
 use DB;
 //use Illuminate\Database\Eloquent\SoftDeletes;
 
-class JobSeekerTempHired extends Model {
+class JobseekerTempHired extends Model {
 
     use Eloquence,
         Mappable;
@@ -20,7 +20,7 @@ class JobSeekerTempHired extends Model {
     protected $hidden = ['created_at', 'updated_at'];
 
     public static function getTempJobSeekerList($job, $forJobType='') {
-        $obj = JobSeekerTempHired::join('recruiter_jobs', 'jobseeker_temp_hired.job_id', '=', 'recruiter_jobs.id')
+        $obj = JobseekerTempHired::join('recruiter_jobs', 'jobseeker_temp_hired.job_id', '=', 'recruiter_jobs.id')
                 ->leftjoin('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                 ->leftjoin('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'jobseeker_temp_hired.jobseeker_id')
                 ->leftjoin('job_titles', 'jobseeker_profiles.job_titile_id', '=', 'job_titles.id')

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\web;
 use App\Http\Controllers\Controller;
 use App\Models\RecruiterJobs;
 use App\Models\JobLists;
-use App\Models\JobSeekerTempHired;
+use App\Models\JobseekerTempHired;
 use Log;
 use App\Http\Requests\CalenderSeekerRequest;
 
@@ -55,7 +55,7 @@ class CalenderController extends Controller
             $jobDetails['job_date'] = $request->jobDate;
             
             if($job['job_type'] == RecruiterJobs::TEMPORARY)
-                $seekers = JobSeekerTempHired::getTempJobSeekerList($jobDetails, config('constants.OneValue'));
+                $seekers = JobseekerTempHired::getTempJobSeekerList($jobDetails, config('constants.OneValue'));
             else        
                 $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));
             
