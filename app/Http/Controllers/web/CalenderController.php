@@ -27,12 +27,6 @@ class CalenderController extends Controller
             foreach($allJobs as $job){
                 $jobDetails['id'] = $job['id'];
                 $jobDetails['job_type'] = $job['job_type'];
-                $jobDetails['job_date'] = $request->jobDate;
-            
-                if($job['job_type'] == RecruiterJobs::TEMPORARY)
-                    $seekers = JobSeekerTempHired::getTempJobSeekerList($jobDetails, config('constants.OneValue'));
-                else        
-                    $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));
                 
                 foreach($seekers as &$seeker){
                     foreach($seeker as &$seek){
@@ -58,6 +52,13 @@ class CalenderController extends Controller
             $jobDetails['id'] = $job['id'];
             $jobDetails['job_type'] = $job['job_type'];
             $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));
+            $jobDetails['job_date'] = $request->jobDate;
+            
+            if($job['job_type'] == RecruiterJobs::TEMPORARY)
+                $seekers = JobSeekerTempHired::getTempJobSeekerList($jobDetails, config('constants.OneValue'));
+            else        
+                $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));
+            
             foreach($seekers as &$seeker){
                 foreach($seeker as &$seek){
                     $seek['profile_pic'] = url("image/" . config('constants.Resolution') . "/" . config('constants.Resolution') . "/?src=" .$seek['profile_pic']);
