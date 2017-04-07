@@ -25,6 +25,7 @@ use App\Http\Requests\CheckJobAppliedOrNotRequest;
 use Session;
 use App\Models\JobRatings;
 use App\Models\SavedJobs;
+use App\Models\JobSeekerTempHired;
 
 class RecruiterJobController extends Controller {
 
@@ -102,15 +103,13 @@ class RecruiterJobController extends Controller {
                 $recruiterJobObj = RecruiterJobs::findById($request->id);
             }
             if($request->jobType == RecruiterJobs::TEMPORARY){
-                $isPreviousTempJobRated = RecruiterJobs::checkPendingTempJobsRating();
+                $isPreviousTempJobRated = JobSeekerTempHired::hiredTempJobPendingRating();
                 if($isPreviousTempJobRated['seekerCount'] != $isPreviousTempJobRated['ratedSeekerCount']) {
                     Session::flash('message', trans('messages.rate_previous_jobseeker'));
                     return redirect('createJob/'.$request->templateId);
                 }
             }
-            /*if($request->jobType == RecruiterJobs::TEMPORARY) {
-                
-            }*/
+            
             $recruiterJobObj->job_template_id = $request->templateId;
             $recruiterJobObj->recruiter_office_id = $request->dentalOfficeId;
             $recruiterJobObj->job_type = $request->jobType;
