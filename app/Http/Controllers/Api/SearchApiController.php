@@ -14,7 +14,7 @@ use App\Models\Notification;
 use App\Models\ChatUserLists;
 use App\Models\JobSeekerTempAvailability;
 use App\Models\TempJobDates;
-use App\Models\JobSeekerTempHired;
+use App\Models\JobseekerTempHired;
 use DB;
 use Log;
 
@@ -183,7 +183,7 @@ class SearchApiController extends Controller {
                     $jobExists->cancel_reason = $reqData['cancelReason'];
                     $jobExists->save();
                     //delete from temp hired jobs
-                    JobSeekerTempHired::where('jobseeker_id',$userId)->forceDelete();
+                    JobseekerTempHired::where('jobseeker_id',$userId)->forceDelete();
                     $this->notifyAdminForCancelJob($reqData['jobId'],$userId,$reqData['cancelReason']);
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_cancelled_success"));
                 }else{
@@ -313,7 +313,7 @@ class SearchApiController extends Controller {
                     }
                     
                     // check if job seeker is already hired for any temp job for these dates
-                    $tempAvailability = JobSeekerTempHired::where('jobseeker_id',$userId)->select('job_date')->get();
+                    $tempAvailability = JobseekerTempHired::where('jobseeker_id',$userId)->select('job_date')->get();
                     if($tempAvailability){
                         $tempDate = $tempAvailability->toArray();
                         if(count($insertDates) > 0){
@@ -326,7 +326,7 @@ class SearchApiController extends Controller {
                     }
                     
                     if(count($insertDates) > 0){
-                        $countHiredJobs = JobSeekerTempHired::where('job_id',$notificationDetails->job_list_id)
+                        $countHiredJobs = JobseekerTempHired::where('job_id',$notificationDetails->job_list_id)
                                 ->whereIn('job_date',$insertDates)
                                 ->select('job_date',DB::raw("count(id) as job_count"))
                                 ->groupby('job_date')->get();
@@ -340,7 +340,7 @@ class SearchApiController extends Controller {
                                 }
                             }
                             if(count($hiredJobDates) > 0){
-                                JobSeekerTempHired::insert($hiredJobDates);
+                                JobseekerTempHired::insert($hiredJobDates);
                                 $response = $this->acceptRejectJob($userId,$notificationDetails->job_list_id,$reqData['acceptStatus'],$notificationDetails->sender_id,$reqData['notificationId']);
                             }else{
                                 $response = apiResponse::customJsonResponse(0, 202, trans("messages.not_job_exists"));
@@ -349,7 +349,7 @@ class SearchApiController extends Controller {
                             foreach($insertDates as $insertDate){
                                 $hiredJobDates[] = array('jobseeker_id' => $userId , 'job_id' => $notificationDetails->job_list_id,'job_date' => $insertDate);
                             }
-                            JobSeekerTempHired::insert($hiredJobDates);
+                            JobseekerTempHired::insert($hiredJobDates);
                             $response = $this->acceptRejectJob($userId,$notificationDetails->job_list_id,$reqData['acceptStatus'],$notificationDetails->sender_id,$reqData['notificationId']);
                         }
                         
