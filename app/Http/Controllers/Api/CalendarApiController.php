@@ -7,7 +7,7 @@ use App\Helpers\apiResponse;
 use App\Models\UserProfile;
 use App\Models\JobSeekerTempAvailability;
 use App\Models\JobLists;
-use App\Models\JobSeekerTempHired;
+use App\Models\JobseekerTempHired;
 
 class CalendarApiController extends Controller {
     
@@ -32,7 +32,7 @@ class CalendarApiController extends Controller {
                 $countExistingjob = 0;
                 // check if job seeker is already hired for any temp job for these dates
                 if(count($reqData['tempdDates']) > 0){
-                    $tempAvailability = JobSeekerTempHired::where('jobseeker_id',$userId)->where('job_date','>=',date('Y-m-d'))->select('job_date')->get();
+                    $tempAvailability = JobseekerTempHired::where('jobseeker_id',$userId)->where('job_date','>=',date('Y-m-d'))->select('job_date')->get();
                     if($tempAvailability){
                         $tempDate = $tempAvailability->toArray();
                             foreach($tempDate as $value ){

@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 
-class JobSeekerTempHired extends Model
+class JobseekerTempHired extends Model
 {
     use SoftDeletes;
   
