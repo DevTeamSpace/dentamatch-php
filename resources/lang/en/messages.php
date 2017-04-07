@@ -168,5 +168,5 @@ return [
     'job_not_exists' => 'This job no longer exists',
     'jobseeker_not_verified' => "You cannot apply for a job as the admin has not yet approved your license",
     'not_job_exists' => 'This Job has been accepted by someone else',
-    'mismatch_availability' => 'Please change your availability',
+    'mismatch_availability' => 'You are currently not available as you have committed for another job',
 ];
