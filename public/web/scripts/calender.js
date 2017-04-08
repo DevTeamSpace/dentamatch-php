@@ -70,6 +70,7 @@ var JobModel = function (data, tempJobDate) {
                             }
                         }
                         for(k in tempJobDates){
+                            console.log(d.jobs[i]);
                             if(typeof d.jobs[i] != "undefined"){
                                 me.datesData.push(new JobModel(d.jobs[i], tempJobDates[k]));
                             }
@@ -77,7 +78,6 @@ var JobModel = function (data, tempJobDate) {
                     }
                 }
                 for(i in me.datesData()){
-
                     if(me.datesData()[i].userDetails().length != 0){
                         me.datesData()[i].userDetails = me.datesData()[i].userDetails()[0]
                     }else{

@@ -409,13 +409,13 @@ class RecruiterJobs extends Model
             ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
             ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id');
         
-            $jobObj->join('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
+            $jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
            
             ->leftJoin('job_lists',function($query){
                 $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
                 ->whereIn('job_lists.applied_status',[RecruiterJobs::HIRED]);
             })
-            ->groupBy('recruiter_profiles.office_name','recruiter_profiles.office_desc','temp_job_dates.job_date');
+            ->groupBy('recruiter_jobs.id','recruiter_profiles.office_name','recruiter_profiles.office_desc');
         $jobObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
             'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday','recruiter_jobs.is_thursday',
             'recruiter_jobs.is_friday','recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
@@ -423,8 +423,9 @@ class RecruiterJobs extends Model
             'recruiter_profiles.office_name','recruiter_profiles.office_desc',
             'recruiter_offices.address','recruiter_offices.zipcode',
             'job_templates.template_name','job_templates.template_desc','job_templates.job_title_id',
-            'job_titles.jobtitle_name','temp_job_dates.job_date as temp_job_dates',
+            'job_titles.jobtitle_name',
             DB::raw("group_concat(job_lists.applied_status) AS applied_status"),
+            DB::raw("group_concat(distinct(temp_job_dates.job_date)) AS temp_job_dates"),
             DB::raw("GROUP_CONCAT(office_types.officetype_name) AS office_type_name"),
             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
     

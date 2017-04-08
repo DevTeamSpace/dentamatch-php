@@ -24,27 +24,35 @@ class CalenderController extends Controller
     public function getCalenderDetails(){
         try{
             $allJobs = RecruiterJobs::getAllTempJobsHired();
+            $result  = [];
             foreach($allJobs as $job){
-                $jobDetails['id'] = $job['id'];
-                $jobDetails['job_type'] = $job['job_type'];
-                $jobDetails['job_date'] = $job['temp_job_dates'];
-
-                if($job['job_type'] == RecruiterJobs::TEMPORARY){
-                    $seekers = JobseekerTempHired::getTempJobSeekerList($jobDetails, config('constants.OneValue'));
-                }
-                else{
-                    $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));
-                }      
+                $tempJobs   =   explode(',', $job['temp_job_dates']);
+                foreach ($tempJobs as $key => $value) {
+                    $innerArray = [];
+                    $jobDetails['id'] = $job['id'];
+                    $jobDetails['job_type'] = $job['job_type'];
+                    $jobDetails['job_date'] = $value;
                     
-
-                foreach($seekers as &$seeker){
-                    foreach($seeker as &$seek){
-                        $seek['profile_pic'] = url("image/" . 60 . "/" . 60 . "/?src=" .$seek['profile_pic']);
+                    if($job['job_type'] == RecruiterJobs::TEMPORARY){
+                        $seekers = JobseekerTempHired::getTempJobSeekerList($jobDetails, config('constants.OneValue'));
                     }
+                    else{
+                        $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));
+                    }
+
+                    foreach($seekers as &$seeker){
+                        foreach($seeker as &$seek){
+                            $seek['profile_pic'] = url("image/" . 60 . "/" . 60 . "/?src=" .$seek['profile_pic']);
+                        }
+                    }
+                    $innerArray =   $job;
+                    $innerArray->temp_job_dates = $value;
+                    $innerArray['seekers'] = $seekers;
+                    $result[] = $innerArray->toArray();
                 }
-                $job['seekers'] = $seekers;
             }
-            $this->response['jobs'] = $allJobs;
+
+            $this->response['jobs'] = $result;
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.calender_details_fetched');
         } catch (\Exception $e) {
