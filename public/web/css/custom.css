@@ -1467,7 +1467,7 @@ strong {
 .list-hired li {
     position: relative;
     display: inline-block;
-    margin-bottom: 5px;
+    /*margin-bottom: 5px;*/
 }
 
 .list-hired li >a {
@@ -1658,3 +1658,5 @@ a.cir-blue:hover {
     display: flex;
     flex-direction: column;
 }
+
+.list-hired{ min-height: 30px;  }

@@ -23,11 +23,20 @@ class CalenderController extends Controller
     
     public function getCalenderDetails(){
         try{
-            $allJobs = RecruiterJobs::getAllTempJobs();
+            $allJobs = RecruiterJobs::getAllTempJobsHired();
             foreach($allJobs as $job){
                 $jobDetails['id'] = $job['id'];
                 $jobDetails['job_type'] = $job['job_type'];
-                $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));
+                $jobDetails['job_date'] = $job['temp_job_dates'];
+
+                if($job['job_type'] == RecruiterJobs::TEMPORARY){
+                    $seekers = JobseekerTempHired::getTempJobSeekerList($jobDetails, config('constants.OneValue'));
+                }
+                else{
+                    $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));
+                }      
+                    
+
                 foreach($seekers as &$seeker){
                     foreach($seeker as &$seek){
                         $seek['profile_pic'] = url("image/" . 60 . "/" . 60 . "/?src=" .$seek['profile_pic']);

@@ -28,7 +28,7 @@ class JobseekerTempHired extends Model {
                 ->where('jobseeker_temp_hired.job_id', $job['id'])
                 ->whereIn('job_lists.applied_status', [JobLists::HIRED]);
         
-        $obj->select('jobseeker_temp_hired.id','job_lists.applied_status', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'jobseeker_profiles.profile_pic', 'job_lists.seeker_id', 'job_titles.jobtitle_name', 'recruiter_jobs.job_type');
+        $obj->select('jobseeker_temp_hired.id','jobseeker_temp_hired.job_date','job_lists.applied_status', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'jobseeker_profiles.profile_pic', 'job_lists.seeker_id', 'job_titles.jobtitle_name', 'recruiter_jobs.job_type');
 
         $obj->leftjoin('job_ratings', function($query) {
                     $query->on('job_ratings.seeker_id', '=', 'jobseeker_temp_hired.jobseeker_id');
