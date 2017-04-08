@@ -208,6 +208,7 @@
                             <span class="dropdown date-drop">
                                 @php 
                                 $seekerDates = explode(',',$seeker['temp_job_dates']);
+                                $seekerDatesCount = count($seekerDates);
                                 @endphp
                                 <span class="dropdown-toggle"  data-toggle="dropdown">
                                     <span class="day-drop">{{ date('l, d M Y',strtotime($seekerDates[0])) }}</span>
@@ -231,7 +232,11 @@
                             <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
                                     data-target="#ShortListMessageBox" data-seekerId="{{ $seeker['seeker_id'] }}">Message</button>
                             @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY && ($seeker['ratingId']!=$seeker['seeker_id']))
-                            <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" data-target="#ratesekeerPopup_{{ $seeker['seeker_id'] }}">Rate seeker</button>
+                                @if(!empty($dates) && date("Y-m-d")>$dates[$seekerDatesCount-1])
+                                    <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" data-target="#ratesekeerPopup_{{ $seeker['seeker_id'] }}">Rate seeker</button>
+                                @else
+                                    <button type="button" class="btn btn-primary-outline pd-l-30 pd-r-30 mr-r-5">Rate seeker</button>
+                                @endif
                             @endif
                             @elseif($key==\App\Models\JobLists::SHORTLISTED)
                             <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30" data-toggle="modal" 
