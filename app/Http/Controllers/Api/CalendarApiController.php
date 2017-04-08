@@ -36,7 +36,10 @@ class CalendarApiController extends Controller {
                 if(count($requestTempDates) > 0){
                     $tempAvailability = JobseekerTempHired::where('jobseeker_id',$userId)->where('job_date','>=',date('Y-m-d'))->select('job_date')->get();
                     if($tempAvailability){
-                        $tempDate = $tempAvailability->toArray();
+                        $tempDateArray = $tempAvailability->toArray();
+                        foreach($tempDateArray as $value) {
+                            $tempDate[] = $value['job_date'];
+                        }
                     }
                 }
                 
