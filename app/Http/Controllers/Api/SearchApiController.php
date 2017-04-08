@@ -355,9 +355,10 @@ class SearchApiController extends Controller {
                         
                     }else{
                         if($userAvail == $hiredAval){
-                            $response = apiResponse::customJsonResponse(0, 201, trans("messages.mismatch_availability"));
-                        }else{
                             $response = apiResponse::customJsonResponse(0, 201, trans("messages.set_availability"));
+                        }else{
+                            $response = apiResponse::customJsonResponse(0, 201, trans("messages.mismatch_availability"));
+                            
                         }
                     }
                 }
