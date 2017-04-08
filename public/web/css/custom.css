@@ -1660,3 +1660,5 @@ a.cir-blue:hover {
 }
 
 .list-hired{ min-height: 30px;  }
+
+.fc-unthemed td.fc-widget-content.fc-today{ border-left: 0px !important;  }
