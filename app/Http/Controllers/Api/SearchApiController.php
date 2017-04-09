@@ -304,6 +304,7 @@ class SearchApiController extends Controller {
                             }
                         
                         }
+                        //Log::info("jobseeker avail temp dates");
                         //Log::info(print_r($tempAvailability->toArray(), true));
                         // recruiter temp job dates
                         $tempDates = TempJobDates::where('recruiter_job_id', $notificationDetails->job_list_id)->get()->toArray();
@@ -315,16 +316,19 @@ class SearchApiController extends Controller {
                                 }
                             }
                         }
+                        //Log::info("temp dates");
                         //Log::info(print_r($tempDates, true));
                         if(empty($insertDates)) {
                            return apiResponse::customJsonResponse(0, 201, trans("messages.set_availability"));
                         }
+                        //Log::info("available days");
                         //Log::info(print_r($insertDates, true));
                         // no of dates user is available wrt to the temp job dates
                         $userAvail = count($insertDates);
                         //Log::info("Availiabilty Count : ".$userAvail);
                         // check if job seeker is already hired for any temp job for these dates
                         $tempAvailability = JobseekerTempHired::where('jobseeker_id',$userId)->select('job_date')->get();
+                        //Log::info("hired days");
                         //Log::info(print_r($tempAvailability->toArray(), true));
                         if($tempAvailability){
                             $tempDate = $tempAvailability->toArray();
@@ -339,6 +343,7 @@ class SearchApiController extends Controller {
                         
                         //no of dates user is available wrt to the temp job dates except the hired dates 
                         $hiredAval = count($insertDates);
+                        //Log::info("final days");
                         //Log::info(print_r($insertDates, true));
                         //Log::info("After Hired Count : ".$userAvail);
                         if(!empty($insertDates)) {
@@ -352,7 +357,7 @@ class SearchApiController extends Controller {
                             if(!empty($countJobArray)){
                                 $hiredJobDates = [];
                                 foreach($countJobArray as $value){
-                                    if($value['job_count'] > $jobDetails->no_of_jobs){
+                                    if($value['job_count'] < $jobDetails->no_of_jobs){
                                         $hiredJobDates[] = array('jobseeker_id' => $userId , 'job_id' => $notificationDetails->job_list_id,'job_date' => $value['job_date']);
                                     }
                                 }
