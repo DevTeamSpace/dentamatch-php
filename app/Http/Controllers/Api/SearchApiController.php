@@ -312,13 +312,15 @@ class SearchApiController extends Controller {
                                 $insertDates[] = $tempDate['job_date'];
                             }
                         }
+                        
+                        // no of dates user is available wrt to the temp job dates
                         $userAvail = count($insertDates);
                         
                         // check if job seeker is already hired for any temp job for these dates
                         $tempAvailability = JobseekerTempHired::where('jobseeker_id',$userId)->select('job_date')->get();
                         if($tempAvailability){
                             $tempDate = $tempAvailability->toArray();
-                            if(count($insertDates) > 0){
+                            if(!empty($insertDates) && !empty($tempDate)){
                                 foreach($tempDate as $value ){
                                     if(in_array($value['job_date'], $insertDates)){
                                         $insertDates = array_diff($insertDates,[$value['job_date']]);
@@ -326,15 +328,16 @@ class SearchApiController extends Controller {
                                 }
                             }
                         }
+                        
+                        //nof of dates user is available wrt to the temp job dates except the hired dates 
                         $hiredAval = count($insertDates);
                         if(count($insertDates) > 0){
                             $countHiredJobs = JobseekerTempHired::where('job_id',$notificationDetails->job_list_id)
                                     ->whereIn('job_date',$insertDates)
                                     ->select('job_date',DB::raw("count(id) as job_count"))
                                     ->groupby('job_date')->get();
-                        
-                            if(count($countHiredJobs->toArray()) > 0){
-                                $countJobArray = $countHiredJobs->toArray();
+                            $countJobArray = $countHiredJobs->toArray();
+                            if(count($countJobArray) > 0){
                                 $hiredJobDates = [];
                                 foreach($countJobArray as $value){
                                     if($value['job_count'] > $jobDetails->no_of_jobs){
