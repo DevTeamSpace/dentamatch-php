@@ -292,74 +292,79 @@ class SearchApiController extends Controller {
                 if($jobDetails->job_type == RecruiterJobs::FULLTIME || $jobDetails->job_type == RecruiterJobs::PARTTIME){
                     $response = $this->acceptRejectJob($userId,$notificationDetails->job_list_id,$reqData['acceptStatus'],$notificationDetails->sender_id,$reqData['notificationId']);
                 }else{
-                    // job seeker availability for temp job
-                    $tempAvailability = JobSeekerTempAvailability::select('temp_job_date')->where('user_id', '=', $userId)->get();
-                    $tempAvailabilityArray = [];
-                    $tempJobDates = [];
-                    if($tempAvailability){
-                        $tempAvailabilityArray = $tempAvailability->toArray();
-                        foreach($tempAvailabilityArray as $value){
-                            $tempJobDates[] = $value['temp_job_date'];
-                        }
+                    if($reqData['acceptStatus']==1) 
+                    {
+                        // job seeker availability for temp job
+                        $tempAvailability = JobSeekerTempAvailability::select('temp_job_date')->where('user_id', '=', $userId)->get();
+                        $tempJobDates = [];
+                        if($tempAvailability){
+                            $tempAvailabilityArray = $tempAvailability->toArray();
+                            foreach($tempAvailabilityArray as $value){
+                                $tempJobDates[] = $value['temp_job_date'];
+                            }
                         
-                    }
-                    // recruiter temp job dates
-                    $tempDates = TempJobDates::where('recruiter_job_id', $notificationDetails->job_list_id)->get()->toArray();
-                    $insertDates = [];
-                    foreach($tempDates as $tempDate){
-                        if(in_array($tempDate['job_date'],$tempJobDates)){
-                            $insertDates[] = $tempDate['job_date'];
                         }
-                    }
-                    $userAvail = count($insertDates);
-                    // check if job seeker is already hired for any temp job for these dates
-                    $tempAvailability = JobseekerTempHired::where('jobseeker_id',$userId)->select('job_date')->get();
-                    if($tempAvailability){
-                        $tempDate = $tempAvailability->toArray();
+                        // recruiter temp job dates
+                        $tempDates = TempJobDates::where('recruiter_job_id', $notificationDetails->job_list_id)->get()->toArray();
+                        $insertDates = [];
+                        foreach($tempDates as $tempDate){
+                            if(in_array($tempDate['job_date'],$tempJobDates)){
+                                $insertDates[] = $tempDate['job_date'];
+                            }
+                        }
+                        $userAvail = count($insertDates);
+                        
+                        // check if job seeker is already hired for any temp job for these dates
+                        $tempAvailability = JobseekerTempHired::where('jobseeker_id',$userId)->select('job_date')->get();
+                        if($tempAvailability){
+                            $tempDate = $tempAvailability->toArray();
+                            if(count($insertDates) > 0){
+                                foreach($tempDate as $value ){
+                                    if(in_array($value['job_date'], $insertDates)){
+                                        $insertDates = array_diff($insertDates,[$value['job_date']]);
+                                    }
+                                }
+                            }
+                        }
+                        $hiredAval = count($insertDates);
                         if(count($insertDates) > 0){
-                            foreach($tempDate as $value ){
-                                if(in_array($value['job_date'], $insertDates)){
-                                    $insertDates = array_diff($insertDates,[$value['job_date']]);
-                                }
-                            }
-                        }
-                    }
-                    $hiredAval = count($insertDates);
-                    if(count($insertDates) > 0){
-                        $countHiredJobs = JobseekerTempHired::where('job_id',$notificationDetails->job_list_id)
-                                ->whereIn('job_date',$insertDates)
-                                ->select('job_date',DB::raw("count(id) as job_count"))
-                                ->groupby('job_date')->get();
+                            $countHiredJobs = JobseekerTempHired::where('job_id',$notificationDetails->job_list_id)
+                                    ->whereIn('job_date',$insertDates)
+                                    ->select('job_date',DB::raw("count(id) as job_count"))
+                                    ->groupby('job_date')->get();
                         
-                        if(count($countHiredJobs->toArray()) > 0){
-                            $countJobArray = $countHiredJobs->toArray();
-                            $hiredJobDates = [];
-                            foreach($countJobArray as $value){
-                                if($value['job_count'] > $jobDetails->no_of_jobs){
-                                    $hiredJobDates[] = array('jobseeker_id' => $userId , 'job_id' => $notificationDetails->job_list_id,'job_date' => $value['job_date']);
+                            if(count($countHiredJobs->toArray()) > 0){
+                                $countJobArray = $countHiredJobs->toArray();
+                                $hiredJobDates = [];
+                                foreach($countJobArray as $value){
+                                    if($value['job_count'] > $jobDetails->no_of_jobs){
+                                        $hiredJobDates[] = array('jobseeker_id' => $userId , 'job_id' => $notificationDetails->job_list_id,'job_date' => $value['job_date']);
+                                    }
                                 }
-                            }
-                            if(count($hiredJobDates) > 0){
+                                if(count($hiredJobDates) > 0){
+                                    JobseekerTempHired::insert($hiredJobDates);
+                                    $response = $this->acceptRejectJob($userId,$notificationDetails->job_list_id,$reqData['acceptStatus'],$notificationDetails->sender_id,$reqData['notificationId']);
+                                }else{
+                                    $response = apiResponse::customJsonResponse(0, 202, trans("messages.not_job_exists"));
+                                }
+                            }else{
+                                foreach($insertDates as $insertDate){
+                                    $hiredJobDates[] = array('jobseeker_id' => $userId , 'job_id' => $notificationDetails->job_list_id,'job_date' => $insertDate);
+                                }
                                 JobseekerTempHired::insert($hiredJobDates);
                                 $response = $this->acceptRejectJob($userId,$notificationDetails->job_list_id,$reqData['acceptStatus'],$notificationDetails->sender_id,$reqData['notificationId']);
-                            }else{
-                                $response = apiResponse::customJsonResponse(0, 202, trans("messages.not_job_exists"));
                             }
-                        }else{
-                            foreach($insertDates as $insertDate){
-                                $hiredJobDates[] = array('jobseeker_id' => $userId , 'job_id' => $notificationDetails->job_list_id,'job_date' => $insertDate);
-                            }
-                            JobseekerTempHired::insert($hiredJobDates);
-                            $response = $this->acceptRejectJob($userId,$notificationDetails->job_list_id,$reqData['acceptStatus'],$notificationDetails->sender_id,$reqData['notificationId']);
-                        }
                         
-                    }else{
-                        if($userAvail == $hiredAval){
-                            $response = apiResponse::customJsonResponse(0, 201, trans("messages.set_availability"));
                         }else{
-                            $response = apiResponse::customJsonResponse(0, 201, trans("messages.mismatch_availability"));
+                            if($userAvail == $hiredAval){
+                                $response = apiResponse::customJsonResponse(0, 201, trans("messages.set_availability"));
+                            }else{
+                                $response = apiResponse::customJsonResponse(0, 201, trans("messages.mismatch_availability"));
                             
+                            }
                         }
+                    } else {
+                        $response = $this->notifyAdmin($notificationDetails->job_list_id,$userId,Notification::JOBSEEKERREJECTED);
                     }
                 }
                 
