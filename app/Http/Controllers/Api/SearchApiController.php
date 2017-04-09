@@ -364,7 +364,7 @@ class SearchApiController extends Controller {
                             }
                         }
                     } else {
-                        $response = $this->notifyAdmin($notificationDetails->job_list_id,$userId,Notification::JOBSEEKERREJECTED);
+                        $response = $this->acceptRejectJob($userId,$notificationDetails->job_list_id,$reqData['acceptStatus'],$notificationDetails->sender_id,$reqData['notificationId']);
                     }
                 }
                 
