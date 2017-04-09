@@ -304,20 +304,28 @@ class SearchApiController extends Controller {
                             }
                         
                         }
+                        //Log::info(print_r($tempAvailability->toArray(), true));
                         // recruiter temp job dates
                         $tempDates = TempJobDates::where('recruiter_job_id', $notificationDetails->job_list_id)->get()->toArray();
                         $insertDates = [];
-                        foreach($tempDates as $tempDate){
-                            if(in_array($tempDate['job_date'],$tempJobDates)){
-                                $insertDates[] = $tempDate['job_date'];
+                        if($tempDates) {
+                            foreach($tempDates as $tempDate){
+                                if(in_array($tempDate['job_date'],$tempJobDates)){
+                                    $insertDates[] = $tempDate['job_date'];
+                                }
                             }
                         }
-                        
+                        //Log::info(print_r($tempDates, true));
+                        if(empty($insertDates)) {
+                           return apiResponse::customJsonResponse(0, 201, trans("messages.set_availability"));
+                        }
+                        //Log::info(print_r($insertDates, true));
                         // no of dates user is available wrt to the temp job dates
                         $userAvail = count($insertDates);
-                        
+                        //Log::info("Availiabilty Count : ".$userAvail);
                         // check if job seeker is already hired for any temp job for these dates
                         $tempAvailability = JobseekerTempHired::where('jobseeker_id',$userId)->select('job_date')->get();
+                        //Log::info(print_r($tempAvailability->toArray(), true));
                         if($tempAvailability){
                             $tempDate = $tempAvailability->toArray();
                             if(!empty($insertDates) && !empty($tempDate)){
@@ -329,22 +337,28 @@ class SearchApiController extends Controller {
                             }
                         }
                         
-                        //nof of dates user is available wrt to the temp job dates except the hired dates 
+                        //no of dates user is available wrt to the temp job dates except the hired dates 
                         $hiredAval = count($insertDates);
-                        if(count($insertDates) > 0){
+                        //Log::info(print_r($insertDates, true));
+                        //Log::info("After Hired Count : ".$userAvail);
+                        if(!empty($insertDates)) {
                             $countHiredJobs = JobseekerTempHired::where('job_id',$notificationDetails->job_list_id)
                                     ->whereIn('job_date',$insertDates)
                                     ->select('job_date',DB::raw("count(id) as job_count"))
                                     ->groupby('job_date')->get();
                             $countJobArray = $countHiredJobs->toArray();
-                            if(count($countJobArray) > 0){
+                            //Log::info("Temp Job By Date");
+                            //Log::info(print_r($countJobArray, true));
+                            if(!empty($countJobArray)){
                                 $hiredJobDates = [];
                                 foreach($countJobArray as $value){
                                     if($value['job_count'] > $jobDetails->no_of_jobs){
                                         $hiredJobDates[] = array('jobseeker_id' => $userId , 'job_id' => $notificationDetails->job_list_id,'job_date' => $value['job_date']);
                                     }
                                 }
-                                if(count($hiredJobDates) > 0){
+                                //Log::info("hiredJobDates");
+                                //Log::info(print_r($hiredJobDates, true));
+                                if(!empty($hiredJobDates)){
                                     JobseekerTempHired::insert($hiredJobDates);
                                     $response = $this->acceptRejectJob($userId,$notificationDetails->job_list_id,$reqData['acceptStatus'],$notificationDetails->sender_id,$reqData['notificationId']);
                                 }else{
@@ -354,14 +368,19 @@ class SearchApiController extends Controller {
                                 foreach($insertDates as $insertDate){
                                     $hiredJobDates[] = array('jobseeker_id' => $userId , 'job_id' => $notificationDetails->job_list_id,'job_date' => $insertDate);
                                 }
+                                //Log::info("All insert dates");
+                                //Log::info(print_r($insertDates, true));
+                                //Log::info(print_r($hiredJobDates, true));
                                 JobseekerTempHired::insert($hiredJobDates);
                                 $response = $this->acceptRejectJob($userId,$notificationDetails->job_list_id,$reqData['acceptStatus'],$notificationDetails->sender_id,$reqData['notificationId']);
                             }
                         
                         }else{
                             if($userAvail == $hiredAval){
+                                //Log::info("both same");
                                 $response = apiResponse::customJsonResponse(0, 201, trans("messages.set_availability"));
                             }else{
+                                 //Log::info(trans("messages.mismatch_availability"));
                                 $response = apiResponse::customJsonResponse(0, 201, trans("messages.mismatch_availability"));
                             
                             }
@@ -380,7 +399,7 @@ class SearchApiController extends Controller {
             $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
             Log::error($e);
-            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getTraceAsString()]);
         }
         return $response;
     }
