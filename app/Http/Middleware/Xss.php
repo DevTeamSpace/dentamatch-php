@@ -23,8 +23,9 @@ class Xss
         $input = $request->all();
 
         array_walk_recursive($input, function(&$input) {
-                $input = htmlspecialchars(strip_tags($input));
-            });
+            if(!array($input))
+                $input = htmlspecialchars($input);
+});
 
         $request->merge($input);
 
