@@ -108,7 +108,7 @@ class RecruiterJobController extends Controller {
                 $tempPreviousArray = $tempPrevious->toArray();
                 foreach($tempPreviousArray as $previousTempJob){
                     $tempJobLastDate = date("Y-m-d", strtotime($previousTempJob['job_date']." +1 days"));
-                    if(($previousTempJob['total_hired'] != $previousTempJob['total_rating']) && ($tempJobLastDate <= date("Y-m-d"))){
+                    if(($previousTempJob['total_hired'] != $previousTempJob['total_rating']) && ($tempJobLastDate >= date("Y-m-d"))){
                         Session::flash('message', trans('messages.rate_previous_jobseeker'));
                         return redirect('createJob/'.$request->templateId);
                     }
