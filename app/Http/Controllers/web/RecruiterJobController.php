@@ -608,7 +608,7 @@ class RecruiterJobController extends Controller {
                 }
                 if(!empty($pushList)) {
                     foreach($pushList as $value) {
-                        $message = "Delete job notification | ".$value['office_name']." has deleted the temporary job vacancy for ".$value['jobtitle_name'];
+                        $message = "Delete job notification | ".$value['office_name']." has deleted the ".strtolower(RecruiterJobs::$jobTypeName[$value['job_type']])." job vacancy for ".$value['jobtitle_name'];
                         $userId = $value['seeker_id'];
                         $senderId = $value['user_id'];
 
