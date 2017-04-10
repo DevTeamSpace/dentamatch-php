@@ -356,9 +356,20 @@ class SearchApiController extends Controller {
                             Log::info(print_r($countJobArray, true));
                             if(!empty($countJobArray)){
                                 $hiredJobDates = [];
+                                $remainingHiredDate = [];
+                                $hiredJobDateAfterCount = [];
                                 foreach($countJobArray as $value){
                                     if($value['job_count'] < $jobDetails->no_of_jobs){
                                         $hiredJobDates[] = array('jobseeker_id' => $userId , 'job_id' => $notificationDetails->job_list_id,'job_date' => $value['job_date']);
+                                        $hiredJobDateAfterCount[] = $value['job_date'];
+                                    }
+                                }
+                                
+                                $remainingHiredDate = array_diff($insertDates, $hiredJobDateAfterCount);
+                                if(!empty($remainingHiredDate)) {
+                                    foreach($remainingHiredDate as $value){
+                                            $hiredJobDates[] = array('jobseeker_id' => $userId , 'job_id' => $notificationDetails->job_list_id,'job_date' => $value);
+                                        }
                                     }
                                 }
                                 Log::info("hiredJobDates");
