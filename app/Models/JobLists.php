@@ -90,8 +90,8 @@ class JobLists extends Model {
     {
         $result = [];
 
-        $tempQueryObj = static::join('recruiter_jobs','job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
-                        ->join('jobseeker_temp_hired', 'jobseeker_temp_hired.job_id', '=', 'recruiter_jobs.id')
+        $tempQueryObj = JobseekerTempHired::join('recruiter_jobs', 'recruiter_jobs.id', '=','jobseeker_temp_hired.job_id')
+                        ->join('job_lists', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
                         ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                         ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
                         ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
@@ -113,6 +113,10 @@ class JobLists extends Model {
                             DB::raw("DATE_FORMAT(jobseeker_temp_hired.job_date, '%Y-%m-%d') AS tempDates"),
                             DB::raw("DATE_FORMAT(job_lists.updated_at, '%Y-%m-%d') AS jobDate")
                         )
+                        ->groupBy('recruiter_jobs.id')
+                        ->groupBy('jobseeker_temp_hired.jobseeker_id')
+                        ->groupBy('jobseeker_temp_hired.job_date')
+                        ->orderBy('jobseeker_temp_hired.job_date')
                         ->get();
         
         if ($tempQueryObj) {

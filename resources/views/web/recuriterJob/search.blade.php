@@ -6,7 +6,7 @@
 @endsection
 @section('content')
 
-<div id="ajaxData" class="container padding-container-template ">
+<div class="container padding-container-template ">
     <!--breadcrumb-->
     <ul class="breadcrumb ">
         <li><a href="{{ url('job/lists') }}">Jobs Listing</a></li>
@@ -54,7 +54,7 @@
 
     <div class="row sec-mob">
     <div class="col-sm-6 mr-b-10 col-xs-6">
-        <div class="section-title">{{$seekersList['paginate']->total()}} Results Found</div>
+        <div class="section-title" id="resultFound">{{$seekersList['paginate']->total()}} Results Found</div>
     </div>
     <div class="col-sm-6 text-right mr-b-10 col-xs-6">
         <button type="button" class="btn {{ !empty($searchData['avail_all']) ? "btn-primary" : "btn-primary-outline" }}" id="availAllBtn">Available all days </button>
@@ -62,7 +62,7 @@
     </div>
 
     @if(count($seekersList['paginate'])>0)
-        <div class="jobseeker-statebox">
+        <div class="jobseeker-statebox"  id="ajaxData">
             @include('web.recuriterJob.seekersData')
         </div>
     @else

@@ -48,6 +48,7 @@
         <span class="dropdown date-drop">
             @php 
             $dates = explode(',',$job['temp_job_dates']);
+            $seekerDatesCount = count($dates);
             @endphp
             <span class=" dropdown-toggle"  data-toggle="dropdown"><span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
             <span class="caret"></span></span>
@@ -213,8 +214,8 @@
                                     <span class="day-drop">{{ date('l, d M Y',strtotime($seekerDates[0])) }}</span>
                                     <span class="caret"></span></span>
                                 <ul class="dropdown-menu">
-                                    @foreach ($seekerDates as $date)
-                                    <li>{{ date('l, d M Y',strtotime($date)) }}</li>
+                                    @foreach ($seekerDates as $sdate)
+                                    <li>{{ date('l, d M Y',strtotime($sdate)) }}</li>
                                     @endforeach
                                 </ul>
                             </span>
@@ -231,7 +232,11 @@
                             <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
                                     data-target="#ShortListMessageBox" data-seekerId="{{ $seeker['seeker_id'] }}">Message</button>
                             @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY && ($seeker['ratingId']!=$seeker['seeker_id']))
-                            <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" data-target="#ratesekeerPopup_{{ $seeker['seeker_id'] }}">Rate seeker</button>
+                                @if(!empty($dates) && date("Y-m-d")>$dates[$seekerDatesCount-1])
+                                    <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" data-target="#ratesekeerPopup_{{ $seeker['seeker_id'] }}">Rate seeker</button>
+                                @else
+                                    <button type="button" class="btn btn-primary-outline pd-l-30 pd-r-30 mr-r-5">Rate seeker</button>
+                                @endif
                             @endif
                             @elseif($key==\App\Models\JobLists::SHORTLISTED)
                             <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30" data-toggle="modal" 
@@ -241,7 +246,7 @@
                             <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::REJECTED }}" class="btn btn-link  mr-r-5">Reject</button>
                             <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::SHORTLISTED }}" class="btn btn-primary pd-l-30 pd-r-30 ">Shortlist</button>
                             @elseif($key==\App\Models\JobLists::INVITED)
-                            <button type="submit" class="btn btn-primary-outline pd-l-30 pd-r-30 ">Invited</button>
+                            <button type="button" class="btn btn-primary-outline pd-l-30 pd-r-30 ">Invited</button>
                             @endif
                         </form>
                     </div>

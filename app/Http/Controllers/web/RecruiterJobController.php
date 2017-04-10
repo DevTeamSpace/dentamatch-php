@@ -25,6 +25,7 @@ use App\Http\Requests\CheckJobAppliedOrNotRequest;
 use Session;
 use App\Models\JobRatings;
 use App\Models\SavedJobs;
+use App\Models\JobseekerTempHired;
 
 class RecruiterJobController extends Controller {
 
@@ -73,7 +74,7 @@ class RecruiterJobController extends Controller {
             $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
 
             if ($request->ajax()) {
-                return view('web.recuriterJob.search', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'maxDistance'=>$maxDistance, 'jobTemplateModalData'=>$jobTemplateModalData])->render();  
+                return view('web.recuriterJob.seekersData', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'maxDistance'=>$maxDistance, 'jobTemplateModalData'=>$jobTemplateModalData])->render();  
             }
 
             return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData', 'jobId','maxDistance', 'jobTemplateModalData'));
@@ -634,6 +635,7 @@ class RecruiterJobController extends Controller {
                 RecruiterJobs::where('id', $jobId)->delete();
                 SavedJobs::where('recruiter_job_id', $jobId)->delete();
                 Notification::where('job_list_id', $jobId)->delete();
+                JobseekerTempHired::where('job_id',$jobId)->forceDelete();
             }
             if(!empty($request->requestOrigin)) {
                 Session::flash('message', trans('messages.job_deleted'));
