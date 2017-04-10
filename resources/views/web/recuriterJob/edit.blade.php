@@ -81,7 +81,7 @@
 </div>
 <div class="form-group custom-select job-opening hide">
     <label >Total Job Opening</label>
-    <input name="noOfJobs" type="text" id="jobopening" class="form-control" data-parsley-required-message="Total job openings required" data-bind="visible: showTotalJobOpenings,value: totalJobOpening, attr:{'data-parsley-required': showTotalJobOpenings}" />
+    <input name="noOfJobs" type="text" min="1" id="jobopening" class="form-control" data-parsley-required-message="Total job openings required" data-bind="visible: showTotalJobOpenings,value: totalJobOpening, attr:{'data-parsley-required': showTotalJobOpenings}" />
     <!--<p class="error-div" data-bind="text: totalJobOpeningError"></p>-->
 </div>
 
