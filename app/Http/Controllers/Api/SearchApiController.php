@@ -183,7 +183,7 @@ class SearchApiController extends Controller {
                     $jobExists->cancel_reason = $reqData['cancelReason'];
                     $jobExists->save();
                     //delete from temp hired jobs
-                    JobseekerTempHired::where('jobseeker_id',$userId)->where('job_id','=',$reqData['jobId'])->forceDelete();
+                    JobseekerTempHired::where('jobseeker_id',$userId)->where('job_id',$reqData['jobId'])->forceDelete();
                     $this->notifyAdminForCancelJob($reqData['jobId'],$userId,$reqData['cancelReason']);
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_cancelled_success"));
                 }else{
