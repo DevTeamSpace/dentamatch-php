@@ -121,7 +121,7 @@ h4,
 h5,
 h6 {
     /* font-weight: normal;
- */
+    */
     font-family: 'Roboto', sans-serif;
 }
 
@@ -1377,6 +1377,7 @@ strong {
     width: 100%;
     float: left;
     color: #484848;
+    word-break: break-all;
 }
 
 .message-textarea .input-group-btn > .btn {
@@ -1659,6 +1660,10 @@ a.cir-blue:hover {
     flex-direction: column;
 }
 
-.list-hired{ min-height: 30px;  }
+.list-hired {
+    min-height: 30px;
+}
 
-.fc-unthemed td.fc-widget-content.fc-today{ border-left: 0px !important;  }
+.fc-unthemed td.fc-widget-content.fc-today {
+    border-left: 0px !important;
+}
