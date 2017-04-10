@@ -632,10 +632,10 @@ class RecruiterJobController extends Controller {
                 JobLists::where('recruiter_job_id', $jobId)->delete();
                 JobRatings::where('recruiter_job_id', $jobId)->delete();
                 TempJobDates::where('recruiter_job_id', $jobId)->delete();
+                JobseekerTempHired::where('job_id',$jobId)->forceDelete();
                 RecruiterJobs::where('id', $jobId)->delete();
                 SavedJobs::where('recruiter_job_id', $jobId)->delete();
                 Notification::where('job_list_id', $jobId)->delete();
-                JobseekerTempHired::where('job_id',$jobId)->forceDelete();
             }
             if(!empty($request->requestOrigin)) {
                 Session::flash('message', trans('messages.job_deleted'));
