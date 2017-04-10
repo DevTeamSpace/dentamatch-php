@@ -16,7 +16,7 @@ use App\Helpers\apiResponse;
 class UserApiController extends Controller {
     
     public function __construct() {
-        $this->middleware('xss');
+        
     }
     
     /**

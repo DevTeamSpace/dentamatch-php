@@ -15,7 +15,6 @@ class WorkExperienceApiController extends Controller {
 
     public function __construct() {
         $this->middleware('ApiAuth');
-        $this->middleware('xss');
     }
     /**
      * Description : Get joblisting
