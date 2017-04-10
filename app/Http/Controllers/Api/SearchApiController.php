@@ -359,9 +359,9 @@ class SearchApiController extends Controller {
                                 $remainingHiredDate = [];
                                 $hiredJobDateAfterCount = [];
                                 foreach($countJobArray as $value){
+                                    $hiredJobDateAfterCount[] = $value['job_date'];
                                     if($value['job_count'] < $jobDetails->no_of_jobs){
                                         $hiredJobDates[] = array('jobseeker_id' => $userId , 'job_id' => $notificationDetails->job_list_id,'job_date' => $value['job_date']);
-                                        $hiredJobDateAfterCount[] = $value['job_date'];
                                     }
                                 }
                                 //Log::info("hiredJobDateAfterCount");
