@@ -89,7 +89,7 @@ class RecruiterJobs extends Model
         $searchQueryObj = RecruiterJobs::leftJoin('job_lists',function($query) use ($reqData){
             $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
                   ->where('job_lists.seeker_id','=', $reqData['userId'])
-                  ->whereNotIn('job_lists.applied_status',[JobLists::REJECTED]);
+                  ->whereNotIn('job_lists.applied_status',[JobLists::REJECTED, JobLists::HIRED, JobLists::APPLIED, JobLists::SHORTLISTED]);
             })
                 ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                 ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
