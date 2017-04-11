@@ -130,7 +130,7 @@ class JobSeekerController extends Controller
             $passwordModel->fill(['token' => $token]);
             $passwordModel->save();
 
-            Mail::queue('email.resetPasswordToken', ['name' => $reqData['firstname'], 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($reqData) {
+            Mail::queue('email.reset-password-token', ['name' => $reqData['firstname'], 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($reqData) {
                 $message->to($reqData['email'], $reqData['firstname'])->subject('Set Password Email');
             });
             $msg = trans('messages.jobseeker_added_success');
@@ -247,7 +247,7 @@ class JobSeekerController extends Controller
                                 )
                         ->where('users.id', $id)->first();
         
-        return view('cms.jobseeker.verificationDetail',['userProfile'=>$userProfile, 's3Url' => $s3Url]);
+        return view('cms.jobseeker.verification-detail',['userProfile'=>$userProfile, 's3Url' => $s3Url]);
         }catch (\Exception $e) {
             Log::error($e);
         } 
@@ -327,7 +327,7 @@ class JobSeekerController extends Controller
     public function jobSeekerDetailView($id) {
         try{
             $seekerDetails = JobSeekerProfiles::getJobSeekerProfile($id);
-            return view('cms.jobseeker.jobseekerDetail',['seekerDetails'=>$seekerDetails]);
+            return view('cms.jobseeker.jobseeker-detail',['seekerDetails'=>$seekerDetails]);
         }catch (\Exception $e) {
             Log::error($e);
         } 

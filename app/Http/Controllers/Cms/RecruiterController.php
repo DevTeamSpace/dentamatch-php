@@ -113,7 +113,7 @@ class RecruiterController extends Controller
                 $passwordModel->fill(['token' => $token]);
                 $passwordModel->save();
 
-                Mail::queue('email.resetPasswordToken', ['name' => "Recruiter", 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($reqData) {
+                Mail::queue('email.reset-password-token', ['name' => "Recruiter", 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($reqData) {
                     $message->to($reqData['email'], "Recruiter")->subject('Set Password Email');
                 });
                 $msg = trans('messages.recruiter_added_success');
@@ -182,7 +182,7 @@ class RecruiterController extends Controller
                                 'users.email','users.id','users.is_active'
                                 )
                         ->where('users.id', $id)->first();
-        return view('cms.recruiter.adminResetPassword',['userProfile'=>$user]);
+        return view('cms.recruiter.admin-reset-password',['userProfile'=>$user]);
     }
     
     public function storeAdminResetPassword(Request $request)
@@ -201,7 +201,7 @@ class RecruiterController extends Controller
                 $passwordModel = PasswordReset::firstOrNew(array('user_id' => $userId, 'email' => $email));
                 $passwordModel->fill(['token' => $token]);
                 if($passwordModel->save()) {
-                    Mail::queue('email.resetPasswordToken', ['name' => "Recruiter", 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($email) {
+                    Mail::queue('email.reset-password-token', ['name' => "Recruiter", 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($email) {
                         $message->to($email, "Recruiter")->subject('Set Password Email');
                     });
                 }

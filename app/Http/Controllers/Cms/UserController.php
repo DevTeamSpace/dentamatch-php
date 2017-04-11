@@ -24,7 +24,7 @@ class UserController extends Controller {
      */
     public function changePassword()
     {  
-        return view('cms.users.changePassword');
+        return view('cms.users.change-password');
     }
     
     /**
