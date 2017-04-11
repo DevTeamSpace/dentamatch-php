@@ -109,9 +109,6 @@
     </section>
 
     <!--Job Detail-->
-
-
-
     <div class="job-seeker mr-t-40">
         <label >Job Seekers</label>
         <div class="jobseeker-border  mr-t-15 mr-b-25"></div>
@@ -256,9 +253,7 @@
         </div>
         @endforeach
         @endif
-        <div class="mr-t-15 text-center">
-            <!--<button type="button" class="view_loadmore btn-block">View More</button>-->
-        </div>
+        <div class="mr-t-15 text-center"></div>
 
     </div>
 </div>

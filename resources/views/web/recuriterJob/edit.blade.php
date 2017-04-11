@@ -38,11 +38,6 @@
                 <label >Dental Office Address</label>
                 <select class="selectpicker" id="select-office-address" data-bind="options: allLocations, optionsText: 'address', optionsValue: 'address', selectedOptions: defaultSelectLocation, event: {change: showOfficeDetails}">
                 </select>
-<!--                <select  id="officeAddress" class="selectpicker" data-bind="options: selectedLocations, selectedOptions: location">
-</select>-->
-
-<!--<p class="error-div">Job cannot be currently created for this location. We will soon be available in your area.</p>-->
-
 </div>
 <div class="form-group">
     <label  >Job Type</label>
@@ -82,7 +77,6 @@
 <div class="form-group custom-select job-opening hide">
     <label >Total Job Opening</label>
     <input name="noOfJobs" type="text" min="1" id="jobopening" class="form-control" data-parsley-required-message="Total job openings required" data-bind="visible: showTotalJobOpenings,value: totalJobOpening, attr:{'data-parsley-required': showTotalJobOpenings}" />
-    <!--<p class="error-div" data-bind="text: totalJobOpeningError"></p>-->
 </div>
 
 </div>
@@ -99,14 +93,12 @@
                 <select class="ddlCars" multiple="true" data-bind=" options: $parent.allOfficeTypes, selectedOptions: selectedOfficeType ">
                 </select>
                 <p class="error-div" data-bind="text: $root.officeTypeError"></p>
-                <!--<p class="error-div">Job cannot be currently created for this location. We will soon be available in your area.</p>-->
             </div>
         </div>
         <div class="form-group">
             <label>Dental Office Address</label>
             <input type="text" value="" data-bind="value: selectedOfficeAddress, event: {focus: $root.getOfficeName}" id="officeAddress" name="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="Required">
             <p class="error-div" data-bind="text: $root.locationError"></p>
-            <!--<input type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="office address required" data-bind="value: selectedOfficeAddress">-->
         </div>
         <div class="form-group">
             <label>Phone Number</label>
@@ -276,7 +268,6 @@
             <textarea class="form-control txtHeight" id="optionalInfo" data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: selectedOfficeInfo"></textarea>
         </div>	
     </div>
-    <!--/ko-->
 </div>
 </form>
 <div id="actionModal" class="modal fade" role="dialog">

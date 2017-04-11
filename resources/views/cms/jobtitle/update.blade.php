@@ -6,15 +6,6 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">Update Jobtitle</div>
-<!--                @if (count($errors) > 0)
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif-->
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('cms/jobtitle/store') }}">
                         {!! csrf_field() !!}
@@ -32,10 +23,6 @@
                                 @endif
                             </div>
                         </div>
-                        
-                        
-                        
-
                         <div class="form-group">
                             <label class="col-md-4 control-label">Is active</label>
 

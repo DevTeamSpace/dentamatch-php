@@ -14,7 +14,6 @@
         <li class="active">Search Preference</li>
     </ul>
     <!--/breadcrumb-->
-<?php //dd($jobDetails); ?>
     
     <div class="col-sm-12 mr-b-55">
         <div class="row section-title mr-b-10">
