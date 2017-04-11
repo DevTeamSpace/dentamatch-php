@@ -120,18 +120,10 @@
                               <p class="text-center" style="color: red;" data-bind="text: errorMessage"></p>
                               <p class="text-center" style="color: green;" data-bind="text: successMessage"></p>
                               <br>
-<!--                            <div class="form-group">
-                                <label class="sr-only" for="card-number">Card number</label>
-                                <input type="number" class="form-control" placeholder="Card number" data-bind="value: editCardNumber" disabled="disable">
-                            </div>-->
                             <div class="form-group">
                                 <label class="sr-only" for="expiry">Expiry</label>
                                 <input type="text" class="form-control" id="editExpiry" placeholder="MM/YYYY" data-bind="value: editExpiry, valueUpdate: 'keyup'">
                             </div>
-<!--                            <div class="form-group">
-                                <label class="sr-only" for="cvv">CVV</label>
-                                <input type="number" class="form-control" placeholder="CVV" data-bind="value: editCvv">
-                            </div>-->
                             <div class="mr-t-20 mr-b-30 dev-pd-l-13p">
                                 <button type="button" class="btn btn-link mr-r-5" data-dismiss="modal">Close</button>
                                 <button type="submit" id="editCardButton" class="btn btn-primary pd-l-30 pd-r-30">Update Card</button>
