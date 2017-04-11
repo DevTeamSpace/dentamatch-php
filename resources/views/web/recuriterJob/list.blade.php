@@ -10,7 +10,7 @@
         <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
     @endif
     @if(count($jobList)>0)
-    @include('web.recuriterJob.jobData')
+    @include('web.recuriterJob.job-data')
     @else
     <div class="jobCatbox mr-b-20">
         <div class="template-job-information ">

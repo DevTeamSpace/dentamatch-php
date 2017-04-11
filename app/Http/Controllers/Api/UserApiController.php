@@ -233,7 +233,7 @@ class UserApiController extends Controller {
         }else{
             $is_verified = 0;
         }
-        return view('verifyUser')->with('verifyUser', $is_verified);
+        return view('verify-user')->with('verifyUser', $is_verified);
     }
     
     /**

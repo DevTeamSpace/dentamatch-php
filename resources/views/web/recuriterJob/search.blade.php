@@ -63,7 +63,7 @@
 
     @if(count($seekersList['paginate'])>0)
         <div class="jobseeker-statebox"  id="ajaxData">
-            @include('web.recuriterJob.seekersData')
+            @include('web.recuriterJob.seekers-data')
         </div>
     @else
     <div class="jobCatbox mr-b-20">

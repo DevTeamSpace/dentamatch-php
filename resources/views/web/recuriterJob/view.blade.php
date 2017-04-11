@@ -128,7 +128,7 @@
             <label class="fnt-16 textcolr-38">Jobseeker {{ \App\Models\JobLists::APPLIED_STATUS[$key] }} ({{ count($seekerGroup) }})</label>
             @foreach($seekerGroup as $seeker)
             @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
-                @include('web.recuriterJob.ratingModal')
+                @include('web.recuriterJob.rating-modal')
             @endif
             <div class="media jobCatbox">
                 <div class="media-left ">

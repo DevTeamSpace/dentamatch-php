@@ -155,7 +155,7 @@
 @yield('js')
 
 @if(!empty($jobTemplateModalData))
-@include('web.recuriterJob.jobTemplateModal')
+@include('web.recuriterJob.job-template-modal')
 @endif
 </body>
 

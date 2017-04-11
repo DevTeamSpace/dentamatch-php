@@ -74,7 +74,7 @@ class RecruiterJobController extends Controller {
             $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
 
             if ($request->ajax()) {
-                return view('web.recuriterJob.seekersData', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'maxDistance'=>$maxDistance, 'jobTemplateModalData'=>$jobTemplateModalData])->render();  
+                return view('web.recuriterJob.seekers-data', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'maxDistance'=>$maxDistance, 'jobTemplateModalData'=>$jobTemplateModalData])->render();  
             }
 
             return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData', 'jobId','maxDistance', 'jobTemplateModalData'));
@@ -158,7 +158,7 @@ class RecruiterJobController extends Controller {
             $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
             
             if ($request->ajax()) {
-                return view('web.recuriterJob.jobData', ['jobList' => $this->viewData['jobList'], 'jobTemplateModalData' => $this->viewData['jobTemplateModalData']])->render();
+                return view('web.recuriterJob.job-data', ['jobList' => $this->viewData['jobList'], 'jobTemplateModalData' => $this->viewData['jobTemplateModalData']])->render();
             }
 
             return $this->returnView('list');
@@ -668,7 +668,7 @@ class RecruiterJobController extends Controller {
     public function jobSeekerProfile($seekerId) {
         try {
             $seekerDetails = JobSeekerProfiles::getJobSeekerProfile($seekerId);
-            return view('web.recuriterJob.seekerProfile',compact('seekerDetails'));
+            return view('web.recuriterJob.seeker-profile',compact('seekerDetails'));
 
         } catch (\Exception $e) {
             Log::error($e);
