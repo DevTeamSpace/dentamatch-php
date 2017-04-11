@@ -72,7 +72,7 @@ class RecruiterJobs extends Model
                         return  $value['recruiter_job_id'];
                     }, $savedJobsArray);
                 }
-        $rejectedJobs = JobLists::where('seeker_id', '=', $reqData['userId'])->where('applied_status', '=', JobLists::REJECTED)->get();
+        $rejectedJobs = JobLists::where('seeker_id', '=', $reqData['userId'])->whereIn('applied_status', [JobLists::REJECTED,JobLists::HIRED, JobLists::APPLIED, JobLists::SHORTLISTED])->get();
         $rejectedJobsArray = array();      
         if($rejectedJobs){
                     $rejectedJobsData = $rejectedJobs->toArray();
@@ -89,7 +89,7 @@ class RecruiterJobs extends Model
         $searchQueryObj = RecruiterJobs::leftJoin('job_lists',function($query) use ($reqData){
             $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
                   ->where('job_lists.seeker_id','=', $reqData['userId'])
-                  ->whereNotIn('job_lists.applied_status',[JobLists::REJECTED, JobLists::HIRED, JobLists::APPLIED, JobLists::SHORTLISTED]);
+                  ->whereNotIn('job_lists.applied_status',[JobLists::REJECTED]);
             })
                 ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                 ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
