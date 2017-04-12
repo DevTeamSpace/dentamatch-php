@@ -1570,6 +1570,9 @@ a.cir-blue:hover {
 }
 
 @media only screen and (max-width: 767px) {
+    .report-filter {
+        text-align: left !important;
+    }
     .frm-cred-access-box {
         width: 100%;
         margin-top: 112px;

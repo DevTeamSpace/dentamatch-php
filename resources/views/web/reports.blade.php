@@ -14,29 +14,32 @@
                             <div class="viewProfileRightCard">
                                 <div class="detailTitleBlock profilePadding">
                                     <div class="frm-title mr-b-25">Reports</div>
-                                    <div class="col-sm-3 pull-right mr-b-10">
-                                        <div class="form-group">
-                                            <div class='input-group date' id='datetimepicker7' data-bind="datetimePicker: {opt:filterTo}">
-                                                <input type='text' class="form-control" placeholder="To" data-bind="value: filterTo, event: {update: $root.filterList}" />
-                                                <span class="input-group-addon">
-                                                    <span class="fa fa-angle-down"></span>
-                                                </span>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-xs-12 report-filter text-right">
+                                            <label>Filter:</label>
+                                        </div>
+                                        <div class="col-sm-3 col-xs-12 pull-right mr-b-10">
+                                            <div class="form-group">
+                                                <div class='input-group date' id='datetimepicker7' data-bind="datetimePicker: {opt:filterTo}">
+                                                    <input type='text' class="form-control" placeholder="To" data-bind="value: filterTo, event: {update: $root.filterList}" />
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-angle-down"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3 col-xs-12 pull-right mr-b-10">
+                                            <div class="form-group">
+                                                <div class='input-group date' id='datetimepicker6' data-bind="datetimePicker: {opt:filterFrom}">
+                                                    <input type='text' class="form-control" placeholder="From" data-bind="value: filterFrom" />
+                                                    <span class="input-group-addon">
+                                                        <span class="fa fa-angle-down"></span>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-3 pull-right mr-b-10">
-                                        <div class="form-group">
-                                            <div class='input-group date' id='datetimepicker6' data-bind="datetimePicker: {opt:filterFrom}">
-                                                <input type='text' class="form-control" placeholder="From" data-bind="value: filterFrom" />
-                                                <span class="input-group-addon">
-                                                    <span class="fa fa-angle-down"></span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 text-right">
-                                        <label>Filter:</label>
-                                    </div>
+
                                 </div>
                                 <table id="report-table" class="table">
                                     <thead>
