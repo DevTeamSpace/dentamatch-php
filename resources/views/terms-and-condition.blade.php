@@ -16,7 +16,7 @@
     <title>DentaMatch</title>
     <style>
         body{background-color:rgb(240,240,240);padding:0 10px;}
-        p{color:#686868;}
+        p{color:#686868; margin-top: 30px}
     </style>
 
 </head>
