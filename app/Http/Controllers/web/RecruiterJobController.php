@@ -226,9 +226,9 @@ class RecruiterJobController extends Controller {
 
     public function jobSeekerDetails($seekerId, $jobId) {
         try {
-            $this->viewData['job'] = RecruiterJobs::getRecruiterJobDetails($jobId);
-            $seekerDetails = JobSeekerProfiles::getJobSeekerDetails($seekerId,$this->viewData['job']);
-            return view('web.recuriterJob.seekerdetails',compact('seekerDetails', 'jobId'));
+            $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
+            $seekerDetails = JobSeekerProfiles::getJobSeekerDetails($seekerId,$jobDetails);
+            return view('web.recuriterJob.seekerdetails',compact('seekerDetails', 'jobId', 'jobDetails'));
 
         } catch (\Exception $e) {
             Log::error($e);

@@ -4,6 +4,10 @@
 <link rel="stylesheet" href="{{asset('web/css/style.css')}}">
 @endsection
 @section('content')
+@php 
+    $datesTemp = explode(',',$jobDetails['temp_job_dates']);
+    $seekerDatesCount = count($datesTemp);
+@endphp
 
 <div class="container padding-container-template">
     <!--breadcrumb-->
@@ -85,7 +89,9 @@
                 <h6>HIRED</h6>
                 <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
                                     data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
-                @else
+                @elseif (!empty($datesTemp) && date("Y-m-d")>$datesTemp[$seekerDatesCount-1] && $jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+                <h6>TEMP JOB EXPIRED</h6>
+                @else 
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pd-l-30 pd-r-30">Invite</button>    
                 @endif    
             </div>

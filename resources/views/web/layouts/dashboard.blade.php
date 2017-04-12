@@ -92,14 +92,15 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Session::get('userData.profile.office_name') }} <span class="caret"></span></a>
                     <ul class="dropdown-menu menuLastBox borderNone">
-                     <span class="fa fa-caret-up notificationCaret"></span>
-                     <li><span class="icon icon-account-circle navRightIcon"></span><a href="{{ url('edit-profile') }}"><b>{{Auth::user()->email}}</b><br>	<button type="button" class="btn btn-primary rghtMenuBtn pd-l-10 pd-r-10">View Profile</button></a>
+                        
+                        <span class="fa fa-caret-up notificationCaret"></span>
+                        <li><span class="icon icon-account-circle navRightIcon"></span><a href="{{ url('edit-profile') }}"><b>{{Auth::user()->email}}</b><br>	<button type="button" class="btn btn-primary rghtMenuBtn pd-l-10 pd-r-10">View Profile</button></a>
 
-                     </li>
-                     <li><span class="icon icon-drive-document navRightIcon"></span><a href="{{ url('reports') }}">Reports</a></li>
-                     <li><span class="icon icon-lock navRightIcon"><a href="#"></a></span><a href="{{ url('change-password') }}">Change Password</a></li>
-                     <li><span class="icon icon-drive-form navRightIcon"></span><a href="{{ url('setting-subscription') }}">Subscription Details</a></li>
-                     <li><span class="icon icon-text-document-black-interface-symbol navRightIcon"></span>
+                        </li>
+                        <li><span class="icon icon-drive-document navRightIcon"></span><a href="{{ url('reports') }}">Reports</a></li>
+                        <li><span class="icon icon-lock navRightIcon"><a href="#"></a></span><a href="{{ url('change-password') }}">Change Password</a></li>
+                        <li><span class="icon icon-drive-form navRightIcon"></span><a href="{{ url('setting-subscription') }}">Subscription Details</a></li>
+                        <li><span class="icon icon-text-document-black-interface-symbol navRightIcon"></span>
                          <a href="{{ url('setting-terms-conditions') }}">Terms &amp; Conditions</a></li>
                          <li><span class="icon icon-logout-web-button navRightIcon"></span><a href="{{ url('logout') }}">Logout</a></li>
 
@@ -145,6 +146,7 @@
     <script src ="{{asset('web/scripts/moment.min.js')}}"></script>
     <script src ="{{asset('web/scripts/bootstrap-datetimepicker.js')}}"></script>
     <script src ="{{asset('web/scripts/main.js')}}"></script>
+
 
 <!-- <script src ="{{asset('web/scripts/tabScript1.js')}}"></script>
 -->

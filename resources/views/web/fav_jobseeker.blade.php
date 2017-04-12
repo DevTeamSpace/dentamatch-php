@@ -56,16 +56,18 @@
                             <select  id="selectJobSeeker" name="selectJobSeeker"  class="selectpicker" required="" data-parsley-required-message="Please select the job." >
                                 <option value="" disabled selected>Select </option>
                                 @foreach($jobDetail as $job)
-                                <?php 
+                                @if(!empty($job->temp_job_dates))
+                                @php 
                                     $temp_jobs = (!empty($job->temp_job_dates)?explode(',', $job->temp_job_dates):array());
                                     $dates_are = '  ';
                                     $dates_are .= (isset($temp_jobs[0])?date('M d, Y',  strtotime($temp_jobs[0])):"");
                                     $dates_are .= (isset($temp_jobs[1])?", ".date('M d, Y',  strtotime($temp_jobs[1])):"");
                                     $dates_are .= (isset($temp_jobs[2])?" , ..":"");
-                                     ?>
+                                @endphp
                                 <option value="{{$job->recruiterId}}" data-content="<h5>{{$job->jobtitle_name}}</h5><span class='label label-warning'>Temporary</span>{{$dates_are}}">
                                     {{$job->jobtitle_name}}
                                 </option>
+                                @endif
                                 <option data-divider="true"></option>
                                 @endforeach
                             </select>
