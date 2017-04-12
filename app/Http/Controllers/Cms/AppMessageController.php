@@ -65,7 +65,7 @@ class AppMessageController extends Controller
         try{
             $reqData = $request->all();
             $rules = array(
-                'message' => array('required','min:2','max:255'),
+                'message' => array('required','min:2','max:150'),
             );
 
             $validator = Validator::make($reqData, $rules);
