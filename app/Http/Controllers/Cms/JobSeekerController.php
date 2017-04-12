@@ -290,15 +290,15 @@ class JobSeekerController extends Controller
         if ($verificationStatus == "Approve") {
             $notificationData = array(
                 'notificationData' => 'Your license number has been approved by admin',
-                'notification_title' => 'Dental certificate verified',
+                'notification_title' => 'Dental License Status',
                 'sender_id' => $user->id,
                 'type' => 1,
                 'notificationType' => Notification::OTHER,
             );
         } else if ($verificationStatus == 'Reject') {
             $notificationData = array(
-                'notificationData' => 'Your dental state board has been rejected by admin',
-                'notification_title' => 'Dental certificate rejected',
+                'notificationData' => 'Your license number has been rejected by admin',
+                'notification_title' => 'Dental License Status',
                 'sender_id' => $user->id,
                 'type' => 1,
                 'notificationType' => Notification::OTHER,
