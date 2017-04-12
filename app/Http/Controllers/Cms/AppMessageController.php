@@ -127,7 +127,7 @@ class AppMessageController extends Controller
 
     public function messageList(){
         try{
-        $appMessages = AppMessage::SELECT(['message','message_to','message_sent','created_at','id'])->get();
+        $appMessages = AppMessage::SELECT(['message','message_to','message_sent','created_at','id'])->orderBy('created_at', 'desc')->get();
         return Datatables::of($appMessages)
                 ->removeColumn('id')
                 ->addColumn('messageTo', function ($appMessages) {
