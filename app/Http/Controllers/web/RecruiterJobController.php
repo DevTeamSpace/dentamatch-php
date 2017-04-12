@@ -74,7 +74,7 @@ class RecruiterJobController extends Controller {
             $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
 
             if ($request->ajax()) {
-                return view('web.recuriterJob.seekersData', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'maxDistance'=>$maxDistance, 'jobTemplateModalData'=>$jobTemplateModalData])->render();  
+                return view('web.recuriterJob.seekers-data', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'maxDistance'=>$maxDistance, 'jobTemplateModalData'=>$jobTemplateModalData])->render();  
             }
 
             return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData', 'jobId','maxDistance', 'jobTemplateModalData'));
@@ -158,7 +158,7 @@ class RecruiterJobController extends Controller {
             $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
             
             if ($request->ajax()) {
-                return view('web.recuriterJob.jobData', ['jobList' => $this->viewData['jobList'], 'jobTemplateModalData' => $this->viewData['jobTemplateModalData']])->render();
+                return view('web.recuriterJob.job-data', ['jobList' => $this->viewData['jobList'], 'jobTemplateModalData' => $this->viewData['jobTemplateModalData']])->render();
             }
 
             return $this->returnView('list');
@@ -592,7 +592,7 @@ class RecruiterJobController extends Controller {
             $jobObj = RecruiterJobs::where('id', $jobId)->first();
             if($jobObj) {
                 $jobData = RecruiterJobs::where('recruiter_jobs.id',$jobId)
-                                ->select('job_lists.seeker_id', 'job_templates.user_id', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name')
+                                ->select('job_lists.seeker_id', 'job_type', 'job_templates.user_id', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name')
                                 ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
                                 ->join('job_lists', 'job_lists.recruiter_job_id', 'recruiter_jobs.id')
                                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
@@ -608,7 +608,7 @@ class RecruiterJobController extends Controller {
                 }
                 if(!empty($pushList)) {
                     foreach($pushList as $value) {
-                        $message = "Delete job notification | ".$value['office_name']." has deleted the temporary job vacancy for ".$value['jobtitle_name'];
+                        $message = "Delete job notification | ".$value['office_name']." has deleted the ".strtolower(RecruiterJobs::$jobTypeName[$value['job_type']])." job vacancy for ".$value['jobtitle_name'];
                         $userId = $value['seeker_id'];
                         $senderId = $value['user_id'];
 
@@ -632,10 +632,10 @@ class RecruiterJobController extends Controller {
                 JobLists::where('recruiter_job_id', $jobId)->delete();
                 JobRatings::where('recruiter_job_id', $jobId)->delete();
                 TempJobDates::where('recruiter_job_id', $jobId)->delete();
+                JobseekerTempHired::where('job_id',$jobId)->forceDelete();
                 RecruiterJobs::where('id', $jobId)->delete();
                 SavedJobs::where('recruiter_job_id', $jobId)->delete();
                 Notification::where('job_list_id', $jobId)->delete();
-                JobseekerTempHired::where('job_id',$jobId)->forceDelete();
             }
             if(!empty($request->requestOrigin)) {
                 Session::flash('message', trans('messages.job_deleted'));
@@ -668,7 +668,7 @@ class RecruiterJobController extends Controller {
     public function jobSeekerProfile($seekerId) {
         try {
             $seekerDetails = JobSeekerProfiles::getJobSeekerProfile($seekerId);
-            return view('web.recuriterJob.seekerProfile',compact('seekerDetails'));
+            return view('web.recuriterJob.seeker-profile',compact('seekerDetails'));
 
         } catch (\Exception $e) {
             Log::error($e);

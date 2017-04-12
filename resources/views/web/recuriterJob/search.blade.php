@@ -14,7 +14,6 @@
         <li class="active">Search Preference</li>
     </ul>
     <!--/breadcrumb-->
-<?php //dd($jobDetails); ?>
     
     <div class="col-sm-12 mr-b-55">
         <div class="row section-title mr-b-10">
@@ -63,7 +62,7 @@
 
     @if(count($seekersList['paginate'])>0)
         <div class="jobseeker-statebox"  id="ajaxData">
-            @include('web.recuriterJob.seekersData')
+            @include('web.recuriterJob.seekers-data')
         </div>
     @else
     <div class="jobCatbox mr-b-20">

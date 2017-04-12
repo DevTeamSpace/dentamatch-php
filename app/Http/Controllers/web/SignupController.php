@@ -124,7 +124,7 @@ class SignupController extends Controller {
                 $userGroupModel->user_id = $user_details->id;
                 $userGroupModel->save();
 
-                Mail::queue('auth.emails.userActivation', ['url' => url("/verification-code/$uniqueCode")], function ($message) use ($reqData) {
+                Mail::queue('auth.emails.user-activation', ['url' => url("/verification-code/$uniqueCode")], function ($message) use ($reqData) {
                     $message->to($reqData['email'])
                             ->subject(trans("messages.confirmation_link"));
                 });

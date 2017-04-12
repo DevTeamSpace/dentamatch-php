@@ -22,7 +22,6 @@ class SearchApiController extends Controller {
     
     public function __construct() {
         $this->middleware('ApiAuth');
-        $this->middleware('xss');
     }
     
     /**
@@ -183,7 +182,7 @@ class SearchApiController extends Controller {
                     $jobExists->cancel_reason = $reqData['cancelReason'];
                     $jobExists->save();
                     //delete from temp hired jobs
-                    JobseekerTempHired::where('jobseeker_id',$userId)->forceDelete();
+                    JobseekerTempHired::where('jobseeker_id',$userId)->where('job_id',$reqData['jobId'])->forceDelete();
                     $this->notifyAdminForCancelJob($reqData['jobId'],$userId,$reqData['cancelReason']);
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_cancelled_success"));
                 }else{
@@ -356,9 +355,23 @@ class SearchApiController extends Controller {
                             //Log::info(print_r($countJobArray, true));
                             if(!empty($countJobArray)){
                                 $hiredJobDates = [];
+                                $remainingHiredDate = [];
+                                $hiredJobDateAfterCount = [];
                                 foreach($countJobArray as $value){
+                                    $hiredJobDateAfterCount[] = $value['job_date'];
                                     if($value['job_count'] < $jobDetails->no_of_jobs){
                                         $hiredJobDates[] = array('jobseeker_id' => $userId , 'job_id' => $notificationDetails->job_list_id,'job_date' => $value['job_date']);
+                                    }
+                                }
+                                //Log::info("hiredJobDateAfterCount");
+                                //Log::info(print_r($hiredJobDateAfterCount, true));
+                                
+                                $remainingHiredDate = array_diff($insertDates, $hiredJobDateAfterCount);
+                                //Log::info("remainingJobDates");
+                                //Log::info(print_r($remainingHiredDate, true));
+                                if(!empty($remainingHiredDate)) {
+                                    foreach($remainingHiredDate as $value){
+                                        $hiredJobDates[] = array('jobseeker_id' => $userId , 'job_id' => $notificationDetails->job_list_id,'job_date' => $value);
                                     }
                                 }
                                 //Log::info("hiredJobDates");
@@ -385,7 +398,7 @@ class SearchApiController extends Controller {
                                 //Log::info("both same");
                                 $response = apiResponse::customJsonResponse(0, 201, trans("messages.set_availability"));
                             }else{
-                                 //Log::info(trans("messages.mismatch_availability"));
+                                //Log::info(trans("messages.mismatch_availability"));
                                 $response = apiResponse::customJsonResponse(0, 201, trans("messages.mismatch_availability"));
                             
                             }
@@ -399,7 +412,7 @@ class SearchApiController extends Controller {
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            Log::error($e);
+            //Log::error($e);
             $messages = json_decode($e->getResponse()->content(), true);
             $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {

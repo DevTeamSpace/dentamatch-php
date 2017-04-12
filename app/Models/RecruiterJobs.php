@@ -72,7 +72,7 @@ class RecruiterJobs extends Model
                         return  $value['recruiter_job_id'];
                     }, $savedJobsArray);
                 }
-        $rejectedJobs = JobLists::where('seeker_id', '=', $reqData['userId'])->where('applied_status', '=', JobLists::REJECTED)->get();
+        $rejectedJobs = JobLists::where('seeker_id', '=', $reqData['userId'])->whereIn('applied_status', [JobLists::REJECTED,JobLists::HIRED, JobLists::APPLIED, JobLists::SHORTLISTED])->get();
         $rejectedJobsArray = array();      
         if($rejectedJobs){
                     $rejectedJobsData = $rejectedJobs->toArray();

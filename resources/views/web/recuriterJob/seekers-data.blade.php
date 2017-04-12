@@ -153,9 +153,6 @@
     </dl>
     <div class="row">
         <div class="col-sm-6 col-xs-6">
-                <!--
-                <a href="#">See more.. </a>
-            -->
         </div>
         <div class="col-sm-6 col-xs-6 ">
             @if(isset($seeker['job_status']) && $seeker['job_status'] == 1)

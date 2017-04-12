@@ -14,7 +14,6 @@ class AffiliationsApiController extends Controller {
 
     public function __construct() {
         $this->middleware('ApiAuth');
-        $this->middleware('xss');
     }
     
     /**
