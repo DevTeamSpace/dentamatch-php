@@ -257,119 +257,119 @@
                             </div>
                         </div>	
                         <div class="form-group">
-                            <label>Office Location Information <i class="optional">(Optional)</i></label>
+                            <label class="mr-0">Office Location Information <i class="optional">(Optional)</i></label>
                             <textarea name="officeLocation" id="officeLocation" class="form-control txtHeight"   data-parsley-required-message="Required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
 
                         </div>	
                     </div>
 
                     <div class="clearfix"></div>
-                    </div>
+                </div>
             </div>
             <div class="profieBox"></div>
             <div  class="pull-right text-right pd-b-20">
                 <div id="removeButton" class="pull-right text-right pd-b-15">
-                <button id="createProfileButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
-            </div>
-        </form>
+                    <button id="createProfileButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
+                </div>
+            </form>
+        </div>
+        <div class="clearfix"></div>
+        <div class="addBtn DynamicAddder pull-right pd-t-10 "><span class="icon icon-plus"></span>You can add upto 2 more locations</div>
+
     </div>
-    <div class="clearfix"></div>
-    <div class="addBtn DynamicAddder pull-right pd-t-10 "><span class="icon icon-plus"></span>You can add upto 2 more locations</div>
 
-</div>
+    @if(isset($modal))
+    <!-- Modal -->
+    <div id="onboardView" class="modal " role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">Skip</button>
+                </div>
+                <div class="modal-body">
+                    <div class="carousel slide " id="fade-quote-carousel" data-ride="carousel" data-interval="false">
+                        <!-- Carousel indicators -->
+                        <ol class="carousel-indicators">
+                            <li data-target="#fade-quote-carousel" data-slide-to="0" class="active"></li>
+                            <li data-target="#fade-quote-carousel" data-slide-to="1"></li>
+                            <li data-target="#fade-quote-carousel" data-slide-to="2" ></li>
+                            <li data-target="#fade-quote-carousel" data-slide-to="3" ></li>
+                            <li data-target="#fade-quote-carousel" data-slide-to="4"></li>
+                        </ol>
+                        <!-- Carousel items -->
+                        <div class="carousel-inner">
+                            <div class="active item">
 
-@if(isset($modal))
-<!-- Modal -->
-<div id="onboardView" class="modal " role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">Skip</button>
-            </div>
-            <div class="modal-body">
-                <div class="carousel slide " id="fade-quote-carousel" data-ride="carousel" data-interval="false">
-                    <!-- Carousel indicators -->
-                    <ol class="carousel-indicators">
-                        <li data-target="#fade-quote-carousel" data-slide-to="0" class="active"></li>
-                        <li data-target="#fade-quote-carousel" data-slide-to="1"></li>
-                        <li data-target="#fade-quote-carousel" data-slide-to="2" ></li>
-                        <li data-target="#fade-quote-carousel" data-slide-to="3" ></li>
-                        <li data-target="#fade-quote-carousel" data-slide-to="4"></li>
-                    </ol>
-                    <!-- Carousel items -->
-                    <div class="carousel-inner">
-                        <div class="active item">
+                                <div class="onboard-img" ><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
+                                <h3 class="onboard-title">Lorem ipsum</h3>
+                                <blockquote>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio .</p>
+                                </blockquote>	
+                            </div>
+                            <div class="item">
 
-                            <div class="onboard-img" ><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
-                            <h3 class="onboard-title">Lorem ipsum</h3>
-                            <blockquote>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio .</p>
-                            </blockquote>	
+                                <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
+                                <h3 class="onboard-title">Lorem ipsum</h3>
+                                <blockquote>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio </p>
+                                </blockquote>
+                            </div>
+                            <div class=" item">
+
+                                <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
+                                <h3 class="onboard-title">Lorem ipsum</h3>
+                                <blockquote>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio doloremque laboriosam quas, quos eaque molestias odio aut eius animi. Impedit temporibus nisi accusamus.</p>
+                                </blockquote>
+                            </div>
+                            <div class=" item">
+
+                                <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
+                                <h3 class="onboard-title">Create Your Profile </h3>
+                                <blockquote>
+                                    <p>Modern medicine has known a rapid progress in the last decades and many traditional forms of treatment have been replaced by new, improved medical…Modern medicine has known a rapid progress in the last decades and many traditional forms.</p>
+                                </blockquote>
+                            </div>
+                            <div class="item">
+
+                                <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
+                                <h3 class="onboard-title">Lorem ipsum</h3>
+                                <blockquote>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio doloremque laboriosam quas, quos eaque molestias odio aut eius animi. Impedit temporibus nisi accusamus.</p>
+                                </blockquote>
+                            </div>
                         </div>
-                        <div class="item">
-
-                            <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
-                            <h3 class="onboard-title">Lorem ipsum</h3>
-                            <blockquote>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio </p>
-                            </blockquote>
-                        </div>
-                        <div class=" item">
-
-                            <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
-                            <h3 class="onboard-title">Lorem ipsum</h3>
-                            <blockquote>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio doloremque laboriosam quas, quos eaque molestias odio aut eius animi. Impedit temporibus nisi accusamus.</p>
-                            </blockquote>
-                        </div>
-                        <div class=" item">
-
-                            <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
-                            <h3 class="onboard-title">Create Your Profile </h3>
-                            <blockquote>
-                                <p>Modern medicine has known a rapid progress in the last decades and many traditional forms of treatment have been replaced by new, improved medical…Modern medicine has known a rapid progress in the last decades and many traditional forms.</p>
-                            </blockquote>
-                        </div>
-                        <div class="item">
-
-                            <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
-                            <h3 class="onboard-title">Lorem ipsum</h3>
-                            <blockquote>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio doloremque laboriosam quas, quos eaque molestias odio aut eius animi. Impedit temporibus nisi accusamus.</p>
-                            </blockquote>
-                        </div>
+                        <!-- Controls -->
+                        <a class="left carousel-control" href="#fade-quote-carousel"  data-slide="prev">
+                            <span class="fa  fa-chevron-left" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#fade-quote-carousel"  data-slide="next">
+                            <span class="fa  fa-chevron-right" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
                     </div>
-                    <!-- Controls -->
-                    <a class="left carousel-control" href="#fade-quote-carousel"  data-slide="prev">
-                        <span class="fa  fa-chevron-left" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="right carousel-control" href="#fade-quote-carousel"  data-slide="next">
-                        <span class="fa  fa-chevron-right" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
                 </div>
             </div>
         </div>
     </div>
-</div>
-@endif
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
-@section('js')
-<script src ="{{asset('web/scripts/dashboard.js')}}"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsIYaIMo9hd5yEL7pChkVPKPWGX6rFcv8&libraries=places"
-async defer></script>
+    @endif
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
+    @section('js')
+    <script src ="{{asset('web/scripts/dashboard.js')}}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsIYaIMo9hd5yEL7pChkVPKPWGX6rFcv8&libraries=places"
+    async defer></script>
 
-<script>
-    $("#officeLocation").Editor();
-    $("button:submit").click(function(){
-        $('#officeLocation').text($('#officeLocation').Editor("getText"));
-        $('#officeLocation1').text($('#officeLocation1').Editor("getText"));
-        $('#officeLocation2').text($('#officeLocation2').Editor("getText"));
-    });
-</script>
+    <script>
+        $("#officeLocation").Editor();
+        $("button:submit").click(function(){
+            $('#officeLocation').text($('#officeLocation').Editor("getText"));
+            $('#officeLocation1').text($('#officeLocation1').Editor("getText"));
+            $('#officeLocation2').text($('#officeLocation2').Editor("getText"));
+        });
+    </script>
 
-<!--&callback=initAutocomplete-->
-@endsection
-@endsection
+    <!--&callback=initAutocomplete-->
+    @endsection
+    @endsection
