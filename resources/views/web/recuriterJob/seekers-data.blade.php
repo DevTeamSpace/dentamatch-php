@@ -1,4 +1,9 @@
 <!--Seeker listing-->
+@php 
+
+    $datesTemp = explode(',',$jobDetails['temp_job_dates']);
+    $seekerDatesCount = count($datesTemp);
+@endphp
 @foreach ($seekersList['paginate'] as $seeker)
 <!--search preference list-->
 <form action="{{ url('job/updateStatus') }}" method="post">
@@ -156,9 +161,10 @@
         </div>
         <div class="col-sm-6 col-xs-6 ">
             @if(isset($seeker['job_status']) && $seeker['job_status'] == 1)
-            <button type="button" class="btn btn-primary-outline pull-right pd-l-30 pd-r-30">Invited</button>
-            @else
-            <button type="submit"  name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pull-right pd-l-30 pd-r-30 ">Invite</button>
+                <button type="button" class="btn btn-primary-outline pull-right pd-l-30 pd-r-30">Invited</button>
+            @elseif (!empty($datesTemp) && date("Y-m-d")>$datesTemp[$seekerDatesCount-1] && $jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+            @else 
+                <button type="submit"  name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pull-right pd-l-30 pd-r-30 ">Invite</button>
             @endif
         </div>
     </div>
