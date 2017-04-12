@@ -61,7 +61,7 @@ class FavoriteJobseekerController extends Controller {
                             ->withInput();
         }
         try {
-            $jobList = \App\Models\JobLists::where('seeker_id', $request->seekerId)
+            $jobList = JobLists::where('seeker_id', $request->seekerId)
                     ->where('recruiter_job_id',$request->selectJobSeeker)
                     ->whereIn('applied_status',[JobLists::INVITED,JobLists::APPLIED,JobLists::SHORTLISTED,JobLists::HIRED])
                     ->orderBy('id', 'DESC')
@@ -89,7 +89,7 @@ class FavoriteJobseekerController extends Controller {
                 }
                 Session::flash('message', $message);
             } else {
-                \App\Models\JobLists::create([
+                JobLists::create([
                     'recruiter_job_id' => $request->selectJobSeeker,
                     'seeker_id' => $request->seekerId,
                     'applied_status' => JobLists::INVITED,
