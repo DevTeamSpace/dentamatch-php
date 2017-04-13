@@ -180,11 +180,15 @@ class RecruiterJobController extends Controller {
     public function jobDetails(Request $request,$jobId) {
         try{
             $userId = Auth::user()->id;
-            $this->viewData['job'] = RecruiterJobs::getRecruiterJobDetails($jobId);
-            $this->viewData['skills'] = TemplateSkills::getTemplateSkills($this->viewData['job']['job_template_id']);
-            $this->viewData['seekerList'] = JobLists::getJobSeekerWithRatingList($this->viewData['job']);
-            $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
-            return $this->returnView('view');
+            if(RecruiterJobs::where('id', $jobId)->first()){
+                $this->viewData['job'] = RecruiterJobs::getRecruiterJobDetails($jobId);
+                $this->viewData['skills'] = TemplateSkills::getTemplateSkills($this->viewData['job']['job_template_id']);
+                $this->viewData['seekerList'] = JobLists::getJobSeekerWithRatingList($this->viewData['job']);
+                $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
+                return $this->returnView('view');
+            }else{
+                return redirect('job/lists');    
+            }
         } catch (\Exception $e) {
             Log::error($e);
             return view('web.error.', ["message" => $e->getMessage()]);
