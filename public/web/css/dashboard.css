@@ -29,6 +29,15 @@ button.multiselect[title="select"] {
     margin: 0;
 }
 
+.label {
+    padding: 0.2em 0.6em;
+}
+
+.algn-rel {
+    position: relative;
+    top: 5px;
+}
+
 
 /*-----common------*/
 
@@ -459,9 +468,10 @@ label {
     width: 150px;
 }
 
-.resultHeading>div:not(:first-child) {
+/* .resultHeading>div:not(:first-child) {
     padding-top: 10px;
 }
+ */
 
 .breadcrumb {
     margin-bottom: 13px;

@@ -1,7 +1,7 @@
 @extends('web.layouts.dashboard')
 
 @section('content')
-<div class="container mr-b-60 padding-container-template">
+<div class="container mr-b-60 mr-t-30 padding-container-template">
     @if(Session::has('message'))
     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">
         {{ Session::get('message') }} 
@@ -58,11 +58,11 @@
                                 @foreach($jobDetail as $job)
                                 @if(!empty($job->temp_job_dates))
                                 @php 
-                                    $temp_jobs = (!empty($job->temp_job_dates)?explode(',', $job->temp_job_dates):array());
-                                    $dates_are = '  ';
-                                    $dates_are .= (isset($temp_jobs[0])?date('M d, Y',  strtotime($temp_jobs[0])):"");
-                                    $dates_are .= (isset($temp_jobs[1])?", ".date('M d, Y',  strtotime($temp_jobs[1])):"");
-                                    $dates_are .= (isset($temp_jobs[2])?" , ..":"");
+                                $temp_jobs = (!empty($job->temp_job_dates)?explode(',', $job->temp_job_dates):array());
+                                $dates_are = '  ';
+                                $dates_are .= (isset($temp_jobs[0])?date('M d, Y',  strtotime($temp_jobs[0])):"");
+                                $dates_are .= (isset($temp_jobs[1])?", ".date('M d, Y',  strtotime($temp_jobs[1])):"");
+                                $dates_are .= (isset($temp_jobs[2])?" , ..":"");
                                 @endphp
                                 <option value="{{$job->recruiterId}}" data-content="<h5>{{$job->jobtitle_name}}</h5><span class='label label-warning'>Temporary</span>{{$dates_are}}">
                                     {{$job->jobtitle_name}}
