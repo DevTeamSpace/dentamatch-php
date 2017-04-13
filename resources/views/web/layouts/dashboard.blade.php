@@ -100,17 +100,16 @@
                         <li><span class="icon icon-drive-document navRightIcon"></span><a href="{{ url('reports') }}">Reports</a></li>
                         <li><span class="icon icon-lock navRightIcon"><a href="#"></a></span><a href="{{ url('change-password') }}">Change Password</a></li>
                         <li><span class="icon icon-drive-form navRightIcon"></span><a href="{{ url('setting-subscription') }}">Subscription Details</a></li>
-                        <li><span class="icon icon-text-document-black-interface-symbol navRightIcon"></span>
-                         <a href="{{ url('setting-terms-conditions') }}">Terms &amp; Conditions</a></li>
-                         <li><span class="icon icon-logout-web-button navRightIcon"></span><a href="{{ url('logout') }}">Logout</a></li>
+                        <li><span class="icon icon-text-document-black-interface-symbol navRightIcon"></span><a href="{{ url('setting-terms-conditions') }}">Terms &amp; Conditions</a></li>
+                        <li><span class="icon icon-logout-web-button navRightIcon"></span><a href="{{ url('logout') }}">Logout</a></li>
 
-                     </ul>
-                 </li>
-             </ul>
-             @php 
-             $navActive = isset($navActive)?$navActive:'';
-             @endphp
-             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    </ul>
+                </li>
+            </ul>
+            @php 
+            $navActive = isset($navActive)?$navActive:'';
+            @endphp
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li class="{{ ($navActive=='calendar')?'active':''}}">
                         <a href="{{ url('calender') }}">Calendar</a>
