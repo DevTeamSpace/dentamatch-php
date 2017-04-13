@@ -34,6 +34,9 @@
             padding: 7px 15px;
         }
         .mr-t13{margin-top:13px !important;}
+        
+        table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child, 
+        table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child{white-space: normal;}
     </style>
 </head>
 <body id="app-layout">
