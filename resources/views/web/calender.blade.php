@@ -18,9 +18,9 @@
                         <a data-toggle="modal" data-dismiss="modal" class="panel-body" data-bind="click: $root.showSeekers">
                             <div class="calender-list-title" data-bind="text: title"></div>
                             <div class="seeker-list">
-                            <!--ko foreach: userDetails-->
+                                <!--ko foreach: userDetails-->
                                 <img src="http://placehold.it/28x28" onerror="this.src = 'http://placehold.it/28x28'" data-bind="attr: {src: pic}" class="img-circle cir-28">
-                            <!--/ko-->
+                                <!--/ko-->
                             </div>
                         </a>
                     </div>
@@ -42,42 +42,42 @@
                     <h4 class="modal-title" data-bind="text: jobCreated"></h4>
                 </div>
                 <div class="modal-body content mCustomScrollbar light
-                     " data-mcs-theme="minimal-dark">
-                    <div class="row">
-                        <div class="col-xs-8 cal-detail-address">
-                            <div class="job-title" data-bind="text: particularJobTitle"></div>
-                            <h5 data-bind="text: particularOfficeName"></h5>
-                            <span data-bind="text: particularOfficeTypeName"></span>
-                            <p data-bind="text: particularOfficeAddress"></p>
-                        </div>
-                        <div class="col-xs-4">
-                            <a type="button" class="btn btn-primary pull-right" data-bind="attr: { href: particularJobUrl }">View Detail</a>
-                        </div>
+                " data-mcs-theme="minimal-dark">
+                <div class="row">
+                    <div class="col-xs-8 cal-detail-address">
+                        <div class="job-title" data-bind="text: particularJobTitle"></div>
+                        <h5 data-bind="text: particularOfficeName"></h5>
+                        <span data-bind="text: particularOfficeTypeName"></span>
+                        <p data-bind="text: particularOfficeAddress"></p>
                     </div>
-                    <div class="cal-hired-seeker mr-t-20">
-                        Hired Jobseeker
+                    <div class="col-xs-4">
+                        <a type="button" class="btn btn-primary pull-right" data-bind="attr: { href: particularJobUrl }">View Detail</a>
                     </div>
-                    <div class="row flex-row">
-                        <!--ko foreach: seekersOfParticularJob-->
-                        <div class="col-xs-12 col-sm-6">
-                            <a data-bind="attr: { href: seekerUrl }" class="">
-                                <div class="media">
-                                    <div class="media-left ">
-                                        <img src="http://placehold.it/28x28" onerror="this.src = 'http://placehold.it/28x28'" data-bind="attr: {src: seekerPic}" class="img-circle cir-55">
-                                    </div>
-                                    <div class="media-body pd-t-5">
-                                        <h4 class="media-heading" data-bind="text: seekerName">Paula Jackson</h4>
-                                        <p data-bind="text: seekerJobTitle"></p>
-                                    </div>
+                </div>
+                <div class="cal-hired-seeker mr-t-20">
+                    Hired Jobseeker
+                </div>
+                <div class="row flex-row">
+                    <!--ko foreach: seekersOfParticularJob-->
+                    <div class="col-xs-12 col-sm-6">
+                        <a data-bind="attr: { href: seekerUrl }" class="">
+                            <div class="media">
+                                <div class="media-left ">
+                                    <img src="http://placehold.it/28x28" onerror="this.src = 'http://placehold.it/28x28'" data-bind="attr: {src: seekerPic}" class="img-circle cir-55">
                                 </div>
-                            </a>
-                        </div>
-                        <!--/ko-->
+                                <div class="media-body pd-t-10">
+                                    <h4 class="media-heading" data-bind="text: seekerName">Paula Jackson</h4>
+                                    <p data-bind="text: seekerJobTitle"></p>
+                                </div>
+                            </div>
+                        </a>
                     </div>
+                    <!--/ko-->
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 @endsection

@@ -5,8 +5,8 @@
 @endsection
 @section('content')
 @php 
-    $datesTemp = explode(',',$jobDetails['temp_job_dates']);
-    $seekerDatesCount = count($datesTemp);
+$datesTemp = explode(',',$jobDetails['temp_job_dates']);
+$seekerDatesCount = count($datesTemp);
 @endphp
 
 <div class="container padding-container-template">
@@ -82,13 +82,13 @@
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::SHORTLISTED }}" class="btn btn-primary pd-l-20 pd-r-20">Accept</button>
                 @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::SHORTLISTED)
                 <h6>SHORTLISTED</h6>
-                <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
-                                    data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
+                <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 " data-toggle="modal" 
+                data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::HIRED }}" class="btn btn-primary pd-l-20 pd-r-20">Hire</button>
                 @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::HIRED)
                 <h6>HIRED</h6>
-                <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
-                                    data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
+                <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 " data-toggle="modal" 
+                data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
                 @elseif (!empty($datesTemp) && date("Y-m-d")>$datesTemp[$seekerDatesCount-1] && $jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
                 <h6>TEMP JOB EXPIRED</h6>
                 @else 
@@ -183,7 +183,7 @@
                 @else
                 <b>{{$skills['skill_title']}}</b>
                 <p>{{$skills['skill_name']}}</p>
-                 @endif
+                @endif
             </div>
             @endforeach
             @endif
@@ -238,15 +238,15 @@
 
 @section('js')
 <script type="text/javascript">
-$('.thumb-certificate').click(function(){
+    $('.thumb-certificate').click(function(){
         var imgUrl = "{{ url('image/550/500/?src=') }}";
         $('#certificateModal').modal({show:true});
         $('#certificateModalImg').attr('src', imgUrl+$(this).data('image'));
         return false;
     });
-var socketUrl = "{{ config('app.socketUrl') }}";
-var userId = "{{ Auth::id() }}";
-var officeName = "{{ Session::get('userData.profile.office_name') }}";
+    var socketUrl = "{{ config('app.socketUrl') }}";
+    var userId = "{{ Auth::id() }}";
+    var officeName = "{{ Session::get('userData.profile.office_name') }}";
 
 </script>
 <script src="{{ config('app.socketUrl') }}/socket.io/socket.io.js"></script>

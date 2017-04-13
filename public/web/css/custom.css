@@ -650,7 +650,7 @@ strong {
     position: absolute;
     content: '';
     top: 0;
-    left: 10px;
+    left: 5px;
     font-size: 16px;
 }
 
@@ -670,7 +670,7 @@ strong {
 /*-----------calendar part-------------*/
 
 .custom-modal .modal-content {
-    border: medium none;
+    border: 1px solid #555;
     border-radius: 8px;
 }
 
@@ -777,6 +777,11 @@ strong {
 
 .custom-modal .modal-body .media:first-child {
     margin-top: 20px;
+}
+
+.dl-horizontal dt {
+    font-size: 16px;
+    font-weight: 400;
 }
 
 .job-title {
@@ -1433,6 +1438,10 @@ strong {
     }
 }
 
+.customSubscriptionTable tr td {
+    padding-left: 0;
+}
+
 
 /*------------report-----*/
 
@@ -1459,7 +1468,7 @@ strong {
 #report-table tr td {
     height: 75px;
     vertical-align: top;
-    padding: 10px 12px;
+    padding: 10px 8px;
     width: 25%;
 }
 
@@ -1518,6 +1527,9 @@ a.cir-blue:hover {
 }
 
 @media only screen and (min-width: 768px) {
+    .report-filter label {
+        margin-top: 8px;
+    }
     .dl-horizontal dt {
         text-align: left;
     }
