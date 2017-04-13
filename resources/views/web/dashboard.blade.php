@@ -267,14 +267,16 @@
                 </div>
             </div>
             <div class="profieBox"></div>
+            <div class="clearfix"></div>
+            <div class="addBtn DynamicAddder pull-right pd-t-10 "><span class="icon icon-plus"></span>You can add upto 2 more locations</div>
+            <div class="clearfix"></div>
             <div  class="pull-right text-right pd-b-20">
-                <div id="removeButton" class="pull-right text-right pd-b-15">
+                <div class="pull-right text-right pd-b-15">
                     <button id="createProfileButton" type="submit" class="btn btn-primary pd-l-40 pd-r-40">Save</button>
                 </div>
             </form>
         </div>
-        <div class="clearfix"></div>
-        <div class="addBtn DynamicAddder pull-right pd-t-10 "><span class="icon icon-plus"></span>You can add upto 2 more locations</div>
+        
 
     </div>
 
