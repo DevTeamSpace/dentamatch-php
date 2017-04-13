@@ -17,15 +17,15 @@
             </div>
             <div class="template-job-information-right">
                 <span >Posted : 
-                   @if($job['days']>0)
-                   {{ $job['days'].' day'.(($job['days']>1)?'s':'') }} ago
-                   @else
-                   Today
-                   @endif
-               </span>
-           </div> 
-       </div>    
-       <div class="job-type-detail">
+                 @if($job['days']>0)
+                 {{ $job['days'].' day'.(($job['days']>1)?'s':'') }} ago
+                 @else
+                 Today
+                 @endif
+             </span>
+         </div> 
+     </div>    
+     <div class="job-type-detail">
         @if($job['job_type']==\App\Models\RecruiterJobs::FULLTIME)
         <span class="drk-green statusBtn mr-r-5">Full Time</span>
         @elseif($job['job_type']==\App\Models\RecruiterJobs::PARTTIME)
@@ -232,7 +232,7 @@
                             @if(!empty($dates) && date("Y-m-d")>$dates[$seekerDatesCount-1])
                             <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 " data-toggle="modal" data-target="#ratesekeerPopup_{{ $seeker['seeker_id'] }}">Rate seeker</button>
                             @else
-                            <button type="button" class="btn btn-primary-outline pd-l-30 pd-r-30 mr-r-5">Rate seeker</button>
+                            <button type="button" class="btn btn-primary-outline pd-l-30 pd-r-30">Rate seeker</button>
                             @endif
                             @endif
                             @elseif($key==\App\Models\JobLists::SHORTLISTED)
