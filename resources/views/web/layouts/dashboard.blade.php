@@ -59,14 +59,14 @@
                 </li>
                 <li class="notificaionbell dropdown">
                     @if(!empty($notificationList['total']))
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            <span class="icon icon-bell "></span>
-                            @if(!empty($notificationList['total']))
-                                <div class="notificationCircle "> {{ $notificationList['total'] }}</div>
-                            @endif
-                        </a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="icon icon-bell "></span>
+                        @if(!empty($notificationList['total']))
+                        <div class="notificationCircle "> {{ $notificationList['total'] }}</div>
+                        @endif
+                    </a>
                     @else
-                        <a href="{{ url('notification-lists') }}" ><span class="icon icon-bell "></span></a>
+                    <a href="{{ url('notification-lists') }}" ><span class="icon icon-bell "></span></a>
                     @endif
                     <div class="dropdown-menu noficationListContainer small-border-radius box-shadow">
 
@@ -90,60 +90,62 @@
                 </li>
                 
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Session::get('userData.profile.office_name') }} <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Session::get('userData.profile.office_name') }} <span class="fa fa-angle-down"></span></a>
                     <ul class="dropdown-menu menuLastBox borderNone">
-                       <span class="fa fa-caret-up notificationCaret"></span>
-                       <li><span class="icon icon-account-circle navRightIcon"></span><a href="{{ url('edit-profile') }}"><b>{{Auth::user()->email}}</b><br>	<button type="button" class="btn btn-primary rghtMenuBtn pd-l-10 pd-r-10">View Profile</button></a>
+                        
+                        <span class="fa fa-caret-up notificationCaret"></span>
+                        <li><span class="icon icon-account-circle navRightIcon"></span><a href="{{ url('edit-profile') }}"><b>{{Auth::user()->email}}</b><br>	<button type="button" class="btn btn-primary rghtMenuBtn pd-l-10 pd-r-10">View Profile</button></a>
 
-                       </li>
-                       <li><span class="icon icon-drive-document navRightIcon"></span><a href="{{ url('reports') }}">Reports</a></li>
-                       <li><span class="icon icon-lock navRightIcon"><a href="#"></a></span><a href="{{ url('change-password') }}">Change Password</a></li>
-                       <li><span class="icon icon-text-document-black-interface-symbol navRightIcon"></span><a href="{{ url('setting-subscription') }}">Subscription Details</a></li>
-                       <li><span class="icon icon-drive-form navRightIcon"></span><a href="{{ url('setting-terms-conditions') }}">Terms &amp; Conditions</a></li>
-                       <li><span class="icon icon-logout-web-button navRightIcon"></span><a href="{{ url('logout') }}">Logout</a></li>
+                        </li>
+                        <li><span class="icon icon-drive-document navRightIcon"></span><a href="{{ url('reports') }}">Reports</a></li>
+                        <li><span class="icon icon-lock navRightIcon"><a href="#"></a></span><a href="{{ url('change-password') }}">Change Password</a></li>
+                        <li><span class="icon icon-drive-form navRightIcon"></span><a href="{{ url('setting-subscription') }}">Subscription Details</a></li>
+                        <li><span class="icon icon-text-document-black-interface-symbol navRightIcon"></span><a href="{{ url('setting-terms-conditions') }}">Terms &amp; Conditions</a></li>
+                        <li><span class="icon icon-logout-web-button navRightIcon"></span><a href="{{ url('logout') }}">Logout</a></li>
 
-                   </ul>
-               </li>
-           </ul>
-           @php 
-           $navActive = isset($navActive)?$navActive:'';
-           @endphp
-           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="{{ ($navActive=='calendar')?'active':''}}">
-                    <a href="{{ url('calender') }}">Calendar</a>
-                </li>
-                <li class="{{ ($navActive=='joblisting')?'active':''}}">
-                    <a href="{{ url('job/lists') }}">Job Listing</a>
-                </li>
-                <li class="{{ ($navActive=='favseeker')?'active':''}}">
-                    <a href="{{url('favorite-jobseeker')}}">Favourite Jobseeker</a>
-                </li>
-                <li class="{{ ($navActive=='template')?'active':''}}">
-                    <a href="{{ url('jobtemplates') }}">Template</a>
+                    </ul>
                 </li>
             </ul>
-        </div><!-- /.navbar-collapse -->
-        @if(!empty($jobTemplateModalData))
-        <a class="modalClick add-on-nav" data-toggle="modal" data-target="#jobTemplate" >+</a>
-        @endif
-    </div><!-- /.container-fluid -->
-</nav>
-@yield('content')
+            @php 
+            $navActive = isset($navActive)?$navActive:'';
+            @endphp
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="{{ ($navActive=='calendar')?'active':''}}">
+                        <a href="{{ url('calender') }}">Calendar</a>
+                    </li>
+                    <li class="{{ ($navActive=='joblisting')?'active':''}}">
+                        <a href="{{ url('job/lists') }}">Job Listing</a>
+                    </li>
+                    <li class="{{ ($navActive=='favseeker')?'active':''}}">
+                        <a href="{{url('favorite-jobseeker')}}">Favourite Jobseeker</a>
+                    </li>
+                    <li class="{{ ($navActive=='template')?'active':''}}">
+                        <a href="{{ url('jobtemplates') }}">Template</a>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+            @if(!empty($jobTemplateModalData))
+            <a class="modalClick add-on-nav" data-toggle="modal" data-target="#jobTemplate" >+</a>
+            @endif
+        </div><!-- /.container-fluid -->
+    </nav>
+    @yield('content')
 
-<!-- Bootstrap 3.3.6 -->
-<script src="{{asset('web/scripts/bootstrap.min.js')}}"></script>
-<script src="{{asset('web/scripts/bootstrap-select.js')}}"></script>
-<script src="{{asset('web/scripts/bootstrap-datepicker.js')}}"></script>
-<script src="{{asset('web/scripts/bootstrap-multiselect.js')}}"></script>
-<script src ="{{asset('web/plugins/range-slider/js/bootstrap-slider.js')}}"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="{{asset('web/scripts/bootstrap.min.js')}}"></script>
+    <script src="{{asset('web/scripts/bootstrap-select.js')}}"></script>
+    <script src="{{asset('web/scripts/bootstrap-datepicker.js')}}"></script>
+    <script src="{{asset('web/scripts/bootstrap-multiselect.js')}}"></script>
+    <script src ="{{asset('web/plugins/range-slider/js/bootstrap-slider.js')}}"></script>
 
-<script src="{{asset('web/plugins/parsley/js/parsley.js')}}"></script>
-<script src="{{asset('web/scripts/custom.js')}}"></script>
-<script src ="{{asset('web/scripts/web.js')}}"></script>
-<script src ="{{asset('web/scripts/moment.min.js')}}"></script>
-<script src ="{{asset('web/scripts/bootstrap-datetimepicker.js')}}"></script>
-<script src ="{{asset('web/scripts/main.js')}}"></script>
+    <script src="{{asset('web/plugins/parsley/js/parsley.js')}}"></script>
+    <script src="{{asset('web/scripts/custom.js')}}"></script>
+    <script src ="{{asset('web/scripts/web.js')}}"></script>
+    <script src ="{{asset('web/scripts/moment.min.js')}}"></script>
+    <script src ="{{asset('web/scripts/bootstrap-datetimepicker.js')}}"></script>
+    <script src ="{{asset('web/scripts/main.js')}}"></script>
+
 
 <!-- <script src ="{{asset('web/scripts/tabScript1.js')}}"></script>
 -->
@@ -155,7 +157,7 @@
 @yield('js')
 
 @if(!empty($jobTemplateModalData))
-@include('web.recuriterJob.jobTemplateModal')
+@include('web.recuriterJob.job-template-modal')
 @endif
 </body>
 

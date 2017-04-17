@@ -56,8 +56,12 @@
             }).done(function (data) {
                 $('#ajaxData').html(data);
                 $('.loader-box').hide();
+                var totalResult = $('#resultCount').val();
+                $('#resultFound').html(totalResult + ' Results Found');
+                
             }).fail(function () {
 
+            }).complete(function(){
             });
         }
     });

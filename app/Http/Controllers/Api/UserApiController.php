@@ -16,7 +16,7 @@ use App\Helpers\apiResponse;
 class UserApiController extends Controller {
     
     public function __construct() {
-        $this->middleware('xss');
+        
     }
     
     /**
@@ -89,7 +89,7 @@ class UserApiController extends Controller {
             $name = $reqData['firstName'];
             $email = $reqData['email'];
             $fname = $reqData['firstName'];
-            Mail::queue('email.userActivation', ['name' => $name, 'url' => $url, 'email' => $reqData['email']], function($message ) use($email,$fname) {
+            Mail::queue('email.user-activation', ['name' => $name, 'url' => $url, 'email' => $reqData['email']], function($message ) use($email,$fname) {
                     $message->to($email, $fname)->subject('Activation Email');
                 });
             
@@ -233,7 +233,7 @@ class UserApiController extends Controller {
         }else{
             $is_verified = 0;
         }
-        return view('verifyUser')->with('verifyUser', $is_verified);
+        return view('verify-user')->with('verifyUser', $is_verified);
     }
     
     /**
@@ -268,7 +268,7 @@ class UserApiController extends Controller {
                     $passwordModel->fill(['token' => $token]);
                     $passwordModel->save();
                 
-                    Mail::queue('email.resetPasswordToken', ['name' => $user->first_name, 'url' => url('password/reset', ['token' => $token]), 'email' => $user->email], function($message) use ($user) {
+                    Mail::queue('email.reset-password-token', ['name' => $user->first_name, 'url' => url('password/reset', ['token' => $token]), 'email' => $user->email], function($message) use ($user) {
                         $message->to($user->email, $user->first_name)->subject('Reset Password Request ');
                     });
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.reset_pw_email_sent"));
@@ -381,7 +381,7 @@ class UserApiController extends Controller {
                     $passwordModel->fill(['token' => $token]);
                     $passwordModel->save();
                 
-                    Mail::queue('email.resetPasswordToken', ['name' => 'Admin', 'url' => url('password/reset', ['token' => $token]), 'email' => $user->email], function($message) use ($user) {
+                    Mail::queue('email.reset-password-token', ['name' => 'Admin', 'url' => url('password/reset', ['token' => $token]), 'email' => $user->email], function($message) use ($user) {
                         $message->to($user->email, $user->first_name)->subject('Reset Password Request ');
                     });
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.reset_pw_email_sent"));

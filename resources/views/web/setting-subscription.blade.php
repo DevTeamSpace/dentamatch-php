@@ -50,7 +50,7 @@
                                 <div class="title pd-b-20 "><b>Payment Methods</b></div>
                                 <!--ko foreach: cards-->
                                 <div class="masterCardBox small-border-radius dev_card_box">
-                                    <p class="pull-left"><span data-bind="text: brand"></span> ending in <span data-bind="text: last4"></span> - <span data-bind="text: exp_month"></span>/<span data-bind="text: exp_year"></span></p>
+                                    <p class="pull-left mr-t-5"><span data-bind="text: brand"></span> ending in <span data-bind="text: last4"></span> - <span data-bind="text: exp_month"></span>/<span data-bind="text: exp_year"></span></p>
                                     <div class="masterEDOPtion pull-right"><span class="gbllist dev_edit_button" data-bind="click: $root.editCard"><i class="icon icon-edit"></i> Edit</span>
                                         <span class="gbllist" data-bind="click: $root.deleteCard"><i class="icon icon-deleteicon"></i> Delete</span></div>
                                         <div class="clearfix"></div>
@@ -120,18 +120,10 @@
                               <p class="text-center" style="color: red;" data-bind="text: errorMessage"></p>
                               <p class="text-center" style="color: green;" data-bind="text: successMessage"></p>
                               <br>
-<!--                            <div class="form-group">
-                                <label class="sr-only" for="card-number">Card number</label>
-                                <input type="number" class="form-control" placeholder="Card number" data-bind="value: editCardNumber" disabled="disable">
-                            </div>-->
-                            <div class="form-group">
+                              <div class="form-group">
                                 <label class="sr-only" for="expiry">Expiry</label>
                                 <input type="text" class="form-control" id="editExpiry" placeholder="MM/YYYY" data-bind="value: editExpiry, valueUpdate: 'keyup'">
                             </div>
-<!--                            <div class="form-group">
-                                <label class="sr-only" for="cvv">CVV</label>
-                                <input type="number" class="form-control" placeholder="CVV" data-bind="value: editCvv">
-                            </div>-->
                             <div class="mr-t-20 mr-b-30 dev-pd-l-13p">
                                 <button type="button" class="btn btn-link mr-r-5" data-dismiss="modal">Close</button>
                                 <button type="submit" id="editCardButton" class="btn btn-primary pd-l-30 pd-r-30">Update Card</button>

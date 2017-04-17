@@ -2,7 +2,6 @@
 
 @section('css')
 <link rel="stylesheet" href="{{asset('web/plugins/custom-scroller/css/mCustomScrollbar.min.css')}}">
-<!--<link rel="stylesheet" href="{{asset('web/plugins/emoji//emoticons.css')}}">-->
 @endsection
 @section('content')
 <div class="container padding-container-template">

@@ -37,14 +37,6 @@
                                 <td>N/A</td>
                             </tr>
                             @endif
-<!--                            <tr>
-                                <td></td>
-                                <td>
-                                    <a href="{{ url('cms/jobseeker/index') }}"  class="btn btn-xs btn-primary">
-                                        <i class="fa fa-backward"></i> Return to list
-                                    </a>
-                                </td>
-                            </tr>-->
                         </tbody>
                     </table>
                 </div>

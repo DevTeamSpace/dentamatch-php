@@ -1,7 +1,7 @@
 @extends('web.layouts.dashboard')
 
 @section('content')
-<div class="container mr-b-60 padding-container-template">
+<div class="container mr-b-60 mr-t-30 padding-container-template">
     @if(Session::has('message'))
     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">
         {{ Session::get('message') }} 
@@ -23,12 +23,6 @@
             </div>
             <div class="col-sm-4 pd-t-15 text-right">
                 <button type="submit" class="btn btn-primary-outline pd-l-30 pd-r-30 " onclick="putValue('{{$fav->seeker_id}}')" data-toggle="modal" data-target=".select_list">Invite</button>
-<!--                @if($fav->applied_status =='1')
-                <button type="submit" class="btn  btn-primary-outline active pd-l-30 pd-r-30 mr-b-5" >Invite</button>
-                <p class="text-success "><span  class=" invite-success"><i class="fa fa-check "></i></span> Invitation sent</p>
-                @else
-                <button type="submit" class="btn btn-primary-outline pd-l-30 pd-r-30 " onclick="putValue('{{$fav->seeker_id}}')" data-toggle="modal" data-target=".select_list">Invite</button>
-                @endif-->
             </div>
         </div>
     </div>
@@ -62,16 +56,18 @@
                             <select  id="selectJobSeeker" name="selectJobSeeker"  class="selectpicker" required="" data-parsley-required-message="Please select the job." >
                                 <option value="" disabled selected>Select </option>
                                 @foreach($jobDetail as $job)
-                                <?php 
-                                    $temp_jobs = (!empty($job->temp_job_dates)?explode(',', $job->temp_job_dates):array());
-                                    $dates_are = '  ';
-                                    $dates_are .= (isset($temp_jobs[0])?date('M d, Y',  strtotime($temp_jobs[0])):"");
-                                    $dates_are .= (isset($temp_jobs[1])?", ".date('M d, Y',  strtotime($temp_jobs[1])):"");
-                                    $dates_are .= (isset($temp_jobs[2])?" , ..":"");
-                                     ?>
+                                @if(!empty($job->temp_job_dates))
+                                @php 
+                                $temp_jobs = (!empty($job->temp_job_dates)?explode(',', $job->temp_job_dates):array());
+                                $dates_are = '  ';
+                                $dates_are .= (isset($temp_jobs[0])?date('M d, Y',  strtotime($temp_jobs[0])):"");
+                                $dates_are .= (isset($temp_jobs[1])?", ".date('M d, Y',  strtotime($temp_jobs[1])):"");
+                                $dates_are .= (isset($temp_jobs[2])?" , ..":"");
+                                @endphp
                                 <option value="{{$job->recruiterId}}" data-content="<h5>{{$job->jobtitle_name}}</h5><span class='label label-warning'>Temporary</span>{{$dates_are}}">
                                     {{$job->jobtitle_name}}
                                 </option>
+                                @endif
                                 <option data-divider="true"></option>
                                 @endforeach
                             </select>

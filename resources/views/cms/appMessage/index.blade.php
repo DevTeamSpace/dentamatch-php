@@ -15,7 +15,7 @@
                 </div>
 
                 <div class="panel-body">
-                    <table id="appMessage_list" class="display responsive nowrap" cellspacing="0" width="100%">
+                    <table id="appMessage_list" class="display responsive table nowrap" cellspacing="0" width="100%">
                           <thead>
                               <tr>
                                   <th>Users</th>
@@ -25,8 +25,7 @@
                                   <th>Action</th>
                               </tr>
                           </thead>
-
-			</table>
+                    </table>
                 </div>
             </div>
         </div>

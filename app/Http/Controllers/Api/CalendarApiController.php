@@ -13,7 +13,6 @@ class CalendarApiController extends Controller {
     
     public function __construct() {
         $this->middleware('ApiAuth');
-        $this->middleware('xss');
     }
     
     /**
@@ -31,17 +30,18 @@ class CalendarApiController extends Controller {
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
                 $countExistingjob = 0;
                 // check if job seeker is already hired for any temp job for these dates
-                if(count($reqData['tempdDates']) > 0){
+                $requestTempDates = $reqData['tempdDates'];
+                $tempDate = [];
+                if(count($requestTempDates) > 0){
                     $tempAvailability = JobseekerTempHired::where('jobseeker_id',$userId)->where('job_date','>=',date('Y-m-d'))->select('job_date')->get();
                     if($tempAvailability){
-                        $tempDate = $tempAvailability->toArray();
-                            foreach($tempDate as $value ){
-                                if(in_array($value['job_date'], $reqData['tempdDates'])){
-                                    $countExistingjob++;
-                                }
-                            }
+                        $tempDateArray = $tempAvailability->toArray();
+                        foreach($tempDateArray as $value) {
+                            $tempDate[] = $value['job_date'];
                         }
                     }
+                }
+                
                 if($countExistingjob == 0){
                         $userProfileModel->is_fulltime = $reqData['isFulltime'];
                         $userProfileModel->is_parttime_monday = 0;
@@ -59,31 +59,24 @@ class CalendarApiController extends Controller {
                             }
                         }
                         $userProfileModel->save();
-                        JobSeekerTempAvailability::where('user_id', '=', $userId)->where('temp_job_date','>=',date('Y-m-d'))->forceDelete();
+                        $deleteAllAvailabilitySet = JobSeekerTempAvailability::where('user_id', '=', $userId);
+                        if(!empty($tempDate)) {
+                            $deleteAllAvailabilitySet = $deleteAllAvailabilitySet->whereNotIn('temp_job_date', $tempDate);
+                        }
+                        $deleteAllAvailabilitySet->where('temp_job_date','>=',date('Y-m-d'))->forceDelete();
                         
-                        if(is_array($reqData['tempdDates']) && count($reqData['tempdDates']) > 0) {
-                            $updateTempDates = [];
+                        if(is_array($requestTempDates) && count($requestTempDates) > 0) {
                             $tempDateArray = [];
-                            $tempJobDate = [];
-                            $availability = JobSeekerTempAvailability::select('temp_job_date')->whereIn('temp_job_date',$reqData['tempdDates'])->where('user_id', '=', $userId)->get();
-                            if($availability) {
-                                $tempJobDate = $availability->toArray();
-                                foreach($tempJobDate as $value){
-                                    $updateTempDates[] = $value['temp_job_date'];
-                                }
-                            }
-                            $insertTempDateArray = array_diff($reqData['tempdDates'], $updateTempDates);
                             
+                            $insertTempDateArray = array_diff($requestTempDates, $tempDate);
                             if(!empty($insertTempDateArray)) {
-                                foreach($insertTempDateArray as $tempDate) {     
-                                        $tempDateArray[] = array('user_id' => $userId , 'temp_job_date' => $tempDate);
+                                foreach($insertTempDateArray as $newTempDate) {     
+                                        $tempDateArray[] = array('user_id' => $userId , 'temp_job_date' => $newTempDate);
                                 }
                                 JobSeekerTempAvailability::insert($tempDateArray);
                             }
                         }
                         $response = apiResponse::customJsonResponse(1, 200, trans("messages.availability_add_success"));
-                }else{
-                        $response = apiResponse::customJsonResponse(0, 201, trans("messages.already_job_availability"));
                 }
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));

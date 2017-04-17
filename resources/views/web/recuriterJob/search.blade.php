@@ -6,7 +6,7 @@
 @endsection
 @section('content')
 
-<div id="ajaxData" class="container padding-container-template ">
+<div class="container padding-container-template ">
     <!--breadcrumb-->
     <ul class="breadcrumb ">
         <li><a href="{{ url('job/lists') }}">Jobs Listing</a></li>
@@ -14,7 +14,6 @@
         <li class="active">Search Preference</li>
     </ul>
     <!--/breadcrumb-->
-<?php //dd($jobDetails); ?>
     
     <div class="col-sm-12 mr-b-55">
         <div class="row section-title mr-b-10">
@@ -54,7 +53,7 @@
 
     <div class="row sec-mob">
     <div class="col-sm-6 mr-b-10 col-xs-6">
-        <div class="section-title">{{$seekersList['paginate']->total()}} Results Found</div>
+        <div class="section-title" id="resultFound">{{$seekersList['paginate']->total()}} Results Found</div>
     </div>
     <div class="col-sm-6 text-right mr-b-10 col-xs-6">
         <button type="button" class="btn {{ !empty($searchData['avail_all']) ? "btn-primary" : "btn-primary-outline" }}" id="availAllBtn">Available all days </button>
@@ -62,8 +61,8 @@
     </div>
 
     @if(count($seekersList['paginate'])>0)
-        <div class="jobseeker-statebox">
-            @include('web.recuriterJob.seekersData')
+        <div class="jobseeker-statebox"  id="ajaxData">
+            @include('web.recuriterJob.seekers-data')
         </div>
     @else
     <div class="jobCatbox mr-b-20">

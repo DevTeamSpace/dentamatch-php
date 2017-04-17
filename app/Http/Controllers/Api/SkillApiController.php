@@ -14,7 +14,6 @@ class SkillApiController extends Controller {
     use FileRepositoryS3;
     public function __construct() {
         $this->middleware('ApiAuth');
-        $this->middleware('xss');
     }
     /**
      * Description : Show skill lists with user skill

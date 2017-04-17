@@ -1,3 +1,47 @@
+.icon-bell,
+.icon-message {
+    font-size: 16px;
+}
+
+.report-jobdate:not(:first-child) {
+    margin-top: 5px;
+}
+
+.tooltip.bottom .tooltip-arrow {
+    top: 0;
+    left: 50%;
+    margin-left: -5px;
+    border-bottom-color: #fff;
+    border-width: 0 5px 5px;
+}
+
+.tooltip-inner {
+    color: #0470c0;
+    background: #fff;
+    border: solid 1px #fff;
+    -webkit-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.19);
+}
+
+button.multiselect[title="select"] {
+    color: #c9c9c9;
+}
+
+.mr-0 {
+    margin: 0;
+}
+
+.label {
+    padding: 0.2em 0.6em;
+}
+
+.algn-rel {
+    position: relative;
+    top: 5px;
+}
+
+
 /*-----common------*/
 
 ul {
@@ -125,7 +169,7 @@ label {
 }
 
 .navbar-brand {
-    padding: 27px 15px;
+    padding: 25px 15px;
 }
 
 .customNav .navbar-nav>.open>a,
@@ -388,7 +432,7 @@ label {
 }
 
 .topIconBox {
-    padding-top: 32px;
+    padding-top: 37px;
 }
 
 .topIconBox a {
@@ -412,7 +456,7 @@ label {
 }
 
 .statusBtn {
-    padding: 4px 9px;
+    padding: 3px 9px;
     color: #fff;
     border-radius: 3px;
     background-color: #8ecf7e;
@@ -427,9 +471,11 @@ label {
     width: 150px;
 }
 
-.resultHeading>div:not(:first-child) {
+
+/* .resultHeading>div:not(:first-child) {
     padding-top: 10px;
 }
+*/
 
 .breadcrumb {
     margin-bottom: 13px;
@@ -660,7 +706,7 @@ p {
 .container-color {
     background-color: #ffffff;
     border-radius: 8px;
-    min-height: 200px;
+    min-height: 225px;
     width: 220px;
     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.12);
 }

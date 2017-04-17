@@ -34,7 +34,7 @@ class ReportController extends Controller
      */
     public function index()
     {
-        return view('cms.report.joblist');
+        return view('cms.report.job-list');
     }
     public function appliedSeekers($id)
     {
@@ -44,15 +44,15 @@ class ReportController extends Controller
                         'job_titles.jobtitle_name')
                 ->where('recruiter_jobs.id','=',$id)
                 ->first();       
-        return view('cms.report.seekerlist',['jobDetail' => $jobDetail]);
+        return view('cms.report.seeker-list',['jobDetail' => $jobDetail]);
     }
     
     public function cancelLists(){
-        return view('cms.report.cancellist');
+        return view('cms.report.cancel-list');
     }
     
     public function jobResponse(){
-        return view('cms.report.responselist');
+        return view('cms.report.response-list');
     }
     
     public function jobResponseList(){
@@ -191,7 +191,7 @@ class ReportController extends Controller
     }
     
     public function searchJobByLocation(){
-        return view('cms.report.locationlist');
+        return view('cms.report.location-list');
     }
     
     public function searchCountbyLocation(){

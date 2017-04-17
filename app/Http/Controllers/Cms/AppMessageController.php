@@ -65,7 +65,7 @@ class AppMessageController extends Controller
         try{
             $reqData = $request->all();
             $rules = array(
-                'message' => array('required','min:2','max:255'),
+                'message' => array('required','min:2','max:150'),
             );
 
             $validator = Validator::make($reqData, $rules);
@@ -127,7 +127,7 @@ class AppMessageController extends Controller
 
     public function messageList(){
         try{
-        $appMessages = AppMessage::SELECT(['message','message_to','message_sent','created_at','id'])->get();
+        $appMessages = AppMessage::SELECT(['message','message_to','message_sent','created_at','id'])->orderBy('created_at', 'desc')->get();
         return Datatables::of($appMessages)
                 ->removeColumn('id')
                 ->addColumn('messageTo', function ($appMessages) {

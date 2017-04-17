@@ -121,7 +121,7 @@ h4,
 h5,
 h6 {
     /* font-weight: normal;
- */
+    */
     font-family: 'Roboto', sans-serif;
 }
 
@@ -221,9 +221,11 @@ strong {
     height: 36px;
 }
 
-.navbar-fixed-top {
+
+/* .navbar-fixed-top {
     z-index: 99999 !important;
 }
+*/
 
 
 /*-------------------------*/
@@ -648,7 +650,7 @@ strong {
     position: absolute;
     content: '';
     top: 0;
-    left: 10px;
+    left: 5px;
     font-size: 16px;
 }
 
@@ -668,7 +670,7 @@ strong {
 /*-----------calendar part-------------*/
 
 .custom-modal .modal-content {
-    border: medium none;
+    border: 1px solid #555;
     border-radius: 8px;
 }
 
@@ -775,6 +777,11 @@ strong {
 
 .custom-modal .modal-body .media:first-child {
     margin-top: 20px;
+}
+
+.dl-horizontal dt {
+    font-size: 16px;
+    font-weight: 400;
 }
 
 .job-title {
@@ -1377,6 +1384,7 @@ strong {
     width: 100%;
     float: left;
     color: #484848;
+    word-break: break-all;
 }
 
 .message-textarea .input-group-btn > .btn {
@@ -1430,6 +1438,10 @@ strong {
     }
 }
 
+.customSubscriptionTable tr td {
+    padding-left: 0;
+}
+
 
 /*------------report-----*/
 
@@ -1456,7 +1468,7 @@ strong {
 #report-table tr td {
     height: 75px;
     vertical-align: top;
-    padding: 10px 12px;
+    padding: 10px 8px;
     width: 25%;
 }
 
@@ -1467,7 +1479,7 @@ strong {
 .list-hired li {
     position: relative;
     display: inline-block;
-    margin-bottom: 5px;
+    /*margin-bottom: 5px;*/
 }
 
 .list-hired li >a {
@@ -1515,6 +1527,9 @@ a.cir-blue:hover {
 }
 
 @media only screen and (min-width: 768px) {
+    .report-filter label {
+        margin-top: 8px;
+    }
     .dl-horizontal dt {
         text-align: left;
     }
@@ -1567,6 +1582,9 @@ a.cir-blue:hover {
 }
 
 @media only screen and (max-width: 767px) {
+    .report-filter {
+        text-align: left !important;
+    }
     .frm-cred-access-box {
         width: 100%;
         margin-top: 112px;
@@ -1657,4 +1675,12 @@ a.cir-blue:hover {
 .flex-row > [class*='col-'] {
     display: flex;
     flex-direction: column;
+}
+
+.list-hired {
+    min-height: 30px;
+}
+
+.fc-unthemed td.fc-widget-content.fc-today {
+    border-left: 0px !important;
 }

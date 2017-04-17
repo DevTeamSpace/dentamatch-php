@@ -22,7 +22,7 @@ class Device extends Model  {
        return true;
     }
     public function registerDevice($deviceId, $userId, $deviceToken, $deviceType,$deviceOs='',$appVersion='') {
-        $userToken = md5($deviceId.$userId);
+        $userToken = bcrypt($deviceId.$userId);
         $data = array(
             'device_id' => $deviceId,
             'user_id' => $userId,

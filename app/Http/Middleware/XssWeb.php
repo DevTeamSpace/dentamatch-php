@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class Xss
+class XssWeb
 {
     /**
      * The following method loops through all request input and strips out all tags from
@@ -23,7 +23,6 @@ class Xss
         $input = $request->all();
 
         array_walk_recursive($input, function(&$input) {
-            
                 $input = strip_tags($input);
 });
 

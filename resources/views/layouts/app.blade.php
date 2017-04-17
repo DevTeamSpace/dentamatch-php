@@ -14,7 +14,6 @@
     <!-- Styles -->
 
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
-    <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">-->
     <link href="{{ asset('bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{{ asset('styles/jquery.dataTables.css')}}" >
 <link rel="stylesheet" type="text/css" href="{{ asset('styles/dataTables.responsive.css')}}" >
@@ -35,6 +34,9 @@
             padding: 7px 15px;
         }
         .mr-t13{margin-top:13px !important;}
+        
+        table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child, 
+        table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child{white-space: normal;}
     </style>
 </head>
 <body id="app-layout">
@@ -58,16 +60,11 @@
 
             <div class="collapse navbar-collapse" id="spark-navbar-collapse">
                 <!-- Left Side Of Navbar -->
-                <!--                <ul class="nav navbar-nav">
-                    <li><a href="{{url('/cms')}}">Home</a></li>
-                </ul>-->
-
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
                     @if (Auth::guest())
                         <li><a href="{{ url('cms/login') }}">Login</a></li>
-                        <!--li><a href="{{ url('/register') }}">Register</a></li-->
                     @else
                         @if (Auth::user()->userGroup->group_id==1)
                         
