@@ -185,6 +185,8 @@ class RecruiterJobController extends Controller {
                 $this->viewData['skills'] = TemplateSkills::getTemplateSkills($this->viewData['job']['job_template_id']);
                 $this->viewData['seekerList'] = JobLists::getJobSeekerWithRatingList($this->viewData['job']);
                 $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
+                //$data = JobLists::getJobSeekerWithRatingList($this->viewData['job']);
+                //print_r($data);exit();
                 return $this->returnView('view');
             }else{
                 return redirect('job/lists');    

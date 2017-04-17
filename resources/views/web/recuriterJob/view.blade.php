@@ -1,6 +1,7 @@
 @extends('web.layouts.dashboard')
 
 @section('content')
+
 <div class="container padding-container-template">
     <!--breadcrumb-->
     <ul class="breadcrumb">
@@ -184,6 +185,22 @@
                         @endif
                     </div>
                     <p class="nopadding">{{ $seeker['jobtitle_name'] }}</p>
+                    <p class="nopadding">
+                        <?php
+                        $date = "";
+                        if(isset($seeker['hired_job_dates']) && $seeker['hired_job_dates'] != ""){
+                            
+                            $dateArray = explode(",",$seeker['hired_job_dates']);
+                            $newDateArray = [];
+                            foreach($dateArray as $date){
+                                $newDateArray[] = date('D, M d, Y',strtotime($date));
+                            }
+                            
+                            $date = implode(" & ",$newDateArray);
+                        }
+                        echo $date;
+                        ?>
+                    </p>
                     @if($seeker['job_type']==\App\Models\RecruiterJobs::PARTTIME)
                     <p  class="nopadding">
                         <!--<span class="bg-ember statusBtn mr-r-5">Part time</span>-->
