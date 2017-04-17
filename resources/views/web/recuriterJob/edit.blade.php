@@ -268,6 +268,7 @@
             <textarea class="form-control txtHeight" id="optionalInfo" data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: selectedOfficeInfo"></textarea>
         </div>	
     </div>
+    <!--/ko-->
 </div>
 </form>
 <div id="actionModal" class="modal fade" role="dialog">
