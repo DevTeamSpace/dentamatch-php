@@ -8,6 +8,8 @@ use App\Models\JobLists;
 use App\Models\JobseekerTempHired;
 use Log;
 use App\Http\Requests\CalenderSeekerRequest;
+use App\Models\JobTemplates;
+use Auth;
 
 class CalenderController extends Controller
 {
@@ -18,7 +20,9 @@ class CalenderController extends Controller
     }
     
     public function getCalender(){
-        return view('web.calender',['navActive'=>'calendar']);
+        $userId = Auth::user()->id;
+        $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
+        return view('web.calender',['navActive'=>'calendar', 'jobTemplateModalData' => $jobTemplateModalData]);
     }
     
     public function getCalenderDetails(){

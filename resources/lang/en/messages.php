@@ -167,7 +167,7 @@ return [
     'already_register_as_recruiter'=>'You are already registered as recruiter',
     'job_not_exists' => 'This job no longer exists',
     'jobseeker_not_verified' => "You cannot apply for a job as the admin has not yet approved your license",
-    'not_job_exists' => 'This Job has been accepted by someone else',
+    'not_job_exists' => 'This Job has been accepted by someone else or you have committed for another job on same date',
     'mismatch_availability' => 'Either you are currently not available or you have committed for another job',
     'set_availability' => 'Please set your availability',
 ];

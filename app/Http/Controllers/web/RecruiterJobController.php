@@ -102,19 +102,19 @@ class RecruiterJobController extends Controller {
             if ($request->action == "edit" && !empty($request->id)) {
                 $recruiterJobObj = RecruiterJobs::findById($request->id);
             }
-            
-            $tempPrevious = RecruiterJobs::chkTempJObRatingPending();
-            if($tempPrevious) {
-                $tempPreviousArray = $tempPrevious->toArray();
-                foreach($tempPreviousArray as $previousTempJob){
-                    $tempJobLastDate = date("Y-m-d", strtotime($previousTempJob['job_date']." +1 days"));
-                    if(($previousTempJob['total_hired'] != $previousTempJob['total_rating']) && ($tempJobLastDate >= date("Y-m-d"))){
-                        Session::flash('message', trans('messages.rate_previous_jobseeker'));
-                        return redirect('createJob/'.$request->templateId);
+            if ($request->jobType == RecruiterJobs::TEMPORARY) {
+                $tempPrevious = RecruiterJobs::chkTempJObRatingPending();
+                if($tempPrevious) {
+                    $tempPreviousArray = $tempPrevious->toArray();
+                    foreach($tempPreviousArray as $previousTempJob){
+                        $tempJobLastDate = date("Y-m-d", strtotime($previousTempJob['job_date']." +1 days"));
+                        if(($previousTempJob['total_hired'] != $previousTempJob['total_rating']) && ($tempJobLastDate >= date("Y-m-d"))){
+                            Session::flash('message', trans('messages.rate_previous_jobseeker'));
+                            return redirect('createJob/'.$request->templateId);
+                        }
                     }
                 }
             }
-            
             $recruiterJobObj->job_template_id = $request->templateId;
             $recruiterJobObj->recruiter_office_id = $request->dentalOfficeId;
             $recruiterJobObj->job_type = $request->jobType;
@@ -185,6 +185,8 @@ class RecruiterJobController extends Controller {
                 $this->viewData['skills'] = TemplateSkills::getTemplateSkills($this->viewData['job']['job_template_id']);
                 $this->viewData['seekerList'] = JobLists::getJobSeekerWithRatingList($this->viewData['job']);
                 $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
+                //$data = JobLists::getJobSeekerWithRatingList($this->viewData['job']);
+                //print_r($data);exit();
                 return $this->returnView('view');
             }else{
                 return redirect('job/lists');    
