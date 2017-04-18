@@ -52,6 +52,10 @@ textarea {
     outline: 0;
 }
 
+.bootstrap-select.btn-group .dropdown-menu li a {
+    white-space: normal;
+}
+
 .btn.active,
 .btn:active {
     box-shadow: none;
@@ -1582,6 +1586,10 @@ a.cir-blue:hover {
 }
 
 @media only screen and (max-width: 767px) {
+    .msg-ratebtn-align .modalClick.btn {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
     .report-filter {
         text-align: left !important;
     }

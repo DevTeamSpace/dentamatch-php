@@ -23,7 +23,7 @@
         <span class="close" data-dismiss="alert">&times;</span>
     </p>
     @endif
-    <form data-parsley-validate method="post" action="{{ url('createJob/saveOrUpdate') }}">
+    <form data-parsley-validate method="post" action="{{ url('createJob/saveOrUpdate') }}" novalidate>
         <div class="row sec-mob">
             <div class="col-sm-6 mr-b-10 col-xs-6">
                 <div class="section-title">Create Job Opening</div>
