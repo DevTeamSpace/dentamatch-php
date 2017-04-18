@@ -1315,6 +1315,12 @@ input[type='checkbox'] {
     .customsel .form-control {
         margin-bottom: 3px;
     }
+    .topIconBox li.dropdown {
+        width: 124px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1331,6 +1337,9 @@ input[type='checkbox'] {
     }
     .notificationCaret {
         right: 46%;
+    }
+    .topIconBox>li {
+        margin-right: 13px;
     }
 }
 
