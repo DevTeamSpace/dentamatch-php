@@ -1112,6 +1112,11 @@ strong {
     margin: auto;
 }
 
+.date-drop a,
+.day-drop {
+    color: #686868;
+}
+
 
 /*--------view template---------*/
 

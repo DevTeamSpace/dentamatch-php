@@ -1318,7 +1318,7 @@ input[type='checkbox'] {
 }
 
 @media (max-width: 480px) {
-    .topIconBox li.dropdown {
+    .topIconBox li.profile-name-mob {
         width: 100px;
         overflow: hidden;
         white-space: nowrap;

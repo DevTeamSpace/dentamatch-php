@@ -89,7 +89,7 @@
 
                 </li>
                 
-                <li class="dropdown">
+                <li class="dropdown profile-name-mob">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Session::get('userData.profile.office_name') }} <span class="fa fa-angle-down"></span></a>
                     <ul class="dropdown-menu menuLastBox borderNone">
                         
