@@ -1315,15 +1315,15 @@ input[type='checkbox'] {
     .customsel .form-control {
         margin-bottom: 3px;
     }
+}
+
+@media (max-width: 480px) {
     .topIconBox li.dropdown {
-        width: 124px;
+        width: 100px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
-}
-
-@media (max-width: 480px) {
     .notificationDel {
         margin-top: -5px;
     }
