@@ -1,8 +1,8 @@
 <!--Seeker listing-->
 @php 
 
-    $datesTemp = explode(',',$jobDetails['temp_job_dates']);
-    $seekerDatesCount = count($datesTemp);
+$datesTemp = explode(',',$jobDetails['temp_job_dates']);
+$seekerDatesCount = count($datesTemp);
 @endphp
 @foreach ($seekersList['paginate'] as $seeker)
 <!--search preference list-->
@@ -59,9 +59,9 @@
                     @endif   
                     
                     @if(!empty($seeker['avg_rating']))
-                        <span class=" dropdown-toggle label {{$avgrateClass}}" data-toggle="dropdown">{{number_format($seeker['avg_rating'], 1, '.', '')}}</span>
+                    <span class=" dropdown-toggle label {{$avgrateClass}}" data-toggle="dropdown">{{number_format($seeker['avg_rating'], 1, '.', '')}}</span>
                     @else
-                        <span class=" dropdown-toggle label label-success">Not Yet Rated</span>
+                    <span class=" dropdown-toggle label label-success">Not Yet Rated</span>
                     @endif
                     
                     
@@ -137,42 +137,42 @@
             @php 
             $dates = explode(',',$seeker['temp_job_dates']);
             @endphp
-            <span class=" dropdown-toggle"  data-toggle="dropdown"><span class="day-drop">{{ date('l, M d, Y',strtotime($dates[0])) }}</span>
-            <span class="caret"></span></span>
-            <ul class="dropdown-menu">
-                @foreach ($dates as $date)
-                <li>{{ date('l, M d, Y',strtotime($date)) }}</li>
-                @endforeach
-            </ul>
-        </span>
-        @endif
-        @endif
-    </div>
-    <dl class="dl-horizontal text-left mr-t-30">
-        @if(isset($seekersList['allSkills'][$seeker['user_id']]))
-        @foreach($seekersList['allSkills'][$seeker['user_id']] as $skills)
-        <dt>{{$skills['title']}}:</dt>
-        <dd>{{ implode(', ',$skills['skills']) }}</dd>
-        @endforeach
-        @endif
-    </dl>
-    <div class="row">
-        <div class="col-sm-6 col-xs-6">
-        </div>
-        <div class="col-sm-6 col-xs-6 ">
-            @if(isset($seeker['job_status']) && $seeker['job_status'] == 1)
-                <button type="button" class="btn btn-primary-outline pull-right pd-l-30 pd-r-30">Invited</button>
-            @elseif (!empty($datesTemp) && date("Y-m-d")>$datesTemp[$seekerDatesCount-1] && $jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
-            @else 
-                <button type="submit"  name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pull-right pd-l-30 pd-r-30 ">Invite</button>
+            <a href="#" class=" dropdown-toggle"  data-toggle="dropdown"><span class="day-drop">{{ date('l, M d, Y',strtotime($dates[0])) }}</span>
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    @foreach ($dates as $date)
+                    <li>{{ date('l, M d, Y',strtotime($date)) }}</li>
+                    @endforeach
+                </ul>
+            </span>
+            @endif
             @endif
         </div>
+        <dl class="dl-horizontal text-left mr-t-30">
+            @if(isset($seekersList['allSkills'][$seeker['user_id']]))
+            @foreach($seekersList['allSkills'][$seeker['user_id']] as $skills)
+            <dt>{{$skills['title']}}:</dt>
+            <dd>{{ implode(', ',$skills['skills']) }}</dd>
+            @endforeach
+            @endif
+        </dl>
+        <div class="row">
+            <div class="col-sm-6 col-xs-6">
+            </div>
+            <div class="col-sm-6 col-xs-6 ">
+                @if(isset($seeker['job_status']) && $seeker['job_status'] == 1)
+                <button type="button" class="btn btn-primary-outline pull-right pd-l-30 pd-r-30">Invited</button>
+                @elseif (!empty($datesTemp) && date("Y-m-d")>$datesTemp[$seekerDatesCount-1] && $jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+                @else 
+                <button type="submit"  name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pull-right pd-l-30 pd-r-30 ">Invite</button>
+                @endif
+            </div>
+        </div>
     </div>
-</div>
 </div>
 </form>
 <!--/search preference list-->
 @endforeach 
 <input type="hidden" name="resultCount" id="resultCount" value="{{ $seekersList['paginate']->total() }}">
-    
+
 {{ $seekersList['paginate']->appends(['distance' => $searchData['distance'],'avail_all' => $searchData['avail_all']])->links() }}

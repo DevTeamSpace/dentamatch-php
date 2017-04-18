@@ -50,10 +50,10 @@
                             @php 
                             $dates = explode(' | ',$seekerDetails['temp_job_dates']);
                             @endphp
-                            <span class=" dropdown-toggle"  data-toggle="dropdown">
+                            <a href="#" class=" dropdown-toggle"  data-toggle="dropdown">
                                 <span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
                                 <span class="caret"></span>
-                            </span>
+                            </a>
                             <ul class="dropdown-menu">
                               @foreach ($dates as $date)
                               <li>{{ date('l, d M Y',strtotime($date)) }}</li>
@@ -64,9 +64,9 @@
                   @endif
               </div>
           </div>
-    </div>
+      </div>
 
-    <div class="pd-t-60">
+      <div class="pd-t-60">
         <div class="leftCircle">
             <div class="searchResultHeading">
                 <h5>ABOUT ME</h5>
@@ -151,7 +151,7 @@
                 @else
                 <b>{{$skills['skill_title']}}</b>
                 <p>{{$skills['skill_name']}}</p>
-                 @endif
+                @endif
             </div>
             @endforeach
             @endif
@@ -161,34 +161,34 @@
                 <P>{{$seekerDetails['affiliations']}}</P>
             </div>
             @if(!empty($seekerDetails['certificate']))
-                @foreach($seekerDetails['certificate'] as $certificate)
-                    <div class="searchResultHeading pd-t-20 smallSquare">
-                    <h5>{{$certificate['certificate_name']}}</h5>
-                    <p>
-                        <a href="javascript:void(0)" >
-                            <img data-toggle="modal" data-target="#certificateModal" class="img-rounded thumb-certificate" data-image="{{ $certificate['image_path'] }}" src="{{ url('image/66/66/?src='.$certificate['image_path']) }}">
-                        </a>
-                        @if(!empty($certificate['validity_date']))
-                        Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span>
-                        @else
-                        Valid Till: N/A
-                        @endif
-                    </p>
-                </div>
-                @endforeach
-                @endif
-            </div>  
+            @foreach($seekerDetails['certificate'] as $certificate)
+            <div class="searchResultHeading pd-t-20 smallSquare">
+                <h5>{{$certificate['certificate_name']}}</h5>
+                <p>
+                    <a href="javascript:void(0)" >
+                        <img data-toggle="modal" data-target="#certificateModal" class="img-rounded thumb-certificate" data-image="{{ $certificate['image_path'] }}" src="{{ url('image/66/66/?src='.$certificate['image_path']) }}">
+                    </a>
+                    @if(!empty($certificate['validity_date']))
+                    Valid Till: <span>{{date('d M Y',strtotime($certificate['validity_date']))}}</span>
+                    @else
+                    Valid Till: N/A
+                    @endif
+                </p>
+            </div>
+            @endforeach
+            @endif
+        </div>  
+    </div>
+</div>  
+</div>
+@else
+<div class="jobCatbox mr-b-20">
+    <div class="template-job-information ">
+        <div class="template-job-information-left">
+            <h4>No Jobseeker Profile to show</h4>
         </div>
     </div>  
 </div>
-@else
-    <div class="jobCatbox mr-b-20">
-        <div class="template-job-information ">
-            <div class="template-job-information-left">
-                <h4>No Jobseeker Profile to show</h4>
-            </div>
-        </div>  
-    </div>
 @endif
 <!--  Modal content for the mixer image example -->
 <div id="certificateModal" class="modal fade" role="dialog">
@@ -211,15 +211,15 @@
 
 @section('js')
 <script type="text/javascript">
-$('.thumb-certificate').click(function(){
+    $('.thumb-certificate').click(function(){
         var imgUrl = "{{ url('image/550/500/?src=') }}";
         $('#certificateModal').modal({show:true});
         $('#certificateModalImg').attr('src', imgUrl+$(this).data('image'));
         return false;
     });
-var socketUrl = "{{ config('app.socketUrl') }}";
-var userId = "{{ Auth::id() }}";
-var officeName = "{{ Session::get('userData.profile.office_name') }}";
+    var socketUrl = "{{ config('app.socketUrl') }}";
+    var userId = "{{ Auth::id() }}";
+    var officeName = "{{ Session::get('userData.profile.office_name') }}";
 
 </script>
 <script src="{{ config('app.socketUrl') }}/socket.io/socket.io.js"></script>
