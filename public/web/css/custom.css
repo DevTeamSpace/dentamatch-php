@@ -456,8 +456,7 @@ strong {
     height: 100%;
     margin-top: -25px;
     overflow: auto;
-    width: 102
-%;
+    width: 102 %;
     z-index: 999;
 }
 
@@ -829,7 +828,7 @@ strong {
 }
 
 .custom-select .bootstrap-select .btn {
-    padding: 10px 12px;
+    padding: 9px 12px;
 }
 
 .custom-select .bs-caret .caret {
