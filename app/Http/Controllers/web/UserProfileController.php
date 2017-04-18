@@ -293,7 +293,7 @@ class UserProfileController extends Controller {
             }else{
                 $recruiterOfficeObj->address = $allData->officeAddress;
                 $recruiterOfficeObj->office_info = $allData->officeInfo;
-                $recruiterOfficeObj->zipcode = (int)$allData->officeZipcode;
+                $recruiterOfficeObj->zipcode = !empty($allData->officeZipcode) ? (int) $allData->officeZipcode : 0;
                 $recruiterOfficeObj->latitude = $officeLat;
                 $recruiterOfficeObj->longitude = $officeLng;
                 $recruiterOfficeObj->save();
