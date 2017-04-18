@@ -49,7 +49,7 @@
             @endif
             <div class="form-group custom-select">
                 <label >Dental Office Address</label>
-                <select data-parsley-required data-parsley-required-message= "Select dental office address" name="dentalOfficeId" id="dentalOfficeId" class="selectpicker">
+                <select data-parsley-required data-parsley-required-message= "Select dental office address" name="dentalOfficeId" id="dentalOfficeId" class="selectpicker mr-b-5">
                     <option value="">Select dental office address</option>
                     @foreach ($offices as $key=>$office)
                     @if($key==0)

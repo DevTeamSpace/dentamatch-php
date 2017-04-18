@@ -1301,6 +1301,10 @@ input[type='checkbox'] {
 /*---chander---*/
 
 @media(max-width:767px) {
+    .custom-active {
+        margin-left: -14px;
+        margin-top: 34px;
+    }
     .add-on-nav {
         bottom: -33px;
     }

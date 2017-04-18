@@ -34,7 +34,7 @@
                         <div class="subcription-price pos-rel">
                             <span class="price-symbol ">$</span>
                             <span class="price" data-bind="text: fullYearPrice">99</span>
-                            <span class="price-duration">/ Yr.</span>
+                            <span class="price-duration">/ yr.</span>
                             <p data-bind="text: free_trial_period">with 1 months free trial</p>
                             <input type="hidden" id="stype" value="2">
                         </div>
