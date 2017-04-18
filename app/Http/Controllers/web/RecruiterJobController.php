@@ -102,19 +102,19 @@ class RecruiterJobController extends Controller {
             if ($request->action == "edit" && !empty($request->id)) {
                 $recruiterJobObj = RecruiterJobs::findById($request->id);
             }
-            
-            $tempPrevious = RecruiterJobs::chkTempJObRatingPending();
-            if($tempPrevious) {
-                $tempPreviousArray = $tempPrevious->toArray();
-                foreach($tempPreviousArray as $previousTempJob){
-                    $tempJobLastDate = date("Y-m-d", strtotime($previousTempJob['job_date']." +1 days"));
-                    if(($previousTempJob['total_hired'] != $previousTempJob['total_rating']) && ($tempJobLastDate >= date("Y-m-d"))){
-                        Session::flash('message', trans('messages.rate_previous_jobseeker'));
-                        return redirect('createJob/'.$request->templateId);
+            if ($request->jobType == RecruiterJobs::TEMPORARY) {
+                $tempPrevious = RecruiterJobs::chkTempJObRatingPending();
+                if($tempPrevious) {
+                    $tempPreviousArray = $tempPrevious->toArray();
+                    foreach($tempPreviousArray as $previousTempJob){
+                        $tempJobLastDate = date("Y-m-d", strtotime($previousTempJob['job_date']." +1 days"));
+                        if(($previousTempJob['total_hired'] != $previousTempJob['total_rating']) && ($tempJobLastDate >= date("Y-m-d"))){
+                            Session::flash('message', trans('messages.rate_previous_jobseeker'));
+                            return redirect('createJob/'.$request->templateId);
+                        }
                     }
                 }
             }
-            
             $recruiterJobObj->job_template_id = $request->templateId;
             $recruiterJobObj->recruiter_office_id = $request->dentalOfficeId;
             $recruiterJobObj->job_type = $request->jobType;
