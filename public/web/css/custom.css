@@ -441,13 +441,13 @@ strong {
 
 .terms-box {
     padding: 27px 27px 0;
+    overflow: hidden;
 }
 
 .scrollable_div {
     height: 415px;
     max-height: 415px;
-    overflow: hidden;
-    width: 100%;
+    width: 99%;
     z-index: 1000;
     padding-bottom: 35px;
 }
@@ -456,7 +456,8 @@ strong {
     height: 100%;
     margin-top: -25px;
     overflow: auto;
-    width: 102%;
+    width: 102
+%;
     z-index: 999;
 }
 
