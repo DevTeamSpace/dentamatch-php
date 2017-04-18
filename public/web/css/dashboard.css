@@ -1319,7 +1319,7 @@ input[type='checkbox'] {
 
 @media (max-width: 480px) {
     .topIconBox li.profile-name-mob {
-        width: 100px;
+        width: 125px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
