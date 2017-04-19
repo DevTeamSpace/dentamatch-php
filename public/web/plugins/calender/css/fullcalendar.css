@@ -109,19 +109,17 @@ NOTE: use percentage font sizes or else old IE chokes
 }
 
 .fc-icon-left-single-arrow:after {
-    content: "";
+    content: url("Line1.png");
     font-weight: bold;
     font-size: 200%;
     top: -7%;
-    background: url("Line1.png")no-repeat;
 }
 
 .fc-icon-right-single-arrow:after {
-    content: "";
+    content: url("Line.png");
     font-weight: bold;
     font-size: 200%;
     top: -7%;
-    background: url("Line.png")no-repeat;
 }
 
 .fc-icon-left-double-arrow:after {
