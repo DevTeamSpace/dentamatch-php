@@ -8,6 +8,7 @@ use DB;
 use Auth;
 use App\Models\TempJobDates;
 
+
 class JobLists extends Model {
 
     use SoftDeletes;
@@ -197,7 +198,8 @@ class JobLists extends Model {
         return JobLists::where(['recruiter_job_id' => $jobId])->count();
     }
     
-    public static function getJobSeekerWithRatingList($job, $forJobType='') {
+    public static function getJobSeekerWithRatingList($job,$appliedStatus='',$forJobType='') {
+        
         $obj = JobLists::join('recruiter_jobs', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
                 ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                 ->join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
@@ -206,7 +208,19 @@ class JobLists extends Model {
         if($forJobType!=''){
             $obj->whereIn('job_lists.applied_status', [JobLists::HIRED]);
         }else{
-            $obj->whereIn('job_lists.applied_status', [JobLists::INVITED, JobLists::APPLIED, JobLists::SHORTLISTED, JobLists::HIRED]);
+            if($appliedStatus == ""){
+               $obj->whereIn('job_lists.applied_status', [JobLists::INVITED, JobLists::APPLIED, JobLists::SHORTLISTED, JobLists::HIRED]); 
+            }else{
+                if($appliedStatus == JobLists::INVITED){
+                    $obj->whereIn('job_lists.applied_status', [JobLists::INVITED]);
+                }else if($appliedStatus == JobLists::APPLIED){
+                    $obj->whereIn('job_lists.applied_status', [JobLists::APPLIED]);
+                }else if($appliedStatus == JobLists::SHORTLISTED){
+                    $obj->whereIn('job_lists.applied_status', [JobLists::SHORTLISTED]);
+                }else if($appliedStatus == JobLists::HIRED){
+                    $obj->whereIn('job_lists.applied_status', [JobLists::HIRED]);
+                }
+            }
         }
         $obj->select('job_lists.applied_status', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'jobseeker_profiles.profile_pic', 'job_lists.seeker_id', 'job_titles.jobtitle_name', 'recruiter_jobs.job_type');
 
@@ -218,8 +232,7 @@ class JobLists extends Model {
             $obj->leftjoin('job_ratings', function($query) {
                         $query->on('job_ratings.recruiter_job_id', '=', 'job_lists.recruiter_job_id');
                         $query->on('job_ratings.seeker_id', '=', 'job_lists.seeker_id');
-                        //->where('job_ratings.recruiter_job_id', '=', 'job_lists.recruiter_job_id')
-                        //->whereNotNull('job_lists.temp_job_id');
+                        
                 })
                 ->leftjoin('jobseeker_temp_hired', function($query) {
                         $query->on('jobseeker_temp_hired.job_id', '=', 'job_lists.recruiter_job_id');
@@ -262,9 +275,16 @@ class JobLists extends Model {
                      )) AS distance"))
                 ->orderby('job_lists.applied_status', 'desc')
                 ->orderby('distance', 'asc')
-                ->get();
-
-        return ($data->groupBy('applied_status')->toArray());
+                ;
+        if($appliedStatus == ''){
+            return ($data->groupBy('applied_status')->get()->toArray());
+        }else{
+            $res = $data->Paginate(JobLists::LIMIT);
+            $res->setPath(url('job/details',[$job['id'],$appliedStatus]));
+            
+            //return $data->Paginate(JobLists::LIMIT);
+            return $res;
+        }
     }
     
     
