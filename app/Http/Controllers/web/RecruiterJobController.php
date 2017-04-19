@@ -183,10 +183,11 @@ class RecruiterJobController extends Controller {
             if(RecruiterJobs::where('id', $jobId)->first()){
                 $this->viewData['job'] = RecruiterJobs::getRecruiterJobDetails($jobId);
                 $this->viewData['skills'] = TemplateSkills::getTemplateSkills($this->viewData['job']['job_template_id']);
-                $this->viewData['seekerList'] = JobLists::getJobSeekerWithRatingList($this->viewData['job']);
+                $this->viewData['seekerListHired'] = $this->getData($this->viewData['job'],JobLists::HIRED);
+                $this->viewData['seekerListInvited'] = $this->getData($this->viewData['job'],JobLists::INVITED);
+                $this->viewData['seekerListSortListed'] = $this->getData($this->viewData['job'],JobLists::SHORTLISTED);
+                $this->viewData['seekerListApplied'] = $this->getData($this->viewData['job'],JobLists::APPLIED);
                 $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
-                //$data = JobLists::getJobSeekerWithRatingList($this->viewData['job']);
-                //print_r($data);exit();
                 return $this->returnView('view');
             }else{
                 return redirect('job/lists');    
@@ -195,6 +196,27 @@ class RecruiterJobController extends Controller {
             Log::error($e);
             return view('web.error.', ["message" => $e->getMessage()]);
         }
+    }
+    
+    public function getJobSeekerDetails(Request $request,$jobId,$appliedStatus){
+        $this->viewData['job'] = RecruiterJobs::getRecruiterJobDetails($jobId);
+        $this->viewData['seekerList'] = $this->getData($this->viewData['job'],$appliedStatus);
+        if($appliedStatus == 1){
+            $this->viewData['status'] = 'Invited';
+        }else if($appliedStatus == 2){
+            $this->viewData['status'] = 'Applied';
+        }else if($appliedStatus == 3){
+            $this->viewData['status'] = 'Shortlisted';
+        }else if($appliedStatus == 4){
+            $this->viewData['status'] = 'Hired';
+        }
+        
+        $this->viewData['totalCount'] = $this->viewData['seekerList']->total();
+        return $this->returnView('job-seeker-details');
+    }
+    
+    public function getData($job,$dataType){
+        return JobLists::getJobSeekerWithRatingList($job,$dataType);
     }
 
     public function updateStatus(Request $request) {

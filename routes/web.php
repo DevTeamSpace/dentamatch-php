@@ -62,6 +62,7 @@
                 Route::get('job/lists', 'web\RecruiterJobController@listJobs');
                 Route::get('job/search/{jobId}', 'web\RecruiterJobController@searchSeekers');
                 Route::get('job/details/{jobId}', 'web\RecruiterJobController@jobDetails');
+                Route::get('job/details/{jobId}/{appliedStatus}', 'web\RecruiterJobController@getJobSeekerDetails');
                 Route::get('job/edit/{jobId}', 'web\RecruiterJobController@jobEdit');
                 Route::get('job/edit-details', 'web\RecruiterJobController@jobEditDetails');
                 Route::post('edit-job', 'web\RecruiterJobController@postEditJob');
