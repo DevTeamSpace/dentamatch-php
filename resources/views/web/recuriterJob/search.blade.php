@@ -59,7 +59,12 @@
         <button type="button" class="btn {{ !empty($searchData['avail_all']) ? "btn-primary" : "btn-primary-outline" }}" id="availAllBtn">Available all days </button>
     </div>
     </div>
-
+    @if(Session::has('message'))
+    <p class="alert {{ Session::get('alert-class', 'alert-info') }}">
+        {{ Session::get('message') }} 
+        <span class="close" data-dismiss="alert">&times;</span>
+    </p>
+    @endif
     @if(count($seekersList['paginate'])>0)
         <div class="jobseeker-statebox"  id="ajaxData">
             @include('web.recuriterJob.seekers-data')

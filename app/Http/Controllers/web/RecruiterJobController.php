@@ -240,12 +240,14 @@ class RecruiterJobController extends Controller {
                 }else if ($requestData['appliedStatus'] == JobLists::REJECTED){
                     $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $jobData->seeker_id, $requestData['jobId']);
                 }
+                return redirect('job/details/'.$requestData['jobId']);
             }else{
                 $inviteJobs = array('seeker_id' => $requestData['seekerId'] , 'recruiter_job_id' => $requestData['jobId'] , 'applied_status' => JobLists::INVITED);
                 JobLists::insert($inviteJobs);
                 $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $requestData['seekerId'], $requestData['jobId']);
+                Session::flash('message', trans('messages.invited_success'));
+                return redirect('job/search/'.$requestData['jobId']);
             }
-            return redirect('job/details/'.$requestData['jobId']);
         } catch (\Exception $e) {
             Log::error($e);
             return view('web.error.', ["message" => $e->getMessage()]);

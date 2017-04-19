@@ -170,4 +170,5 @@ return [
     'not_job_exists' => 'This Job has been accepted by someone else or you have committed for another job on same date',
     'mismatch_availability' => 'Either you are currently not available or you have committed for another job',
     'set_availability' => 'Please set your availability',
+    'invited_success' => 'Selected user has been invited for this job successfully'
 ];
