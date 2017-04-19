@@ -80,7 +80,7 @@ body .fc {
 
 .fc-icon {
     display: inline-block;
-    height: 1em;
+    height: 2em;
     line-height: 1em;
     font-size: 1em;
     text-align: center;
@@ -109,19 +109,19 @@ NOTE: use percentage font sizes or else old IE chokes
 }
 
 .fc-icon-left-single-arrow:after {
-    content: "\02039";
+    content: "";
     font-weight: bold;
     font-size: 200%;
     top: -7%;
-    background-image: url("Line.png");
+    background: url("Line1.png")no-repeat;
 }
 
 .fc-icon-right-single-arrow:after {
-    content: "\0203A";
+    content: "";
     font-weight: bold;
     font-size: 200%;
     top: -7%;
-    background-image: url("Line1.png");
+    background: url("Line.png")no-repeat;
 }
 
 .fc-icon-left-double-arrow:after {
