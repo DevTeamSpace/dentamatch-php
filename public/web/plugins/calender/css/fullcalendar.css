@@ -113,7 +113,7 @@ NOTE: use percentage font sizes or else old IE chokes
     font-weight: bold;
     font-size: 200%;
     top: -7%;
-    background-image: url("./line.png");
+    background-image: url("Line.png");
 }
 
 .fc-icon-right-single-arrow:after {
@@ -121,7 +121,7 @@ NOTE: use percentage font sizes or else old IE chokes
     font-weight: bold;
     font-size: 200%;
     top: -7%;
-    background-image: url("./line1.png");
+    background-image: url("Line1.png");
 }
 
 .fc-icon-left-double-arrow:after {
