@@ -12,11 +12,11 @@
 
 /*jslint nomen: true */
 ;
-(function ($, window, document) {
+(function($, window, document) {
     'use strict';
 
     // constructor
-    var SearchableOptionList = function ($element, options) {
+    var SearchableOptionList = function($element, options) {
         this.$originalElement = $element;
         this.options = options;
 
@@ -29,20 +29,20 @@
     SearchableOptionList.prototype = {
 
         SOL_OPTION_FORMAT: {
-            type:     'option',        // fixed
-            value:    undefined,       // value that will be submitted
-            selected: false,           // boolean selected state
-            disabled: false,           // boolean disabled state
-            label:    undefined,       // label string
-            tooltip:  undefined,       // tooltip string
-            cssClass: ''               // custom css class for container
+            type: 'option', // fixed
+            value: undefined, // value that will be submitted
+            selected: false, // boolean selected state
+            disabled: false, // boolean disabled state
+            label: undefined, // label string
+            tooltip: undefined, // tooltip string
+            cssClass: '' // custom css class for container
         },
         SOL_OPTIONGROUP_FORMAT: {
-            type:     'optiongroup',    // fixed
-            label:    undefined,        // label string
-            tooltip:  undefined,        // tooltip string
-            disabled: false,            // all children disabled boolean property
-            children: undefined         // array of SOL_OPTION_FORMAT objects
+            type: 'optiongroup', // fixed
+            label: undefined, // label string
+            tooltip: undefined, // tooltip string
+            disabled: false, // all children disabled boolean property
+            children: undefined // array of SOL_OPTION_FORMAT objects
         },
 
         DATA_KEY: 'sol-element',
@@ -51,7 +51,7 @@
         // default option values
         defaults: {
             data: undefined,
-            name: undefined,           // name attribute, can also be set as name="" attribute on original element or data-sol-name=""
+            name: undefined, // name attribute, can also be set as name="" attribute on original element or data-sol-name=""
 
             texts: {
                 noItemsAvailable: 'No entries found',
@@ -69,7 +69,7 @@
                 onOpen: undefined,
                 onClose: undefined,
                 onChange: undefined,
-                onScroll: function () {
+                onScroll: function() {
 
                     var selectionContainerYPos = this.$input.offset().top - this.config.scrollTarget.scrollTop() + this.$input.outerHeight(false),
                         selectionContainerHeight = this.$selectionContainer.outerHeight(false),
@@ -118,7 +118,7 @@
             },
 
             selectAllMaxItemsThreshold: 30,
-            showSelectAll: function () {
+            showSelectAll: function() {
                 return this.config.multiple && this.config.selectAllMaxItemsThreshold && this.items && this.items.length <= this.config.selectAllMaxItemsThreshold;
             },
 
@@ -136,7 +136,7 @@
         },
 
         // initialize the plugin
-        init: function () {
+        init: function() {
             this.config = $.extend(true, {}, this.defaults, this.options, this.metadata);
 
             var originalName = this._getNameAttribute(),
@@ -149,7 +149,7 @@
 
             // old IE does not support trim
             if (typeof String.prototype.trim !== 'function') {
-                String.prototype.trim = function () {
+                String.prototype.trim = function() {
                     return this.replace(/^\s+|\s+$/g, '');
                 }
             }
@@ -164,7 +164,7 @@
             this._initializeUiElements();
             this._initializeInputEvents();
 
-            setTimeout(function () {
+            setTimeout(function() {
                 sol._initializeData();
 
                 // take original form element out of form submission
@@ -183,12 +183,12 @@
             return this;
         },
 
-        _getNameAttribute: function () {
+        _getNameAttribute: function() {
             return this.config.name || this.$originalElement.data('sol-name') || this.$originalElement.attr('name');
         },
 
         // shows an error label
-        _showErrorLabel: function (message) {
+        _showErrorLabel: function(message) {
             var $errorMessage = $('<div style="color: red; font-weight: bold;" />').html(message);
             if (!this.$container) {
                 $errorMessage.insertAfter(this.$originalElement);
@@ -198,9 +198,9 @@
         },
 
         // register click handler to determine when to trigger the close event
-        _registerWindowEventsIfNeccessary: function () {
+        _registerWindowEventsIfNeccessary: function() {
             if (!window[this.WINDOW_EVENTS_KEY]) {
-                $(document).click(function (event) {
+                $(document).click(function(event) {
                     // if clicked inside a sol element close all others
                     // else close all sol containers
 
@@ -217,7 +217,7 @@
 
                     $('.sol-active')
                         .not($clickedWithinThisSolContainer)
-                        .each(function (index, item) {
+                        .each(function(index, item) {
                             $(item)
                                 .data(SearchableOptionList.prototype.DATA_KEY)
                                 .close();
@@ -230,23 +230,24 @@
         },
 
         // add sol ui elements
-        _initializeUiElements: function () {
+        _initializeUiElements: function() {
             var self = this;
 
-            this.internalScrollWrapper = function () {
+            this.internalScrollWrapper = function() {
                 if ($.isFunction(self.config.events.onScroll)) {
                     self.config.events.onScroll.call(self);
                 }
             };
 
-            this.$input = $('<input type="text"/>')
+            this.$input = $('<input type="text" />')
                 .attr('placeholder', this.config.texts.searchplaceholder);
+            this.$input = $('<input type="text" />').attr('autocomplete', 'off');
 
             this.$noResultsItem = $('<div class="sol-no-results"/>').html(this.config.texts.noItemsAvailable).hide();
             this.$loadingData = $('<div class="sol-loading-data"/>').html(this.config.texts.loadingData);
             this.$xItemsSelected = $('<div class="sol-results-count"/>');
 
-            this.$caret = $('<div class="sol-caret-container"><b class="caret caretModify"/></div>').click(function (e) {
+            this.$caret = $('<div class="sol-caret-container"><b class="caret caretModify"/></div>').click(function(e) {
                 self.toggle();
                 e.preventDefault();
                 return false;
@@ -263,10 +264,10 @@
             this.$container = $('<div class="sol-container"/>')
                 .hide()
                 .data(this.DATA_KEY, this)
-			.append(this.$innerContainer)
+                .append(this.$innerContainer)
                 .append(this.$selectionContainer)
-                
-                .insertBefore(this.$originalElement);
+
+            .insertBefore(this.$originalElement);
 
             // add selected items display container
             this.$showSelectionContainer = $('<div class="sol-current-selection"/>');
@@ -331,7 +332,7 @@
             }
         },
 
-        _getActualCssPropertyValue: function ($element, property) {
+        _getActualCssPropertyValue: function($element, property) {
 
             var domElement = $element.get(0),
                 originalDisplayProperty = $element.css('display');
@@ -351,16 +352,16 @@
             return $element.css(property);
         },
 
-        _initializeInputEvents: function () {
+        _initializeInputEvents: function() {
             // form event
             var self = this,
                 $form = this.$input.parents('form').first();
 
             if ($form && $form.length === 1 && !$form.data(this.WINDOW_EVENTS_KEY)) {
-                var resetFunction = function () {
+                var resetFunction = function() {
                     var $changedItems = [];
 
-                    $form.find('.sol-option input').each(function (index, item) {
+                    $form.find('.sol-option input').each(function(index, item) {
                         var $item = $(item),
                             initialState = $item.data('sol-item').selected;
 
@@ -377,7 +378,7 @@
                     }
                 };
 
-                $form.on('reset', function (event) {
+                $form.on('reset', function(event) {
                     // unfortunately the reset event gets fired _before_
                     // the inputs are actually reset. The only possibility
                     // to overcome this is to set an interval to execute
@@ -389,7 +390,7 @@
 
                     // timeout for selection after form reset
                     // needed to reset previously checked fields
-                    setTimeout(function () {
+                    setTimeout(function() {
                         resetFunction.call(self);
                     }, 100);
                 });
@@ -399,13 +400,13 @@
 
             // text input events
             this.$input
-                .focus(function () {
+                .focus(function() {
                     self.open();
                 })
-                .on('propertychange input', function (e) {
+                .on('propertychange input', function(e) {
                     var valueChanged = true;
-                    if (e.type=='propertychange') {
-                        valueChanged = e.originalEvent.propertyName.toLowerCase()=='value';
+                    if (e.type == 'propertychange') {
+                        valueChanged = e.originalEvent.propertyName.toLowerCase() == 'value';
                     }
                     if (valueChanged) {
                         self._applySearchTermFilter();
@@ -414,7 +415,7 @@
 
             // keyboard navigation
             this.$container
-                .on('keydown', function (e) {
+                .on('keydown', function(e) {
                     var keyCode = e.keyCode;
 
                     // event handling for keyboard navigation
@@ -432,7 +433,7 @@
                             self._setKeyBoardNavigationMode(true);
 
                             $currentHighlightedOption = self.$selection.find('.sol-option.keyboard-selection');
-                            directionValue = (keyCode === 38) ? -1 : 1;   // negative for up, positive for down
+                            directionValue = (keyCode === 38) ? -1 : 1; // negative for up, positive for down
 
                             var indexOfNextHighlightedOption = $allVisibleOptions.index($currentHighlightedOption) + directionValue;
                             if (indexOfNextHighlightedOption < 0) {
@@ -465,7 +466,7 @@
                         }
                     }
                 })
-                .on('keyup', function (e) {
+                .on('keyup', function(e) {
                     var keyCode = e.keyCode;
 
                     if (keyCode === 27) {
@@ -487,7 +488,7 @@
                 });
         },
 
-        _setKeyBoardNavigationMode: function (keyboardNavigationOn) {
+        _setKeyBoardNavigationMode: function(keyboardNavigationOn) {
 
             if (keyboardNavigationOn) {
                 // on
@@ -503,7 +504,7 @@
             }
         },
 
-        _applySearchTermFilter: function () {
+        _applySearchTermFilter: function() {
             if (!this.items || this.items.length === 0) {
                 return;
             }
@@ -526,7 +527,7 @@
             }
         },
 
-        _findTerms: function (dataArray, searchTerm) {
+        _findTerms: function(dataArray, searchTerm) {
             if (!dataArray || !$.isArray(dataArray) || dataArray.length === 0) {
                 return;
             }
@@ -536,7 +537,7 @@
             // reset keyboard navigation mode when applying new filter
             this._setKeyBoardNavigationMode(false);
 
-            $.each(dataArray, function (index, item) {
+            $.each(dataArray, function(index, item) {
                 if (item.type === 'option') {
                     var $element = item.displayElement,
                         elementSearchableTerms = (item.label + ' ' + item.tooltip).trim().toLowerCase();
@@ -557,7 +558,7 @@
             this._setNoResultsItemVisible(this.$selectionContainer.find('.sol-option:not(.sol-filtered-search)').length === 0);
         },
 
-        _initializeData: function () {
+        _initializeData: function() {
             if (!this.config.data) {
                 this.items = this._detectDataFromOriginalElement();
             } else if ($.isFunction(this.config.data)) {
@@ -576,12 +577,12 @@
             }
         },
 
-        _detectDataFromOriginalElement: function () {
+        _detectDataFromOriginalElement: function() {
             if (this.$originalElement.prop('tagName').toLowerCase() === 'select') {
                 var self = this,
                     solData = [];
 
-                $.each(this.$originalElement.children(), function (index, item) {
+                $.each(this.$originalElement.children(), function(index, item) {
                     var $item = $(item),
                         itemTagName = $item.prop('tagName').toLowerCase(),
                         solDataItem;
@@ -609,7 +610,7 @@
             }
         },
 
-        _processSelectOption: function ($option) {
+        _processSelectOption: function($option) {
             return $.extend({}, this.SOL_OPTION_FORMAT, {
                 value: $option.val(),
                 selected: $option.prop('selected'),
@@ -621,7 +622,7 @@
             });
         },
 
-        _processSelectOptgroup: function ($optgroup) {
+        _processSelectOptgroup: function($optgroup) {
             var self = this,
                 solOptiongroup = $.extend({}, this.SOL_OPTIONGROUP_FORMAT, {
                     label: $optgroup.attr('label'),
@@ -631,7 +632,7 @@
                 }),
                 optgroupChildren = $optgroup.children('option');
 
-            $.each(optgroupChildren, function (index, item) {
+            $.each(optgroupChildren, function(index, item) {
                 var $child = $(item),
                     solOption = self._processSelectOption($child);
 
@@ -646,38 +647,38 @@
             return solOptiongroup;
         },
 
-        _fetchDataFromFunction: function (dataFunction) {
+        _fetchDataFromFunction: function(dataFunction) {
             return this._invokeConverterIfNeccessary(dataFunction(this));
         },
 
-        _fetchDataFromArray: function (dataArray) {
+        _fetchDataFromArray: function(dataArray) {
             return this._invokeConverterIfNeccessary(dataArray);
         },
 
-        _loadItemsFromUrl: function (url) {
+        _loadItemsFromUrl: function(url) {
             var self = this;
             $.ajax(url, {
-                success: function (actualData) {
+                success: function(actualData) {
                     self.items = self._invokeConverterIfNeccessary(actualData);
                     if (self.items) {
                         self._processDataItems(self.items);
                     }
                 },
-                error: function (xhr, status, message) {
+                error: function(xhr, status, message) {
                     self._showErrorLabel('Error loading from url ' + url + ': ' + message);
                 },
                 dataType: 'json'
             });
         },
 
-        _invokeConverterIfNeccessary: function (dataItems) {
+        _invokeConverterIfNeccessary: function(dataItems) {
             if ($.isFunction(this.config.converter)) {
                 return this.config.converter.call(this, this, dataItems);
             }
             return dataItems;
         },
 
-        _processDataItems: function (solItems) {
+        _processDataItems: function(solItems) {
             if (!solItems) {
                 this._showErrorLabel('Data items not present. Maybe the converter did not return any values');
                 return;
@@ -691,7 +692,7 @@
 
             var self = this,
                 nextIndex = 0,
-                dataProcessedFunction = function () {
+                dataProcessedFunction = function() {
                     // hide "loading data"
                     this.$loadingData.remove();
                     this._initializeSelectAll();
@@ -700,7 +701,7 @@
                         this.config.events.onInitialized.call(this, this, solItems);
                     }
                 },
-                loopFunction = function () {
+                loopFunction = function() {
 
                     var currentBatch = 0,
                         item;
@@ -728,13 +729,13 @@
             loopFunction.call(this);
         },
 
-        _renderOption: function (solOption, $optionalTargetContainer) {
+        _renderOption: function(solOption, $optionalTargetContainer) {
             var self = this,
                 $actualTargetContainer = $optionalTargetContainer || this.$selection,
                 $inputElement,
                 $labelText = $('<div class="sol-label-text"/>')
-                    .html(solOption.label.trim().length === 0 ? '&nbsp;' : solOption.label)
-                    .addClass(solOption.cssClass),
+                .html(solOption.label.trim().length === 0 ? '&nbsp;' : solOption.label)
+                .addClass(solOption.cssClass),
                 $label,
                 $displayElement,
                 inputName = this._getNameAttribute();
@@ -749,11 +750,11 @@
             } else {
                 // use radio buttons
                 $inputElement = $('<input type="radio" class="sol-radio"/>')
-                    .on('change', function () {
+                    .on('change', function() {
                         // when selected notify all others of being deselected
                         self.$selectionContainer.find('input[type="radio"][name="' + inputName + '"]').not($(this)).trigger('sol-deselect');
                     })
-                    .on('sol-deselect', function () {
+                    .on('sol-deselect', function() {
                         // remove display selection item
                         // TODO also better show it inline instead of above or below to save space
                         self._removeSelectionDisplayItem($(this));
@@ -761,10 +762,10 @@
             }
 
             $inputElement
-                .on('change', function (event, skipCallback) {
+                .on('change', function(event, skipCallback) {
                     $(this).trigger('sol-change', skipCallback);
                 })
-                .on('sol-change', function (event, skipCallback) {
+                .on('sol-change', function(event, skipCallback) {
                     self._selectionChange($(this), skipCallback);
                 })
                 .data('sol-item', solOption)
@@ -788,11 +789,11 @@
             }
         },
 
-        _renderOptiongroup: function (solOptiongroup) {
+        _renderOptiongroup: function(solOptiongroup) {
             var self = this,
                 $groupCaption = $('<div class="sol-optiongroup-label"/>')
-                    .attr('title', solOptiongroup.tooltip)
-                    .html(solOptiongroup.label),
+                .attr('title', solOptiongroup.tooltip)
+                .html(solOptiongroup.label),
                 $groupItem = $('<div class="sol-optiongroup"/>').append($groupCaption);
 
             if (solOptiongroup.disabled) {
@@ -800,7 +801,7 @@
             }
 
             if ($.isArray(solOptiongroup.children)) {
-                $.each(solOptiongroup.children, function (index, item) {
+                $.each(solOptiongroup.children, function(index, item) {
                     self._renderOption(item, $groupItem);
                 });
             }
@@ -809,28 +810,28 @@
             this.$selection.append($groupItem);
         },
 
-        _initializeSelectAll: function () {
+        _initializeSelectAll: function() {
             // multiple values selectable
             if (this.config.showSelectAll === true || ($.isFunction(this.config.showSelectAll) && this.config.showSelectAll.call(this))) {
                 // buttons for (de-)select all
                 var self = this,
-                    $deselectAllButton = $('<a href="#" class="sol-deselect-all"/>').html(this.config.texts.selectNone).click(function (e) {
+                    $deselectAllButton = $('<a href="#" class="sol-deselect-all"/>').html(this.config.texts.selectNone).click(function(e) {
                         self.deselectAll();
                         e.preventDefault();
                         return false;
                     }),
-                    $selectAllButton = $('<a href="#" class="sol-select-all"/>').html(this.config.texts.selectAll).click(function (e) {
+                    $selectAllButton = $('<a href="#" class="sol-select-all"/>').html(this.config.texts.selectAll).click(function(e) {
                         self.selectAll();
                         e.preventDefault();
                         return false;
                     });
 
-//                this.$actionButtons = $('<div class="sol-action-buttons"/>').append($selectAllButton).append($deselectAllButton).append('<div class="sol-clearfix"/>');
+                //                this.$actionButtons = $('<div class="sol-action-buttons"/>').append($selectAllButton).append($deselectAllButton).append('<div class="sol-clearfix"/>');
                 this.$selectionContainer.prepend(this.$actionButtons);
             }
         },
 
-        _selectionChange: function ($changeItem, skipCallback) {
+        _selectionChange: function($changeItem, skipCallback) {
 
             // apply state to original select if neccessary
             // helps to keep old legacy code running which depends
@@ -838,7 +839,7 @@
             // e.g. $('#myPreviousSelectWhichNowIsSol').val()
             if (this.$originalElement && this.$originalElement.prop('tagName').toLowerCase() === 'select') {
                 var self = this;
-                this.$originalElement.find('option').each(function (index, item) {
+                this.$originalElement.find('option').each(function(index, item) {
                     var $currentOriginalOption = $(item);
                     if ($currentOriginalOption.val() === $changeItem.val()) {
                         $currentOriginalOption.prop('selected', $changeItem.prop('checked'));
@@ -881,7 +882,7 @@
             }
         },
 
-        _addSelectionDisplayItem: function ($changedItem) {
+        _addSelectionDisplayItem: function($changedItem) {
             var solOptionItem = $changedItem.data('sol-item'),
                 $existingDisplayItem = solOptionItem.displaySelectionItem,
                 $displayItemText;
@@ -897,7 +898,7 @@
                 if ((this.config.multiple || this.config.allowNullSelection) && !$changedItem.prop('disabled')) {
                     $('<span class="sol-quick-delete"/>')
                         .html(this.config.texts.quickDelete)
-                        .click(function () {
+                        .click(function() {
                             $changedItem
                                 .prop('checked', false)
                                 .trigger('change');
@@ -909,7 +910,7 @@
             }
         },
 
-        _removeSelectionDisplayItem: function ($changedItem) {
+        _removeSelectionDisplayItem: function($changedItem) {
             var solOptionItem = $changedItem.data('sol-item'),
                 $myDisplayItem = solOptionItem.displaySelectionItem;
 
@@ -919,7 +920,7 @@
             }
         },
 
-        _setNoResultsItemVisible: function (visible) {
+        _setNoResultsItemVisible: function(visible) {
             if (visible) {
                 this.$noResultsItem.show();
                 this.$selection.hide();
@@ -937,15 +938,15 @@
             }
         },
 
-        isOpen: function () {
+        isOpen: function() {
             return this.$container.hasClass('sol-active');
         },
 
-        isClosed: function () {
+        isClosed: function() {
             return !this.isOpen();
         },
 
-        toggle: function () {
+        toggle: function() {
             if (this.isOpen()) {
                 this.close();
             } else {
@@ -953,7 +954,7 @@
             }
         },
 
-        open: function () {
+        open: function() {
             if (this.isClosed()) {
                 this.$container.addClass('sol-active');
                 this.config.scrollTarget.bind('scroll', this.internalScrollWrapper).trigger('scroll');
@@ -965,7 +966,7 @@
             }
         },
 
-        close: function () {
+        close: function() {
             if (this.isOpen()) {
                 this._setKeyBoardNavigationMode(false);
 
@@ -987,7 +988,7 @@
             }
         },
 
-        selectAll: function () {
+        selectAll: function() {
             if (this.config.multiple) {
                 var $changedInputs = this.$selectionContainer
                     .find('input[type="checkbox"]:not([disabled], :checked)')
@@ -1009,9 +1010,9 @@
                     .find('input[type="checkbox"]').filter('[disabled], :checked')
 
                 $openedInputs.prop('checked', false)
-                             .trigger('change', true);
+                    .trigger('change', true);
                 $closedInputs.prop('checked', true)
-                             .trigger('change', true)
+                    .trigger('change', true)
 
                 this.options.closeOnClick && this.close();
 
@@ -1020,7 +1021,7 @@
                 }
             }
         },
-        deselectAll: function () {
+        deselectAll: function() {
             if (this.config.multiple) {
                 var $changedInputs = this.$selectionContainer
                     .find('input[type="checkbox"]:not([disabled]):checked')
@@ -1035,7 +1036,7 @@
             }
         },
 
-        getSelection: function () {
+        getSelection: function() {
             return this.$selection.find('input:checked');
         }
     };
@@ -1044,9 +1045,9 @@
     SearchableOptionList.defaults = SearchableOptionList.prototype.defaults;
     window.SearchableOptionList = SearchableOptionList;
 
-    $.fn.searchableOptionList = function (options) {
+    $.fn.searchableOptionList = function(options) {
         var result = [];
-        this.each(function () {
+        this.each(function() {
             var $this = $(this),
                 $alreadyInitializedSol = $this.data(SearchableOptionList.prototype.DATA_KEY);
 

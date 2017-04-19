@@ -38,17 +38,17 @@
                     <div class="detailTitleBlock">
                         <h5>KEY SKILLS</h5>
                     </div>
-                @foreach ($skillsData as $key => $skills)
-                <div class="form-group">
-                    <label ><?=$key?></label>
-                    <select class="my-select" name="skills[]" multiple="multiple" style="display:none">
-                        @foreach ($skills as $skillData)
-                        <option {{ (isset($skillData['sel_skill_id']) && $skillData['sel_skill_id']==$skillData['id'])?'selected':'' }} value="{{ $skillData['id'] }}">{{ $skillData['skill_name'] }}</option>
-                        @endforeach
-                    </select>
+                    @foreach ($skillsData as $key => $skills)
+                    <div class="form-group">
+                        <label ><?=$key?></label>
+                        <select class="my-select" name="skills[]" multiple="multiple" style="display:none" autocomplete="off">
+                            @foreach ($skills as $skillData)
+                            <option {{ (isset($skillData['sel_skill_id']) && $skillData['sel_skill_id']==$skillData['id'])?'selected':'' }} value="{{ $skillData['id'] }}">{{ $skillData['skill_name'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endforeach
                 </div>
-                @endforeach
-					</div>
                 
             </div>	
         </div>
@@ -64,33 +64,33 @@
 </form>
 
 <div id="discardTemplate" class="modal fade" role="dialog" style="display: none;">
-		<div class="modal-dialog custom-modal popup-wd522">
+  <div class="modal-dialog custom-modal popup-wd522">
 
-			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">×</button>
-					<h4 class="modal-title">Discard Template</h4>
-				</div>
-				<div class="modal-body text-center">
-					
-					<p>Do you want to discard the changes?</p>
+     <!-- Modal content-->
+     <div class="modal-content">
+        <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal">×</button>
+           <h4 class="modal-title">Discard Template</h4>
+       </div>
+       <div class="modal-body text-center">
+           
+           <p>Do you want to discard the changes?</p>
 
-					<div class="mr-t-20 mr-b-30">
-						<button id="cancelButton" type="button" class="btn btn-link mr-r-5">Yes</button>
-                                                <button type="button" class="btn btn-primary pd-l-30 pd-r-30" data-dismiss="modal">No </button>
-					</div>
-
-
+           <div class="mr-t-20 mr-b-30">
+              <button id="cancelButton" type="button" class="btn btn-link mr-r-5">Yes</button>
+              <button type="button" class="btn btn-primary pd-l-30 pd-r-30" data-dismiss="modal">No </button>
+          </div>
 
 
-				</div>
 
 
-			</div>
+      </div>
 
-		</div>
-	</div>
+
+  </div>
+
+</div>
+</div>
 @endsection
 
 @section('js')
@@ -107,14 +107,14 @@
     document.getElementById("cancelButton").onclick = function () {
         location.href = "{{ url('jobtemplates') }}";
     };
-	$('#jobTitleId').selectpicker({
-				style: 'btn btn-default'
-			});
+    $('#jobTitleId').selectpicker({
+        style: 'btn btn-default'
+    });
 
-$('.my-select').searchableOptionList({
-    maxHeight: 200,
-    showSelectAll: true
-});
+    $('.my-select').searchableOptionList({
+        maxHeight: 200,
+        showSelectAll: true
+    });
 
 </script>
 @endsection

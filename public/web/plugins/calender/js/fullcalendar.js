@@ -6706,7 +6706,7 @@
             var content = $(
                 '<div class="fc-header ' + view.widgetHeaderClass + '">' +
                 '<span class="fc-close ' +
-                (isTheme ? 'ui-icon ui-icon-closethick' : 'glyphicon glyphicon-menu-left fc-icon fc-icon-x') +
+                (isTheme ? 'ui-icon ui-icon-closethick' : ' fc-icon fc-icon-x') +
                 '"></span>' +
                 '<span class="fc-title">' +
                 htmlEscape(title) +
@@ -9659,7 +9659,7 @@
                                 } else if (themeIcon && calendar.options.theme) {
                                     innerHtml = "<span class='ui-icon ui-icon-" + themeIcon + "'></span>";
                                 } else if (normalIcon && !calendar.options.theme) {
-                                    innerHtml = "<span class='glyphicon glyphicon-menu-left fc-icon fc-icon-" + normalIcon + "'></span>";
+                                    innerHtml = "<span class=' fc-icon fc-icon-" + normalIcon + "'></span>";
                                 } else {
                                     innerHtml = htmlEscape(defaultText);
                                 }

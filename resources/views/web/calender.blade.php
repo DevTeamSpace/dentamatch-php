@@ -2,7 +2,7 @@
 
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<div class="container" id="calenderParent">
+<div class="container mr-t-30" id="calenderParent">
     <!-- Modal -->
     <div class="modal fade calendar_list" role="dialog">
         <div class="modal-dialog custom-modal popup-wd522">
