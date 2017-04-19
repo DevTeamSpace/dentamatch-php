@@ -286,6 +286,4 @@ class JobLists extends Model {
             return $res;
         }
     }
-    
-    
 }

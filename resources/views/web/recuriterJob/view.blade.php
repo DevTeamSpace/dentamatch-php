@@ -51,7 +51,7 @@
                 $seekerDatesCount = count($dates);
                 @endphp
                 <a href="#" class=" dropdown-toggle"  data-toggle="dropdown"><span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
-                    <span class="caret"></span></a>
+                <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         @foreach ($dates as $date)
                         <li>{{ date('l, d M Y',strtotime($date)) }}</li>
