@@ -52,6 +52,10 @@ textarea {
     outline: 0;
 }
 
+.bootstrap-select.btn-group .dropdown-menu li a {
+    white-space: normal;
+}
+
 .btn.active,
 .btn:active {
     box-shadow: none;
@@ -437,13 +441,13 @@ strong {
 
 .terms-box {
     padding: 27px 27px 0;
+    overflow: hidden;
 }
 
 .scrollable_div {
     height: 415px;
     max-height: 415px;
-    overflow: hidden;
-    width: 100%;
+    width: 99%;
     z-index: 1000;
     padding-bottom: 35px;
 }
@@ -452,7 +456,7 @@ strong {
     height: 100%;
     margin-top: -25px;
     overflow: auto;
-    width: 102%;
+    width: 102 %;
     z-index: 999;
 }
 
@@ -824,7 +828,7 @@ strong {
 }
 
 .custom-select .bootstrap-select .btn {
-    padding: 10px 12px;
+    padding: 9px 12px;
 }
 
 .custom-select .bs-caret .caret {
@@ -1106,6 +1110,11 @@ strong {
     bottom: 0;
     right: 0;
     margin: auto;
+}
+
+.date-drop a,
+.day-drop {
+    color: #686868;
 }
 
 
@@ -1582,6 +1591,10 @@ a.cir-blue:hover {
 }
 
 @media only screen and (max-width: 767px) {
+    .msg-ratebtn-align .modalClick.btn {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
     .report-filter {
         text-align: left !important;
     }
@@ -1644,6 +1657,12 @@ a.cir-blue:hover {
 }
 
 @media only screen and (max-width: 480px) {}
+
+.rate-align .date_drop {
+    margin-left: 0 !important;
+    margin-top: 5px;
+    display: inline-block;
+}
 
 .dev_edit_button {
     margin-right: 17px !important;

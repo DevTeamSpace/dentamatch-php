@@ -1301,6 +1301,10 @@ input[type='checkbox'] {
 /*---chander---*/
 
 @media(max-width:767px) {
+    .custom-active {
+        margin-left: -14px;
+        margin-top: 34px;
+    }
     .add-on-nav {
         bottom: -33px;
     }
@@ -1314,6 +1318,12 @@ input[type='checkbox'] {
 }
 
 @media (max-width: 480px) {
+    .topIconBox li.profile-name-mob {
+        width: 125px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
     .notificationDel {
         margin-top: -5px;
     }
@@ -1327,6 +1337,9 @@ input[type='checkbox'] {
     }
     .notificationCaret {
         right: 46%;
+    }
+    .topIconBox>li {
+        margin-right: 13px;
     }
 }
 

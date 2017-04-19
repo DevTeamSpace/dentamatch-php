@@ -499,7 +499,7 @@ class RecruiterJobController extends Controller {
                 $recruiterOfficeObj->latitude = $allData->selectedOffice[0]->selectedOfficeLat;
                 $recruiterOfficeObj->user_id = Auth::user()->id;
                 $recruiterOfficeObj->longitude = $allData->selectedOffice[0]->selectedOfficeLng;
-                $recruiterOfficeObj->zipcode = $allData->selectedOffice[0]->selectedOfficeZipcode;
+                $recruiterOfficeObj->zipcode = !empty($allData->selectedOffice[0]->selectedOfficeZipcode) ? $allData->selectedOffice[0]->selectedOfficeZipcode : 0;
                 $recruiterOfficeObj->phone_no = $allData->selectedOffice[0]->selectedOfficePhone;
                 $recruiterOfficeObj->office_info = $allData->selectedOffice[0]->selectedOfficeInfo;
                 $recruiterOfficeObj->save();

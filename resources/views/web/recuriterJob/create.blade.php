@@ -23,7 +23,7 @@
         <span class="close" data-dismiss="alert">&times;</span>
     </p>
     @endif
-    <form data-parsley-validate method="post" action="{{ url('createJob/saveOrUpdate') }}">
+    <form data-parsley-validate method="post" action="{{ url('createJob/saveOrUpdate') }}" novalidate>
         <div class="row sec-mob">
             <div class="col-sm-6 mr-b-10 col-xs-6">
                 <div class="section-title">Create Job Opening</div>
@@ -49,7 +49,7 @@
             @endif
             <div class="form-group custom-select">
                 <label >Dental Office Address</label>
-                <select data-parsley-required data-parsley-required-message= "Select dental office address" name="dentalOfficeId" id="dentalOfficeId" class="selectpicker">
+                <select data-parsley-required data-parsley-required-message= "Select dental office address" name="dentalOfficeId" id="dentalOfficeId" class="selectpicker mr-b-5">
                     <option value="">Select dental office address</option>
                     @foreach ($offices as $key=>$office)
                     @if($key==0)

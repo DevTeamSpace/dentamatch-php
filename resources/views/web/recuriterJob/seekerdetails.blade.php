@@ -55,10 +55,10 @@ $seekerDatesCount = count($datesTemp);
                             @php 
                             $dates = explode(' | ',$seekerDetails['temp_job_dates']);
                             @endphp
-                            <span class=" dropdown-toggle"  data-toggle="dropdown">
+                            <a href="#" class=" dropdown-toggle"  data-toggle="dropdown">
                                 <span class="day-drop">{{ date('l, M d, Y',strtotime($dates[0])) }}</span>
                                 <span class="caret"></span>
-                            </span>
+                            </a>
                             <ul class="dropdown-menu">
                               @foreach ($dates as $date)
                               <li>{{ date('l, M d, Y',strtotime($date)) }}</li>
