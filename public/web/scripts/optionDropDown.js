@@ -239,8 +239,9 @@
                 }
             };
 
-            this.$input = $('<input type="text" autocomplete="off"/>')
+            this.$input = $('<input type="text" />')
                 .attr('placeholder', this.config.texts.searchplaceholder);
+            this.$input.attr('autocomplete', 'off');
 
             this.$noResultsItem = $('<div class="sol-no-results"/>').html(this.config.texts.noItemsAvailable).hide();
             this.$loadingData = $('<div class="sol-loading-data"/>').html(this.config.texts.loadingData);
