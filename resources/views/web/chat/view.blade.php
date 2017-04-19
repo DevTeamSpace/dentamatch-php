@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-md-4 col-sm-5 col-xs-3">
             <div class="chat-list chat-box">
-                <div class="chat-list-title">All Message</div>
+                <div class="chat-list-title">All Messages</div>
                 <div class="content mCustomScrollbar light" data-mcs-theme="minimal-dark">
                     <ul class="list-group nav-stacked" role="tablist">
                         @foreach ($seekerList as $seeker)

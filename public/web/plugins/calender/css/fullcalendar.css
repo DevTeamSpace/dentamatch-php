@@ -98,8 +98,8 @@ body .fc {
 
 /*
 Acceptable font-family overrides for individual icons:
-	"Arial", sans-serif
-	"Times New Roman", serif
+    "Arial", sans-serif
+    "Times New Roman", serif
 
 NOTE: use percentage font sizes or else old IE chokes
 */
@@ -113,6 +113,7 @@ NOTE: use percentage font sizes or else old IE chokes
     font-weight: bold;
     font-size: 200%;
     top: -7%;
+    background-image: url("./line.png");
 }
 
 .fc-icon-right-single-arrow:after {
@@ -120,6 +121,7 @@ NOTE: use percentage font sizes or else old IE chokes
     font-weight: bold;
     font-size: 200%;
     top: -7%;
+    background-image: url("./line1.png");
 }
 
 .fc-icon-left-double-arrow:after {
