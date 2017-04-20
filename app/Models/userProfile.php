@@ -24,8 +24,23 @@ class UserProfile extends Model {
         $return = [];
         
         
-        $userModel = static::select('jobseeker_profiles.id', 'jobseeker_profiles.user_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'jobseeker_profiles.zipcode', 'jobseeker_profiles.latitude', 'jobseeker_profiles.longitude', 'jobseeker_profiles.preferred_job_location', 
-                            'jobseeker_profiles.job_titile_id',  'jobseeker_profiles.profile_pic', 'jobseeker_profiles.dental_state_board', 'jobseeker_profiles.license_number', 'jobseeker_profiles.state', 'jobseeker_profiles.about_me')      
+        $userModel = static::select('jobseeker_profiles.id', 
+                                    'jobseeker_profiles.user_id',
+                                    'jobseeker_profiles.first_name',
+                                    'jobseeker_profiles.last_name',
+                                    'jobseeker_profiles.zipcode',
+                                    'jobseeker_profiles.latitude',
+                                    'jobseeker_profiles.longitude', 
+                                    'jobseeker_profiles.preferred_job_location',
+                                    'jobseeker_profiles.preferred_city',
+                                    'jobseeker_profiles.preferred_state',
+                                    'jobseeker_profiles.preferred_country',
+                                    'jobseeker_profiles.job_titile_id',
+                                    'jobseeker_profiles.profile_pic',
+                                    'jobseeker_profiles.dental_state_board', 
+                                    'jobseeker_profiles.license_number',
+                                    'jobseeker_profiles.state',
+                                    'jobseeker_profiles.about_me')      
                     ->where('jobseeker_profiles.user_id', $userId)
                     ->first();
         

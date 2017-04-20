@@ -42,6 +42,7 @@ class FavoriteJobseekerController extends Controller {
                 ->where('job_templates.user_id', Auth::user()->id)
                 ->whereNull('recruiter_jobs.deleted_at')
                 ->select('job_titles.jobtitle_name', 'recruiter_jobs.id as recruiterId',DB::raw("group_concat(distinct(temp_job_dates.job_date) ORDER BY temp_job_dates.job_date ASC) AS temp_job_dates"))
+                ->orderby('temp_job_dates.job_date','asc')
                 ->groupby('temp_job_dates.recruiter_job_id')
                 ->get();
         

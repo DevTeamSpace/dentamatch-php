@@ -290,6 +290,9 @@ class UserProfileApiController extends Controller {
                 $userProfile->latitude = $reqData['latitude'];
                 $userProfile->longitude = $reqData['longitude'];
                 $userProfile->preferred_job_location = $reqData['preferredJobLocation'];
+                $userProfile->preferred_city = $reqData['city'];
+                $userProfile->preferred_state = $reqData['state'];
+                $userProfile->preferred_country = $reqData['country'];
                 $userProfile->job_titile_id = $reqData['jobTitileId'];
                 $userProfile->about_me = $reqData['aboutMe'];
                 $userProfile->save();

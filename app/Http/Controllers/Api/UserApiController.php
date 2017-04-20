@@ -74,6 +74,9 @@ class UserApiController extends Controller {
             $userProfileModel->preferred_job_location = $reqData['preferedLocation'];
             $userProfileModel->latitude = $reqData['latitude'];
             $userProfileModel->longitude = $reqData['longitude'];
+            $userProfileModel->preferred_city = $reqData['city'];
+            $userProfileModel->preferred_state = $reqData['state'];
+            $userProfileModel->preferred_country = $reqData['country'];
             
             $userProfileModel->save();
             
@@ -133,7 +136,8 @@ class UserApiController extends Controller {
                                 'jobseeker_profiles.zipcode',
                                 'jobseeker_profiles.preferred_job_location',
                                 'jobseeker_profiles.latitude',
-                                'jobseeker_profiles.longitude',
+                                'jobseeker_profiles.longitude','jobseeker_profiles.preferred_city',
+                                'jobseeker_profiles.preferred_state','jobseeker_profiles.preferred_country',
                                 'users.is_verified','jobseeker_profiles.is_completed'
                                 )
                         ->where('users.id', $userId)
