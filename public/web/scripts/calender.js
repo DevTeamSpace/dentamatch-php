@@ -35,6 +35,7 @@ var JobModel = function (data, tempJobDate) {
         me.seekerUrl = ko.observable('');
 
         me._init = function (d, jobId) {
+            console.log(d);
             me.seekerJobTitle = d.jobtitle_name;
             me.seekerPic = d.profile_pic;
             me.seekerName = d.first_name + ' ' + d.last_name;
