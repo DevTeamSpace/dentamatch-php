@@ -335,6 +335,9 @@ class UserProfileApiController extends Controller {
                 $userProfile->latitude = $reqData['latitude'];
                 $userProfile->longitude = $reqData['longitude'];
                 $userProfile->preferred_job_location = $reqData['preferedLocation'];
+                $userProfile->preferred_city = $reqData['preferredCity'];
+                $userProfile->preferred_state = $reqData['preferredState'];
+                $userProfile->preferred_country = $reqData['preferredCountry'];
                 $userProfile->save();
                 $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.location_update_success"));
             } else {
