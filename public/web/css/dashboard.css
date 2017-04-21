@@ -7,7 +7,7 @@
     margin-top: 5px;
 }
 
-.tooltip.bottom .tooltip-arrow {
+#report-table .tooltip.bottom .tooltip-arrow {
     top: 0;
     left: 50%;
     margin-left: -5px;
@@ -15,7 +15,7 @@
     border-width: 0 5px 5px;
 }
 
-.tooltip-inner {
+#report-table .tooltip-inner {
     color: #0470c0;
     background: #fff;
     border: solid 1px #fff;
