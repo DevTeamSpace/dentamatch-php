@@ -47,7 +47,7 @@ class SearchApiController extends Controller {
             if($userId > 0){
                 $reqData = $request->all();
                 
-                SearchFilter::createFilter($userId, $reqData);
+                SearchFilter::createFilter($userId, $request);
                 
                 $location = Location::where('zipcode',$reqData['zipCode'])->first();
                 if($location){
