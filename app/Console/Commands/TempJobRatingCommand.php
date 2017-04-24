@@ -49,8 +49,7 @@ class TempJobRatingCommand extends Command
             $pushList = [];
             $configModel = Configs::where('config_name', 'RATESEEKER')->first();
             $notificationDays = $configModel->config_data;
-            $cronDate = date('Y-m-d', strtotime("+".$notificationDays." days"));
-            
+            $cronDate = date('Y-m-d', strtotime("-".$notificationDays." days"));
             $senderId = User::getAdminUserDetailsForNotification();
             $tempJobModel = TempJobDates::select('recruiter_jobs.id', 'job_templates.user_id', 'job_titles.jobtitle_name', 'temp_job_dates.job_date')
                                 ->join('recruiter_jobs', 'recruiter_jobs.id', '=', 'temp_job_dates.recruiter_job_id')
