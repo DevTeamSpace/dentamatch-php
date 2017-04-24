@@ -173,6 +173,9 @@ class UserApiController extends Controller {
                             'longitude' => $userData['longitude'],
                             'accessToken' => $userToken,
                             'profileCompleted' => $userData['is_completed'],
+                            'city' => $userData['preferred_city'],
+                            'state' => $userData['preferred_state'],
+                            'country' => $userData['preferred_country'],
                         );
                         $searchArray = SearchFilter::getFiltersOnLogin($userId);
                         if($searchArray){

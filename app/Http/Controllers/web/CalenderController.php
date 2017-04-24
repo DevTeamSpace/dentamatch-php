@@ -31,7 +31,7 @@ class CalenderController extends Controller
             $result  = [];
             foreach($allJobs as $job){
                 $tempJobs   =   explode(',', $job['temp_job_dates']);
-                foreach ($tempJobs as $key => $value) {
+                foreach ($tempJobs as  $value) {
                     $innerArray = [];
                     $jobDetails['id'] = $job['id'];
                     $jobDetails['job_type'] = $job['job_type'];

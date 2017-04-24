@@ -58,7 +58,7 @@ class JobSeekerProfiles extends Model
             $obj->join('jobseeker_temp_availability',function($query) use ($job,$reqData){
                     $query->on('jobseeker_temp_availability.user_id', '=', 'jobseeker_profiles.user_id');
                     $query->whereIn('jobseeker_temp_availability.temp_job_date',explode(',',$job['temp_job_dates'])); 
-                    $requiredDates = explode(',',$job['temp_job_dates']);
+                    
             });
             if($reqData['avail_all']){
                 $obj->havingRaw("count(distinct jobseeker_temp_availability.temp_job_date) >=".count(explode(',',$job['temp_job_dates']))); 
