@@ -391,7 +391,7 @@ class RecruiterJobs extends Model
             'job_titles.jobtitle_name',
             DB::raw("group_concat(job_lists.applied_status) AS applied_status"),
             DB::raw("group_concat(temp_job_dates.job_date) AS temp_job_dates"),
-            DB::raw("GROUP_CONCAT(office_types.officetype_name) AS office_type_name"),
+            DB::raw("GROUP_CONCAT(DISTINCT(office_types.officetype_name)) AS office_type_name"),
             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
     
         return $jobObj->get();
@@ -426,7 +426,7 @@ class RecruiterJobs extends Model
             'job_titles.jobtitle_name',
             DB::raw("group_concat(job_lists.applied_status) AS applied_status"),
             DB::raw("group_concat(distinct(temp_job_dates.job_date)) AS temp_job_dates"),
-            DB::raw("GROUP_CONCAT(office_types.officetype_name) AS office_type_name"),
+            DB::raw("GROUP_CONCAT(DISTINCT(office_types.officetype_name)) AS office_type_name"),
             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
     
         return $jobObj->get();
