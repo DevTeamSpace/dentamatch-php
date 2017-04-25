@@ -159,12 +159,12 @@ class RecruiterController extends Controller
                 })
                 ->addColumn('action', function ($userData) {
                     $edit = url('cms/recruiter/'.$userData->id.'/edit');
-                    $delete =url('cms/recruiter/'.$userData->id.'/delete');
+                    
                     $resetPassword = url('cms/recruiter/'.$userData->id.'/adminResetPassword');
                     $view = url('cms/recruiter/'.$userData->id.'/view');
                     $action = '<a href="'.$view.'"  class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> View</a>&nbsp;';
                     $action .= '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-                    //$action .= '<a href="'.$delete.'" class="delete btn btn-xs btn-primary" onclick="return confirm(\'Are you sure you want to delete this recruiter?\');"><i class="fa fa-remove"></i> Delete</a>&nbsp;';
+                    
                     $action .= '<a href="'.$resetPassword.'"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;';
                     return $action;
                 })
