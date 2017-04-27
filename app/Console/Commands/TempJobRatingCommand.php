@@ -51,15 +51,17 @@ class TempJobRatingCommand extends Command
             $notificationDays = $configModel->config_data;
             $cronDate = date('Y-m-d', strtotime("-".$notificationDays." days"));
             $senderId = User::getAdminUserDetailsForNotification();
-            $tempJobModel = TempJobDates::select('recruiter_jobs.id', 'job_templates.user_id', 'job_titles.jobtitle_name', 'temp_job_dates.job_date')
+            $tempJobModel = TempJobDates::select('recruiter_jobs.id', 'job_templates.user_id', 'job_titles.jobtitle_name')
+                                ->addSelect(DB::raw("max(temp_job_dates.job_date) as max_date"))
                                 ->join('recruiter_jobs', 'recruiter_jobs.id', '=', 'temp_job_dates.recruiter_job_id')
                                 ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
                                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
                                 ->leftjoin('job_lists', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
-                                ->where('temp_job_dates.job_date','=', $cronDate)
+                                //->where('temp_job_dates.job_date','=', $cronDate)
+                                ->having('max_date','=',$cronDate)
                                 ->where("recruiter_jobs.job_type",  RecruiterJobs::TEMPORARY)
                                 ->where('job_lists.applied_status', JobLists::HIRED)
-                                ->groupBy('temp_job_dates.id')
+                                ->groupBy('temp_job_dates.recruiter_job_id')
                                 ->orderBy('temp_job_dates.job_date', 'desc')
                                 ->get();
             $list = $tempJobModel->toArray();
