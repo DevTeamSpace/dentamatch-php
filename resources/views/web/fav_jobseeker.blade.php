@@ -22,7 +22,7 @@
                 <p>{{ $fav->jobtitle_name}}</p>
             </div>
             <div class="col-sm-4 pd-t-15 text-right">
-                <button type="submit" class="btn btn-primary-outline pd-l-30 pd-r-30 " onclick="putValue('{{$fav->seeker_id}}')" data-toggle="modal" data-target=".select_list">Invite</button>
+                <button type="button" class="btn btn-primary-outline pd-l-30 pd-r-30 " onclick="putValue('{{$fav->seeker_id}}')" >Invite</button>
             </div>
         </div>
     </div>
@@ -37,7 +37,7 @@
     </div>
     @endif
     <!-- Modal -->
-    <div class="modal fade select_list " role="dialog">
+    <div class="modal fade select_list " role="dialog" id="favModal">
         <div class="modal-dialog custom-modal popup-wd522">
 
             <!-- Modal content-->
@@ -47,14 +47,15 @@
                     <h4 class="modal-title">Invite Jobseeker</h4>
                 </div>
                 <div class="modal-body ">
-
+                    
                     <form data-parsley-validate action="/invite-jobseeker" id="invite_seeker" method="post">
                         {{ csrf_field() }}
                         <div class="form-group custom-select">
+                            <div id="showMessage" class="alert alert-danger"></div>
                             <label for="selectJobSeeker">Choose the job you want to invite for</label>
                             <input type="hidden" id="seekerId" name="seekerId" >
                             <select  id="selectJobSeeker" name="selectJobSeeker"  class="selectpicker" required="" data-parsley-required-message="Please select the job." >
-                                <option value="" disabled selected>Select </option>
+<!--                                <option value="" disabled selected>Select </option>
                                 @foreach($jobDetail as $job)
                                 @if(!empty($job->temp_job_dates))
                                 @php 
@@ -67,9 +68,14 @@
                                 <option value="{{$job->recruiterId}}" data-content="<h5>{{$job->jobtitle_name}}</h5><span class='label label-warning'>Temporary</span>{{$dates_are}}">
                                     {{$job->jobtitle_name}}
                                 </option>
+
+                                
+                                <option value="" disabled selected>Select </option>
+<option value="6" data-content="<h5>Registered Dental Assistant</h5><span class="label label-warning">Temporary</span>May 17, 2017, May 26, 2017 Registered Dental Assistant</option><option data-divider="true"></option>
+
                                 @endif
                                 <option data-divider="true"></option>
-                                @endforeach
+                                @endforeach-->
                             </select>
                         </div>
                         <div class="text-right mr-t-20 mr-b-30">
@@ -93,6 +99,30 @@
     });
     function putValue(v){
         $('#seekerId').val(v);
+        var userId = v;
+        
+        if(userId){
+            $.ajax({
+                type:'GET',
+                url:'/get-favorite-job-lists',
+                data:{'userId' : userId},
+                success:function(data){
+                    $('#showMessage').removeClass('alert alert-danger');
+                    $('#showMessage').html('');
+                    if(data != ""){
+                        $('#selectJobSeeker').html(data);
+                    }else{
+                        $('#showMessage').addClass('alert alert-danger');
+                        $('#showMessage').html('You do not have any job for sending invitaion for this user');
+                        
+                    }
+                    $('#selectJobSeeker').selectpicker('refresh');
+                    $('#favModal').modal('show');
+                }
+            }); 
+        }else{
+            //alert('Please select user first'); 
+        }
     }
 </script>
 @endsection

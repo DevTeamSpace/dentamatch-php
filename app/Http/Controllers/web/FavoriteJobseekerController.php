@@ -157,5 +157,52 @@ class FavoriteJobseekerController extends Controller {
             NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params);
         }
     }
+    
+    public function postFavouriteJobList(Request $request){
+        $rejectedJobs = JobLists::where('seeker_id', '=', $request->userId)->whereIn('applied_status', [JobLists::HIRED, JobLists::INVITED])->get();
+        $rejectedJobsArray = array();      
+        if($rejectedJobs){
+                    $rejectedJobsData = $rejectedJobs->toArray();
+                    $rejectedJobsArray = array_map(function ($value) {
+                        return  $value['recruiter_job_id'];
+                    }, $rejectedJobsData);
+                } 
+        
+        $jobDetail = JobTemplates::join('recruiter_jobs', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
+                ->join('job_titles', 'job_templates.job_title_id', '=', 'job_titles.id')
+                ->leftJoin('temp_job_dates',function($query){
+                    $query->on('temp_job_dates.recruiter_job_id','=','recruiter_jobs.id')
+                    ->whereDate('temp_job_dates.job_date','>=',date('Y-m-d').' 00:00:00');
+                })
+                ->where('recruiter_jobs.job_type', '3')
+                ->where('job_templates.user_id', Auth::user()->id)
+                ->whereNull('recruiter_jobs.deleted_at')
+                ->select('job_titles.jobtitle_name', 'recruiter_jobs.id as recruiterId',DB::raw("group_concat(distinct(temp_job_dates.job_date) ORDER BY temp_job_dates.job_date ASC) AS temp_job_dates"))
+                ->orderby('temp_job_dates','ASC')
+                ->groupby('temp_job_dates.recruiter_job_id');
+                
+        if(count($rejectedJobsArray) > 0){
+                $jobDetail->whereNotIn('recruiter_jobs.id',$rejectedJobsArray);
+            }
+        $output = "";
+        $listJobs = $jobDetail->get();
+        if($listJobs->count() > 0){
+            $output .= '<option value="" disabled selected>Select </option>';
+                foreach($listJobs as $job){
+                                    $dates_are = '';
+                                    if(!empty($job->temp_job_dates))
+                                    {
+                                    $temp_jobs = (!empty($job->temp_job_dates)?explode(',', $job->temp_job_dates):array());
+                                    $dates_are .= (isset($temp_jobs[0])?date('M d, Y',  strtotime($temp_jobs[0])):"");
+                                    $dates_are .= (isset($temp_jobs[1])?", ".date('M d, Y',  strtotime($temp_jobs[1])):"");
+                                    $dates_are .= (isset($temp_jobs[2])?" , ..":"");
+                                    $output .= '<option value="'.$job->recruiterId.'" data-content = "<h5>'.$job->jobtitle_name.'</h5><span class = \'label label-warning\' >Temporary</span>'.$dates_are.'">'.$job->jobtitle_name.'</option>';
+                                    $output .= '<option data-divider="true"></option>';
+                                    }
+                }
+            
+        }
+        echo $output;exit();   
+    }
 
 }

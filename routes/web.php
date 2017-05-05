@@ -39,6 +39,7 @@
   Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm');
   Route::post('password/reset', 'Auth\ResetPasswordController@reset');
   Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
+  
 
   Route::group(['middleware' => ['auth', 'xssWeb', 'nocache']], function () {
     Route::group(['middleware' => 'recruiter'], function () {
@@ -73,6 +74,7 @@
                 Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
                                 
                 Route::get('favorite-jobseeker','web\FavoriteJobseekerController@getFavJobseeker');
+                Route::get('get-favorite-job-lists','web\FavoriteJobseekerController@postFavouriteJobList');
                 Route::post('invite-jobseeker','web\FavoriteJobseekerController@postInviteJobseeker');              
                 Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
                 Route::get('recruiter-profile-details', 'web\UserProfileController@getRecruiterProfileDetails');
