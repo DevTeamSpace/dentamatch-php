@@ -1086,6 +1086,10 @@
                         .day-drop {
                             color: #686868;
                         }
+                        .bullet-list{padding-left:1.5em}
+                        .bullet-list > li{
+                            list-style-type:disc;
+                        }
                         /*--------view template---------*/
                         
                         .viewtemp-div h6 {

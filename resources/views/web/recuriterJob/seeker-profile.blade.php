@@ -156,10 +156,22 @@
             @endforeach
             @endif
             
+            <?php
+                $affiliations = explode(',',$seekerDetails['affiliations']);
+            if(count($affiliations) > 0){
+                ?>
+            
             <div class="searchResultHeading pd-t-20">
                 <h5>AFFILIATIONS</h5>
-                <P>{{$seekerDetails['affiliations']}}</P>
+                <ul class="job-detail-listing bullet-list">
+                     @foreach($affiliations as $affiliation)
+                    <li>
+                        {{ $affiliation }}
+                    </li>
+                    @endforeach
+                </ul>
             </div>
+            <?php } ?>
             @if(!empty($seekerDetails['certificate']))
             @foreach($seekerDetails['certificate'] as $certificate)
             <div class="searchResultHeading pd-t-20 smallSquare">
