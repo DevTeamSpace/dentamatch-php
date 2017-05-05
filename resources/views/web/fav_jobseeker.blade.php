@@ -107,7 +107,6 @@
                 url:'/get-favorite-job-lists',
                 data:{'userId' : userId},
                 success:function(data){
-                    alert(data);
                     $('#showMessage').removeClass('alert alert-danger');
                     $('#showMessage').html('');
                     if(data != ""){

@@ -184,10 +184,11 @@ class FavoriteJobseekerController extends Controller {
         if(count($rejectedJobsArray) > 0){
                 $jobDetail->whereNotIn('recruiter_jobs.id',$rejectedJobsArray);
             }
-        $output = "";
+        $returnData = "";
         $listJobs = $jobDetail->get();
         if($listJobs->count() > 0){
-            $output .= '<option value="" disabled selected>Select </option>';
+            //$output .= '<option value="" disabled selected>Select </option>';
+            $output = "";
                 foreach($listJobs as $job){
                                     $dates_are = '';
                                     if(!empty($job->temp_job_dates))
@@ -200,9 +201,12 @@ class FavoriteJobseekerController extends Controller {
                                     $output .= '<option data-divider="true"></option>';
                                     }
                 }
+                if($output != ""){
+                    $returnData = '<option value="" disabled selected>Select </option>'.$output;
+                }
             
         }
-        echo $output;exit();   
+        echo $returnData;exit();   
     }
 
 }
