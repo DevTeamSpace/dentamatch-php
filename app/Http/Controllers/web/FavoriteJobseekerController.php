@@ -197,7 +197,7 @@ class FavoriteJobseekerController extends Controller {
                                     $dates_are .= (isset($temp_jobs[0])?date('M d, Y',  strtotime($temp_jobs[0])):"");
                                     $dates_are .= (isset($temp_jobs[1])?", ".date('M d, Y',  strtotime($temp_jobs[1])):"");
                                     $dates_are .= (isset($temp_jobs[2])?" , ..":"");
-                                    $output .= '<option value="'.$job->recruiterId.'" data-content = "<h5>'.$job->jobtitle_name.'</h5><span class = \'label label-warning\' >Temporary</span>'.$dates_are.'">'.$job->jobtitle_name.'</option>';
+                                    $output .= '<option value="'.$job->recruiterId.'" data-content = "<h5>'.$job->jobtitle_name.'</h5><span class = \'label label-warning\' >Temporary </span>'.$dates_are.'">'.$job->jobtitle_name.'</option>';
                                     $output .= '<option data-divider="true"></option>';
                                     }
                 }
