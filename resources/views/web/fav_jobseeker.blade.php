@@ -51,7 +51,7 @@
                     <form data-parsley-validate action="/invite-jobseeker" id="invite_seeker" method="post">
                         {{ csrf_field() }}
                         <div class="form-group custom-select">
-                            <div id="showMessage" class="alert alert-danger"></div>
+                            <div id="showMessage"></div>
                             <label for="selectJobSeeker">Choose the job you want to invite for</label>
                             <input type="hidden" id="seekerId" name="seekerId" >
                             <select  id="selectJobSeeker" name="selectJobSeeker"  class="selectpicker" required="" data-parsley-required-message="Please select the job." >
