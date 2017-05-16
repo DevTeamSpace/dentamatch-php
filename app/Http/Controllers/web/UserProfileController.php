@@ -227,7 +227,7 @@ class UserProfileController extends Controller {
     }
 
     public function getEditProfile() {
-        return view('web.edit_profile', ['activeTab'=>'3']);
+        return view('web.edit-profile', ['activeTab'=>'3']);
     }
     
     public function getRecruiterProfileDetails(){
