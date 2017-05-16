@@ -47,7 +47,7 @@ class FavoriteJobseekerController extends Controller {
                 ->get();
         
         $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
-        return view('web.fav_jobseeker', ['favJobSeeker' => $favJobSeeker, 'jobDetail' => $jobDetail, 'jobTemplateModalData' => $jobTemplateModalData, 'navActive'=>'favseeker']);
+        return view('web.fav-jobseeker', ['favJobSeeker' => $favJobSeeker, 'jobDetail' => $jobDetail, 'jobTemplateModalData' => $jobTemplateModalData, 'navActive'=>'favseeker']);
     }
 
     public function postInviteJobseeker(Request $request) {
@@ -57,7 +57,7 @@ class FavoriteJobseekerController extends Controller {
         ]);
 
         if ($validator->fails()) {
-            return redirect('fav_jobseeker')
+            return redirect('favorite-jobseeker')
                             ->withErrors($validator)
                             ->withInput();
         }
