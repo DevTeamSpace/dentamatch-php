@@ -46,7 +46,7 @@ $(function() {
         if ($(this).hasClass('DynamicAddder')) {
             currentEvent = $(this);
             dynamicDiv = $(document.body).find(".profieBox").append('<div class="mainMasterBox"><div class="commonBox cboxbottom masterBox"></div><div class="pull-right text-right pd-b-15" id="removeButton' + dynamicLength + '"></div><div class="clearfix"></div></div> ');
-            //masterCLone = $(".masterBox:first").children().clone()
+            
             var officeTypes = $.parseJSON($('#officeTypesJson').val());
             var options = "";
             $.each(officeTypes, function(index, value) {
@@ -129,9 +129,7 @@ $(function() {
             $(e.currentTarget).parents('.dayBox').find(".datetimepicker2 input").val("05:00 PM");
 
 
-            //blackValueCheck()
             $(".customsel").on("dp.change", function(e) {
-                //  blackValueCheck()
                 if ($(this).find("input").prop("disabled") == false) {
                     if ($(this).find("input").val() == "") {
                         $(this).find("input").siblings(".parsley-errors-list").html("<li>Required</li>");
@@ -200,55 +198,6 @@ $(function() {
 
     });
 
-//    $('#officeDetailForm').on('submit', function() {
-//        var currentBtn = $(this);
-//        if ($('#createProfileForm').parsley().isValid() && currentBtn.parsley().isValid()) {
-//            createProfile();
-//            $('#officeDetailButton').attr('disabled', 'disabled');
-//            officeDetail();
-//            officeDetail1();
-//        } else {
-//
-//            $('#createProfileForm').parsley().validate();
-//            $(currentBtn).parsley().validate();
-//        }
-//
-//    });
-
-
-//    $(document).on('submit', '#officeDetailForm1', function() {
-//        var currentBtn = $(this);
-//        if ($('#createProfileForm').parsley().isValid() && currentBtn.parsley().isValid()) {
-//            createProfile();
-//            //$('#officeDetailButton1').attr('disabled', 'disabled');
-//            officeDetail1();
-//            officeDetail2();
-//            $('#officeDetailButton1').attr('disabled', 'disabled');
-//            $('#officeDetailButton2').attr('disabled', 'disabled');
-//
-//        } else {
-//
-//            $(currentBtn).parsley().validate();
-//            $('#createProfileForm').parsley().validate();
-//        }
-//    });
-
-
-//    $(document).on('submit', '#officeDetailForm2', function() {
-//        var currentBtn = $(this);
-//        if ($('#createProfileForm').parsley().isValid() && currentBtn.parsley().isValid()) {
-//            createProfile();
-//            $('#officeDetailButton2').attr('disabled', 'disabled');
-//            officeDetail2();
-//
-//        } else {
-//            $(currentBtn).parsley().validate();
-//            $('#createProfileForm').parsley().validate();
-//        }
-//    });
-
-
-
 
     //form button disabled//
     $('.txtBtnDisable').on('focus', function() {
@@ -258,19 +207,6 @@ $(function() {
     })
 
 
-    //==== all input stop action by clicking===//
-    // $(document).on("keypress", 'form', function(e) {
-    //     var code = e.keyCode || e.which;
-    //     if (code == 13) {
-    //         e.preventDefault();
-    //         return false;
-    //     }
-    // });
-
-
-    //=== all input stop action by clicking===//
-
-
     $(document).on('keyup', '.phone-number', function(e) {
         var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
         e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
@@ -278,10 +214,7 @@ $(function() {
     //----- customValidation-----//
     $('.DynamicAddder').on("click", dynamicBox);
     $(document).on("click", ".deleteCard", deleteBox);
-    //$('.masterBox').find('.ckBox').children('input[type="checkbox"]').on('change',checkBoxValidation);
     $(document).on('change', '.masterBox .ckBox input[type="checkbox"]', checkBoxValidation);
-    //$('.customsel').on("change",changeSelect);
-    //$(document).on("click",".formBtnAction",checkBtnValidation);
 
 
 });
