@@ -56,7 +56,7 @@ return [
     */
 
     'from' => [
-        'address' => 'info@dentamatch.com',
+        'address' => env('MAIL_FROM', 'ondemand@appster.in'),
         'name' => 'DentaMatch',
     ],
 
