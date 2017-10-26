@@ -46,7 +46,6 @@ class RecruiterJobController extends Controller {
             $this->viewData['offices'] = RecruiterOffice::getAllRecruiterOffices(Auth::user()->id);
             $this->viewData['templateId'] = $templateId;
             $this->viewData['jobTemplates'] = JobTemplates::findById($templateId);
-            ;
 
             return $this->returnView('create');
         } catch (\Exception $e) {

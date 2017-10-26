@@ -77,5 +77,7 @@ Route::group(['middleware' => ['xss']], function () {
     Route::post('users/update-devicetoken', 'Api\PushNotificationApiController@PostUpdateDeviceToken');
 
     Route::post('admin/forgot-password', 'Api\UserApiController@postAdminForgotPassword');
+    
+    Route::get('jobs/preferred-job-locations', 'Api\MasterApiController@getPreferrefJobLocation');
 
 });

@@ -1172,5 +1172,19 @@ paths:
   
       tags:
         - Job search
+        
+  /jobs/preferred-job-locations:
+    get:
+      summary: Preferred Job Locations
+      description: Api to list preferred job locations
+      responses: 
+          200:
+            description: Preferred Job Locations
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+      tags:
+        - Preferred Job Locations
 
 
