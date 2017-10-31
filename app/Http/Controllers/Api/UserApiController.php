@@ -55,7 +55,7 @@ class UserApiController extends Controller {
             }
         }
         
-        $validator = Validator::make($data, $validation_rules);
+        $validator = Validator::make($reqData, $validation_rules);
         if ($validator->fails()) {
             return $this->validation_error($validator);
         }
