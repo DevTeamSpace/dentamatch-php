@@ -3,6 +3,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
 use Hash;
 use App\Models\User;
 use App\Models\UserProfile;
@@ -270,7 +271,7 @@ class UserProfileApiController extends Controller {
      */
     public function updateUserProfile(Request $request) {
         try {
-            $this->validate($request, [
+            $validation_rules = [
                 'firstName' => 'required',
                 'lastName' => 'required',
                 'zipcode' => 'required',
@@ -278,9 +279,24 @@ class UserProfileApiController extends Controller {
                 'longitude' => 'required',
                 'preferredJobLocation'=>'required',
                 'jobTitileId'=>'required|integer',
-                'aboutMe' => 'required'
-            ]);
+                'preferredJobLocationId' => 'required',
+                'aboutMe' => 'required',
+            ];
+
             $reqData = $request->all();
+            $jobTitleModel = JobTitles::where('id',$reqData['jobTitileId'])->first();
+            if($jobTitleModel) {
+                if($jobTitleModel->is_license_required) {
+                    $licenseValidation = ['licenseNumber' => 'required'];
+                    $validation_rules = array_merge($validation_rules, $licenseValidation);
+                }
+            }
+
+            $validator = Validator::make($reqData, $validation_rules);
+            if ($validator->fails()) {
+                return $this->validation_error($validator);
+            }
+            
             $userId = $request->userServerData->user_id;
             if($userId>0) {
                 $userProfile = UserProfile::where('user_id', $userId)->first();
@@ -290,11 +306,13 @@ class UserProfileApiController extends Controller {
                 $userProfile->latitude = $reqData['latitude'];
                 $userProfile->longitude = $reqData['longitude'];
                 $userProfile->preferred_job_location = $reqData['preferredJobLocation'];
+                $userProfile->preferred_job_location_id = $reqData['preferredJobLocationId'];
                 $userProfile->preferred_city = $reqData['preferredCity'];
                 $userProfile->preferred_state = $reqData['preferredState'];
                 $userProfile->preferred_country = $reqData['preferredCountry'];
                 $userProfile->job_titile_id = $reqData['jobTitileId'];
                 $userProfile->about_me = $reqData['aboutMe'];
+                $userProfile->license_number = isset($reqData['licenseNumber']) ? $reqData['licenseNumber'] : null;
                 $userProfile->save();
                 apiResponse::chkProfileComplete($userId);
                 $message = trans("messages.user_profile_updated");
