@@ -32,6 +32,7 @@ class UserProfile extends Model {
                                     'jobseeker_profiles.latitude',
                                     'jobseeker_profiles.longitude', 
                                     'jobseeker_profiles.preferred_job_location',
+                                    'jobseeker_profiles.preferred_job_location_id',
                                     'jobseeker_profiles.preferred_city',
                                     'jobseeker_profiles.preferred_state',
                                     'jobseeker_profiles.preferred_country',

@@ -140,7 +140,7 @@ class UserApiController extends Controller {
                                 'jobseeker_profiles.latitude',
                                 'jobseeker_profiles.longitude','jobseeker_profiles.preferred_city',
                                 'jobseeker_profiles.preferred_state','jobseeker_profiles.preferred_country',
-                                'users.is_verified','jobseeker_profiles.is_completed'
+                                'jobseeker_profiles.preferred_job_location_id','users.is_verified','jobseeker_profiles.is_completed'
                                 )
                         ->where('users.id', $userId)
                         ->first();
@@ -171,6 +171,7 @@ class UserApiController extends Controller {
                             'imageUrl' => $imgUrl,
                             'zipCode' => $userData['zipcode'],
                             'preferredJobLocation' => $userData['preferred_job_location'],
+                            'preferredJobLocationId' => $userData['preferred_job_location_id'],
                             'latitude' => $userData['latitude'],
                             'longitude' => $userData['longitude'],
                             'accessToken' => $userToken,
