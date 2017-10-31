@@ -39,6 +39,7 @@ class UserApiController extends Controller {
                 'latitude' => 'required',
                 'longitude' => 'required',
                 'zipCode' => 'required',
+                'preferredJobLocationId' => 'required',
             ]);
         
         $reqData = $request->all();
@@ -72,6 +73,7 @@ class UserApiController extends Controller {
             $userProfileModel->last_name = $reqData['lastName'];
             $userProfileModel->zipcode = $reqData['zipCode'];
             $userProfileModel->preferred_job_location = $reqData['preferedLocation'];
+            $userProfileModel->preferred_job_location_id = $reqData['preferredJobLocationId'];
             $userProfileModel->latitude = $reqData['latitude'];
             $userProfileModel->longitude = $reqData['longitude'];
             $userProfileModel->preferred_city = $reqData['city'];
