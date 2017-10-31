@@ -3,6 +3,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\Device;
@@ -10,6 +11,7 @@ use App\Models\UserProfile;
 use App\Models\SearchFilter;
 use App\Models\PasswordReset;
 use App\Models\ChatUserLists;
+use App\Models\JobTitles;
 use Mail;
 use Auth;
 use App\Helpers\apiResponse;
@@ -28,21 +30,35 @@ class UserApiController extends Controller {
      */
     public function postSignup(Request $request){
         try {
-            $this->validate($request, [
-                'deviceId' => 'required',
-                'deviceType' => 'required',
-                'firstName' => 'required',
-                'lastName' => 'required',
-                'email' => 'required',
-                'password' => 'required',
-                'preferedLocation' => 'required',
-                'latitude' => 'required',
-                'longitude' => 'required',
-                'zipCode' => 'required',
-                'preferredJobLocationId' => 'required',
-            ]);
+        $validation_rules = [
+            'deviceId' => 'required',
+            'deviceType' => 'required',
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'preferedLocation' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
+            'zipCode' => 'required',
+            'preferredJobLocationId' => 'required',
+            'jobTitleId' => 'required',
+            'aboutMe' => 'required',
+        ];
         
         $reqData = $request->all();
+        $jobTitleModel = JobTitles::where('id',$reqData['jobTitleId'])->first();
+        if($jobTitleModel) {
+            if($jobTitleModel->is_license_required) {
+                $licenseValidation = ['licenseNumber' => 'required'];
+                $validation_rules = array_merge($validation_rules, $licenseValidation);
+            }
+        }
+        
+        $validator = Validator::make($data, $validation_rules);
+        if ($validator->fails()) {
+            return $this->validation_error($validator);
+        }
         $userExists = User::with('userGroup')->where('email', $reqData['email'])->first();
         if($userExists){
             if (isset($userExists->userGroup) && !empty($userExists->userGroup)) {
@@ -79,6 +95,8 @@ class UserApiController extends Controller {
             $userProfileModel->preferred_city = $reqData['city'];
             $userProfileModel->preferred_state = $reqData['state'];
             $userProfileModel->preferred_country = $reqData['country'];
+            $userProfileModel->license_number = isset($reqData['licenseNumber']) ? $reqData['licenseNumber'] : null;
+            $userProfileModel->about_me = $reqData['aboutMe'];
             
             $userProfileModel->save();
             
@@ -137,10 +155,11 @@ class UserApiController extends Controller {
                                 'jobseeker_profiles.profile_pic',
                                 'jobseeker_profiles.zipcode',
                                 'jobseeker_profiles.preferred_job_location',
-                                'jobseeker_profiles.latitude',
+                                'jobseeker_profiles.latitude', 'jobseeker_profiles.license_number',
                                 'jobseeker_profiles.longitude','jobseeker_profiles.preferred_city',
                                 'jobseeker_profiles.preferred_state','jobseeker_profiles.preferred_country',
-                                'jobseeker_profiles.preferred_job_location_id','users.is_verified','jobseeker_profiles.is_completed'
+                                'jobseeker_profiles.about_me','jobseeker_profiles.preferred_job_location_id',
+                                'users.is_verified','jobseeker_profiles.is_completed'
                                 )
                         ->where('users.id', $userId)
                         ->first();
@@ -179,6 +198,8 @@ class UserApiController extends Controller {
                             'city' => $userData['preferred_city'],
                             'state' => $userData['preferred_state'],
                             'country' => $userData['preferred_country'],
+                            'aboutMe' => $userData['about_me'],
+                            'licenseNumber' => $userData['license_number'],
                         );
                         $searchArray = SearchFilter::getFiltersOnLogin($userId);
                         if($searchArray){
