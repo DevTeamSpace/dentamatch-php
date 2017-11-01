@@ -34,8 +34,6 @@ class SearchApiController extends Controller {
     public function postSearchjobs(Request $request){
         try{
             $this->validate($request, [
-                'lat' => 'required',
-                'lng' => 'required',
                 'zipCode' => 'required',
                 'page' => 'required',
                 'jobTitle' => 'required',
@@ -205,8 +203,6 @@ class SearchApiController extends Controller {
             $this->validate($request, [
                 'type' => 'required',
                 'page' => 'required',
-                'lat' => 'required',
-                'lng' => 'required',
             ]);
             $userId = $request->userServerData->user_id;
             if($userId > 0){

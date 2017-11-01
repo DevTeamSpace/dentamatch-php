@@ -79,9 +79,7 @@ class RecruiterJobs extends Model
                     $rejectedJobsArray = array_map(function ($value) {
                         return  $value['recruiter_job_id'];
                     }, $rejectedJobsData);
-                }   
-        $latitude = $reqData['lat'];
-        $longitude = $reqData['lng'];
+                }
         
         /*$userProfile = UserProfile::where('user_id', $reqData['userId'])->first();
         $longitude = $userProfile->longitude;
@@ -153,7 +151,6 @@ class RecruiterJobs extends Model
         //$radius = Configs::select('config_data')->where('config_name','=','SEARCHRADIUS')->first();
         //$searchQueryObj->where('distance','<=',$radius->config_data);
         //$searchQueryObj->groupby('recruiter_jobs.id');
-        $maxDistance = Configs::getSearchRadius();
         
         $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
                         'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
@@ -162,26 +159,7 @@ class RecruiterJobs extends Model
                         'job_titles.jobtitle_name','recruiter_profiles.office_name','job_templates.job_title_id',
                         'recruiter_offices.address','recruiter_offices.zipcode',
                         'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
-                        DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"),
-                        DB::raw("(
-            3959 * acos (
-              cos ( radians($latitude) )
-              * cos( radians( recruiter_offices.latitude) )
-              * cos( radians( $longitude ) - radians(recruiter_offices.longitude) )
-              + sin ( radians($latitude) )
-              * sin( radians( recruiter_offices.latitude ) )
-             )) AS distance"));
-        
-        
-            $searchQueryObj->where(DB::raw("(
-            3959 * acos (
-              cos ( radians($latitude) )
-              * cos( radians( recruiter_offices.latitude) )
-              * cos( radians( $longitude ) - radians(recruiter_offices.longitude) )
-              + sin ( radians($latitude) )
-              * sin( radians( recruiter_offices.latitude ) )
-             )) "), '<=', $maxDistance);
-       
+                        DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
         
         $total = $searchQueryObj->distinct('recruiter_jobs.id')->count('recruiter_jobs.id');
         $page = $reqData['page'];
@@ -190,7 +168,7 @@ class RecruiterJobs extends Model
         if($page>1){
             $skip = ($page-1)* $limit;
         }
-        $searchResult = $searchQueryObj->distinct('recruiter_jobs.id')->skip($skip)->take($limit)->orderBy('distance', 'asc')->get();
+        $searchResult = $searchQueryObj->distinct('recruiter_jobs.id')->skip($skip)->take($limit)->orderBy('recruiter_jobs.id', 'desc')->get();
         $result = array();
         $updatedResult = array();
         if($searchResult){
