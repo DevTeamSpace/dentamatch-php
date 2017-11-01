@@ -92,6 +92,17 @@
                             </ul>
                         </li>
                         
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    Job Seeker <span class="caret"></span>
+                                </a>
+
+                            <ul class="dropdown-menu" role="jobseeker">
+                                <li><a href="{{ url('cms/jobseeker/unverified') }}">Unverified Profiles</a></li>
+                                <li><a href="{{ url('cms/jobseeker/incomplete') }}">Incomplete Profiles</a></li>
+                            </ul>
+                        </li>
+                        
                         @endif
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

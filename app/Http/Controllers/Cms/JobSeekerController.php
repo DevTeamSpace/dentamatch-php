@@ -332,4 +332,176 @@ class JobSeekerController extends Controller
             Log::error($e);
         } 
     }
+    
+    /**
+     * List all unverfied jobseekers.
+     *
+     * @param  array  $data
+     * @return User
+     */
+    protected function unverified()
+    {  
+        return view('cms.jobseeker.unverified');
+    }
+    
+    /**
+     * List all unverfied jobseekers.
+     *
+     * @param  array  $data
+     * @return User
+     */
+    protected function incomplete()
+    {  
+        return view('cms.jobseeker.incomplete');
+    }
+    
+    public function unverifiedJobseekerList(){
+        try{
+        $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+                        ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->select(
+                                'users.email','users.id',
+                                'jobseeker_profiles.first_name',
+                                'jobseeker_profiles.last_name',
+                                'users.is_verified','users.is_active'
+                                )
+                        ->where('user_groups.group_id', 3)
+                        ->where('users.is_verified', 0)
+                        ->orderBy('users.id', 'desc');
+        return Datatables::of($userData)
+                ->removeColumn('id')
+                ->addColumn('active', function ($userData) {
+                	$active = ($userData->is_active == 1) ? 'Yes':'No';
+                    return $active;
+                })
+//                ->addColumn('action', function ($userData) {
+//                    $edit = url('cms/jobseeker/'.$userData->id.'/edit');
+//                    $resetPassword = url('cms/recruiter/'.$userData->id.'/adminResetPassword');
+//                    $viewDetails = url('cms/jobseeker/'.$userData->id.'/viewdetails');
+//                    $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
+//                    $action .= '<a href="'.$resetPassword.'"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;';
+//                    $action .= '<a href="'.$viewDetails.'"  class="btn btn-xs btn-primary">View Details</a>&nbsp;';
+//                    return $action;
+//                       
+//                })
+                ->make(true);
+        }catch (\Exception $e) {
+            Log::error($e);
+        }
+                       
+    }
+    
+    public function incompleteJobseekerList(){
+        try{
+        $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+                        ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->select(
+                                'users.email','users.id',
+                                'jobseeker_profiles.first_name',
+                                'jobseeker_profiles.last_name',
+                                'jobseeker_profiles.is_completed','users.is_active'
+                                )
+                        ->where('user_groups.group_id', 3)
+                        ->where('jobseeker_profiles.is_completed', 0)
+                        ->orderBy('users.id', 'desc');
+        
+        return Datatables::of($userData)
+                ->removeColumn('id')
+                ->addColumn('active', function ($userData) {
+                	$active = ($userData->is_active == 1) ? 'Yes':'No';
+                    return $active;
+                })
+//                ->addColumn('action', function ($userData) {
+//                    $edit = url('cms/jobseeker/'.$userData->id.'/edit');
+//                    $resetPassword = url('cms/recruiter/'.$userData->id.'/adminResetPassword');
+//                    $viewDetails = url('cms/jobseeker/'.$userData->id.'/viewdetails');
+//                    $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
+//                    $action .= '<a href="'.$resetPassword.'"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;';
+//                    $action .= '<a href="'.$viewDetails.'"  class="btn btn-xs btn-primary">View Details</a>&nbsp;';
+//                    return $action;
+//                       
+//                })
+                ->make(true);
+        }catch (\Exception $e) {
+            Log::error($e);
+        }
+                       
+    }
+    
+    public function downloadIncompleteJobseekerCsv(){
+        $arr = [];
+            $data = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+                        ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->select(
+                                'users.id','users.email',
+                                'jobseeker_profiles.first_name',
+                                'jobseeker_profiles.last_name'
+                                )
+                        ->where('user_groups.group_id', 3)
+                        ->where('jobseeker_profiles.is_completed', 0)
+                        ->orderBy('users.id', 'desc')->get();
+           
+        $arr['id'] ="User Id";
+        $arr['email'] ="Email Id";
+        $arr['first_name'] = "First Name";
+        $arr['last_name'] = 'Last Name';
+        $list = $data->toArray();
+        
+        header("Content-type: application/octet-stream");
+        header("Content-Disposition: attachment; filename=incompleteJobseeker_".time().".csv");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        $outstream = fopen("php://output", 'r+');
+        
+        fputcsv($outstream, $arr, ',', '"');
+        
+        if(!empty($list)) {
+            foreach($list as $value) {
+                fputcsv($outstream, $value, ',', '"');
+            }
+        }
+        
+        fgets($outstream);
+        fclose($outstream);
+    }
+    
+    public function downloadUnverifiedJobseekerCsv(){
+        $arr = [];
+            $data = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+                        ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->select(
+                                'users.id','users.email',
+                                'jobseeker_profiles.first_name',
+                                'jobseeker_profiles.last_name'
+                                )
+                        ->where('user_groups.group_id', 3)
+                        ->where('users.is_verified', 0)
+                        ->orderBy('users.id', 'desc')->get();
+           
+        $arr['id'] ="User Id";
+        $arr['email'] ="Email Id";
+        $arr['first_name'] = "First Name";
+        $arr['last_name'] = 'Last Name';
+        $list = $data->toArray();
+        
+        header("Content-type: application/octet-stream");
+        header("Content-Disposition: attachment; filename=unverifiedJobseeker_".time().".csv");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        $outstream = fopen("php://output", 'r+');
+        
+        fputcsv($outstream, $arr, ',', '"');
+        
+        if(!empty($list)) {
+            foreach($list as $value) {
+                fputcsv($outstream, $value, ',', '"');
+            }
+        }
+        
+        fgets($outstream);
+        fclose($outstream);
+    }
+    
 }

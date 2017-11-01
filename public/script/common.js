@@ -135,6 +135,38 @@ $(function () {
         ]
     });
     
+    $('#jobseeker_unverified_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'jobseeker/listUnverifiedJobseeker',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'email', name: 'email',searchable:true},
+            {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
+            {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
+            {data: 'active', name: 'active',searchable:false},
+        ]
+    });
+    
+    $('#jobseeker_incomplete_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'jobseeker/listIncompleteJobseeker',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'email', name: 'email',searchable:true},
+            {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
+            {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
+            {data: 'active', name: 'active',searchable:false},
+        ]
+    });
+    
     $('#recruiter_list').DataTable({
         processing: true,
         serverSide: true,

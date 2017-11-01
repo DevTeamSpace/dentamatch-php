@@ -233,6 +233,12 @@ Route::group(['middleware' => ['web', 'xssWeb', 'nocache'], 'prefix' => 'cms/'],
         Route::get('verification-list', 'Cms\JobSeekerController@jobSeekerVerificationList');
         Route::get('{id}/verification', 'Cms\JobSeekerController@jobSeekerVerificationView');
         Route::post('storeVerification', 'Cms\JobSeekerController@storeVerification');
+        Route::get('unverified', 'Cms\JobSeekerController@unverified');
+        Route::get('listUnverifiedJobseeker', 'Cms\JobSeekerController@unverifiedJobseekerList');
+        Route::get('downloadUnverifiedJobseeker', 'Cms\JobSeekerController@downloadUnverifiedJobseekerCsv');
+        Route::get('incomplete', 'Cms\JobSeekerController@incomplete');
+        Route::get('listIncompleteJobseeker', 'Cms\JobSeekerController@incompleteJobseekerList');
+        Route::get('downloadIncompleteJobseeker', 'Cms\JobSeekerController@downloadIncompleteJobseekerCsv');
     });
     
     Route::group(['prefix' => 'recruiter/'], function() {
