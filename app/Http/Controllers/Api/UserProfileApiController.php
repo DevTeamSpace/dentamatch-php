@@ -115,7 +115,7 @@ class UserProfileApiController extends Controller {
                 'jobTitleId' => 'required',
                 'aboutMe' => 'required'
             ]);
-            
+            $mappedSkillsArray = [];
             $jobTitleModel = JobTitles::where('id',$request->jobTitleId)->first();
             if($jobTitleModel) {
                 $mappedSkills = $jobTitleModel->mapped_skills_id;
@@ -130,6 +130,10 @@ class UserProfileApiController extends Controller {
                 UserProfile::where('user_id', $userId)->update(['license_number' => $request->license, 'state' => $request->state,'is_job_seeker_verified' => 0]);
                 if(($request->jobTitleId != "") && ($request->jobTitleId > 0)){
                     UserProfile::where('user_id', $userId)->update(['job_titile_id' => $request->jobTitleId]);
+                }
+                
+                if(!empty($mappedSkillsArray)) {
+                    JobSeekerSkills::addJobSeekerSkills($userId, $mappedSkillsArray);
                 }
                 apiResponse::chkProfileComplete($userId);
                 $response =  apiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"));

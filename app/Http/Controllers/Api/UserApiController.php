@@ -97,10 +97,6 @@ class UserApiController extends Controller {
             $last = strtotime(date('Y-m-d')." +60 days");
             JobSeekerTempAvailability::addTempDateAvailability($userDetails->id, $current, $last);
             
-            if(!empty($mappedSkillsArray)) {
-                JobSeekerSkills::addJobSeekerSkills($userDetails->id, $mappedSkillsArray);
-            }
-            
             $url = url("/verification-code/$uniqueCode");
             $name = $reqData['firstName'];
             $email = $reqData['email'];

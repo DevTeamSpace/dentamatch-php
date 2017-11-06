@@ -3,6 +3,7 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Log;
 
 class JobSeekerTempAvailability extends Model
 {
@@ -21,17 +22,13 @@ class JobSeekerTempAvailability extends Model
     ];
     
     public static function addTempDateAvailability($userId, $currentDate, $endDate) {
-        $insertTempDateArray = [];
-        while( $currentDate <= $endDate ) {
-                $insertTempDateArray[] = date( "Y-m-d", $currentDate );
-                $currentDate = strtotime("+1", $currentDate );
+        $tempDateArray = [];
+        while($currentDate<=$endDate) {
+                $insertDate = date( "Y-m-d", $currentDate );
+                $tempDateArray[] = array('user_id' => $userId, 'temp_job_date' => $insertDate);
+                $currentDate = strtotime($insertDate." +1 days");
         }
-        if(!empty($insertTempDateArray)) {
-            foreach($insertTempDateArray as $newTempDate) {     
-                    $tempDateArray[] = array('user_id' => $userId, 'temp_job_date' => $newTempDate);
-            }
-            self::insert($tempDateArray);
-        }
+        self::insert($tempDateArray);
     }
     
     
