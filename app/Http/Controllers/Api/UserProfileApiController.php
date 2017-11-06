@@ -112,9 +112,19 @@ class UserProfileApiController extends Controller {
     public function putUpdateLicense(Request $request) {
         try {
             $this->validate($request, [
-                'license' => 'required',
-                'state' => 'required',
+                'jobTitleId' => 'required',
+                'aboutMe' => 'required'
             ]);
+            
+            $jobTitleModel = JobTitles::where('id',$request->jobTitleId)->first();
+            if($jobTitleModel) {
+                $mappedSkills = $jobTitleModel->mapped_skills_id;
+                $mappedSkillsArray = explode(",",$mappedSkills);
+                if($jobTitleModel->is_license_required) {
+                    $this->validate($request, ['licenseNumber' => 'required', 'state' => 'required']);
+                }
+            }
+            
             $userId = $request->userServerData->user_id;
             if($userId > 0){
                 UserProfile::where('user_id', $userId)->update(['license_number' => $request->license, 'state' => $request->state,'is_job_seeker_verified' => 0]);

@@ -617,20 +617,22 @@ paths:
           in: header
           description: access token
           type: string
-
-        - name: license
-          in: formData
-          description: license for user
-          type: string
-        - name: state
-          in: formData
-          description: state for user
-          type: string
         - name: jobTitleId
           in: formData
           description: jobtitle for user (optional) , leave blank for update
+          type: integer
+        - name: license
+          in: formData
+          description: license for user (required if jobTitleId criteria validates it) , leave blank for update
           type: string
-          
+        - name: state
+          in: formData
+          description: state for user (required if license is not null) , leave blank for update
+          type: string
+        - name: aboutMe
+          in: formData
+          description: about me
+          type: string
       tags:
         - User Profile
         
