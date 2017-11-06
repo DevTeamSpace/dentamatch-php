@@ -111,20 +111,21 @@ class UserProfileApiController extends Controller {
      */
     public function putUpdateLicense(Request $request) {
         try {
-            $this->validate($request, [
+            $validateKeys = [
                 'jobTitleId' => 'required',
                 'aboutMe' => 'required'
-            ]);
+            ];
             $mappedSkillsArray = [];
             $jobTitleModel = JobTitles::where('id',$request->jobTitleId)->first();
             if($jobTitleModel) {
                 $mappedSkills = $jobTitleModel->mapped_skills_id;
                 $mappedSkillsArray = explode(",",$mappedSkills);
                 if($jobTitleModel->is_license_required) {
-                    $this->validate($request, ['licenseNumber' => 'required', 'state' => 'required']);
+                    $validateKeys['license']= 'required';
+                    $validateKeys['state'] = 'required';
                 }
             }
-            
+            $this->validate($request, $validateKeys);
             $userId = $request->userServerData->user_id;
             if($userId > 0){
                 UserProfile::where('user_id', $userId)->update(['license_number' => $request->license, 'state' => $request->state,'is_job_seeker_verified' => 0]);
@@ -140,14 +141,13 @@ class UserProfileApiController extends Controller {
             }else{
                 $response =  apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
+            return $response;
          } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $response =  apiResponse::responseError("Request validation failed.", ["data" => $messages]);
-        } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response =  apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        } catch (\Exception $e) {
+            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
-        return $response;
     }
     
     /**

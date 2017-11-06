@@ -600,7 +600,7 @@ paths:
         - User Profile
         
   /users/update-license:
-    post:
+    put:
       summary: Update lisence , state and jobtitle of user
       description: Api to update lisence , state and jobtitle
       responses: 
