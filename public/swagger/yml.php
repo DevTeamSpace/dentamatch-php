@@ -169,7 +169,6 @@ paths:
           type: string
         - name: deviceToken
           in: formData
-          required: true
           description: Token for that particular devide(Optional)
           type: string
         - name: firstName
