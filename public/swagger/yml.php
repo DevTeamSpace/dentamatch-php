@@ -9,7 +9,7 @@ info:
 host: <?php echo $_SERVER['HTTP_HOST']; ?>/api
 # array of all schemes that your API supports
 schemes:
-  - http
+  - https
 # will be prefixed to all paths
 basePath: /
 produces:
