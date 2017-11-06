@@ -40,20 +40,10 @@ class UserApiController extends Controller {
                 'email' => 'required',
                 'password' => 'required',
                 'preferredJobLocationId' => 'required',
-                'jobTitleId' => 'required',
-                'aboutMe' => 'required',
             ]);
         
         $reqData = $request->all();
         $mappedSkillsArray = [];
-        $jobTitleModel = JobTitles::where('id',$reqData['jobTitleId'])->first();
-        if($jobTitleModel) {
-            $mappedSkills = $jobTitleModel->mapped_skills_id;
-            $mappedSkillsArray = explode(",",$mappedSkills);
-            if($jobTitleModel->is_license_required) {
-                $this->validate($request, ['licenseNumber' => 'required']);
-            }
-        }
         
         $userExists = User::with('userGroup')->where('email', $reqData['email'])->first();
         if($userExists){
@@ -84,8 +74,6 @@ class UserApiController extends Controller {
             $userProfileModel->first_name = $reqData['firstName'];
             $userProfileModel->last_name = $reqData['lastName'];
             $userProfileModel->preferred_job_location_id = $reqData['preferredJobLocationId'];
-            $userProfileModel->license_number = isset($reqData['licenseNumber']) ? $reqData['licenseNumber'] : null;
-            $userProfileModel->about_me = $reqData['aboutMe'];
             $userProfileModel->is_fulltime = config('constants.AutoAvailabilityFlag');
             $userProfileModel->is_parttime_monday = config('constants.AutoAvailabilityFlag');
             $userProfileModel->is_parttime_tuesday = config('constants.AutoAvailabilityFlag');

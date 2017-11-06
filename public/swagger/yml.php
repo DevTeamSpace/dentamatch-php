@@ -192,25 +192,11 @@ paths:
           required: true
           description: Password  of the user
           type: string
-        - name: jobTitleId
-          in: formData
-          required: true
-          description: Job title id
-          type: integer
         - name: preferredJobLocationId
           in: formData
           required: true
           description: preferred Job Location Id
           type: integer
-        - name: aboutMe
-          in: formData
-          required: true
-          description: about me
-          type: string
-        - name: licenseNumber
-          in: formData
-          description: license number (optional)
-          type: string
       tags:
         - Users onboarding
         
