@@ -192,7 +192,6 @@ paths:
           required: true
           description: Password  of the user
           type: string
-          type: string
         - name: jobTitleId
           in: formData
           required: true
