@@ -88,8 +88,9 @@ class UserApiController extends Controller {
             $deviceModel =  new Device();
             $reqData['deviceOs'] = isset($reqData['deviceOs'])?$reqData['deviceOs']:'';
             $reqData['appVersion'] = isset($reqData['appVersion'])?$reqData['appVersion']:'';
+            $deviceToken = isset($reqData['deviceToken']) ? $reqData['deviceToken'] : "";
             $deviceModel->registerDevice(
-                    $reqData['deviceId'], $userDetails->id, $reqData['deviceToken'],
+                    $reqData['deviceId'], $userDetails->id, $deviceToken,
                     $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']
                 );
             
