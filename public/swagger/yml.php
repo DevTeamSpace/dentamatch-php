@@ -164,73 +164,54 @@ paths:
           type: string
         - name: deviceType
           in: formData
+          required: true
           description: Type of device (ex. iOS or Android)
           type: string
         - name: deviceToken
           in: formData
+          required: true
           description: Token for that particular devide(Optional)
           type: string
         - name: firstName
           in: formData
+          required: true
           description: Firstname of the user
           type: string
         - name: lastName
           in: formData
+          required: true
           description: Firstname of the user
           type: string
         - name: email
           in: formData
+          required: true
           description: Email  of the user
           type: string
         - name: password
           in: formData
+          required: true
           description: Password  of the user
           type: string
-        - name: preferedLocation
-          in: formData
-          description: Preffered location of the user
-          type: string
-        - name: latitude
-          in: formData
-          description: Latitude of user location
-          type: string
-        - name: longitude
-          in: formData
-          description: Longitude of user location
-          type: string
-        - name: zipCode
-          in: formData
-          description: Zipcode  of user location
           type: string
         - name: jobTitleId
           in: formData
+          required: true
           description: Job title id
           type: integer
         - name: preferredJobLocationId
           in: formData
+          required: true
           description: preferred Job Location Id
           type: integer
         - name: aboutMe
           in: formData
+          required: true
           description: about me
           type: string
         - name: licenseNumber
           in: formData
           description: license number (optional)
           type: string
-        - name: city
-          in: formData
-          description: preferred city
-          type: string
-        - name: state
-          in: formData
-          description: preferred state
-          type: string
-        - name: country
-          in: formData
-          description: preferred country
-          type: string
-          
       tags:
         - Users onboarding
         

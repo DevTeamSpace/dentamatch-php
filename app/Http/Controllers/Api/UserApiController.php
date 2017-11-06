@@ -39,16 +39,9 @@ class UserApiController extends Controller {
                 'lastName' => 'required',
                 'email' => 'required',
                 'password' => 'required',
-                'preferedLocation' => 'required',
-                'latitude' => 'required',
-                'longitude' => 'required',
-                'zipCode' => 'required',
                 'preferredJobLocationId' => 'required',
                 'jobTitleId' => 'required',
                 'aboutMe' => 'required',
-                'city' => 'required',
-                'state' => 'required',
-                'country' => 'required',
             ]);
         
         $reqData = $request->all();
@@ -90,14 +83,7 @@ class UserApiController extends Controller {
             $userProfileModel->user_id = $userDetails->id;
             $userProfileModel->first_name = $reqData['firstName'];
             $userProfileModel->last_name = $reqData['lastName'];
-            $userProfileModel->zipcode = $reqData['zipCode'];
-            $userProfileModel->preferred_job_location = $reqData['preferedLocation'];
             $userProfileModel->preferred_job_location_id = $reqData['preferredJobLocationId'];
-            $userProfileModel->latitude = $reqData['latitude'];
-            $userProfileModel->longitude = $reqData['longitude'];
-            $userProfileModel->preferred_city = $reqData['city'];
-            $userProfileModel->preferred_state = $reqData['state'];
-            $userProfileModel->preferred_country = $reqData['country'];
             $userProfileModel->license_number = isset($reqData['licenseNumber']) ? $reqData['licenseNumber'] : null;
             $userProfileModel->about_me = $reqData['aboutMe'];
             $userProfileModel->is_fulltime = config('constants.AutoAvailabilityFlag');
