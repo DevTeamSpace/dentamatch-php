@@ -41,11 +41,7 @@
             <div class="col-sm-5">
               <label class="fnt-16 nopadding">Radius</label>
               <div >
-                <input type="hidden" id="slider_val" name="slider_val" value="{{ $searchData['distance'] }}">
                 <input type="hidden" id="avail_all" name="avail_all" value="{{ $searchData['avail_all'] }}">
-                <input id="range_slider" type="text"/>
-                <span class="pull-left">1 mile</span>
-                <span class="pull-right">{{ $maxDistance }} miles</span>
               </div>
             </div>
         </div>
@@ -91,7 +87,6 @@
 @section('js')
 <script type="text/javascript">
     var urlFav = "{{ url('recruiter/markFavourite') }}";
-    maxSliderRange = "<?php echo $maxDistance; ?>";
 </script>
 <script src ="{{asset('web/scripts/search.js')}}"></script>
 <script src ="{{asset('web/scripts/jobdetail.js')}}"></script>

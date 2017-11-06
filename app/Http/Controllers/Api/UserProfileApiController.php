@@ -3,7 +3,6 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Validator;
 use Hash;
 use App\Models\User;
 use App\Models\UserProfile;
@@ -271,30 +270,25 @@ class UserProfileApiController extends Controller {
      */
     public function updateUserProfile(Request $request) {
         try {
-            $validation_rules = [
+            
+            $this->validate($request, [
                 'firstName' => 'required',
                 'lastName' => 'required',
                 'zipcode' => 'required',
                 'latitude' => 'required',
                 'longitude' => 'required',
-                'preferredJobLocation'=>'required',
-                'jobTitileId'=>'required|integer',
+                'preferredJobLocation' => 'required',
+                'jobTitleId' => 'required',
                 'preferredJobLocationId' => 'required',
                 'aboutMe' => 'required',
-            ];
-
+            ]);
+            
             $reqData = $request->all();
             $jobTitleModel = JobTitles::where('id',$reqData['jobTitileId'])->first();
             if($jobTitleModel) {
                 if($jobTitleModel->is_license_required) {
-                    $licenseValidation = ['licenseNumber' => 'required'];
-                    $validation_rules = array_merge($validation_rules, $licenseValidation);
+                    $this->validate($request, ['licenseNumber' => 'required']);
                 }
-            }
-
-            $validator = Validator::make($reqData, $validation_rules);
-            if ($validator->fails()) {
-                return $this->validation_error($validator);
             }
             
             $userId = $request->userServerData->user_id;

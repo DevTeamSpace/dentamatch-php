@@ -24,4 +24,5 @@ return [
         'SixMonths' => 'six-months',
         'OneYear' => 'one-year',
         'Resubscribe' => 'resubscribe',
+        'AutoAvailabilityFlag' => 1
 ];

@@ -3,7 +3,6 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\Device;
@@ -12,6 +11,8 @@ use App\Models\SearchFilter;
 use App\Models\PasswordReset;
 use App\Models\ChatUserLists;
 use App\Models\JobTitles;
+use App\Models\JobSeekerTempAvailability;
+use App\Models\JobSeekerSkills;
 use Mail;
 use Auth;
 use App\Helpers\apiResponse;
@@ -30,35 +31,37 @@ class UserApiController extends Controller {
      */
     public function postSignup(Request $request){
         try {
-        $validation_rules = [
-            'deviceId' => 'required',
-            'deviceType' => 'required',
-            'firstName' => 'required',
-            'lastName' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-            'preferedLocation' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
-            'zipCode' => 'required',
-            'preferredJobLocationId' => 'required',
-            'jobTitleId' => 'required',
-            'aboutMe' => 'required',
-        ];
+            
+            $this->validate($request, [
+                'deviceId' => 'required',
+                'deviceType' => 'required',
+                'firstName' => 'required',
+                'lastName' => 'required',
+                'email' => 'required',
+                'password' => 'required',
+                'preferedLocation' => 'required',
+                'latitude' => 'required',
+                'longitude' => 'required',
+                'zipCode' => 'required',
+                'preferredJobLocationId' => 'required',
+                'jobTitleId' => 'required',
+                'aboutMe' => 'required',
+                'city' => 'required',
+                'state' => 'required',
+                'country' => 'required',
+            ]);
         
         $reqData = $request->all();
+        $mappedSkillsArray = [];
         $jobTitleModel = JobTitles::where('id',$reqData['jobTitleId'])->first();
         if($jobTitleModel) {
+            $mappedSkills = $jobTitleModel->mapped_skills_id;
+            $mappedSkillsArray = explode(",",$mappedSkills);
             if($jobTitleModel->is_license_required) {
-                $licenseValidation = ['licenseNumber' => 'required'];
-                $validation_rules = array_merge($validation_rules, $licenseValidation);
+                $this->validate($request, ['licenseNumber' => 'required']);
             }
         }
         
-        $validator = Validator::make($reqData, $validation_rules);
-        if ($validator->fails()) {
-            return $this->validation_error($validator);
-        }
         $userExists = User::with('userGroup')->where('email', $reqData['email'])->first();
         if($userExists){
             if (isset($userExists->userGroup) && !empty($userExists->userGroup)) {
@@ -97,6 +100,14 @@ class UserApiController extends Controller {
             $userProfileModel->preferred_country = $reqData['country'];
             $userProfileModel->license_number = isset($reqData['licenseNumber']) ? $reqData['licenseNumber'] : null;
             $userProfileModel->about_me = $reqData['aboutMe'];
+            $userProfileModel->is_fulltime = config('constants.AutoAvailabilityFlag');
+            $userProfileModel->is_parttime_monday = config('constants.AutoAvailabilityFlag');
+            $userProfileModel->is_parttime_tuesday = config('constants.AutoAvailabilityFlag');
+            $userProfileModel->is_parttime_wednesday = config('constants.AutoAvailabilityFlag');
+            $userProfileModel->is_parttime_thursday = config('constants.AutoAvailabilityFlag');
+            $userProfileModel->is_parttime_friday = config('constants.AutoAvailabilityFlag');
+            $userProfileModel->is_parttime_saturday = config('constants.AutoAvailabilityFlag');
+            $userProfileModel->is_parttime_sunday = config('constants.AutoAvailabilityFlag');
             
             $userProfileModel->save();
             
@@ -107,6 +118,14 @@ class UserApiController extends Controller {
                     $reqData['deviceId'], $userDetails->id, $reqData['deviceToken'],
                     $reqData['deviceType'], $reqData['deviceOs'], $reqData['appVersion']
                 );
+            
+            $current = strtotime(date('Y-m-d'));
+            $last = strtotime(date('Y-m-d')." +60 days");
+            JobSeekerTempAvailability::addTempDateAvailability($userDetails->id, $current, $last);
+            
+            if(!empty($mappedSkillsArray)) {
+                JobSeekerSkills::addJobSeekerSkills($userDetails->id, $mappedSkillsArray);
+            }
             
             $url = url("/verification-code/$uniqueCode");
             $name = $reqData['firstName'];

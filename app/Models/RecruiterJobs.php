@@ -222,15 +222,8 @@ class RecruiterJobs extends Model
                             'recruiter_offices.address','recruiter_offices.zipcode',
                             'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
                             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS job_posted_time_gap"),
-                            DB::raw("GROUP_CONCAT(office_types.officetype_name SEPARATOR ', ') AS office_type_name"),
-                            DB::raw("(
-                    3959 * acos (
-                      cos ( radians($latitude) )
-                      * cos( radians( recruiter_offices.latitude) )
-                      * cos( radians( $longitude ) - radians(recruiter_offices.longitude) )
-                      + sin ( radians($latitude) )
-                      * sin( radians( recruiter_offices.latitude ) )
-                     )) AS distance"));
+                            DB::raw("GROUP_CONCAT(office_types.officetype_name SEPARATOR ', ') AS office_type_name")
+                            );
                         
                         
         $data = $searchQueryObj->first();

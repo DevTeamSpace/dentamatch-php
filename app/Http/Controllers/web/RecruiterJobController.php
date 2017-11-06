@@ -58,25 +58,20 @@ class RecruiterJobController extends Controller {
         try{
             $userId = Auth::user()->id;
             $searchData = $request->all();
-            $maxDistance = Configs::getSearchRadius();
-            $distance = $request->get('distance');
             $availAll = $request->get('avail_all');
-            if(empty($distance))
-                $distance = $maxDistance;
             if(empty($availAll)) {
                 $availAll = 0;
             }
-            $searchData['distance']     = $distance;
             $searchData['avail_all']    = $availAll;
             $jobDetails     = RecruiterJobs::getRecruiterJobDetails($jobId);
             $seekersList    = JobSeekerProfiles::getJobSeekerProfiles($jobDetails,$searchData);
             $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
-
+            
             if ($request->ajax()) {
-                return view('web.recuriterJob.seekers-data', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'maxDistance'=>$maxDistance, 'jobTemplateModalData'=>$jobTemplateModalData])->render();  
+                return view('web.recuriterJob.seekers-data', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'jobTemplateModalData'=>$jobTemplateModalData])->render();  
             }
 
-            return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData', 'jobId','maxDistance', 'jobTemplateModalData'));
+            return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData', 'jobId', 'jobTemplateModalData'));
         } catch (\Exception $e) {
             Log::error($e);
             return view('web.error.', ["message" => $e->getMessage()]);

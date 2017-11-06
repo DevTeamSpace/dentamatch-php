@@ -79,26 +79,6 @@ class JobSeekerProfiles extends Model
         
         if($job['job_type']==RecruiterJobs::TEMPORARY)
             $obj->addSelect(DB::raw("group_concat(distinct(jobseeker_temp_availability.temp_job_date)) AS temp_job_dates"));
-        
-        $obj->addSelect(DB::raw("(
-                        3959 * acos (
-                          cos ( radians(".$job['latitude'].") )
-                          * cos( radians( jobseeker_profiles.latitude) )
-                          * cos( radians(".$job['longitude'].") - radians(jobseeker_profiles.longitude) )
-                          + sin ( radians(".$job['latitude'].") )
-                          * sin( radians( jobseeker_profiles.latitude ) )
-                         )) AS distance") );
-
-        if(isset($reqData['distance']) && !empty($reqData['distance'])){
-            $obj->where(DB::raw("(
-                        3959 * acos (
-                          cos ( radians(".$job['latitude'].") )
-                          * cos( radians( jobseeker_profiles.latitude) )
-                          * cos( radians(".$job['longitude'].") - radians(jobseeker_profiles.longitude) )
-                          + sin ( radians(".$job['latitude'].") )
-                          * sin( radians( jobseeker_profiles.latitude ) )
-                         ))"),'<=',$reqData['distance']);
-        }    
     
         $obj->leftjoin('job_ratings',function($query){
             $query->on('job_ratings.seeker_id', '=', 'jobseeker_profiles.user_id');
@@ -121,7 +101,6 @@ class JobSeekerProfiles extends Model
         ->groupby('jobseeker_profiles.user_id');
         $obj->orderby('is_favourite','desc');
         $obj->orderby('matched_skills','desc');
-        $obj->orderby('distance');
         
         $allProfiles    =   $obj->pluck('user_id');
         $allSkills      =   '';
@@ -156,15 +135,6 @@ class JobSeekerProfiles extends Model
         $obj->addSelect(DB::raw("group_concat(distinct(affiliations.affiliation_name) SEPARATOR ', ') AS affiliations"));
 
         $obj->addSelect(DB::raw("group_concat(distinct(jobseeker_temp_availability.temp_job_date) SEPARATOR ' | ') AS temp_job_dates"));
-
-        $obj->addSelect(DB::raw("(
-                        3959 * acos (
-                          cos ( radians(".$job['latitude'].") )
-                          * cos( radians( jobseeker_profiles.latitude) )
-                          * cos( radians(".$job['longitude'].") - radians(jobseeker_profiles.longitude) )
-                          + sin ( radians(".$job['latitude'].") )
-                          * sin( radians( jobseeker_profiles.latitude ) )
-                         )) AS distance") );
 
         $searchResult   =   $obj->first();
         
@@ -214,17 +184,8 @@ class JobSeekerProfiles extends Model
             $obj->addSelect(DB::raw("group_concat(jobseeker_temp_availability.temp_job_date) AS temp_job_dates"));
         }
         
-        $data = $obj->addSelect(DB::raw("(
-                    3959 * acos (
-                      cos ( radians(recruiter_offices.latitude) )
-                      * cos( radians( jobseeker_profiles.latitude) )
-                      * cos( radians( recruiter_offices.longitude    ) - radians(jobseeker_profiles.longitude) )
-                      + sin ( radians(recruiter_offices.latitude) )
-                      * sin( radians( jobseeker_profiles.latitude ) )
-                     )) AS distance"))
-                ->orderby('job_lists.applied_status','desc')
-                ->orderby('distance','asc')
-                    ->get();
+        $data = $obj->orderby('job_lists.applied_status','desc')
+                ->get();
       dd($data->groupBy('applied_status')->toArray());  
     }
     

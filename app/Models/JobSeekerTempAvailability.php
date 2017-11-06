@@ -20,6 +20,19 @@ class JobSeekerTempAvailability extends Model
        'updated_at', 'deleted_at','created_at'
     ];
     
+    public static function addTempDateAvailability($userId, $currentDate, $endDate) {
+        $insertTempDateArray = [];
+        while( $currentDate <= $endDate ) {
+                $insertTempDateArray[] = date( "Y-m-d", $currentDate );
+                $currentDate = strtotime("+1", $currentDate );
+        }
+        if(!empty($insertTempDateArray)) {
+            foreach($insertTempDateArray as $newTempDate) {     
+                    $tempDateArray[] = array('user_id' => $userId, 'temp_job_date' => $newTempDate);
+            }
+            self::insert($tempDateArray);
+        }
+    }
     
     
 }

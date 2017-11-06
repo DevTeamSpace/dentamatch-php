@@ -116,7 +116,6 @@
                         <?php 
                             $key = $seeker['applied_status'];
                         ?>
-                        <p>{{ round($seeker['distance'],1) }} miles away</p>
                         <form action="{{ url('job/updateStatus') }}" method="post">
                             {!! csrf_field() !!}
                             <input type="hidden" name="jobId" value="{{ $job['id'] }}">

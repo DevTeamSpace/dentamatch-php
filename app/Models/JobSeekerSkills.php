@@ -96,4 +96,13 @@ class JobSeekerSkills extends Model
         return $list;
     }
     
+    public static function addJobSeekerSkills($userId, $skillsArray) {
+        if(!empty($skillsArray)) {
+            foreach($skillsArray as $skills) {
+                $skillInsertArray[] = ['user_id' => $userId, 'skill_id' => $skills, 'other_skill'=>""];
+            }
+            self::insert($skillInsertArray);
+        }
+    }
+    
 }

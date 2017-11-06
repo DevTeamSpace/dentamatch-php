@@ -202,6 +202,34 @@ paths:
           in: formData
           description: Zipcode  of user location
           type: string
+        - name: jobTitleId
+          in: formData
+          description: Job title id
+          type: integer
+        - name: preferredJobLocationId
+          in: formData
+          description: preferred Job Location Id
+          type: integer
+        - name: aboutMe
+          in: formData
+          description: about me
+          type: string
+        - name: licenseNumber
+          in: formData
+          description: license number (optional)
+          type: string
+        - name: city
+          in: formData
+          description: preferred city
+          type: string
+        - name: state
+          in: formData
+          description: preferred state
+          type: string
+        - name: country
+          in: formData
+          description: preferred country
+          type: string
           
       tags:
         - Users onboarding

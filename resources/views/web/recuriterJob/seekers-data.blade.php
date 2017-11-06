@@ -108,7 +108,7 @@ $seekerDatesCount = count($datesTemp);
             @endif  
         </div>
         <div class="template-job-information-right">
-            <span >{{round($seeker['distance'],1)}} miles away</span>
+            
         </div> 
     </div> 
     <div class="job-type-detail">
@@ -175,4 +175,4 @@ $seekerDatesCount = count($datesTemp);
 @endforeach 
 <input type="hidden" name="resultCount" id="resultCount" value="{{ $seekersList['paginate']->total() }}">
 
-{{ $seekersList['paginate']->appends(['distance' => $searchData['distance'],'avail_all' => $searchData['avail_all']])->links() }}
+{{ $seekersList['paginate']->appends(['avail_all' => $searchData['avail_all']])->links() }}

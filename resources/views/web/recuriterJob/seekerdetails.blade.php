@@ -70,7 +70,7 @@ $seekerDatesCount = count($datesTemp);
               </div>
           </div>
           <form action="{{ url('job/updateStatus') }}" method="post">
-            <div class="col-md-3 text-right"><p>{{round($seekerDetails['distance'],1)}} miles away</p>
+            <div class="col-md-3 text-right">
                 {!! csrf_field() !!}
                 <input type="hidden" name="jobId" value="{{ $jobId }}">
                 <input type="hidden" name="seekerId" value="{{ $seekerDetails['user_id'] }}">

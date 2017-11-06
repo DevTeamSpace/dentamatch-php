@@ -50,16 +50,7 @@ class JobseekerTempHired extends Model {
                 ->addSelect(DB::raw("(avg(punctuality)+avg(time_management)+avg(skills)+avg(teamwork)+avg(onemore))/5 AS avg_rating"))
                 ->groupby('jobseeker_temp_hired.jobseeker_id');
        
-        $data = $obj->addSelect(DB::raw("(
-                    3959 * acos (
-                      cos ( radians(recruiter_offices.latitude) )
-                      * cos( radians( jobseeker_profiles.latitude) )
-                      * cos( radians( recruiter_offices.longitude    ) - radians(jobseeker_profiles.longitude) )
-                      + sin ( radians(recruiter_offices.latitude) )
-                      * sin( radians( jobseeker_profiles.latitude ) )
-                     )) AS distance"))
-                ->orderby('job_lists.applied_status', 'desc')
-                ->orderby('distance', 'asc')
+        $data = $obj->orderby('job_lists.applied_status', 'desc')
                 ->get();
 
         return ($data->groupBy('applied_status')->toArray());
