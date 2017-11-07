@@ -142,8 +142,10 @@
         me.showEdit = ko.observable(true);
         me.cannotEdit = ko.observable(false);
         me.allLocations = ko.observableArray([]);
+        me.preferredJobLocations = ko.observableArray([]);
         me.jobId = ko.observable();
         me.defaultSelectLocation = ko.observableArray([]);
+        me.defaultSelectPreferredJobLocation = ko.observableArray([]);
         me.abcd = ko.observableArray([]);
         me.jobType = ko.observable('');
         me.totalJobOpening = ko.observable();
@@ -194,6 +196,11 @@
                     me.allLocations.push(d.recruiterOffices[i]);
                 }
                 me.defaultSelectLocation.push(d.jobDetails.address);
+                
+                for (i in d.preferredJobLocations) {
+                    me.preferredJobLocations.push(d.preferredJobLocations[i]);
+                }
+                me.defaultSelectPreferredJobLocation.push(d.jobDetails.preferred_job_location_id);
                 
                 me.allPartTimeDays(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
                 if (d.jobDetails.job_type == 1) {

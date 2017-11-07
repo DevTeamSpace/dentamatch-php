@@ -233,12 +233,22 @@ Route::group(['middleware' => ['web', 'xssWeb', 'nocache'], 'prefix' => 'cms/'],
         Route::get('verification-list', 'Cms\JobSeekerController@jobSeekerVerificationList');
         Route::get('{id}/verification', 'Cms\JobSeekerController@jobSeekerVerificationView');
         Route::post('storeVerification', 'Cms\JobSeekerController@storeVerification');
+        
         Route::get('unverified', 'Cms\JobSeekerController@unverified');
         Route::get('listUnverifiedJobseeker', 'Cms\JobSeekerController@unverifiedJobseekerList');
         Route::get('downloadUnverifiedJobseeker', 'Cms\JobSeekerController@downloadUnverifiedJobseekerCsv');
+        
         Route::get('incomplete', 'Cms\JobSeekerController@incomplete');
         Route::get('listIncompleteJobseeker', 'Cms\JobSeekerController@incompleteJobseekerList');
         Route::get('downloadIncompleteJobseeker', 'Cms\JobSeekerController@downloadIncompleteJobseekerCsv');
+        
+        Route::get('nonavailableusers', 'Cms\JobSeekerController@nonAvailableUsers');
+        Route::get('listNonAvailableUsers', 'Cms\JobSeekerController@listNonAvailableUsers');
+        Route::get('downloadNonAvailableUsers', 'Cms\JobSeekerController@downloadNonAvailableUsersCsv');
+        
+        Route::get('invited', 'Cms\JobSeekerController@invited');
+        Route::get('listInvitedUsers', 'Cms\JobSeekerController@listInvitedUsers');
+        Route::get('downloadInvitedUsers', 'Cms\JobSeekerController@downloadInvitedUsersCsv');
     });
     
     Route::group(['prefix' => 'recruiter/'], function() {

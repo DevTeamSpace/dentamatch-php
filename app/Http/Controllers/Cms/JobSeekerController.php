@@ -17,6 +17,7 @@ use App\Models\UserGroup;
 use App\Models\UserProfile;
 use App\Models\PasswordReset;
 use App\Models\JobSeekerProfiles;
+use App\Models\JobSeekerTempAvailability;
 use Mail;
 use Log;
 
@@ -504,4 +505,185 @@ class JobSeekerController extends Controller
         fclose($outstream);
     }
     
+    public function nonAvailableUsers()
+    {  
+        return view('cms.jobseeker.nonavailableusers');
+    }
+    
+    public function invited()
+    {  
+        return view('cms.jobseeker.invited');
+    }
+    
+    public function listNonAvailableUsers(){
+        try{
+        $availableUsers = JobSeekerTempAvailability::select('user_id')
+                ->groupBy('user_id')
+                ->get('user_id')
+                ->map(function($query) {
+                    return $query['user_id'];
+                })->toArray();
+                
+        $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+                        ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->select(
+                                'users.email','users.id',
+                                'jobseeker_profiles.first_name',
+                                'jobseeker_profiles.last_name',
+                                'jobseeker_profiles.is_completed','users.is_active'
+                                )
+                        ->where('user_groups.group_id', 3)
+                        ->whereNotIn('users.id', $availableUsers)
+                        ->where('is_fulltime',0)
+                        ->where('is_parttime_monday',0)
+                        ->where('is_parttime_tuesday',0)
+                        ->where('is_parttime_wednesday',0)
+                        ->where('is_parttime_thursday',0)
+                        ->where('is_parttime_friday',0)
+                        ->where('is_parttime_saturday',0)
+                        ->where('is_parttime_sunday',0)
+                        ->orderBy('users.id', 'desc');
+        return Datatables::of($userData)
+                ->removeColumn('id')
+                ->addColumn('active', function ($userData) {
+                	$active = ($userData->is_active == 1) ? 'Yes':'No';
+                    return $active;
+                })
+                ->make(true);
+        
+        
+        }catch (\Exception $e) {
+            Log::error($e);
+        }
+                       
+    }
+    
+    public function listInvitedUsers(){
+        try{
+        $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+                        ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->join('job_lists','job_lists.seeker_id' , '=','users.id')
+                        ->select(
+                                'users.email','users.id',
+                                'jobseeker_profiles.first_name',
+                                'jobseeker_profiles.last_name',
+                                'users.is_verified','users.is_active'
+                                )
+                        ->where('user_groups.group_id', 3)
+                        ->where('job_lists.applied_status',1)
+                        ->whereNotIn('job_lists.applied_status', [2,3,4,5])
+                        ->groupBy('users.id')
+                        ->orderBy('users.id', 'desc');
+        return Datatables::of($userData)
+                ->removeColumn('id')
+                ->addColumn('active', function ($userData) {
+                	$active = ($userData->is_active == 1) ? 'Yes':'No';
+                    return $active;
+                })
+                ->make(true);
+        
+        
+        }catch (\Exception $e) {
+            Log::error($e);
+        }
+                       
+    }
+    
+    public function downloadNonAvailableUsersCsv(){
+        $arr = [];
+        $availableUsers = JobSeekerTempAvailability::select('user_id')
+            ->groupBy('user_id')
+            ->get('user_id')
+            ->map(function($query) {
+                return $query['user_id'];
+            })->toArray();
+
+        $data = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+                    ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                    ->select(
+                            'users.email','users.id',
+                            'jobseeker_profiles.first_name',
+                            'jobseeker_profiles.last_name',
+                            'jobseeker_profiles.is_completed','users.is_active'
+                            )
+                    ->where('user_groups.group_id', 3)
+                    ->whereNotIn('users.id', $availableUsers)
+                    ->where('is_fulltime',0)
+                    ->where('is_parttime_monday',0)
+                    ->where('is_parttime_tuesday',0)
+                    ->where('is_parttime_wednesday',0)
+                    ->where('is_parttime_thursday',0)
+                    ->where('is_parttime_friday',0)
+                    ->where('is_parttime_saturday',0)
+                    ->where('is_parttime_sunday',0)
+                    ->orderBy('users.id', 'desc')
+                    ->get();
+           
+        $arr['id'] ="User Id";
+        $arr['email'] ="Email Id";
+        $arr['first_name'] = "First Name";
+        $arr['last_name'] = 'Last Name';
+        $list = $data->toArray();
+        
+        header("Content-type: application/octet-stream");
+        header("Content-Disposition: attachment; filename=unavailable_jobseeker_".time().".csv");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        $outstream = fopen("php://output", 'r+');
+        
+        fputcsv($outstream, $arr, ',', '"');
+        
+        if(!empty($list)) {
+            foreach($list as $value) {
+                fputcsv($outstream, $value, ',', '"');
+            }
+        }
+        
+        fgets($outstream);
+        fclose($outstream);
+    }
+    
+    public function downloadInvitedUsersCsv(){
+        $arr = [];
+        $data = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+                        ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->join('job_lists','job_lists.seeker_id' , '=','users.id')
+                        ->select(
+                                'users.email','users.id',
+                                'jobseeker_profiles.first_name',
+                                'jobseeker_profiles.last_name',
+                                'users.is_verified','users.is_active'
+                                )
+                        ->where('user_groups.group_id', 3)
+                        ->where('job_lists.applied_status',1)
+                        ->whereNotIn('job_lists.applied_status', [2,3,4,5])
+                        ->groupBy('users.id')
+                        ->orderBy('users.id', 'desc')
+                        ->get();
+                        
+        $arr['id'] ="User Id";
+        $arr['email'] ="Email Id";
+        $arr['first_name'] = "First Name";
+        $arr['last_name'] = 'Last Name';
+        $list = $data->toArray();
+        
+        header("Content-type: application/octet-stream");
+        header("Content-Disposition: attachment; filename=invited_jobseeker_".time().".csv");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        $outstream = fopen("php://output", 'r+');
+        
+        fputcsv($outstream, $arr, ',', '"');
+        
+        if(!empty($list)) {
+            foreach($list as $value) {
+                fputcsv($outstream, $value, ',', '"');
+            }
+        }
+        
+        fgets($outstream);
+        fclose($outstream);
+    }
 }

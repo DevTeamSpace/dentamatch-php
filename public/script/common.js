@@ -167,6 +167,38 @@ $(function () {
         ]
     });
     
+    $('#jobseeker_nonavailable_users_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'jobseeker/listNonAvailableUsers',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'email', name: 'email',searchable:true},
+            {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
+            {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
+            {data: 'active', name: 'active',searchable:false},
+        ]
+    });
+    
+    $('#jobseeker_invited_users_list').DataTable({
+        processing: true,
+        serverSide: true,
+        //responsive: true,
+        //autoWidth: false,
+        ajax: public_path+'jobseeker/listInvitedUsers',
+        ordering:false,
+        //bFilter: false,
+        columns: [
+            {data: 'email', name: 'email',searchable:true},
+            {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
+            {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
+            {data: 'active', name: 'active',searchable:false},
+        ]
+    });
+    
     $('#recruiter_list').DataTable({
         processing: true,
         serverSide: true,

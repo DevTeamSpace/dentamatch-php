@@ -100,6 +100,8 @@
                             <ul class="dropdown-menu" role="jobseeker">
                                 <li><a href="{{ url('cms/jobseeker/unverified') }}">Unverified Profiles</a></li>
                                 <li><a href="{{ url('cms/jobseeker/incomplete') }}">Incomplete Profiles</a></li>
+                                <li><a href="{{ url('cms/jobseeker/nonavailableusers') }}">Non Available Users Profiles</a></li>
+                                <li><a href="{{ url('cms/jobseeker/invited') }}">Invited Jobseeker Profiles</a></li>
                             </ul>
                         </li>
                         

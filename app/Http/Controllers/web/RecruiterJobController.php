@@ -26,6 +26,7 @@ use Session;
 use App\Models\JobRatings;
 use App\Models\SavedJobs;
 use App\Models\JobseekerTempHired;
+use App\Models\PreferredJobLocation;
 
 class RecruiterJobController extends Controller {
 
@@ -46,6 +47,7 @@ class RecruiterJobController extends Controller {
             $this->viewData['offices'] = RecruiterOffice::getAllRecruiterOffices(Auth::user()->id);
             $this->viewData['templateId'] = $templateId;
             $this->viewData['jobTemplates'] = JobTemplates::findById($templateId);
+            $this->viewData['preferredLocationId'] = PreferredJobLocation::getAllPreferrefJobLocation();
 
             return $this->returnView('create');
         } catch (\Exception $e) {
@@ -87,7 +89,8 @@ class RecruiterJobController extends Controller {
             'tempDates' => 'required_if:jobType,3',
             'noOfJobs' => 'required_if:jobType,3',
             'action' => 'required|in:add,edit',
-            'id' => 'integer|required_if:action,edit'
+            'id' => 'integer|required_if:action,edit',
+            'preferredJobLocationId' => 'integer|required'
         ]);
         try {
 
@@ -113,6 +116,7 @@ class RecruiterJobController extends Controller {
             $recruiterJobObj->recruiter_office_id = $request->dentalOfficeId;
             $recruiterJobObj->job_type = $request->jobType;
             $recruiterJobObj->no_of_jobs = ($request->noOfJobs != '') ? $request->noOfJobs : 0;
+            $recruiterJobObj->preferred_job_location_id = $request->preferredJobLocationId;
 
             if ($request->jobType == RecruiterJobs::PARTTIME) {
                 $recruiterJobObj->is_monday = in_array('1', $request->partTimeDays);
@@ -327,6 +331,7 @@ class RecruiterJobController extends Controller {
             $allData['jobSeekerStatus'] = $jobSeekerStatus;
             $allData['recruiterOffices'] = $recruiterOffices;
             $allData['allOfficeTypes'] = $allOfficeTypes;
+            $allData['preferredJobLocations'] = PreferredJobLocation::getAllPreferrefJobLocation();
             $response = $allData;
         } catch (\Exception $e) {
             Log::error($e);
@@ -518,6 +523,7 @@ class RecruiterJobController extends Controller {
 
     private function updateJob($jobType, $allData, $office = '') {
         try {
+            //print_r($allData); die;
             $jobObj = RecruiterJobs::where(['id' => $allData->jobId])->first();
             //Log::info("updateJobMethod:jobObj");
             //Log::info(print_r($jobObj, true));
@@ -538,6 +544,7 @@ class RecruiterJobController extends Controller {
             $jobObj->is_saturday = config('constants.NullValue');
             $jobObj->is_sunday = config('constants.NullValue');
             $jobObj->no_of_jobs = config('constants.NullValue');
+            $jobObj->preferred_job_location_id = $allData->defaultSelectPreferredJobLocation[0];
             TempJobDates::where(['recruiter_job_id' => $allData->jobId])->forceDelete();
             if ($jobType == config('constants.PartTimeJob')) {
                 $jobObj->is_monday = in_array("Monday", $allData->partTimeDays) ? 1 : 0;

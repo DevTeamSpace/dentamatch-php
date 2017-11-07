@@ -39,6 +39,11 @@
                 <select class="selectpicker" id="select-office-address" data-bind="options: allLocations, optionsText: 'address', optionsValue: 'address', selectedOptions: defaultSelectLocation, event: {change: showOfficeDetails}">
                 </select>
             </div>
+            <div class="form-group custom-select">
+                <label >Preferred Job Locations</label>
+                <select class="selectpicker" id="select-preferred-location" data-bind="options: preferredJobLocations, optionsText: 'preferred_location_name', optionsValue: 'id', selectedOptions: defaultSelectPreferredJobLocation">
+                </select>
+            </div>
             <div class="form-group">
                 <label  >Job Type</label>
                 <div class="row">

@@ -324,7 +324,7 @@ class RecruiterJobs extends Model
             'recruiter_profiles.office_name','recruiter_profiles.office_desc',
             'recruiter_offices.address','recruiter_offices.zipcode','recruiter_offices.latitude','recruiter_offices.longitude',
             'job_templates.template_name','job_templates.template_desc','job_templates.job_title_id',
-            'job_titles.jobtitle_name',
+            'job_titles.jobtitle_name', 'preferred_job_location_id',
             DB::raw("group_concat(distinct(office_types.officetype_name)) AS officetype_name"),
             DB::raw("group_concat(distinct(temp_job_dates.job_date) ORDER BY temp_job_dates.job_date ASC) AS temp_job_dates"),
             DB::raw("group_concat(distinct(template_skills.skill_id)) AS required_skills"),

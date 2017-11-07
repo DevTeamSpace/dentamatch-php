@@ -65,6 +65,20 @@
                 <p class="error-div hide">Job cannot be currently created for this location. We will soon be available in your area.</p>
 
             </div>
+            <div class="form-group custom-select">
+                <label >Preferred Job Locations</label>
+                <select data-parsley-required data-parsley-required-message= "Select preferred location" name="preferredJobLocationId" id="preferredJobLocationId" class="selectpicker mr-b-5">
+                    <option value="">Select preferred job locations</option>
+                    @foreach ($preferredLocationId as $prefLocation)
+                    @if($key==0)
+                    <option data-divider="true"></option>
+                    @endif
+                    <option value="{{ $prefLocation['id'] }}">{{ $prefLocation['preferred_location_name'] }}</option>
+                    <option data-divider="true"></option>
+                    @endforeach
+
+                </select>
+            </div>
             <div class="form-group">
                 <label  >Job Type</label>
                 <div class="row">
