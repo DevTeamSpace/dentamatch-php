@@ -69,7 +69,7 @@
                 <label >Preferred Job Locations</label>
                 <select data-parsley-required data-parsley-required-message= "Select preferred location" name="preferredJobLocationId" id="preferredJobLocationId" class="selectpicker mr-b-5">
                     <option value="">Select preferred job locations</option>
-                    @foreach ($preferredLocationId as $prefLocation)
+                    @foreach ($preferredLocationId as $key=>$prefLocation)
                     @if($key==0)
                     <option data-divider="true"></option>
                     @endif
