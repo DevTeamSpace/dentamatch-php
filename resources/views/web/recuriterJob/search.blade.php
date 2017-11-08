@@ -38,8 +38,21 @@
                 @endif
               </h4>
             </div>
-            <div class="col-sm-5">
-              <label class="fnt-16 nopadding">Radius</label>
+            <div class="col-sm-4">
+              <div class="form-group"> <!--  custom-select -->
+                <label class="fnt-16 nopadding">Preferred Job Locations</label>
+                <select name="preferredLocationId" id="preferredLocationIdSearch" class="selectpicker">
+                    <option value="">Select preferred job locations</option>
+                    @foreach ($preferredLocations as $key=>$prefLocation)
+                    @if($key==0)
+                    <option data-divider="true"></option>
+                    @endif
+                    <option value="{{ $prefLocation['id'] }}" @if($prefLocation['id'] == $preferredLocationId) selected='true' @endif; >{{ $prefLocation['preferred_location_name'] }}</option>
+                    <option data-divider="true"></option>
+                    @endforeach
+
+                </select>
+            </div>
               <div >
                 <input type="hidden" id="avail_all" name="avail_all" value="{{ $searchData['avail_all'] }}">
               </div>

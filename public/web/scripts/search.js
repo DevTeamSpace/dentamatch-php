@@ -13,13 +13,38 @@
         $('#availAllBtn').click(function(){
             var availableAll = ($('#avail_all').val()==1 ? 0 : 1);
             $('.loader-box').show();
+            var preferredLocationId = $('#preferredLocationIdSearch').val();
             var url         =   window.location.href;
             var mainUrl     =   url.split("?")[0]; 
-            url = mainUrl+'?avail_all='+availableAll;
+            if(preferredLocationId!="") {
+                url = mainUrl+'?preferredLocationId='+preferredLocationId+'&avail_all='+availableAll;
+            } else {
+                url = mainUrl+'?avail_all='+availableAll;
+            }
+            
             getArticles(url);
             window.history.pushState("", "", url);
         });
+        
+        $('#preferredLocationIdSearch').on('change', function() {
+            $('.loader-box').show();
+            var preferredLocationId = $('#preferredLocationIdSearch').val();
+            var url         =   window.location.href;
+            var mainUrl     =   url.split("?")[0]; 
+            if(preferredLocationId!="") {
+                url = mainUrl+'?preferredLocationId='+preferredLocationId;
+            } else {
+                url = mainUrl;
+            }
 
+            if($('#avail_all').val()==1 && preferredLocationId!=""){
+                url += '&avail_all=1';
+            } else if($('#avail_all').val()==1) {
+                url += '?avail_all=1';
+            }
+            getArticles(url);
+            window.history.pushState("", "", url);
+        });
         /*-----------range slider--------*/
 
 

@@ -98,6 +98,9 @@ class RecruiterJobs extends Model
                 ->where('recruiter_profiles.is_subscribed','=', 1)
                 ->whereIn('job_templates.job_title_id', $reqData['jobTitle']);
             
+            if(!empty($reqData['preferredLocationId'])) {
+                $searchQueryObj->where('recruiter_jobs.preferred_job_location_id',$reqData['preferredLocationId']);
+            }
             if(count($rejectedJobsArray) > 0){
                 $searchQueryObj->whereNotIn('recruiter_jobs.id',$rejectedJobsArray);
             }
@@ -159,7 +162,7 @@ class RecruiterJobs extends Model
                         'job_titles.jobtitle_name','recruiter_profiles.office_name','job_templates.job_title_id',
                         'recruiter_offices.address','recruiter_offices.zipcode',
                         'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
-                        DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
+                        'recruiter_jobs.preferred_job_location_id', DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
         
         $total = $searchQueryObj->distinct('recruiter_jobs.id')->count('recruiter_jobs.id');
         $page = $reqData['page'];

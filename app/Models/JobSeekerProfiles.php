@@ -19,7 +19,9 @@ class JobSeekerProfiles extends Model
         $obj = JobSeekerProfiles::where('jobseeker_profiles.job_titile_id',$job['job_title_id']);
 
         $obj->leftJoin('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id');
-
+        if(!empty($reqData['preferredLocationId'])) {
+            $obj->where('jobseeker_profiles.preferred_job_location_id',$reqData['preferredLocationId']);
+        }
         if($job['job_type']==RecruiterJobs::FULLTIME){
             $obj->where('jobseeker_profiles.is_fulltime',1);
         }

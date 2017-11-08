@@ -60,20 +60,26 @@ class RecruiterJobController extends Controller {
         try{
             $userId = Auth::user()->id;
             $searchData = $request->all();
+            $preferredLocationId = $request->get('preferredLocationId');
             $availAll = $request->get('avail_all');
             if(empty($availAll)) {
                 $availAll = 0;
             }
+            if(empty($preferredLocationId)) {
+                $preferredLocationId = "";
+            }
             $searchData['avail_all']    = $availAll;
+            $searchData['preferredLocationId']    = $preferredLocationId;
             $jobDetails     = RecruiterJobs::getRecruiterJobDetails($jobId);
             $seekersList    = JobSeekerProfiles::getJobSeekerProfiles($jobDetails,$searchData);
             $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
+            $preferredLocations = PreferredJobLocation::getAllPreferrefJobLocation();
             
             if ($request->ajax()) {
-                return view('web.recuriterJob.seekers-data', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'jobTemplateModalData'=>$jobTemplateModalData])->render();  
+                return view('web.recuriterJob.seekers-data', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'jobTemplateModalData'=>$jobTemplateModalData, 'preferredLocations'=>$preferredLocations, 'preferredLocationId'=>$preferredLocationId])->render();  
             }
 
-            return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData', 'jobId', 'jobTemplateModalData'));
+            return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData', 'jobId', 'jobTemplateModalData', 'preferredLocations','preferredLocationId'));
         } catch (\Exception $e) {
             Log::error($e);
             return view('web.error.', ["message" => $e->getMessage()]);
