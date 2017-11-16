@@ -41,6 +41,7 @@ class UserProfile extends Model {
                                     'jobseeker_profiles.dental_state_board', 
                                     'jobseeker_profiles.license_number',
                                     'jobseeker_profiles.state',
+                                    'jobseeker_profiles.signup_source',
                                     'jobseeker_profiles.about_me')      
                     ->where('jobseeker_profiles.user_id', $userId)
                     ->first();

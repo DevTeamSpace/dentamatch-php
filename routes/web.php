@@ -18,6 +18,8 @@
 
   Route::get('signup', 'web\SignupController@getLogin');
   Route::post('signup', 'web\SignupController@postSignUp');
+  Route::post('jobseeker/storeSignup', 'web\SignupController@postJobseekerSignUp');
+  Route::get('jobseeker/signup', 'web\SignupController@getJobseekerSignUp');
 
   Route::post('login', 'web\SignupController@postLogin');
   Route::get('login', 'web\SignupController@getLogin');
