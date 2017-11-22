@@ -40,7 +40,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('notify:tempJobExpiryNotification')->everyMinute()->withoutOverlapping();
         $schedule->command('notify:tempJobRatingNotification')->daily()->withoutOverlapping();
         $schedule->command('jobseeker:unverified')->daily()->withoutOverlapping();
-        $schedule->command('user:availability')->daily()->withoutOverlapping();
+        $schedule->command('user:availability')->everyMinute()->withoutOverlapping();
         $schedule->command('user:pendinginvites')->daily()->withoutOverlapping();
     }
 
