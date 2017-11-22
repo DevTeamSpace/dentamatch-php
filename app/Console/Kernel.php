@@ -21,6 +21,9 @@ class Kernel extends ConsoleKernel
         Commands\InactiveJobCommand::class,
         Commands\TempJobExpiryCommand::class,
         Commands\TempJobRatingCommand::class,
+        Commands\UnverifiedJobseekerCommand::class,
+        Commands\SetAvailabilityCommand::class,
+        Commands\InvitedJobseekerCommand::class,
     ];
 
     /**
@@ -36,6 +39,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('notify:adminNotification')->everyMinute()->withoutOverlapping();
         $schedule->command('notify:tempJobExpiryNotification')->everyMinute()->withoutOverlapping();
         $schedule->command('notify:tempJobRatingNotification')->daily()->withoutOverlapping();
+        $schedule->command('jobseeker:unverified')->daily()->withoutOverlapping();
+        $schedule->command('user:availability')->daily()->withoutOverlapping();
+        $schedule->command('user:pendinginvites')->daily()->withoutOverlapping();
     }
 
     /**
