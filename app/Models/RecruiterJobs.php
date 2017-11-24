@@ -64,6 +64,14 @@ class RecruiterJobs extends Model
     }
     
     public static function searchJob($reqData){
+        $jobseekerSkills = JobSeekerSkills::select('jobseeker_skills.skill_id')
+                            ->where("user_id", $reqData['userId'])
+                            ->orderBy('jobseeker_skills.skill_id')
+                            ->get()
+                            ->map(function($jobseekerSkills) {
+                                return $jobseekerSkills['skill_id'];
+                            })->toArray();
+                
         $savedJobsResult  = SavedJobs::select('recruiter_job_id')->where('seeker_id',$reqData['userId'])->get();
         $userSavedJobs = array();
         if($savedJobsResult){
@@ -98,9 +106,11 @@ class RecruiterJobs extends Model
                 ->where('recruiter_profiles.is_subscribed','=', 1)
                 ->whereIn('job_templates.job_title_id', $reqData['jobTitle']);
             
-            if(!empty($reqData['preferredLocationId'])) {
-                $searchQueryObj->where('recruiter_jobs.preferred_job_location_id',$reqData['preferredLocationId']);
-            }
+            $searchQueryObj->join('template_skills',function($query) use ($jobseekerSkills){
+                $query->on('template_skills.job_template_id','=','recruiter_jobs.job_template_id')
+                        ->whereIn('template_skills.skill_id',$jobseekerSkills);
+                })->groupby('recruiter_jobs.id');
+                    
             if(count($rejectedJobsArray) > 0){
                 $searchQueryObj->whereNotIn('recruiter_jobs.id',$rejectedJobsArray);
             }
@@ -163,6 +173,8 @@ class RecruiterJobs extends Model
                         'recruiter_offices.address','recruiter_offices.zipcode',
                         'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
                         'recruiter_jobs.preferred_job_location_id', DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
+        
+        $searchQueryObj->addSelect(DB::raw("count(distinct(template_skills.skill_id)) AS matched_skills")); 
         
         $total = $searchQueryObj->distinct('recruiter_jobs.id')->count('recruiter_jobs.id');
         $page = $reqData['page'];

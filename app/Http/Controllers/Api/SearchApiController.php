@@ -39,12 +39,12 @@ class SearchApiController extends Controller {
                 'jobTitle' => 'required',
                 'isFulltime' => 'required',
                 'isParttime' => 'required',
-                
+            
             ]);
             $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
-                
+                $reqData['city'] = "delhi";
                 SearchFilter::createFilter($userId, $reqData);
                 
                 $location = Location::where('zipcode',$reqData['zipCode'])->first();
@@ -64,8 +64,10 @@ class SearchApiController extends Controller {
             } 
         }catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
+             Log::error($messages);
             $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
+            Log::error($e);;
             $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
