@@ -151,7 +151,7 @@ class UserApiController extends Controller {
                                 'jobseeker_profiles.longitude','jobseeker_profiles.preferred_city',
                                 'jobseeker_profiles.preferred_state','jobseeker_profiles.preferred_country',
                                 'jobseeker_profiles.about_me','jobseeker_profiles.preferred_job_location_id',
-                                'users.is_verified','jobseeker_profiles.is_completed', 
+                                'users.is_verified','jobseeker_profiles.is_completed', 'jobseeker_profiles.job_titile_id'
                                 'preferred_job_locations.preferred_location_name', 'job_titles.jobtitle_name'
                                 )
                         ->where('users.id', $userId)
@@ -195,6 +195,7 @@ class UserApiController extends Controller {
                             'licenseNumber' => $userData['license_number'],
                             'preferredLocationName' => $userData['preferred_location_name'],
                             'jobtitleName' => $userData['jobtitle_name'],
+                            'jobTitileId' => $userData['job_titile_id'],
                         );
                         $searchArray = SearchFilter::getFiltersOnLogin($userId);
                         if($searchArray){
