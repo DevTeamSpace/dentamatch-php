@@ -193,6 +193,8 @@ class UserApiController extends Controller {
                             'country' => $userData['preferred_country'],
                             'aboutMe' => $userData['about_me'],
                             'licenseNumber' => $userData['license_number'],
+                            'preferredLocationName' => $userData['preferred_location_name'],
+                            'jobtitleName' => $userData['jobtitle_name'],
                         );
                         $searchArray = SearchFilter::getFiltersOnLogin($userId);
                         if($searchArray){
