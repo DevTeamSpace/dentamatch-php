@@ -39,12 +39,11 @@ class SearchApiController extends Controller {
                 'jobTitle' => 'required',
                 'isFulltime' => 'required',
                 'isParttime' => 'required',
-            
             ]);
             $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
-                $reqData['city'] = "delhi";
+                $reqData['city'] = "";
                 SearchFilter::createFilter($userId, $reqData);
                 
                 $location = Location::where('zipcode',$reqData['zipCode'])->first();
