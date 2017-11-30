@@ -137,8 +137,8 @@ class UserApiController extends Controller {
         if($userId > 0){
             $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
-                        ->join('job_titles','jobseeker_profiles.job_titile_id' , '=','job_titles.id')
-                        ->join('preferred_job_locations','preferred_job_locations.id' , '=','jobseeker_profiles.preferred_job_location_id')
+                        ->leftjoin('job_titles','jobseeker_profiles.job_titile_id' , '=','job_titles.id')
+                        ->leftjoin('preferred_job_locations','preferred_job_locations.id' , '=','jobseeker_profiles.preferred_job_location_id')
                         ->select(
                                 'user_groups.group_id', 
                                 'users.email','users.id','users.is_active',
