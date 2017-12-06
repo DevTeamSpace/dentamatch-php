@@ -34,7 +34,6 @@ class SearchApiController extends Controller {
     public function postSearchjobs(Request $request){
         try{
             $this->validate($request, [
-                'zipCode' => 'required',
                 'page' => 'required',
                 'jobTitle' => 'required',
                 'isFulltime' => 'required',
@@ -46,17 +45,12 @@ class SearchApiController extends Controller {
                 $reqData['city'] = "";
                 SearchFilter::createFilter($userId, $reqData);
                 
-                $location = Location::where('zipcode',$reqData['zipCode'])->first();
-                if($location){
-                    $reqData['userId'] = $userId;
-                    $searchResult = RecruiterJobs::searchJob($reqData);
-                    if(count($searchResult['list']) > 0){
-                        $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"),  apiResponse::convertToCamelCase($searchResult));
-                    }else{
-                        $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
-                    }
+                $reqData['userId'] = $userId;
+                $searchResult = RecruiterJobs::searchJob($reqData);
+                if(count($searchResult['list']) > 0){
+                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"),  apiResponse::convertToCamelCase($searchResult));
                 }else{
-                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.invalid_job_location"));
+                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
                 }
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
