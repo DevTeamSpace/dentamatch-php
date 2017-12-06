@@ -288,10 +288,6 @@ class UserProfileApiController extends Controller {
             $this->validate($request, [
                 'firstName' => 'required',
                 'lastName' => 'required',
-                'zipcode' => 'required',
-                'latitude' => 'required',
-                'longitude' => 'required',
-                'preferredJobLocation' => 'required',
                 'jobTitleId' => 'required',
                 'preferredJobLocationId' => 'required',
                 'aboutMe' => 'required',
@@ -301,7 +297,7 @@ class UserProfileApiController extends Controller {
             $jobTitleModel = JobTitles::where('id',$reqData['jobTitileId'])->first();
             if($jobTitleModel) {
                 if($jobTitleModel->is_license_required) {
-                    $this->validate($request, ['licenseNumber' => 'required']);
+                    $this->validate($request, ['licenseNumber' => 'required', 'state'=> 'required']);
                 }
             }
             
@@ -310,17 +306,11 @@ class UserProfileApiController extends Controller {
                 $userProfile = UserProfile::where('user_id', $userId)->first();
                 $userProfile->first_name = $reqData['firstName'];
                 $userProfile->last_name = $reqData['lastName'];
-                $userProfile->zipcode = $reqData['zipcode'];
-                $userProfile->latitude = $reqData['latitude'];
-                $userProfile->longitude = $reqData['longitude'];
-                $userProfile->preferred_job_location = $reqData['preferredJobLocation'];
                 $userProfile->preferred_job_location_id = $reqData['preferredJobLocationId'];
-                $userProfile->preferred_city = $reqData['preferredCity'];
-                $userProfile->preferred_state = $reqData['preferredState'];
-                $userProfile->preferred_country = $reqData['preferredCountry'];
                 $userProfile->job_titile_id = $reqData['jobTitileId'];
                 $userProfile->about_me = $reqData['aboutMe'];
                 $userProfile->license_number = isset($reqData['licenseNumber']) ? $reqData['licenseNumber'] : null;
+                $userProfile->state = isset($reqData['state']) ? $reqData['state'] : null;
                 $userProfile->save();
                 apiResponse::chkProfileComplete($userId);
                 $message = trans("messages.user_profile_updated");
