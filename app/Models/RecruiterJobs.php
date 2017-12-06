@@ -209,7 +209,6 @@ class RecruiterJobs extends Model
 
             $result['total'] = $total;
         }
-        print_r($result); die;
         return $result;
     }
     
