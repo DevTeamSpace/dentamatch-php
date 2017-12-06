@@ -27,6 +27,8 @@ class JobSeekerSkills extends Model
                 ->where('skills.is_active', static::ACTIVE)
                 ->where('jobseeker_skills.user_id', $userId)
                 ->where('skills.parent_id',0)
+                ->groupBy('parentId')
+                ->groupBy('childId')
                 ->orderBy('skills.id')
                 ->orderBy('skillsChild.id');
         
