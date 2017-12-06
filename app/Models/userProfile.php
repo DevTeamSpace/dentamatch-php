@@ -33,29 +33,26 @@ class UserProfile extends Model {
                                     'jobseeker_profiles.longitude', 
                                     'jobseeker_profiles.preferred_job_location',
                                     'jobseeker_profiles.preferred_job_location_id',
+                                    'preferred_job_locations.preferred_location_name',
                                     'jobseeker_profiles.preferred_city',
                                     'jobseeker_profiles.preferred_state',
                                     'jobseeker_profiles.preferred_country',
                                     'jobseeker_profiles.job_titile_id',
+                                    'job_titles.jobtitle_name',
                                     'jobseeker_profiles.profile_pic',
                                     'jobseeker_profiles.dental_state_board', 
                                     'jobseeker_profiles.license_number',
                                     'jobseeker_profiles.state',
                                     'jobseeker_profiles.signup_source',
-                                    'jobseeker_profiles.about_me')      
+                                    'jobseeker_profiles.preferred_job_location_id',
+                                    'jobseeker_profiles.about_me')
+                    ->leftjoin('job_titles', 'job_titles.id', 'jobseeker_profiles.job_titile_id')
+                    ->leftjoin('preferred_job_locations', 'preferred_job_locations.id', 'jobseeker_profiles.preferred_job_location_id')
                     ->where('jobseeker_profiles.user_id', $userId)
                     ->first();
         
         if($userModel) {
             $return = $userModel->toArray();
-            $title = "";   
-            if($return['job_titile_id']){
-                $jobTitle = JobTitles::select('jobtitle_name')->where('id',$return['job_titile_id'])->first()->toArray();
-                $title = $jobTitle['jobtitle_name'];
-            }else{
-                $return['job_titile_id'] = 0;
-            }
-            $return['job_title'] = $title;
             $return['profile_pic'] = apiResponse::getThumbImage($return['profile_pic']);
             if(($return['dental_state_board']) && $return['dental_state_board'] != ""){
                 $return['dental_state_board'] = apiResponse::getThumbImage($return['dental_state_board']);
