@@ -234,18 +234,14 @@ class SearchApiController extends Controller {
     {
         try{
             $this->validate($request, [
-                'jobId' => 'required',
-                'lat' => 'required',
-                'lng' => 'required'
+                'jobId' => 'required'
             ]);
             $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $reqData = $request->all();
                 $jobId = $reqData['jobId'];
-                $lat = $reqData['lat'];
-                $lng = $reqData['lng'];
                 
-                $data = RecruiterJobs::getJobDetail($jobId, $userId, $lat, $lng);
+                $data = RecruiterJobs::getJobDetail($jobId, $userId);
                 if(!empty($data)) {
                     $data['is_applied'] = JobLists::isJobApplied($jobId,$userId);
                     $data['is_saved'] = SavedJobs::getJobSavedStatus($jobId, $userId);
