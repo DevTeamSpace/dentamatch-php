@@ -89,6 +89,12 @@ class RecruiterJobs extends Model
                     }, $rejectedJobsData);
                 }
         
+        if(empty($reqData['jobTitle'])) {
+            $jobTitlesModel = JobTitles::getAll(1);
+            $reqData['jobTitle'] = array_map(function ($value) {
+                                        return  $value['id'];
+                                    }, $jobTitlesModel);
+        }
         /*$userProfile = UserProfile::where('user_id', $reqData['userId'])->first();
         $longitude = $userProfile->longitude;
         $latitude = $userProfile->latitude;*/
@@ -129,38 +135,40 @@ class RecruiterJobs extends Model
                     }, $blockedRecruiterModel);
             $searchQueryObj->whereNotIn('recruiter_profiles.user_id',$blockedRecruiter);
         }
-        if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 0){
-            $searchQueryObj->where('recruiter_jobs.job_type',1);
-        }
+        if(isset($reqData['isFulltime']) || isset($reqData['isParttime'])) {
+            if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 0){
+                $searchQueryObj->where('recruiter_jobs.job_type',1);
+            }
 
-        if($reqData['isFulltime'] == 0 && $reqData['isParttime'] == 1){
-            $searchQueryObj->where('recruiter_jobs.job_type',2);
+            if($reqData['isFulltime'] == 0 && $reqData['isParttime'] == 1){
+                $searchQueryObj->where('recruiter_jobs.job_type',2);
+                $searchQueryObj->where(function($query) use ($reqData){
+                    if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
+                        //$daysArray = ['is_monday'=>0, 'is_tuesday'=>0, 'is_wednesday'=>0, 'is_thursday'=>0, 'is_friday'=>0, 'is_saturday'=>0, 'is_sunday'=>0];
+                        foreach($reqData['parttimeDays'] as $day){
+                            $query->orWhere('is_'.$day, 1);
+                        }
+                    }
+                });
+            }
+
+
             $searchQueryObj->where(function($query) use ($reqData){
-                if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
-                    //$daysArray = ['is_monday'=>0, 'is_tuesday'=>0, 'is_wednesday'=>0, 'is_thursday'=>0, 'is_friday'=>0, 'is_saturday'=>0, 'is_sunday'=>0];
-                    foreach($reqData['parttimeDays'] as $day){
-                        $query->orWhere('is_'.$day, 1);
+                if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 1){
+                    $query->where('recruiter_jobs.job_type',1);
+                    if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
+                        $query->orWhere(function($query1) use ($reqData){
+                            $query1->where('recruiter_jobs.job_type',2);
+                            $query1->where(function($query2) use ($reqData){
+                                foreach($reqData['parttimeDays'] as  $day){
+                                    $query2->orWhere('is_'.$day, 1);
+                                }
+                            });
+                        });
                     }
                 }
             });
         }
-
-
-        $searchQueryObj->where(function($query) use ($reqData){
-            if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 1){
-                $query->where('recruiter_jobs.job_type',1);
-                if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
-                    $query->orWhere(function($query1) use ($reqData){
-                        $query1->where('recruiter_jobs.job_type',2);
-                        $query1->where(function($query2) use ($reqData){
-                            foreach($reqData['parttimeDays'] as  $day){
-                                $query2->orWhere('is_'.$day, 1);
-                            }
-                        });
-                    });
-                }
-            }
-        });
         //$radius = Configs::select('config_data')->where('config_name','=','SEARCHRADIUS')->first();
         //$searchQueryObj->where('distance','<=',$radius->config_data);
         //$searchQueryObj->groupby('recruiter_jobs.id');

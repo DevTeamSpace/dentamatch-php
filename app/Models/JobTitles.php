@@ -18,7 +18,7 @@ class JobTitles extends Model
     protected $hidden       = ['is_active','created_at','updated_at'];
     
     public static function getAll($active=''){
-        $obj = JobTitles::select('id','jobtitle_name','is_license_required');
+        $obj = self::select('id','jobtitle_name','is_license_required');
         if($active!=''){
             $obj->where('is_active',$active);
         }
@@ -26,7 +26,7 @@ class JobTitles extends Model
     }
 
     public static function getTitle($titleId){
-        $obj = JobTitles::select('jobtitle_name','is_license_required');
+        $obj = self::select('jobtitle_name','is_license_required');
         $obj->where('id',$titleId);
         $obj->where('is_active',JobTitles::ACTIVE);
         return $obj->get()->toArray();
