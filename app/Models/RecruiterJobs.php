@@ -115,7 +115,7 @@ class RecruiterJobs extends Model
             $searchQueryObj->join('template_skills',function($query) use ($jobseekerSkills){
                 $query->on('template_skills.job_template_id','=','recruiter_jobs.job_template_id')
                         ->whereIn('template_skills.skill_id',$jobseekerSkills);
-                })->groupby('recruiter_jobs.id');
+                });
                     
             if(count($rejectedJobsArray) > 0){
                 $searchQueryObj->whereNotIn('recruiter_jobs.id',$rejectedJobsArray);
@@ -191,7 +191,7 @@ class RecruiterJobs extends Model
         if($page>1){
             $skip = ($page-1)* $limit;
         }
-        $searchResult = $searchQueryObj->distinct('recruiter_jobs.id')->skip($skip)->take($limit)->orderBy('recruiter_jobs.id', 'desc')->get();
+        $searchResult = $searchQueryObj->groupby('recruiter_jobs.id')->distinct('recruiter_jobs.id')->skip($skip)->take($limit)->orderBy('recruiter_jobs.id', 'desc')->get();
         $result = array();
         $updatedResult = array();
         if($searchResult){
@@ -209,6 +209,7 @@ class RecruiterJobs extends Model
 
             $result['total'] = $total;
         }
+        print_r($result); die;
         return $result;
     }
     
