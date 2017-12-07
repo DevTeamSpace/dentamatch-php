@@ -111,7 +111,6 @@ class UserProfileApiController extends Controller {
      */
     public function putUpdateLicense(Request $request) {
         try {
-            print_r($request->all()); die;
             $validateKeys = [
                 'jobTitleId' => 'required',
                 'aboutMe' => 'required'
