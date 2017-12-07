@@ -106,7 +106,7 @@ class UserApiController extends Controller {
                     $message->to($email, $fname)->subject('Activation Email');
                 });
             $userData['userDetails'] = User::getUser($userDetails->id);
-            $response = apiResponse::customJsonResponse(1, 200, trans("messages.user_registration_successful"), $userData); 
+            $response = apiResponse::customJsonResponse(1, 200, trans("messages.user_registration_successful"), apiResponse::convertToCamelCase($userData)); 
         }
         return $response;
         } catch (ValidationException $e) {

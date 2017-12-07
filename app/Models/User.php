@@ -58,7 +58,7 @@ class User extends Authenticatable
         $userModel = static::select('users.id',
                                     'jobseeker_profiles.first_name',
                                     'jobseeker_profiles.last_name',
-                                    'jobseeker_profiles.zipcode',
+                                    'jobseeker_profiles.zipcode as zipCode',
                                     'jobseeker_profiles.latitude',
                                     'jobseeker_profiles.longitude', 
                                     'jobseeker_profiles.preferred_job_location',
@@ -75,7 +75,7 @@ class User extends Authenticatable
                                     'jobseeker_profiles.state',
                                     'jobseeker_profiles.signup_source',
                                     'jobseeker_profiles.preferred_job_location_id',
-                                    'jobseeker_profiles.is_completed',
+                                    'jobseeker_profiles.is_completed as profile_completed',
                                     'jobseeker_profiles.is_job_seeker_verified',
                                     'jobseeker_profiles.about_me',
                                     'devices.user_token as access_token')
