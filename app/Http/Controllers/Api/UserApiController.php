@@ -105,8 +105,8 @@ class UserApiController extends Controller {
             Mail::queue('email.user-activation', ['name' => $name, 'url' => $url, 'email' => $reqData['email']], function($message ) use($email,$fname) {
                     $message->to($email, $fname)->subject('Activation Email');
                 });
-            
-            $response = apiResponse::customJsonResponse(1, 200, trans("messages.user_registration_successful")); 
+            $userData['userDetails'] = User::getUser($userDetails->id);
+            $response = apiResponse::customJsonResponse(1, 200, trans("messages.user_registration_successful"), $userData); 
         }
         return $response;
         } catch (ValidationException $e) {
