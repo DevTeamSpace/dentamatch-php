@@ -45,6 +45,8 @@ class UserProfile extends Model {
                                     'jobseeker_profiles.state',
                                     'jobseeker_profiles.signup_source',
                                     'jobseeker_profiles.preferred_job_location_id',
+                                    'jobseeker_profiles.is_completed',
+                                    'jobseeker_profiles.is_job_seeker_verified',
                                     'jobseeker_profiles.about_me')
                     ->leftjoin('job_titles', 'job_titles.id', 'jobseeker_profiles.job_titile_id')
                     ->leftjoin('preferred_job_locations', 'preferred_job_locations.id', 'jobseeker_profiles.preferred_job_location_id')
