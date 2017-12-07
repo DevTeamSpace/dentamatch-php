@@ -98,7 +98,7 @@ class User extends Authenticatable
             if(($return['dental_state_board']) && $return['dental_state_board'] != ""){
                 $dentalStateBoard = apiResponse::getThumbImage($return['dental_state_board']);
             }
-            $return['profile_pic'] = $profilePic;
+            $return['image_url'] = $profilePic;
             $return['dental_state_board'] = $dentalStateBoard;
         }
         return $return;
