@@ -111,6 +111,7 @@ class UserProfileApiController extends Controller {
      */
     public function putUpdateLicense(Request $request) {
         try {
+            print_r($request->all()); die;
             $validateKeys = [
                 'jobTitleId' => 'required',
                 'aboutMe' => 'required'
@@ -137,7 +138,10 @@ class UserProfileApiController extends Controller {
                     JobSeekerSkills::addJobSeekerSkills($userId, $mappedSkillsArray);
                 }
                 apiResponse::chkProfileComplete($userId);
-                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"));
+                
+                $userData = User::getUser($userId);
+                $isVerified = isset($userData['is_verified']) ? $userData['is_verified'] : null;
+                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"), ['isVerified' => $isVerified]);
             }else{
                 $response =  apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
