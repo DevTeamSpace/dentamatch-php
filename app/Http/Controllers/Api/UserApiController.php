@@ -145,7 +145,7 @@ class UserApiController extends Controller {
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name',
                                 'jobseeker_profiles.profile_pic',
-                                'jobseeker_profiles.zipcode',
+                                'jobseeker_profiles.zipcode','jobseeker_profiles.is_job_seeker_verified',
                                 'jobseeker_profiles.preferred_job_location', 'jobseeker_profiles.state',
                                 'jobseeker_profiles.latitude', 'jobseeker_profiles.license_number',
                                 'jobseeker_profiles.longitude','jobseeker_profiles.preferred_city',
@@ -175,7 +175,7 @@ class UserApiController extends Controller {
                         if(($userData['profile_pic'])){
                             $imgUrl = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $userData['profile_pic'];
                         }
-                        $userArray['userDetails'] = array(
+                        $userArray['userDetails'] = [
                             'id' => $userData['id'],
                             'email' => $userData['email'],
                             'firstName' => $userData['first_name'],
@@ -196,7 +196,9 @@ class UserApiController extends Controller {
                             'preferredLocationName' => $userData['preferred_location_name'],
                             'jobtitleName' => $userData['jobtitle_name'],
                             'jobTitileId' => $userData['job_titile_id'],
-                        );
+                            'isVerified' => $userData['is_verified'],
+                            'isJobSeekerVerified' => $userData['is_job_seeker_verified']
+                        ];
                         $searchArray = SearchFilter::getFiltersOnLogin($userId);
                         if($searchArray){
                         $userArray['searchFilters'] = apiResponse::convertToCamelCase($searchArray);

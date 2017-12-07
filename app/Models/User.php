@@ -55,7 +55,7 @@ class User extends Authenticatable
     public static function getUser($userId)
     {
         $return = [];
-        $userModel = static::select('users.id',
+        $userModel = static::select('users.id', 'users.email',
                                     'jobseeker_profiles.first_name',
                                     'jobseeker_profiles.last_name',
                                     'jobseeker_profiles.zipcode as zipCode',
