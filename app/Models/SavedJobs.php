@@ -60,7 +60,7 @@ class SavedJobs extends Model
         $searchQueryObj->addSelect(DB::raw("count(distinct(tmp_skills.skill_id)) AS template_skills_count")); 
         $searchQueryObj->addSelect(DB::raw("IF(count(distinct(template_skills.skill_id))>0, (count(distinct(template_skills.skill_id))/count(distinct(tmp_skills.skill_id)))*100,0) AS percentaSkillsMatch")); 
         
-        $total = $searchQueryObj->distinct('saved_jobs.recruiter_job_id')->count('saved_jobs.recruiter_job_id');
+        $total = $searchQueryObj->distinct('recruiter_jobs.id')->count('recruiter_jobs.id');
         
         $page = $reqData['page'];
         $limit = SavedJobs::LIMIT ;
@@ -68,7 +68,7 @@ class SavedJobs extends Model
         if($page > 1){
             $skip = ($page-1)* $limit;
         }
-        $searchResult = $searchQueryObj->groupby('saved_jobs.recruiter_job_id')->skip($skip)->take($limit)->get();
+        $searchResult = $searchQueryObj->groupby('recruiter_jobs.id')->skip($skip)->take($limit)->get();
         $result = array();
         if($searchResult){
             $result['list'] = $searchResult->toArray();
