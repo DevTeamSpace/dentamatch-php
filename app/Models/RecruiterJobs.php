@@ -71,7 +71,7 @@ class RecruiterJobs extends Model
                             ->map(function($jobseekerSkills) {
                                 return $jobseekerSkills['skill_id'];
                             })->toArray();
-                
+        
         $savedJobsResult  = SavedJobs::select('recruiter_job_id')->where('seeker_id',$reqData['userId'])->get();
         $userSavedJobs = array();
         if($savedJobsResult){
@@ -115,7 +115,11 @@ class RecruiterJobs extends Model
             $searchQueryObj->join('template_skills',function($query) use ($jobseekerSkills){
                 $query->on('template_skills.job_template_id','=','recruiter_jobs.job_template_id')
                         ->whereIn('template_skills.skill_id',$jobseekerSkills);
-                });
+            });
+            
+            $searchQueryObj->join('template_skills as tmp_skills',function($query) {
+                $query->on('tmp_skills.job_template_id','=','recruiter_jobs.job_template_id');
+            });
                     
             if(count($rejectedJobsArray) > 0){
                 $searchQueryObj->whereNotIn('recruiter_jobs.id',$rejectedJobsArray);
@@ -168,6 +172,8 @@ class RecruiterJobs extends Model
                     }
                 }
             });
+        }else{
+            $searchQueryObj->whereIn('recruiter_jobs.job_type',[1,2]);
         }
         //$radius = Configs::select('config_data')->where('config_name','=','SEARCHRADIUS')->first();
         //$searchQueryObj->where('distance','<=',$radius->config_data);
@@ -183,6 +189,8 @@ class RecruiterJobs extends Model
                         'recruiter_jobs.preferred_job_location_id', DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
         
         $searchQueryObj->addSelect(DB::raw("count(distinct(template_skills.skill_id)) AS matched_skills")); 
+        $searchQueryObj->addSelect(DB::raw("count(distinct(tmp_skills.skill_id)) AS template_skills_count")); 
+        $searchQueryObj->addSelect(DB::raw("IF(count(distinct(template_skills.skill_id))>0, (count(distinct(template_skills.skill_id))/count(distinct(tmp_skills.skill_id)))*100,0) AS percentaSkillsMatch")); 
         
         $total = $searchQueryObj->distinct('recruiter_jobs.id')->count('recruiter_jobs.id');
         $page = $reqData['page'];
