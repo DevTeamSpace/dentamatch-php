@@ -15,6 +15,7 @@ use App\Models\ChatUserLists;
 use App\Models\JobSeekerTempAvailability;
 use App\Models\TempJobDates;
 use App\Models\JobseekerTempHired;
+use App\Models\User;
 use DB;
 use Log;
 
@@ -45,6 +46,9 @@ class SearchApiController extends Controller {
                 $reqData['userId'] = $userId;
                 $searchResult = RecruiterJobs::searchJob($reqData);
                 if(count($searchResult['list']) > 0){
+                    $userData = User::getUser($userId);
+                    $searchResult['isJobSeekerVerified'] = isset($userData['is_job_seeker_verified']) ? $userData['is_job_seeker_verified'] : null;
+                    $searchResult['profileCompleted'] = isset($userData['profile_completed']) ? $userData['profile_completed'] : null;
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"),  apiResponse::convertToCamelCase($searchResult));
                 }else{
                     $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
