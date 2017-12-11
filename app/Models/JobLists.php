@@ -35,6 +35,15 @@ class JobLists extends Model {
     }
 
     public static function listJobsByStatus($reqData) {
+        
+        $jobseekerSkills = JobSeekerSkills::select('jobseeker_skills.skill_id')
+                            ->where("user_id", $reqData['userId'])
+                            ->orderBy('jobseeker_skills.skill_id')
+                            ->get()
+                            ->map(function($jobseekerSkills) {
+                                return $jobseekerSkills['skill_id'];
+                            })->toArray();
+        
         $searchQueryObj = JobLists::join('recruiter_jobs', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
                 ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                 ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
@@ -47,7 +56,15 @@ class JobLists extends Model {
             $searchQueryObj->where('job_lists.applied_status', '=', JobLists::SHORTLISTED);
         }
 
-        $total = $searchQueryObj->count();
+        $searchQueryObj->join('template_skills',function($query) use ($jobseekerSkills){
+                $query->on('template_skills.job_template_id','=','recruiter_jobs.job_template_id')
+                        ->whereIn('template_skills.skill_id',$jobseekerSkills);
+                });
+        
+        $searchQueryObj->join('template_skills as tmp_skills',function($query) {
+                $query->on('tmp_skills.job_template_id','=','recruiter_jobs.job_template_id');
+            });
+                
         $searchQueryObj->select('recruiter_jobs.id', 'recruiter_jobs.job_type', 
                 'recruiter_jobs.is_monday', 'recruiter_jobs.is_tuesday', 
                 'recruiter_jobs.is_wednesday', 'recruiter_jobs.is_thursday', 
@@ -57,14 +74,19 @@ class JobLists extends Model {
                 'recruiter_offices.zipcode', 'recruiter_offices.latitude', 
                 'recruiter_offices.longitude', 'recruiter_jobs.created_at', 
                 DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
-
+        
+        $searchQueryObj->addSelect(DB::raw("count(distinct(template_skills.skill_id)) AS matched_skills")); 
+        $searchQueryObj->addSelect(DB::raw("count(distinct(tmp_skills.skill_id)) AS template_skills_count")); 
+        $searchQueryObj->addSelect(DB::raw("IF(count(distinct(template_skills.skill_id))>0, (count(distinct(template_skills.skill_id))/count(distinct(tmp_skills.skill_id)))*100,0) AS percentaSkillsMatch")); 
+        
+        $total = $searchQueryObj->distinct('recruiter_jobs.id')->count('recruiter_jobs.id');
         $page = $reqData['page'];
         $limit = SavedJobs::LIMIT;
         $skip = 0;
         if ($page > 1) {
             $skip = ($page - 1) * $limit;
         }
-        $searchResult = $searchQueryObj->skip($skip)->take($limit)->get();
+        $searchResult = $searchQueryObj->groupby('recruiter_jobs.id')->skip($skip)->take($limit)->get();
         $result = array();
         if ($searchResult) {
             $result['list'] = $searchResult->toArray();
