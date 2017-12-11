@@ -38,10 +38,11 @@
                 @endif
               </h4>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-5">
               <div class="form-group"> <!--  custom-select -->
                 <label class="fnt-16 nopadding">Preferred Job Locations</label>
-                <select name="preferredLocationId" id="preferredLocationIdSearch" class="selectpicker">
+                <div class="clearfix"></div>
+                <select name="preferredLocationId" id="preferredLocationIdSearch" class="customPreferDrop selectpicker">
                     <option value="">Select preferred job locations</option>
                     @foreach ($preferredLocations as $key=>$prefLocation)
                     @if($key==0)

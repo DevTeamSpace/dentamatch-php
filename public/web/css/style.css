@@ -36,6 +36,7 @@ and open the template in the editor.
 }
 
 
+
 /*----------Job detail------*/
 
 .job-detail span,
@@ -119,7 +120,15 @@ and open the template in the editor.
     position: relative;
     left: -2px;
 }
-
+.customPreferDrop{width:100% !important;}
+.customPreferDrop .dropdown-menu{max-height:219px !important ; 	box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.11); border:none !important;}
+.customPreferDrop>button{border-color:#e2e2e2 !important;  color:#383838 !important;}
+.dropdown-menu .divider{background-color:#e2e2e2 !important;}
+.customPreferDrop .text{color:#424242;}
+.customPreferDrop .filter-option {    font-weight: 500;
+    font-size: 20px;}
+    .customPreferDrop  .caret{color:#8a8a8a}
+    .customPreferDrop .dropdown-toggle{background-color:r#fff;}
 @media only screen and (min-width: 768px) {
     .template-job-information-left {
         width: 65%;
