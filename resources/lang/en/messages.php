@@ -172,5 +172,6 @@ return [
     'set_availability' => 'Please set your availability',
     'invited_success' => 'Selected user has been invited for this job successfully',
     'email_is_verified' => 'Email id is verified for this user',
-    'email_is_not_verified' => 'Email id is not verified for this user'
+    'email_is_not_verified' => 'Email id is not verified for this user',
+    'data_retrieved_successfully' => 'Data retrieve successfully',
 ];

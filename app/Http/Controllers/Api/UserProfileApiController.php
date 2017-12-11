@@ -378,11 +378,11 @@ class UserProfileApiController extends Controller {
             
             if(isset($userId) && $userId > 0){
                 $userModel = User::isUserEmailVerified($userId);
+                $isVerified = 0;
                 if ($userModel->is_verified) {
-                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.email_is_verified")); 
-                } else {
-                    $response = apiResponse::customJsonResponse(0, 204, trans("messages.email_is_not_verified"));
+                    $isVerified = 1;
                 }
+                $response = apiResponse::customJsonResponse(1, 200, trans("messages.data_retrieved_successfully"), ['is_verified'=>$isVerified]); 
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
