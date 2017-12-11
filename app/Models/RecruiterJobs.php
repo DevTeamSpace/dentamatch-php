@@ -172,9 +172,9 @@ class RecruiterJobs extends Model
                     }
                 }
             });
-        }else{
-            $searchQueryObj->whereIn('recruiter_jobs.job_type',[1,2]);
         }
+        
+        $searchQueryObj->whereIn('recruiter_jobs.job_type',[1,2]);
         //$radius = Configs::select('config_data')->where('config_name','=','SEARCHRADIUS')->first();
         //$searchQueryObj->where('distance','<=',$radius->config_data);
         //$searchQueryObj->groupby('recruiter_jobs.id');
