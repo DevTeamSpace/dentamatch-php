@@ -139,8 +139,7 @@ class UserProfileApiController extends Controller {
                 apiResponse::chkProfileComplete($userId);
                 
                 $userData = User::getUser($userId);
-                $isVerified = isset($userData['is_verified']) ? $userData['is_verified'] : null;
-                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"), ['isVerified' => $isVerified]);
+                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"), ['userDetails' => $userData]);
             }else{
                 $response =  apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
