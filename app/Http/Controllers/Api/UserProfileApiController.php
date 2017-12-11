@@ -138,8 +138,8 @@ class UserProfileApiController extends Controller {
                 }
                 apiResponse::chkProfileComplete($userId);
                 
-                $userData = User::getUser($userId);
-                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"), ['userDetails' => $userData]);
+                $userData['userDetails'] = User::getUser($userId);
+                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"), apiResponse::convertToCamelCase($userData));
             }else{
                 $response =  apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
