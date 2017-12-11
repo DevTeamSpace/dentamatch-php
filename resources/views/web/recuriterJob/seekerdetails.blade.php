@@ -19,6 +19,11 @@ $seekerDatesCount = count($datesTemp);
     </ul>
     <!--/breadcrumb-->
 
+
+
+
+
+
     <div class="commonBox">   
         <div class="row resultHeading">
             <div class="col-md-2 col-sm-2 resultImage">
@@ -98,7 +103,61 @@ $seekerDatesCount = count($datesTemp);
         </form>
     </div>
 
-    <div class="pd-t-60">
+
+<!-- <div class="commonBox">
+
+</div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+    
+</div>
+
+<div class="commonBox mr-t-20 mr-b-20">
+<div class="skillsBlock">
+<h5>MATCHING SKILLS (70%)</h5>
+<ul class="skill_List">
+<li>CAD CAM</li>
+<li><strong>Planscan</strong>,Cerec</li>
+</ul>
+
+<ul class="skill_List">
+<li>DIG IMP</li>
+<li>3 m true definition, 3 shape trios, Itero</li>
+</ul>
+
+<ul class="skill_List">
+<li>Digital Imaging </li>
+<li><strong>Dexis, Schick, Trophy, Suni</strong></li>
+</ul>
+
+
+<ul class="skill_List">
+<li>Professional Training </li>
+<li><strong>Back office management</strong>,Supply inventory management</li>
+</ul>
+
+
+</div>
+
+
+</div>
+
+
+<div class="commonBox" >
+ <div class="">
         <div class="leftCircle">
             <div class="searchResultHeading">
                 <h5>ABOUT ME</h5>
@@ -223,7 +282,8 @@ $seekerDatesCount = count($datesTemp);
                 @endif
             </div>  
         </div>
-    </div>  
+    </div>   
+
 </div>
 
 <!--  Modal content for the mixer image example -->

@@ -23,7 +23,7 @@
     -moz-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.19);
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.19);
 }
-
+.skillsBlock{padding-left:46px;}
 button.multiselect[title="select"] {
     color: #c9c9c9;
 }
@@ -1200,6 +1200,7 @@ input[type='checkbox'] {
     .container-color {
         width: 100%;
     }
+    .skillsBlock{padding-left:0px;}
 }
 
 @media (min-width:768px) {

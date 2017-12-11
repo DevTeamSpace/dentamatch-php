@@ -120,6 +120,10 @@ and open the template in the editor.
     position: relative;
     left: -2px;
 }
+.skillsBlock h5{color:#182556;}
+.skill_List li:first-child{font-size:16px; color:#2f2f2f;}
+.skill_List{margin-top:20px;}
+.skill_List strong{color:#0d5ab2;}
 .customPreferDrop{width:100% !important;}
 .customPreferDrop .dropdown-menu{max-height:219px !important ; 	box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.11); border:none !important;}
 .customPreferDrop>button{border-color:#e2e2e2 !important;  color:#383838 !important;}
