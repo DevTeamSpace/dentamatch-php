@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','verification_code'
+        'name', 'email', 'password','verification_code', 'is_verified'
     ];
 
     /**
@@ -102,5 +102,9 @@ class User extends Authenticatable
             $return['dental_state_board'] = $dentalStateBoard;
         }
         return $return;
+    }
+    
+    public static function isUserEmailVerified($userId) {
+        return static::select('is_verified')->where('id',$userId)->first();
     }
 }

@@ -138,9 +138,8 @@ class UserProfileApiController extends Controller {
                 }
                 apiResponse::chkProfileComplete($userId);
                 
-                $userData = User::getUser($userId);
-                $isVerified = isset($userData['is_verified']) ? $userData['is_verified'] : null;
-                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"), ['isVerified' => $isVerified]);
+                $userData['userDetails'] = User::getUser($userId);
+                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"), apiResponse::convertToCamelCase($userData));
             }else{
                 $response =  apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
@@ -371,5 +370,30 @@ class UserProfileApiController extends Controller {
         }
     }
     
+    public function getIsUserVerified(Request $request) {
+        try {
+            $reqData = $request->all();
+            $userId = $request->userServerData->user_id;
+            
+            if(isset($userId) && $userId > 0){
+                $userModel = User::isUserEmailVerified($userId);
+                $isVerified = 0;
+                if ($userModel->is_verified) {
+                    $isVerified = 1;
+                }
+                $response = apiResponse::customJsonResponse(1, 200, trans("messages.data_retrieved_successfully"), ['isVerified'=>$isVerified]); 
+            }else{
+                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+            }
+            
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        } catch (\Exception $ex) {
+            $message = $ex->getMessage();
+            $response =  apiResponse::responseError("Some error occoured", ["data" => $message]);
+        }
+        return $response;
+    }
     
 }
