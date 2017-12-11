@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 Route::group(['middleware' => ['xss']], function () {
     Route::post('users/sign-up','Api\UserApiController@postSignup');
     Route::post('users/sign-in','Api\UserApiController@postSignIn');
+    Route::get('users/is-verified','Api\UserProfileApiController@getIsUserVerified');
     Route::delete('users/sign-out','Api\UserApiController@deleteSignOut');
     Route::get('privacy-policy','Api\UserApiController@getPrivacypolicy');
     Route::get('term-condition','Api\UserApiController@getTermsAndCondition');

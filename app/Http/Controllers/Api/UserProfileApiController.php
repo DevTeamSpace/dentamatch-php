@@ -371,5 +371,30 @@ class UserProfileApiController extends Controller {
         }
     }
     
+    public function getIsUserVerified(Request $request) {
+        try {
+            $reqData = $request->all();
+            $userId = $request->userServerData->user_id;
+            
+            if(isset($userId) && $userId > 0){
+                $userModel = User::isUserEmailVerified($userId);
+                if ($userModel->is_verified) {
+                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.email_is_verified")); 
+                } else {
+                    $response = apiResponse::customJsonResponse(0, 204, trans("messages.email_is_not_verified"));
+                }
+            }else{
+                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+            }
+            
+        } catch (ValidationException $e) {
+            $messages = json_decode($e->getResponse()->content(), true);
+            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+        } catch (\Exception $ex) {
+            $message = $ex->getMessage();
+            $response =  apiResponse::responseError("Some error occoured", ["data" => $message]);
+        }
+        return $response;
+    }
     
 }

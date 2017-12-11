@@ -103,4 +103,8 @@ class User extends Authenticatable
         }
         return $return;
     }
+    
+    public static function isUserEmailVerified($userId) {
+        return static::select('is_verified')->where('id',$userId)->get();
+    }
 }
