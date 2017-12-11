@@ -19,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','verification_code'
+        'name', 'email', 'password','verification_code', 'is_verified'
     ];
 
     /**
@@ -105,6 +105,6 @@ class User extends Authenticatable
     }
     
     public static function isUserEmailVerified($userId) {
-        return static::select('is_verified')->where('id',$userId)->get();
+        return static::select('is_verified')->where('id',$userId)->first();
     }
 }
