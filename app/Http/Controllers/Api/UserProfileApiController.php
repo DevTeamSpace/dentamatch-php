@@ -382,7 +382,7 @@ class UserProfileApiController extends Controller {
                 if ($userModel->is_verified) {
                     $isVerified = 1;
                 }
-                $response = apiResponse::customJsonResponse(1, 200, trans("messages.data_retrieved_successfully"), ['is_verified'=>$isVerified]); 
+                $response = apiResponse::customJsonResponse(1, 200, trans("messages.data_retrieved_successfully"), ['isVerified'=>$isVerified]); 
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
