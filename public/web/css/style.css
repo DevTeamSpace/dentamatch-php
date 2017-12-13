@@ -210,6 +210,8 @@ and open the template in the editor.
     cursor:pointer;
     color: #0d5ab2;}
 
+    .bootstrap-select .dropdown-menu{height:170px !important;}
+
 @media only screen and (min-width: 768px) {
     .template-job-information-left {
         width: 65%;
