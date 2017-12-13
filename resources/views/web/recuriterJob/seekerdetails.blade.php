@@ -102,59 +102,33 @@ $seekerDatesCount = count($datesTemp);
             </div>
         </form>
     </div>
-
-
-<!-- <div class="commonBox">
-
-</div> -->
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-    
 </div>
 
 <div class="commonBox mr-t-20 mr-b-20">
-<div class="skillsBlock">
-<h5>MATCHING SKILLS (70%)</h5>
-<ul class="skill_List">
-<li>CAD CAM</li>
-<li><strong>Planscan</strong>,Cerec</li>
-</ul>
-
-<ul class="skill_List">
-<li>DIG IMP</li>
-<li>3 m true definition, 3 shape trios, Itero</li>
-</ul>
-
-<ul class="skill_List">
-<li>Digital Imaging </li>
-<li><strong>Dexis, Schick, Trophy, Suni</strong></li>
-</ul>
-
-
-<ul class="skill_List">
-<li>Professional Training </li>
-<li><strong>Back office management</strong>,Supply inventory management</li>
-</ul>
-
-
+    <div class="skillsBlock">
+        <h5>MATCHING SKILLS ({{ number_format($matchedSkills['percentSkills'],2) }}%)</h5>
+        @if(!empty($matchedSkills['data']))
+            @foreach($matchedSkills['data'] as $keySki => $skillArray)
+                <ul class="skill_List">
+                    <li>{{ $keySki }}</li>
+                    @if(!empty($skillArray))
+                        <li>
+                            @foreach($skillArray as $skillArrayList)
+                                @if($skillArrayList['matchedFlag'] == 1)
+                                    <strong>
+                                        {{ $skillArrayList['skill_name'] }},
+                                    </strong>
+                                @else
+                                    {{ $skillArrayList['skill_name'] }},
+                                @endif
+                            @endforeach
+                        </li>
+                    @endif
+                </ul>
+            @endforeach
+        @endif
+    </div>
 </div>
-
-
-</div>
-
 
 <div class="commonBox" >
  <div class="">

@@ -107,4 +107,15 @@ class JobSeekerSkills extends Model
         }
     }
     
+    public static function fetchJobseekerSkills($userId) {
+        $jobseekerSkills = static::select('jobseeker_skills.skill_id')
+                            ->where("user_id", $userId)
+                            ->orderBy('jobseeker_skills.skill_id')
+                            ->get()
+                            ->map(function($jobseekerSkills) {
+                                return $jobseekerSkills['skill_id'];
+                            })->toArray();
+                            
+        return $jobseekerSkills;      
+    }
 }

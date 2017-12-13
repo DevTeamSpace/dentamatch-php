@@ -260,9 +260,10 @@ class RecruiterJobController extends Controller {
 
     public function jobSeekerDetails($seekerId, $jobId) {
         try {
+            $matchedSkills = RecruiterJobs::getMatchingSkills($jobId, $seekerId);
             $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
             $seekerDetails = JobSeekerProfiles::getJobSeekerDetails($seekerId,$jobDetails);
-            return view('web.recuriterJob.seekerdetails',compact('seekerDetails', 'jobId', 'jobDetails'));
+            return view('web.recuriterJob.seekerdetails',compact('seekerDetails', 'jobId', 'jobDetails', 'matchedSkills'));
 
         } catch (\Exception $e) {
             Log::error($e);

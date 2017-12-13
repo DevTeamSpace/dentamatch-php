@@ -23,13 +23,7 @@ class SavedJobs extends Model
     const LIMIT = 10;
     
     public static function listSavedJobs($reqData){
-        $jobseekerSkills = JobSeekerSkills::select('jobseeker_skills.skill_id')
-                            ->where("user_id", $reqData['userId'])
-                            ->orderBy('jobseeker_skills.skill_id')
-                            ->get()
-                            ->map(function($jobseekerSkills) {
-                                return $jobseekerSkills['skill_id'];
-                            })->toArray();
+        $jobseekerSkills = JobSeekerSkills::fetchJobseekerSkills($reqData['userId']);
         
         $searchQueryObj = SavedJobs::join('recruiter_jobs','saved_jobs.recruiter_job_id', '=', 'recruiter_jobs.id')
                         ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
