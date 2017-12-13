@@ -259,7 +259,7 @@ class RecruiterJobs extends Model
                             'recruiter_offices.address','recruiter_offices.zipcode',
                             'recruiter_offices.latitude','recruiter_offices.longitude','recruiter_jobs.created_at',
                             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS job_posted_time_gap"),
-                            DB::raw("GROUP_CONCAT(office_types.officetype_name SEPARATOR ', ') AS office_type_name")
+                            DB::raw("GROUP_CONCAT(DISTINCT(office_types.officetype_name) SEPARATOR ', ') AS office_type_name")
                             );
         
         $searchQueryObj->addSelect(DB::raw("count(distinct(template_skills.skill_id)) AS matched_skills")); 
