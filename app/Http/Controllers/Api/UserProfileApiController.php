@@ -15,6 +15,7 @@ use App\Models\JobSeekerAffiliation;
 use App\Models\JobseekerCertificates;
 use App\Models\Certifications;
 use App\Models\JobTitles;
+use Mail;
 
 class UserProfileApiController extends Controller {
 
@@ -380,8 +381,16 @@ class UserProfileApiController extends Controller {
                 $isVerified = 0;
                 if ($userModel->is_verified) {
                     $isVerified = 1;
+                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.data_retrieved_successfully"), ['isVerified'=>$isVerified]); 
+                } else {
+                    $url = url("/verification-code/".$userModel->verification_code);
+                    $name = $userModel->first_name;
+                    $email = $userModel->email;
+                    Mail::queue('email.pending-email-verification', ['name' => $name, 'url' => $url, 'email' => $email], function($message) use($email,$name) {
+                            $message->to($email, $name)->subject('Pending Email Activation');
+                        });
+                    $response = apiResponse::customJsonResponse(1, 200, "Email verification link has been sent to $email.", ['isVerified'=>$isVerified]); 
                 }
-                $response = apiResponse::customJsonResponse(1, 200, trans("messages.data_retrieved_successfully"), ['isVerified'=>$isVerified]); 
             }else{
                 $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
