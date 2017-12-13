@@ -36,13 +36,7 @@ class JobLists extends Model {
 
     public static function listJobsByStatus($reqData) {
         
-        $jobseekerSkills = JobSeekerSkills::select('jobseeker_skills.skill_id')
-                            ->where("user_id", $reqData['userId'])
-                            ->orderBy('jobseeker_skills.skill_id')
-                            ->get()
-                            ->map(function($jobseekerSkills) {
-                                return $jobseekerSkills['skill_id'];
-                            })->toArray();
+        $jobseekerSkills = JobSeekerSkills::fetchJobseekerSkills($reqData['userId']);
         
         $searchQueryObj = JobLists::join('recruiter_jobs', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
                 ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
