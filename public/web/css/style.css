@@ -120,6 +120,7 @@ and open the template in the editor.
     position: relative;
     left: -2px;
 }
+
 .skillsBlock h5{color:#182556;}
 .skill_List li:first-child{font-size:16px; color:#2f2f2f;}
 .skill_List{margin-top:20px;}
@@ -129,10 +130,86 @@ and open the template in the editor.
 .customPreferDrop>button{border-color:#e2e2e2 !important;  color:#383838 !important;}
 .dropdown-menu .divider{background-color:#e2e2e2 !important;}
 .customPreferDrop .text{color:#424242;}
+.customInfo h3{margin-top:0px; font-weight:bold;}
+.customInfo{	background-color: #0470c0; color:#fff;}
 .customPreferDrop .filter-option {    font-weight: 500;
     font-size: 20px;}
     .customPreferDrop  .caret{color:#8a8a8a}
     .customPreferDrop .dropdown-toggle{background-color:r#fff;}
+   .customInfo .close{color:inherit; opacity:1;}
+   .customInfo{border-radius:8px;}
+   .infoContent{padding: 3px 35px 0 10px}
+   .welcomeLeftheader{background: rgba(4, 112, 192,0.1); border-radius: 7px 7px 0 0px; position: relative;    padding: 27px 18px 19px 25px;}
+   .dashboarFinalInnerBox .commonBox{padding:0px;}
+   .welcomeLeftheader h6{ margin-top:0px; color:#0d112f; opacity:0.5; margin-bottom:-5px;}
+.welcomeLeftheader h4{color:#0d112f; font-weight:bold;}
+#dashEdit{position: absolute;
+    right: 18px;
+    bottom: 29px;}
+    .tHire{    color: #0470c0;}
+    .tHire span{font-size: 26px;
+        font-weight: bold;}
+        .tHire p{    font-weight: normal;
+            font-size: 12px;}
+    .dashboadFinalPadder{    padding: 18px 18px 18px 25px;}  
+    .welcomeContent{position:relative;}
+    .welcomeContent h4{	color: #0d112f;    padding: 24px 25px 0;}
+
+    .tHire{position: absolute;
+        right: 18px;
+        top: 24px;
+        text-align: center;}
+
+
+.dashboarFinalList li{	border-bottom: solid 1px #e9e9e9; position:relative;  padding-left:25px;    padding-right: 115px; padding-bottom: 16px;
+    padding-top: 9px;}
+.dashboarFinalList li:last-child{ border-bottom:none;}
+.dashListImg{width:40px; height:40px; border-radius:50%; background-color:#bfbdbd; float:left; margin-right:11px;}
+.dashListImgContent p{    color: #909090;}
+.dashListImgContent{padding-left:50px;}
+.dashListImgContent h6{    font-size: 14px;
+    font-weight:500;
+    color: #0f183e;
+    margin-bottom: 2px;     padding-top: 3px;}
+    .dashboarFinalInnerBox .commonBox{margin-bottom:30px;}
+.latestNotification .onlineDot{    right: 19px;
+    top: 25px}
+    .dashListRightPos{color:#0470c0; font-size:12px;     position: absolute;
+        right: 19px;
+        top: 32px;}
+        .unread{font-weight:500 !important; 	color: #0d112f; font-size:16px;}
+        .lastMsg h4{font-weight:bold;}
+.viewAll{    padding: 10px 25px;	font-size: 16px;
+    color: #1379c4; cursor:pointer;     border-top: solid 1px #e9e9e9;}
+    
+    .latestNotification h6{font-size:16px !important;}
+    .latestNotification .media-heading>p{display:inline;     font-size: inherit;
+        font-weight: normal; color:#686868;}
+        .latestNotification .justNow{margin-top:7px;}
+    .msgNotification{background-color:#1379c4; width:18px; height:18px;border-radius:50%; color:#fff; text-align:center; font-size:11px; line-height:19px;     margin: 0 auto;}
+    .msgNotficaitonBlock span{	font-size: 10px;	color: #a1a1a1; display:block; margin-bottom:4px;}
+.msgNotficaitonBlock{    position: absolute;
+    right: 18px;
+    text-align: center;
+    bottom: 22px;}
+    .msgImg p{font-size:12px; 	color: #484848;}
+
+    .dashboadPostBlock>li{display: inline-block; text-align: center;}
+.dashboadPostBlock a{display:block;}
+.dashboadPostBlock img{margin-bottom:11px;}
+.dashboadPostBlock{font-weight:500;	color: #0470c0;     margin-left: 29px;}
+/* .dashboadPostBlock li:first-child{margin-left:5%;} */
+.dashboadPostBlock{    margin-top: 35px;
+    margin-bottom: 15px;}
+.dashboadPostBlock li{margin-right:17%; margin-bottom:10px;}
+.dashboadPostBlock li:last-child{margin-right:0px;}
+.recentlyPost h4{padding:11px 0 !important; font-weight:500;	color: #0f183e;}
+.postViewDetail{    position: absolute;
+    right: 19px;
+    top: 10px;
+    cursor:pointer;
+    color: #0d5ab2;}
+
 @media only screen and (min-width: 768px) {
     .template-job-information-left {
         width: 65%;
@@ -156,4 +233,11 @@ and open the template in the editor.
     .search-seeker .pull-right {
         float: left !important;
     }
+}
+
+@media only screen and (max-width: 480px) {
+.welcomeContent  h4{font-size:16px;}
+.tHire span{font-size:21px;}
+.latestNotification h6{font-size:13px !important;}
+
 }

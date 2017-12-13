@@ -55,6 +55,7 @@
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
             Route::post('change-password', 'web\UserProfileController@postChangePassword');
             Route::group(['middleware' => 'subscription'], function () {
+                Route::get('dashboard', 'web\UserProfileController@dashboard');
                 Route::get('jobtemplates', 'web\JobtemplateController@listJobTemplates');
                 Route::get('jobtemplates/view/{templateId}', 'web\JobtemplateController@viewTemplate');
                 Route::get('jobtemplates/edit/{templateId}', 'web\JobtemplateController@editJobTemplate');

@@ -20,6 +20,11 @@ use App\Models\Location;
 
 class UserProfileController extends Controller {
     private $result = [];
+
+    public function dashboard(){
+        return view('web.user-dashboard',['activeTab'=>'3']);
+    }
+
     public function officeDetails(Request $request) {
         
         if (isset($request->phoneNumber) && !empty($request->phoneNumber)) {
