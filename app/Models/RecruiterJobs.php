@@ -169,7 +169,7 @@ class RecruiterJobs extends Model
         }
         
         if(!empty($reqData['preferredJobLocationId']) && is_array($reqData['preferredJobLocationId'])){
-            $searchQueryObj->whereIn('recruiter_profiles.preferred_job_location_id',$reqData['preferredJobLocationId']);
+            $searchQueryObj->whereIn('recruiter_jobs.preferred_job_location_id',$reqData['preferredJobLocationId']);
         }
         
         $searchQueryObj->whereIn('recruiter_jobs.job_type',[1,2]);
