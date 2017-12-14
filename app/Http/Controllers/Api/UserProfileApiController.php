@@ -117,6 +117,8 @@ class UserProfileApiController extends Controller {
                 'aboutMe' => 'required'
             ];
             $mappedSkillsArray = [];
+            $isJobSeekerVerified = 1;
+            $isLicenseRequired = 0;
             $jobTitleModel = JobTitles::where('id',$request->jobTitleId)->first();
             if($jobTitleModel) {
                 $mappedSkills = $jobTitleModel->mapped_skills_id;
@@ -124,15 +126,26 @@ class UserProfileApiController extends Controller {
                 if($jobTitleModel->is_license_required) {
                     $validateKeys['license']= 'required';
                     $validateKeys['state'] = 'required';
+                    $isLicenseRequired = 1;
                 }
             }
             $this->validate($request, $validateKeys);
             $userId = $request->userServerData->user_id;
             if($userId > 0){
-                UserProfile::where('user_id', $userId)->update(['about_me' => $request->aboutMe, 'license_number' => $request->license, 'state' => $request->state,'is_job_seeker_verified' => 0]);
-                if(($request->jobTitleId != "") && ($request->jobTitleId > 0)){
-                    UserProfile::where('user_id', $userId)->update(['job_titile_id' => $request->jobTitleId]);
+                $userProfileModel = UserProfile::where('user_id', $userId)->first();
+                if($isLicenseRequired && ($userProfileModel->license_number != $request->license || $userProfileModel->state != $request->state)) {
+                    $isJobSeekerVerified = 0;
                 }
+                $userProfileModel->about_me = $request->aboutMe;
+                $userProfileModel->license_number = $request->license;
+                $userProfileModel->state = $request->state;
+                $userProfileModel->is_job_seeker_verified = $isJobSeekerVerified;
+                
+                if(($request->jobTitleId != "") && ($request->jobTitleId > 0)){
+                    $userProfileModel->job_titile_id = $request->jobTitleId;
+                }
+                
+                $userProfileModel->save();
                 
                 if(!empty($mappedSkillsArray)) {
                     JobSeekerSkills::addJobSeekerSkills($userId, $mappedSkillsArray);
@@ -297,16 +310,22 @@ class UserProfileApiController extends Controller {
             ]);
             
             $reqData = $request->all();
+            $isJobSeekerVerified = 1;
+            $isLicenseRequired = 0;
             $jobTitleModel = JobTitles::where('id',$reqData['jobTitileId'])->first();
             if($jobTitleModel) {
                 if($jobTitleModel->is_license_required) {
                     $this->validate($request, ['licenseNumber' => 'required', 'state'=> 'required']);
+                    $isLicenseRequired = 1;
                 }
             }
             
             $userId = $request->userServerData->user_id;
             if($userId>0) {
                 $userProfile = UserProfile::where('user_id', $userId)->first();
+                if($isLicenseRequired && ((isset($reqData['licenseNumber']) && $userProfile->license_number != $request->license) || (isset($reqData['state']) && $userProfile->state != $request->state))) {
+                    $isJobSeekerVerified = 0;
+                }
                 $userProfile->first_name = $reqData['firstName'];
                 $userProfile->last_name = $reqData['lastName'];
                 $userProfile->preferred_job_location_id = $reqData['preferredJobLocationId'];
@@ -314,7 +333,9 @@ class UserProfileApiController extends Controller {
                 $userProfile->about_me = $reqData['aboutMe'];
                 $userProfile->license_number = isset($reqData['licenseNumber']) ? $reqData['licenseNumber'] : null;
                 $userProfile->state = isset($reqData['state']) ? $reqData['state'] : null;
+                $userProfile->is_job_seeker_verified = $isJobSeekerVerified;
                 $userProfile->save();
+                
                 apiResponse::chkProfileComplete($userId);
                 $message = trans("messages.user_profile_updated");
                 $returnResponse = apiResponse::customJsonResponse(1, 200, $message);
