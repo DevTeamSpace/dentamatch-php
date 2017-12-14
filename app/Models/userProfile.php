@@ -14,7 +14,12 @@ class UserProfile extends Model {
     const JOBSEEKER_VERIFY_APPROVED = 1;
     const JOBSEEKER_VERIFY_REJECT = 2;
     
-
+    protected $fillable = [
+        'user_id', 'first_name', 'last_name','preferred_job_location_id', 'preferred_location_name',
+        'job_titile_id', 'jobtitle_name', 'license_number', 'state', 'preferred_job_location_id',
+        'is_job_seeker_verified', 'about_me', 'profile_pic', 'dental_state_board'
+    ];
+    
     public function user() {
         return $this->belongsTo(User::class);
     }
