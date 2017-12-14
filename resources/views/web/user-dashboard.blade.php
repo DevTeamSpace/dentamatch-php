@@ -181,6 +181,50 @@ It is a long established fact that a reader will be distracted by the readable c
 </div>
 
 
+
+<div class="commonBox">
+<div class="welcomeContent lastMsg">
+<h4>This week’s view</h4>
+<ul class="weekList">
+<li class="weekActive">Aug 3 - Mon</li>
+<li>Aug 4 -  TUE
+<div class="dental">
+  <p>Dental Assistant</p>
+  <div class="dentalImg">
+    <img src="http://dev.dentamatch.com/web/images/defaultImg.png" width="22" class="img-circle">
+    <img src="http://dev.dentamatch.com/web/images/defaultImg.png" width="22" class="img-circle">
+    <img src="http://dev.dentamatch.com/web/images/defaultImg.png" width="22" class="img-circle">
+  </div>
+</div>
+
+</li>
+<li>Aug 5 - WED  
+<div class="dental">
+  <p>Dental Hygienist</p>
+  <div class="dentalImg">
+    <img src="http://dev.dentamatch.com/web/images/defaultImg.png" width="22" class="img-circle">
+    <img src="http://dev.dentamatch.com/web/images/defaultImg.png" width="22" class="img-circle">
+   
+    <div class="dentalNumber img-circle">2+</div>
+    
+  </div>
+</div>
+<a href="#" class="moreJobs pull-right">4 More Jobs</a>
+
+</li>
+<li>Aug 6 - THU  </li>
+<li>Aug 7 - FRI </li>
+<li class="weekHolidday">Aug 8 - SAT </li>
+<li class="weekHolidday">Aug 9 - SAN </li>
+
+
+</ul>
+<div class="viewAll">View calendar</div>
+
+</div>
+</div>
+
+
 <div class="commonBox">
 
 <div class="welcomeContent lastMsg">

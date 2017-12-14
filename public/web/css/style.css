@@ -209,9 +209,19 @@ and open the template in the editor.
     top: 10px;
     cursor:pointer;
     color: #0d5ab2;}
-
+    .dental{position: absolute;
+        left: 133px;
+        top: 7px;
+        color: #0470c0;}
+        .dentalImg img{margin-right:6px; float:left}
+        .dentalNumber{width:22px; height:22px; background:#0470c0; float:left;     text-align: center;
+            line-height: 22px; color:#fff;}
+.weekList li{border-top:1px solid #e9e9e9; font-size:12px; height:58px;position: relative;    padding: 20px 25px; }
     .bootstrap-select .dropdown-menu{height:170px !important;}
-
+    .weekActive{border-left: 5px solid #0470c0;}
+    .moreJobs{font-size:12px;}
+    .weekList{padding-top:19px;}
+    .weekHolidday{color:#fc434a;}
 @media only screen and (min-width: 768px) {
     .template-job-information-left {
         width: 65%;
@@ -241,5 +251,8 @@ and open the template in the editor.
 .welcomeContent  h4{font-size:16px;}
 .tHire span{font-size:21px;}
 .latestNotification h6{font-size:13px !important;}
+.dashboadPostBlock li{margin-right: 8%;}
+.dental{    left: 102px;}
+.weekList li{padding: 20px 15px;}
 
 }
