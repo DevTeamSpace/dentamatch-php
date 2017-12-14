@@ -168,6 +168,10 @@ class RecruiterJobs extends Model
             });
         }
         
+        if(!empty($reqData['preferredJobLocationId']) && is_array($reqData['preferredJobLocationId'])){
+            $searchQueryObj->whereIn('recruiter_jobs.preferred_job_location_id',$reqData['preferredJobLocationId']);
+        }
+        
         $searchQueryObj->whereIn('recruiter_jobs.job_type',[1,2]);
         //$radius = Configs::select('config_data')->where('config_name','=','SEARCHRADIUS')->first();
         //$searchQueryObj->where('distance','<=',$radius->config_data);
