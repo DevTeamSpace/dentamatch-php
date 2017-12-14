@@ -107,6 +107,6 @@ class User extends Authenticatable
     public static function isUserEmailVerified($userId) {
         return static::select('is_verified', 'first_name', 'email', 'verification_code')
                 ->join('jobseeker_profiles', 'jobseeker_profiles.user_id', 'users.id')
-                ->where('id',$userId)->first();
+                ->where('users.id',$userId)->first();
     }
 }
