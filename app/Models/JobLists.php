@@ -210,6 +210,7 @@ class JobLists extends Model {
                 ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                 ->join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
                 ->join('job_titles', 'jobseeker_profiles.job_titile_id', '=', 'job_titles.id')
+                ->leftjoin('chat_user_list', 'chat_user_list.recruiter_id', '=', 'recruiter_offices.user_id')
                 ->where('job_lists.recruiter_job_id', $job['id']);
         if($forJobType!=''){
             $obj->whereIn('job_lists.applied_status', [JobLists::HIRED]);
@@ -228,7 +229,7 @@ class JobLists extends Model {
                 }
             }
         }
-        $obj->select('job_lists.applied_status', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'jobseeker_profiles.profile_pic', 'job_lists.seeker_id', 'job_titles.jobtitle_name', 'recruiter_jobs.job_type');
+        $obj->select('job_lists.applied_status', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'jobseeker_profiles.profile_pic', 'job_lists.seeker_id', 'job_titles.jobtitle_name', 'recruiter_jobs.job_type', 'recruiter_block', 'seeker_block');
 
         if ($job['job_type'] == RecruiterJobs::FULLTIME) {
             $obj->addSelect('jobseeker_profiles.is_fulltime');

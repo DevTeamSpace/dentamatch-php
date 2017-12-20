@@ -121,8 +121,10 @@
                             <input type="hidden" name="jobId" value="{{ $job['id'] }}">
                             <input type="hidden" name="seekerId" value="{{ $seeker['seeker_id'] }}">
                             @if($key==\App\Models\JobLists::HIRED)
+                            @if($seeker['seeker_block']==0 && $seeker['recruiter_block']==0)
                             <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
                             data-target="#ShortListMessageBox" data-seekerId="{{ $seeker['seeker_id'] }}">Message</button>
+                            @endif
                             @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY && ($seeker['ratingId']!=$seeker['seeker_id']))
                             @if(!empty($dates) && date("Y-m-d")>$dates[$seekerDatesCount-1])
                             <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 " data-toggle="modal" data-target="#ratesekeerPopup_{{ $seeker['seeker_id'] }}">Rate seeker</button>
@@ -131,8 +133,10 @@
                             @endif
                             @endif
                             @elseif($key==\App\Models\JobLists::SHORTLISTED)
+                            @if($seeker['seeker_block']==0 && $seeker['recruiter_block']==0)
                             <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30" data-toggle="modal" 
                             data-target="#ShortListMessageBox" data-seekerId="{{ $seeker['seeker_id'] }}">Message</button>
+                            @endif
                             <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::HIRED }}" class="btn btn-primary pd-l-30 pd-r-30 ">Hire</button>
                             @elseif($key==\App\Models\JobLists::APPLIED)
                             <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::REJECTED }}" class="btn btn-link  mr-r-5">Reject</button>
