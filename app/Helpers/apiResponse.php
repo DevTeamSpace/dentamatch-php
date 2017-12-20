@@ -7,6 +7,7 @@ use App\Models\JobSeekerSchooling;
 use App\Models\JobSeekerSkills;
 use App\Models\JobSeekerAffiliation;
 use App\Models\JobseekerCertificates;
+use App\Models\JobTitles;
 
 class apiResponse {
 
@@ -88,32 +89,40 @@ class apiResponse {
     public static function chkProfileComplete($userId){
         
         $userProfileModel = UserProfile::getUserProfile($userId);
-        $userWorkExperience = WorkExperience::getWorkExperienceList($userId);
-        $schooling = JobSeekerSchooling::getJobSeekerSchooling($userId);
-        $otherSchooling = JobSeekerSchooling::getJobseekerOtherSchooling($userId);
-        $schooling = array_merge($schooling, $otherSchooling);
+        //$userWorkExperience = WorkExperience::getWorkExperienceList($userId);
+        //$schooling = JobSeekerSchooling::getJobSeekerSchooling($userId);
+        //$otherSchooling = JobSeekerSchooling::getJobseekerOtherSchooling($userId);
+        //$schooling = array_merge($schooling, $otherSchooling);
         $skills = JobSeekerSkills::getJobSeekerSkills($userId);
         $otherSkills = JobSeekerSkills::getJobseekerOtherSkills($userId);
         $skills = array_merge($skills, $otherSkills);
-        $affiliations = JobSeekerAffiliation::getJobSeekerAffiliation($userId);
-        $jobSeekerCertifications = JobseekerCertificates::getJobSeekerCertificates($userId);
+        //$affiliations = JobSeekerAffiliation::getJobSeekerAffiliation($userId);
+        //$jobSeekerCertifications = JobseekerCertificates::getJobSeekerCertificates($userId);
         $chkProfileStatus = 0;
         $completionStatus = 0;
-        $workExperienceStatus = ($userWorkExperience['total'] > 0) ? 1 : 0;
-        $schoolingStatus = (count($schooling) > 0) ? 1 : 0;
+        //$workExperienceStatus = ($userWorkExperience['total'] > 0) ? 1 : 0;
+        //$schoolingStatus = (count($schooling) > 0) ? 1 : 0;
         $skillStatus = (count($skills) > 0) ? 1 : 0;
-        $affiliationStatus = (count($affiliations) > 0) ? 1 : 0;
-        $certificationStatus = (count($jobSeekerCertifications) > 0) ? 1 : 0;
-        if($userProfileModel['job_titile_id'] > 0 && 
-                $userProfileModel['profile_pic'] != "" && 
-                $userProfileModel['license_number'] != "" && 
-                $userProfileModel['state'] != "" && 
-                $userProfileModel['about_me'] != "" 
-                ){
+        //$affiliationStatus = (count($affiliations) > 0) ? 1 : 0;
+        //$certificationStatus = (count($jobSeekerCertifications) > 0) ? 1 : 0;
+        $checkLicenseAndStateVerified = 1;
+        if(!empty($userProfileModel['job_titile_id'])) {
             $chkProfileStatus = 1;
+            $jobTitleModel = JobTitles::getTitle($userProfileModel['job_titile_id']);
+            if($jobTitleModel && $jobTitleModel['is_license_required'] == 1 && (empty($userProfileModel['license_number']) || empty($userProfileModel['state']))) {
+                $checkLicenseAndStateVerified = 0;
+            }
+        } else {
+            $checkLicenseAndStateVerified = 0;
         }
         
-        if($chkProfileStatus == 1 && $workExperienceStatus == 1 && $schoolingStatus == 1 && $skillStatus == 1 && $affiliationStatus == 1 && $certificationStatus == 1){
+        $checkAvailabilitySet = UserProfile::checkIfAvailabilitySet($userId);
+        
+//        if($chkProfileStatus == 1 && $checkLicenseAndStateVerified == 1 && $workExperienceStatus == 1 && $schoolingStatus == 1 && $skillStatus == 1 && $affiliationStatus == 1 && $certificationStatus == 1){
+//            $completionStatus = 1;
+//        }
+        
+        if($chkProfileStatus == 1 && $checkLicenseAndStateVerified == 1 && $skillStatus == 1 && $checkAvailabilitySet == 1){
             $completionStatus = 1;
         }
         $userProfile = UserProfile::where('user_id', $userId)->first();
