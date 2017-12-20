@@ -29,6 +29,6 @@ class JobTitles extends Model
         $obj = self::select('jobtitle_name','is_license_required');
         $obj->where('id',$titleId);
         $obj->where('is_active',JobTitles::ACTIVE);
-        return $obj->get()->toArray();
+        return $obj->first()->toArray();
     }
 }
