@@ -92,5 +92,36 @@ class UserProfile extends Model {
         }
         return $list;
     }
+    
+    public static function checkIfAvailabilitySet($userId) {
+        $checkAvailabilityStatus = 0;
+        $userAvailability = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+                        ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->select('users.id')
+                        ->where('user_groups.group_id', 3)
+                        ->where('users.id', $userId)
+                        ->where(function($query) {
+                            $query->orWhere('is_fulltime',1)
+                                ->orWhere('is_parttime_monday',1)
+                                ->orWhere('is_parttime_tuesday',1)
+                                ->orWhere('is_parttime_wednesday',1)
+                                ->orWhere('is_parttime_thursday',1)
+                                ->orWhere('is_parttime_friday',1)
+                                ->orWhere('is_parttime_saturday',1)
+                                ->orWhere('is_parttime_sunday',1);
+                        })
+                        ->get();
+        
+        if($userAvailability) {
+            $checkAvailabilityStatus = 1;
+        }
+        
+        $tempAvailableUsers = JobSeekerTempAvailability::where('user_id',$userId)->get();
+        if($tempAvailableUsers) {
+            $checkAvailabilityStatus = 1;
+        }
+        
+        return $checkAvailabilityStatus = 1;
+    }
 
 }
