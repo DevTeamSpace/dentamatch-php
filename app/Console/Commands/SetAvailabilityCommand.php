@@ -14,7 +14,7 @@ use Mail;
 
 class SetAvailabilityCommand extends Command
 {
-    const NOTIFICATION_INTERVAL = [0,7,14];
+    const NOTIFICATION_INTERVAL = [1,2,3];
     /**
      * The name and signature of the console command.
      *
