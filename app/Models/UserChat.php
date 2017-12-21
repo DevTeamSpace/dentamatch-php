@@ -20,5 +20,9 @@ class UserChat extends Model
         'createdAt' => 'created_at',
         'updatedAt' => 'updated_at',
         ];  
+    
+    public static function getChatCountsForRecruiter($recruiterId) {
+        return static::where('to_id', $recruiterId)->where('read_status',0)->get()->count();
+    }
    
 }

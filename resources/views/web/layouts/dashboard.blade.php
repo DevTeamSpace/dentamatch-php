@@ -37,7 +37,10 @@
 </head>
 
 <body>
-    <?php $notificationList = \App\Helpers\NotificationHelper::topNotificationList(Auth::user()->id); ?>
+    <?php 
+        $notificationList = \App\Helpers\NotificationHelper::topNotificationList(Auth::user()->id);
+        $chatCount = \App\Helpers\UserChatHelper::recruiterChatCount(Auth::user()->id); 
+    ?>
     <nav class="customNav navbar navbar-default navbar-fixed-top">
 
         <div class="container pos-rel">
@@ -55,7 +58,15 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <ul class=" topIconBox navbar-right customnavRight">
                 <li>
+                    @if(!empty($chatCount))
                     <a href="{{ url('chat') }}"><span class="icon icon-message"></span></a>
+                        @if(!empty($chatCount))
+                        <div class="notificationCircle "> {{ $chatCount }}</div>
+                        @endif
+                    </a>
+                    @else
+                        <a href="{{ url('chat') }}"><span class="icon icon-message"></span></a>
+                    @endif
                 </li>
                 <li class="notificaionbell dropdown">
                     @if(!empty($notificationList['total']))
