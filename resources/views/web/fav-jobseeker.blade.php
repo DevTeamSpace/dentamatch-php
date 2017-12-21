@@ -29,7 +29,7 @@
     @endforeach
     @else
     <div class="jobCatbox mr-b-20">
-        <div class="template-job-information ">
+        <div class="template-job-information pd-l-15 ">
             <div class="template-job-information-left">
                 <h4>No favourites to show</h4>
             </div>
