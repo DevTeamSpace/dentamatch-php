@@ -134,6 +134,15 @@ class UserProfileApiController extends Controller {
             if($userId > 0){
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
                 if($isLicenseRequired && ($userProfileModel->license_number != $request->license || $userProfileModel->state != $request->state)) {
+                    if(!empty($request->license) && !empty($request->state)) {
+                        $userLicenData = User::getUser($userId);
+                        $userName = $userLicenData['first_name'];
+                        $userEmail = $userLicenData['email'];
+                        $adminEmail = env('ADMIN_EMAIL');
+                        Mail::queue('email.admin-verify-jobseeker', ['name' => $userName, 'email' => $userEmail], function($message ) use($adminEmail) {
+                                $message->to($adminEmail, "Dentamatch Admin")->subject('Verify Jobseeker');
+                            });
+                    }
                     $isJobSeekerVerified = 0;
                 }
                 $userProfileModel->about_me = $request->aboutMe;
@@ -324,6 +333,15 @@ class UserProfileApiController extends Controller {
             if($userId>0) {
                 $userProfile = UserProfile::where('user_id', $userId)->first();
                 if($isLicenseRequired && ((isset($reqData['licenseNumber']) && $userProfile->license_number != $request->license) || (isset($reqData['state']) && $userProfile->state != $request->state))) {
+                    if(!empty($request->license) && !empty($request->state)) {
+                        $userLicenData = User::getUser($userId);
+                        $userName = $userLicenData['first_name'];
+                        $userEmail = $userLicenData['email'];
+                        $adminEmail = env('ADMIN_EMAIL');
+                        Mail::queue('email.admin-verify-jobseeker', ['name' => $userName, 'email' => $userEmail], function($message ) use($adminEmail) {
+                                $message->to($adminEmail, "Dentamatch Admin")->subject('Verify Jobseeker');
+                            });
+                    }
                     $isJobSeekerVerified = 0;
                 }
                 $userProfile->first_name = $reqData['firstName'];
