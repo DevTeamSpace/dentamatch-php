@@ -109,7 +109,7 @@
     <div class="col-sm-4 ">
        
         <div class="search-seeker">
-            <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-30 pull-right">Search Seekers</a>
+            <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pd-l-25 pd-r-30 pull-right">Search Seekers</a>
         </div>
     </div>
 

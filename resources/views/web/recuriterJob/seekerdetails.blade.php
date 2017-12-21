@@ -92,7 +92,7 @@ $seekerDatesCount = count($datesTemp);
                 <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::HIRED }}" class="btn btn-primary pd-l-20 pd-r-20">Hire</button>
                 @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::HIRED)
                 <h6>HIRED</h6>
-                <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 " data-toggle="modal" 
+                <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-t-30 " data-toggle="modal" 
                 data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
                 @elseif (!empty($datesTemp) && date("Y-m-d")>$datesTemp[$seekerDatesCount-1] && $jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
                 <h6>TEMP JOB EXPIRED</h6>

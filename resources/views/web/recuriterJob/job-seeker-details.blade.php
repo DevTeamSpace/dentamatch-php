@@ -17,7 +17,7 @@
                     <div >
                         <a href="{{ url('job/seekerdetails/'.$seeker['seeker_id'].'/'.$job['id']) }}" class="algn-rel media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
                         @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
-                        <span class="mr-l-5 dropdown date_drop">
+                        <span class="mr-l-15 dropdown date_drop">
                             @if(!empty($seeker['avg_rating']))
                             <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{ number_format($seeker['avg_rating'], 1, '.', '') }}</span>
                             @else

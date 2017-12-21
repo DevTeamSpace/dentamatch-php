@@ -9,11 +9,18 @@ and open the template in the editor.
     Created on : Jan 12, 2017, 9:18:13 AM
     Author     : sagar
     */
+    .media-body, .media-left, .media-right{
+ vertical-align:middle !important;
+    }
 
+    .skill_List li{color:#0d5ab2;}
+
+    .media-object{margin-top:12px !important;}
 .template-job-information {
     display: table;
     width: 100%;
 }
+
 
 .template-job-information address {
     margin-bottom: 0;
