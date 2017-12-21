@@ -24,5 +24,6 @@ return [
         'SixMonths' => 'six-months',
         'OneYear' => 'one-year',
         'Resubscribe' => 'resubscribe',
-        'AutoAvailabilityFlag' => 1
+        'AutoAvailabilityFlag' => 1,
+        'defaultProfileImage' => 'defaultProfilePic.png'
 ];

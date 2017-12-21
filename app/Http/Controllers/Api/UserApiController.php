@@ -82,6 +82,7 @@ class UserApiController extends Controller {
             $userProfileModel->is_parttime_friday = config('constants.AutoAvailabilityFlag');
             $userProfileModel->is_parttime_saturday = config('constants.AutoAvailabilityFlag');
             $userProfileModel->is_parttime_sunday = config('constants.AutoAvailabilityFlag');
+            $userProfileModel->profile_pic = config('constants.defaultProfileImage');
             
             $userProfileModel->save();
             
