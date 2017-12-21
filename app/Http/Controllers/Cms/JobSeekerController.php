@@ -194,6 +194,7 @@ class JobSeekerController extends Controller
         try{
         $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->join('job_titles','job_titles.id' , '=','jobseeker_profiles.job_titile_id')
                         ->select(
                                 'users.id',
                                 'jobseeker_profiles.first_name',
@@ -203,6 +204,7 @@ class JobSeekerController extends Controller
                                 'jobseeker_profiles.is_job_seeker_verified'
                                 )
                         ->where('user_groups.group_id', 3)
+                        ->where('job_titles.is_license_required', 1)
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
                 ->removeColumn('id')
