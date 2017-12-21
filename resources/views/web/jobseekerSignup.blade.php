@@ -29,15 +29,15 @@
 
                 <div class="form-group">
                     <label>First Name</label>
-                    <input placeholder="First Name" value="{{ old('firstName') }}" name="firstName" type="text" class="form-control" data-parsley-required data-parsley-required-message="First name is required">
+                    <input placeholder="First Name" value="{{ app('request')->input('firstName') }}" name="firstName" type="text" class="form-control" data-parsley-required data-parsley-required-message="First name is required">
                 </div>
                 <div class="form-group">
                     <label>Last Name</label>
-                    <input placeholder="Last Name" value="{{ old('lastName') }}" name="lastName" type="text" class="form-control" data-parsley-required data-parsley-required-message="Last name is required">
+                    <input placeholder="Last Name" value="{{ app('request')->input('lastName') }}" name="lastName" type="text" class="form-control" data-parsley-required data-parsley-required-message="Last name is required">
                 </div>
                 <div class="form-group">
                     <label>Email</label>
-                    <input placeholder="Email" value="{{ old('email') }}" name="email" type="email" class="form-control" data-parsley-required data-parsley-required-message="Email is required">
+                    <input placeholder="Email" value="{{ app('request')->input('email') }}" name="email" type="email" class="form-control" data-parsley-required data-parsley-required-message="Email is required">
                 </div>
                 
                 <div class="form-group">
@@ -49,19 +49,23 @@
                             @if($key==0)
                                 <option data-divider="true"></option>
                             @endif
-                            <option value="{{ $jobTitle['id'] }}">{{ $jobTitle['jobtitle_name'] }}</option>
-                            <option data-divider="true"></option>
+                            @if($jobTitle['id'] == app('request')->input('jobTitleId'))
+                                <option selected='true' value="{{ $jobTitle['id'] }}">{{ $jobTitle['jobtitle_name'] }}</option>
+                            @else
+                                <option value="{{ $jobTitle['id'] }}">{{ $jobTitle['jobtitle_name'] }}</option>
+                            @endif
+                                <option data-divider="true"></option>
                             @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label>License</label>
-                    <input placeholder="License No" value="{{ old('license') }}" name="license" type="text" class="form-control">
+                    <input placeholder="License No" value="{{ app('request')->input('license') }}" name="license" type="text" class="form-control">
                 </div>
                 <div class="form-group">
                     <label>State</label>
-                    <input placeholder="State" value="{{ old('lastName') }}" name="state" type="text" class="form-control">
+                    <input placeholder="State" value="{{ app('request')->input('state') }}" name="state" type="text" class="form-control">
                 </div>
                 <div class="form-group">
                     <label>Preferred Job Locations</label>
@@ -72,7 +76,11 @@
                             @if($key==0)
                                 <option data-divider="true"></option>
                             @endif
+                            @if($prefLocation['id'] == app('request')->input('preferredJobLocationId'))
+                                <option selected='true' value="{{ $prefLocation['id'] }}">{{ $prefLocation['preferred_location_name'] }}</option>
+                            @else
                                 <option value="{{ $prefLocation['id'] }}">{{ $prefLocation['preferred_location_name'] }}</option>
+                            @endif
                                 <option data-divider="true"></option>
                             @endforeach
                         </select>
@@ -80,7 +88,7 @@
                 </div>
                 <div class="form-group">
                     <label>About Me</label>
-                    <textarea data-parsley-required data-parsley-required-message="About me is required" class="form-control" name="aboutMe">{{ old('aboutMe') }}</textarea>
+                    <textarea data-parsley-required data-parsley-required-message="About me is required" class="form-control" name="aboutMe">{{ app('request')->input('aboutMe') }}</textarea>
                 </div>
 
             </div>
