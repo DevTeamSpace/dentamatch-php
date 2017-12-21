@@ -332,8 +332,8 @@ class UserProfileApiController extends Controller {
             $userId = $request->userServerData->user_id;
             if($userId>0) {
                 $userProfile = UserProfile::where('user_id', $userId)->first();
-                if($isLicenseRequired && ((isset($reqData['licenseNumber']) && $userProfile->license_number != $request->license) || (isset($reqData['state']) && $userProfile->state != $request->state))) {
-                    if(!empty($request->license) && !empty($request->state)) {
+                if($isLicenseRequired && ((isset($reqData['licenseNumber']) && $userProfile->license_number != $reqData['licenseNumber']) || (isset($reqData['state']) && $userProfile->state != $reqData['state']))) {
+                    if(!empty($reqData['licenseNumber']) && !empty($reqData['state'])) {
                         $userLicenData = User::getUser($userId);
                         $userName = $userLicenData['first_name'];
                         $userEmail = $userLicenData['email'];
