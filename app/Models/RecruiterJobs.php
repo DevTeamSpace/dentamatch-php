@@ -234,8 +234,7 @@ class RecruiterJobs extends Model
                         ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
                         ->join('recruiter_office_types','recruiter_office_types.recruiter_office_id', '=' , 'recruiter_offices.id')
                         ->leftjoin('office_types','recruiter_office_types.office_type_id', '=' , 'office_types.id')
-                        ->where('recruiter_jobs.id', $jobId)
-                        ->groupBy('recruiter_jobs.id');
+                        ->where('recruiter_jobs.id', $jobId);
         
         $searchQueryObj->join('template_skills',function($query) use ($jobseekerSkills){
                 $query->on('template_skills.job_template_id','=','recruiter_jobs.job_template_id')
