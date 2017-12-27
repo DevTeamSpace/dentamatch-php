@@ -233,6 +233,13 @@ class SignupController extends Controller {
                         $message->to($email, $fname)->subject('Activation Email');
                     });
                     
+                if(!empty($reqData['license']) && !empty($reqData['state'])) {
+                    $adminEmail = env('ADMIN_EMAIL');
+                    Mail::queue('email.admin-verify-jobseeker', ['name' => $name, 'email' => $email], function($message ) use($adminEmail) {
+                            $message->to($adminEmail, "Dentamatch Admin")->subject('Verify Jobseeker');
+                        });
+                }
+                    
                 Session::flash('message', trans("messages.user_registration_successful")); 
             }
             DB::commit();
