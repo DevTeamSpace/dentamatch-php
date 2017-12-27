@@ -159,6 +159,7 @@ class SignupController extends Controller {
                 'aboutMe' => 'required',
             ]);
             $mappedSkillsArray = [];
+            $validateKeys = [];
             $jobTitleModel = JobTitles::where('id',$request->jobTitleId)->first();
             if($jobTitleModel) {
                 $mappedSkills = $jobTitleModel->mapped_skills_id;
@@ -168,7 +169,11 @@ class SignupController extends Controller {
                     $validateKeys['state'] = 'required';
                 }
             }
-            $this->validate($request, $validateKeys);
+            
+            if(!empty($validateKeys)) {
+                $this->validate($request, $validateKeys);
+            }
+            
             $redirect = 'login';
             $reqData = $request->all();
             DB::beginTransaction();
