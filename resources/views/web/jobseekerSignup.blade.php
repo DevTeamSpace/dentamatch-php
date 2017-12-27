@@ -24,7 +24,7 @@
 <form data-parsley-validate method="post" action="{{ url('jobseeker/storeSignup') }}">
     <div class="customContainer center-block containerBottom">
         <div class="profieBox">
-            <h3>Jobseeker</h3>
+            <h3>Jobseeker Signup</h3>
             <div class="commonBox cboxbottom">
 
                 <div class="form-group">
