@@ -64,7 +64,7 @@
                     <input placeholder="License No" value="{{ app('request')->input('license') }}" name="license" type="text" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label>State</label>
+                    <label>License State</label>
                     <input placeholder="State" value="{{ app('request')->input('state') }}" name="state" type="text" class="form-control">
                 </div>
                 <div class="form-group">
