@@ -159,6 +159,7 @@ class SignupController extends Controller {
                 'aboutMe' => 'required',
             ]);
             $mappedSkillsArray = [];
+            $validateKeys = [];
             $jobTitleModel = JobTitles::where('id',$request->jobTitleId)->first();
             if($jobTitleModel) {
                 $mappedSkills = $jobTitleModel->mapped_skills_id;
@@ -168,7 +169,11 @@ class SignupController extends Controller {
                     $validateKeys['state'] = 'required';
                 }
             }
-            $this->validate($request, $validateKeys);
+            
+            if(!empty($validateKeys)) {
+                $this->validate($request, $validateKeys);
+            }
+            
             $redirect = 'login';
             $reqData = $request->all();
             DB::beginTransaction();
@@ -232,6 +237,13 @@ class SignupController extends Controller {
                 Mail::queue('email.user-activation', ['name' => $name, 'url' => $url, 'email' => $reqData['email']], function($message ) use($email,$fname) {
                         $message->to($email, $fname)->subject('Activation Email');
                     });
+                    
+                if(!empty($reqData['license']) && !empty($reqData['state'])) {
+                    $adminEmail = env('ADMIN_EMAIL');
+                    Mail::queue('email.admin-verify-jobseeker', ['name' => $name, 'email' => $email], function($message ) use($adminEmail) {
+                            $message->to($adminEmail, "Dentamatch Admin")->subject('Verify Jobseeker');
+                        });
+                }
                     
                 Session::flash('message', trans("messages.user_registration_successful")); 
             }
