@@ -98,6 +98,8 @@ class UserProfile extends Model {
         $checkAvailabilityStatus = 0;
         $userAvailability = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->select('is_fulltime', 'is_parttime_monday','is_parttime_tuesday', 'is_parttime_wednesday',
+                                'is_parttime_thursday','is_parttime_friday', 'is_parttime_saturday', 'is_parttime_sunday')
                         ->where('user_groups.group_id', 3)
                         ->where('users.id', $userId)
                         ->first();
@@ -105,7 +107,7 @@ class UserProfile extends Model {
         if($userAvailability) {
             $statusAvailability = $userAvailability->is_fulltime || $userAvailability->is_parttime_monday || $userAvailability->is_parttime_tuesday || $userAvailability->is_parttime_wednesday
                                 || $userAvailability->is_parttime_thursday || $userAvailability->is_parttime_friday || $userAvailability->is_parttime_saturday || $userAvailability->is_parttime_sunday;
-            $checkAvailabilityStatus = (!empty($statusAvailability) ? 1 : 0);
+            $checkAvailabilityStatus = (int) (!empty($statusAvailability) ? 1 : 0);
             Log::info('StatusavailabilityStatus '.$statusAvailability);
             Log::info('availabilityStatus2 '.$checkAvailabilityStatus);
             
