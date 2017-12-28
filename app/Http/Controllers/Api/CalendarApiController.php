@@ -76,6 +76,7 @@ class CalendarApiController extends Controller {
                                 JobSeekerTempAvailability::insert($tempDateArray);
                             }
                         }
+                        apiResponse::chkProfileComplete($userId);
                         $response = apiResponse::customJsonResponse(1, 200, trans("messages.availability_add_success"));
                 }
             }else{
