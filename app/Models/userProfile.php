@@ -110,7 +110,7 @@ class UserProfile extends Model {
                                 ->orWhere('is_parttime_saturday',1)
                                 ->orWhere('is_parttime_sunday',1);
                         })
-                        ->get();
+                        ->first();
         
         if($userAvailability) {
             $checkAvailabilityStatus = 1;
