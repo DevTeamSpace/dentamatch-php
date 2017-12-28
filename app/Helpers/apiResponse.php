@@ -128,6 +128,7 @@ class apiResponse {
         $userProfile = UserProfile::where('user_id', $userId)->first();
         $userProfile->is_completed = $completionStatus;
         $userProfile->save();
+        $userProfile->fresh();
         
     }
 }
