@@ -8,6 +8,7 @@ use App\Models\JobSeekerSkills;
 use App\Models\JobSeekerAffiliation;
 use App\Models\JobseekerCertificates;
 use App\Models\JobTitles;
+use Log;
 
 class apiResponse {
 
@@ -121,10 +122,15 @@ class apiResponse {
 //        if($chkProfileStatus == 1 && $checkLicenseAndStateVerified == 1 && $workExperienceStatus == 1 && $schoolingStatus == 1 && $skillStatus == 1 && $affiliationStatus == 1 && $certificationStatus == 1){
 //            $completionStatus = 1;
 //        }
-        
+        Log::info("licnese status ".$checkLicenseAndStateVerified);
+        Log::info("chkProfileStatus".$chkProfileStatus);
+        Log::info("skills status ".$skillStatus);
+        Log::info("avail status ".$checkAvailabilitySet);
         if($chkProfileStatus == 1 && $checkLicenseAndStateVerified == 1 && $skillStatus == 1 && $checkAvailabilitySet == 1){
             $completionStatus = 1;
         }
+        Log::info("profile status ".$completionStatus);
+        
         $userProfile = UserProfile::where('user_id', $userId)->first();
         $userProfile->is_completed = $completionStatus;
         $userProfile->save();

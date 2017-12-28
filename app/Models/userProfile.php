@@ -105,7 +105,7 @@ class UserProfile extends Model {
         if($userAvailability) {
             $statusAvailability = $userAvailability->is_fulltime || $userAvailability->is_parttime_monday || $userAvailability->is_parttime_tuesday || $userAvailability->is_parttime_wednesday
                                 || $userAvailability->is_parttime_thursday || $userAvailability->is_parttime_friday || $userAvailability->is_parttime_saturday || $userAvailability->is_parttime_sunday;
-            $checkAvailabilityStatus = ($statusAvailability == 1 ? 1 : 0);
+            $checkAvailabilityStatus = (!empty($statusAvailability) ? 1 : 0);
         }
         
         $tempAvailableUsers = JobSeekerTempAvailability::where('user_id',$userId)->get()->count();
