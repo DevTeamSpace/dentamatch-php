@@ -103,24 +103,18 @@ class UserProfile extends Model {
                         ->where('user_groups.group_id', 3)
                         ->where('users.id', $userId)
                         ->first();
-        Log::info('availabilityStatus1 '.$checkAvailabilityStatus);
         if($userAvailability) {
             $statusAvailability = $userAvailability->is_fulltime || $userAvailability->is_parttime_monday || $userAvailability->is_parttime_tuesday || $userAvailability->is_parttime_wednesday
                                 || $userAvailability->is_parttime_thursday || $userAvailability->is_parttime_friday || $userAvailability->is_parttime_saturday || $userAvailability->is_parttime_sunday;
             $checkAvailabilityStatus = (int) (!empty($statusAvailability) ? 1 : 0);
-            Log::info('StatusavailabilityStatus '.$statusAvailability);
-            Log::info('availabilityStatus2 '.$checkAvailabilityStatus);
             
         }
         
         $tempAvailableUsers = JobSeekerTempAvailability::where('user_id',$userId)->get()->count();
-         Log::info('tempAvail '.$tempAvailableUsers);
         if($tempAvailableUsers > 0) {
             
             $checkAvailabilityStatus = 1;
-            Log::info('availabilityStatus3 '.$checkAvailabilityStatus);
         }
-        Log::info('availabilityStatusFinal '.$checkAvailabilityStatus);
         return $checkAvailabilityStatus;
     }
 
