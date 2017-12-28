@@ -121,7 +121,7 @@ class UserProfile extends Model {
             $checkAvailabilityStatus = 1;
         }
         
-        return $checkAvailabilityStatus = 1;
+        return $checkAvailabilityStatus;
     }
 
 }
