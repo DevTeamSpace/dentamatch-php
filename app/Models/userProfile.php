@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use App\Helpers\apiResponse;
+use Log;
 
 class UserProfile extends Model {
 
@@ -97,22 +98,26 @@ class UserProfile extends Model {
         $checkAvailabilityStatus = 0;
         $userAvailability = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
-                        ->select('users.id')
                         ->where('user_groups.group_id', 3)
                         ->where('users.id', $userId)
                         ->first();
-        
+        Log::info('availabilityStatus1 '.$checkAvailabilityStatus);
         if($userAvailability) {
             $statusAvailability = $userAvailability->is_fulltime || $userAvailability->is_parttime_monday || $userAvailability->is_parttime_tuesday || $userAvailability->is_parttime_wednesday
                                 || $userAvailability->is_parttime_thursday || $userAvailability->is_parttime_friday || $userAvailability->is_parttime_saturday || $userAvailability->is_parttime_sunday;
             $checkAvailabilityStatus = (!empty($statusAvailability) ? 1 : 0);
+            Log::info('StatusavailabilityStatus '.$statusAvailability);
+            Log::info('availabilityStatus2 '.$checkAvailabilityStatus);
+            
         }
         
         $tempAvailableUsers = JobSeekerTempAvailability::where('user_id',$userId)->get()->count();
         if($tempAvailableUsers > 0) {
+            
             $checkAvailabilityStatus = 1;
+            Log::info('availabilityStatus3 '.$checkAvailabilityStatus);
         }
-        
+        Log::info('availabilityStatusFinal '.$checkAvailabilityStatus);
         return $checkAvailabilityStatus;
     }
 
