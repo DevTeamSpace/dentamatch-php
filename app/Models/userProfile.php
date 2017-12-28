@@ -112,6 +112,7 @@ class UserProfile extends Model {
         }
         
         $tempAvailableUsers = JobSeekerTempAvailability::where('user_id',$userId)->get()->count();
+         Log::info('tempAvail '.$tempAvailableUsers);
         if($tempAvailableUsers > 0) {
             
             $checkAvailabilityStatus = 1;
