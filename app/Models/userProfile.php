@@ -100,20 +100,12 @@ class UserProfile extends Model {
                         ->select('users.id')
                         ->where('user_groups.group_id', 3)
                         ->where('users.id', $userId)
-                        ->where(function($query) {
-                            $query->orWhere('is_fulltime',1)
-                                ->orWhere('is_parttime_monday',1)
-                                ->orWhere('is_parttime_tuesday',1)
-                                ->orWhere('is_parttime_wednesday',1)
-                                ->orWhere('is_parttime_thursday',1)
-                                ->orWhere('is_parttime_friday',1)
-                                ->orWhere('is_parttime_saturday',1)
-                                ->orWhere('is_parttime_sunday',1);
-                        })
                         ->first();
         
         if($userAvailability) {
-            $checkAvailabilityStatus = 1;
+            $statusAvailability = $userAvailability->is_fulltime || $userAvailability->is_parttime_monday || $userAvailability->is_parttime_tuesday || $userAvailability->is_parttime_wednesday
+                                || $userAvailability->is_parttime_thursday || $userAvailability->is_parttime_friday || $userAvailability->is_parttime_saturday || $userAvailability->is_parttime_sunday;
+            $checkAvailabilityStatus = ($statusAvailability == 1 ? 1 : 0);
         }
         
         $tempAvailableUsers = JobSeekerTempAvailability::where('user_id',$userId)->get();
