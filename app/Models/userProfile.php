@@ -108,8 +108,8 @@ class UserProfile extends Model {
             $checkAvailabilityStatus = ($statusAvailability == 1 ? 1 : 0);
         }
         
-        $tempAvailableUsers = JobSeekerTempAvailability::where('user_id',$userId)->get();
-        if($tempAvailableUsers) {
+        $tempAvailableUsers = JobSeekerTempAvailability::where('user_id',$userId)->get()->count();
+        if($tempAvailableUsers > 0) {
             $checkAvailabilityStatus = 1;
         }
         
