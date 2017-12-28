@@ -216,8 +216,8 @@ class SignupController extends Controller {
                 $userProfileModel->is_parttime_wednesday = config('constants.AutoAvailabilityFlag');
                 $userProfileModel->is_parttime_thursday = config('constants.AutoAvailabilityFlag');
                 $userProfileModel->is_parttime_friday = config('constants.AutoAvailabilityFlag');
-                $userProfileModel->is_parttime_saturday = config('constants.AutoAvailabilityFlag');
-                $userProfileModel->is_parttime_sunday = config('constants.AutoAvailabilityFlag');
+                $userProfileModel->is_parttime_saturday = config('constants.NonAvailabilityFlag');
+                $userProfileModel->is_parttime_sunday = config('constants.NonAvailabilityFlag');
                 $userProfileModel->signup_source = 2;
 
                 $userProfileModel->save();
