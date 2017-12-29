@@ -24,10 +24,10 @@ class JobSeekerTempAvailability extends Model
     public static function addTempDateAvailability($userId, $currentDate, $endDate) {
         $tempDateArray = [];
         while($currentDate<=$endDate) {
-                $dateString = date("l", $currentDate);
+                $dateString = date("w", $currentDate);
                 $dateString = strtolower($dateString);
                 $insertDate = date( "Y-m-d",$currentDate);
-                if($dateString != "saturday" || $dateString != "sunday") {
+                if($dateString!=6 || $dateString!=0) {
                     Log::info($dateString);
                     Log::info($insertDate);
                     $tempDateArray[] = array('user_id' => $userId, 'temp_job_date' => $insertDate);
