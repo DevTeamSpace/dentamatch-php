@@ -28,6 +28,7 @@ class JobSeekerTempAvailability extends Model
                 $insertDate = date( "Y-m-d",$currentDate);
                 if($dateString != "6" || $dateString!="0") {
                     Log::info($dateString);
+                    Log::info(typeOf($dateString));
                     Log::info($insertDate);
                     $tempDateArray[] = array('user_id' => $userId, 'temp_job_date' => $insertDate);
                 }
