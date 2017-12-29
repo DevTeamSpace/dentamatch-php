@@ -140,7 +140,7 @@ $seekerDatesCount = count($datesTemp);
 
             <div class="searchResultHeading pd-t-20">
                 <h5>LOCATION</h5>
-                <p>{{$seekerDetails['preferred_job_location']}}</p>
+                <p>{{$seekerDetails['preferred_location_name']}}</p>
             </div>
 
             <div class="searchResultHeading pd-t-20">
