@@ -15,7 +15,8 @@
             <div class="media-body row">
                 <div class="col-sm-7 pd-t-10 ">
                     <div >
-                        <a href="{{ url('job/seekerdetails/'.$seeker['seeker_id'].'/'.$job['id']) }}" class="algn-rel media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a> 
+                        <a href="{{ url('job/seekerdetails/'.$seeker['seeker_id'].'/'.$job['id']) }}" class="algn-rel media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a>
+                         <strong>({{ number_format($seeker['percentaSkillsMatch'],2) }}%)</strong>
                         @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
                         <span class="mr-l-15 dropdown date_drop">
                             @if(!empty($seeker['avg_rating']))
