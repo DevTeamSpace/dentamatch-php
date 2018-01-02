@@ -100,6 +100,7 @@
                 Route::get('notification-lists', 'web\NotificationController@getNotificationList');
                 Route::get('{id}/delete-notification', 'web\NotificationController@deleteNotification');
                 Route::get('checknotratedjobs', 'web\RatingController@getRating');
+                Route::get('users/dashboard', 'web\RecruiterJobController@dashboard');
             });
             Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails');
             Route::get('/get-location/{zip}', 'web\UserProfileController@checkValidLocation');

@@ -292,7 +292,12 @@ class RecruiterJobs extends Model
     }
     
     
-    public static function getJobs(){
+    public static function getJobs($limit=""){
+        $paginationLimit = RecruiterJobs::LIMIT;
+        if(!empty($limit)) {
+            $paginationLimit = $limit;
+        }
+        
         $tempPrevious = RecruiterJobs::chkTempJObRatingPending();
         $excludeJob = [];
         if($tempPrevious){
@@ -342,7 +347,7 @@ class RecruiterJobs extends Model
             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"))
             ->orderBy('recruiter_jobs.id','desc');
         
-        return $jobObj->paginate(RecruiterJobs::LIMIT);
+        return $jobObj->paginate($paginationLimit);
         
     }
     
