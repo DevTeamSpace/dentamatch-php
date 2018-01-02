@@ -489,6 +489,40 @@ class RecruiterJobs extends Model
         return $jobObj->get();
     }
     
+    public static function getDashboardCalendar($dashboard = false){
+        $jobObj = RecruiterJobs::where('recruiter_jobs.job_type',RecruiterJobs::TEMPORARY)
+            ->join('job_templates',function($query){
+                $query->on('job_templates.id','=','recruiter_jobs.job_template_id')
+                ->where('job_templates.user_id',Auth::user()->id);
+            })
+            ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id');
+        
+            $jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
+           
+            ->leftJoin('job_lists',function($query){
+                $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
+                ->whereIn('job_lists.applied_status',[RecruiterJobs::HIRED]);
+            });
+            
+        if(!empty($dashboard)) {
+            $endDate = date("Y-m-d");
+            $startDate = date("Y-m-d", strtotime($endDate." -7 days"));
+            $jobObj->whereBetween('temp_job_dates.job_date',[$startDate,$endDate]);
+        }
+        $jobObj->groupBy('recruiter_jobs.id','temp_job_dates.job_date');
+        $jobObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
+            'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday','recruiter_jobs.is_thursday',
+            'recruiter_jobs.is_friday','recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
+            'recruiter_jobs.no_of_jobs','recruiter_jobs.created_at',
+            'job_templates.template_name','job_templates.template_desc','job_templates.job_title_id',
+            'job_titles.jobtitle_name',
+            DB::raw("group_concat(job_lists.applied_status) AS applied_status"),
+            DB::raw("group_concat(distinct(temp_job_dates.job_date)) AS temp_job_dates"),
+            DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
+    
+        return $jobObj->orderBy('temp_job_dates.job_date','desc')->get();
+    }
+    
     public static function getTempJobsReports(){
         $jobs = RecruiterJobs::where(['recruiter_jobs.job_type' => RecruiterJobs::TEMPORARY, 'recruiter_offices.user_id' => Auth::user()->id])
                 ->join('recruiter_offices', 'recruiter_offices.id', '=', 'recruiter_jobs.recruiter_office_id')
