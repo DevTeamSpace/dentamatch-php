@@ -12,7 +12,8 @@
                         <h3 style="margin:0 0 15px 0">Hello Admin,</h3>
                         <div style="font-size:15px;">
                             <p style="line-height: 24px;">
-                                Jobseeker <strong>{{ $name }} ( {{ $email }} )</strong> has updated the license and state for his profile<br/><br/>
+                                Jobseeker <strong>{{ $name }} ( {{ $email }} )</strong> has updated the profile.<br/><br/>
+                                The license and state for this user is pending for approval.<br/><br/>
                                 Kindly login to the Dentamatch Admin to Approve / Reject jobseeker.<br/>
                             </p>
                             <p style="margin:20px 0 0 0; padding: 0;">Sincerely, </p>
