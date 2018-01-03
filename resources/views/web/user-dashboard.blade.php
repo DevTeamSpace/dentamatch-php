@@ -2,15 +2,16 @@
 @section('content')
 <div class="container">
     <div class="dashboarFinalBox mr-t-25">
-
-        <div class="alert alert-info customInfo">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <input type="hidden" class="recId" name="id" value="{{$notificationAdmins['id']}}">
-            <div class="infoContent">
-                <h3>Announcements</h3>
-                <?php echo $notificationAdmin->message ?>
+        @if(!empty($notificationAdminModel))
+            <div class="alert alert-info customInfo">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <input type="hidden" class="recId" name="id" value="{{ $notificationAdminModel->id }}">
+                <div class="infoContent">
+                    <h3>Announcements</h3>
+                    <?php echo $notificationAdmin->message ?>
+                </div>
             </div>
-        </div>
+        @endif
 
         <div class="dashboarFinalInnerBox">
             <div class="row">
