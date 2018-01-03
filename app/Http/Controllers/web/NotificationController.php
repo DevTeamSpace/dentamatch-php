@@ -5,6 +5,7 @@ namespace App\Http\Controllers\web;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Notification;
+use DB;
 
 class NotificationController extends Controller {
     
@@ -26,5 +27,10 @@ class NotificationController extends Controller {
     public function deleteNotification($id){
         Notification::findOrFail($id)->delete();
         return redirect('notification-lists');
+    }
+    
+    public function seenNotification($id){
+       Notification::where('id',$id)->update(['seen' => 1]);
+       return View('web.user-dashboard');
     }
 }

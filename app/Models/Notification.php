@@ -66,4 +66,10 @@ class Notification extends Model {
         }
         return $return;
     }
+    
+    public static function NotificationAdmin($userId){
+       $adminNotification = Notification::where('sender_id',1)
+               ->where('receiver_id', $userId)->where('seen',0)->orderBy('id','desc')->first();
+       return $adminNotification;
+    }
 }
