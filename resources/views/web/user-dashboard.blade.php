@@ -22,35 +22,30 @@
                             <a href="/edit-profile" id="dashEdit">Edit profile</a>
                         </div>
                         <div class="welcomeContent">
-                            <h4>Monday<br>August 03, 2017</h4>
+                            <h4>{{ $currentDate }}</h4>
                             <div class="tHire">
-                                <span>02</span>   
+                                <span>{{ count($hiredListByCurrentDate) }}</span>   
                                 <p>Today’s Hire</p>
                             </div>
 
-                            <ul class="dashboarFinalList"> 
-                                <li>
-                                    <div class="dashListImgBlock">
-                                        <div class="dashListImg"></div>
-                                        <div class="dashListImgContent">
-                                            <h6>Elle Nelson</h6>
-                                            <p>Dental Assistant</p>  
-                                        </div>
-                                        <a href="#" class="dashListRightPos">View Job details</a>
-                                    </div>
-                                    <div class="line"></div>
-                                </li>
-                                <li>
-                                    <div class="dashListImgBlock">
-                                        <div class="dashListImg"></div>
-                                        <div class="dashListImgContent">
-                                            <h6>Elle Nelson</h6>
-                                            <p>Dental Assistant</p>  
-                                        </div>
-                                        <a href="#" class="dashListRightPos">View Job details</a>
-                                    </div>
-                                    <div class="line"></div>
-                                </li>
+                            <ul class="dashboarFinalList">
+                                @if(!empty($hiredListByCurrentDate))
+                                    @foreach($hiredListByCurrentDate as $hiredJobseeker)
+                                        <li>
+                                            <div class="dashListImgBlock">
+                                                <div class="dashListImg">
+                                                    <img class="dashListImg" src="{{ url("image/66/66/?src=" .$hiredJobseeker['profile_pic']) }}" alt="...">
+                                                </div>
+                                                <div class="dashListImgContent">
+                                                    <h6>{{ $hiredJobseeker['first_name'] }} {{ $hiredJobseeker['last_name'] }}</h6>
+                                                    <p>{{ $hiredJobseeker['jobtitle_name'] }}</p>  
+                                                </div>
+                                                <a href="/job/details/{{ $hiredJobseeker['id'] }}" class="dashListRightPos">View Job details</a>
+                                            </div>
+                                            <div class="line"></div>
+                                        </li>
+                                    @endforeach
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -58,7 +53,7 @@
                         <div class="welcomeContent lastMsg">
                             <h4>Latest Messages</h4>
                             <div class="tHire unread">
-                                {{ count($latestMessage) }} Unread
+                                    {{ count($latestMessage) }} Unread
                             </div>
 
                             <ul class="dashboarFinalList"> 

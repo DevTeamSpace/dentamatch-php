@@ -39,7 +39,8 @@
                     <label>Email</label>
                     <input placeholder="Email" value="{{ app('request')->input('email') }}" name="email" type="email" class="form-control" data-parsley-required data-parsley-required-message="Email is required">
                 </div>
-                
+                <input type="hidden" name="jobtitles" id="jsonVal" value="{{ json_encode($jobTitleData) }}">
+                        
                 <div class="form-group">
                     <label>Job Title</label>
                     <div class="slt custom-select">
@@ -50,15 +51,16 @@
                                 <option data-divider="true"></option>
                             @endif
                             @if($jobTitle['id'] == app('request')->input('jobTitleId'))
-                                <option selected='true' value="{{ $jobTitle['id'] }}">{{ $jobTitle['jobtitle_name'] }}</option>
+                                <option selected='true'  value="{{ $jobTitle['id'] }}">{{ $jobTitle['jobtitle_name'] }}</option>
                             @else
-                                <option value="{{ $jobTitle['id'] }}">{{ $jobTitle['jobtitle_name'] }}</option>
+                                <option value="{{ $jobTitle['id'] }}" >{{ $jobTitle['jobtitle_name'] }}</option>
                             @endif
                                 <option data-divider="true"></option>
                             @endforeach
                         </select>
                     </div>
                 </div>
+                <div class="liscenceGroup licenseId" >
                 <div class="form-group">
                     <label>License</label>
                     <input placeholder="License No" value="{{ app('request')->input('license') }}" name="license" type="text" class="form-control">
@@ -66,6 +68,7 @@
                 <div class="form-group">
                     <label>License State</label>
                     <input placeholder="State" value="{{ app('request')->input('state') }}" name="state" type="text" class="form-control">
+                </div>
                 </div>
                 <div class="form-group">
                     <label>Preferred Job Locations</label>
@@ -113,6 +116,37 @@
         if (form.parsley().isValid()){
             $('#Save').attr('disabled',true);
         }
+    });
+
+
+    $('#jobTitleId').change(function(){
+    debugger
+    var jobTitleIndex,jsonValue;
+    
+    jobTitleIndex= $(this)[0].value-1;
+    jsonValue=JSON.parse($(jsonVal).val());
+    
+    // $.each(jsonValue, function(i,item){
+    //     console.log();
+        if(jsonValue[jobTitleIndex].is_license_required==1){
+        $('.liscenceGroup').removeClass("licenseId");
+        }
+
+     else{
+
+        $('.liscenceGroup').addClass("licenseId");
+
+        }
+
+            
+        // }
+
+
+
+
+
+
+
     });
 
 </script>
