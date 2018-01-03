@@ -147,7 +147,7 @@ class SignupController extends Controller {
     }
     
     public function postJobseekerSignUp(Request $request) {
-        
+ 
         try {
             $this->validate($request, [
                 'firstName' => 'required',
