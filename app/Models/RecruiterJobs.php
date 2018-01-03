@@ -505,9 +505,9 @@ class RecruiterJobs extends Model
             });
             
         if(!empty($dashboard)) {
-            $endDate = date("Y-m-d");
-            $startDate = date("Y-m-d", strtotime($endDate." -7 days"));
-            $jobObj->whereBetween('temp_job_dates.job_date',[$startDate,$endDate]);
+            $ts = strtotime(date("Y-m-d"));
+            $start = (date('w', $ts) == 1) ? $ts : strtotime('last monday', $ts);
+            $jobObj->whereBetween('temp_job_dates.job_date',[(date('Y-m-d', $start)),(date('Y-m-d', strtotime('next sunday', $start)))]);
         }
         $jobObj->groupBy('recruiter_jobs.id','temp_job_dates.job_date');
         $jobObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
