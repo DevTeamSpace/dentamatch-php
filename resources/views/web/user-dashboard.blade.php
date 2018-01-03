@@ -1,14 +1,14 @@
 @extends('web.layouts.dashboard')
-
 @section('content')
 <div class="container">
     <div class="dashboarFinalBox mr-t-25">
 
         <div class="alert alert-info customInfo">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <input type="hidden" class="recId" name="id" value="{{$notificationAdmins['id']}}">
             <div class="infoContent">
                 <h3>Announcements</h3>
-                It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.
+                <?php echo $notificationAdmin->message ?>
             </div>
         </div>
 
@@ -156,7 +156,20 @@
         </div>
     </div>
 </div>
-
     @endsection
     @section('js')
+<script>
+$('.close').on('click',function (){
+    var Id = $('.recId').val();
+   $.ajax({
+   url :'notification/seen/' + Id,
+   type:'GET',
+   dataType: 'json',
+   success: function() {
+       location.reload();
+   }
+  }); 
+});
+
+</script>    
     @endsection

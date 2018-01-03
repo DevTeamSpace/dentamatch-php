@@ -15,7 +15,7 @@
     $server->outputImage($_GET['src'], ['w' => $w, 'h' => $h, 'fit' => 'crop']);
     });
   Route::get('/', 'web\SignupController@getLogin');
-
+ 
   Route::get('signup', 'web\SignupController@getLogin');
   Route::post('signup', 'web\SignupController@postSignUp');
   Route::post('jobseeker/storeSignup', 'web\SignupController@postJobseekerSignUp');
@@ -26,7 +26,7 @@
   Route::get('verification-code/{code}', 'web\SignupController@getVerificationCode');
   Route::get('user-activation/{code}', 'Api\UserApiController@getActivatejobseeker');
   Route::get('logout', 'web\SignupController@logout');
-
+  Route::get('users/notification/seen/{id}', 'web\NotificationController@seenNotification');
   Route::get('/aboutus', function () {
     return view('about');
 });
