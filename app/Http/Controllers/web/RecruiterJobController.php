@@ -17,7 +17,6 @@ use App\Providers\NotificationServiceProvider;
 use App\Models\Device;
 use App\Models\Notification;
 use App\Models\OfficeType;
-use App\Models\Configs;
 use App\Models\RecruiterOfficeType;
 use DB;
 use Log;
@@ -27,6 +26,8 @@ use App\Models\JobRatings;
 use App\Models\SavedJobs;
 use App\Models\JobseekerTempHired;
 use App\Models\PreferredJobLocation;
+use App\Models\User;
+use App\Helpers\NotificationHelper;
 
 class RecruiterJobController extends Controller {
 
@@ -38,6 +39,56 @@ class RecruiterJobController extends Controller {
         $this->viewData = ['navActive' => 'joblisting',];
     }
 
+    public function dashboard(){
+        try {
+            $activeTab = 3;
+            $userId = Auth::user()->id;
+            $userDetails = User::getUser($userId);
+            $hiredListByCurrentDate = [];
+            $latestMessage = ChatUserLists::getSeekerListForChat(Auth::id());
+            $latestNotifications = NotificationHelper::topNotificationList($userId);
+            $jobList = RecruiterJobs::getJobs(3);
+            $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
+            $allJobs = RecruiterJobs::getDashboardCalendar(true);
+            $currentWeekCalendar = [];
+            if($allJobs) {
+                foreach($allJobs as $job){
+                    $tempJobs   =   explode(',', $job['temp_job_dates']);
+                    foreach ($tempJobs as  $value) {
+                        $innerArray = [];
+                        $jobDetails['id'] = $job['id'];
+                        $jobDetails['job_type'] = $job['job_type'];
+                        $jobDetails['job_date'] = $value;
+
+                        if($job['job_type'] == RecruiterJobs::TEMPORARY){
+                            $seekers = JobseekerTempHired::getTempJobSeekerList($jobDetails, config('constants.OneValue'));
+                        }
+                        else{
+                            $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));
+                        }
+
+                        foreach($seekers as &$seeker){
+                            foreach($seeker as &$seek){
+                                $seek['profile_pic'] = url("image/" . 60 . "/" . 60 . "/?src=" .$seek['profile_pic']);
+                            }
+                        }
+                        $innerArray =   $job;
+                        $innerArray->temp_job_dates = $value;
+                        $innerArray->temp_job_format = date('M d - D',strtotime($value));
+                        $innerArray['seekers'] = $seekers;
+                        $currentWeekCalendar[] = $innerArray->toArray();
+                    }
+                }
+            }
+           // echo "<pre>"; print_r($currentWeekCalendar); die;
+            return view('web.user-dashboard', compact('activeTab','userDetails','hiredListByCurrentDate','latestMessage', 'latestNotifications', 'jobList', 'currentWeekCalendar', 'jobTemplateModalData'));
+        
+        }  catch (\Exception $e) {
+            Log::error($e);
+            return view('web.error.', ["message" => $e->getMessage()]);
+        }
+    }
+    
     public function returnView($viewFileName) {
         return view('web.recuriterJob.' . $viewFileName, $this->viewData);
     }

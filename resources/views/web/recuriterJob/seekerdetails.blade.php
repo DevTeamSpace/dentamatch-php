@@ -30,6 +30,7 @@ $seekerDatesCount = count($datesTemp);
                 <img src="{{ url('image/120/120/?src=' .$seekerDetails['profile_pic']) }}" class="img-circle">
             </div> 
             <div class="col-md-7 col-sm-6">
+                <span>{{ number_format($matchedSkills['percentSkills'],2) }}% Match</span>
                 <h4>{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']}}</h4>
                 <h6>{{$seekerDetails['jobtitle_name']}}</h6> 
                 <div class="job-type-detail seeker-detail-temp">
@@ -140,7 +141,7 @@ $seekerDatesCount = count($datesTemp);
 
             <div class="searchResultHeading pd-t-20">
                 <h5>LOCATION</h5>
-                <p>{{$seekerDetails['preferred_job_location']}}</p>
+                <p>{{$seekerDetails['preferred_location_name']}}</p>
             </div>
 
             <div class="searchResultHeading pd-t-20">

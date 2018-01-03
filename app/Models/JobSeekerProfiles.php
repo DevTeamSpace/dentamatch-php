@@ -115,7 +115,9 @@ class JobSeekerProfiles extends Model
 
     public static function getJobSeekerDetails($seekerId, $job){
         $obj = JobSeekerProfiles::where('jobseeker_profiles.user_id',$seekerId);
-
+        
+        $obj->join('preferred_job_locations','preferred_job_locations.id','=','jobseeker_profiles.preferred_job_location_id');
+        
         $obj->leftJoin('jobseeker_affiliations','jobseeker_profiles.user_id','=','jobseeker_affiliations.user_id')
             ->leftJoin('affiliations','jobseeker_affiliations.affiliation_id','=','affiliations.id');
 
@@ -131,7 +133,8 @@ class JobSeekerProfiles extends Model
         
         $obj->select('jobseeker_profiles.first_name','jobseeker_profiles.last_name','jobseeker_profiles.profile_pic',
                     'jobseeker_profiles.is_parttime_monday','jobseeker_profiles.is_parttime_tuesday','jobseeker_profiles.is_parttime_tuesday',
-                    'jobseeker_profiles.is_parttime_wednesday','jobseeker_profiles.is_parttime_thursday','jobseeker_profiles.is_parttime_friday','jobseeker_profiles.is_parttime_saturday','jobseeker_profiles.is_parttime_sunday','jobseeker_profiles.is_fulltime','jobseeker_profiles.user_id','jobseeker_profiles.id','job_titles.jobtitle_name','jobseeker_profiles.about_me', 'jobseeker_profiles.preferred_job_location','job_lists.applied_status')
+                    'jobseeker_profiles.is_parttime_wednesday','jobseeker_profiles.is_parttime_thursday','jobseeker_profiles.is_parttime_friday','jobseeker_profiles.is_parttime_saturday','jobseeker_profiles.is_parttime_sunday','jobseeker_profiles.is_fulltime','jobseeker_profiles.user_id','jobseeker_profiles.id','job_titles.jobtitle_name',
+                    'jobseeker_profiles.about_me', 'jobseeker_profiles.preferred_job_location','job_lists.applied_status', 'preferred_job_locations.preferred_location_name')
             ->groupby('jobseeker_profiles.user_id', 'jobseeker_affiliations.user_id');
 
         $obj->addSelect(DB::raw("group_concat(distinct(affiliations.affiliation_name) SEPARATOR ', ') AS affiliations"));

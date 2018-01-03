@@ -40,6 +40,7 @@ class ChatUserLists extends Model
                     DB::raw("concat(jobseeker_profiles.first_name,' ',jobseeker_profiles.last_name) AS name"),
                     DB::raw("max(user_chat.message) AS message"),
                     DB::raw("max(user_chat.created_at) AS timestamp"),
+                    DB::raw("count(chat_user_list.seeker_id) AS chatCount"),
                     DB::raw("max(user_chat.id) AS messageId"),'job_titles.jobtitle_name as jobTitle',
                     'chat_user_list.id as messageListId','chat_user_list.seeker_id as seekerId',
                     'chat_user_list.recruiter_block as recruiterBlock','chat_user_list.seeker_block as seekerBlock')

@@ -212,6 +212,15 @@ class JobLists extends Model {
                 ->join('job_titles', 'jobseeker_profiles.job_titile_id', '=', 'job_titles.id')
                 ->leftjoin('chat_user_list', 'chat_user_list.recruiter_id', '=', 'recruiter_offices.user_id')
                 ->where('job_lists.recruiter_job_id', $job['id']);
+        
+        $obj->join('template_skills as tmp_skills','tmp_skills.job_template_id','=','recruiter_jobs.job_template_id');
+        $obj->join('template_skills','template_skills.job_template_id','=','recruiter_jobs.job_template_id');
+        
+        $obj->join('jobseeker_skills',function($query){
+                $query->on('jobseeker_skills.user_id','=','jobseeker_profiles.user_id')
+                        ->on('jobseeker_skills.skill_id','=','template_skills.skill_id');
+            });
+            
         if($forJobType!=''){
             $obj->whereIn('job_lists.applied_status', [JobLists::HIRED]);
         }else{
@@ -230,7 +239,10 @@ class JobLists extends Model {
             }
         }
         $obj->select('job_lists.applied_status', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'jobseeker_profiles.profile_pic', 'job_lists.seeker_id', 'job_titles.jobtitle_name', 'recruiter_jobs.job_type', 'recruiter_block', 'seeker_block');
-
+        $obj->addSelect(DB::raw("count(distinct(jobseeker_skills.skill_id)) AS matched_skills")); 
+        $obj->addSelect(DB::raw("count(distinct(tmp_skills.skill_id)) AS template_skills_count")); 
+        $obj->addSelect(DB::raw("IF(count(distinct(jobseeker_skills.skill_id))>0, (count(distinct(jobseeker_skills.skill_id))/count(distinct(tmp_skills.skill_id)))*100,0) AS percentaSkillsMatch")); 
+        
         if ($job['job_type'] == RecruiterJobs::FULLTIME) {
             $obj->addSelect('jobseeker_profiles.is_fulltime');
         } elseif ($job['job_type'] == RecruiterJobs::PARTTIME) {
@@ -257,8 +269,8 @@ class JobLists extends Model {
                 ->addSelect('onemore')
                 ->addSelect('favourites.seeker_id as is_favourite')
                 ->leftJoin('temp_job_dates','job_lists.temp_job_id','=','temp_job_dates.id')
-                ->addSelect(DB::raw("group_concat(temp_job_dates.job_date) AS temp_job_dates"))
-                ->addSelect(DB::raw("group_concat(jobseeker_temp_hired.job_date) AS hired_job_dates"))
+                ->addSelect(DB::raw("group_concat(distinct(temp_job_dates.job_date)) AS temp_job_dates"))
+                ->addSelect(DB::raw("group_concat(distinct(jobseeker_temp_hired.job_date)) AS hired_job_dates"))
                 ->addSelect(DB::raw("avg(punctuality) as avg_punctuality"),DB::raw("avg(time_management) as avg_time_management"),
                         DB::raw("avg(skills) as avg_skills"),DB::raw("avg(teamwork) as avg_teamwork"),DB::raw("avg(onemore) as avg_onemore"))
                 ->addSelect(DB::raw("(avg(punctuality)+avg(time_management)+avg(skills))/3 AS avg_rating"));

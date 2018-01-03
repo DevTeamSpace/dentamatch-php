@@ -133,18 +133,18 @@ class UserProfileApiController extends Controller {
             $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
-                if($isLicenseRequired && ($userProfileModel->license_number != $request->license || $userProfileModel->state != $request->state)) {
-                    if(!empty($request->license) && !empty($request->state)) {
-                        $userLicenData = User::getUser($userId);
-                        $userName = $userLicenData['first_name'];
-                        $userEmail = $userLicenData['email'];
-                        $adminEmail = env('ADMIN_EMAIL');
-                        Mail::queue('email.admin-verify-jobseeker', ['name' => $userName, 'email' => $userEmail], function($message ) use($adminEmail) {
-                                $message->to($adminEmail, "Dentamatch Admin")->subject('Verify Jobseeker');
-                            });
+                    if($isLicenseRequired && ($userProfileModel->license_number != $request->license || $userProfileModel->state != $request->state)) {
+                        if(!empty($request->license) && !empty($request->state)) {
+                            $userLicenData = User::getUser($userId);
+                            $userName = $userLicenData['first_name'];
+                            $userEmail = $userLicenData['email'];
+                            $adminEmail = env('ADMIN_EMAIL');
+                            Mail::queue('email.admin-verify-jobseeker', ['name' => $userName, 'email' => $userEmail], function($message ) use($adminEmail) {
+                                    $message->to($adminEmail, "Dentamatch Admin")->subject('Verify Jobseeker');
+                                });
+                        }
+                        $isJobSeekerVerified = 0;
                     }
-                    $isJobSeekerVerified = 0;
-                }
                 $userProfileModel->about_me = $request->aboutMe;
                 $userProfileModel->license_number = $request->license;
                 $userProfileModel->state = $request->state;
@@ -332,7 +332,20 @@ class UserProfileApiController extends Controller {
             $userId = $request->userServerData->user_id;
             if($userId>0) {
                 $userProfile = UserProfile::where('user_id', $userId)->first();
-                if($isLicenseRequired && ((isset($reqData['licenseNumber']) && $userProfile->license_number != $reqData['licenseNumber']) || (isset($reqData['state']) && $userProfile->state != $reqData['state']))) {
+                if($userProfile->is_job_seeker_verified) {
+                    if($isLicenseRequired && ((isset($reqData['licenseNumber']) && $userProfile->license_number != $reqData['licenseNumber']) || (isset($reqData['state']) && $userProfile->state != $reqData['state']))) {
+                        if(!empty($reqData['licenseNumber']) && !empty($reqData['state'])) {
+                            $userLicenData = User::getUser($userId);
+                            $userName = $userLicenData['first_name'];
+                            $userEmail = $userLicenData['email'];
+                            $adminEmail = env('ADMIN_EMAIL');
+                            Mail::queue('email.admin-verify-jobseeker', ['name' => $userName, 'email' => $userEmail], function($message ) use($adminEmail) {
+                                    $message->to($adminEmail, "Dentamatch Admin")->subject('Verify Jobseeker');
+                                });
+                        }
+                        $isJobSeekerVerified = 0;
+                    }
+                } else if($isLicenseRequired && (isset($reqData['licenseNumber']) && isset($reqData['state']))) {
                     if(!empty($reqData['licenseNumber']) && !empty($reqData['state'])) {
                         $userLicenData = User::getUser($userId);
                         $userName = $userLicenData['first_name'];
@@ -344,6 +357,7 @@ class UserProfileApiController extends Controller {
                     }
                     $isJobSeekerVerified = 0;
                 }
+                
                 $userProfile->first_name = $reqData['firstName'];
                 $userProfile->last_name = $reqData['lastName'];
                 $userProfile->preferred_job_location_id = $reqData['preferredJobLocationId'];
