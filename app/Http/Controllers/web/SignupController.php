@@ -44,7 +44,7 @@ class SignupController extends Controller {
 
     public function getLogin(Request $request) {
         if(Auth::check()){
-            return redirect('home');
+            return redirect('users/dashboard');
         }
         return view('web.login');
     }
@@ -66,7 +66,7 @@ class SignupController extends Controller {
                 $term = RecruiterProfile::where('user_id', Auth::user()->id)->first();
                 $request->session()->put('userData', ['basic'=>$user->toArray(),'profile'=>$term->toArray()]);
                 if (!empty($term) && isset($term) && $term->accept_term==1) {
-                    $redirect = 'home';
+                    $redirect = 'users/dashboard';
                 }
             }
         }
