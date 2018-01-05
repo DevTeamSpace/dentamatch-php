@@ -8,5 +8,10 @@ class NotificationHelper {
         $notificationModel = Notification::userTopNotification($userId);
         return $notificationModel;
     }
+    
+    public static function notificationAdmin($userId){
+        $notificationModel = Notification::notificationAdmin($userId);
+        return $notificationModel;
+    }
 }
 

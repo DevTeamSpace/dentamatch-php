@@ -44,7 +44,7 @@ class SignupController extends Controller {
 
     public function getLogin(Request $request) {
         if(Auth::check()){
-            return redirect('home');
+            return redirect('users/dashboard');
         }
         return view('web.login');
     }
@@ -66,7 +66,7 @@ class SignupController extends Controller {
                 $term = RecruiterProfile::where('user_id', Auth::user()->id)->first();
                 $request->session()->put('userData', ['basic'=>$user->toArray(),'profile'=>$term->toArray()]);
                 if (!empty($term) && isset($term) && $term->accept_term==1) {
-                    $redirect = 'home';
+                    $redirect = 'users/dashboard';
                 }
             }
         }
@@ -147,7 +147,7 @@ class SignupController extends Controller {
     }
     
     public function postJobseekerSignUp(Request $request) {
-        
+
         try {
             $this->validate($request, [
                 'firstName' => 'required',
@@ -160,11 +160,13 @@ class SignupController extends Controller {
             ]);
             $mappedSkillsArray = [];
             $validateKeys = [];
+            $isComplete = 1;
             $jobTitleModel = JobTitles::where('id',$request->jobTitleId)->first();
             if($jobTitleModel) {
-                $mappedSkills = $jobTitleModel->mapped_skills_id;
+                $mappedSkills = $jobTitleModel->mapped_skills_id; 
                 $mappedSkillsArray = explode(",",$mappedSkills);
                 if($jobTitleModel->is_license_required) {
+                    $isComplete = 0;
                     $validateKeys['license']= 'required';
                     $validateKeys['state'] = 'required';
                 }
@@ -218,6 +220,9 @@ class SignupController extends Controller {
                 $userProfileModel->is_parttime_friday = config('constants.AutoAvailabilityFlag');
                 $userProfileModel->is_parttime_saturday = config('constants.NonAvailabilityFlag');
                 $userProfileModel->is_parttime_sunday = config('constants.NonAvailabilityFlag');
+                $userProfileModel->profile_pic = config('constants.defaultProfileImage');
+                $userProfileModel->is_completed = $isComplete;
+                $userProfileModel->is_job_seeker_verified = $isComplete;
                 $userProfileModel->signup_source = 2;
 
                 $userProfileModel->save();

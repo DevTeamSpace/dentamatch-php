@@ -43,10 +43,17 @@ class RecruiterJobController extends Controller {
         try {
             $activeTab = 3;
             $userId = Auth::user()->id;
+            $currentDate = date('D M d, Y',time());
             $userDetails = User::getUser($userId);
-            $hiredListByCurrentDate = [];
+            $hiredListByCurrentDate = JobseekerTempHired::getCurrentDayJobSeekerList();
             $latestMessage = ChatUserLists::getSeekerListForChat(Auth::id());
             $latestNotifications = NotificationHelper::topNotificationList($userId);
+            $notificationAdminModel = NotificationHelper::notificationAdmin($userId);
+            $notificationAdmin = [];
+            if($notificationAdminModel) {
+                $notificationAdmin = json_decode($notificationAdminModel->notification_data); 
+            }
+            
             $jobList = RecruiterJobs::getJobs(3);
             $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
             $allJobs = RecruiterJobs::getDashboardCalendar(true);
@@ -79,9 +86,8 @@ class RecruiterJobController extends Controller {
                         $currentWeekCalendar[] = $innerArray->toArray();
                     }
                 }
-            }
-           // echo "<pre>"; print_r($currentWeekCalendar); die;
-            return view('web.user-dashboard', compact('activeTab','userDetails','hiredListByCurrentDate','latestMessage', 'latestNotifications', 'jobList', 'currentWeekCalendar', 'jobTemplateModalData'));
+            }     
+            return view('web.user-dashboard', compact('activeTab', 'currentDate','userDetails','hiredListByCurrentDate','latestMessage', 'latestNotifications', 'notificationAdminModel','notificationAdmin', 'jobList', 'currentWeekCalendar', 'jobTemplateModalData'));
         
         }  catch (\Exception $e) {
             Log::error($e);
