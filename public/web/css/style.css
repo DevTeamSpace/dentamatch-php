@@ -154,6 +154,7 @@ and open the template in the editor.
 .welcomeLeftheader h4{color:#0d112f; font-weight:bold;}
 #dashEdit{position: absolute;
     right: 18px;
+    font-weight:bold;
     bottom: 29px;}
     .tHire{    color: #0470c0;}
     .tHire span{font-size: 26px;
