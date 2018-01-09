@@ -73,7 +73,7 @@
                                             </div>
                                             <div class="msgNotficaitonBlock">
                                                 <span>{{ ($seeker['timestamp']) }}</span>
-                                                <div class="msgNotification ">{{ ($seeker['chatCount']) }}</div></div>
+                                                <div class="msgNotification ">{{ ($seeker['unreadCount']) }}</div></div>
                                         </div>
                                     </li>
                                 @endforeach

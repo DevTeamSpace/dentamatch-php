@@ -23,6 +23,48 @@ class ChatUserLists extends Model
         'updatedAt' => 'updated_at',
         ]; 
     
+    public static function getSeekerListForChatDashboard($recruiterId){
+        $chatUserList = static::join('jobseeker_profiles','jobseeker_profiles.user_id','=','chat_user_list.seeker_id')
+            ->join('user_chat',function($query){
+                $query->on('user_chat.to_id','=','chat_user_list.seeker_id')
+                    ->orOn('user_chat.from_id','=','chat_user_list.seeker_id');
+            })
+            ->where(function($query) use ($recruiterId){
+                return $query->where('user_chat.from_id',$recruiterId)
+                    ->orwhere('user_chat.to_id',$recruiterId);
+            })
+            ->where('chat_user_list.recruiter_id',$recruiterId)
+            ->groupBy('chat_user_list.seeker_id')
+            ->select('chat_user_list.recruiter_id as recruiterId','jobseeker_profiles.profile_pic',
+                    DB::raw("concat(jobseeker_profiles.first_name,' ',jobseeker_profiles.last_name) AS name"),
+                    DB::raw("max(user_chat.message) AS message"),
+                    DB::raw("max(user_chat.created_at) AS timestamp"),
+                    DB::raw("max(user_chat.id) AS messageId"),
+                    'chat_user_list.id as messageListId','chat_user_list.seeker_id as seekerId',
+                    'chat_user_list.recruiter_block as recruiterBlock','chat_user_list.seeker_block as seekerBlock')
+                    ->get();
+            
+        $messageIds = $chatUserList->pluck('messageId'); 
+        $responseData = $chatUserList->toArray();
+        
+        $chatCountData = UserChat::where('to_id',$recruiterId)->where('read_status',0)
+                ->select('from_id as fromId',DB::raw("count(id) AS unreadCount"))
+                ->groupBy('from_id')->pluck('unreadCount','fromId');
+        
+        $chatData = UserChat::whereIn('id',$messageIds)->pluck('message','id');
+        foreach($responseData as $key=>$row){
+            if(isset($chatCountData[$row['seekerId']])){
+            $responseData[$key]['message'] = $chatData[$row['messageId']];
+            $responseData[$key]['timestamp'] = date('M d', strtotime($row['timestamp']));
+            $responseData[$key]['unreadCount'] = $chatCountData[$row['seekerId']];
+            }else{
+                unset($responseData[$key]);
+            }
+        }
+        return $responseData;
+        
+    }
+    
     public static function getSeekerListForChat($recruiterId){
         $chatUserList = static::join('jobseeker_profiles','jobseeker_profiles.user_id','=','chat_user_list.seeker_id')
             ->join('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id')
@@ -40,7 +82,6 @@ class ChatUserLists extends Model
                     DB::raw("concat(jobseeker_profiles.first_name,' ',jobseeker_profiles.last_name) AS name"),
                     DB::raw("max(user_chat.message) AS message"),
                     DB::raw("max(user_chat.created_at) AS timestamp"),
-                    DB::raw("count(chat_user_list.seeker_id) AS chatCount"),
                     DB::raw("max(user_chat.id) AS messageId"),'job_titles.jobtitle_name as jobTitle',
                     'chat_user_list.id as messageListId','chat_user_list.seeker_id as seekerId',
                     'chat_user_list.recruiter_block as recruiterBlock','chat_user_list.seeker_block as seekerBlock')
@@ -52,12 +93,12 @@ class ChatUserLists extends Model
         foreach($responseData as $key=>$row){
             $responseData[$key]['message'] = $chatData[$row['messageId']];
             $responseData[$key]['timestamp'] = date('M d', strtotime($row['timestamp']));
-        }
-
+            }
+            
         return $responseData;
         
     }
-
+    
     public static function getRecruiterListForChat($userId){
         $chatUserList = static::join('recruiter_profiles','recruiter_profiles.user_id','=','chat_user_list.recruiter_id')
             ->join('user_chat',function($query){

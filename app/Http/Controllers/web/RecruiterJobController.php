@@ -48,7 +48,7 @@ class RecruiterJobController extends Controller {
             $currentDate = date('F d, Y',time());
             $userDetails = User::getUser($userId);
             $hiredListByCurrentDate = JobseekerTempHired::getCurrentDayJobSeekerList();
-            $latestMessage = ChatUserLists::getSeekerListForChat(Auth::id());
+            $latestMessage = ChatUserLists::getSeekerListForChatDashboard(Auth::id());
             //dd($latestMessage);
             $latestNotifications = NotificationHelper::topNotificationList($userId);
             $notificationAdminModel = NotificationHelper::notificationAdmin($userId);
