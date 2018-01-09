@@ -28,6 +28,7 @@ use App\Models\JobseekerTempHired;
 use App\Models\PreferredJobLocation;
 use App\Models\User;
 use App\Helpers\NotificationHelper;
+use Mail;
 
 class RecruiterJobController extends Controller {
 
@@ -43,10 +44,12 @@ class RecruiterJobController extends Controller {
         try {
             $activeTab = 3;
             $userId = Auth::user()->id;
-            $currentDate = date('D M d, Y',time());
+            $currentDay = date("l"); 
+            $currentDate = date('F d, Y',time());
             $userDetails = User::getUser($userId);
             $hiredListByCurrentDate = JobseekerTempHired::getCurrentDayJobSeekerList();
             $latestMessage = ChatUserLists::getSeekerListForChat(Auth::id());
+            //dd($latestMessage);
             $latestNotifications = NotificationHelper::topNotificationList($userId);
             $notificationAdminModel = NotificationHelper::notificationAdmin($userId);
             $notificationAdmin = [];
@@ -87,7 +90,7 @@ class RecruiterJobController extends Controller {
                     }
                 }
             }     
-            return view('web.user-dashboard', compact('activeTab', 'currentDate','userDetails','hiredListByCurrentDate','latestMessage', 'latestNotifications', 'notificationAdminModel','notificationAdmin', 'jobList', 'currentWeekCalendar', 'jobTemplateModalData'));
+            return view('web.user-dashboard', compact('activeTab','currentDay','currentDate','userDetails','hiredListByCurrentDate','latestMessage', 'latestNotifications', 'notificationAdminModel','notificationAdmin', 'jobList', 'currentWeekCalendar', 'jobTemplateModalData'));
         
         }  catch (\Exception $e) {
             Log::error($e);
@@ -135,7 +138,6 @@ class RecruiterJobController extends Controller {
             if ($request->ajax()) {
                 return view('web.recuriterJob.seekers-data', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'jobTemplateModalData'=>$jobTemplateModalData, 'preferredLocations'=>$preferredLocations, 'preferredLocationId'=>$preferredLocationId])->render();  
             }
-
             return view('web.recuriterJob.search', compact('seekersList','jobDetails','searchData', 'jobId', 'jobTemplateModalData', 'preferredLocations','preferredLocationId'));
         } catch (\Exception $e) {
             Log::error($e);
@@ -286,18 +288,19 @@ class RecruiterJobController extends Controller {
             'seekerId' => 'required|integer',
             'appliedStatus' => 'required|integer',
         ]);
-        try {
+        try { 
             $requestData = $request->all();
             $jobData = JobLists::getJobInfo($requestData['seekerId'], $requestData['jobId']);
             if ($jobData) {
                 $jobData->applied_status = $requestData['appliedStatus'];
                 $jobData->save();
+              
                 if ($requestData['appliedStatus'] == JobLists::SHORTLISTED || $requestData['appliedStatus'] == JobLists::HIRED) {
                     $userChat = new ChatUserLists();
                     $userChat->recruiter_id = Auth::id();
                     $userChat->seeker_id = $jobData->seeker_id;
                     $userChat->checkAndSaveUserToChatList();
-                    $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $jobData->seeker_id, $requestData['jobId']);
+    
                 }else if ($requestData['appliedStatus'] == JobLists::REJECTED){
                     $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $jobData->seeker_id, $requestData['jobId']);
                 }
@@ -305,7 +308,11 @@ class RecruiterJobController extends Controller {
             }else{
                 $inviteJobs = array('seeker_id' => $requestData['seekerId'] , 'recruiter_job_id' => $requestData['jobId'] , 'applied_status' => JobLists::INVITED);
                 JobLists::insert($inviteJobs);
-                $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $requestData['seekerId'], $requestData['jobId']);
+                $email = \App\Models\User::where('id',$request->seekerId)->first();
+                       Mail::queue('auth.emails.user-activation', [], function ($message) use ($email) {
+                    $message->to($email['email'])
+                            ->subject(trans("messages.confirmation_link"));
+                });
                 Session::flash('message', trans('messages.invited_success'));
                 return redirect('job/search/'.$requestData['jobId']);
             }

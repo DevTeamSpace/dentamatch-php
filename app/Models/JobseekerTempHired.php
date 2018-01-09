@@ -57,31 +57,32 @@ class JobseekerTempHired extends Model {
     }
     
     public static function getCurrentDayJobSeekerList($limit=3) {
-        $obj = JobseekerTempHired::join('recruiter_jobs', 'jobseeker_temp_hired.job_id', '=', 'recruiter_jobs.id')
+        $obj = JobLists::join('recruiter_jobs', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
                 ->leftjoin('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
-                ->leftjoin('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'jobseeker_temp_hired.jobseeker_id')
+                ->leftjoin('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
                 ->leftjoin('job_titles', 'jobseeker_profiles.job_titile_id', '=', 'job_titles.id')
-                ->leftjoin('job_lists', 'jobseeker_temp_hired.job_id', '=', 'job_lists.recruiter_job_id')
-                ->where('jobseeker_temp_hired.job_date', date("Y-m-d"))
-                ->whereIn('job_lists.applied_status', [JobLists::HIRED]);
+                ->whereDate('job_lists.updated_at', '=', date('Y-m-d'))
+                ->whereIn('job_lists.applied_status', [JobLists::HIRED])
+                ->where('job_lists.deleted_at', NULL);
         
-        $obj->select('jobseeker_temp_hired.id','jobseeker_temp_hired.job_date','job_lists.applied_status', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'jobseeker_profiles.profile_pic', 'jobseeker_temp_hired.jobseeker_id as seeker_id', 'job_titles.jobtitle_name', 'recruiter_jobs.job_type');
+        $obj->select('job_lists.id','job_lists.updated_at','job_lists.applied_status', 'jobseeker_profiles.first_name', 
+                    'jobseeker_profiles.last_name', 'jobseeker_profiles.profile_pic', 
+                'job_lists.seeker_id as seeker_id', 'job_titles.jobtitle_name', 'recruiter_jobs.job_type');
 
         $obj->leftjoin('job_ratings', function($query) {
-                    $query->on('job_ratings.seeker_id', '=', 'jobseeker_temp_hired.jobseeker_id');
+                    $query->on('job_ratings.seeker_id', '=', 'job_lists.seeker_id');
             })
             ->leftjoin('favourites',function($query){
-                $query->on('favourites.seeker_id','=','jobseeker_temp_hired.jobseeker_id')
+                $query->on('favourites.seeker_id','=','job_lists.seeker_id')
                     ->where('favourites.recruiter_id',Auth::user()->id);
             });
 
         $obj->addSelect('favourites.seeker_id as is_favourite')
                 ->leftJoin('temp_job_dates','job_lists.temp_job_id','=','temp_job_dates.id')
-                ->groupby('jobseeker_temp_hired.jobseeker_id');
+                ->groupby('job_lists.seeker_id');
        
         $data = $obj->orderby('job_lists.applied_status', 'desc')
                 ->take($limit)->get();
-
         return $data->toArray();
     }
 

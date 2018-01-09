@@ -23,7 +23,8 @@
                             <a href="/edit-profile" id="dashEdit">Edit profile</a>
                         </div>
                         <div class="welcomeContent">
-                            <h4>{{ $currentDate }}</h4>
+                            
+                            <h4>{{$currentDay}}<br>{{ $currentDate }}</h4>
                             <div class="tHire">
                                 <span>{{ count($hiredListByCurrentDate) }}</span>   
                                 <p>Today’s Hire</p>
@@ -60,6 +61,7 @@
                             <ul class="dashboarFinalList"> 
                                 @if(!empty($latestMessage))
                                 @foreach ($latestMessage as $seeker)
+         
                                     <li>
                                         <div class="dashListImgBlock">
                                             <div class="dashListImg">
@@ -67,7 +69,7 @@
                                             </div>
                                             <div class="dashListImgContent msgImg">
                                                 <h6>{{ $seeker['name'] }}</h6>
-                                                <p>{{ $seeker['jobTitle'] }}</p>  
+                                                <p>{{ $seeker['message'] }}</p>  
                                             </div>
                                             <div class="msgNotficaitonBlock">
                                                 <span>{{ ($seeker['timestamp']) }}</span>

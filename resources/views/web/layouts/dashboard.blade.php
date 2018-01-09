@@ -52,7 +52,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"><img src="{{asset('web/images/dentaMatchLogo.png')}}" alt=""></a>
+                <a class="navbar-brand" href="{{asset('users/dashboard')}}"><img src="{{asset('web/images/dentaMatchLogo.png')}}" alt=""></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->

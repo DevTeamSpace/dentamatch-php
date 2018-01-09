@@ -16,6 +16,7 @@ use App\Models\JobLists;
 use App\Models\RecruiterJobs;
 use App\Models\Device;
 use Session;
+use Log;
 
 class FavoriteJobseekerController extends Controller {
     
@@ -67,6 +68,7 @@ class FavoriteJobseekerController extends Controller {
                     ->whereIn('applied_status',[JobLists::INVITED,JobLists::APPLIED,JobLists::SHORTLISTED,JobLists::HIRED])
                     ->orderBy('id', 'DESC')
                     ->first();
+            
             if (isset($jobList) && !empty($jobList)) {
                 //if ($jobList->recruiter_job_id != $request->selectJobSeeker) {
                     /*\App\Models\JobLists::create([
@@ -110,7 +112,7 @@ class FavoriteJobseekerController extends Controller {
      * @return int
      */
     public function getMarkFavourite($seekerId)
-    {
+      {
         $return=[];
         $recruiterId = Auth::user()->id;
         $favModel = Favourite::where('recruiter_id', $recruiterId)->where('seeker_id', $seekerId)->first();
@@ -130,9 +132,10 @@ class FavoriteJobseekerController extends Controller {
         }
         
         return $return;
-    }
+      }
     
     public function sendPushUser($jobstatus, $sender, $receiverId, $jobId) {
+              
         $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
         if ($jobstatus == JobLists::INVITED) {
             $notificationData = array(
@@ -153,7 +156,6 @@ class FavoriteJobseekerController extends Controller {
         $params['notification_details'] = $notificationDetails;
         $deviceModel = Device::getDeviceToken($receiverId);
         if ($deviceModel) {
-            //$this->info($userId);
             NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params);
         }
     }

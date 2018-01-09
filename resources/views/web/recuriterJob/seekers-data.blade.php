@@ -1,6 +1,5 @@
 <!--Seeker listing-->
 @php 
-
 $datesTemp = explode(',',$jobDetails['temp_job_dates']);
 $seekerDatesCount = count($datesTemp);
 @endphp

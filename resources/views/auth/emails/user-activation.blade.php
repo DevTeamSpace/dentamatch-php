@@ -14,12 +14,10 @@
                         <h3 style="margin:0 0 15px 0">Hi,</h3>
                         <div style="font-size:15px;">
                             <p style="line-height: 24px;">
-                                You have requested to activate your account.<br/><br/>
-                                Please visit the link below to activate your account.<br/>
-                                <a href="{{ $url }}">Click to Activate</a>
+                                You have invited for the job by the recruiter.<br/><br/>
+                                Please visit him.<br/>
                             </p>
                             <br/>
-                            
                             <p style="margin:20px 0 0 0; padding: 0;">Sincerely Captured</p>
                             <p style="margin: 0">Dentamatch Team</p>
 

@@ -45,7 +45,7 @@ class ChatUserLists extends Model
                     'chat_user_list.id as messageListId','chat_user_list.seeker_id as seekerId',
                     'chat_user_list.recruiter_block as recruiterBlock','chat_user_list.seeker_block as seekerBlock')
                     ->get();
-    
+            
         $messageIds = $chatUserList->pluck('messageId'); 
         $responseData = $chatUserList->toArray();
         $chatData = UserChat::whereIn('id',$messageIds)->pluck('message','id');
@@ -53,7 +53,9 @@ class ChatUserLists extends Model
             $responseData[$key]['message'] = $chatData[$row['messageId']];
             $responseData[$key]['timestamp'] = date('M d', strtotime($row['timestamp']));
         }
+
         return $responseData;
+        
     }
 
     public static function getRecruiterListForChat($userId){
