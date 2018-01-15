@@ -141,7 +141,7 @@
                             <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::HIRED }}" class="btn btn-primary pd-l-30 pd-r-30 ">Hire</button>
                             @elseif($key==\App\Models\JobLists::APPLIED)
                             <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::REJECTED }}" class="btn btn-link  mr-r-5">Reject</button>
-                            <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::SHORTLISTED }}" class="btn btn-primary pd-l-30 pd-r-30 ">Shortlist</button>
+                            <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::SHORTLISTED }}" class="btn btn-primary pd-l-30 pd-r-30 ">Interviewing</button>
                             @elseif($key==\App\Models\JobLists::INVITED)
                             <button type="button" class="btn btn-primary-outline pd-l-30 pd-r-30 ">Invited</button>
                             @endif

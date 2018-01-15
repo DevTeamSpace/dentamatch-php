@@ -80,7 +80,8 @@ class JobLists extends Model {
         if ($page > 1) {
             $skip = ($page - 1) * $limit;
         }
-        $searchResult = $searchQueryObj->groupby('recruiter_jobs.id')->skip($skip)->take($limit)->get();
+        $searchResult = $searchQueryObj->groupby('recruiter_jobs.id')
+                ->orderby('matched_skills','desc')->skip($skip)->take($limit)->get();
         $result = array();
         if ($searchResult) {
             $result['list'] = $searchResult->toArray();
