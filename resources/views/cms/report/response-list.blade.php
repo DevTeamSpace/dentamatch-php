@@ -22,7 +22,7 @@
                                   <th>Job Type</th>
                                   <th>Invited</th>
                                   <th>Applied</th>
-                                  <th>Shortlisted</th>
+                                  <th>Interviewing</th>
                                   <th>Hired</th>
                                   <th>Reject</th>
                                   <th>Cancel</th>
