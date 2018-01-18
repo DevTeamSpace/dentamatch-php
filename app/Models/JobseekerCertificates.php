@@ -8,8 +8,7 @@ use App\Helpers\apiResponse;
 use DB;
 
 class JobseekerCertificates extends Model
-{
-    //
+{   
     protected $table = 'jobseeker_certificates';
     protected $primaryKey = 'id';
     
@@ -27,7 +26,6 @@ class JobseekerCertificates extends Model
         if(!empty($list)) {
             foreach($list as $value) {
                 $returnData[$value['certificate_id']] = $value;
-                //$returnData[$value['certificate_id']]['image_path'] = !empty($value['image_path']) ? $s3Url.DIRECTORY_SEPARATOR.$s3Bucket.DIRECTORY_SEPARATOR.$value['image_path'] : $value['image_path'];
                 $returnData[$value['certificate_id']]['image_path'] =  apiResponse::getThumbImage($value['image_path']);
                 
             }
@@ -45,7 +43,6 @@ class JobseekerCertificates extends Model
                             ->get()
                             ->toArray();
         }
-
         return $certificates;
     }
 }

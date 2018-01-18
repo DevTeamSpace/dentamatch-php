@@ -9,7 +9,6 @@ use App\Models\Location;
 use Yajra\Datatables\Datatables;
 use Session;
 use App\Models\Schooling;
-use Log;
 
 class SchoolController extends Controller
 {

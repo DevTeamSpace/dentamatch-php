@@ -5,11 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
-
 use App\Models\UserProfile;
 use App\Models\SavedJobs;
 use Auth;
-use App\Models\Configs;
 use App\Models\JobLists;
 use App\Models\TempJobDates;
 use App\Models\RecruiterJobs;
@@ -65,7 +63,6 @@ class RecruiterJobs extends Model
     
     public static function searchJob($reqData){
         $jobseekerSkills = JobSeekerSkills::fetchJobseekerSkills($reqData['userId']);
-        
         $savedJobsResult  = SavedJobs::select('recruiter_job_id')->where('seeker_id',$reqData['userId'])->get();
         $userSavedJobs = array();
         if($savedJobsResult){
@@ -76,22 +73,20 @@ class RecruiterJobs extends Model
                 }
         $rejectedJobs = JobLists::where('seeker_id', '=', $reqData['userId'])->whereIn('applied_status', [JobLists::REJECTED,JobLists::HIRED, JobLists::APPLIED, JobLists::SHORTLISTED])->get();
         $rejectedJobsArray = array();      
-        if($rejectedJobs){
+        if($rejectedJobs){         
                     $rejectedJobsData = $rejectedJobs->toArray();
                     $rejectedJobsArray = array_map(function ($value) {
                         return  $value['recruiter_job_id'];
                     }, $rejectedJobsData);
                 }
-        
+               
         if(empty($reqData['jobTitle'])) {
             $jobTitlesModel = JobTitles::getAll(1);
             $reqData['jobTitle'] = array_map(function ($value) {
                                         return  $value['id'];
                                     }, $jobTitlesModel);
         }
-        /*$userProfile = UserProfile::where('user_id', $reqData['userId'])->first();
-        $longitude = $userProfile->longitude;
-        $latitude = $userProfile->latitude;*/
+       
         $searchQueryObj = RecruiterJobs::leftJoin('job_lists',function($query) use ($reqData){
             $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
                   ->where('job_lists.seeker_id','=', $reqData['userId'])
@@ -100,9 +95,7 @@ class RecruiterJobs extends Model
                 ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                 ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
                 ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
-                ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
-               // ->whereNull('job_lists.id')
-                //->where('job_lists.seeker_id','!=', $reqData['userId'])
+                ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')       
                 ->where('recruiter_profiles.is_subscribed','=', 1)
                 ->whereIn('job_templates.job_title_id', $reqData['jobTitle']);
             
@@ -118,13 +111,6 @@ class RecruiterJobs extends Model
             if(count($rejectedJobsArray) > 0){
                 $searchQueryObj->whereNotIn('recruiter_jobs.id',$rejectedJobsArray);
             }
-
-                //->whereIn('job_titles.id', $reqData['jobTitle']);
-        /*$searchQueryObj = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
-                ->join('job_templates','job_templates.id','=','recruiter_jobs.job_template_id')
-                ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
-                ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
-                ->whereIn('job_templates.job_title_id', $reqData['jobTitle']);*/
 
         $blockedRecruiterModel = ChatUserLists::getBlockedRecruiters($reqData['userId']);
         if(!empty($blockedRecruiterModel)) {
@@ -142,15 +128,12 @@ class RecruiterJobs extends Model
                 $searchQueryObj->where('recruiter_jobs.job_type',2);
                 $searchQueryObj->where(function($query) use ($reqData){
                     if(is_array($reqData['parttimeDays']) && count($reqData['parttimeDays']) > 0){
-                        //$daysArray = ['is_monday'=>0, 'is_tuesday'=>0, 'is_wednesday'=>0, 'is_thursday'=>0, 'is_friday'=>0, 'is_saturday'=>0, 'is_sunday'=>0];
                         foreach($reqData['parttimeDays'] as $day){
                             $query->orWhere('is_'.$day, 1);
                         }
                     }
                 });
             }
-
-
             $searchQueryObj->where(function($query) use ($reqData){
                 if($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 1){
                     $query->where('recruiter_jobs.job_type',1);
@@ -172,11 +155,7 @@ class RecruiterJobs extends Model
             $searchQueryObj->whereIn('recruiter_jobs.preferred_job_location_id',$reqData['preferredJobLocationId']);
         }
         
-        $searchQueryObj->whereIn('recruiter_jobs.job_type',[1,2]);
-        //$radius = Configs::select('config_data')->where('config_name','=','SEARCHRADIUS')->first();
-        //$searchQueryObj->where('distance','<=',$radius->config_data);
-        //$searchQueryObj->groupby('recruiter_jobs.id');
-        
+        $searchQueryObj->whereIn('recruiter_jobs.job_type',[1,2]);        
         $searchQueryObj->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
                         'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
                         'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
@@ -197,7 +176,7 @@ class RecruiterJobs extends Model
         if($page>1){
             $skip = ($page-1)* $limit;
         }
-        $searchResult = $searchQueryObj->groupby('recruiter_jobs.id')->distinct('recruiter_jobs.id')->skip($skip)->take($limit)->orderBy('recruiter_jobs.id', 'desc')->get();
+        $searchResult = $searchQueryObj->groupby('recruiter_jobs.id')->distinct('recruiter_jobs.id')->skip($skip)->take($limit)->orderBy('percentaSkillsMatch', 'desc')->get();        
         $result = array();
         $updatedResult = array();
         if($searchResult){
@@ -211,8 +190,7 @@ class RecruiterJobs extends Model
                 $updatedResult[] = $value;
             }
             $result['list'] = $updatedResult;
-            //$result['list'] = $searchResult->toArray();
-
+         
             $result['total'] = $total;
         }
         return $result;
@@ -323,10 +301,8 @@ class RecruiterJobs extends Model
                 $jobObj->whereNotIn('recruiter_jobs.id',$excludeJob);
             }
         
-        //$jobObj->leftJoin('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
             $jobObj ->leftJoin('temp_job_dates',function($query){
-                $query->on('temp_job_dates.recruiter_job_id','=','recruiter_jobs.id');
-                //->whereDate('temp_job_dates.job_date','>=',date('Y-m-d'));
+                $query->on('temp_job_dates.recruiter_job_id','=','recruiter_jobs.id');          
             })
             ->leftJoin('job_lists',function($query){
                 $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
@@ -559,7 +535,7 @@ class RecruiterJobs extends Model
     }
     
     public static function chkTempJObRatingPending(){
-        //$tempJobs = 
+       
         $jobObj = RecruiterJobs::join('job_templates',function($query){
                     $query->on('job_templates.id','=','recruiter_jobs.job_template_id')
                     ->where('job_templates.user_id',Auth::user()->id);

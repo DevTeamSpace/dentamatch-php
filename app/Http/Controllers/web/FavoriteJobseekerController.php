@@ -16,7 +16,6 @@ use App\Models\JobLists;
 use App\Models\RecruiterJobs;
 use App\Models\Device;
 use Session;
-use Log;
 
 class FavoriteJobseekerController extends Controller {
     
@@ -70,16 +69,7 @@ class FavoriteJobseekerController extends Controller {
                     ->first();
             
             if (isset($jobList) && !empty($jobList)) {
-                //if ($jobList->recruiter_job_id != $request->selectJobSeeker) {
-                    /*\App\Models\JobLists::create([
-                        'recruiter_job_id' => $request->selectJobSeeker,
-                        'seeker_id' => $request->seekerId,
-                        'applied_status' => '1',
-                    ]);*/
-                    /*\App\Models\JobLists::where('id', $jobList->id)->update(['applied_status' => JobLists::INVITED]);
-                    $this->sendPushUser(JobLists::INVITED, Auth::user()->id, $request->seekerId, $request->selectJobSeeker);
-                    Session::flash('message', trans('messages.invite_sent_success'));*/
-                //}
+             
                 $message = "";
                 if($jobList->applied_status == JobLists::INVITED){
                     $message = "This seeker is already invited for this job";
@@ -189,7 +179,6 @@ class FavoriteJobseekerController extends Controller {
         $returnData = "";
         $listJobs = $jobDetail->get();
         if($listJobs->count() > 0){
-            //$output .= '<option value="" disabled selected>Select </option>';
             $output = "";
                 foreach($listJobs as $job){
                                     $dates_are = '';

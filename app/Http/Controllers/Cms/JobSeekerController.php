@@ -377,16 +377,7 @@ class JobSeekerController extends Controller
                 	$active = ($userData->is_active == 1) ? 'Yes':'No';
                     return $active;
                 })
-//                ->addColumn('action', function ($userData) {
-//                    $edit = url('cms/jobseeker/'.$userData->id.'/edit');
-//                    $resetPassword = url('cms/recruiter/'.$userData->id.'/adminResetPassword');
-//                    $viewDetails = url('cms/jobseeker/'.$userData->id.'/viewdetails');
-//                    $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-//                    $action .= '<a href="'.$resetPassword.'"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;';
-//                    $action .= '<a href="'.$viewDetails.'"  class="btn btn-xs btn-primary">View Details</a>&nbsp;';
-//                    return $action;
-//                       
-//                })
+//          
                 ->make(true);
         }catch (\Exception $e) {
             Log::error($e);
@@ -414,16 +405,7 @@ class JobSeekerController extends Controller
                 	$active = ($userData->is_active == 1) ? 'Yes':'No';
                     return $active;
                 })
-//                ->addColumn('action', function ($userData) {
-//                    $edit = url('cms/jobseeker/'.$userData->id.'/edit');
-//                    $resetPassword = url('cms/recruiter/'.$userData->id.'/adminResetPassword');
-//                    $viewDetails = url('cms/jobseeker/'.$userData->id.'/viewdetails');
-//                    $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-//                    $action .= '<a href="'.$resetPassword.'"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;';
-//                    $action .= '<a href="'.$viewDetails.'"  class="btn btn-xs btn-primary">View Details</a>&nbsp;';
-//                    return $action;
-//                       
-//                })
+//           
                 ->make(true);
         }catch (\Exception $e) {
             Log::error($e);

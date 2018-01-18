@@ -32,7 +32,6 @@ class PushNotificationApiController extends Controller {
                 $reqData = $request->all();
                 $reqData['userId'] = $userId;
                 $notificationList = Notification::userNotificationList($reqData);
-                //$updated_notification = [];
                 if(count($notificationList['list']) > 0){
                     foreach($notificationList['list'] as $notification){
                         if($notification['job_list_id'] && $notification['job_list_id'] > 0){
@@ -41,7 +40,6 @@ class PushNotificationApiController extends Controller {
                                 $notification['job_details'] = $data;
                             }
                         }
-                            //$updated_notification[] = $notification;
                     }
                     $response = apiResponse::customJsonResponse(1, 200, trans("messages.notification_list"),  apiResponse::convertToCamelCase($notificationList));
                 }else{

@@ -49,7 +49,6 @@ class RecruiterJobController extends Controller {
             $userDetails = User::getUser($userId);
             $hiredListByCurrentDate = JobseekerTempHired::getCurrentDayJobSeekerList();
             $latestMessage = ChatUserLists::getSeekerListForChatDashboard(Auth::id());
-            //dd($latestMessage);
             $latestNotifications = NotificationHelper::topNotificationList($userId);
             $notificationAdminModel = NotificationHelper::notificationAdmin($userId);
             $notificationAdmin = [];
@@ -380,7 +379,6 @@ class RecruiterJobController extends Controller {
         $params['notification_details'] = $notificationDetails;
         $deviceModel = Device::getDeviceToken($receiverId);
         if ($deviceModel) {
-            //$this->info($userId);
             NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params);
         }
     }
@@ -415,10 +413,7 @@ class RecruiterJobController extends Controller {
         try {
             DB::beginTransaction();
             $allData = json_decode($request->jobDetails);
-
-            //Log::info(print_r($allData, true));
-
-            if ($allData->selectedJobType == config('constants.FullTime')) {
+             if ($allData->selectedJobType == config('constants.FullTime')) {
                 $allData->selectedJobType = config('constants.OneValue');
             } else if ($allData->selectedJobType == config('constants.PartTime')) {
                 $allData->selectedJobType = config('constants.PartTimeJob');
@@ -426,25 +421,18 @@ class RecruiterJobController extends Controller {
                 $allData->selectedJobType = config('constants.TemporaryJob');
             }
             $jobDetails = RecruiterJobs::getRecruiterJobDetails($allData->jobId);
-            //Log::info("Job Detail");
-            //Log::info(print_r($jobDetails, true));
-            
+                      
             $recruiterOfficeObj = RecruiterOffice::where(['id' => $jobDetails['recruiter_office_id']])->first();
-            //Log::info("recruiterOfficeObj");
-            //Log::info(print_r($recruiterOfficeObj, true));
             
             $updatedJob = $this->sameOfficeOrNot($allData, $recruiterOfficeObj);
             
             DB::commit();
-            //Log::info("finaldata");
-            //Log::info(print_r($updatedJob, true));
-            
+           
             $this->result['data'] = $updatedJob['data'];
             $this->result['success'] = true;
             $this->result['message'] = trans('messages.job_edited');
         } catch (\Exception $e) {
             DB::rollback();
-            //Log::error($e);
             $this->result['success'] = false;
             $this->result['message'] = $e->getMessage();
         }
@@ -455,24 +443,17 @@ class RecruiterJobController extends Controller {
         try {
             if ((string) $recruiterOfficeObj['latitude'] == (string) $allData->selectedOffice[0]->selectedOfficeLat && (string) $recruiterOfficeObj['longitude'] == (string) $allData->selectedOffice[0]->selectedOfficeLng) {
                 $updatedJob = $this->updateJob($allData->selectedJobType, $allData);
-                //Log::info("sameOffice:updatedJobIf");
-                //Log::info(print_r($updatedJob, true));
-
+           
                 $this->updateOffice($allData);
                 $this->updateOfficeType($allData);
             } else {
-                $updatedJob = $this->checkingOffice($allData, $recruiterOfficeObj);
-                //Log::info("sameOffice:checkingOffice:updatedJobElse");
-                //Log::info(print_r($updatedJob, true));
+                $updatedJob = $this->checkingOffice($allData, $recruiterOfficeObj);             
             }
             
             $this->result['data'] = $updatedJob['data'];
             $this->result['success'] = true;
-            //Log::info("sameOffice:result");
-            //Log::info(print_r($this->result, true));
             
         } catch (\Exception $e) {
-            //Log::error($e);
             $this->result['success'] = $e->getMessage();
         }
         return $this->result;
@@ -485,41 +466,24 @@ class RecruiterJobController extends Controller {
                         'longitude' => $allData->selectedOffice[0]->selectedOfficeLng,
                         'user_id' => Auth::user()->id
                     ])->first();
-            
-            //Log::info("checkingOffice:recruiterOfficeObj");
-            //Log::info(print_r($recruiterOfficeObj, true));
-            
+           
             if($recruiterOfficeObj != null){
                 $this->saveOffice($recruiterOfficeObj->id, $allData);
-                //Log::info("checkingOffice:saveOfficeIfNull");
-                
+
                 $updatedJob = $this->updateJob($allData->selectedJobType, $allData, $recruiterOfficeObj);
-                //Log::info("checkingOffice:updateJob");
-                //Log::info(print_r($updatedJob, true));
-                
                 $this->updateOfficeType($allData, $recruiterOfficeObj->id);
-                //Log::info("checkingOffice:officeType");
                 
                 DB::table('recruiter_jobs')->where('id', $allData->jobId)->delete();
             }else{
-                $newOfficeObj = $this->updateOffice($allData, config('constants.OneValue'));
-                //Log::info("checkingOffice:newOfficeElse");
-                //Log::info(print_r($newOfficeObj, true));
-                
-                $updatedJob =  $this->updateJob($allData->selectedJobType, $allData, $newOfficeObj);
-                //Log::info("checkingOffice:updateOfficeElse");
-                //Log::info(print_r($updatedJob, true));
-                
-                $this->updateOfficeType($allData, $newOfficeObj['id']);
-                //Log::info("checkingOffice:officeType");
-                
+                $newOfficeObj = $this->updateOffice($allData, config('constants.OneValue'));             
+                $updatedJob =  $this->updateJob($allData->selectedJobType, $allData, $newOfficeObj);           
+                $this->updateOfficeType($allData, $newOfficeObj['id']);           
                 DB::table('recruiter_jobs')->where('id', $allData->jobId)->delete();
                 RecruiterOffice::where('id', $allData->selectedOffice[0]->selectedOfficeId)->delete();
             }
             $this->result['data'] = $updatedJob;
             $this->result['success'] = true;
         } catch (\Exception $e) {
-            //Log::error($e);
             $this->result['success'] = $e->getMessage();
         }
         return $this->result;
@@ -550,16 +514,10 @@ class RecruiterJobController extends Controller {
             $recruiterOfficeObj->save();
             $this->result['success'] = true;
             
-            //Log::info("saveOfficeMethod:recruiterOfficeObj");
-            //Log::info(print_r($recruiterOfficeObj, true));
         } catch (\Exception $e) {
-            //Log::error($e);
             $this->result['success'] = $e->getMessage();
         }
-        
-        //Log::info("saveOfficeMethod:result");
-        //Log::info(print_r($this->result, true));
-        
+
         return $this->result;
     }
 
@@ -578,15 +536,12 @@ class RecruiterJobController extends Controller {
             } else {
                 $recruiterOfficeObj = RecruiterOffice::where(['id' => $allData->selectedOffice[0]->selectedOfficeId])->first();
             }
-            //Log::info("updateOfficeMethod:recruiterOfficeObj");
-            //Log::info(print_r($recruiterOfficeObj, true));
-            
+         
             $this->saveOffice($recruiterOfficeObj->id, $allData);
-            //Log::info("updateOfficeMethod:saveOffice");
-            
+          
             $updateOfficeResult = $recruiterOfficeObj;
         } catch (\Exception $e) {
-            //Log::error($e);
+ 
             $updateOfficeResult = $e->getMessage();
         }
         return $updateOfficeResult;
@@ -594,11 +549,8 @@ class RecruiterJobController extends Controller {
 
     private function updateJob($jobType, $allData, $office = '') {
         try {
-            //print_r($allData); die;
             $jobObj = RecruiterJobs::where(['id' => $allData->jobId])->first();
-            //Log::info("updateJobMethod:jobObj");
-            //Log::info(print_r($jobObj, true));
-            
+          
             $jobTemplateId = $jobObj['job_template_id'];
             if ($office != '') {
                 $jobObj = new RecruiterJobs();
@@ -627,9 +579,7 @@ class RecruiterJobController extends Controller {
                 $jobObj->is_sunday = in_array("Sunday", $allData->partTimeDays) ? 1 : 0;
                 $jobObj->no_of_jobs = config('constants.NullValue');
                 $jobObj->save();
-                //Log::info("updateJobMethod:PartTime");
-                //Log::info(print_r($jobObj, true));
-                
+              
             } elseif ($jobType == config('constants.TemporaryJob')) {
                 $jobObj->no_of_jobs = $allData->totalJobOpening;
                 $jobObj->save();
@@ -639,17 +589,13 @@ class RecruiterJobController extends Controller {
                     $newTemJobObj->job_date = date('Y-m-d', strtotime($tempJobDate));
                     $newTemJobObj->save();
                     
-                    //Log::info("updateJobMethod:newTemJobObj");
-                    //Log::info(print_r($newTemJobObj, true));
                 }
             } else {
                 $jobObj->save();
-                //Log::info("updateJobMethod:FullTime");
-                //Log::info(print_r($jobObj, true));
+              
             }
             
         } catch (\Exception $e) {
-            //Log::error($e);
             $jobObj = $e->getMessage();
         }
         return $jobObj;
@@ -677,13 +623,9 @@ class RecruiterJobController extends Controller {
             }
             $updateOfficeTypeResult = true;
         } catch (\Exception $e) {
-            //Log::error($e);
             $updateOfficeTypeResult = $e->getMessage();
         }
-        
-        //Log::info("updateOfficeTypeMethod");
-        //Log::info(print_r($updateOfficeTypeResult, true));
-        
+  
         return $updateOfficeTypeResult;
     }
     

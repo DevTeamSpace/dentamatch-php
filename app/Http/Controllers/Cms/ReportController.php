@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Cms;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\Datatables\Datatables;
-use Session;
 use App\Models\User;
 use App\Models\RecruiterJobs;
 use Log;

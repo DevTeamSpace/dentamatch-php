@@ -76,10 +76,8 @@ class LoginController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function logout(){
-        //$user = Auth::user();
-        //Auth::guard($this->getGuard())->logout();
+      
         Auth::guard()->logout();
-        
         return redirect(property_exists($this, 'redirectTo') ? $this->redirectTo : '/');
     }
 }

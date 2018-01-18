@@ -3,9 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use DB;
 use App\Helpers\apiResponse;
-use Log;
 
 class UserProfile extends Model {
 

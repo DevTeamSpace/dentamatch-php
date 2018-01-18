@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Auth;
-use DB;
 
 class Notification extends Model {
 

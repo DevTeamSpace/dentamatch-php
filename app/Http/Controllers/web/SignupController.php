@@ -153,7 +153,6 @@ class SignupController extends Controller {
                 'firstName' => 'required',
                 'lastName' => 'required',
                 'email' => 'required',
-                //'password' => 'required',
                 'preferredJobLocationId' => 'required',
                 'jobTitleId' => 'required',
                 'aboutMe' => 'required',
