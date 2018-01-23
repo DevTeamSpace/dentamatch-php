@@ -307,11 +307,7 @@ class RecruiterJobController extends Controller {
             }else{
                 $inviteJobs = array('seeker_id' => $requestData['seekerId'] , 'recruiter_job_id' => $requestData['jobId'] , 'applied_status' => JobLists::INVITED);
                 JobLists::insert($inviteJobs);
-                $email = \App\Models\User::where('id',$request->seekerId)->first();
-                       Mail::queue('auth.emails.user-activation', [], function ($message) use ($email) {
-                    $message->to($email['email'])
-                            ->subject(trans("messages.confirmation_link"));
-                });
+                $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $requestData['seekerId'], $requestData['jobId']);
                 Session::flash('message', trans('messages.invited_success'));
                 return redirect('job/search/'.$requestData['jobId']);
             }
@@ -380,6 +376,14 @@ class RecruiterJobController extends Controller {
         $deviceModel = Device::getDeviceToken($receiverId);
         if ($deviceModel) {
             NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params);
+        }elseif(!$deviceModel && $jobstatus == JobLists::INVITED){
+            $email = \App\Models\User::where('id',$receiverId)->first();
+            $name = \App\Models\JobSeekerProfile::where('user_id',$receiverId)->first();
+            $dataName = $name['first_name'];
+            Mail::queue('email.new-invite', ['name' => $dataName ], function ($message) use ($email) {
+            $message->to($email['email'])
+                 ->subject(trans("messages.confirmation_link"));
+            });
         }
     }
 
