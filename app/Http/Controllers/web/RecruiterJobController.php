@@ -133,7 +133,6 @@ class RecruiterJobController extends Controller {
             $seekersList    = JobSeekerProfiles::getJobSeekerProfiles($jobDetails,$searchData);
             $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
             $preferredLocations = PreferredJobLocation::getAllPreferrefJobLocation();
-            
             if ($request->ajax()) {
                 return view('web.recuriterJob.seekers-data', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId'=>$jobId,'jobTemplateModalData'=>$jobTemplateModalData, 'preferredLocations'=>$preferredLocations, 'preferredLocationId'=>$preferredLocationId])->render();  
             }
