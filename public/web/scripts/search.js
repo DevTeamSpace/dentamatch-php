@@ -36,7 +36,7 @@
             } else {
                 url = mainUrl;
             }
-
+            
             if($('#avail_all').val()==1 && preferredLocationId!=""){
                 url += '&avail_all=1';
             } else if($('#avail_all').val()==1) {
@@ -50,11 +50,14 @@
 
         function getArticles(url) {
             $.ajax({
-                url: url
+                url: url     
             }).done(function (data) {
                 $('#ajaxData').html(data);
                 $('.loader-box').hide();
                 var totalResult = $('#resultCount').val();
+                if (totalResult === undefined) {
+                    totalResult = 0;
+                }
                 $('#resultFound').html(totalResult + ' Results Found');
                 
             }).fail(function () {

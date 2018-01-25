@@ -161,7 +161,6 @@ $seekerDatesCount = count($datesTemp);
             <div class="col-sm-6 col-xs-6 ">
                 @if(isset($seeker['job_status']) && $seeker['job_status'] == 1)
                 <button type="button" class="btn btn-primary-outline pull-right pd-l-30 pd-r-30">Invited</button>
-               
                 @else 
                 <button type="submit"  name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pull-right pd-l-30 pd-r-30 ">Invite</button>
                 @endif
@@ -172,6 +171,6 @@ $seekerDatesCount = count($datesTemp);
 </form>
 <!--/search preference list-->
 @endforeach 
-<input type="hidden" name="resultCount" id="resultCount" value="{{ $seekersList['paginate']->total() }}">
+<input type="hidden" name="resultCount" id="resultCount" value="{{$seekersList['paginate']->total()}}">
 
 {{ $seekersList['paginate']->appends(['avail_all' => $searchData['avail_all']])->links() }}

@@ -135,6 +135,7 @@ class JobSeekerController extends Controller
                 $message->to($reqData['email'], $reqData['firstname'])->subject('Set Password Email');
             });
             $msg = trans('messages.jobseeker_added_success');
+            dd($msg);
         }  
         Session::flash('message',$msg);
         return redirect('cms/jobseeker/index');
