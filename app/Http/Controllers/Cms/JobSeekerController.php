@@ -119,7 +119,7 @@ class JobSeekerController extends Controller
             $userGroupModel->group_id = 3;
             $userGroupModel->user_id = $userId;
             $userGroupModel->save();
-            
+
             $userProfileModel = new UserProfile();
             $userProfileModel->user_id = $userId;
             $userProfileModel->first_name = $reqData['firstname'];
@@ -135,7 +135,6 @@ class JobSeekerController extends Controller
                 $message->to($reqData['email'], $reqData['firstname'])->subject('Set Password Email');
             });
             $msg = trans('messages.jobseeker_added_success');
-            dd($msg);
         }  
         Session::flash('message',$msg);
         return redirect('cms/jobseeker/index');
