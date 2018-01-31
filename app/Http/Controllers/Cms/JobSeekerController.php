@@ -634,10 +634,10 @@ class JobSeekerController extends Controller
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                         ->join('job_lists','job_lists.seeker_id' , '=','users.id')
                         ->select(
-                                'users.email','users.id',
+                                'users.email',
                                 'jobseeker_profiles.first_name',
-                                'jobseeker_profiles.last_name',
-                                'users.is_verified','users.is_active'
+                                'jobseeker_profiles.last_name'
+//                                'users.is_verified','users.is_active'
                                 )
                         ->where('user_groups.group_id', 3)
                         ->where('job_lists.applied_status',1)
@@ -646,7 +646,7 @@ class JobSeekerController extends Controller
                         ->orderBy('users.id', 'desc')
                         ->get();
                         
-        $arr['id'] ="User Id";
+        //$arr['id'] ="User Id";
         $arr['email'] ="Email Id";
         $arr['first_name'] = "First Name";
         $arr['last_name'] = 'Last Name';
