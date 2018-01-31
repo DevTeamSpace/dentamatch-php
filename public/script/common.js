@@ -147,7 +147,7 @@ $(function () {
             {data: 'email', name: 'email',searchable:true},
             {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
             {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
-            {data: 'active', name: 'active',searchable:false},
+//            {data: 'active', name: 'active',searchable:false},
         ]
     });
     
@@ -163,7 +163,7 @@ $(function () {
             {data: 'email', name: 'email',searchable:true},
             {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
             {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
-            {data: 'active', name: 'active',searchable:false},
+//            {data: 'active', name: 'active',searchable:false},
         ]
     });
     
@@ -179,7 +179,7 @@ $(function () {
             {data: 'email', name: 'email',searchable:true},
             {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
             {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
-            {data: 'active', name: 'active',searchable:false},
+//            {data: 'active', name: 'active',searchable:false},
         ]
     });
     
@@ -195,7 +195,7 @@ $(function () {
             {data: 'email', name: 'email',searchable:true},
             {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
             {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
-            {data: 'active', name: 'active',searchable:false},
+//            {data: 'active', name: 'active',searchable:false},
         ]
     });
     
@@ -221,12 +221,13 @@ $(function () {
         //responsive: true,
         //autoWidth: false,
         ajax: public_path+'report/list',
-        ordering:false,
+        ordering:true,
+        //bSort:true,
         //bFilter: false,
         columns: [
-            {data: 'office_name', name: 'recruiter_profiles.office_name',searchable:true},
+            {data: 'office_name', name: 'office_name',searchable:true},
             {data: 'address', name: 'address',searchable:false},
-            {data: 'jobtitle_name', name: 'job_titles.jobtitle_name',searchable:false},
+            {data: 'jobtitle_name', name: 'jobtitle_name',searchable:true},
             {data: 'jobtype', name: 'jobtype',searchable:false},
             {data: 'action', name: 'action',searchable:false}
         ]

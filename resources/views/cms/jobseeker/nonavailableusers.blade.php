@@ -21,7 +21,7 @@
                                   <th>Email</th>
                                   <th>First Name</th>
                                   <th>Last Name</th>
-                                  <th>Active</th>
+<!--                                  <th>Active</th>-->
 <!--                                  <th>Action</th>-->
                               </tr>
                           </thead>

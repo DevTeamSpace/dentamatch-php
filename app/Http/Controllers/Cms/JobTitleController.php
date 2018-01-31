@@ -112,7 +112,7 @@ class JobTitleController extends Controller
 
     public function jobTitleList(){
         try{
-        $jobtitles = JobTitles::SELECT('jobtitle_name','is_active','id')->orderBy('id', 'desc');
+        $jobtitles = JobTitles::SELECT('jobtitle_name','is_active','id')->orderBy('jobtitle_name', 'asc');
         return Datatables::of($jobtitles)
                 ->removeColumn('id')
                 ->addColumn('active', function ($affiliations) {

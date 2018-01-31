@@ -373,10 +373,10 @@ class JobSeekerController extends Controller
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
                 ->removeColumn('id')
-                ->addColumn('active', function ($userData) {
-                	$active = ($userData->is_active == 1) ? 'Yes':'No';
-                    return $active;
-                })
+//                ->addColumn('active', function ($userData) {
+//                	$active = ($userData->is_active == 1) ? 'Yes':'No';
+//                    return $active;
+//                })
 //          
                 ->make(true);
         }catch (\Exception $e) {
@@ -401,10 +401,10 @@ class JobSeekerController extends Controller
         
         return Datatables::of($userData)
                 ->removeColumn('id')
-                ->addColumn('active', function ($userData) {
-                	$active = ($userData->is_active == 1) ? 'Yes':'No';
-                    return $active;
-                })
+//                ->addColumn('active', function ($userData) {
+//                	$active = ($userData->is_active == 1) ? 'Yes':'No';
+//                    return $active;
+//                })
 //           
                 ->make(true);
         }catch (\Exception $e) {
@@ -529,10 +529,10 @@ class JobSeekerController extends Controller
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
                 ->removeColumn('id')
-                ->addColumn('active', function ($userData) {
-                	$active = ($userData->is_active == 1) ? 'Yes':'No';
-                    return $active;
-                })
+//                ->addColumn('active', function ($userData) {
+//                	$active = ($userData->is_active == 1) ? 'Yes':'No';
+//                    return $active;
+//                })
                 ->make(true);
         
         
@@ -560,10 +560,10 @@ class JobSeekerController extends Controller
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
                 ->removeColumn('id')
-                ->addColumn('active', function ($userData) {
-                	$active = ($userData->is_active == 1) ? 'Yes':'No';
-                    return $active;
-                })
+//                ->addColumn('active', function ($userData) {
+//                	$active = ($userData->is_active == 1) ? 'Yes':'No';
+//                    return $active;
+//                })
                 ->make(true);
         
         

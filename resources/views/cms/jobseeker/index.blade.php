@@ -28,14 +28,14 @@
 
 			</table>
                 </div>
-                
+                <br>
+                <div class="panel-heading">Verification Status</div>
                 <div class="panel-body">
                     <table id="jobseeker_verification" class="display responsive nowrap" cellspacing="0" width="100%">
                           <thead>
                               <tr>
                                   <th>First Name</th>
                                   <th>Last Name</th>
-                                  
                                   <th>License Number</th>
                                   <th>Status</th>
                                   <th>Action</th>
