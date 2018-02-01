@@ -166,9 +166,6 @@ function checkLocation(zip, indexField) {
             if (data == 0) {
                 msg = 'Please enter a valid address.';
                 $('#location-msg' + indexField).html(msg);
-            } else if (data == 2) {
-                msg = 'Job cannot be currently created for this location. We will soon be available in your area.';
-                $('#location-msg' + indexField).html(msg);
             }
         },
         error: function(data) {
