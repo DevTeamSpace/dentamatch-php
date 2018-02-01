@@ -221,7 +221,7 @@ $(function () {
         //responsive: true,
         //autoWidth: false,
         ajax: public_path+'report/list',
-        ordering:true,
+        ordering:false,
         //bSort:true,
         //bFilter: false,
         columns: [

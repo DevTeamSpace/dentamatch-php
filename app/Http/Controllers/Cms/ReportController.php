@@ -200,12 +200,12 @@ class ReportController extends Controller {
         if ($type == 'cancellist') {
             $data = JobLists::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
                             ->where('job_lists.applied_status', JobLists::CANCELLED)
-                            ->select('jobseeker_profiles.user_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name')
+                            ->select('jobseeker_profiles.first_name', 'jobseeker_profiles.last_name')
                             ->addSelect(DB::raw("count(job_lists.id) as cancelno"))
                             ->groupby('jobseeker_profiles.user_id')
                             ->orderBy('jobseeker_profiles.first_name', 'asc')->get();
 
-            $arr['user_id'] = "User Id";
+            //$arr['user_id'] = "User Id";
             $arr['first_name'] = "First Name";
             $arr['last_name'] = 'Last Name';
             $arr['cancelno'] = 'No of cancellation';

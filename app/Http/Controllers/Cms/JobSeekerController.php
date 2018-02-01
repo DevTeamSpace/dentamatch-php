@@ -418,7 +418,7 @@ class JobSeekerController extends Controller
             $data = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                         ->select(
-                                'users.id','users.email',
+                                'users.email',
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name'
                                 )
@@ -426,7 +426,7 @@ class JobSeekerController extends Controller
                         ->where('jobseeker_profiles.is_completed', 0)
                         ->orderBy('users.id', 'desc')->get();
            
-        $arr['id'] ="User Id";
+        //$arr['id'] ="User Id";
         $arr['email'] ="Email Id";
         $arr['first_name'] = "First Name";
         $arr['last_name'] = 'Last Name';
@@ -456,7 +456,7 @@ class JobSeekerController extends Controller
             $data = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                         ->select(
-                                'users.id','users.email',
+                                'users.email',
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name'
                                 )
@@ -464,7 +464,7 @@ class JobSeekerController extends Controller
                         ->where('users.is_verified', 0)
                         ->orderBy('users.id', 'desc')->get();
            
-        $arr['id'] ="User Id";
+        //$arr['id'] ="User Id";
         $arr['email'] ="Email Id";
         $arr['first_name'] = "First Name";
         $arr['last_name'] = 'Last Name';
@@ -585,10 +585,10 @@ class JobSeekerController extends Controller
         $data = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                     ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                     ->select(
-                            'users.email','users.id',
+                            'users.email',
                             'jobseeker_profiles.first_name',
-                            'jobseeker_profiles.last_name',
-                            'jobseeker_profiles.is_completed','users.is_active'
+                            'jobseeker_profiles.last_name'
+                           
                             )
                     ->where('user_groups.group_id', 3)
                     ->whereNotIn('users.id', $availableUsers)
@@ -603,7 +603,7 @@ class JobSeekerController extends Controller
                     ->orderBy('users.id', 'desc')
                     ->get();
            
-        $arr['id'] ="User Id";
+        //$arr['id'] ="User Id";
         $arr['email'] ="Email Id";
         $arr['first_name'] = "First Name";
         $arr['last_name'] = 'Last Name';
