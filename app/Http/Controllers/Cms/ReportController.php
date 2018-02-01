@@ -240,7 +240,7 @@ class ReportController extends Controller {
             $arr['job_type'] = "Job Type";
             $arr['invited'] = 'Invited';
             $arr['applied'] = 'Applied';
-            $arr['sortlisted'] = 'Sortlisted';
+            $arr['sortlisted'] = 'Interviewing';
             $arr['hired'] = 'Hired';
             $arr['rejected'] = 'Rejected';
             $arr['cancelled'] = 'Cancelled';

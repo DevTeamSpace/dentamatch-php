@@ -262,7 +262,7 @@ class UserProfileApiController extends Controller {
                                                                     ];
                     }
                 }
-                $jobTitle = JobTitles::where('is_active',1)->get()->toArray();
+                $jobTitle = JobTitles::where('is_active',1)->orderBy('jobtitle_name','asc')->get()->toArray();
                 $affiliations = JobSeekerAffiliation::getJobSeekerAffiliation($userId);
                 $jobSeekerCertifications = JobseekerCertificates::getJobSeekerCertificates($userId);
                 $allCertification = Certifications::getAllCertificates();
