@@ -246,13 +246,16 @@ class JobSeekerController extends Controller
         $s3Url = $s3Path.DIRECTORY_SEPARATOR.$s3Bucket.DIRECTORY_SEPARATOR;
         $userProfile = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->join('job_titles','job_titles.id' , '=','jobseeker_profiles.job_titile_id')
                         ->select(
                                 'users.email','users.id','users.is_active',
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name',
                                 'jobseeker_profiles.dental_state_board',
+                                'jobseeker_profiles.state',
                                 'jobseeker_profiles.license_number',
-                                'jobseeker_profiles.is_job_seeker_verified'
+                                'jobseeker_profiles.is_job_seeker_verified',
+                                'job_titles.jobtitle_name'
                                 )
                         ->where('users.id', $id)->first();
         

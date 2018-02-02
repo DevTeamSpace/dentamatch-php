@@ -25,7 +25,6 @@
                                 <td>Last Name</td>
                                 <td>{{ $userProfile->last_name }}</td>
                             </tr>
-                            
                             @if(!empty($userProfile->license_number))
                             <tr>
                                 <td>License Number</td>
@@ -34,6 +33,28 @@
                             @else
                             <tr>
                                 <td>License Number</td>
+                                <td>N/A</td>
+                            </tr>
+                            @endif
+                            @if(!empty($userProfile->state))
+                            <tr>
+                                <td>License State</td>
+                                <td>{{ $userProfile->state }}</td>
+                            </tr>
+                            @else
+                            <tr>
+                                <td>License State</td>
+                                <td>N/A</td>
+                            </tr>
+                            @endif
+                            @if(!empty($userProfile->jobtitle_name))
+                            <tr>
+                                <td>Job Title</td>
+                                <td>{{ $userProfile->jobtitle_name }}</td>
+                            </tr>
+                            @else
+                            <tr>
+                                <td>Job Title</td>
                                 <td>N/A</td>
                             </tr>
                             @endif
