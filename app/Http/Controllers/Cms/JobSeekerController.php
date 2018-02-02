@@ -270,7 +270,6 @@ class JobSeekerController extends Controller
         try{
         $msg = trans('messages.something_wrong');
         if(!empty($request->verify)) {
-            
             switch ($request->verify) {
                 case "Approve" : 
                     $statusCode = 1;
@@ -285,7 +284,6 @@ class JobSeekerController extends Controller
                     $msg = trans('messages.jobseeker_updated_success');
                     break;
             }
-            
             UserProfile::where('user_id', $request->user_id)->update(['is_job_seeker_verified' => $statusCode]);
             $this->sendPushUser($request->user_id,$request->verify);
         }
@@ -316,6 +314,7 @@ class JobSeekerController extends Controller
                 'notificationType' => Notification::OTHER,
             );
         } 
+
         $params['data'] = $notificationData;
         $devices = Device::getDeviceToken($receiverId);
         if(!empty($devices)) {

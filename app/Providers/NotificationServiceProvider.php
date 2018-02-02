@@ -23,14 +23,15 @@ class NotificationServiceProvider extends ServiceProvider {
      * @return type
      */
     public static function sendPushNotification($device, $message, $params = false) {
-        if (strtolower($device->device_type) == Device::DEVICE_TYPE_IOS) {
-                static::sendPushIOS($device->device_token, $message, $params);
-            } else if (strtolower($device->device_type) == Device::DEVICE_TYPE_ANDROID) {
-                static::sendPushAndroid($device->device_token, $message, $params);
+        if (strtolower($device['device_type']) == Device::DEVICE_TYPE_IOS) {
+                static::sendPushIOS($device['device_token'], $message, $params);
+            } else if (strtolower($device['device_type']) == Device::DEVICE_TYPE_ANDROID) {
+                static::sendPushAndroid($device['device_token'], $message, $params);
             }
     }
 
     public static function sendPushIOS($device_identifier, $message, $params = false) {
+            
         if (!$device_identifier || strlen($device_identifier) < 22) {
             return;
         }
@@ -72,13 +73,13 @@ class NotificationServiceProvider extends ServiceProvider {
         $payload = json_encode($body);
         $msg = chr(0) . pack('n', 32) . pack('H*', $device_identifier) . pack('n', strlen($payload)) . $payload;
         $result = fwrite($fp, $msg, strlen($msg));
-        
+
         if (!$result) {
           echo 'Message not delivered' . PHP_EOL;
         } else {
           echo 'Message successfully delivered' . PHP_EOL;
         }
-
+        
         fclose($fp);
     }
 
