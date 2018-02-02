@@ -197,10 +197,12 @@ class JobSeekerController extends Controller
                         ->join('job_titles','job_titles.id' , '=','jobseeker_profiles.job_titile_id')
                         ->select(
                                 'users.id',
+                                'job_titles.jobtitle_name',
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name',
                                 'jobseeker_profiles.dental_state_board',
                                 'jobseeker_profiles.license_number',
+                                'jobseeker_profiles.state',
                                 'jobseeker_profiles.is_job_seeker_verified'
                                 )
                         ->where('user_groups.group_id', 3)
@@ -208,10 +210,14 @@ class JobSeekerController extends Controller
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
                 ->removeColumn('id')
-                /*->addColumn('dental_state_board', function ($userData) {
-                	$dentalStateBoard = !empty($userData->dental_state_board) ? $userData->dental_state_board :'N/A';
-                    return $dentalStateBoard;
-                })*/
+                 ->addColumn('job_title', function ($userData) {
+                	$jobTitle = !empty($userData->jobtitle_name) ? $userData->jobtitle_name :'N/A';
+                    return $jobTitle;
+                })
+                ->addColumn('state', function ($userData) {
+                	$State = !empty($userData->state) ? $userData->state :'N/A';
+                    return $State;
+                })
                 ->addColumn('license_number', function ($userData) {
                 	$licenseNumber = !empty($userData->license_number) ? $userData->license_number : "N/A";
                     return $licenseNumber;

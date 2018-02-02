@@ -310,8 +310,9 @@ $(function () {
         columns: [
             {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
             {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
-            
             {data: 'license_number', name: 'license_number',searchable:false},
+            {data: 'state', name: 'state',searchable:false},
+            {data: 'job_title', name: 'job_title',searchable:false},
             {data: 'is_job_seeker_verified', name: 'is_job_seeker_verified',searchable:false},
             {data: 'action', name: 'action',searchable:false}
         ]
