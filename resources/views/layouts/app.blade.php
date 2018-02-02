@@ -88,7 +88,7 @@
                                 <li><a href="{{ url('cms/report/index') }}">Job Lists</a></li>
                                 <li><a href="{{ url('cms/report/cancellist') }}">Cancel Lists</a></li>
                                 <li><a href="{{ url('cms/report/responselist') }}">Response Rate</a></li>
-                                <li><a href="{{ url('cms/report/search-location') }}">Search Location</a></li>
+<!--                                <li><a href="{{ url('cms/report/search-location') }}">Search Location</a></li>-->
                             </ul>
                         </li>
                         
