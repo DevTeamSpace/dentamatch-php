@@ -352,6 +352,7 @@ label {
     right: -44px !important;
     top: 28px;
     left: auto;
+    overflow:hidden;
     /* display: none;
     */
 }
