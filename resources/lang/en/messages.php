@@ -41,7 +41,7 @@ return [
     'address_zip_required' => 'Unable to find zip code from the address.',
     'password_not_match_confirm'=>'Password and confirm password do not match.',
     'validation_failure'=>'Validation failure.',
-    'successfully_register'=>'User registered successfully. A Confirmation link is sent on your mail.',
+    'successfully_register'=>'Your account is successfully registered with us. Please verify your email id by clicking on the verification link sent to your registered email.',
     'verified_user'=>'User verified successfully. You can login.',
     'verified_problem'=>'Problem in verification process. Please contact admin.',
     'availability_add_success' => 'Availability updated successfully',
@@ -68,7 +68,7 @@ return [
     
     'password_saved_successfully'=>'Password changed successfully',
     'old_not_match'=>'Old Password not matched.',
-    'invalid_cred_or_not_active' => 'Invalid Credentials or your account is not activated yet',
+    'invalid_cred_or_not_active' => 'This account is yet not verified by you. Please verify your account by clicking on the verification link sent to your registered email.',
     'already_register_as_seeker'=>'You are already registered as job seeker',
     'email_already_regisered' => 'Email already registered',
     'confirmation_link'=>'Confirmation Link for new user',
