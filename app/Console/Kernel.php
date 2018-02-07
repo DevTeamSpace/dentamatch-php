@@ -34,14 +34,14 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('user:profileCompletion')->daily()->withoutOverlapping();
+        $schedule->command('user:profileCompletion')->everyThirtyMinutes()->withoutOverlapping();
         $schedule->command('user:certificateExpiry')->daily()->withoutOverlapping();
         $schedule->command('notify:adminNotification')->everyMinute()->withoutOverlapping();
         $schedule->command('notify:tempJobExpiryNotification')->daily()->withoutOverlapping();
         $schedule->command('notify:tempJobRatingNotification')->daily()->withoutOverlapping();
-        $schedule->command('jobseeker:unverified')->daily()->withoutOverlapping();
-        $schedule->command('user:availability')->daily()->withoutOverlapping();
-        $schedule->command('user:pendinginvites')->daily()->withoutOverlapping();
+        $schedule->command('jobseeker:unverified')->everyThirtyMinutes()->withoutOverlapping();
+        $schedule->command('user:availability')->everyThirtyMinutes()->withoutOverlapping();
+        $schedule->command('user:pendinginvites')->everyThirtyMinutes()->withoutOverlapping();
     }
 
     /**

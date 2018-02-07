@@ -54,6 +54,12 @@ class JobSeekerController extends Controller
         return view('cms.jobseeker.index');
     }
     
+    
+    protected function verificationLicense()
+    {  
+        return view('cms.jobseeker.verification-status');
+    }
+    
     /**
      * Show the form to update an existing location.
      *
@@ -289,7 +295,7 @@ class JobSeekerController extends Controller
         }
             
         Session::flash('message',$msg);
-        return redirect('cms/jobseeker/index');
+        return redirect('cms/jobseeker/verification');
         }catch (\Exception $e) {
             Log::error($e);
         } 

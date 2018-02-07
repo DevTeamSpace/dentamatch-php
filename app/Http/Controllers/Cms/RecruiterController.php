@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\PasswordReset;
 use Illuminate\Support\Facades\Validator;
+use App\Models\RecruiterProfile;
 use Mail;
 use Log;
 
@@ -112,7 +113,9 @@ class RecruiterController extends Controller
                 $passwordModel = PasswordReset::firstOrNew(array('user_id' => $userId, 'email' => $reqData['email']));
                 $passwordModel->fill(['token' => $token]);
                 $passwordModel->save();
-
+                
+                 RecruiterProfile::create(['user_id' => $userId]);
+                 
                 Mail::queue('email.reset-password-token', ['name' => "Recruiter", 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($reqData) {
                     $message->to($reqData['email'], "Recruiter")->subject('Set Password Email');
                 });

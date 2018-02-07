@@ -228,6 +228,7 @@ Route::group(['middleware' => ['web', 'xssWeb', 'nocache'], 'prefix' => 'cms/'],
     
     Route::group(['prefix' => 'jobseeker/'], function() {
         Route::get('index', 'Cms\JobSeekerController@index');
+        Route::get('verification', 'Cms\JobSeekerController@verificationLicense');
         Route::get('list', 'Cms\JobSeekerController@jobSeekerList');
         Route::delete('{id}/delete', 'Cms\JobSeekerController@delete');
         Route::get('{id}/edit', 'Cms\JobSeekerController@edit');

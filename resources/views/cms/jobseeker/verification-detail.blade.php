@@ -74,7 +74,7 @@
                                 @endif
                             @endif
                             
-                            <a href="<?php echo e(url('cms/jobseeker/index')); ?>"  class="btn btn-primary">
+                            <a href="<?php echo e(url('cms/jobseeker/verification')); ?>"  class="btn btn-primary">
                                 <i class="fa fa-backward"></i> Return to list
                             </a>
                         </div>

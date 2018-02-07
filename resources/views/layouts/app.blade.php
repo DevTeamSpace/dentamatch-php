@@ -83,18 +83,17 @@
                                 <li><a href="{{ url('cms/skill/index') }}">Skills</a></li>
                                 <li><a href="{{ url('cms/school/index') }}">Schooling</a></li>
                                 <li><a href="{{ url('cms/jobseeker/index') }}">Job Seeker</a></li>
+                                <li><a href="{{ url('cms/jobseeker/verification') }}">Verification Status</a></li>
                                 <li><a href="{{ url('cms/recruiter/index') }}">Recruiter</a></li>
                                 <li><a href="{{ url('cms/notify/index') }}">Notify Users</a></li>
-                                <li><a href="{{ url('cms/report/index') }}">Job Lists</a></li>
-                                <li><a href="{{ url('cms/report/cancellist') }}">Cancel Lists</a></li>
-                                <li><a href="{{ url('cms/report/responselist') }}">Response Rate</a></li>
+                               
 <!--                                <li><a href="{{ url('cms/report/search-location') }}">Search Location</a></li>-->
                             </ul>
                         </li>
                         
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    Job Seeker <span class="caret"></span>
+                                    Job Seeker Report<span class="caret"></span>
                                 </a>
 
                             <ul class="dropdown-menu" role="jobseeker">
@@ -102,6 +101,9 @@
                                 <li><a href="{{ url('cms/jobseeker/incomplete') }}">Incomplete Profiles</a></li>
                                 <li><a href="{{ url('cms/jobseeker/nonavailableusers') }}">Non Available Users Profiles</a></li>
                                 <li><a href="{{ url('cms/jobseeker/invited') }}">Invited Jobseeker Profiles</a></li>
+                                 <li><a href="{{ url('cms/report/index') }}">Job Lists</a></li>
+                                <li><a href="{{ url('cms/report/cancellist') }}">Cancel Lists</a></li>
+                                <li><a href="{{ url('cms/report/responselist') }}">Response Rate</a></li>
                             </ul>
                         </li>
                         
