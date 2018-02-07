@@ -119,35 +119,60 @@
     });
 
 
+
+
+    $('#jobTitleId > option').each(function(index) {
+       $(this).attr("customIndex",index);
+    });
+
     $('#jobTitleId').change(function(){
-    debugger
-    var jobTitleIndex,jsonValue;
     
-    jobTitleIndex= $(this)[0].value-1;
+
+     
+    var listID,jsonValue;
+    
+
+
+    listID= $(this).val();
+ 
+    
     jsonValue=JSON.parse($(jsonVal).val());
+  
+
+
+    for(var i=0;i<jsonValue.length; i++){
+
+
+if(jsonValue[i].id==listID)
+{
+
+if(jsonValue[i].is_license_required==1){
+    $('.liscenceGroup').removeClass("licenseId");
+        
+        }
+
+ else{
+    $('.liscenceGroup').addClass("licenseId");
+        }
+    break;
+
+}
+
+
+    }
     
-    // $.each(jsonValue, function(i,item){
-    //     console.log();
-        if(jsonValue[jobTitleIndex].is_license_required==1){
-        $('.liscenceGroup').removeClass("licenseId");
-        }
-
-     else{
-
-        $('.liscenceGroup').addClass("licenseId");
-
-        }
 
             
-        // }
+        });
+
+
+    
 
 
 
 
 
-
-
-    });
+    
 
 </script>
 @endsection
