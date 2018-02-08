@@ -1,9 +1,16 @@
 $(function() {
     "use strict";
+   
     var dynamicCount = 0;
     var dynamicLength, selVal, selLen;
     var locationNum = 3;
     $(".dropCheck").find("input").after("<div></div>");
+debugger
+// $(".dropdown-menu .inner>li").each(function(index,value){
+// $(this).attr("chetan",value);
+
+// });
+
 
     function dropDownDynamic() {
         $('.ddlCars').multiselect({

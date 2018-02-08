@@ -526,7 +526,9 @@
             ((typeof index !== 'undefined' & null !== index) ? ' data-original-index="' + index + '"' : '') +
             ((typeof optgroup !== 'undefined' & null !== optgroup) ? 'data-optgroup="' + optgroup + '"' : '') +
             '>' + content + '</li>';
+       
       };
+
 
       /**
        * @param text
@@ -1472,9 +1474,12 @@
       $lisVisible.toggleClass('selected', status);
 
       for (var i = 0; i < lisVisLen; i++) {
+
         var origIndex = $lisVisible[i].getAttribute('data-original-index');
         selectedOptions[selectedOptions.length] = $options.eq(origIndex)[0];
       }
+
+
 
       $(selectedOptions).prop('selected', status);
 
