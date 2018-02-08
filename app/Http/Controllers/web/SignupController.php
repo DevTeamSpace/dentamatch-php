@@ -280,7 +280,8 @@ class SignupController extends Controller {
                 ->select('user_groups.group_id','users.id', 'email')
                 ->where('users.verification_code', $code)
                 ->first();
-        
+        Auth::logout();
+        Session::flush();
         $redirect = 'login';
         try {
             if (isset($user) && !empty($user)) {
