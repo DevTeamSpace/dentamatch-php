@@ -121,8 +121,12 @@ class UserProfileApiController extends Controller {
             $isLicenseRequired = 0;
             $jobTitleModel = JobTitles::where('id',$request->jobTitleId)->first();
             if($jobTitleModel) {
+             if($jobTitleModel->mapped_skills_id == ""){
+                 $mappedSkillsArray = [];
+              }else{  
                 $mappedSkills = $jobTitleModel->mapped_skills_id;
                 $mappedSkillsArray = explode(",",$mappedSkills);
+              }
                 if($jobTitleModel->is_license_required) {
                     $validateKeys['license']= 'required';
                     $validateKeys['state'] = 'required';

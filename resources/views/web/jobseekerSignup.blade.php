@@ -93,6 +93,9 @@
                     <label>About Me</label>
                     <textarea data-parsley-required data-parsley-required-message="About me is required" class="form-control" name="aboutMe">{{ app('request')->input('aboutMe') }}</textarea>
                 </div>
+                <div class="form-group">
+                    <input type="checkbox" name="privacy" id="checkbox" style="-webkit-appearance:checkbox; margin-right:5px;" value="" required=""><strong>I agree to the Terms and Conditions and Privacy policy</strong>
+                </div>
 
             </div>
         </div>
@@ -120,10 +123,11 @@
 
 
 
-
     $('#jobTitleId > option').each(function(index) {
        $(this).attr("customIndex",index);
     });
+    
+    
 
     $('#jobTitleId').change(function(){
     
