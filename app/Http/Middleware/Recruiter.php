@@ -18,8 +18,8 @@ class Recruiter {
     public function handle($request, Closure $next, $guard = null) {
         $term = \App\Models\UserGroup::where('user_id', Auth::user()->id)->first();
         if (!empty($term) && isset($term)) {
-            if ($term->group_id != 2) {
-                return redirect('login');
+            if ($term->group_id == 1) {
+                return redirect('cms');
             }
             return $next($request);
         } else {
