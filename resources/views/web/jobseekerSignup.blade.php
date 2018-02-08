@@ -94,7 +94,7 @@
                     <textarea data-parsley-required data-parsley-required-message="About me is required" class="form-control" name="aboutMe">{{ app('request')->input('aboutMe') }}</textarea>
                 </div>
                 <div class="form-group">
-                    <input type="checkbox" name="privacy" id="checkbox" style="-webkit-appearance:checkbox; margin-right:5px;" value="" required=""><strong>I agree to the Terms and Conditions and Privacy policy</strong>
+                    <input type="checkbox" name="privacy" id="checkbox" style="-webkit-appearance:checkbox; margin-right:5px;" value=""><strong>I agree to the <a href="{{ url('api/term-condition') }}">Terms and Conditions</a> and <a href="{{ url('api/privacy-policy') }}">Privacy policy</a></strong>
                 </div>
 
             </div>
