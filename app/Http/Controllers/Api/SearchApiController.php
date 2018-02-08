@@ -271,7 +271,7 @@ class SearchApiController extends Controller {
                 $jobDetails = RecruiterJobs::where('recruiter_jobs.id',$notificationDetails->job_list_id)->first();
                 
                 if($jobDetails->job_type == RecruiterJobs::FULLTIME || $jobDetails->job_type == RecruiterJobs::PARTTIME){
-                    $response = $this->acceptRejectJob($userId,$notificationDetails->job_list_id,$reqData['acceptStatus'],$notificationDetails->sender_id,$reqData['notificationId']);
+                    $response = $this->acceptRejectJob($userId,$notificationDetails->job_list_id,$reqData['acceptStatus'],$notificationDetails->sender_id,$reqData['notificationId'],0);
                 }else{
                     if($reqData['acceptStatus']==1) 
                     {
@@ -383,7 +383,7 @@ class SearchApiController extends Controller {
         return $response;
     }
     
-    public function acceptRejectJob($userId,$jobId,$acceptstatus,$recruiterId,$notificationId){
+    public function acceptRejectJob($userId,$jobId,$acceptstatus,$recruiterId,$notificationId,$hired=1){
         $jobExists = JobLists::where('seeker_id','=',$userId)
                                             ->where('recruiter_job_id','=',$jobId)
                                             ->orderBy('id','desc')
@@ -394,13 +394,15 @@ class SearchApiController extends Controller {
                             if($acceptstatus == 0){
                                 $jobExists->applied_status = JobLists::CANCELLED;
                                 $msg = trans("messages.job_cancelled_success");
-                            }else{
+                            }elseif($hired==1){
                                 $jobExists->applied_status = JobLists::HIRED;
                                 $userChat = new ChatUserLists();
                                 $userChat->recruiter_id = $recruiterId;
                                 $userChat->seeker_id = $userId;
                                 $userChat->checkAndSaveUserToChatList();
                                 $msg = trans("messages.job_hired_success");
+                            }else{
+                                $jobExists->applied_status = JobLists::APPLIED;
                             }
                             $jobExists->save();
                             Notification::where('id', $notificationId)->update(['seen' => 1]);
