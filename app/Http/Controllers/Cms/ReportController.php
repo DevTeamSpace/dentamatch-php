@@ -64,7 +64,7 @@ class ReportController extends Controller {
                             ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 5, 1,0)) AS rejected"))
                             ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 6, 1,0)) AS cancelled"))
                             ->groupby('recruiter_jobs.id')
-                            ->orderBy('recruiter_jobs.id', 'desc');
+                            ->orderBy('recruiter_jobs.id', 'desc')->get();
             return Datatables::of($jobLists)
                             ->removeColumn('id')
                             ->addColumn('jobtype', function ($jobLists) {
@@ -91,7 +91,7 @@ class ReportController extends Controller {
                             ->select('jobseeker_profiles.user_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name')
                             ->addSelect(DB::raw("count(job_lists.id) as cancelno"))
                             ->groupby('jobseeker_profiles.user_id')
-                            ->orderBy('jobseeker_profiles.first_name', 'asc');
+                            ->orderBy('jobseeker_profiles.first_name', 'asc')->get();
 
             return Datatables::of($seekerList)
                             ->removeColumn('user_id')

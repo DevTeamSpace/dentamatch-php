@@ -162,8 +162,12 @@ class SignupController extends Controller {
             $isComplete = 1;
             $jobTitleModel = JobTitles::where('id',$request->jobTitleId)->first();
             if($jobTitleModel) {
+              if($jobTitleModel->mapped_skills_id == ""){
+                 $mappedSkillsArray = [];
+              }else{  
                 $mappedSkills = $jobTitleModel->mapped_skills_id; 
                 $mappedSkillsArray = explode(",",$mappedSkills);
+              }  
                 if($jobTitleModel->is_license_required) {
                     $isComplete = 0;
                     $validateKeys['license']= 'required';
