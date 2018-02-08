@@ -5,12 +5,12 @@ return [
     'apple' => [
         'sandbox' => [
             'url' => 'ssl://gateway.sandbox.push.apple.com:2195',
-            'pem_file' =>public_path('notification_pems') . '/DentaMatchDev.pem',
+            'pem_file' =>public_path('notification_pems') . '/pushDevelopment.pem',
             'passphrase' => '1234'
         ],
         'production' => [
             'url' => 'ssl://gateway.push.apple.com:2195',
-            'pem_file' => public_path('notification_pems') . '/DentaMatchDist.pem',
+            'pem_file' => public_path('notification_pems') . '/pushProduction.pem',
             'passphrase' => '1234'
         ]
     ],
