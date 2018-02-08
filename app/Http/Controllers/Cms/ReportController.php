@@ -109,8 +109,14 @@ class ReportController extends Controller {
                             ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'recruiter_offices.user_id')
                             ->select('recruiter_jobs.id', 'recruiter_jobs.job_type', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name', 'recruiter_offices.address')
                             ->orderBy('recruiter_jobs.id', 'desc');
-
+ 
             return Datatables::of($jobLists)
+                            ->filterColumn('office_name', function ($query, $keyword) {
+                                $query->whereRaw("office_name like ?", ["%$keyword%"]);
+                            })
+                            ->filterColumn('jobtitle_name', function ($query, $keyword) {
+                                $query->whereRaw("jobtitle_name like ?", ["%$keyword%"]);
+                            })
                             ->removeColumn('id')
                             ->addColumn('jobtype', function ($jobLists) {
                                 $jobType = "";
