@@ -272,8 +272,8 @@ $(function () {
         ordering:false,
         //bFilter: false,
         columns: [
-            {data: 'office_name', name: 'recruiter_profiles.office_name',searchable:false},
-            {data: 'jobtitle_name', name: 'jobtitle_name',searchable:false},
+            {data: 'office_name', name: 'recruiter_profiles.office_name',searchable:true},
+            {data: 'jobtitle_name', name: 'job_titles.jobtitle_name',searchable:true},
             {data: 'jobtype', name: 'jobtype',searchable:false},
             {data: 'invited', name: 'invited',searchable:false},
             {data: 'applied', name: 'applied',searchable:false},
