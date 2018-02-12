@@ -186,9 +186,6 @@
         <script type="text/javascript">
 
             var urlFav = "{{ url('recruiter/markFavourite') }}";
-            var socketUrl = "{{ config('app.socketUrl') }}";
-            var userId = "{{ Auth::id() }}";
-            var officeName = "{{ $job['office_name'] }}";
 
 
     $(".deleteJobModal").click(function() {
@@ -223,7 +220,6 @@
     });
 
 </script>
-<script src="{{ config('app.socketUrl') }}/socket.io/socket.io.js"></script>
 <script src ="{{asset('web/scripts/jobdetail.js')}}"></script>
 @endsection
 
