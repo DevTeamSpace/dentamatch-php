@@ -309,7 +309,7 @@ class JobSeekerController extends Controller
                 'notification_title' => 'Dental License Status',
                 'sender_id' => $user->id,
                 'type' => 1,
-                'notificationType' => Notification::OTHER,
+                'notificationType' => Notification::LICENSEACCEPTREJECT,
             );
         } else if ($verificationStatus == 'Reject') {
             $notificationData = array(
@@ -317,7 +317,7 @@ class JobSeekerController extends Controller
                 'notification_title' => 'Dental License Status',
                 'sender_id' => $user->id,
                 'type' => 1,
-                'notificationType' => Notification::OTHER,
+                'notificationType' => Notification::LICENSEACCEPTREJECT,
             );
         } 
 
