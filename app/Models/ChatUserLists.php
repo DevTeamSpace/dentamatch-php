@@ -42,7 +42,7 @@ class ChatUserLists extends Model
                     DB::raw("max(user_chat.id) AS messageId"),
                     'chat_user_list.id as messageListId','chat_user_list.seeker_id as seekerId',
                     'chat_user_list.recruiter_block as recruiterBlock','chat_user_list.seeker_block as seekerBlock')
-                    ->limit(2)->get();
+                    ->get();
             
         $messageIds = $chatUserList->pluck('messageId'); 
         $responseData = $chatUserList->toArray();
@@ -50,7 +50,9 @@ class ChatUserLists extends Model
         $chatCountData = UserChat::where('to_id',$recruiterId)->where('read_status',0)
                 ->select('from_id as fromId',DB::raw("count(id) AS unreadCount"))
                 ->groupBy('from_id')->pluck('unreadCount','fromId');
-        
+
+        $totalCount = $chatCountData->sum();
+
         $chatData = UserChat::whereIn('id',$messageIds)->pluck('message','id');
         foreach($responseData as $key=>$row){
             if(isset($chatCountData[$row['seekerId']])){
@@ -61,8 +63,9 @@ class ChatUserLists extends Model
                 unset($responseData[$key]);
             }
         }
-        return $responseData;
+        $chatDatas = array('totalCount' => $totalCount, 'chatData' => $responseData);
         
+        return $chatDatas; 
     }
     
     public static function getSeekerListForChat($recruiterId){
@@ -95,7 +98,6 @@ class ChatUserLists extends Model
             $responseData[$key]['message'] = $chatData[$row['messageId']];
             $responseData[$key]['timestamp'] = date('M d', strtotime($row['timestamp']));
             }
-            
         return $responseData;
         
     }
