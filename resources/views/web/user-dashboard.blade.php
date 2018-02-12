@@ -57,11 +57,9 @@
                             <div class="tHire unread">
                                     {{ count($latestMessage) }} Unread
                             </div>
-
                             <ul class="dashboarFinalList"> 
                                 @if(!empty($latestMessage))
                                 @foreach ($latestMessage as $seeker)
-         
                                     <li>
                                         <div class="dashListImgBlock">
                                             <div class="dashListImg">
@@ -79,7 +77,7 @@
                                 @endforeach
                                 @endif
                             </ul>
-                            <div class="viewAll"><a href="/chat">View all</a></div>
+                            <div class="viewAll"><a href="{{url('/chat')}}">View all</a></div>
 
                         </div>
                     </div>
@@ -137,7 +135,7 @@
                             @if(count($currentWeekCalendar)>0)
                                 @include('web.recuriterJob.dashboard-calendar-data')
                             @endif
-                            <div class="viewAll"><a href="/calender">View calendar</a></div>
+                            <div class="viewAll"><a href="{{url('/calender')}}">View calendar</a></div>
                         </div>
                     </div>
                     <div class="commonBox">

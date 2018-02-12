@@ -20,7 +20,7 @@
                                 <a href="{{ $url }}">Click to Activate</a>
                             </p>
                             <br/>
-                            
+                            <p style="margin: 0">(Link)</p>
                             <p style="margin:20px 0 0 0; padding: 0;">Sincerely Captured</p>
                             <p style="margin: 0">Dentamatch Team</p>
 

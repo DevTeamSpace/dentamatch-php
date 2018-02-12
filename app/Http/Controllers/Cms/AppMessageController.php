@@ -87,6 +87,7 @@ class AppMessageController extends Controller
             $appMessage->message = $request->message;
             $appMessage->messageTo = $request->message_to;
             $appMessage->save();
+            
             Session::flash('message',$msg);
             return redirect('cms/notify/index');
         } catch (\Exception $e) {
@@ -106,8 +107,8 @@ class AppMessageController extends Controller
         if(!$appMessage->messageSent){
             $appMessage->messageSent=1;
             $appMessage->cronMessageSent=0;
-            $appMessage->save();
-        }else {
+            $appMessage->save();   
+       }else {
             Session::flash('message',trans('messages.already_sent_message'));
         }
         

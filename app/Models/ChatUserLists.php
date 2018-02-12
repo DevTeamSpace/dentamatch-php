@@ -42,7 +42,7 @@ class ChatUserLists extends Model
                     DB::raw("max(user_chat.id) AS messageId"),
                     'chat_user_list.id as messageListId','chat_user_list.seeker_id as seekerId',
                     'chat_user_list.recruiter_block as recruiterBlock','chat_user_list.seeker_block as seekerBlock')
-                    ->get();
+                    ->limit(2)->get();
             
         $messageIds = $chatUserList->pluck('messageId'); 
         $responseData = $chatUserList->toArray();
@@ -85,6 +85,7 @@ class ChatUserLists extends Model
                     DB::raw("max(user_chat.id) AS messageId"),'job_titles.jobtitle_name as jobTitle',
                     'chat_user_list.id as messageListId','chat_user_list.seeker_id as seekerId',
                     'chat_user_list.recruiter_block as recruiterBlock','chat_user_list.seeker_block as seekerBlock')
+                    ->orderBy('timestamp','desc')
                     ->get();
             
         $messageIds = $chatUserList->pluck('messageId'); 

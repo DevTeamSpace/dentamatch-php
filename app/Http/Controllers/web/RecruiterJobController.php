@@ -342,7 +342,7 @@ class RecruiterJobController extends Controller {
         }else if ($jobstatus == JobLists::REJECTED) {
             $notificationData = array(
                 'notificationData' => $jobDetails['office_name'] . " has rejected your job application for " . $jobDetails['jobtitle_name'],
-                'notification_title' => 'User shortlisted',
+                'notification_title' => 'User rejected',
                 'sender_id' => $sender,
                 'type' => 1,
                 'notificationType' => Notification::REJECTED,

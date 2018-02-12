@@ -31,7 +31,7 @@ class NotificationServiceProvider extends ServiceProvider {
     }
 
     public static function sendPushIOS($device_identifier, $message, $params = false) {
-            
+      try{          
         if (!$device_identifier || strlen($device_identifier) < 22) {
             return;
         }
@@ -81,9 +81,14 @@ class NotificationServiceProvider extends ServiceProvider {
         }
         
         fclose($fp);
-    }
+       }
+         catch (Exception $e) {
+            Log::error(__METHOD__ . ' ' . $e->getMessage());
+       } 
+   }
 
     public static function sendPushAndroid($device_token, $message, $params = false) {
+       try{ 
         if (!$device_token) {
             return;
         }
@@ -110,6 +115,10 @@ class NotificationServiceProvider extends ServiceProvider {
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
         curl_exec($ch);
         curl_close($ch);
+        }
+         catch (Exception $e) {
+            Log::error(__METHOD__ . ' ' . $e->getMessage());
+       } 
     }
 
     
@@ -200,7 +209,6 @@ class NotificationServiceProvider extends ServiceProvider {
     public static function notificationFromAdmin(AppMessage $appMessage){
         $message = $appMessage->message;
         $user = User::getAdminUserDetailsForNotification();
-        
         if($appMessage->messageTo==1) {
             static::getAppRecruiterNotification($user, $message, 2);
             static::getAppDeviceNotification($user, $message, 3);
@@ -244,7 +252,7 @@ class NotificationServiceProvider extends ServiceProvider {
                             'type' => 1,
                             'notificationType' => Notification::OTHER,
                         ];
-        
+
         $devices = Device::getAllDeviceToken($groupId);
         if(!empty($devices)) {
 
