@@ -56,7 +56,7 @@ class JobseekerTempHired extends Model {
         return ($data->groupBy('applied_status')->toArray());
     }
     
-    public static function getCurrentDayJobSeekerList($limit=3) {
+    public static function getCurrentDayJobSeekerList() {
         $obj = JobLists::join('recruiter_jobs', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
                 ->leftjoin('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                 ->leftjoin('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
@@ -82,7 +82,7 @@ class JobseekerTempHired extends Model {
                 ->groupby('job_lists.seeker_id');
        
         $data = $obj->orderby('job_lists.applied_status', 'desc')
-                ->take($limit)->get();
+                ->get();
         return $data->toArray();
     }
 
