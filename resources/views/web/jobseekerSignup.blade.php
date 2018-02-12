@@ -177,6 +177,6 @@ if(jsonValue[i].is_license_required==1){
 
 
     
-
+$('#jobTitleId').change();
 </script>
 @endsection
