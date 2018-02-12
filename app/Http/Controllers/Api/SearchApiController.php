@@ -269,7 +269,7 @@ class SearchApiController extends Controller {
                 $reqData = $request->all();
                 $notificationDetails = Notification::where('id',$reqData['notificationId'])->first();
                 $jobDetails = RecruiterJobs::where('recruiter_jobs.id',$notificationDetails->job_list_id)->first();
-                
+
                 if($jobDetails->job_type == RecruiterJobs::FULLTIME || $jobDetails->job_type == RecruiterJobs::PARTTIME){
                     $response = $this->acceptRejectJob($userId,$notificationDetails->job_list_id,$reqData['acceptStatus'],$notificationDetails->sender_id,$reqData['notificationId'],0);
                 }else{
@@ -388,7 +388,7 @@ class SearchApiController extends Controller {
                                             ->where('recruiter_job_id','=',$jobId)
                                             ->orderBy('id','desc')
                                             ->first();
-        
+                   
         if($jobExists){
                         if($jobExists->applied_status == JobLists::INVITED){
                             if($acceptstatus == 0){
@@ -403,6 +403,7 @@ class SearchApiController extends Controller {
                                 $msg = trans("messages.job_hired_success");
                             }else{
                                 $jobExists->applied_status = JobLists::APPLIED;
+                                $msg = trans("messages.job_hired_success");
                             }
                             $jobExists->save();
                             Notification::where('id', $notificationId)->update(['seen' => 1]);
