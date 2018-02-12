@@ -20,22 +20,3 @@
         </div>
     </div>
 </div>
-
-<div id="logoutMessageBox" class="modal fade" role="dialog">
-    <div class="modal-dialog custom-modal popup-wd522">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Message</h4>
-            </div>
-            <div class="modal-body ">
-                <form>
-                    <div class="form-group custom-select">
-                        You have logged in to some other browser.
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
