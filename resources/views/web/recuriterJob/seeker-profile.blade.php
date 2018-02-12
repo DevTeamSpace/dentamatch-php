@@ -229,11 +229,6 @@
         $('#certificateModalImg').attr('src', imgUrl+$(this).data('image'));
         return false;
     });
-    var socketUrl = "{{ config('app.socketUrl') }}";
-    var userId = "{{ Auth::id() }}";
-    var officeName = "{{ Session::get('userData.profile.office_name') }}";
-
 </script>
-<script src="{{ config('app.socketUrl') }}/socket.io/socket.io.js"></script>
 <script src ="{{ asset('web/scripts/jobdetail.js') }}"></script>
 @endsection

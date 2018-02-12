@@ -16,11 +16,13 @@ $(document).ready(function() {
     //$.emoticons.define(definition);
     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var loadPage = false;
+    $('.modalClick').hide();
     var socket = io(socketUrl,{reconnection:true,reconnectionAttempts:'Infinity'});
     socket.on('connect', function() {
         console.info('Socket ');
         socket.send("Hello World");
         socket.on('disconnect', function() {
+            $('.modalClick').hide();
             console.info('Socket disconnect');
             loadPage = true;
         });
@@ -38,6 +40,7 @@ $(document).ready(function() {
                     });
                     
                 }
+                $('.modalClick').show();
             });
         }
         initSocket();
@@ -60,6 +63,13 @@ $(document).ready(function() {
                 }
             });
         }
+        
+        
+        $('.modalClick').off('click');
+        $('.modalClick').on('click',function(e){
+            $('#seekerId').val($(this).data('seekerid'));
+            $('#chatMsg').val('');
+        });
         socket.on('logoutPreviousSession',function(response){
             $('#logoutMessageBox').modal('show');
             setTimeout(function(){ window.location.href='/logout'; }, 3000);
@@ -223,7 +233,22 @@ $(document).ready(function() {
             }
             //console.log(msgDateArr);
         });
-
+        
+        $('#sendChat').off('click');
+        $('#sendChat').on('click',function(e){
+            e.preventDefault();
+            var chatMsg = $('#chatMsg').val();
+            var seekerId = $('#seekerId').val();
+            console.log(seekerId);
+            var data = {fromId:userId, toId:seekerId, message:chatMsg, messageFrom:1};
+            if(chatMsg!=''){
+                socket.emit('sendMessage', data, function(msgObj){
+                    console.log(msgObj);
+                    $('.modal .close').click();
+                });
+            }
+        });
+        
         socket.off('receiveMessage');
         socket.on('receiveMessage', function(data) {
 
