@@ -55,11 +55,11 @@
                         <div class="welcomeContent lastMsg">
                             <h4>Latest Messages</h4>
                             <div class="tHire unread">
-                                    {{ count($latestMessage) }} Unread
+                                    {{ $latestMessage['totalCount'] }} Unread
                             </div>
                             <ul class="dashboarFinalList"> 
-                                @if(!empty($latestMessage))
-                                @foreach ($latestMessage as $seeker)
+                                @if(!empty($latestMessage['chatData']))
+                                @foreach ($latestMessage['chatData'] as $seeker)
                                     <li>
                                         <div class="dashListImgBlock">
                                             <div class="dashListImg">
