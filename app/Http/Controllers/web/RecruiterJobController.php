@@ -283,7 +283,7 @@ class RecruiterJobController extends Controller {
                     $userChat->recruiter_id = Auth::id();
                     $userChat->seeker_id = $jobData->seeker_id;
                     $userChat->checkAndSaveUserToChatList();
-    
+                    $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $jobData->seeker_id, $requestData['jobId']);
                 }else if ($requestData['appliedStatus'] == JobLists::REJECTED){
                     $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $jobData->seeker_id, $requestData['jobId']);
                 }
