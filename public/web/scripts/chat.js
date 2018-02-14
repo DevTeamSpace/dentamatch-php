@@ -240,7 +240,7 @@ $(document).ready(function() {
             var chatMsg = $('#chatMsg').val();
             var seekerId = $('#seekerId').val();
             console.log(seekerId);
-            var data = {fromId:userId, toId:seekerId, message:chatMsg, messageFrom:1};
+            var data = {fromId:fromId, toId:seekerId, message:chatMsg, messageFrom:1};
             if(chatMsg!=''){
                 socket.emit('sendMessage', data, function(msgObj){
                     console.log(msgObj);
