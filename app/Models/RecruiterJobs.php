@@ -609,26 +609,5 @@ class RecruiterJobs extends Model
             ->orderBy('recruiter_jobs.id','desc');  
         return $jobObj->get();
     }
-    
-    public static function getDashboardCalendarData(){
-        $ts = strtotime(date("Y-m-d"));
-        $start = (date('w', $ts) == 1) ? $ts : strtotime('last monday', $ts);
-        $jobObj = RecruiterJobs::where('recruiter_jobs.job_type',RecruiterJobs::TEMPORARY)
-            ->join('job_templates',function($query){
-                $query->on('job_templates.id','=','recruiter_jobs.job_template_id')
-                ->where('job_templates.user_id',Auth::user()->id);
-            })
-            ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
-            ->join('jobseeker_temp_hired', 'jobseeker_temp_hired.job_id', '=', 'recruiter_jobs.id')
-            ->join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'jobseeker_temp_hired.jobseeker_id')
-            ->whereBetween('jobseeker_temp_hired.job_date',[(date('Y-m-d', $start)),(date('Y-m-d', strtotime('next sunday', $start)))])
-            ->groupBy('recruiter_jobs.id','jobseeker_temp_hired.job_date')
-            ->select('jobseeker_profiles.first_name','jobseeker_profiles.last_name','jobseeker_profiles.profile_pic',
-                    'job_titles.jobtitle_name','jobseeker_temp_hired.jobseeker_id','jobseeker_temp_hired.job_id',
-                    DB::raw("count(distinct jobseeker_temp_hired.jobseeker_id) AS user_count"),
-                    'jobseeker_temp_hired.job_date')->get();
-            
-        return $jobObj->groupBy('job_date');
-    }
 }
     
