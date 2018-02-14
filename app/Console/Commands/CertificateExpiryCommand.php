@@ -57,10 +57,11 @@ class CertificateExpiryCommand extends Command
                 $userId = $value->user_id;
                 $notificationData['receiver_id'] = $userId;
                 $notificationData = array(
-                    'message' => static::NOTIFICATION_INTERVAL." days remaining for the expiry of ".$value->certificate_name,
+                    'notificationData' => static::NOTIFICATION_INTERVAL." days remaining for the expiry of ".$value->certificate_name,
                     'notification_title'=>'Certification Expiry Reminder',
                     'sender_id' => $adminModel->id,
-                    'type' => Notification::OTHER
+                    "type" =>1,
+                    'notificationType' => Notification::OTHER
                 );
                 
                 $params['data'] = $notificationData;
