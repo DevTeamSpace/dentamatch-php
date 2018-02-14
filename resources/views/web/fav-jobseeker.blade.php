@@ -18,7 +18,8 @@
         </div>
         <div class="media-body row">
             <div class="col-sm-8 pd-t-10 ">
-                <div ><a href="{{ url('jobseeker/'.$fav->seeker_id) }}" class="media-heading">{{$fav->first_name}} {{$fav->last_name}}</a> <span class="mr-l-5 label label-success">{{ !empty($fav->sum) ? number_format($fav->sum,1) : "Not Yet Rated"}}</span></div>
+                <div ><a href="{{ url('jobseeker/'.$fav->seeker_id) }}" class="media-heading">{{$fav->first_name}} {{$fav->last_name}}</a> 
+                    <span class="mr-l-5 label label-success">{{ !empty($fav->sum) ? number_format($fav->sum,1) : "Not Yet Rated"}}</span></div>
                 <p>{{ $fav->jobtitle_name}}</p>
             </div>
             <div class="col-sm-4 pd-t-15 text-right">

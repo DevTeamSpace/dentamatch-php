@@ -27,10 +27,11 @@ class FavoriteJobseekerController extends Controller {
                 ->leftjoin('job_ratings', 'favourites.seeker_id', '=', 'job_ratings.seeker_id')
                 ->leftjoin('job_titles','job_titles.id', '=' , 'jobseeker_profiles.job_titile_id')
                 ->where('favourites.recruiter_id', Auth::user()->id)
-                ->select(DB::raw('(avg(job_ratings.punctuality) + avg(job_ratings.time_management) + avg(job_ratings.skills))/3 as sum'), 'jobseeker_profiles.user_id as seeker_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'job_lists.applied_status','job_titles.jobtitle_name', 'jobseeker_profiles.profile_pic')
+                ->select(DB::raw('(avg(job_ratings.punctuality) + avg(job_ratings.time_management) + avg(job_ratings.skills))/3 as sum'), 'jobseeker_profiles.user_id as seeker_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'job_lists.applied_status','job_titles.jobtitle_name','jobseeker_profiles.profile_pic')
+                ->addSelect(DB::raw("avg(punctuality) as punctuality"),DB::raw("avg(time_management) as time_management"),
+                           DB::raw("avg(skills) as skills"))
                 ->groupby('favourites.seeker_id')
                 ->simplePaginate(15);
-        
         
         $jobDetail = JobTemplates::join('recruiter_jobs', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                 ->join('job_titles', 'job_templates.job_title_id', '=', 'job_titles.id')

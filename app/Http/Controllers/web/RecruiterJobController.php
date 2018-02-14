@@ -58,7 +58,7 @@ class RecruiterJobController extends Controller {
             
             $jobList = RecruiterJobs::getJobs(3);
             $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
-            $allJobs = RecruiterJobs::getDashboardCalendar(true);
+            $allJobs = RecruiterJobs::getDashboardCalendar(true); 
             $currentWeekCalendar = [];
             if($allJobs) {
                 foreach($allJobs as $job){
@@ -88,7 +88,8 @@ class RecruiterJobController extends Controller {
                         $currentWeekCalendar[] = $innerArray->toArray();
                     }
                 }
-            }     
+            } 
+            
             return view('web.user-dashboard', compact('activeTab','currentDay','currentDate','userDetails','hiredListByCurrentDate','latestMessage', 'latestNotifications', 'notificationAdminModel','notificationAdmin', 'jobList', 'currentWeekCalendar', 'jobTemplateModalData'));
         
         }  catch (\Exception $e) {

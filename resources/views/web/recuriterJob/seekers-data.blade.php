@@ -58,6 +58,7 @@ $seekerDatesCount = count($datesTemp);
                     @endif   
                     
                     @if(!empty($seeker['avg_rating']))
+
                     <span class=" dropdown-toggle label {{$avgrateClass}}" data-toggle="dropdown">{{number_format($seeker['avg_rating'], 1, '.', '')}}</span>
                     @else
                     <span class=" dropdown-toggle label label-success">Not Yet Rated</span>
