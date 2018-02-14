@@ -52,8 +52,8 @@
                     @endif 
                     
                   @if(!empty($fav->sum))
-                   <div ><a href="{{ url('jobseeker/'.$fav->seeker_id) }}" class="media-heading">{{$fav->first_name}} {{$fav->last_name}}</a>
-                       <span class=" dropdown-toggle label {{$avgrateClass}}" data-toggle="dropdown">{{number_format($fav->sum, 1, '.', '')}}</span></div>
+                   <a href="{{ url('jobseeker/'.$fav->seeker_id) }}" class="media-heading">{{$fav->first_name}} {{$fav->last_name}}</a>
+                       <span class=" dropdown-toggle label {{$avgrateClass}}" data-toggle="dropdown">{{number_format($fav->sum, 1, '.', '')}}</span>
                     @else
                     <span class=" dropdown-toggle label label-success">Not Yet Rated</span>
                     @endif
@@ -146,6 +146,11 @@
         </div>
     </div>
 </div>
+
+
+
+
+
 @section('js')
 
 <script>
