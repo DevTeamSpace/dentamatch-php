@@ -58,6 +58,7 @@ class RecruiterJobController extends Controller {
             
             $jobList = RecruiterJobs::getJobs(3);
             $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
+
             $ts = strtotime(date("Y-m-d"));
             $start = (date('w', $ts) == 1) ? $ts : strtotime('last monday', $ts);
             
@@ -72,8 +73,7 @@ class RecruiterJobController extends Controller {
                 $start = strtotime('+1 day', $start);
             }
             ksort($currentWeekCalendar);
-            //dd($currentWeekCalendar);
-               
+                        
             return view('web.user-dashboard', compact('activeTab','currentDay','currentDate','userDetails','hiredListByCurrentDate','latestMessage', 'latestNotifications', 'notificationAdminModel','notificationAdmin', 'jobList', 'currentWeekCalendar', 'jobTemplateModalData'));
         
         }  catch (\Exception $e) {

@@ -52,7 +52,7 @@ class UserProfileCompletionCommand extends Command
                     'type' => 1
                 );
         
-        $userModel = UserProfile::select('jobseeker_profiles.user_id', 'users.email', 'users.first_name')
+        $userModel = UserProfile::select('jobseeker_profiles.user_id', 'users.email', 'jobseeker_profiles.first_name')
                         ->join('users', 'users.id', '=', 'jobseeker_profiles.user_id')
                         ->where('is_completed',static::IS_COMPLETED)
                         ->whereIn(DB::raw("DATEDIFF(now(), users.created_at)"), static::NOTIFICATION_INTERVAL)

@@ -18,7 +18,87 @@
         </div>
         <div class="media-body row">
             <div class="col-sm-8 pd-t-10 ">
-                <div ><a href="{{ url('jobseeker/'.$fav->seeker_id) }}" class="media-heading">{{$fav->first_name}} {{$fav->last_name}}</a> <span class="mr-l-5 label label-success">{{ !empty($fav->sum) ? number_format($fav->sum,1) : "Not Yet Rated"}}</span></div>
+                     <span class="mr-l-5 dropdown date_drop">
+                    @if(round(($fav->sum),0) > 3)
+                    @php $avgrateClass = 'bg-green' @endphp
+                    @elseif(round(($fav->sum),0) == 3)
+                    @php $avgrateClass = 'bg-ember' @endphp
+                    @elseif(round(($fav->sum),0) < 3)
+                    @php $avgrateClass = 'bg-red'  @endphp
+                    @endif
+                    
+                    @if(round(($fav->punctuality),0) > 3)
+                    @php $puncClass = 'bg-green' @endphp
+                    @elseif(round(($fav->punctuality),0) == 3)
+                    @php $puncClass = 'bg-ember' @endphp
+                    @elseif(round(($fav->punctuality),0) < 3)
+                    @php $puncClass = 'bg-red'  @endphp
+                    @endif 
+                    
+                    @if(round(($fav->time_management),0) > 3)
+                    @php $timeClass = 'bg-green' @endphp
+                    @elseif(round(($fav->time_management),0) == 3)
+                    @php $timeClass = 'bg-ember' @endphp
+                    @elseif(round(($fav->time_management),0) < 3)
+                    @php $timeClass = 'bg-red'  @endphp
+                    @endif 
+                    
+                    @if(round(($fav->skills),0) > 3)
+                    @php $skillClass = 'bg-green' @endphp
+                    @elseif(round(($fav->skills),0) == 3)
+                    @php $skillClass = 'bg-ember' @endphp
+                    @elseif(round(($fav->skills),0) < 3)
+                    @php $skillClass = 'bg-red'  @endphp
+                    @endif 
+                    
+                  @if(!empty($fav->sum))
+                   <a href="{{ url('jobseeker/'.$fav->seeker_id) }}" class="media-heading">{{$fav->first_name}} {{$fav->last_name}}</a>
+                       <span class=" dropdown-toggle label {{$avgrateClass}}" data-toggle="dropdown">{{number_format($fav->sum, 1, '.', '')}}</span>
+                    @else
+                    <a href="{{ url('jobseeker/'.$fav->seeker_id) }}" class="media-heading">{{$fav->first_name}} {{$fav->last_name}}</a>
+                    <span class=" dropdown-toggle label label-success">Not Yet Rated</span>
+                    @endif
+                
+                 <ul class="dropdown-menu rating-info">
+                      <li><div class="rating_on"> Punctuality</div>
+                        <ul class="rate_me">
+                            @for($i=1; $i<=5; $i++)
+                            @if($i <= round(($fav->punctuality),0))
+                            <li><span class="{{$puncClass}}"></span></li>
+                            @else
+                            <li><span></span></li>
+                            @endif
+                            @endfor
+                        </ul>
+                        <label class="total-count "><span class="counter">{{round(($fav->punctuality),0)}}</span>/5</label>
+                    </li>
+                     <li><div class="rating_on"> Time management</div>
+                        <ul class="rate_me">
+                            @for($i=1; $i<=5; $i++)
+                            @if($i <= round(($fav->time_management),0))
+                            <li><span class="{{$timeClass}}"></span></li>
+                            @else
+                            <li><span></span></li>
+                            @endif
+                            @endfor
+                        </ul>
+                        <label class="total-count "><span class="counter">{{round(($fav->time_management),0)}}</span>/5</label>
+                    </li>
+                    <li>
+                        <div class="rating_on">  Personal/Professional skill</div>
+                        <ul class="rate_me">
+                            @for($i=1; $i<=5; $i++)
+                            @if($i <= round(($fav->skills),0))
+                            <li><span class="{{$skillClass}}"></span></li>
+                            @else
+                            <li><span></span></li>
+                            @endif
+                            @endfor
+                        </ul>
+                        <label class="total-count "><span class="counter">{{round(($fav->skills),0)}}</span>/5</label>
+                    </li>
+                </ul>    
+               </span>   
                 <p>{{ $fav->jobtitle_name}}</p>
             </div>
             <div class="col-sm-4 pd-t-15 text-right">
@@ -67,6 +147,11 @@
         </div>
     </div>
 </div>
+
+
+
+
+
 @section('js')
 
 <script>

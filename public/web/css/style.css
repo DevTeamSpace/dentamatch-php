@@ -231,6 +231,7 @@ and open the template in the editor.
     .weekActive{border-left: 5px solid #0470c0;}
     .moreJobs{font-size:12px;}
     .weekList{padding-top:19px;}
+    .weekList li:last-child,.weekList li:nth-of-type(6){color:red;}
     .weekHolidday{color:#fc434a;}
 @media only screen and (min-width: 768px) {
     .template-job-information-left {
