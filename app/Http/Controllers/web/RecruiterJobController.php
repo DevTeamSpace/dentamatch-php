@@ -58,37 +58,22 @@ class RecruiterJobController extends Controller {
             
             $jobList = RecruiterJobs::getJobs(3);
             $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
-            $allJobs = RecruiterJobs::getDashboardCalendar(true);
-            $currentWeekCalendar = [];
-            if($allJobs) {
-                foreach($allJobs as $job){
-                    $tempJobs   =   explode(',', $job['temp_job_dates']);
-                    foreach ($tempJobs as  $value) {
-                        $innerArray = [];
-                        $jobDetails['id'] = $job['id'];
-                        $jobDetails['job_type'] = $job['job_type'];
-                        $jobDetails['job_date'] = $value;
-
-                        if($job['job_type'] == RecruiterJobs::TEMPORARY){
-                            $seekers = JobseekerTempHired::getTempJobSeekerList($jobDetails, config('constants.OneValue'));
-                        }
-                        else{
-                            $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));
-                        }
-
-                        foreach($seekers as &$seeker){
-                            foreach($seeker as &$seek){
-                                $seek['profile_pic'] = url("image/" . 60 . "/" . 60 . "/?src=" .$seek['profile_pic']);
-                            }
-                        }
-                        $innerArray =   $job;
-                        $innerArray->temp_job_dates = $value;
-                        $innerArray->temp_job_format = date('M d - D',strtotime($value));
-                        $innerArray['seekers'] = $seekers;
-                        $currentWeekCalendar[] = $innerArray->toArray();
-                    }
+            $ts = strtotime(date("Y-m-d"));
+            $start = (date('w', $ts) == 1) ? $ts : strtotime('last monday', $ts);
+            
+            $wkEndDay = strtotime('next sunday', $start);
+            
+            $currentWeekCalendar = RecruiterJobs::getDashboardCalendarData($start);
+            while($wkEndDay>=$start){
+                $nextDay = date('Y-m-d', $start);
+                if(!isset($currentWeekCalendar[$nextDay])){
+                    $currentWeekCalendar[$nextDay]=[];
                 }
-            }     
+                $start = strtotime('+1 day', $start);
+            }
+            ksort($currentWeekCalendar);
+            //dd($currentWeekCalendar);
+               
             return view('web.user-dashboard', compact('activeTab','currentDay','currentDate','userDetails','hiredListByCurrentDate','latestMessage', 'latestNotifications', 'notificationAdminModel','notificationAdmin', 'jobList', 'currentWeekCalendar', 'jobTemplateModalData'));
         
         }  catch (\Exception $e) {

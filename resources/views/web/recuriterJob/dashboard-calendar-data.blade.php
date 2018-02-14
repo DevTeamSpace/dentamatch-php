@@ -1,16 +1,27 @@
 <ul class="weekList">
-    @foreach ($currentWeekCalendar as $calendar)
-        <li>{{ $calendar['temp_job_format'] }}
+    @foreach ($currentWeekCalendar as $key=>$calendar)
+        <li>{{ date('M d - D',strtotime($key)) }}
+            @if(!empty($calendar))
             <div class="dental">
-                <p>{{ $calendar['jobtitle_name'] }}</p>
-                @if(!empty($calendar['seekers']['4']))
+                <p>{{ $calendar['jobTitle'] }}</p>
+                @if(!empty($calendar['seekerData']))
                     <div class="dentalImg">
-                        <img src="{{ $calendar['seekers']['4']['0']['profile_pic'] }}" width="22" class="img-circle">
-                        <div class="dentalNumber img-circle">{{ count($calendar['seekers']['4']) }}+</div>
+                        @if(isset($calendar['seekerData'][0]))
+                        <img src="{{ $calendar['seekerData'][0]['profile_pic'] }}" width="22" class="img-circle">
+                        @endif
+                        @if(isset($calendar['seekerData'][1]))
+                        <img src="{{ $calendar['seekerData'][1]['profile_pic'] }}" width="22" class="img-circle">
+                        @endif
+                        @if(count($calendar['seekerData'])>2)
+                        <div class="dentalNumber img-circle">{{ count($calendar['seekerData'])-2 }}+</div>
+                        @endif
                     </div>
                 @endif
             </div>
-            <a href="#" class="moreJobs pull-right">{{ $calendar['no_of_jobs'] }}</a>
+            @if($calendar['jobCount']>1)
+            <a href="{{ url('calender')}}" class="moreJobs pull-right">{{ $calendar['jobCount']-1 }} More Jobs</a>
+            @endif
+            @endif
         </li>
     @endforeach
 </ul>

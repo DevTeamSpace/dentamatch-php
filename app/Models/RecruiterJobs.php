@@ -465,6 +465,54 @@ class RecruiterJobs extends Model
         return $jobObj->get();
     }
     
+    public static function getDashboardCalendarData($start){
+        $jobData = RecruiterJobs::where('recruiter_jobs.job_type',RecruiterJobs::TEMPORARY)
+            ->join('job_templates',function($query){
+                $query->on('job_templates.id','=','recruiter_jobs.job_template_id')
+                ->where('job_templates.user_id',Auth::user()->id);
+            })
+            ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
+            ->join('temp_job_dates','temp_job_dates.recruiter_job_id', '=' , 'recruiter_jobs.id')
+            ->leftJoin('job_lists',function($query){
+                $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
+                ->where('job_lists.applied_status',RecruiterJobs::HIRED);
+            })
+            ->leftjoin('jobseeker_temp_hired', 'jobseeker_temp_hired.job_id', '=', 'recruiter_jobs.id')
+            ->leftjoin('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'jobseeker_temp_hired.jobseeker_id')
+            ->whereBetween('temp_job_dates.job_date',[(date('Y-m-d', $start)),(date('Y-m-d', strtotime('next sunday', $start)))])
+            ->select('jobseeker_profiles.first_name','jobseeker_profiles.last_name','jobseeker_profiles.profile_pic',
+                    'job_titles.jobtitle_name','jobseeker_temp_hired.jobseeker_id','jobseeker_temp_hired.job_id',
+                    DB::raw("group_concat(job_lists.applied_status) AS applied_status"),
+                    DB::raw("group_concat(distinct(temp_job_dates.job_date)) AS temp_job_dates"),
+                    'jobseeker_temp_hired.job_date')
+            ->groupBy('recruiter_jobs.id','temp_job_dates.job_date')
+            ->orderBy('temp_job_dates.job_date','asc')
+            ->get();
+        //dd($jobData);
+        $resData = [];
+        foreach($jobData as $job){
+            $profilePic = '';
+            if($job->profile_pic!=''){
+                $profilePic = url("image/" . 60 . "/" . 60 . "/?src=" .$job->profile_pic);
+            }
+                
+            if(!isset($resData[$job->temp_job_dates])){
+                $resData[$job->temp_job_dates]=['jobTitle'=>$job->jobtitle_name,'jobCount'=>1,
+                    'jobId'=>$job->job_id,'seekerData'=>[]];
+                if($job->job_id!=''){
+                    $resData[$job->temp_job_dates]['seekerData']=[['profile_pic'=>$profilePic]];
+                }
+            }else{
+                if($resData[$job->temp_job_dates]['jobId']==$job->job_id && $job->job_id!=''){
+                    array_push($resData[$job->temp_job_dates]['seekerData'], ['profile_pic'=>$profilePic]);
+                }else{
+                    $resData[$job->temp_job_dates]['jobCount']++;
+                }
+            }
+        }
+        return $resData;
+    }
+    
     public static function getDashboardCalendar($dashboard = false){
         $jobObj = RecruiterJobs::where('recruiter_jobs.job_type',RecruiterJobs::TEMPORARY)
             ->join('job_templates',function($query){
