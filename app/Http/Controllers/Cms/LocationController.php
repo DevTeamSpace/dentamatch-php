@@ -112,10 +112,14 @@ class LocationController extends Controller
 
     public function locationsList(){
         try{
-        $locations = Location::SELECT(['zipcode','free_trial_period','id'])->orderBy('id', 'desc')->get();
+        $locations = Location::SELECT(['zipcode','free_trial_period','is_active','id'])->orderBy('id', 'desc')->get();
         
         return Datatables::of($locations)
                 ->removeColumn('id')
+                ->addColumn('active', function ($locations) {
+                            $active = ($locations->is_active == 1) ? 'Yes':'No';
+                        return $active;
+                    })
                 ->addColumn('action', function ($locations) {
                     $edit = url('cms/location/'.$locations->id.'/edit');
                     $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';

@@ -54,7 +54,7 @@
                 </div>
             @endif
             <div class="postViewDetail text-right">
-                <a href="/job/details/{{ $job['id'] }}">View details</a>
+                <a href="{{ url('/job/details') }}/{{ $job['id'] }}">View details</a>
             </div>
         </li>
     @endforeach
