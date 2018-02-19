@@ -30,8 +30,6 @@
                                 <tr>
                                     <td> Job Availability</td>
                                     <td>
-                                        
-
                                         @if($seekerDetails['is_fulltime'])
                                         <span >Full Time</span><br />
                                         @endif
@@ -58,10 +56,10 @@
                                             @php 
                                             $dates = explode(' | ',$seekerDetails['temp_job_dates']);
                                             @endphp
-                                            <a href="#" class=" dropdown-toggle"  data-toggle="dropdown">
+                                            <a href="#" class="dropdown-toggle"  data-toggle="dropdown">
                                                 <span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
                                                 <span class="caret"></a>
-                                                </span>
+                            
                                                 <ul class="dropdown-menu">
                                                   @foreach ($dates as $date)
                                                   <li>{{ date('l, d M Y',strtotime($date)) }}</li>

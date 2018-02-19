@@ -123,8 +123,7 @@ class LocationController extends Controller
                 ->addColumn('action', function ($locations) {
                     $edit = url('cms/location/'.$locations->id.'/edit');
                     $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-                    return $action;
-                       
+                    return $action;     
                 })
                 ->make(true);
         }  catch (\Exception $e) {
