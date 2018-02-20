@@ -65,7 +65,7 @@ class InvitedJobseekerCommand extends Command
                         ->where('user_groups.group_id', 3)
                         ->where('job_lists.applied_status',1)
                         ->whereNotIn('job_lists.applied_status', [2,3,4,5])
-                        ->whereIn(DB::raw("TIMESTAMPDIFF(HOUR,now(), job_lists.created_at)"), static::NOTIFICATION_INTERVAL)
+                        ->whereIn(DB::raw("DATEDIFF(now(), job_lists.created_at)"), static::NOTIFICATION_INTERVAL)
                         ->groupBy('users.id')
                         ->orderBy('users.id', 'desc')
                         ->get();
