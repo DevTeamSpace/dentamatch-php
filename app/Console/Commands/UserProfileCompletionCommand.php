@@ -68,7 +68,7 @@ class UserProfileCompletionCommand extends Command
                 $deviceModel = Device::getDeviceToken($userId);
                 if($deviceModel) {
                     NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['message'], $params);
-                    $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['message']];
+                    $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['message'],'notification_type'=>Notification::OTHER];
                     Notification::createNotification($data);
                 } else {
                     $name = $value->first_name;
