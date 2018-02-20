@@ -72,7 +72,7 @@ class InvitedJobseekerCommand extends Command
         
         if(!empty($userModel)) {
             foreach($userModel as $value) {
-                $userId = $value->user_id;
+                $userId = $value->id;
                 
                 $notificationData['receiver_id'] = $userId;
                 $params['data'] = $notificationData;
