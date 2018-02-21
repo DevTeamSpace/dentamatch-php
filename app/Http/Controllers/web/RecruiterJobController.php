@@ -652,8 +652,13 @@ class RecruiterJobController extends Controller {
                             'created_at'=>date('Y-m-d h:i:s'),
                             'notification_type' => Notification::OTHER,
                             ];
-                            
-                           NotificationServiceProvider::sendPushNotification($deviceModel, $message);
+                            $params['data']  = ["notificationData"=>$message,
+                                "notification_title"=>"Job deleted",
+                                "notificationType"=>Notification::OTHER,
+                                "type"=>1,
+                                "sender_id"=>$senderId
+                                ];
+                           NotificationServiceProvider::sendPushNotification($deviceModel, $message,$params);
                         }
                     }
                     if(!empty($insertData)) {
