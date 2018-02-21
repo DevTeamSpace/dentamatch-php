@@ -46,11 +46,11 @@ class UserProfileCompletionCommand extends Command
     public function handle()
     {
         $notificationData = array(
-                    'notification_data' => "The profile completion is still pending.",
+                    'notificationData' => "The profile completion is still pending.",
                     'notification_title'=>'Profile Completion Reminder',
                     'sender_id' => "",
                     'type' => 1,
-                    'notification_type'=>Notification::OTHER
+                    'notificationType'=>Notification::OTHER
                 );
         
         $userModel = UserProfile::select('jobseeker_profiles.user_id', 'users.email', 'jobseeker_profiles.first_name')
@@ -68,8 +68,8 @@ class UserProfileCompletionCommand extends Command
                 
                 $deviceModel = Device::getDeviceToken($userId);
                 if($deviceModel) {
-                    NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notification_data'], $params);
-                    $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['notification_data'],'notification_type'=>Notification::OTHER];
+                    NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params);
+                    $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['notificationData'],'notification_type'=>Notification::OTHER];
                     Notification::createNotification($data);
                 } else {
                     $name = $value->first_name;

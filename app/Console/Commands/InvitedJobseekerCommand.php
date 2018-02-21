@@ -47,11 +47,11 @@ class InvitedJobseekerCommand extends Command
     public function handle()
     {
         $notificationData = array(
-                    'notification_data' => "You have pending jobs to accept/reject",
+                    'notificationData' => "You have pending jobs to accept/reject",
                     'notification_title'=>'Pending Invites',
                     'sender_id' => "",
                     "type" =>1,
-                    'notification_type'=>Notification::OTHER
+                    'notificationType'=>Notification::OTHER
                 );
                 
         $userModel = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
@@ -80,8 +80,8 @@ class InvitedJobseekerCommand extends Command
                 
                 $deviceModel = Device::getDeviceToken($userId);
                 if($deviceModel) {
-                    NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notification_data'], $params);
-                    $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['notification_data'],'notification_type'=>Notification::OTHER];
+                    NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params);
+                    $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['notificationData'],'notification_type'=>Notification::OTHER];
                     Notification::createNotification($data);
                 } else {
                     $name = $value->first_name;
