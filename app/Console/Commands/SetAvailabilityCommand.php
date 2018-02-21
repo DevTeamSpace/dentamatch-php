@@ -47,10 +47,11 @@ class SetAvailabilityCommand extends Command
     public function handle()
     {
         $notificationData = array(
-                    'message' => "You had not yet set your availability dates",
+                    'notificationData' => "You had not yet set your availability dates",
                     'notification_title'=>'Set Availability',
                     'sender_id' => "",
-                    'type' => 1
+                    'type' => 1,
+                    'notificationType'=>Notification::OTHER
                 );
         
         $availableUsers = JobSeekerTempAvailability::select('user_id')
@@ -93,8 +94,8 @@ class SetAvailabilityCommand extends Command
                 
                 $deviceModel = Device::getDeviceToken($userId);
                 if($deviceModel) {
-                    NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['message'], $params);
-                    $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['message'],'notification_type'=>Notification::OTHER];
+                    NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params);
+                    $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['notificationData'],'notification_type'=>Notification::OTHER];
                     Notification::createNotification($data);
                 } else {
                     $name = $value->first_name;
