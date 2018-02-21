@@ -656,7 +656,7 @@ class RecruiterJobController extends Controller {
                                 "notification_title"=>"Job deleted",
                                 "notificationType"=>Notification::OTHER,
                                 "type"=>1,
-                                "sender_id"=>$sender
+                                "sender_id"=>$senderId
                                 ];
                            NotificationServiceProvider::sendPushNotification($deviceModel, $message,$params);
                         }
