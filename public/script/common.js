@@ -259,6 +259,7 @@ $(function () {
         columns: [
             {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
             {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
+            {data: 'email', name: 'users.email',searchable:true},
             {data: 'cancelno', name: 'cancelno',searchable:false},
         ]
     });

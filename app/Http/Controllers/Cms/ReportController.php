@@ -87,8 +87,9 @@ class ReportController extends Controller {
     public function listCancel() {
         try {
             $seekerList = JobLists::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
+                            ->join('users','jobseeker_profiles.user_id','=','users.id')
                             ->where('job_lists.applied_status', JobLists::CANCELLED)
-                            ->select('jobseeker_profiles.user_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name')
+                            ->select('jobseeker_profiles.user_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'users.email')
                             ->addSelect(DB::raw("count(job_lists.id) as cancelno"))
                             ->groupby('jobseeker_profiles.user_id')
                             ->orderBy('jobseeker_profiles.first_name', 'asc');
