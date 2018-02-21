@@ -183,7 +183,6 @@ class WorkExperienceApiController extends Controller {
                         $jobSeekerData[$value['schooling_id']] = [ 'schoolingId' => $value['schooling_id'], 'otherSchooling' => $value['other_schooling'],'yearOfGraduation' => $value['year_of_graduation']];
                     }
                 }
-
                 if(!empty($schoolingList)) {
                     foreach($schoolingList as $key=>$value) {
                         $data[$value['parentId']]['schoolingId'] = $value['parentId'];
