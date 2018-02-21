@@ -652,7 +652,7 @@ class RecruiterJobController extends Controller {
                             'created_at'=>date('Y-m-d h:i:s'),
                             'notification_type' => Notification::OTHER,
                             ];
-                            $params  = ["notificationData"=>$message,
+                            $params['data']  = ["notificationData"=>$message,
                                 "notification_title"=>"Job deleted",
                                 "notificationType"=>Notification::OTHER,
                                 "type"=>1,
