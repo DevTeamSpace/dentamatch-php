@@ -100,6 +100,9 @@ class JobSeekerController extends Controller
                 }
             UserProfile::where('user_id', $request->id)->update(['first_name' => $request->firstname,'last_name' => $request->lastname]);
             $activationStatus  = ($request->is_active)?1:0;
+            if($activationStatus == 0){
+                Device::unRegisterAll($request->id);
+            }
             User::where('id',$request->id)->update(['is_active' => $activationStatus]);
             $msg = trans('messages.jobseeker_updated_success');
         }
