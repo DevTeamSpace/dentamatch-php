@@ -91,8 +91,8 @@ class ReportController extends Controller {
                             ->select('jobseeker_profiles.user_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name')
                             ->addSelect(DB::raw("count(job_lists.id) as cancelno"))
                             ->groupby('jobseeker_profiles.user_id')
-                            ->orderBy('jobseeker_profiles.first_name', 'asc')->get();
-
+                            ->orderBy('jobseeker_profiles.first_name', 'asc');
+               
             return Datatables::of($seekerList)
                             ->removeColumn('user_id')
                             ->make(true);
@@ -148,7 +148,7 @@ class ReportController extends Controller {
             $seekerList = JobLists::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
                             ->where('job_lists.recruiter_job_id', $id)
                             ->select('jobseeker_profiles.user_id', 'job_lists.applied_status', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name')
-                            ->orderBy('jobseeker_profiles.first_name', 'asc')->get();
+                            ->orderBy('jobseeker_profiles.first_name', 'asc');
             return Datatables::of($seekerList)
                             ->removeColumn('user_id')
                             ->addColumn('applied_status', function ($seekerList) {

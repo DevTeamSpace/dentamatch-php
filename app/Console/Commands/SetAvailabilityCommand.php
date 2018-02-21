@@ -53,14 +53,12 @@ class SetAvailabilityCommand extends Command
                     'type' => 1,
                     'notificationType'=>Notification::OTHER
                 );
-        
         $availableUsers = JobSeekerTempAvailability::select('user_id')
                 ->groupBy('user_id')
                 ->get('user_id')
                 ->map(function($query) {
                     return $query['user_id'];
                 })->toArray();
-                
         $userModel = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                         ->select(
@@ -84,7 +82,6 @@ class SetAvailabilityCommand extends Command
                         ->whereIn(DB::raw("DATEDIFF(now(), users.created_at)"), static::NOTIFICATION_INTERVAL)
                         ->orderBy('users.id', 'desc')
                         ->get();
-
         if(!empty($userModel)) {
             foreach($userModel as $value) {
                 $userId = $value->user_id;
