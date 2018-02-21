@@ -25,7 +25,7 @@ return [
     'user_exist_same_email' => 'User already exists with this email',
     'user_registration_successful' => 'You are successfully registered. Please check your mail box to verify the email',
     'user_logged_successful' => 'User logged in successfully',
-    'user_account_not_active' => 'Please verify your email first',
+    'user_account_not_active' => 'User has been deactivated.Please contact admin',
     'invalid_login_credentials' => 'Invalid login credentials',
     'email_not_exists' => 'Email does not exists',
     'reset_pw_email_sent' => 'Please check your mailbox',
