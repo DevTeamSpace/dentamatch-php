@@ -54,8 +54,8 @@ class SkillApiController extends Controller {
                 foreach ($skillLists as $key => $skill) {
                     if ($skill['skill_name'] != 'Other') {
                         $subskills = array();
+                        $child_skill = array();
                         if (is_array($skill['children']) && count($skill['children']) > 0) {
-                            $child_skill = array();
                             foreach ($skill['children'] as $subskills) {
                                 if (in_array($subskills['id'], $userSkills)) {
                                     $userSkill = 1;
