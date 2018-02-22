@@ -82,9 +82,10 @@ class SetAvailabilityCommand extends Command
                         ->whereIn(DB::raw("DATEDIFF(now(), users.created_at)"), static::NOTIFICATION_INTERVAL)
                         ->orderBy('users.id', 'desc')
                         ->get();
+
         if(!empty($userModel)) {
             foreach($userModel as $value) {
-                $userId = $value->user_id;
+                $userId = $value->id;
                 
                 $notificationData['receiver_id'] = $userId;
                 $params['data'] = $notificationData;
