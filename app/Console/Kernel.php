@@ -24,6 +24,7 @@ class Kernel extends ConsoleKernel
         Commands\UnverifiedJobseekerCommand::class,
         Commands\SetAvailabilityCommand::class,
         Commands\InvitedJobseekerCommand::class,
+        Commands\SubscriptionCommand::class,
     ];
 
     /**
@@ -42,6 +43,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('jobseeker:unverified')->everyThirtyMinutes()->withoutOverlapping();
         $schedule->command('user:availability')->everyThirtyMinutes()->withoutOverlapping();
         $schedule->command('user:pendinginvites')->everyThirtyMinutes()->withoutOverlapping();
+        $schedule->command('user:subscription')->everyThirtyMinutes()->withoutOverlapping();
     }
 
     /**

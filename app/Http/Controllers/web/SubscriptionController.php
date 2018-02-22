@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RecruiterProfile;
 use App\Models\RecruiterOffice;
+use App\Models\SubscriptionPayments;
 use App\Http\Requests\CreateSubscriptionRequest;
 use App\Http\Requests\AddCardRequest;
 use App\Http\Requests\DeleteCardRequest;
@@ -115,11 +116,12 @@ class SubscriptionController extends Controller {
             }else{
                 $planId = config('constants.OneYear');
             }
-            \Stripe\Subscription::create(array(
+            $subscription = \Stripe\Subscription::create(array(
                 "customer" => $customerId,
                 "plan" => $planId,
                 "trial_period_days" => $trailPeriodDays
             ));
+            $this->saveSubscription($subscription);
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.user_added_to_subscription');
         } catch (\Exception $e) {
@@ -130,6 +132,16 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
+    public function saveSubscription($subscription){
+        $payments = new SubscriptionPayments;
+        $payments->recruiter_id=Auth::user()->id;
+        $payments->expiryDate = date('Y-m-d', $subscription['current_period_end']);
+        $payments->paymentId = $subscription['id'];
+        $payments->paymentResponse = json_encode($subscription);
+        $payments->save();
+    }
+
+
     public function postAddCard(AddCardRequest $request){
         try{
             $customerId = RecruiterProfile::where(['user_id' => Auth::user()->id])->pluck('customer_id');
