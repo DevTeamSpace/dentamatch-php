@@ -86,7 +86,6 @@ class SetAvailabilityCommand extends Command
         if(!empty($userModel)) {
             foreach($userModel as $value) {
                 $userId = $value->id;
-                
                 $notificationData['receiver_id'] = $userId;
                 $params['data'] = $notificationData;
                 
