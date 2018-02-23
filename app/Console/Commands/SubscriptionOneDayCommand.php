@@ -6,9 +6,8 @@ use Illuminate\Console\Command;
 use App\Models\SubscriptionPayments;
 use App\Models\User;
 use App\Models\Notification;
-use App\Models\Device;
+use App\Models\RecruiterProfile;
 use DB;
-use App\Providers\NotificationServiceProvider;
 
 class SubscriptionOneDayCommand extends Command
 {
