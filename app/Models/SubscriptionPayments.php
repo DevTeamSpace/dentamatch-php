@@ -19,8 +19,9 @@ class SubscriptionPayments extends Model
         'expiryDate' => 'subscription_expiry_date',
         'paymentId' => 'payment_id',
         'paymentResponse' => 'payment_response',
+        'trialEnd' => 'trial_end',
         ];
     protected $hidden       = ['created_at','updated_at'];
-    protected $fillable     = ['recruiterId','expiryDate','paymentId','paymentResponse'];
-    protected $appends      = ['recruiterId','expiryDate','paymentId','paymentResponse'];
+    protected $fillable     = ['recruiterId','expiryDate','paymentId','paymentResponse','trialEnd'];
+    protected $appends      = ['recruiterId','expiryDate','paymentId','paymentResponse','trialEnd'];
 }
