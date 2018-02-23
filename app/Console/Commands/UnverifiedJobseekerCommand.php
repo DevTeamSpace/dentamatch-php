@@ -11,7 +11,7 @@ use Mail;
 class UnverifiedJobseekerCommand extends Command
 {
     const IS_VERIFIED = 0;
-    const NOTIFICATION_INTERVAL = [1,2,3];
+    const NOTIFICATION_INTERVAL = [0,3,7];
     /**
      * The name and signature of the console command.
      *

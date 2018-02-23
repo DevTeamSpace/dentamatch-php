@@ -65,7 +65,7 @@ $seekerDatesCount = count($datesTemp);
                     @endif
                     
                     
-                    <ul class="dropdown-menu rating-info">
+<!--                    <ul class="dropdown-menu rating-info">
                       <li><div class="rating_on"> Punctuality</div>
                         <ul class="rate_me">
                             @for($i=1; $i<=5; $i++)
@@ -103,7 +103,7 @@ $seekerDatesCount = count($datesTemp);
                         </ul>
                         <label class="total-count "><span class="counter">{{round($seeker['skills'],0)}}</span>/5</label>
                     </li>
-                </ul>
+                </ul>-->
             </span>
             @endif  
         </div>
