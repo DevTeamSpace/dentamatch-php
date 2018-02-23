@@ -54,7 +54,6 @@ class SubscriptionOneDayCommand extends Command
                                 ->get();
             $list = $recruiterModel->toArray();
             if(!empty($list)) {
-                $insertData = [];
                 foreach($list as $listValue)
                 {
                  
@@ -65,12 +64,12 @@ class SubscriptionOneDayCommand extends Command
                     if($current_period_end>$listValue['subscription_expiry_date']){
                         if($listValue['trial_end']!=$listValue['subscription_expiry_date']){
                             $data = ['image' => url('web/images/dentaMatchLogo.png'),'message' => 'You subscription has been renewed to'.' '.$listValue['subscription_expiry_date']];
-                            $insertData[] = ['sender_id' => $senderId->id, 'receiver_id' => $listValue['user_id'], 'notification_data'=> json_encode($data)];  
+                            $insertData = ['sender_id' => $senderId->id, 'receiver_id' => $listValue['user_id'], 'notification_data'=> json_encode($data)];  
                             Notification::insert($insertData);
                         }
                         $isSubscribed=1;
                         SubscriptionPayments::where('recruiter_id',$listValue['user_id'])
-                                ->update(['subscription_expiry_date' => date('Y-m-d', $current_period_end), 'payment_response' => json_encode($customer)]);
+                                ->update(['subscription_expiry_date' => $current_period_end, 'payment_response' => json_encode($customer)]);
                     }else{
                         $isSubscribed=0;
                     }
