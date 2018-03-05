@@ -50,25 +50,36 @@ class SignupController extends Controller {
     }
 
     protected function postLogin(\Illuminate\Http\Request $request) {
-
         $validation_rules = array('email' => 'required|email', 'password' => 'required');
         $validator = Validator::make($request->all(), $validation_rules);
         if ($validator->fails()) {
             Session::flash('message', "Validation Failure");
         }
+        $users = User::where('email',$request->email)->first();
         $credentials = ['email' => $request->email, 'password' => $request->password, 'is_verified' => 1, 'is_active' => 1];
         $message = trans("messages.invalid_cred_or_not_active");
         $redirect = 'login';
-        if (Auth::validate($credentials)) {
+        if (Auth::validate($credentials)){
             $user = User::where('email', $credentials['email'])->first();
             if ($user->userGroup->group_id == 2 && Auth::attempt($credentials)) {
                 $redirect = 'terms-conditions';
                 $term = RecruiterProfile::where('user_id', Auth::user()->id)->first();
                 $request->session()->put('userData', ['basic'=>$user->toArray(),'profile'=>$term->toArray()]);
                 if (!empty($term) && isset($term) && $term->accept_term==1) {
-                    $redirect = 'users/dashboard';
+                  if(empty($term->office_name)){
+                      $redirect = 'home';
+                   }else{
+                      $redirect = 'users/dashboard';  
+                   } 
+                   
                 }
             }
+        }elseif($users['is_active'] == 0){
+           $message = trans("messages.deactivated_admin");
+           $redirect = 'login';   
+        }else{
+           $message = trans("messages.invalid_credentials");
+           $redirect = 'login';
         }
         Session::flash('message', $message);
         return redirect($redirect);

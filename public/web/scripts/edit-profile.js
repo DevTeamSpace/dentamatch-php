@@ -775,7 +775,7 @@ var EditProfileVM = function () {
             return false;
         }
         if (d.dentalOfficeDescription() == "" || d.dentalOfficeDescription() == null) {
-            me.officeDescError('Decscription cannot be empty.');
+            me.officeDescError('Description cannot be empty.');
             return false;
         }
 

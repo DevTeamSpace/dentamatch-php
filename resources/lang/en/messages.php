@@ -72,6 +72,7 @@ return [
     'already_register_as_seeker'=>'You are already registered as job seeker',
     'email_already_regisered' => 'Email already registered',
     'confirmation_link'=>'Confirmation Link for new user',
+    'new_job_invite'=>'New Job Invites',
 
     'calendar_availability_list' => 'Calendar Availability List Retrieved',
     'saved_job_list' => "Saved job list",
@@ -174,4 +175,6 @@ return [
     'email_is_verified' => 'Email id is verified for this user',
     'email_is_not_verified' => 'Email id is not verified for this user',
     'data_retrieved_successfully' => 'Data retrieve successfully',
+    'invalid_credentials'  =>  'User not registered',
+    'deactivated_admin'  => 'you may have been deactivated by admin.Please contact admin'
 ];

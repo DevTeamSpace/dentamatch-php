@@ -3,7 +3,7 @@ function createProfile() {
     var form_data = $('#createProfileForm').serialize();
     var errorsHtml;
     $.ajax({
-        url: '/create-profile',
+        url: 'create-profile',
         type: "POST",
         data: form_data,
         success: function(data) {
@@ -13,7 +13,7 @@ function createProfile() {
             $('div.alert').delay(1000).slideUp(300);
             setTimeout(
                 function () {
-                    window.location.href = '/subscription-detail';
+                    window.location.href = 'subscription-detail';
                 }, 300
             );
             
@@ -169,8 +169,8 @@ function checkLocation(zip, indexField) {
             }
         },
         error: function(data) {
-            msg = 'Please enter a valid address.';
-            $('#location-msg' + indexField).html(msg);
+           msg = 'Please enter a valid address.';
+           $('#location-msg' + indexField).html(msg);
         }
     });
 }

@@ -20,7 +20,8 @@ $(function() {
     function lengthRestriction(event) {
         dynamicLength = $(".mainMasterBox").length;
         console.log(dynamicLength);
-        $(".DynamicAddder").html('<span class="icon icon-plus"></span>You can add upto ${3 - dynamicLength} more locations');
+        var total = 3 - dynamicLength;
+        $(".DynamicAddder").html('<span class="icon icon-plus"></span>You can add upto ' + total + ' more locations');
         if (dynamicLength >= 3) {
             $(".addBtn").removeClass("DynamicAddder");
             $(".addBtn").empty();
@@ -119,8 +120,9 @@ $(function() {
     function deleteBox() {
         $(this).parents(".mainMasterBox").remove();
         dynamicLength = $(".mainMasterBox").length;
+        var total = 3 - dynamicLength; 
         $(".addBtn").addClass("DynamicAddder");
-        $(".DynamicAddder").html('<span class="icon icon-plus"></span>You can add upto ${3 - dynamicLength} more locations');
+        $(".DynamicAddder").html('<span class="icon icon-plus"></span>You can add upto ' + total + ' more locations');
 
     }
     //----- customValidation-----//

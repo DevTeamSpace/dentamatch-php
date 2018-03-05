@@ -366,6 +366,7 @@
     <script>
         $("#officeLocation").Editor();
         $("button:submit").click(function(){
+            alert('joo');
             $('#officeLocation').text($('#officeLocation').Editor("getText"));
             $('#officeLocation1').text($('#officeLocation1').Editor("getText"));
             $('#officeLocation2').text($('#officeLocation2').Editor("getText"));

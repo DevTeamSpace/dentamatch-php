@@ -56,7 +56,7 @@
                                         <div class="clearfix"></div>
                                     </div>
                                     <!--/ko-->
-                                    <a href="#" class="pull-right pd-t-10 pd-b-20" data-bind="visible: addCardVisible,click: addCard"><b>Add Payment Method</b></a>	
+                                    <a href="#" class="pull-right pd-t-10 pd-b-20" data-bind="visible: addCardVisible,click: addCard"><b>Add Card</b></a>	
 
                                 </div>		
                             </div>

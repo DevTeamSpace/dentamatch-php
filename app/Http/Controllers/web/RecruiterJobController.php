@@ -366,7 +366,7 @@ class RecruiterJobController extends Controller {
             $dataName = $name['first_name'];
             Mail::queue('email.new-invite', ['name' => $dataName ], function ($message) use ($email) {
             $message->to($email['email'])
-                 ->subject(trans("messages.confirmation_link"));
+                 ->subject(trans("messages.new_job_invite"));
             });
         }
     }

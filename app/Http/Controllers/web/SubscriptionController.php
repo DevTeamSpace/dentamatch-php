@@ -111,6 +111,7 @@ class SubscriptionController extends Controller {
             $fotDiff = \Carbon\Carbon::now();
             $addMonths = $now->addMonths($trailPeriod);
             $trailPeriodDays = $addMonths->diff($fotDiff)->days;
+            //dd($trailPeriodDays);
             if($subscriptionType == 1){
                 $planId = config('constants.SixMonths');
             }else{
@@ -273,6 +274,7 @@ class SubscriptionController extends Controller {
             foreach($customer->subscriptions['data'] as $subscription){
                 $subscription['created'] = date('Y-m-d', $subscription['created']);
                 $subscription['current_period_end'] = date('Y-m-d', $subscription['current_period_end']);
+                
             }
             $this->response['success'] = true;
             $this->response['data'] = $customer;
@@ -313,7 +315,7 @@ class SubscriptionController extends Controller {
         try{
             $sub = \Stripe\Subscription::retrieve($request->subscriptionId);
             if($sub->cancel(array("at_period_end" => true ))){
-                RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => config('constants.ZeroValue'), 'free_period' => null, 'auto_renewal' => null]);
+                RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => config('constants.OneValue'), 'free_period' => null, 'auto_renewal' => null]);
                 $this->response['success'] = true;
                 $this->response['message'] = trans('messages.unsubscribed');
             }else{
