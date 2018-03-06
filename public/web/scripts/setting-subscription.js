@@ -16,7 +16,8 @@ var SubscriptionModel = function (data) {
         me.subscriptionActivation(moment(d.created).format('LL'));
         me.subscriptionAutoRenewal(moment(d.current_period_end).format('LL'));
         me.leftDays(moment(d.current_period_end).diff(moment(d.created), 'days'));
-        if (d.plan.interval_count == 6) {
+        console.log(d.plan.interval_count);
+        if (d.plan.interval_count == 2) {
             me.subscriptionPlan('Half Yearly');
         } else {
             me.subscriptionPlan('Yearly');
@@ -88,6 +89,7 @@ var SubscriptionVM = function () {
                         me.unsubscribeButton(true);
                         me.resubscribeButton(false);
                         me.switchVisible(true);
+                        console.log(d.data.data.data.subscriptions.data[i].plan.id);
                         if (d.data.data.data.subscriptions.data[i].plan.id === "one-year") {
                             me.switchToText('Switch to Half Yearly');
                         } else {
@@ -310,7 +312,6 @@ var SubscriptionVM = function () {
         me.showModalFooter(true);
         me.cancelButtonDelete(true);
         me.actionButtonText('Change');
-        console.log(d);
         if (d.subscription()[0].subscriptionPlan() === "Yearly") {
             me.prompt('Do you want to change plan to half yearly. ?');
         } else {
