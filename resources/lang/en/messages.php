@@ -176,5 +176,5 @@ return [
     'email_is_not_verified' => 'Email id is not verified for this user',
     'data_retrieved_successfully' => 'Data retrieve successfully',
     'invalid_credentials'  =>  'User not registered',
-    'deactivated_admin'  => 'you may have been deactivated by admin.Please contact admin'
+    'deactivated_admin'  => 'Your account is not registered with us. Please sign up'
 ];
