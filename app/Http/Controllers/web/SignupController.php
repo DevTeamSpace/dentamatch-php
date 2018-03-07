@@ -74,7 +74,7 @@ class SignupController extends Controller {
                    
                 }
             }
-        }elseif($users['is_active'] == 0){
+        }elseif(!empty($users) && $users['is_active'] == 0){
            $message = trans("messages.deactivated_admin");
            $redirect = 'login';   
         }else{
