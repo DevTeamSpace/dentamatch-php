@@ -124,13 +124,13 @@ class SearchApiController extends Controller {
                     if ($profileComplete->is_job_seeker_verified != UserProfile::JOBSEEKER_VERIFY_APPROVED) {
                         return apiResponse::customJsonResponse(0, 200, trans("messages.jobseeker_not_verified"));
                     }
+     
                     $jobExists = RecruiterJobs::leftJoin('job_lists',function($query) use ($userId){
                             $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
                                   ->where('job_lists.seeker_id', '=', $userId)
                                   ->whereIn('job_lists.applied_status',[JobLists::INVITED,JobLists::APPLIED]);
                             })->where('recruiter_jobs.id', '=', $reqData['jobId'])
                             ->first();
-                   
                     if (!empty($jobExists) && $jobExists->applied_status==JobLists::INVITED) {
                         JobLists::where('id', $jobExists->id)->update(['applied_status' => JobLists::APPLIED]);
                         $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
@@ -145,13 +145,13 @@ class SearchApiController extends Controller {
                             ($jobExists->job_type == 2 && $profileComplete->is_parttime_friday == $jobExists->is_friday && $jobExists->is_friday==1) ||
                             ($jobExists->job_type == 2 && $profileComplete->is_parttime_saturday == $jobExists->is_saturday && $jobExists->is_saturday==1) ||
                             ($jobExists->job_type == 2 && $profileComplete->is_parttime_sunday == $jobExists->is_sunday && $jobExists->is_sunday==1)) 
-                          {         
+                          {    
                             $applyJobs = array('seeker_id' => $userId, 'recruiter_job_id' => $reqData['jobId'], 'applied_status' => JobLists::APPLIED);
                             JobLists::insert($applyJobs);
                             $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
                             $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
                     }else{
-                            $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
+                            $response = apiResponse::customJsonResponse(1, 200, trans("messages.set_availability"));
                     }
                 } else {
                     $response = apiResponse::customJsonResponse(0, 202, trans("messages.profile_not_complete"));
