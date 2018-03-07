@@ -45,7 +45,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('user:availability')->everyThirtyMinutes()->withoutOverlapping();
         $schedule->command('user:pendinginvites')->everyThirtyMinutes()->withoutOverlapping();
         //$schedule->command('user:subscription')->everyThirtyMinutes()->withoutOverlapping();
-        //$schedule->command('user:onedaysubscription')->everyThirtyMinutes()->withoutOverlapping();
+        $schedule->command('user:onedaysubscription')->everyThirtyMinutes()->withoutOverlapping();
     }
 
     /**
