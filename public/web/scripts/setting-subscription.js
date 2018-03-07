@@ -12,10 +12,11 @@ var SubscriptionModel = function (data) {
             return false;
         }
         me.subscriptionId(d.id);
-        me.subscriptionAmount("$" + (String)(d.plan.amount).slice(0, 2));
+        var planCost = d.plan.amount/100;
+        me.subscriptionAmount("$" + planCost);
         me.subscriptionActivation(moment(d.created).format('LL'));
         me.subscriptionAutoRenewal(moment(d.current_period_end).format('LL'));
-        me.leftDays(moment(d.current_period_end).diff(moment(d.created), 'days'));
+        me.leftDays(moment(d.current_period_end).diff(moment(d.current_period_start), 'days'));
         console.log(d.plan.interval_count);
         if (d.plan.interval_count == 2) {
             me.subscriptionPlan('Half Yearly');
