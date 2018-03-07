@@ -273,8 +273,13 @@ class SubscriptionController extends Controller {
             $customer = \Stripe\Customer::retrieve($customerId);
             foreach($customer->subscriptions['data'] as $subscription){
                 $subscription['created'] = date('Y-m-d', $subscription['created']);
-                $subscription['current_period_end'] = date('Y-m-d', $subscription['current_period_end']);
-                
+                $subscription['current_period_start'] = date('Y-m-d', $subscription['current_period_start']);
+                if($subscription['trial_end']!=null && $subscription['current_period_end']==$subscription['trial_end']){
+                    $trailEnd = date('Y-m-d', $subscription['trial_end']);
+                    $subscription['current_period_end'] = date('Y-m-d',  strtotime($trailEnd.'+ '.$subscription['plan']['interval_count'].' '.$subscription['plan']['interval'] ));
+                }else{
+                    $subscription['current_period_end'] = date('Y-m-d', $subscription['current_period_end']);
+                }
             }
             $this->response['success'] = true;
             $this->response['data'] = $customer;
