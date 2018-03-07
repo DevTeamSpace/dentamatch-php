@@ -115,14 +115,12 @@ class SearchApiController extends Controller {
             $this->validate($request, [
                 'jobId' => 'required',
             ]);
-            $userId = $request->userServerData->user_id;
+            $userId = $request->userServerData->user_id;  
             if ($userId > 0) {
                 $reqData = $request->all();
                 $profileComplete = UserProfile::select('is_completed', 'is_job_seeker_verified', 'is_fulltime', 'is_parttime_monday', 'is_parttime_tuesday', 'is_parttime_wednesday', 'is_parttime_thursday', 'is_parttime_friday', 'is_parttime_saturday', 'is_parttime_sunday')->where('user_id', $userId)->first();
 
-
                 if ($profileComplete->is_completed == 1) {
-
                     if ($profileComplete->is_job_seeker_verified != UserProfile::JOBSEEKER_VERIFY_APPROVED) {
                         return apiResponse::customJsonResponse(0, 200, trans("messages.jobseeker_not_verified"));
                     }
@@ -131,60 +129,33 @@ class SearchApiController extends Controller {
                             ->where('job_lists.recruiter_job_id', '=', $reqData['jobId'])
                             ->whereIn('job_lists.applied_status', [JobLists::INVITED])
                             ->first();
-
+                    
 //                    $jobExists = JobLists::where('seeker_id','=',$userId)
 //                                    ->where('recruiter_job_id','=',$reqData['jobId'])
 //                                    ->whereIn('applied_status',[JobLists::INVITED])
 //                                    ->first();
 
-                    if ($jobExists->applied_status == JobLists::INVITED) {
+                    if ($jobExists) {
                         JobLists::where('id', $jobExists->id)->update(['applied_status' => JobLists::APPLIED]);
                         $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
                         $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
-                    } else {
-                        if (($jobExists->job_type == 1 && $profileComplete->is_fulltime == 1) ||
-                                ($jobExists->job_type == 2 && $profileComplete->is_parttime_monday == $jobExists->is_monday)) {
+                    } elseif(($jobExists->job_type == 1 && $profileComplete->is_fulltime == 1) ||
+                            ($jobExists->job_type == 2 && $profileComplete->is_parttime_monday == $jobExists->is_monday && $jobExists->is_monday==1) ||
+                            ($jobExists->job_type == 2 && $profileComplete->is_parttime_tuesday == $jobExists->is_tuesday && $jobExists->is_tuesday==1) ||
+                            ($jobExists->job_type == 2 && $profileComplete->is_parttime_wednesday == $jobExists->is_wednesday && $jobExists->is_wednesday==1) ||
+                            ($jobExists->job_type == 2 && $profileComplete->is_parttime_thursday == $jobExists->is_thursday && $jobExists->is_thursday==1) ||
+                            ($jobExists->job_type == 2 && $profileComplete->is_parttime_friday == $jobExists->is_friday && $jobExists->is_friday==1) ||
+                            ($jobExists->job_type == 2 && $profileComplete->is_parttime_saturday == $jobExists->is_saturday && $jobExists->is_saturday==1) ||
+                            ($jobExists->job_type == 2 && $profileComplete->is_parttime_sunday == $jobExists->is_sunday && $jobExists->is_sunday==1) 
+                                ) {
                             $applyJobs = array('seeker_id' => $userId, 'recruiter_job_id' => $reqData['jobId'], 'applied_status' => JobLists::APPLIED);
                             JobLists::insert($applyJobs);
                             $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
                             $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
-                        } elseif (($jobExists->job_type == 1 && $profileComplete->is_fulltime == 1) ||
-                                ($jobExists->job_type == 2 && $profileComplete->is_parttime_tuesday == $jobExists->is_tuesday)) {
-                            $applyJobs = array('seeker_id' => $userId, 'recruiter_job_id' => $reqData['jobId'], 'applied_status' => JobLists::APPLIED);
-                            JobLists::insert($applyJobs);
-                            $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
+                    }else{
                             $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
-                        } elseif (($jobExists->job_type == 1 && $profileComplete->is_fulltime == 1) ||
-                                ($jobExists->job_type == 2 && $profileComplete->is_parttime_wednesday == $jobExists->is_wednesday)) {
-                            $applyJobs = array('seeker_id' => $userId, 'recruiter_job_id' => $reqData['jobId'], 'applied_status' => JobLists::APPLIED);
-                            JobLists::insert($applyJobs);
-                            $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
-                            $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
-                        } elseif (($jobExists->job_type == 1 && $profileComplete->is_fulltime == 1) ||
-                                ($jobExists->job_type == 2 && $profileComplete->is_parttime_thursday == $jobExists->is_thursday)) {
-                            $applyJobs = array('seeker_id' => $userId, 'recruiter_job_id' => $reqData['jobId'], 'applied_status' => JobLists::APPLIED);
-                            JobLists::insert($applyJobs);
-                            $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
-                            $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
-                        } elseif (($jobExists->job_type == 1 && $profileComplete->is_fulltime == 1) ||
-                                ($jobExists->job_type == 2 && $profileComplete->is_parttime_friday == $jobExists->is_friday)) {
-                            $applyJobs = array('seeker_id' => $userId, 'recruiter_job_id' => $reqData['jobId'], 'applied_status' => JobLists::APPLIED);
-                            JobLists::insert($applyJobs);
-                            $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
-                            $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
-                        } elseif (($jobExists->job_type == 1 && $profileComplete->is_fulltime == 1) ||
-                                ($jobExists->job_type == 2 && $profileComplete->is_parttime_saturday == $jobExists->is_saturday)) {
-                            $applyJobs = array('seeker_id' => $userId, 'recruiter_job_id' => $reqData['jobId'], 'applied_status' => JobLists::APPLIED);
-                            JobLists::insert($applyJobs);
-                            $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
-                            $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
-                        }else{
-                            $applyJobs = array('seeker_id' => $userId, 'recruiter_job_id' => $reqData['jobId'], 'applied_status' => JobLists::APPLIED);
-                            JobLists::insert($applyJobs);
-                            $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
-                            $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
-                        }
                     }
+                    
                 } else {
                     $response = apiResponse::customJsonResponse(0, 202, trans("messages.profile_not_complete"));
                 }

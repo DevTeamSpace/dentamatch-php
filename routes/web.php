@@ -119,6 +119,7 @@
             Route::get('setting-terms-conditions', 'web\UserProfileController@getTermsConditions');
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
             Route::post('change-password', 'web\UserProfileController@postChangePassword');
+            Route::get('get-plans','web\SubscriptionController@getPlans');
 
             //Route::get('chat', 'web\ChatController@getChatSeekerList');
             Route::get('calender', 'web\CalenderController@getCalender');
