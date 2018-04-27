@@ -62,7 +62,7 @@
                         {{ $job['office_types_name'] }}<br>
                         {{ $job['address'].' '.$job['zipcode'] }}<br>
                         @if($job['job_type']==\App\Models\RecruiterJobs::TEMPORARY)
-                        <span>Total Job Opening: {{ $job['no_of_jobs'] }}</span>
+                        <span>Number of People Needed: {{ $job['no_of_jobs'] }}</span>
                         @endif
                     </address> 
 

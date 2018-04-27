@@ -122,7 +122,7 @@
 
             </div>
             <div class="form-group  job-opening hide">
-                <label >Total Job Opening</label>
+                <label >Number of People Needed</label>
                 <input name="noOfJobs" type="text" id="jobopening" class="form-control" data-parsley-min="1" data-parsley-pattern="^[0-9]*$" data-parsley-pattern-message="numeric only "  data-parsley-required-message="required" data-parsley-min-message="zero should not be allowed"/>
             </div>
         </div>  
