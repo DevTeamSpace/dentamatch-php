@@ -20,7 +20,7 @@ class JobTitles extends Model
     public static function getAll($active=''){
         $obj = self::select('id','jobtitle_name','is_license_required');
         if($active!=''){
-            $obj->where('is_active',$active)->orderby('jobtitle_name','asc');
+            $obj->where('is_active',$active)->orderby('id','asc');
         }
         return $obj->get()->toArray();
        
