@@ -68,7 +68,7 @@ class SkillApiController extends Controller {
                                     'skill_name' => $subskills['skill_name'],
                                     'user_skill' => $userSkill,
                                 );
-                                if ($subskills['skill_name'] == 'Other' || $subskills['skill_name'] == 'other') {
+                                if (trim($subskills['skill_name']) == 'Other' || trim($subskills['skill_name']) == 'other') {
                                     $subSkills['other_skill'] = '';
                                     if ($userSkill == 1 && !empty($UpdatedJobseekerSkills[$subskills['id']])) {
                                         $subSkills['other_skill'] = $UpdatedJobseekerSkills[$subskills['id']]['other_skill'];
