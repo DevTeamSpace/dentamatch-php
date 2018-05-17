@@ -250,7 +250,7 @@ $(document).ready(function() {
             }
         });
         
-        socket.removeAllListener('receiveMessage');
+        socket.off('receiveMessage');
         socket.on('receiveMessage', function(data) {
 
             console.log(data);
