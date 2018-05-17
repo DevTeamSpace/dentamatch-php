@@ -93,7 +93,9 @@
                                 <?php $data = json_decode($notification->notification_data); ?>
                                     <li>
                                         <div class="dashListImgBlock">
-                                            <div class="dashListImg"></div>
+                                            <div class="dashListImg">
+                                                <img class="dashListImg" src="{{ url("image/66/66/?src=" .$data->image) }}" alt="...">
+                                            </div>
                                             <div class="dashListImgContent msgImg">
                                                 <h6 class="media-heading"><?php echo strip_tags($data->message); ?></p></h6>
                                                 <p class="justNow"><span class="icon-clock"></span>{{ $notification->created_at->diffForHumans() }}</p> 
