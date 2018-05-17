@@ -94,7 +94,7 @@
                                     <li>
                                         <div class="dashListImgBlock">
                                             <div class="dashListImg">
-                                                <img class="dashListImg" src="{{ url("image/66/66/?src=" .$data->image) }}" alt="...">
+                                                <img class="dashListImg" src="{{ $data->image }}" alt="...">
                                             </div>
                                             <div class="dashListImgContent msgImg">
                                                 <h6 class="media-heading"><?php echo strip_tags($data->message); ?></p></h6>

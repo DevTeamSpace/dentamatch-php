@@ -249,7 +249,7 @@ $(document).ready(function() {
             }
         });
         
-        socket.off('receiveMessage');
+        socket.removeAllListener('receiveMessage');
         socket.on('receiveMessage', function(data) {
 
             console.log(data);
