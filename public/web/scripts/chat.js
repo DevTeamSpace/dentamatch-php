@@ -26,7 +26,8 @@ $(document).ready(function() {
             console.info('Socket disconnect');
             loadPage = true;
         });
-
+        initSocket();
+    });
         var currentSel = '';
         function initSocket(){
             console.info('Socket Init');
@@ -43,7 +44,7 @@ $(document).ready(function() {
                 $('.modalClick').show();
             });
         }
-        initSocket();
+        
         function loadLeftMessages(lastMsgId,appendToId){
             socket.emit('getLeftMessages', {messageId: lastMsgId, fromId: fromId, toId: appendToId }, function(response) {
                 var appendHtml = '';
@@ -300,5 +301,5 @@ $(document).ready(function() {
             obj.find('.chatSend').removeClass('action-disabled');
             blockUnblockSeeker(0);
         });
-    });
+    
 });
