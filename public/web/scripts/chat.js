@@ -135,7 +135,7 @@ $(document).ready(function() {
                     var page = $('#pr_' + currentSel).data('page');
                     var dataToBeLoaded = $('#li_' + currentSel).attr('data-loaded');
                     if (dataToBeLoaded == "1") {
-                        loadMessages(page + 1);
+                        //loadMessages(page + 1);
                         console.log("Scrolled back to the beginning of content.");
                     }
                 }
