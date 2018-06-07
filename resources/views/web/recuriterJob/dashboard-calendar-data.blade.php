@@ -19,7 +19,7 @@
                 @endif
             </div>
             @if($calendar['jobCount']>1)
-            <a href="{{ url('calender')}}" class="moreJobs pull-right">{{ $calendar['jobCount']-1 }} More Jobs</a>
+            <a href="{{ url('calender')}}" class="moreJobs pull-right">{{ $calendar['jobCount']-1 }} More Positions</a>
             @endif
             @endif
         </li>

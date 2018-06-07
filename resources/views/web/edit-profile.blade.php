@@ -22,11 +22,11 @@
                             </ul>
                         </div>
                         <div class="viewProfileRightCard">
-                            <h6>Dental Office Name</h6>
+                            <h6>Office Name</h6>
                             <div class="detailTitleBlock">
                                 <h5 data-bind="text: dentalOfficeName"></h5>
                             </div>
-                            <h6>Dental Office Description</h6>
+                            <h6>About Our Office</h6>
                             <p data-bind="text: dentalOfficeDescription"></p>
                         </div>
                     </div>
@@ -35,12 +35,12 @@
                     <div class="resp-tabs-container commonBox profilePadding cboxbottom">
                         <div class="descriptionBox">
                             <div class="viewProfileRightCard form-group">
-                                <label>Dental Office Name</label>
+                                <label>Office Name</label>
                                 <input type="text" id="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="required" data-bind="value: dentalOfficeName">
                                 <p class="error-div" data-bind="text: officeNameError"></p>
                             </div>
                             <div class="detailTitleBlock">
-                                <label>Dental Office Description</label>
+                                <label>About Our Office</label>
                                 <textarea class="form-control  txtHeight txtBtnDisable chacterValidtion" data-parsley-required data-parsley-required-message="required" maxlength=500 data-bind="value: dentalOfficeDescription, valueUpdate: 'blur'">
                                 </textarea>
                                 <p class="error-div" data-bind="text: officeDescError"></p>
@@ -70,7 +70,7 @@
                                 <div class="detailTitleBlock">
                                     <h5>OFFICE DETAILS</h5>
                                 </div>
-                                <h6>Dental Office Type</h6>
+                                <h6>Office Type</h6>
                                 <span></span>
                                 <!--ko foreach: officeType-->
                                 <span data-bind="text: $data"></span><span data-bind="text: $index() !== ($parent.officeType().length -1) ? ',' : ''"></span>
@@ -112,7 +112,7 @@
                                 <!--/ko-->
                             </div>
                             <div class="viewProfileRightCard pd-b-25">
-                                <h6>Office Location Information</h6>
+                                <h6>Additional Helpful Information</h6>
                                 <p data-bind="text: officeInfo"></p>
                             </div>
                         </div>
@@ -128,7 +128,7 @@
             <br>
             <!-- ko if: offices().length < 3 -->
             <div class="pull-right text-right" data-bind="visible: showAddMoreOfficeButton">
-                <div class="addProfileBtn1" data-bind="click: $root.addOfficeFunction"><span class="icon icon-plus"></span>You can add upto <span data-bind="text: 3-offices().length"></span><span> more location(s)</span></div>
+                <div class="addProfileBtn1" data-bind="click: $root.addOfficeFunction"><span class="icon icon-plus"></span>Add up to <span data-bind="text: 3-offices().length"></span><span> Office Location(s)</span></div>
             </div>
             <!--/ko-->
         </div>
@@ -139,7 +139,7 @@
                 <div class="detailTitleBlock">
                     <h5>OFFICE DETAILS</h5>
                 </div>
-                <label >Dental Office Type</label>
+                <label >Office Type</label>
                 <div class="slt">
                     <select class="ddlCars" multiple="true" data-bind=" options: $root.allOfficeTypes, selectedOptions: officeType ">
                     </select>
@@ -315,7 +315,8 @@
                 </div>
             </div>	
             <div class="form-group">
-                <label>Office Location Information <i class="optional">(Optional)</i></label>
+                <label>Additional Helpful Information <i class="optional">(Optional)</i></label>
+                <label>example:where to park, lunch hour, what to wear, etc.</label>
                 <textarea class="form-control txtHeight" data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: officeInfo" ></textarea>
                 <p class="error-div" data-bind="text: officeInfoError"></p>
             </div>

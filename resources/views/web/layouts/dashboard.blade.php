@@ -126,13 +126,13 @@
                         <a href="{{ url('calender') }}">Calendar</a>
                     </li>
                     <li class="{{ ($navActive=='joblisting')?'active':''}}">
-                        <a href="{{ url('job/lists') }}">Job Listing</a>
+                        <a href="{{ url('job/lists') }}">Job Listings</a>
                     </li>
                     <li class="{{ ($navActive=='favseeker')?'active':''}}">
-                        <a href="{{url('favorite-jobseeker')}}">Favourite Jobseeker</a>
+                        <a href="{{url('favorite-jobseeker')}}">Favourite Candidates</a>
                     </li>
                     <li class="{{ ($navActive=='template')?'active':''}}">
-                        <a href="{{ url('jobtemplates') }}">Template</a>
+                        <a href="{{ url('jobtemplates') }}">Position Templates</a>
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->

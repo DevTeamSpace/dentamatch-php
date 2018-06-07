@@ -100,7 +100,7 @@
                                 <li><a href="{{ url('cms/jobseeker/unverified') }}">Unverified Profiles</a></li>
                                 <li><a href="{{ url('cms/jobseeker/incomplete') }}">Incomplete Profiles</a></li>
                                 <li><a href="{{ url('cms/jobseeker/nonavailableusers') }}">Non Available Users Profiles</a></li>
-                                <li><a href="{{ url('cms/jobseeker/invited') }}">Invited Jobseeker Profiles</a></li>
+                                <li><a href="{{ url('cms/jobseeker/invited') }}">Invited Candidate Profiles</a></li>
                                  <li><a href="{{ url('cms/report/index') }}">Job Lists</a></li>
                                 <li><a href="{{ url('cms/report/cancellist') }}">Cancel Lists</a></li>
                                 <li><a href="{{ url('cms/report/responselist') }}">Response Rate</a></li>

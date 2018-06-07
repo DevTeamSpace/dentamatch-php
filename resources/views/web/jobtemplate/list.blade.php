@@ -13,7 +13,7 @@
                     </div>
                 </a>
                 <div class="info-block"><!-- BODY BOX-->
-                    <span class="info-block-text">Create Template</span>
+                    <span class="info-block-text">Create New Position Template</span>
                 </div>
 
             </div>      
@@ -51,7 +51,7 @@
             </div>
             <div class="info-block"><!-- BODY BOX-->
                 <div class="createjob">
-                    <a class="btn btn-primary btn-block" href="{{ url('createJob/'.$template['id']) }}">Create Job Opening</a>
+                    <a class="btn btn-primary btn-block" href="{{ url('createJob/'.$template['id']) }}">Create New Job Listing</a>
                 </div>
                 <div class="info-block-dentinal-text"> 
                     <span class="view-template-text">

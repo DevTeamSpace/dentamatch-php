@@ -9,7 +9,7 @@
             <input type="hidden" name="seeker_id" value="{{ $seeker['seeker_id'] }}">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Rate Jobseeker</h4>
+                <h4 class="modal-title">Rate Candidate</h4>
             </div>
             <div class="modal-body ">
                 <div class="media nopadding">
@@ -60,7 +60,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Rate Jobseeker</h4>
+                <h4 class="modal-title">Rate Candidate</h4>
             </div>
             <div class="modal-body ">
                 <form action="{{ url('recruiter/rating') }}" method="post">

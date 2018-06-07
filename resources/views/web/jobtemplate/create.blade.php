@@ -7,11 +7,11 @@
 <form data-parsley-validate method="post" action="{{ url('jobtemplates/saveOrUpdate') }}">
     <div class="customContainer center-block containerBottom">
         <div class="profieBox">
-            <h3>Create Job Template</h3>
+            <h3>Create Position Template</h3>
             <div class="commonBox cboxbottom">
 
                 <div class="form-group">
-                    <label >Template Name</label>
+                    <label >Position Name</label>
                     <input value="{{ (isset($templateData->templateName)?$templateData->templateName:'') }}" name="templateName" type="text" class="form-control" data-parsley-pattern="/^[a-zA-Z0-9\-\s]+$/" data-parsley-required data-parsley-required-message="Required">
                 </div>
                 <div class="form-group">
@@ -27,7 +27,7 @@
 
                 </div>
                 <div class="form-group">
-                    <label>Job Description</label>
+                    <label>Job Description and Defined Duties</label>
                     <textarea name="templateDesc" class="form-control chacterValidtion txtHeight" maxlength="1000"  data-parsley-required data-parsley-required-message= "Required"   >{{ (isset($templateData->templateDesc)?$templateData->templateDesc:'') }}</textarea>
                 </div>
 
@@ -36,7 +36,7 @@
             <div class="commonBox cboxbottom masterBox">
                 <div class="form-group">
                     <div class="detailTitleBlock">
-                        <h5>KEY SKILLS</h5>
+                        <h5>KEY SKILLS & TECHNOLOGY EXPERIENCE SPECIFIC TO YOUR OFFICE</h5>
                     </div>
                     @foreach ($skillsData as $key => $skills)
                     <div class="form-group">
@@ -74,7 +74,7 @@
        </div>
        <div class="modal-body text-center">
            
-           <p>Do you want to discard the changes?</p>
+            <p>Do you want to discard this position template?</p>
 
            <div class="mr-t-20 mr-b-30">
               <button id="cancelButton" type="button" class="btn btn-link mr-r-5">Yes</button>

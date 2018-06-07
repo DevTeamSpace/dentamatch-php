@@ -80,7 +80,7 @@
 
             </div>
             <div class="form-group custom-select job-opening hide">
-                <label >Number of People Needed</label>
+                <label >Number of Candidates Needed</label>
                 <input name="noOfJobs" type="text" min="1" id="jobopening" class="form-control" data-parsley-required-message="Total job openings required" data-bind="visible: showTotalJobOpenings,value: totalJobOpening, attr:{'data-parsley-required': showTotalJobOpenings}" />
             </div>
 
@@ -93,7 +93,7 @@
                     <div class="detailTitleBlock">
                         <h5>OFFICE DETAILS</h5>
                     </div>
-                    <label >Dental Office Type</label>
+                    <label >Office Type</label>
                     <div class="slt">
                         <select class="ddlCars" multiple="true" data-bind=" options: $parent.allOfficeTypes, selectedOptions: selectedOfficeType ">
                         </select>
@@ -269,7 +269,8 @@
                     </div>
                 </div>	
                 <div class="form-group">
-                    <label>Office Location Information <i class="optional">(Optional)</i></label>
+                    <label>Additional Helpful Information <i class="optional">(Optional)</i></label>
+                    <label>example:where to park, lunch hour, what to wear, etc.</label>
                     <textarea class="form-control txtHeight" id="optionalInfo" data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: selectedOfficeInfo"></textarea>
                 </div>	
             </div>

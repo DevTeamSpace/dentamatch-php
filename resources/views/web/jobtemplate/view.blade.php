@@ -6,7 +6,7 @@
 @section('content')
 <div class="container padding-container-template">
     <ul class="breadcrumb">
-        <li><a href="{{ url('jobtemplates') }}">Template</a></li>
+        <li><a href="{{ url('jobtemplates') }}">Position Templates</a></li>
         <li class="active">{{ $templateData->templateName }}</li>
     </ul>
     <div class="row sec-mob mr-b-10">
@@ -14,7 +14,7 @@
             <div class="section-title mr-b-10">{{ $templateData->templateName }}</div>
         </div>
         <div class="col-sm-6 text-right col-xs-6">
-            <a href="{{ url('createJob/'.$templateId)}}" class="btn btn-primary pd-l-25 pd-r-25">Create Job Opening</a>
+            <a href="{{ url('createJob/'.$templateId)}}" class="btn btn-primary pd-l-25 pd-r-25">Create New Job Listing</a>
         </div>  
     </div>    
     <div class="commonBox">

@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="cal-hired-seeker mr-t-20">
-                    Hired Jobseeker
+                    Hired Talent
                 </div>
                 <div class="row flex-row">
                     <!--ko foreach: seekersOfParticularJob-->

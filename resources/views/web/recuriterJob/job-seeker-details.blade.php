@@ -1,4 +1,4 @@
-<label class="fnt-16 textcolr-38">Jobseeker {{ $status }} ({{ $totalCount }})</label>
+<label class="fnt-16 textcolr-38">Candidates {{ $status }} ({{ $totalCount }})</label>
 @foreach($seekerList as $seeker)
         @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
         @include('web.recuriterJob.rating-modal')

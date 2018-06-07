@@ -27,7 +27,7 @@
                             <h4>{{$currentDay}}<br>{{ $currentDate }}</h4>
                             <div class="tHire">
                                 <span>{{ count($hiredListByCurrentDate) }}</span>   
-                                <p>Today’s Hire</p>
+                                <p>Today’s Activity</p>
                             </div>
 
                             <ul class="dashboarFinalList">
@@ -114,7 +114,7 @@
                 <div class="col-sm-6">
                     <div class="commonBox">
                         <div class="welcomeContent lastMsg">
-                            <h4>What to do next?</h4>
+                            <h4>What Would You Like To Do?</h4>
                             <ul class="dashboadPostBlock">
                                 <li>
                                     <a class="modalClick btn btn-link mr-r-20" data-toggle="modal" data-target="#jobTemplate"><img src="{{asset('web/images/dentamatch-folder.png')}}" width="45"></a>
@@ -122,7 +122,7 @@
                                 </li>
                                 <li>
                                     <a href="/jobtemplates/create"><img src="{{asset('web/images/dentamatch-plussign.png')}}" width="45"></a>
-                                    Create Template
+                                    Create New Position Template
                                 </li>
                                 <li>
                                     <a href="/job/lists"><img src="{{asset('web/images/dentamatch-foldercurrentJob.png')}}" width="45"></a>
@@ -137,7 +137,7 @@
                             @if(count($currentWeekCalendar)>0)
                                 @include('web.recuriterJob.dashboard-calendar-data')
                             @endif
-                            <div class="viewAll"><a href="{{url('/calender')}}">View calendar</a></div>
+                            <div class="viewAll"><a href="{{url('/calender')}}">View Full Calendar</a></div>
                         </div>
                     </div>
                     <div class="commonBox">

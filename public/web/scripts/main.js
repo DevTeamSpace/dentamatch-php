@@ -53,7 +53,7 @@ $(document).ready(function() {
         $('.custom-active .datepicker-days').find('th.prev').text('<');
         $('.custom-active .datepicker-days').find('th.next').text('>');
         $('.datepicker .datepicker-days .table-condensed thead').find('.choose-dates').parent().remove();
-        $('.datepicker .datepicker-days .table-condensed thead').prepend('<tr><th class="choose-dates" colspan="14">Choose Dates</th></tr>');
+        $('.datepicker .datepicker-days .table-condensed thead').prepend('<tr><th class="choose-dates" colspan="14">Select Dates</th></tr>');
     });
 
     $('.full-time-box label').click(function() {
@@ -74,7 +74,7 @@ $(document).ready(function() {
                 selectAll: false,
                 minWidth: 100
             }).width(300);
-            $(this).parent().parent().find('button span').addClass('placeholder').text('Select Days');
+            $(this).parent().parent().find('button span').addClass('placeholder').text('Select Available Days');
         } else if (getId === 'temporary') {
             $('div.select-days-custom').css('display', 'none');
             $('.job-opening').removeClass('hide');
@@ -95,7 +95,7 @@ $(document).ready(function() {
 
 
     $(document).on('click', '.select-days-custom div.ms-drop', function(e) {
-        $(this).parent().parent().find('button span').addClass('placeholder').text('Select Days');
+        $(this).parent().parent().find('button span').addClass('placeholder').text('Select Available Days');
     });
     $(document).on('click', '.select-days-custom button', function(event) {
         $(this).find('div').addClass('open');

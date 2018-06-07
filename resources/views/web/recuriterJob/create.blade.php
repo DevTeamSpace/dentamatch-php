@@ -11,9 +11,9 @@
 <div class="container padding-container-template">
     <!--breadcrumb-->
     <ul class="breadcrumb">
-        <li><a href="{{ url('jobtemplates') }}">Template</a></li>
+        <li><a href="{{ url('jobtemplates') }}">Position Templates</a></li>
         <li><a href="{{ url('jobtemplates/view',[$jobTemplates->id]) }}">{{ $jobTemplates->templateName }}</a></li>
-        <li class="active">Create Job Opening</li>
+        <li class="active">Create New Job Listing</li>
     </ul>
     <!--/breadcrumb-->
 
@@ -26,7 +26,7 @@
     <form data-parsley-validate method="post" action="{{ url('createJob/saveOrUpdate') }}" novalidate autocomplete="off">
         <div class="row sec-mob">
             <div class="col-sm-6 mr-b-10 col-xs-6">
-                <div class="section-title">Create Job Opening</div>
+                <div class="section-title">Create New Job Listing</div>
             </div>
             <div class="col-sm-6 text-right mr-b-10 col-xs-6">
                 {!! csrf_field() !!}
@@ -122,7 +122,7 @@
 
             </div>
             <div class="form-group  job-opening hide">
-                <label >Number of People Needed</label>
+                <label >Number of Candidates Needed</label>
                 <input name="noOfJobs" type="text" id="jobopening" class="form-control" data-parsley-min="1" data-parsley-pattern="^[0-9]*$" data-parsley-pattern-message="numeric only "  data-parsley-required-message="required" data-parsley-min-message="zero should not be allowed"/>
             </div>
         </div>  

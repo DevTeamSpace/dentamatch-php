@@ -108,7 +108,7 @@
                     </div>
                     <div class="modal-body content mCustomScrollbar light" data-mcs-theme="minimal-dark">
                         <div class="cal-hired-seeker mr-t-20">
-                            Hired Jobseeker
+                            Hired Talent
                         </div>
                         <div class="row flex-row">
                             <!--ko foreach: modalSeekers-->

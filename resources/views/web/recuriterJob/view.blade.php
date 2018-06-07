@@ -67,7 +67,7 @@
                         {{ $job['officetype_name'] }}<br>
                         {{ $job['address'].' '.$job['zipcode'] }}<br>
                         @if($job['job_type']==\App\Models\RecruiterJobs::TEMPORARY)
-                        <span>Number of People Needed: {{ $job['no_of_jobs'] }}</span>
+                        <span>Number of Candidates Needed: {{ $job['no_of_jobs'] }}</span>
                         @endif
                     </address> 
 
@@ -76,7 +76,7 @@
         <div class="template-job-information-right j-i-m-r">
             <div class="job-information-detail">
                 <div class="search-seeker">
-                    <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-20 btn-block">Search Seekers</a>
+                    <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-20 btn-block">Search Available Candidates</a>
                     <button type="button" class="btn btn-primary pd-l-30 pd-r-20 btn-block deleteJobModal" data-target="#actionModal" data-toggle="modal" data-job-id="{{ $job['id'] }}">Delete</button>
                     <?php
                     $seekerListHiredArray = $seekerListHired->toArray();
@@ -101,7 +101,7 @@
                             <p >{{ $job['template_desc'] }}</p>
                         </li>
                         <li>
-                            <span>Dental Office Description</span>
+                            <span>About Our Office</span>
                             <p >{{ $job['office_desc'] }}</p>
                         </li>
                         @foreach($skills as $skill)
@@ -119,13 +119,13 @@
 
 <!--Job Detail-->
 <div class="job-seeker mr-t-40">
-    <label >Job Seekers</label>
+    <label >Available Candidates</label>
     <div class="jobseeker-border  mr-t-15 mr-b-25"></div>
     @if($seekerListHiredArray['total'] == 0 && $seekerListInvitedArray['total'] == 0 && $seekerListSortListedArray['total'] == 0 && $seekerListAppliedArray['total'] == 0 )
     <div class="text-center">
         <img src="{{ asset('web/images/denta_create_profile.png')}}" alt="create profile">
         <div class="mr-b-10">
-            <label class="mr-t-15">No jobseekers yet</label>
+            <label class="mr-t-15">No available candidate yet</label>
         </div>
     </div>
     @else
@@ -136,7 +136,7 @@
         @endif
         @if($seekerListSortListedArray['total'] > 0)
         <div class="jobseeker-statebox mr-t-25" id="3">
-                @include('web.recuriterJob.job-seeker-details',['seekerList'=>$seekerListSortListed,'status'=>'Shortlisted','totalCount'=>$seekerListSortListedArray['total']])
+                @include('web.recuriterJob.job-seeker-details',['seekerList'=>$seekerListSortListed,'status'=>'Accepted','totalCount'=>$seekerListSortListedArray['total']])
         </div>
         @endif
         @if($seekerListAppliedArray['total'] > 0)
@@ -146,7 +146,7 @@
         @endif
         @if($seekerListInvitedArray['total'] > 0)
         <div class="jobseeker-statebox mr-t-25" id="1">
-                @include('web.recuriterJob.job-seeker-details',['seekerList'=>$seekerListInvited,'status'=>'Invited','totalCount'=>$seekerListInvitedArray['total']])
+                @include('web.recuriterJob.job-seeker-details',['seekerList'=>$seekerListInvited,'status'=>'Invited to Interview','totalCount'=>$seekerListInvitedArray['total']])
         </div>
         @endif
     @endif

@@ -13,7 +13,7 @@
                     <table class="table table-user-information">
                         <tbody>
                             <tr>
-                                <td>Dental Office Name</td>
+                                <td>Office Name</td>
                                 @if(!empty($userProfile->office_name))
                                 <td>{{ $userProfile->office_name }}</td>
                                 @else
@@ -21,7 +21,7 @@
                                 @endif
                             </tr>
                             <tr>
-                               <td>Dental Office Description</td> 
+                               <td>About Our Office</td> 
                                 @if(!empty($userProfile->office_desc))
                                 <td>{{ $userProfile->office_desc }}</td>
                                 @else

@@ -197,7 +197,7 @@
 <div class="jobCatbox mr-b-20">
     <div class="template-job-information ">
         <div class="template-job-information-left">
-            <h4>No Jobseeker Profile to show</h4>
+            <h4>No Candidate Profile to show</h4>
         </div>
     </div>  
 </div>

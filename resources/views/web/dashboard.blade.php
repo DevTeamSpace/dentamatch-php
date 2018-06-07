@@ -10,7 +10,7 @@
 
 <div class="customContainer center-block containerBottom">
     <div class="profieBoxAbc">
-        <h3>Create Profile</h3>
+        <h3>Create Your Office Profile</h3>
         @if (count($errors) > 0)
         <div class="alert alert-danger">
             <ul>
@@ -26,11 +26,11 @@
             <div id="createForm-errors"></div>
             <div class="commonBox cboxbottom">
                 <div class="form-group">
-                    <label >Dental Office Name</label>
-                    <input type="text" value="{{ old('officeName') }}" onclick="getOfficeName()" id="officeName" name="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="Required" placeholder="Enter Dental Office Name">
+                    <label >Office Name</label>
+                    <input type="text" value="{{ old('officeName') }}" onclick="getOfficeName()" id="officeName" name="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="Required" placeholder="Enter Office Name">
                 </div>
                 <div class="form-group">
-                    <label  >Dental Office Description</label>
+                    <label  >About Our Office</label>
                     <textarea class="form-control  txtHeight txtBtnDisable chacterValidtion"  name="officeDescription"  data-parsley-required data-parsley-required-message="Required" maxlength=500 >{{ old('officeDescription') }}</textarea>
                 </div>
             </div>	
@@ -48,7 +48,7 @@
                             <div class="detailTitleBlock">
                                 <h5>OFFICE DETAILS</h5>
                             </div>
-                            <label >Dental Office Type</label>
+                            <label >Office Type</label>
                             <div class="slt">
                                 <select  name="officeType[]" value="" class="ddlCars" multiple="multiple" data-parsley-required data-parsley-required-message="required">
                                     @foreach($officeType as $office)
@@ -257,7 +257,8 @@
                             </div>
                         </div>	
                         <div class="form-group">
-                            <label class="mr-0">Office Location Information <i class="optional">(Optional)</i></label>
+                            <label class="mr-0">Additional Helpful Information <i class="optional">(Optional)</i></label>
+                            <label>example:where to park, lunch hour, what to wear, etc.</label>
                             <textarea name="officeLocation" id="officeLocation" class="form-control txtHeight"   data-parsley-required-message="Required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
 
                         </div>	
