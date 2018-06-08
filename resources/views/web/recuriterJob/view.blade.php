@@ -76,7 +76,7 @@
         <div class="template-job-information-right j-i-m-r">
             <div class="job-information-detail">
                 <div class="search-seeker">
-                    <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pd-l-30 pd-r-20 btn-block">Search Available Candidates</a>
+                    <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary btn-block">Search Available Candidates</a>
                     <button type="button" class="btn btn-primary pd-l-30 pd-r-20 btn-block deleteJobModal" data-target="#actionModal" data-toggle="modal" data-job-id="{{ $job['id'] }}">Delete</button>
                     <?php
                     $seekerListHiredArray = $seekerListHired->toArray();

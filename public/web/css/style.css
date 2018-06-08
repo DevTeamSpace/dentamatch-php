@@ -91,7 +91,8 @@ and open the template in the editor.
 
 .search-seeker button,
 .search-seeker a.btn {
-    width: 144px;
+    /*width: 144px;*/
+    padding: 7px 25px;
 }
 
 .width-job-info {
@@ -130,10 +131,14 @@ and open the template in the editor.
     left: -2px;
 }
 
-.skillsBlock h5{color:#182556;}
+.skillsBlock h5{color:#182556; margin-bottom: 5px;}
+.skillsBlock h6 {
+    font-size: 12px;
+    margin: 0;
+}
 .skill_List li:first-child{font-size:16px; color:#2f2f2f;}
 .skill_List{margin-top:20px;}
-.skill_List strong{color:#0d5ab2;}
+.skill_List strong{color:#0d5ab2; font-weight: bolder;}
 .customPreferDrop{width:100% !important;}
 .customPreferDrop .dropdown-menu{max-height:219px !important ; 	box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.11); border:none !important;}
 .customPreferDrop>button{border-color:#e2e2e2 !important;  color:#383838 !important;}
@@ -211,8 +216,17 @@ and open the template in the editor.
 /* .dashboadPostBlock li:first-child{margin-left:5%;} */
 .dashboadPostBlock{    margin-top: 35px;
     margin-bottom: 15px;}
-.dashboadPostBlock li{margin-right:17%; margin-bottom:10px;}
+.dashboadPostBlock li{margin-right:10%; margin-bottom:10px;}
 .dashboadPostBlock li:last-child{margin-right:0px;}
+.dashboadPostBlock li .list-image {
+    height: 50px;
+    margin-bottom: 10px;
+}
+.dashboadPostBlock li .list-image img{
+    height: 45px;
+    width:auto;
+    vertical-align: top;
+}
 .recentlyPost h4{padding:11px 0 !important; font-weight:500;	color: #0f183e;}
 .postViewDetail{    position: absolute;
     right: 19px;
@@ -231,8 +245,14 @@ and open the template in the editor.
     .weekActive{border-left: 5px solid #0470c0;}
     .moreJobs{font-size:12px;}
     .weekList{padding-top:19px;}
-    .weekList li:last-child,.weekList li:nth-of-type(6){color:red;}
+/*    .weekList li:last-child,.weekList li:nth-of-type(6){color:red;}*/
     .weekHolidday{color:#fc434a;}
+    .fc-day-header.fc-sat span, .fc-day-header.fc-sun span {
+        color: #383838 !important;
+    }
+    .ex-text {
+        font-size:9px;
+    }
 @media only screen and (min-width: 768px) {
     .template-job-information-left {
         width: 65%;

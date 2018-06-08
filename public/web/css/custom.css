@@ -952,6 +952,14 @@
                             display: inline-block;
                             padding-left: 0;
                         }
+                        .rate_me li:last-child.last-child-css {
+                            display: inline-block;
+                            margin-left: 15px;
+                            margin-top:5px;
+                        }
+                        .ex-text {
+                            font-size: 9px !important;
+                        }
                         
                         .counter {
                             font-size: 16px;
@@ -992,7 +1000,7 @@
                             line-height: 1.42857;
                             margin-left: -1px;
                             padding: 3px 8px;
-                            width: 27px;
+                            width: 40px;
                             height: 29px;
                             position: relative;
                             text-decoration: none;
@@ -1004,10 +1012,12 @@
                             -moz--webkit-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.25);
                             -webkit-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.25);
                             right: 0;
-                            left: auto;
+                            left: 0;
                             padding: 5px 10px;
-                            min-width: 200px;
+                            min-width: 250px;
                             margin-top: 10px;
+                            top: auto;
+                            bottom: 35px;
                         }
                         
                         .rating-info .rating_on {

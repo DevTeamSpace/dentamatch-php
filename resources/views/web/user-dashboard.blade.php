@@ -117,16 +117,16 @@
                             <h4>What Would You Like To Do?</h4>
                             <ul class="dashboadPostBlock">
                                 <li>
-                                    <a class="modalClick btn btn-link mr-r-20" data-toggle="modal" data-target="#jobTemplate"><img src="{{asset('web/images/dentamatch-folder.png')}}" width="45"></a>
-                                    Post New Job
+                                    <div class="list-image"><a class="modalClick btn btn-link mr-r-20" data-toggle="modal" data-target="#jobTemplate"><img src="{{asset('web/images/dentamatch-folder.png')}}" ></a></div>
+                                    <p>Post New Job</p>
                                 </li>
                                 <li>
-                                    <a href="/jobtemplates/create"><img src="{{asset('web/images/dentamatch-plussign.png')}}" width="45"></a>
-                                    Create New Position Template
+                                     <div class="list-image"><a href="/jobtemplates/create"><img src="{{asset('web/images/dentamatch-plussign.png')}}" ></a></div>
+                                     <p>Create New Position Template</p>
                                 </li>
                                 <li>
-                                    <a href="/job/lists"><img src="{{asset('web/images/dentamatch-foldercurrentJob.png')}}" width="45"></a>
-                                    View Current Jobs
+                                     <div class="list-image"><a href="/job/lists"><img src="{{asset('web/images/dentamatch-foldercurrentJob.png')}}" ></a></div>
+                                     <p>View Current Jobs</p>
                                 </li>
                             </ul>
                         </div>

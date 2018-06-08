@@ -108,6 +108,7 @@ $seekerDatesCount = count($datesTemp);
 <div class="commonBox mr-t-20 mr-b-20">
     <div class="skillsBlock">
         <h5>MATCHING SKILLS ({{ number_format($matchedSkills['percentSkills'],2) }}%)</h5>
+        <h6>Matched skills are in bold</h6>
         @if(!empty($matchedSkills['data']))
             @foreach($matchedSkills['data'] as $keySki => $skillArray)
                 <ul class="skill_List">

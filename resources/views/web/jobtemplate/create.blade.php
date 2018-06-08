@@ -40,7 +40,7 @@
                     </div>
                     @foreach ($skillsData as $key => $skills)
                     <div class="form-group">
-                        <label ><?=$key?></label>
+                        <label ><?=$key?> <span class="ex-text">(click all that apply)</span></label>
                         <select class="my-select" name="skills[]" multiple="multiple" style="display:none" autocomplete="off">
                             @foreach ($skills as $skillData)
                             <option {{ (isset($skillData['sel_skill_id']) && $skillData['sel_skill_id']==$skillData['id'])?'selected':'' }} value="{{ $skillData['id'] }}">{{ $skillData['skill_name'] }}</option>

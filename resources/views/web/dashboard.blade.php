@@ -258,7 +258,7 @@
                         </div>	
                         <div class="form-group">
                             <label class="mr-0">Additional Helpful Information <i class="optional">(Optional)</i></label>
-                            <label>example:where to park, lunch hour, what to wear, etc.</label>
+                            <label class="ex-text">example:where to park, lunch hour, what to wear, etc.</label>
                             <textarea name="officeLocation" id="officeLocation" class="form-control txtHeight"   data-parsley-required-message="Required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
 
                         </div>	
@@ -269,7 +269,7 @@
             </div>
             <div class="profieBox"></div>
             <div class="clearfix"></div>
-            <div class="addBtn DynamicAddder pull-right pd-t-10 "><span class="icon icon-plus"></span>You can add upto 2 more locations</div>
+            <div class="addBtn DynamicAddder pull-right pd-t-10 "><span class="icon icon-plus"></span>Add upto 3 office locations</div>
             <div class="clearfix"></div>
             <div  class="pull-right text-right pd-b-20">
                 <div class="pull-right text-right pd-b-15">

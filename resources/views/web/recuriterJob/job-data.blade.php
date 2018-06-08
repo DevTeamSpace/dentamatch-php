@@ -98,10 +98,10 @@
             }
             @endphp
             @if($valueCountArr["2"]>0)
-            <li><a href="{{ url('job/details/'.$job['id']) }}">{{ $valueCountArr['2'] }} Candidates{{ ($valueCountArr['2']>1)?'s':'' }} Applied</a> </li>
+            <li><a href="{{ url('job/details/'.$job['id']) }}">{{ $valueCountArr['2'] }} Candidate{{ ($valueCountArr['2']>1)?'s':'' }} Applied</a> </li>
             @endif
             @if($valueCountArr["1"]>0)
-            <li><a href="{{ url('job/details/'.$job['id']) }}">{{ $valueCountArr['1'] }} Candidates{{ ($valueCountArr['1']>1)?'s':'' }} Invited </a></li>
+            <li><a href="{{ url('job/details/'.$job['id']) }}">{{ $valueCountArr['1'] }} Candidate{{ ($valueCountArr['1']>1)?'s':'' }} Invited </a></li>
             @endif
             <li><a href="{{ url('job/details/'.$job['id']) }}"> View Detail</a></li>
         </ul>
@@ -109,7 +109,7 @@
     <div class="col-sm-4 ">
        
         <div class="search-seeker">
-            <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pd-l-25 pd-r-30 pull-right">Search Candidates</a>
+            <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pull-right">Search Candidates</a>
         </div>
     </div>
 

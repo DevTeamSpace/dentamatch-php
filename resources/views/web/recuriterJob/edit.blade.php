@@ -270,7 +270,7 @@
                 </div>	
                 <div class="form-group">
                     <label>Additional Helpful Information <i class="optional">(Optional)</i></label>
-                    <label>example:where to park, lunch hour, what to wear, etc.</label>
+                    <label class="ex-text">example:where to park, lunch hour, what to wear, etc.</label>
                     <textarea class="form-control txtHeight" id="optionalInfo" data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: selectedOfficeInfo"></textarea>
                 </div>	
             </div>
