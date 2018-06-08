@@ -27,36 +27,36 @@
                             <ul class="dropdown-menu rating-info">
                                 <li><div class="rating_on"> Punctuality <span class="ex-text">(Did they show up & were they on time) under punctuality</span></div>
                                     <ul class="rate_me">
-                                        
+                                        <?php $punctuality = round($seeker['avg_punctuality'],1);?>
                                         <li ><span {{ (!empty($punctuality)) ? (floor($punctuality)>=1 ? "class=bg-green" : "") : "" }}></span></li>
                                         <li><span {{ (!empty($punctuality)) ? (floor($punctuality)>=2 ? "class=bg-green" : "") : "" }}></span></li>
                                         <li><span {{ (!empty($punctuality) && floor($punctuality)>=3) ? "class=bg-green" : "" }}></span></li>
                                         <li ><span {{ (!empty($punctuality) && floor($punctuality)>=4) ? "class=bg-green" : "" }}></span></li>
                                         <li><span {{ (!empty($punctuality) && floor($punctuality)>=5) ? "class=bg-green" : "" }} ></span></li>
-                                        <li class="last-child-css">{{ $punctuality = round($seeker['avg_punctuality'],1) }}</li>
+                                        <li class="last-child-css">{{ $punctuality }}</li>
                                     </ul>
                                 </li>
                                 <li><div class="rating_on"> Work performance <span class="ex-text">(Were they efficient? Were they a team player? under work performance)</span></div>
                                     <ul class="rate_me">
-                                       
+                                        <?php $timeManagement = round($seeker['avg_time_management'],1);?>
                                         <li ><span {{ (!empty($timeManagement)) ? (floor($timeManagement)>=1 ? "class=bg-ember" : "") : "" }}></span></li>
                                         <li><span {{ (!empty($timeManagement)) ? (floor($timeManagement)>=2 ? "class=bg-ember" : "") : "" }}></span></li>
                                         <li><span {{ (!empty($timeManagement) && floor($timeManagement)>=3) ? "class=bg-ember" : "" }}></span></li>
                                         <li ><span {{ (!empty($timeManagement) && floor($timeManagement)>=4) ? "class=bg-ember" : "" }}></span></li>
                                         <li><span {{ (!empty($timeManagement) && floor($timeManagement)>=5) ? "class=bg-ember" : "" }} ></span></li>
-                                        <li class="last-child-css">{{ $timeManagement = round($seeker['avg_time_management'],1) }}</li>
+                                        <li class="last-child-css">{{ $timeManagement }}</li>
                                     </ul>
                                 </li>
                                 <li>
                                     <div class="rating_on">  Skill & Aptitude <span class="ex-text">(Were the clinical slill on point? Was the candidate engaging with the patients and other members of the staff)</span></div>
                                     <ul class="rate_me">
-                                        
+                                        <?php $skillsRating = round($seeker['avg_skills'],1);?>
                                         <li ><span {{ (!empty($skillsRating)) ? (floor($skillsRating)>=1 ? "class=bg-red" : "") : "" }}></span></li>
                                         <li><span {{ (!empty($skillsRating)) ? (floor($skillsRating)>=2 ? "class=bg-red" : "") : "" }}></span></li>
                                         <li><span {{ (!empty($skillsRating) && floor($skillsRating)>=3) ? "class=bg-red" : "" }}></span></li>
                                         <li><span {{ (!empty($skillsRating) && floor($skillsRating)>=4) ? "class=bg-red" : "" }}></span></li>
                                         <li><span {{ (!empty($skillsRating) && floor($skillsRating)>=5) ? "class=bg-red" : "" }}></span></li>
-                                        <li class="last-child-css">{{ $skillsRating = round($seeker['avg_skills'],1) }}    </li>
+                                        <li class="last-child-css">{{ $skillsRating }}    </li>
                                     </ul>
                                 </li>
                             </ul>
