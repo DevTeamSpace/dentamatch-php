@@ -50,14 +50,17 @@ class TempJobExpiryCommand extends Command
             $notificationDays = $configModel->config_data;
             
             $senderId = User::getAdminUserDetailsForNotification();
-            $tempJobModel = TempJobDates::select('recruiter_jobs.id', 'job_templates.user_id', 'job_titles.jobtitle_name', 'temp_job_dates.job_date')
+            $tempJobModel = TempJobDates::select('recruiter_jobs.id', 'job_templates.user_id', 'job_titles.jobtitle_name')
+                                ->selectRaw(DB::raw("DATEDIFF(max(temp_job_dates.job_date),now()) as maxDate"))
+                                ->selectRaw(DB::raw("max(temp_job_dates.job_date) as job_date"))
                                 ->join('recruiter_jobs', 'recruiter_jobs.id', '=', 'temp_job_dates.recruiter_job_id')
                                 ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
                                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
                                 ->leftjoin('job_lists', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
-                                ->where(DB::raw("DATEDIFF(temp_job_dates.job_date,now())"),'=', $notificationDays)
-                                ->groupBy('temp_job_dates.id')
+                                //->where(DB::raw("DATEDIFF(temp_job_dates.job_date,now())"),'=', $notificationDays)                
+                                ->groupBy('temp_job_dates.recruiter_job_id')
                                 ->orderBy('temp_job_dates.job_date', 'desc')
+                                ->having('maxdate','=',$notificationDays)
                                 ->get();
             $list = $tempJobModel->toArray();
             if(!empty($list)) {

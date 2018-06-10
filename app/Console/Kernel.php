@@ -36,7 +36,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('user:profileCompletion')->dailyAt()->withoutOverlapping();
+        $schedule->command('user:profileCompletion')->daily()->withoutOverlapping();
         $schedule->command('user:certificateExpiry')->daily()->withoutOverlapping();
         $schedule->command('notify:adminNotification')->everyTenMinutes()->withoutOverlapping();
         $schedule->command('notify:tempJobExpiryNotification')->daily()->withoutOverlapping();
