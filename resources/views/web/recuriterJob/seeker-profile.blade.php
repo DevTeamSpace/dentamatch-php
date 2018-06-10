@@ -21,7 +21,84 @@
                 <img src="{{ url('image/120/120/?src=' .$seekerDetails['profile_pic']) }}" class="img-circle">
             </div> 
             <div class="col-md-7 col-sm-6">
+                <span class="mr-l-5 dropdown date_drop">
+                    @if(round(($seekerDetails['sum']),0) > 3)
+                    @php $avgrateClass = 'bg-green' @endphp
+                    @elseif(round(($seekerDetails['sum']),0) == 3)
+                    @php $avgrateClass = 'bg-ember' @endphp
+                    @elseif(round(($seekerDetails['sum']),0) < 3)
+                    @php $avgrateClass = 'bg-red'  @endphp
+                    @endif
+                    
+                    @if(round(($seekerDetails['punctuality']),0) > 3)
+                    @php $puncClass = 'bg-green' @endphp
+                    @elseif(round(($seekerDetails['punctuality']),0) == 3)
+                    @php $puncClass = 'bg-ember' @endphp
+                    @elseif(round(($seekerDetails['punctuality']),0) < 3)
+                    @php $puncClass = 'bg-red'  @endphp
+                    @endif 
+                    
+                    @if(round(($seekerDetails['time_management']),0) > 3)
+                    @php $timeClass = 'bg-green' @endphp
+                    @elseif(round(($seekerDetails['time_management']),0) == 3)
+                    @php $timeClass = 'bg-ember' @endphp
+                    @elseif(round(($seekerDetails['time_management']),0) < 3)
+                    @php $timeClass = 'bg-red'  @endphp
+                    @endif 
+                    
+                    @if(round(($seekerDetails['avgskills']),0) > 3)
+                    @php $skillClass = 'bg-green' @endphp
+                    @elseif(round(($seekerDetails['avgskills']),0) == 3)
+                    @php $skillClass = 'bg-ember' @endphp
+                    @elseif(round(($seekerDetails['avgskills']),0) < 3)
+                    @php $skillClass = 'bg-red'  @endphp
+                    @endif
                 <h4>{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']}}</h4>
+                @if(!empty($seekerDetails['sum']))
+                    <span class=" dropdown-toggle label {{$avgrateClass}}" data-toggle="dropdown">{{number_format($seekerDetails['sum'], 1, '.', '')}}</span>
+                @else
+                    <span class=" dropdown-toggle label label-success">Not Yet Rated</span>
+                @endif
+                <ul class="dropdown-menu rating-info">
+                      <li><div class="rating_on"> Punctuality <span class="ex-text">(Did they show up & were they on time) under punctuality</span></div>
+                        <ul class="rate_me">
+                            @for($i=1; $i<=5; $i++)
+                            @if($i <= round(($seekerDetails['punctuality']),0))
+                            <li><span class="{{$puncClass}}"></span></li>
+                            @else
+                            <li><span></span></li>
+                            @endif
+                            @endfor
+                        </ul>
+                        <label class="total-count "><span class="counter">{{round(($seekerDetails['punctuality']),0)}}</span>/5</label>
+                    </li>
+                     <li><div class="rating_on"> Work performance <span class="ex-text">(Were they efficient? Were they a team player? under work performance)</span></div>
+                        <ul class="rate_me">
+                            @for($i=1; $i<=5; $i++)
+                            @if($i <= round(($seekerDetails['time_management']),0))
+                            <li><span class="{{$timeClass}}"></span></li>
+                            @else
+                            <li><span></span></li>
+                            @endif
+                            @endfor
+                        </ul>
+                        <label class="total-count "><span class="counter">{{round(($seekerDetails['time_management']),0)}}</span>/5</label>
+                    </li>
+                    <li>
+                        <div class="rating_on"> Skill & Aptitude <span class="ex-text">(Were the clinical slill on point? Was the candidate engaging with the patients and other members of the staff)</span></div>
+                        <ul class="rate_me">
+                            @for($i=1; $i<=5; $i++)
+                            @if($i <= round(($seekerDetails['avgskills']),0))
+                            <li><span class="{{$skillClass}}"></span></li>
+                            @else
+                            <li><span></span></li>
+                            @endif
+                            @endfor
+                        </ul>
+                        <label class="total-count "><span class="counter">{{round(($seekerDetails['avgskills']),0)}}</span>/5</label>
+                    </li>
+                </ul>  
+                </span>
                 <h6>{{$seekerDetails['jobtitle_name']}}</h6> 
                 <div class="job-type-detail seeker-detail-temp">
 
