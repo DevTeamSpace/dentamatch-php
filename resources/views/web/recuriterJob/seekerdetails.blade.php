@@ -2,6 +2,7 @@
 
 @section('css')
 <link rel="stylesheet" href="{{asset('web/css/style.css')}}">
+<link rel="stylesheet" href="{{asset('web/css/bootstrap-datepicker.css')}}">
 @endsection
 @section('content')
 @php 
@@ -61,15 +62,16 @@ $seekerDatesCount = count($datesTemp);
                             @php 
                             $dates = explode(' | ',$seekerDetails['temp_job_dates']);
                             @endphp
-                            <a href="#" class=" dropdown-toggle"  data-toggle="dropdown">
+                            <input type="hidden" id="tempDates" value="{{ $seekerDetails['temp_job_dates'] }}">
+                            <a href="#" class=" dropdown-toggle" id="showCalendarProfile">
                                 <span class="day-drop">{{ date('l, M d, Y',strtotime($dates[0])) }}</span>
-                                <span class="caret"></span>
+                                <span class="fa fa-calendar"></span>
                             </a>
-                            <ul class="dropdown-menu">
+<!--                            <ul class="dropdown-menu">
                               @foreach ($dates as $date)
                               <li>{{ date('l, M d, Y',strtotime($date)) }}</li>
                               @endforeach
-                          </ul>
+                          </ul>-->
                       </span>
                   </label>
                   @endif
@@ -284,7 +286,24 @@ $seekerDatesCount = count($datesTemp);
 @endsection
 
 @section('js')
+<script src="{{asset('web/scripts/moment.min.js')}}"></script>
+<script src="{{asset('web/scripts/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
+    $(document).ready(function(){
+        $('#showCalendarProfile').datepicker({
+            format: 'yyyy/mm/dd',
+            autoclose: true,
+            daysOfWeekDisabled:[0,1,2,3,4,5,6],            
+        });
+        $('#showCalendarProfile').click(function(){      
+            console.log('ssss');
+            var tempDates = $('#tempDates').val().split('|');
+            console.log(tempDates);
+            
+            $(this).datepicker('setDates', tempDates);
+            //['06-05-2018','06-06-2018','06-07-2018']
+        });
+    })
     $('.thumb-certificate').click(function(){
         var imgUrl = "{{ url('image/550/500/?src=') }}";
         $('#certificateModal').modal({show:true});

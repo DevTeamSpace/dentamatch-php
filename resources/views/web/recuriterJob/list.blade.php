@@ -2,7 +2,7 @@
 
 @section('css')
 <link rel="stylesheet" href="{{asset('web/css/style.css')}}">
-
+<link rel="stylesheet" href="{{asset('web/css/bootstrap-datepicker.css')}}">
 @endsection
 @section('content')
 <div id="ajaxData" class="container mr-t-30 padding-container-template">

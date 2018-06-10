@@ -43,13 +43,15 @@
                     @php 
                     $dates = explode(',',$job['temp_job_dates']);
                     @endphp
-                    <a href="#" class=" dropdown-toggle"  data-toggle="dropdown"><span class="day-drop">{{ date('l, M d, Y',strtotime($dates[0])) }}</span>
-                        <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
+                    <input type="hidden" class="tempDates" value="{{ $job['temp_job_dates'] }}">
+                    <a href="javascript:void(0);" class=" dropdown-toggle showCalendarProfile">
+                        <span class="day-drop">{{ date('l, M d, Y',strtotime($dates[0])) }}</span>
+                        <span class="fa fa-calendar"></span></a>
+<!--                        <ul class="dropdown-menu">
                             @foreach ($dates as $date)
                             <li>{{ date('l, M d, Y',strtotime($date)) }}</li>
                             @endforeach
-                        </ul>
+                        </ul>-->
                     </span>
                     @endif
                 </div>
@@ -119,3 +121,24 @@
 </div>  
 @endforeach 
 {{ $jobList->links() }}
+@section('js')
+<script src="{{asset('web/scripts/moment.min.js')}}"></script>
+<script src="{{asset('web/scripts/bootstrap-datepicker.js')}}"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.showCalendarProfile').datepicker({
+            format: 'yyyy/mm/dd',
+            autoclose: true,
+            daysOfWeekDisabled:[0,1,2,3,4,5,6],            
+        });
+        $('.showCalendarProfile').click(function(){      
+            console.log('ssss');
+            var tempDates = $(this).closest('.dropdown').find('.tempDates').val().split(',');
+            console.log(tempDates);
+            
+            $(this).datepicker('setDates', tempDates);
+            //['06-05-2018','06-06-2018','06-07-2018']
+        });
+    })
+</script>
+@endsection

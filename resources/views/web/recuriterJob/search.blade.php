@@ -3,6 +3,7 @@
 @section('css')
 <link rel="stylesheet" href="{{asset('web/css/style.css')}}">
 <link rel="stylesheet" href="{{asset('web/plugins/range-slider/css/bootstrap-slider.css')}}">
+<link rel="stylesheet" href="{{asset('web/css/bootstrap-datepicker.css')}}">
 @endsection
 @section('content')
 
