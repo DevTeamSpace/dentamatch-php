@@ -80,7 +80,7 @@ class JobSeekerProfiles extends Model
         $obj->addSelect(DB::raw("count(distinct(skill_count.skill_id)) AS matched_skills")); 
         
         if($job['job_type']==RecruiterJobs::TEMPORARY)
-            $obj->addSelect(DB::raw("group_concat(distinct(jobseeker_temp_availability.temp_job_date)) AS temp_job_dates"));
+            $obj->addSelect(DB::raw("group_concat(distinct(jobseeker_temp_availability.temp_job_date)  ORDER BY jobseeker_temp_availability.temp_job_date ASC) AS temp_job_dates"));
     
         $obj->leftjoin('job_ratings',function($query){
             $query->on('job_ratings.seeker_id', '=', 'jobseeker_profiles.user_id');
