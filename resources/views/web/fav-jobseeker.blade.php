@@ -60,7 +60,7 @@
                     @endif
                 
                  <ul class="dropdown-menu rating-info">
-                      <li><div class="rating_on"> Punctuality</div>
+                      <li><div class="rating_on"> Punctuality <span class="ex-text">(Did they show up & were they on time) under punctuality</span></div>
                         <ul class="rate_me">
                             @for($i=1; $i<=5; $i++)
                             @if($i <= round(($fav->punctuality),0))
@@ -72,7 +72,7 @@
                         </ul>
                         <label class="total-count "><span class="counter">{{round(($fav->punctuality),0)}}</span>/5</label>
                     </li>
-                     <li><div class="rating_on"> Time management</div>
+                     <li><div class="rating_on"> Work performance <span class="ex-text">(Were they efficient? Were they a team player? under work performance)</span></div>
                         <ul class="rate_me">
                             @for($i=1; $i<=5; $i++)
                             @if($i <= round(($fav->time_management),0))
@@ -85,7 +85,7 @@
                         <label class="total-count "><span class="counter">{{round(($fav->time_management),0)}}</span>/5</label>
                     </li>
                     <li>
-                        <div class="rating_on">  Personal/Professional skill</div>
+                        <div class="rating_on"> Skill & Aptitude <span class="ex-text">(Were the clinical slill on point? Was the candidate engaging with the patients and other members of the staff)</span></div>
                         <ul class="rate_me">
                             @for($i=1; $i<=5; $i++)
                             @if($i <= round(($fav->skills),0))

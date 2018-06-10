@@ -1019,9 +1019,13 @@
                             top: auto;
                             bottom: 35px;
                         }
-                        .jobCatbox .rating-info.dropdown-menu { 
+                        .jobCatbox:last-child .rating-info.dropdown-menu { 
                             top: auto;
+                            bottom: 35px;
+                        }
+                        .jobCatbox:first-child .rating-info.dropdown-menu { 
                             bottom: auto;
+                            top: 35px;
                         }
                         .rating-info .rating_on {
                             font-size: 12px;

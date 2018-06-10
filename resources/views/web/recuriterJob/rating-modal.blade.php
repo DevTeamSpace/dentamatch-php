@@ -95,7 +95,7 @@
                     <ul class="mr-t-40 rating-box">
                         <li class="row">
                             <div class="col-sm-6">
-                                <div class="rating_on"> Punctuality</div>
+                                <div class="rating_on"> Punctuality<span class="ex-text">(Did they show up & were they on time) under punctuality</span></div>
                             </div>
                             <div class="col-sm-6 ">
                                 <input type="text" name="punctuality" id="punctuality_{{ $seeker["seeker_id"] }}">
@@ -104,7 +104,7 @@
                         </li>
                         <li class="row">
                             <div class="col-sm-6 ">
-                                <div class="rating_on"> Time management</div>
+                                <div class="rating_on"> Work performance <span class="ex-text">(Were they efficient? Were they a team player? under work performance)</span></div>
                             </div>
                             <div class="col-sm-6 ">
                                 <input type="text" name="time_management" id="time-manage_{{ $seeker["seeker_id"] }}">
@@ -113,7 +113,7 @@
                         </li>
                         <li class="row">
                             <div class="col-sm-6">
-                                <div class="rating_on"> Personal/Professional skill</div>
+                                <div class="rating_on"> Skill & Aptitude <span class="ex-text">(Were the clinical slill on point? Was the candidate engaging with the patients and other members of the staff)</span></div>
                             </div>
                             <div class="col-sm-6 ">
                                 <input type="text" name="skills" id="personal-skill_{{ $seeker["seeker_id"] }}">
