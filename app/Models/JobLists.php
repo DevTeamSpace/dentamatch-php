@@ -138,8 +138,10 @@ class JobLists extends Model {
         
         if ($tempQueryObj) {
             $searchResults = $tempQueryObj->toArray();
+            $currentDate = date('Y-m-d');
             foreach ($searchResults as $key=>$value) {
                 $searchResults[$key]['job_type_string'] = static::$jobTypeName[$value['job_type']];
+                $searchResults[$key]['currentDate'] = $currentDate;
             }
             
             $result['list'] = $searchResults;
