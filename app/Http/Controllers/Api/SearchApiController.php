@@ -151,7 +151,7 @@ class SearchApiController extends Controller {
                             $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
                             $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
                     }else{
-                            $response = apiResponse::customJsonResponse(0, 202, trans("messages.set_availability"));
+                            $response = apiResponse::customJsonResponse(0, 200, trans("messages.set_availability"));
                     }
                 } else {
                     $response = apiResponse::customJsonResponse(0, 202, trans("messages.profile_not_complete"));
