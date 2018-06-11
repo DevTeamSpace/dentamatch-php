@@ -1354,3 +1354,14 @@ input[type='checkbox'] {
         height: auto;
     }
 }
+
+.dropdown-menu.rating-info.seeker-rating-info {
+                                position: absolute;
+                                top: 100%;
+                                background: #fff;
+                                min-height: 280px;
+                            }
+                            .resultHeading h4.next-rate {
+                                display: inline;
+                                margin-left: 0px;
+                            }

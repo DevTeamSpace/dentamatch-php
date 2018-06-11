@@ -53,13 +53,13 @@
                     @elseif(round(($seekerDetails['avgskills']),0) < 3)
                     @php $skillClass = 'bg-red'  @endphp
                     @endif
-                <h4>{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']}}</h4>
+                <h4 class="next-rate">{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']}}</h4>
                 @if(!empty($seekerDetails['sum']))
                     <span class=" dropdown-toggle label {{$avgrateClass}}" data-toggle="dropdown">{{number_format($seekerDetails['sum'], 1, '.', '')}}</span>
                 @else
                     <span class=" dropdown-toggle label label-success">Not Yet Rated</span>
                 @endif
-                <ul class="dropdown-menu rating-info">
+                <ul class="dropdown-menu rating-info seeker-rating-info">
                       <li><div class="rating_on"> Punctuality <span class="ex-text">(Did they show up & were they on time) under punctuality</span></div>
                         <ul class="rate_me">
                             @for($i=1; $i<=5; $i++)

@@ -31,8 +31,8 @@ $seekerDatesCount = count($datesTemp);
                 <img src="{{ url('image/120/120/?src=' .$seekerDetails['profile_pic']) }}" class="img-circle">
             </div> 
             <div class="col-md-7 col-sm-6">
-                <span>{{ number_format($matchedSkills['percentSkills'],2) }}% Match</span>
-                <span class="mr-l-5 dropdown date_drop">
+                <div>{{ number_format($matchedSkills['percentSkills'],2) }}% Match</div>
+                <span class=" dropdown date_drop">
                     @if(round(($seekerDetails['sum']),0) > 3)
                     @php $avgrateClass = 'bg-green' @endphp
                     @elseif(round(($seekerDetails['sum']),0) == 3)
@@ -64,13 +64,13 @@ $seekerDatesCount = count($datesTemp);
                     @elseif(round(($seekerDetails['avgskills']),0) < 3)
                     @php $skillClass = 'bg-red'  @endphp
                     @endif
-                <h4>{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']}}</h4>
+                    <h4 class="next-rate">{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']}}</h4>
                 @if(!empty($seekerDetails['sum']))
                     <span class=" dropdown-toggle label {{$avgrateClass}}" data-toggle="dropdown">{{number_format($seekerDetails['sum'], 1, '.', '')}}</span>
                 @else
                     <span class=" dropdown-toggle label label-success">Not Yet Rated</span>
                 @endif
-                <ul class="dropdown-menu rating-info">
+                <ul class="dropdown-menu rating-info seeker-rating-info">
                       <li><div class="rating_on"> Punctuality <span class="ex-text">(Did they show up & were they on time) under punctuality</span></div>
                         <ul class="rate_me">
                             @for($i=1; $i<=5; $i++)
