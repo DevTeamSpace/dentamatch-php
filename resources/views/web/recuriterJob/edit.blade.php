@@ -35,7 +35,7 @@
 
             <div class="form-group custom-select">
                 <input hidden value="{{$jobId}}" id="jobIdValue">
-                <label >Dental Office Address</label>
+                <label >Office Address</label>
                 <select class="selectpicker" id="select-office-address" data-bind="options: allLocations, optionsText: 'address', optionsValue: 'address', selectedOptions: defaultSelectLocation, event: {change: showOfficeDetails}">
                 </select>
             </div>
@@ -101,7 +101,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Dental Office Address</label>
+                    <label>Office Address</label>
                     <input type="text" value="" data-bind="value: selectedOfficeAddress, event: {focus: $root.getOfficeName}" id="officeAddress" name="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="Required">
                     <p class="error-div" data-bind="text: $root.locationError"></p>
                 </div>

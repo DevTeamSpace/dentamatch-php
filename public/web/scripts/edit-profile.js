@@ -373,7 +373,7 @@ var EditProfileVM = function () {
                         d.locationError('Please enter a valid address.');
                         d.errors(true);
                     } else if (data == 2) {
-                        d.locationError('Job cannot be currently created for this location. We will soon be available in your area.');
+                        d.locationError('Position cannot currently be created for this location. We will soon be available in your area.');
                         //d.errors(true);
                     } else {
                         d.errors(false);

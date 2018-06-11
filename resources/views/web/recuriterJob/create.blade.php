@@ -48,9 +48,9 @@
             </div>
             @endif
             <div class="form-group custom-select">
-                <label >Dental Office Address</label>
-                <select data-parsley-required data-parsley-required-message= "Select dental office address" name="dentalOfficeId" id="dentalOfficeId" class="selectpicker mr-b-5">
-                    <option value="">Select dental office address</option>
+                <label >Office Address</label>
+                <select data-parsley-required data-parsley-required-message= "Select office address" name="dentalOfficeId" id="dentalOfficeId" class="selectpicker mr-b-5">
+                    <option value="">Select office address</option>
                     @foreach ($offices as $key=>$office)
                     @if($key==0)
                     <option data-divider="true"></option>
@@ -62,7 +62,7 @@
                 </select>
                 <input type="hidden" value="{{ json_encode($offices) }}" id="officeJson">
                 <input type="hidden" value="add" name="action">
-                <p class="error-div hide">Job cannot be currently created for this location. We will soon be available in your area.</p>
+                <p class="error-div hide">Position cannot currently be created for this location. We will soon be available in your area.</p>
 
             </div>
             <div class="form-group custom-select">

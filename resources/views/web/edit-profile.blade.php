@@ -77,7 +77,7 @@
                                 <!--/ko-->
                             </div>
                             <div class="viewProfileRightCard pd-b-25">
-                                <h6>Dental Office Address</h6>
+                                <h6>Office Address</h6>
                                 <p data-bind="text: officeAddress"></p>
                             </div>
                             <div class="viewProfileRightCard pd-b-25">
@@ -147,7 +147,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label>Dental Office Address</label>
+                <label>Office Address</label>
                 <input type="text" value="" id="officeAddress" name="officeName" placeholder="Office name, Street, City, Zip Code and Country" class="form-control txtBtnDisable officeAddressMap"  data-parsley-required data-parsley-required-message="Required" data-bind="value: officeAddress, event: {focus: $root.getOfficeName}">
                 <p class="error-div" data-bind="text: locationError"></p>
             </div>

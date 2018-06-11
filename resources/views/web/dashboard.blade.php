@@ -59,7 +59,7 @@
                             <input type="hidden" value="{{ json_encode($officeType,true) }}" id="officeTypesJson">
                         </div>
                         <div class="form-group">
-                            <label>Dental Office Address</label>
+                            <label>Office Address</label>
                             <div id="locationField">
                                 <input  id="autocomplete" name="officeAddress" value="{{ old('officeAddress') }}" type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="Required">
                                 <div id="location-msg"></div>
