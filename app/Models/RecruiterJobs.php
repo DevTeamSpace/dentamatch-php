@@ -19,7 +19,7 @@ class RecruiterJobs extends Model
     const FULLTIME = 1;
     const PARTTIME = 2;
     const TEMPORARY = 3;
-    const LIMIT = 5;
+    const LIMIT = 10;
     const INVITED = 1;
     const APPLIED = 2;
     const SHORTLISTED = 3;
