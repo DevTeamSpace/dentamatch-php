@@ -177,9 +177,6 @@ $seekerDatesCount = count($datesTemp);
 <input type="hidden" name="resultCount" id="resultCount" value="{{$seekersList['paginate']->total()}}">
 
 {{ $seekersList['paginate']->appends(['avail_all' => $searchData['avail_all']])->links() }}
-@section('js')
-<script src="{{asset('web/scripts/moment.min.js')}}"></script>
-<script src="{{asset('web/scripts/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         $('.showCalendarProfile').datepicker({
@@ -197,4 +194,3 @@ $seekerDatesCount = count($datesTemp);
         });
     })
 </script>
-@endsection

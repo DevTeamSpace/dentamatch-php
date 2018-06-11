@@ -100,6 +100,8 @@
 @endsection
 
 @section('js')
+<script src="{{asset('web/scripts/moment.min.js')}}"></script>
+<script src="{{asset('web/scripts/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
     var urlFav = "{{ url('recruiter/markFavourite') }}";
 </script>

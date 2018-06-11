@@ -113,7 +113,7 @@
                             <input class="magic-radio" type="radio" name="jobType" id="temporary" value="{{ \App\Models\RecruiterJobs::TEMPORARY }}">
 
                             <label for="Temporary">
-                                Temporary
+                                Temporary Job / Service Technician
                             </label>
                             <input name="tempDates" type="text" id="CoverStartDateOtherPicker" data-date="" class="date-instance" />
                         </div>  
