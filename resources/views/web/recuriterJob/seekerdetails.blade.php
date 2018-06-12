@@ -225,7 +225,7 @@ $seekerDatesCount = count($datesTemp);
             </div>
 
             <div class="searchResultHeading pd-t-20">
-                <h5>EXPERIENCE</h5>
+                <h5>PAST WORK EXPERIENCE</h5>
                 @if(!empty($seekerDetails['experience']))
                 @foreach($seekerDetails['experience'] as $experience)
                 <div class="row">   
@@ -273,7 +273,7 @@ $seekerDatesCount = count($datesTemp);
 
 
             <div class="searchResultHeading pd-t-20">
-                <h5>DENTAL SCHOOL / TRAINING / GRADUATIONS</h5>
+                <h5>EDUCATION / TRAINING </h5>
                 @if(!empty($seekerDetails['schoolings']))
                 @foreach($seekerDetails['schoolings'] as $schoolings)
                 <div class="pd-t-10 keySkills">
@@ -285,7 +285,7 @@ $seekerDatesCount = count($datesTemp);
             </div>
 
             <div class="searchResultHeading pd-t-20">
-                <h5>KEY SKILLS</h5>
+                <h5>KEY SKILLS & TECHNOLOGY EXPERIENCE</h5>
             </div>
 
             @if(!empty($seekerDetails['skills']))
