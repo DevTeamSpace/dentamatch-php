@@ -25,7 +25,7 @@
                             <span class=" dropdown-toggle label label-success">Not Yet Rated</span>
                             @endif
                             <ul class="dropdown-menu rating-info">
-                                <li><div class="rating_on"> Punctuality <span class="ex-text">(Did they show up & were they on time) under punctuality</span></div>
+                                <li><div class="rating_on"> Punctuality <span class="ex-text">(Did they show up & were they on time?)</span></div>
                                     <ul class="rate_me">
                                         <?php $punctuality = round($seeker['avg_punctuality'],1);?>
                                         <li ><span {{ (!empty($punctuality)) ? (floor($punctuality)>=1 ? "class=bg-green" : "") : "" }}></span></li>
@@ -36,7 +36,7 @@
                                         <li class="last-child-css">{{ $punctuality }}</li>
                                     </ul>
                                 </li>
-                                <li><div class="rating_on"> Work performance <span class="ex-text">(Were they efficient? Were they a team player? under work performance)</span></div>
+                                <li><div class="rating_on"> Work performance <span class="ex-text">(Were they efficient? Were they a team player?)</span></div>
                                     <ul class="rate_me">
                                         <?php $timeManagement = round($seeker['avg_time_management'],1);?>
                                         <li ><span {{ (!empty($timeManagement)) ? (floor($timeManagement)>=1 ? "class=bg-ember" : "") : "" }}></span></li>
@@ -48,7 +48,7 @@
                                     </ul>
                                 </li>
                                 <li>
-                                    <div class="rating_on">  Skill & Aptitude <span class="ex-text">(Were the clinical slill on point? Was the candidate engaging with the patients and other members of the staff)</span></div>
+                                    <div class="rating_on">  Skill & Aptitude <span class="ex-text">(Were the clinical skill on point? Was the candidate engaging with the patients and other members of the staff?)</span></div>
                                     <ul class="rate_me">
                                         <?php $skillsRating = round($seeker['avg_skills'],1);?>
                                         <li ><span {{ (!empty($skillsRating)) ? (floor($skillsRating)>=1 ? "class=bg-red" : "") : "" }}></span></li>

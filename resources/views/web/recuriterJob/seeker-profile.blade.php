@@ -60,7 +60,7 @@
                     <span class=" dropdown-toggle label label-success">Not Yet Rated</span>
                 @endif
                 <ul class="dropdown-menu rating-info seeker-rating-info">
-                      <li><div class="rating_on"> Punctuality <span class="ex-text">(Did they show up & were they on time) under punctuality</span></div>
+                      <li><div class="rating_on"> Punctuality <span class="ex-text">(Did they show up & were they on time?)</span></div>
                         <ul class="rate_me">
                             @for($i=1; $i<=5; $i++)
                             @if($i <= round(($seekerDetails['punctuality']),0))
@@ -72,7 +72,7 @@
                         </ul>
                         <label class="total-count "><span class="counter">{{round(($seekerDetails['punctuality']),0)}}</span>/5</label>
                     </li>
-                     <li><div class="rating_on"> Work performance <span class="ex-text">(Were they efficient? Were they a team player? under work performance)</span></div>
+                     <li><div class="rating_on"> Work performance <span class="ex-text">(Were they efficient? Were they a team player?)</span></div>
                         <ul class="rate_me">
                             @for($i=1; $i<=5; $i++)
                             @if($i <= round(($seekerDetails['time_management']),0))
@@ -85,7 +85,7 @@
                         <label class="total-count "><span class="counter">{{round(($seekerDetails['time_management']),0)}}</span>/5</label>
                     </li>
                     <li>
-                        <div class="rating_on"> Skill & Aptitude <span class="ex-text">(Were the clinical slill on point? Was the candidate engaging with the patients and other members of the staff)</span></div>
+                        <div class="rating_on"> Skill & Aptitude <span class="ex-text">(Were the clinical skill on point? Was the candidate engaging with the patients and other members of the staff?)</span></div>
                         <ul class="rate_me">
                             @for($i=1; $i<=5; $i++)
                             @if($i <= round(($seekerDetails['avgskills']),0))
