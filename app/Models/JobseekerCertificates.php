@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\apiResponse;
 
-use DB;
 
 class JobseekerCertificates extends Model
 {   

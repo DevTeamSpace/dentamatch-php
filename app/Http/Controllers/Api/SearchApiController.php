@@ -424,9 +424,9 @@ class SearchApiController extends Controller {
                 $response = apiResponse::customJsonResponse(1, 200, $msg);
             } else {
                 if ($jobExists->applied_status == JobLists::HIRED) {
-                    $msg = "This seeker is already hired for this job";
+                    $msg = trans("messages.seeker_already_hired");
                 } else {
-                    $msg = "This seeker is already cancelled for this job";
+                    $msg = trans("messages.seeker_already_cancelled");
                 }
                 $response = apiResponse::customJsonResponse(0, 201, $msg);
             }

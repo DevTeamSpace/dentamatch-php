@@ -46,7 +46,7 @@ class UserApiController extends Controller {
         $userExists = User::with('userGroup')->where('email', $reqData['email'])->first();
         if($userExists){
             if (isset($userExists->userGroup) && !empty($userExists->userGroup)) {
-                    if ($userExists->userGroup->group_id == 2) {
+                    if ($userExists->userGroup->group_id == UserGroup::RECRUITER) {
                         $msg = trans("messages.already_register_as_recruiter");
                     } else {
                         $msg = trans("messages.user_exist_same_email");
@@ -62,7 +62,7 @@ class UserApiController extends Controller {
             );
             $userDetails = User::create($user);
             $userGroupModel = new UserGroup();
-            $userGroupModel->group_id = 3;
+            $userGroupModel->group_id = UserGroup::JOBSEEKER;
             $userGroupModel->user_id = $userDetails->id;
             $userGroupModel->save();
             
@@ -155,8 +155,8 @@ class UserApiController extends Controller {
                                 )
                         ->where('users.id', $userId)
                         ->first();
-            if($userData['group_id'] == 3){
-                if($userData['is_verified'] == 1 && $userData['is_active'] == 1){
+            if($userData['group_id'] == UserGroup::JOBSEEKER){
+                if($userData['is_verified'] == UserProfile::JOBSEEKER_VERIFY_APPROVED && $userData['is_active'] == 1){
                         $device = Device::where('user_id', $userId)->orWhere('device_id', $reqData['deviceId'])->first();
                         $reqData['deviceOs'] = isset($reqData['deviceOs'])?$reqData['deviceOs']:'';
                         $reqData['appVersion'] = isset($reqData['appVersion'])?$reqData['appVersion']:'';
@@ -250,16 +250,12 @@ class UserApiController extends Controller {
         $is_verified = 0;
         $profile_details = UserProfile::where('verification_code', $confirmation_code)->first();
         if($profile_details){
-            if($profile_details->is_verified == 0){
+            if($profile_details->is_verified == UserProfile::JOBSEEKER_VERIFY_DEFAULT){
                 $update_profile = UserProfile::find($profile_details->id);
-                $update_profile->is_verified = 1;
+                $update_profile->is_verified = UserProfile::JOBSEEKER_VERIFY_APPROVED;
                 $update_profile->save();
                 $is_verified = 1;
-            }else{
-                $is_verified = 0;
             }
-        }else{
-            $is_verified = 0;
         }
         return view('verify-user')->with('verifyUser', $is_verified);
     }
@@ -289,7 +285,7 @@ class UserApiController extends Controller {
                         ->where('user_groups.group_id' , 3)
                         ->first();
             if ($user) {
-                if($user->is_verified == 1){
+                if($user->is_verified == UserProfile::JOBSEEKER_VERIFY_APPROVED){
                     PasswordReset::where('user_id' , $user->id)->where('email', $user->email)->delete();
                     $token = md5($user->email . time());
                     $passwordModel = PasswordReset::firstOrNew(array('user_id' => $user->id, 'email' => $user->email));
@@ -398,7 +394,7 @@ class UserApiController extends Controller {
                                 'users.is_verified'
                                 )
                         ->where('users.email', $reqData['email'])
-                        ->where('user_groups.group_id' , 1)
+                        ->where('user_groups.group_id' , UserGroup::ADMIN)
                         ->first();
             
             if ($user) {

@@ -176,5 +176,11 @@ return [
     'email_is_not_verified' => 'Email id is not verified for this user',
     'data_retrieved_successfully' => 'Data retrieve successfully',
     'invalid_credentials'  =>  'User not registered',
-    'deactivated_admin'  => 'You have been deactivated. Please contact admin.'
+    'deactivated_admin'  => 'You have been deactivated. Please contact admin.',
+    'seeker_already_hired'=>'This seeker is already hired for this job',
+    'seeker_already_cancelled'=>'This seeker is already cancelled for this job',
+    'seeker_already_invited'=>'This seeker is already invited for this job',
+    'seeker_already_applied'=>'This seeker is already applied for this job',
+    'seeker_already_shortlisted'=>'This seeker is already shortlisted for this job',
+    'seeker_already_hired'=>'This seeker is already hired for this job',
 ];

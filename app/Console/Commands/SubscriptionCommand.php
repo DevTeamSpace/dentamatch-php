@@ -6,9 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\SubscriptionPayments;
 use App\Models\User;
 use App\Models\Notification;
-use App\Models\Device;
 use DB;
-use App\Providers\NotificationServiceProvider;
 
 class SubscriptionCommand extends Command
 {

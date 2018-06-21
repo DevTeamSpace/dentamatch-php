@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\RecruiterJobs;
 use App\Models\User;
 use App\Models\Notification;
 use App\Models\TempJobDates;

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\web;
 
-use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\JobRatings;

@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\UserProfile;
 use App\Models\JobSeekerTempAvailability;
 use App\Models\User;
 use App\Models\Notification;

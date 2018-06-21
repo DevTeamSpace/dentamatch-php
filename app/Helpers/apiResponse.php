@@ -2,13 +2,8 @@
 namespace App\Helpers;
 use App\Models\Device;
 use App\Models\UserProfile;
-use App\Models\WorkExperience;
-use App\Models\JobSeekerSchooling;
 use App\Models\JobSeekerSkills;
-use App\Models\JobSeekerAffiliation;
-use App\Models\JobseekerCertificates;
 use App\Models\JobTitles;
-use Log;
 
 class apiResponse {
 

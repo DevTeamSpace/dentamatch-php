@@ -61,7 +61,7 @@ class SignupController extends Controller {
         $redirect = 'login';
         if (Auth::validate($credentials)){
             $user = User::where('email', $credentials['email'])->first();
-            if ($user->userGroup->group_id == 2 && Auth::attempt($credentials)) {
+            if ($user->userGroup->group_id == UserGroup::RECRUITER && Auth::attempt($credentials)) {
                 $redirect = 'terms-conditions';
                 $term = RecruiterProfile::where('user_id', Auth::user()->id)->first();
                 $request->session()->put('userData', ['basic'=>$user->toArray(),'profile'=>$term->toArray()]);
@@ -120,7 +120,7 @@ class SignupController extends Controller {
             $userExists = User::with('userGroup')->where('email', $reqData['email'])->first();
             if ($userExists) {
                 if (isset($userExists->userGroup) && !empty($userExists->userGroup)) {
-                    if ($userExists->userGroup->group_id == 3) {
+                    if ($userExists->userGroup->group_id == UserGroup::JOBSEEKER) {
                         Session::flash('message', trans("messages.already_register_as_seeker"));
                     } else {
                         Session::flash('message', trans("messages.email_already_regisered"));
@@ -138,7 +138,7 @@ class SignupController extends Controller {
                 $user_details = User::create($user);
                 RecruiterProfile::create(['user_id' => $user_details->id]);
                 $userGroupModel = new UserGroup();
-                $userGroupModel->group_id = 2;
+                $userGroupModel->group_id = UserGroup::RECRUITER;
                 $userGroupModel->user_id = $user_details->id;
                 $userGroupModel->save();
 
@@ -197,7 +197,7 @@ class SignupController extends Controller {
             $userExists = User::with('userGroup')->where('email', $reqData['email'])->first();
             if($userExists){
                 if (isset($userExists->userGroup) && !empty($userExists->userGroup)) {
-                    if ($userExists->userGroup->group_id == 2) {
+                    if ($userExists->userGroup->group_id == UserGroup::RECRUITER) {
                         Session::flash('message', trans("messages.already_register_as_recruiter"));
                     } else {
                         Session::flash('message', trans("messages.user_exist_same_email"));
@@ -212,7 +212,7 @@ class SignupController extends Controller {
                 );
                 $userDetails = User::create($user);
                 $userGroupModel = new UserGroup();
-                $userGroupModel->group_id = 3;
+                $userGroupModel->group_id = UserGroup::JOBSEEKER;
                 $userGroupModel->user_id = $userDetails->id;
                 $userGroupModel->save();
 
@@ -302,7 +302,7 @@ class SignupController extends Controller {
             if (isset($user) && !empty($user)) {
                 User::where('verification_code', $code)->update(['is_verified' => 1, 'is_active' => 1]);
                 Session::flash('success', trans("messages.verified_user"));
-                if ($user->group_id == 3) {
+                if ($user->group_id == UserGroup::JOBSEEKER) {
                     $userProfileModel = UserProfile::getUserProfile($user->id);
                     $msg = "Hi ".$userProfileModel['first_name']." , <br />Your account has been activated successfully. Now you can login in DentaMatch app";
                     Session::flash('message', $msg);

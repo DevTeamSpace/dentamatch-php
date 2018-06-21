@@ -7,7 +7,6 @@ use App\Models\JobseekerCertificates;
 use App\Models\Notification;
 use App\Models\User;
 use App\Models\Device;
-use DB;
 use App\Providers\NotificationServiceProvider;
 
 class CertificateExpiryCommand extends Command

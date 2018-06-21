@@ -125,7 +125,7 @@ class JobSeekerController extends Controller
             );
             $userId = User::insertGetId($user);
             $userGroupModel = new UserGroup();
-            $userGroupModel->group_id = 3;
+            $userGroupModel->group_id = UserGroup::JOBSEEKER;
             $userGroupModel->user_id = $userId;
             $userGroupModel->save();
 
@@ -174,7 +174,7 @@ class JobSeekerController extends Controller
                                 'jobseeker_profiles.last_name',
                                 'users.is_verified','users.is_active'
                                 )
-                        ->where('user_groups.group_id', 3)
+                        ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
                 ->removeColumn('id')
@@ -214,7 +214,7 @@ class JobSeekerController extends Controller
                                 'jobseeker_profiles.state',
                                 'jobseeker_profiles.is_job_seeker_verified'
                                 )
-                        ->where('user_groups.group_id', 3)
+                        ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->where('job_titles.is_license_required', 1)
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
@@ -385,7 +385,7 @@ class JobSeekerController extends Controller
                                 'jobseeker_profiles.last_name',
                                 'users.is_verified','users.is_active'
                                 )
-                        ->where('user_groups.group_id', 3)
+                        ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->where('users.is_verified', 0)
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
@@ -412,7 +412,7 @@ class JobSeekerController extends Controller
                                 'jobseeker_profiles.last_name',
                                 'jobseeker_profiles.is_completed','users.is_active'
                                 )
-                        ->where('user_groups.group_id', 3)
+                        ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->where('jobseeker_profiles.is_completed', 0)
                         ->orderBy('users.id', 'desc');
         
@@ -439,7 +439,7 @@ class JobSeekerController extends Controller
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name'
                                 )
-                        ->where('user_groups.group_id', 3)
+                        ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->where('jobseeker_profiles.is_completed', 0)
                         ->orderBy('users.id', 'desc')->get();
            
@@ -477,7 +477,7 @@ class JobSeekerController extends Controller
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name'
                                 )
-                        ->where('user_groups.group_id', 3)
+                        ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->where('users.is_verified', 0)
                         ->orderBy('users.id', 'desc')->get();
            
@@ -533,7 +533,7 @@ class JobSeekerController extends Controller
                                 'jobseeker_profiles.last_name',
                                 'jobseeker_profiles.is_completed','users.is_active'
                                 )
-                        ->where('user_groups.group_id', 3)
+                        ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->whereNotIn('users.id', $availableUsers)
                         ->where('is_fulltime',0)
                         ->where('is_parttime_monday',0)
@@ -570,7 +570,7 @@ class JobSeekerController extends Controller
                                 'jobseeker_profiles.last_name',
                                 'users.is_verified','users.is_active'
                                 )
-                        ->where('user_groups.group_id', 3)
+                        ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->where('job_lists.applied_status',1)
                         ->whereNotIn('job_lists.applied_status', [2,3,4,5])
                         ->groupBy('users.id')
@@ -607,7 +607,7 @@ class JobSeekerController extends Controller
                             'jobseeker_profiles.last_name'
                            
                             )
-                    ->where('user_groups.group_id', 3)
+                    ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                     ->whereNotIn('users.id', $availableUsers)
                     ->where('is_fulltime',0)
                     ->where('is_parttime_monday',0)
@@ -656,7 +656,7 @@ class JobSeekerController extends Controller
                                 'jobseeker_profiles.last_name'
 //                                'users.is_verified','users.is_active'
                                 )
-                        ->where('user_groups.group_id', 3)
+                        ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->where('job_lists.applied_status',1)
                         ->whereNotIn('job_lists.applied_status', [2,3,4,5])
                         ->groupBy('users.id')
