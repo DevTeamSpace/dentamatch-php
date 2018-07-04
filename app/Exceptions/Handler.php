@@ -44,6 +44,20 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if($this->isHttpException($exception)){
+            switch ($exception->getStatusCode()) {
+                case 404:
+                case 500:
+                    return redirect()->guest('/');
+                default:
+                    if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+                        $message = $exception->getMessage();
+                    }elseif($exception instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException){
+                        $message = 'The page you are looking for is not available';
+                    }
+                    return response()->view('errors.404', array('message'=>$message), 404);
+            }
+        }
         return parent::render($request, $exception);
     }
 

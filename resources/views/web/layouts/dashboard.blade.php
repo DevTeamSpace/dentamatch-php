@@ -129,7 +129,7 @@
                         <a href="{{ url('job/lists') }}">Job Listings</a>
                     </li>
                     <li class="{{ ($navActive=='favseeker')?'active':''}}">
-                        <a href="{{url('favorite-jobseeker')}}">Favourite Candidates</a>
+                        <a href="{{url('favorite-jobseeker')}}">Favorite Candidates</a>
                     </li>
                     <li class="{{ ($navActive=='template')?'active':''}}">
                         <a href="{{ url('jobtemplates') }}">Position Templates</a>

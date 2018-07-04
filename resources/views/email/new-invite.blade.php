@@ -13,10 +13,10 @@
                         <div style="font-size:15px;">
                             <p style="line-height: 24px;">
                                 You have a new job invite in your account.<br/><br/>
-                                Kindly login to the Dentamatch App to accept jobs.<br/>
+                                Kindly login to the DentaMatch App to Review and Accept invitations.<br/>
                             </p>
                             <p style="margin:20px 0 0 0; padding: 0;">Sincerely, </p>
-                            <p style="margin: 0">Dentamatch Team</p>
+                            <p style="margin: 0">DentaMatch Team</p>
                         </div>
                     </div>
                 </td>

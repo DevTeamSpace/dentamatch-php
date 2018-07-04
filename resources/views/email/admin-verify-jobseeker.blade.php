@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Dentamatch - Verify Candidate</title>
+        <title>DentaMatch - Verify Candidate</title>
         <link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
     </head>
     <body  style="margin: 0; padding: 0; outline:0 none; font-family: 'Lato', sans-serif;">
@@ -14,10 +14,10 @@
                             <p style="line-height: 24px;">
                                 Candidate <strong>{{ $name }} ( {{ $email }} )</strong> has updated the profile.<br/><br/>
                                 The license and state for this user is pending for approval.<br/><br/>
-                                Kindly login to the Dentamatch Admin to Approve / Reject jobseeker.<br/>
+                                Kindly login to the DentaMatch Admin to Approve / Reject jobseeker.<br/>
                             </p>
                             <p style="margin:20px 0 0 0; padding: 0;">Sincerely, </p>
-                            <p style="margin: 0">Dentamatch Team</p>
+                            <p style="margin: 0">DentaMatch Team</p>
                         </div>
                     </div>
                 </td>

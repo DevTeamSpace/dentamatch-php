@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Dentamatch - Email Verification</title>
+        <title>DentaMatch - Email Verification</title>
         <link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
     </head>
     <body  style="margin: 0; padding: 0; outline:0 none; font-family: 'Lato', sans-serif;">
@@ -18,7 +18,7 @@
                             </p>
                             <br/>
                             <p style="margin:20px 0 0 0; padding: 0;">Sincerely, </p>
-                            <p style="margin: 0">Dentamatch Team</p>
+                            <p style="margin: 0">DentaMatch Team</p>
                         </div>
                     </div>
                 </td>

@@ -22,7 +22,7 @@
                             <br/>
                             <p style="margin: 0">(Link)</p>
                             <p style="margin:20px 0 0 0; padding: 0;">Sincerely Captured</p>
-                            <p style="margin: 0">Dentamatch Team</p>
+                            <p style="margin: 0">DentaMatch Team</p>
 
                         </div>
                     </div>
