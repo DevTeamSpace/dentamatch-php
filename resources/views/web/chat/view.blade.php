@@ -6,7 +6,7 @@
 @section('content')
 <div class="container padding-container-template">
     <div class="row">
-        <div class="col-md-4 col-sm-5 col-xs-3">
+        <div class="col-md-4 col-sm-5 col-xs-4">
             <div class="chat-list chat-box">
                 <div class="chat-list-title">All Messages</div>
                 <div class="content mCustomScrollbar light" data-mcs-theme="minimal-dark">
@@ -36,7 +36,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-8 col-sm-7 col-xs-9 mob-chat-dialog">
+        <div class="col-md-8 col-sm-7 col-xs-8 mob-chat-dialog">
             <!-- Tab panes -->
             <div class="tab-content">
                 @foreach ($seekerList as $seeker)

@@ -1637,6 +1637,7 @@
                             .chat-list-title {
                                 padding: 16px 10px;
                                 font-size: 10px;
+                                text-align: center;
                             }
                             .chat-list .list-group a {
                                 padding: 15px 10px;
