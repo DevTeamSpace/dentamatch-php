@@ -97,7 +97,7 @@
                                                 <img class="dashListImg" src="{{ $data->image }}" alt="...">
                                             </div>
                                             <div class="dashListImgContent msgImg">
-                                                <h6 class="media-heading"><?php echo strip_tags($data->message); ?></p></h6>
+                                                <h6 class="media-heading"><?php echo ($data->message); ?></p></h6>
                                                 <p class="justNow"><span class="icon-clock"></span>{{ $notification->created_at->diffForHumans() }}</p> 
                                             </div>
                                             <div class="onlineDot border-radius">

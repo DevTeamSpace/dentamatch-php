@@ -52,6 +52,7 @@
             Route::get('get-location/{zip}', 'web\UserProfileController@checkValidLocation');
             Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
             Route::get('setting-terms-conditions', 'web\UserProfileController@getTermsConditions');
+            Route::get('setting-privacy-policy', 'web\UserProfileController@getPrivacyPolicy');
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
             Route::post('change-password', 'web\UserProfileController@postChangePassword');
             Route::group(['middleware' => 'subscription'], function () {

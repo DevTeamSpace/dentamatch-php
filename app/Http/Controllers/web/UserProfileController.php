@@ -214,6 +214,9 @@ class UserProfileController extends Controller {
     public function getTermsConditions() {
         return view('web.setting-terms-conditions',['activeTab'=>'5']);
     }
+    public function getPrivacyPolicy() {
+        return view('web.privacy-policy',['activeTab'=>'6']);
+    }
 
     public function postChangePassword(Request $request) {
         $validator = Validator::make($request->all(), [

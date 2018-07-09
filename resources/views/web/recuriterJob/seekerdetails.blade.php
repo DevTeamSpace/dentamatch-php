@@ -142,7 +142,7 @@ $seekerDatesCount = count($datesTemp);
                             <input type="hidden" id="tempDates" value="{{ $seekerDetails['temp_job_dates'] }}">
                             <a href="#" class=" dropdown-toggle" id="showCalendarProfile">
                                 <span class="day-drop">{{ date('l, M d, Y',strtotime($dates[0])) }}</span>
-                                <span class="fa fa-calendar"></span>
+                                <span class="fa fa-calendar"></span> Click to view dates
                             </a>
 <!--                            <ul class="dropdown-menu">
                               @foreach ($dates as $date)

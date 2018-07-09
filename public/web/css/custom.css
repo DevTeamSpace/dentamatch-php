@@ -800,7 +800,10 @@
                             color: #383838;
                         }
                         /*----------custom select bootstrap-----*/
-                        
+                        .privacy-ul{
+                                margin: 0 30px;
+                                list-style: circle;
+                            }
                         .custom-select .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
                             width: 100% !important;
                         }
@@ -1693,6 +1696,6 @@
                             .fc-unthemed td.fc-widget-content.fc-today {
                                 border-left: 0px !important;
                             }
+                            
                            
-
                             

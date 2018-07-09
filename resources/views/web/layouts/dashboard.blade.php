@@ -87,7 +87,7 @@
                             @foreach($notificationList['data'] as $notification)
                             <?php $data = json_decode($notification->notification_data); ?>
                             <li>
-                                <p ><strong><?php echo strip_tags($data->message); ?></strong></p>
+                                <p ><?php echo $data->message; ?></p>
                                 <span>{{ $notification->created_at->diffForHumans() }}</span>
                                 <a href="{{ url($notification->id.'/delete-notification') }}"><i class="icon icon-deleteicon notificationdelIcon"></i></a>
                             </li>
@@ -170,7 +170,7 @@
 @if(!empty($jobTemplateModalData))
 @include('web.recuriterJob.job-template-modal')
 @endif
-<script src="{{ config('app.socketUrl') }}/socket.io/socket.io.js"></script>
+<!--<script src="{{ config('app.socketUrl') }}/socket.io/socket.io.js"></script>-->
 <script type="text/javascript">
     var fromId = "{{ Auth::id() }}";
     var userName = '{{ Session::get("userData")["profile"]["office_name"] }}';
