@@ -135,7 +135,7 @@ class JobSeekerController extends Controller
             $userProfileModel->last_name = $reqData['lastname'];
             $userProfileModel->save();
             
-            $token = md5($reqData['email'] . time());
+            $token = \Illuminate\Support\Facades\Crypt::encrypt($reqData['email'] . time());
             $passwordModel = PasswordReset::firstOrNew(array('user_id' => $userId, 'email' => $reqData['email']));
             $passwordModel->fill(['token' => $token]);
             $passwordModel->save();

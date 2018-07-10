@@ -308,7 +308,7 @@ class SignupController extends Controller {
                     Session::flash('message', $msg);
                     $redirect = 'success-active';
                     if($userProfileModel['signup_source'] == 2) {
-                        $token = md5($user->email . time());
+                        $token = \Illuminate\Support\Facades\Crypt::encrypt($user->email . time());
                         $passwordModel = PasswordReset::firstOrNew(array('user_id' => $user->id, 'email' => $user->email));
                         $passwordModel->fill(['token' => $token]);
                         $passwordModel->save();

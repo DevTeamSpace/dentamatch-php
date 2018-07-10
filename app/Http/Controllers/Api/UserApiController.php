@@ -287,7 +287,7 @@ class UserApiController extends Controller {
             if ($user) {
                 if($user->is_verified == UserProfile::JOBSEEKER_VERIFY_APPROVED){
                     PasswordReset::where('user_id' , $user->id)->where('email', $user->email)->delete();
-                    $token = md5($user->email . time());
+                    $token = \Illuminate\Support\Facades\Crypt::encrypt($user->email . time());
                     $passwordModel = PasswordReset::firstOrNew(array('user_id' => $user->id, 'email' => $user->email));
                     $passwordModel->fill(['token' => $token]);
                     $passwordModel->save();
@@ -400,7 +400,7 @@ class UserApiController extends Controller {
             if ($user) {
                 
                     PasswordReset::where('user_id' , $user->id)->where('email', $user->email)->delete();
-                    $token = md5($user->email . time());
+                    $token = \Illuminate\Support\Facades\Crypt::encrypt($user->email . time());
                     $passwordModel = PasswordReset::firstOrNew(array('user_id' => $user->id, 'email' => $user->email));
                     $passwordModel->fill(['token' => $token]);
                     $passwordModel->save();

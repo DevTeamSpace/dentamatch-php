@@ -109,7 +109,7 @@ class RecruiterController extends Controller
                 $userGroupModel->user_id = $userId;
                 $userGroupModel->save();
 
-                $token = md5($reqData['email'] . time());
+                $token = \Illuminate\Support\Facades\Crypt::encrypt($reqData['email'] . time());
                 $passwordModel = PasswordReset::firstOrNew(array('user_id' => $userId, 'email' => $reqData['email']));
                 $passwordModel->fill(['token' => $token]);
                 $passwordModel->save();
@@ -200,7 +200,7 @@ class RecruiterController extends Controller
                 User::where('id',$userId)->update(['password'=>'']);
 
                 PasswordReset::where('user_id' , $userId)->where('email', $email)->delete();
-                $token = md5($email . time());
+                $token = \Illuminate\Support\Facades\Crypt::encrypt($email . time());
                 $passwordModel = PasswordReset::firstOrNew(array('user_id' => $userId, 'email' => $email));
                 $passwordModel->fill(['token' => $token]);
                 if($passwordModel->save()) {
