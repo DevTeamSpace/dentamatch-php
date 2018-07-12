@@ -111,7 +111,7 @@ class SubscriptionController extends Controller {
             $fotDiff = \Carbon\Carbon::now();
             $addMonths = $now->addMonths($trailPeriod);
             $trailPeriodDays = $addMonths->diff($fotDiff)->days;
-            //dd($trailPeriodDays);
+            
             if($subscriptionType == 1){
                 $planId = config('constants.SixMonths');
             }else{

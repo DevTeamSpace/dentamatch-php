@@ -602,7 +602,7 @@ class JobSeekerController extends Controller
                     ->orderBy('users.id', 'desc')
                     ->get();
            
-        //$arr['id'] ="User Id";
+        
         $arr['email'] ="Email Id";
         $arr['first_name'] = "First Name";
         $arr['last_name'] = 'Last Name';

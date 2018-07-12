@@ -2,5 +2,5 @@ projectKey=Dentamatch-php
 serverUrl=https://sonarqube.appster.in/sonar
 serverVersion=7.0.0.36138
 dashboardUrl=https://sonarqube.appster.in/sonar/dashboard/index/Dentamatch-php
-ceTaskId=AWSOS083DWKzx2rI6ZhO
-ceTaskUrl=https://sonarqube.appster.in/sonar/api/ce/task?id=AWSOS083DWKzx2rI6ZhO
+ceTaskId=AWSOTdFgDWKzx2rI6ZhP
+ceTaskUrl=https://sonarqube.appster.in/sonar/api/ce/task?id=AWSOTdFgDWKzx2rI6ZhP
