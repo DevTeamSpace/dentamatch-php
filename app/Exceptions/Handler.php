@@ -50,7 +50,7 @@ class Handler extends ExceptionHandler
                 case 500:
                     return redirect()->guest('/');
                 default:
-                    if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+                    if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
                         $message = $exception->getMessage();
                     }elseif($exception instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException){
                         $message = 'The page you are looking for is not available';

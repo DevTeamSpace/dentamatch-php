@@ -1,5 +1,6 @@
 projectKey=Dentamatch-php
-serverUrl=http://54.152.88.149:9000/sonar
-dashboardUrl=http://54.152.88.149:9000/sonar/dashboard/index/Dentamatch-php
-ceTaskId=AVsN--HQROOMfOPYoymu
-ceTaskUrl=http://54.152.88.149:9000/sonar/api/ce/task?id=AVsN--HQROOMfOPYoymu
+serverUrl=https://sonarqube.appster.in/sonar
+serverVersion=7.0.0.36138
+dashboardUrl=https://sonarqube.appster.in/sonar/dashboard/index/Dentamatch-php
+ceTaskId=AWSOS083DWKzx2rI6ZhO
+ceTaskUrl=https://sonarqube.appster.in/sonar/api/ce/task?id=AWSOS083DWKzx2rI6ZhO
