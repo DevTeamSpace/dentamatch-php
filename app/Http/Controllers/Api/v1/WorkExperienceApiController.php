@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use App\Models\WorkExperience;
 use App\Models\Schooling;
-use App\Helpers\apiResponse;
+use App\Helpers\ApiResponse;
 use App\Models\JobTitles;
 use App\Models\JobSeekerSchooling;
 
@@ -25,7 +25,7 @@ class WorkExperienceApiController extends Controller {
      */
     public function getJobTitlelists(){
         $job_title = JobTitles::select('*')->where('is_active',1)->orderby('id','asc')->get()->toArray();
-        $response = apiResponse::customJsonResponseObject(1, 200, "Jobtitle list",'joblists',apiResponse::convertToCamelCase($job_title));
+        $response = ApiResponse::customJsonResponseObject(1, 200, "Jobtitle list",'joblists',ApiResponse::convertToCamelCase($job_title));
         return $response;
     }
     /**
@@ -80,17 +80,17 @@ class WorkExperienceApiController extends Controller {
                 }else{
                     $message = trans("messages.work_exp_added");
                 }
-                apiResponse::chkProfileComplete($userId);
-                $returnResponse = apiResponse::customJsonResponse(1, 200, $message, apiResponse::convertToCamelCase($data));
+                ApiResponse::chkProfileComplete($userId);
+                $returnResponse = ApiResponse::customJsonResponse(1, 200, $message, ApiResponse::convertToCamelCase($data));
             } else {
-                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
             
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $returnResponse = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         
         return $returnResponse;
@@ -112,15 +112,15 @@ class WorkExperienceApiController extends Controller {
             $userId = $request->userServerData->user_id;
             if($userId>0) {
                 WorkExperience::where('id', $request->id)->where('user_id',$userId)->update(['deleted_at' => date('Y-m-d H:i:s')]);
-                $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_removed"));
+                $returnResponse = ApiResponse::customJsonResponse(1, 200, trans("messages.work_exp_removed"));
             } else {
-                    $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                    $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $returnResponse = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         
         return $returnResponse;
@@ -147,15 +147,15 @@ class WorkExperienceApiController extends Controller {
                 $query['start'] = $start;
                 $query['limit'] = $limit;
 
-                $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.work_exp_list"), apiResponse::convertToCamelCase($query));
+                $returnResponse = ApiResponse::customJsonResponse(1, 200, trans("messages.work_exp_list"), ApiResponse::convertToCamelCase($query));
             } else {
-                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            $returnResponse = ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $e) {
-            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         
         return $returnResponse;
@@ -215,15 +215,15 @@ class WorkExperienceApiController extends Controller {
                 }
                 $return['list'] = array_values($data);
 
-                $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.school_list_success"), apiResponse::convertToCamelCase($return));
+                $returnResponse = ApiResponse::customJsonResponse(1, 200, trans("messages.school_list_success"), ApiResponse::convertToCamelCase($return));
             } else {
-                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            $returnResponse = ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $e) {
-            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         
         return $returnResponse;
@@ -264,16 +264,16 @@ class WorkExperienceApiController extends Controller {
                 if(!empty($jobSeekerData)) {
                     JobSeekerSchooling::insert($jobSeekerData);
                 }
-                apiResponse::chkProfileComplete($userId);
-                $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.school_add_success")); 
+                ApiResponse::chkProfileComplete($userId);
+                $returnResponse = ApiResponse::customJsonResponse(1, 200, trans("messages.school_add_success")); 
             } else {
-                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $returnResponse = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         
         return $returnResponse;

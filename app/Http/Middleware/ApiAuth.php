@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Models\Device;
-use App\Helpers\apiResponse;
+use App\Helpers\ApiResponse;
 
 
 class ApiAuth {
@@ -27,13 +27,13 @@ class ApiAuth {
         try {
             $user = Device::select('user_id')->where('user_token',$request->header('accessToken'))->first();
             if (!$user) {
-                return apiResponse::customJsonResponse(1, 204, "Token is invalid");
+                return ApiResponse::customJsonResponse(1, 204, "Token is invalid");
             }else{
                 $request->merge(['userServerData' => $user]);
             }
             
         } catch (\Exception $ex) {
-            return apiResponse::responseError("Request validation failed.");
+            return ApiResponse::responseError("Request validation failed.");
         }
         return $next($request);
     }

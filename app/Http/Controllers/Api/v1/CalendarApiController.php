@@ -3,7 +3,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use App\Helpers\apiResponse;
+use App\Helpers\ApiResponse;
 use App\Models\UserProfile;
 use App\Models\JobSeekerTempAvailability;
 use App\Models\JobLists;
@@ -76,17 +76,17 @@ class CalendarApiController extends Controller {
                                 JobSeekerTempAvailability::insert($tempDateArray);
                             }
                         }
-                        apiResponse::chkProfileComplete($userId);
-                        $response = apiResponse::customJsonResponse(1, 200, trans("messages.availability_add_success"));
+                        ApiResponse::chkProfileComplete($userId);
+                        $response = ApiResponse::customJsonResponse(1, 200, trans("messages.availability_add_success"));
                 }
             }else{
-                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             } 
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
     }
@@ -114,19 +114,19 @@ class CalendarApiController extends Controller {
                 $listHiredJobs = JobLists::postJobCalendar($userId, $jobStartDate, $jobEndDate);
                 
                 if(count($listHiredJobs) > 0 && count($listHiredJobs['list']) > 0){
-                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"),  apiResponse::convertToCamelCase($listHiredJobs));
+                    $response = ApiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"),  ApiResponse::convertToCamelCase($listHiredJobs));
                 }else{
-                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
+                    $response = ApiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
                 }
                 
             }else{
-                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             } 
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
     }
@@ -153,19 +153,19 @@ class CalendarApiController extends Controller {
                 $calendarEndDate = $reqData['calendarEndDate'];
                 $listAvailability = UserProfile::getAvailability($userId, $calendarStartDate, $calendarEndDate);
                 if(count($listAvailability) > 0){
-                    $response = apiResponse::customJsonResponse(1, 200, "",  apiResponse::convertToCamelCase($listAvailability));
+                    $response = ApiResponse::customJsonResponse(1, 200, "",  ApiResponse::convertToCamelCase($listAvailability));
                 }else{
-                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
+                    $response = ApiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
                 }
                 
             }else{
-                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             } 
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
     }

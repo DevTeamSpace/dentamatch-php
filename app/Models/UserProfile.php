@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Helpers\apiResponse;
+use App\Helpers\ApiResponse;
 
 class UserProfile extends Model {
 
@@ -59,9 +59,9 @@ class UserProfile extends Model {
         
         if($userModel) {
             $return = $userModel->toArray();
-            $return['profile_pic'] = apiResponse::getThumbImage($return['profile_pic']);
+            $return['profile_pic'] = ApiResponse::getThumbImage($return['profile_pic']);
             if(($return['dental_state_board']) && $return['dental_state_board'] != ""){
-                $return['dental_state_board'] = apiResponse::getThumbImage($return['dental_state_board']);
+                $return['dental_state_board'] = ApiResponse::getThumbImage($return['dental_state_board']);
             }else{
                 $return['dental_state_board'] = "";
             }

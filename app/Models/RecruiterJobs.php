@@ -49,8 +49,7 @@ class RecruiterJobs extends Model
     protected $hidden       = ['updated_at','deleted_at'];
     protected $fillable     = ['jobTemplateId','recuriterOfficeId','jobType','noOfJobs','isMonday',
         'isTuesday','isWednesday','isThursday','isFriday','isSaturday','isSunday','isPublished'];
-    //protected $appends      = ['userId','templateName','templateDesc'];
-
+    
     protected $dates = ['deleted_at'];
     
     public function tempJobDates(){
@@ -488,7 +487,7 @@ class RecruiterJobs extends Model
             ->groupBy('recruiter_jobs.id','temp_job_dates.job_date')
             ->orderBy('temp_job_dates.job_date','asc')
             ->get();
-        //dd($jobData);
+        
         $resData = [];
         foreach($jobData as $job){
             $profilePic = '';

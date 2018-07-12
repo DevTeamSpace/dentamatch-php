@@ -5,7 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use App\Helpers\apiResponse;
+use App\Helpers\ApiResponse;
 use App\Models\RecruiterJobs;
 use App\Models\SavedJobs;
 use App\Models\JobLists;
@@ -50,21 +50,21 @@ class SearchApiController extends Controller {
                     $userData = User::getUser($userId);
                     $searchResult['isJobSeekerVerified'] = isset($userData['is_job_seeker_verified']) ? $userData['is_job_seeker_verified'] : null;
                     $searchResult['profileCompleted'] = isset($userData['profile_completed']) ? $userData['profile_completed'] : null;
-                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"), apiResponse::convertToCamelCase($searchResult));
+                    $response = ApiResponse::customJsonResponse(1, 200, trans("messages.job_search_list"), ApiResponse::convertToCamelCase($searchResult));
                 } else {
-                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
+                    $response = ApiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
                 }
             } else {
-                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             Log::error($messages);
-            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
             Log::error($e);
             ;
-            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
     }
@@ -88,24 +88,24 @@ class SearchApiController extends Controller {
                 if ($reqData['status'] == 1) {
                     $isSaved = SavedJobs::where('recruiter_job_id', '=', $reqData['jobId'])->where('seeker_id', '=', $userId)->count();
                     if ($isSaved > 0) {
-                        $response = apiResponse::customJsonResponse(1, 201, trans("messages.job_already_saved"));
+                        $response = ApiResponse::customJsonResponse(1, 201, trans("messages.job_already_saved"));
                     } else {
                         $saveJobs = array('recruiter_job_id' => $reqData['jobId'], 'seeker_id' => $userId);
                         SavedJobs::insert($saveJobs);
-                        $response = apiResponse::customJsonResponse(1, 200, trans("messages.save_job_success"));
+                        $response = ApiResponse::customJsonResponse(1, 200, trans("messages.save_job_success"));
                     }
                 } else {
                     SavedJobs::where('seeker_id', '=', $userId)->where('recruiter_job_id', '=', $reqData['jobId'])->forceDelete();
-                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.unsave_job_success"));
+                    $response = ApiResponse::customJsonResponse(1, 200, trans("messages.unsave_job_success"));
                 }
             } else {
-                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
     }
@@ -122,7 +122,7 @@ class SearchApiController extends Controller {
 
                 if ($profileComplete->is_completed == 1) {
                     if ($profileComplete->is_job_seeker_verified != UserProfile::JOBSEEKER_VERIFY_APPROVED) {
-                        return apiResponse::customJsonResponse(0, 200, trans("messages.jobseeker_not_verified"));
+                        return ApiResponse::customJsonResponse(0, 200, trans("messages.jobseeker_not_verified"));
                     }
      
                     $jobExists = RecruiterJobs::leftJoin('job_lists',function($query) use ($userId){
@@ -134,9 +134,9 @@ class SearchApiController extends Controller {
                     if (!empty($jobExists) && $jobExists->applied_status==JobLists::INVITED) {
                         JobLists::where('id', $jobExists->id)->update(['applied_status' => JobLists::APPLIED]);
                         $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
-                        $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
+                        $response = ApiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
                     }elseif (!empty($jobExists) && $jobExists->applied_status==JobLists::APPLIED) {
-                        $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_already_applied"));
+                        $response = ApiResponse::customJsonResponse(1, 200, trans("messages.job_already_applied"));
                     } elseif(($jobExists->job_type == 1 && $profileComplete->is_fulltime == 1) ||
                             ($jobExists->job_type == 2 && $profileComplete->is_parttime_monday == $jobExists->is_monday && $jobExists->is_monday==1) ||
                             ($jobExists->job_type == 2 && $profileComplete->is_parttime_tuesday == $jobExists->is_tuesday && $jobExists->is_tuesday==1) ||
@@ -149,21 +149,21 @@ class SearchApiController extends Controller {
                             $applyJobs = array('seeker_id' => $userId, 'recruiter_job_id' => $reqData['jobId'], 'applied_status' => JobLists::APPLIED);
                             JobLists::insert($applyJobs);
                             $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
-                            $response = apiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
+                            $response = ApiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
                     }else{
-                            $response = apiResponse::customJsonResponse(0, 200, trans("messages.set_availability"));
+                            $response = ApiResponse::customJsonResponse(0, 200, trans("messages.set_availability"));
                     }
                 } else {
-                    $response = apiResponse::customJsonResponse(0, 202, trans("messages.profile_not_complete"));
+                    $response = ApiResponse::customJsonResponse(0, 202, trans("messages.profile_not_complete"));
                 }
             } else {
-                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
     }
@@ -186,18 +186,18 @@ class SearchApiController extends Controller {
                     //delete from temp hired jobs
                     JobseekerTempHired::where('jobseeker_id', $userId)->where('job_id', $reqData['jobId'])->forceDelete();
                     $this->notifyAdminForCancelJob($reqData['jobId'], $userId, $reqData['cancelReason']);
-                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.job_cancelled_success"));
+                    $response = ApiResponse::customJsonResponse(1, 200, trans("messages.job_cancelled_success"));
                 } else {
-                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.job_not_applied_by_you"));
+                    $response = ApiResponse::customJsonResponse(0, 201, trans("messages.job_not_applied_by_you"));
                 }
             } else {
-                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
     }
@@ -226,18 +226,18 @@ class SearchApiController extends Controller {
                     }
                 }
                 if (count($searchResult['list']) > 0) {
-                    $response = apiResponse::customJsonResponse(1, 200, $message, apiResponse::convertToCamelCase($searchResult));
+                    $response = ApiResponse::customJsonResponse(1, 200, $message, ApiResponse::convertToCamelCase($searchResult));
                 } else {
-                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
+                    $response = ApiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
                 }
             } else {
-                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
     }
@@ -256,18 +256,18 @@ class SearchApiController extends Controller {
                 if (!empty($data)) {
                     $data['is_applied'] = JobLists::isJobApplied($jobId, $userId);
                     $data['is_saved'] = SavedJobs::getJobSavedStatus($jobId, $userId);
-                    $returnResponse = apiResponse::customJsonResponse(1, 200, trans('messages.job_detail_success'), apiResponse::convertToCamelCase($data));
+                    $returnResponse = ApiResponse::customJsonResponse(1, 200, trans('messages.job_detail_success'), ApiResponse::convertToCamelCase($data));
                 } else {
-                    $returnResponse = apiResponse::customJsonResponse(0, 201, trans("messages.job_not_exists"));
+                    $returnResponse = ApiResponse::customJsonResponse(0, 201, trans("messages.job_not_exists"));
                 }
             } else {
-                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $returnResponse = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $returnResponse;
     }
@@ -308,7 +308,7 @@ class SearchApiController extends Controller {
                             }
                         }
                         if (empty($insertDates)) {
-                            return apiResponse::customJsonResponse(0, 201, trans("messages.set_availability"));
+                            return ApiResponse::customJsonResponse(0, 201, trans("messages.set_availability"));
                         }
                         // no of dates user is available wrt to the temp job dates
                         $userAvail = count($insertDates);
@@ -359,7 +359,7 @@ class SearchApiController extends Controller {
                                     JobseekerTempHired::insert($hiredJobDates);
                                     $response = $this->acceptRejectJob($userId, $notificationDetails->job_list_id, $reqData['acceptStatus'], $notificationDetails->sender_id, $reqData['notificationId']);
                                 } else {
-                                    $response = apiResponse::customJsonResponse(0, 202, trans("messages.not_job_exists"));
+                                    $response = ApiResponse::customJsonResponse(0, 202, trans("messages.not_job_exists"));
                                 }
                             } else {
                                 foreach ($insertDates as $insertDate) {
@@ -370,9 +370,9 @@ class SearchApiController extends Controller {
                             }
                         } else {
                             if ($userAvail == $hiredAval) {
-                                $response = apiResponse::customJsonResponse(0, 201, trans("messages.set_availability"));
+                                $response = ApiResponse::customJsonResponse(0, 201, trans("messages.set_availability"));
                             } else {
-                                $response = apiResponse::customJsonResponse(0, 201, trans("messages.mismatch_availability"));
+                                $response = ApiResponse::customJsonResponse(0, 201, trans("messages.mismatch_availability"));
                             }
                         }
                     } else {
@@ -380,14 +380,14 @@ class SearchApiController extends Controller {
                     }
                 }
             } else {
-                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $response = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
             Log::error($e);
-            $response = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getTraceAsString()]);
+            $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getTraceAsString()]);
         }
         return $response;
     }
@@ -421,17 +421,17 @@ class SearchApiController extends Controller {
                 } else {
                     $this->notifyAdmin($jobId, $userId, Notification::JOBSEEKERACCEPTED);
                 }
-                $response = apiResponse::customJsonResponse(1, 200, $msg);
+                $response = ApiResponse::customJsonResponse(1, 200, $msg);
             } else {
                 if ($jobExists->applied_status == JobLists::HIRED) {
                     $msg = trans("messages.seeker_already_hired");
                 } else {
                     $msg = trans("messages.seeker_already_cancelled");
                 }
-                $response = apiResponse::customJsonResponse(0, 201, $msg);
+                $response = ApiResponse::customJsonResponse(0, 201, $msg);
             }
         } else {
-            $response = apiResponse::customJsonResponse(0, 201, trans("messages.not_invited_job"));
+            $response = ApiResponse::customJsonResponse(0, 201, trans("messages.not_invited_job"));
         }
         return $response;
     }

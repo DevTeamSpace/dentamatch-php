@@ -13,7 +13,7 @@ use App\Models\ChatUserLists;
 use App\Models\JobSeekerTempAvailability;
 use Mail;
 use Auth;
-use App\Helpers\apiResponse;
+use App\Helpers\ApiResponse;
 class UserApiController extends Controller {
     
     public function __construct() {
@@ -52,7 +52,7 @@ class UserApiController extends Controller {
                         $msg = trans("messages.user_exist_same_email");
                     }
                 }
-            $response = apiResponse::customJsonResponse(0, 201,$msg);      
+            $response = ApiResponse::customJsonResponse(0, 201,$msg);      
         }else{
             $uniqueCode = uniqid();
             $user =  array(
@@ -105,14 +105,14 @@ class UserApiController extends Controller {
                     $message->to($email, $fname)->subject('Activation Email');
                 });
             $userData['userDetails'] = User::getUser($userDetails->id);
-            $response = apiResponse::customJsonResponse(1, 200, trans("messages.user_registration_successful"), apiResponse::convertToCamelCase($userData)); 
+            $response = ApiResponse::customJsonResponse(1, 200, trans("messages.user_registration_successful"), ApiResponse::convertToCamelCase($userData)); 
         }
         return $response;
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            return ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         }catch (\Exception $e) {
-            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            return ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
     }
     
@@ -171,7 +171,7 @@ class UserApiController extends Controller {
 
                         }
                         $imgUrl = "";
-                        if(($userData['profile_pic'])){
+                        if($userData['profile_pic']){
                             $imgUrl = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $userData['profile_pic'];
                         }
                         $userArray['userDetails'] = [
@@ -200,26 +200,26 @@ class UserApiController extends Controller {
                         ];
                         $searchArray = SearchFilter::getFiltersOnLogin($userId);
                         if($searchArray){
-                        $userArray['searchFilters'] = apiResponse::convertToCamelCase($searchArray);
+                        $userArray['searchFilters'] = ApiResponse::convertToCamelCase($searchArray);
                         }else{
                            $userArray['searchFilters'] = $searchArray; 
                         }
-                        $response = apiResponse::customJsonResponse(1, 200, trans("messages.user_logged_successful"),$userArray);
+                        $response = ApiResponse::customJsonResponse(1, 200, trans("messages.user_logged_successful"),$userArray);
                 }else{
-                    $response = apiResponse::customJsonResponse(0, 202, trans("messages.user_account_not_active")); 
+                    $response = ApiResponse::customJsonResponse(0, 202, trans("messages.user_account_not_active")); 
                 }
             }else{
-                $response = apiResponse::customJsonResponse(0, 201, trans("messages.invalid_login_credentials")); 
+                $response = ApiResponse::customJsonResponse(0, 201, trans("messages.invalid_login_credentials")); 
             }
         }else{
-            $response = apiResponse::customJsonResponse(0, 201,trans("messages.invalid_login_credentials")); 
+            $response = ApiResponse::customJsonResponse(0, 201,trans("messages.invalid_login_credentials")); 
         }
            return $response;
          } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            return ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         }catch (\Exception $e) {
-            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            return ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
     }
     
@@ -249,13 +249,11 @@ class UserApiController extends Controller {
     public  function getActivatejobseeker($confirmation_code) { 
         $is_verified = 0;
         $profile_details = UserProfile::where('verification_code', $confirmation_code)->first();
-        if($profile_details){
-            if($profile_details->is_verified == UserProfile::JOBSEEKER_VERIFY_DEFAULT){
+        if(is_object($profile_details) && $profile_details->is_verified == UserProfile::JOBSEEKER_VERIFY_DEFAULT){
                 $update_profile = UserProfile::find($profile_details->id);
                 $update_profile->is_verified = UserProfile::JOBSEEKER_VERIFY_APPROVED;
                 $update_profile->save();
                 $is_verified = 1;
-            }
         }
         return view('verify-user')->with('verifyUser', $is_verified);
     }
@@ -295,21 +293,21 @@ class UserApiController extends Controller {
                     Mail::queue('email.reset-password-token', ['name' => $user->first_name, 'url' => url('password/reset', ['token' => $token]), 'email' => $user->email], function($message) use ($user) {
                         $message->to($user->email, $user->first_name)->subject('Reset Password Request ');
                     });
-                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.reset_pw_email_sent"));
+                    $response = ApiResponse::customJsonResponse(1, 200, trans("messages.reset_pw_email_sent"));
                 }else{
-                    $response = apiResponse::customJsonResponse(0, 202, trans("messages.user_account_not_active")); 
+                    $response = ApiResponse::customJsonResponse(0, 202, trans("messages.user_account_not_active")); 
                 }
                 
             }else{
-                $response = apiResponse::customJsonResponse(0, 201, trans("messages.email_not_exists"));
+                $response = ApiResponse::customJsonResponse(0, 201, trans("messages.email_not_exists"));
             }
             return $response;
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            return ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $ex) {
             $message = $ex->getMessage();
-            return apiResponse::responseError("Some error occoured", ["data" => $message]);
+            return ApiResponse::responseError("Some error occoured", ["data" => $message]);
         }
         
     }
@@ -323,18 +321,18 @@ class UserApiController extends Controller {
         
         try {
             
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = ApiResponse::loginUserId($request->header('accessToken'));
             if($userId>0) {
                 Device::unRegisterAll($userId);
-                $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.user_signout"));
+                $returnResponse = ApiResponse::customJsonResponse(1, 200, trans("messages.user_signout"));
             } else {
-                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            $returnResponse = ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $e) {
-            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $returnResponse;
     }
@@ -342,18 +340,18 @@ class UserApiController extends Controller {
     public function chatRecruiterList(Request $request){
         try {
             
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = ApiResponse::loginUserId($request->header('accessToken'));
             if($userId>0) {
                 $recruiterList = ChatUserLists::getRecruiterListForChat($userId);
-                $returnResponse = apiResponse::customJsonResponse(1, 200, '',['list'=>$recruiterList]);
+                $returnResponse = ApiResponse::customJsonResponse(1, 200, '',['list'=>$recruiterList]);
             } else {
-                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            $returnResponse = ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $e) {
-            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $returnResponse;
     }
@@ -364,18 +362,18 @@ class UserApiController extends Controller {
                 'recruiterId' => 'required',
                 'blockStatus' => 'required|in:0,1,',
             ]);
-            $userId = apiResponse::loginUserId($request->header('accessToken'));
+            $userId = ApiResponse::loginUserId($request->header('accessToken'));
             if($userId>0) {
                 $blockStatus = ChatUserLists::blockUnblockSeekerOrRecruiter($userId, $request->recruiterId, $request->blockStatus);
-                $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.recruiter_blocked"),['recruiterId'=>$request->recruiterId,'blockStatus'=>$blockStatus]);
+                $returnResponse = ApiResponse::customJsonResponse(1, 200, trans("messages.recruiter_blocked"),['recruiterId'=>$request->recruiterId,'blockStatus'=>$blockStatus]);
             } else {
-                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            $returnResponse = ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $e) {
-            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $returnResponse;
     }
@@ -408,17 +406,17 @@ class UserApiController extends Controller {
                     Mail::queue('email.reset-password-token', ['name' => 'Admin', 'url' => url('password/reset', ['token' => $token]), 'email' => $user->email], function($message) use ($user) {
                         $message->to($user->email, $user->first_name)->subject('Reset Password Request ');
                     });
-                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.reset_pw_email_sent"));
+                    $response = ApiResponse::customJsonResponse(1, 200, trans("messages.reset_pw_email_sent"));
                 }else{
-                $response = apiResponse::customJsonResponse(0, 201, trans("messages.email_not_exists"));
+                $response = ApiResponse::customJsonResponse(0, 201, trans("messages.email_not_exists"));
             }
             return $response;
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            return ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $ex) {
             $message = $ex->getMessage();
-            return apiResponse::responseError("Some error occoured", ["data" => $message]);
+            return ApiResponse::responseError("Some error occoured", ["data" => $message]);
         }
         
     }

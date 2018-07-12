@@ -80,7 +80,6 @@ use ResetsPasswords;
     }
 
     protected function sendResetResponse($request, $response) {
-        //print_r($request['email']);exit;
         $users = DB::table('users')
                 ->join('user_groups', 'users.id', '=', 'user_groups.user_id')
                 ->select('user_groups.group_id')
@@ -94,8 +93,6 @@ use ResetsPasswords;
             return redirect('/cms/login');
         }
         else {
-            /*return redirect($this->redirectPath())
-                            ->with('status', trans($response));*/
             $message = 'Password Reset successfully';
             Session::flash('success', $message);
              Auth::logout();

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use App\Models\Affiliation;
-use App\Helpers\apiResponse;
+use App\Helpers\ApiResponse;
 use App\Models\JobSeekerAffiliation;
 use Log;
 
@@ -49,17 +49,17 @@ class AffiliationsApiController extends Controller {
 
                 $return['list'] = array_values($data);
 
-                $returnResponse =  apiResponse::customJsonResponse(1, 200, trans("messages.affiliation_list_success"), apiResponse::convertToCamelCase($return));
+                $returnResponse =  ApiResponse::customJsonResponse(1, 200, trans("messages.affiliation_list_success"), ApiResponse::convertToCamelCase($return));
             } else {
-                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
         } catch (ValidationException $e) {
             Log::error($e);
             $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            $returnResponse = ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $e) {
             Log::error($e);
-            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         
         return $returnResponse;
@@ -112,18 +112,18 @@ class AffiliationsApiController extends Controller {
                 if(!empty($jobSeekerData)) {
                     JobSeekerAffiliation::insert($jobSeekerData);
                 }
-                apiResponse::chkProfileComplete($userId);
-                $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.affiliation_add_success")); 
+                ApiResponse::chkProfileComplete($userId);
+                $returnResponse = ApiResponse::customJsonResponse(1, 200, trans("messages.affiliation_add_success")); 
             } else {
-                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
         } catch (ValidationException $e) {
             Log::error($e);
             $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $returnResponse = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
             Log::error($e);
-            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         
         return $returnResponse;

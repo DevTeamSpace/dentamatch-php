@@ -7,13 +7,11 @@ use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
 use Auth;
 use DB;
-//use Illuminate\Database\Eloquent\SoftDeletes;
 
 class JobseekerTempHired extends Model {
 
     use Eloquence,
         Mappable;
-//    use SoftDeletes;
 
     protected $table = 'jobseeker_temp_hired';
     protected $primaryKey = 'id';

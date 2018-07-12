@@ -10,7 +10,6 @@ class JobSeekerProfile extends Model {
 
     use Eloquence,
         Mappable;
-//    use SoftDeletes;
 
     protected $table = 'jobseeker_profiles';
     protected $primaryKey = 'id';

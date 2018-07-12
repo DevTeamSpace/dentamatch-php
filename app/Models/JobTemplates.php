@@ -23,8 +23,7 @@ class JobTemplates extends Model
         ];
     protected $hidden       = ['created_at','updated_at','deleted_at'];
     protected $fillable     = ['userId','templateName','templateDesc'];
-    //protected $appends      = ['userId','templateName','templateDesc'];
-
+    
     protected $dates = ['deleted_at'];
     
      /**

@@ -50,7 +50,6 @@ class Kernel extends HttpKernel
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'cms' => \App\Http\Middleware\Cms::class,
         'xss' => \App\Http\Middleware\Xss::class,
-        'xssWeb' => \App\Http\Middleware\XssWeb::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,

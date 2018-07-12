@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Helpers\apiResponse;
+use App\Helpers\ApiResponse;
 
 class User extends Authenticatable
 {
@@ -96,7 +96,7 @@ class User extends Authenticatable
             }
             
             if(($return['dental_state_board']) && $return['dental_state_board'] != ""){
-                $dentalStateBoard = apiResponse::getThumbImage($return['dental_state_board']);
+                $dentalStateBoard = ApiResponse::getThumbImage($return['dental_state_board']);
             }
             $return['image_url'] = $profilePic;
             $return['dental_state_board'] = $dentalStateBoard;

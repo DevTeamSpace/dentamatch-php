@@ -390,11 +390,6 @@ class JobSeekerController extends Controller
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
                 ->removeColumn('id')
-//                ->addColumn('active', function ($userData) {
-//                	$active = ($userData->is_active == 1) ? 'Yes':'No';
-//                    return $active;
-//                })
-//          
                 ->make(true);
         }catch (\Exception $e) {
             Log::error($e);
@@ -418,11 +413,6 @@ class JobSeekerController extends Controller
         
         return Datatables::of($userData)
                 ->removeColumn('id')
-//                ->addColumn('active', function ($userData) {
-//                	$active = ($userData->is_active == 1) ? 'Yes':'No';
-//                    return $active;
-//                })
-//           
                 ->make(true);
         }catch (\Exception $e) {
             Log::error($e);
@@ -443,7 +433,7 @@ class JobSeekerController extends Controller
                         ->where('jobseeker_profiles.is_completed', 0)
                         ->orderBy('users.id', 'desc')->get();
            
-        //$arr['id'] ="User Id";
+        
         $arr['email'] ="Email Id";
         $arr['first_name'] = "First Name";
         $arr['last_name'] = 'Last Name';
@@ -481,7 +471,7 @@ class JobSeekerController extends Controller
                         ->where('users.is_verified', 0)
                         ->orderBy('users.id', 'desc')->get();
            
-        //$arr['id'] ="User Id";
+        
         $arr['email'] ="Email Id";
         $arr['first_name'] = "First Name";
         $arr['last_name'] = 'Last Name';
@@ -546,10 +536,6 @@ class JobSeekerController extends Controller
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
                 ->removeColumn('id')
-//                ->addColumn('active', function ($userData) {
-//                	$active = ($userData->is_active == 1) ? 'Yes':'No';
-//                    return $active;
-//                })
                 ->make(true);
         
         
@@ -577,10 +563,6 @@ class JobSeekerController extends Controller
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
                 ->removeColumn('id')
-//                ->addColumn('active', function ($userData) {
-//                	$active = ($userData->is_active == 1) ? 'Yes':'No';
-//                    return $active;
-//                })
                 ->make(true);
         
         
@@ -654,7 +636,6 @@ class JobSeekerController extends Controller
                                 'users.email',
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name'
-//                                'users.is_verified','users.is_active'
                                 )
                         ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->where('job_lists.applied_status',1)
@@ -663,7 +644,7 @@ class JobSeekerController extends Controller
                         ->orderBy('users.id', 'desc')
                         ->get();
                         
-        //$arr['id'] ="User Id";
+       
         $arr['email'] ="Email Id";
         $arr['first_name'] = "First Name";
         $arr['last_name'] = 'Last Name';

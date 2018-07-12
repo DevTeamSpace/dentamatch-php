@@ -4,13 +4,12 @@ namespace App\Modules\Docs\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 class WebController extends Controller
 {
     public function __construct() {
-        //$this->middleware("ApiLog");
+       
     }
     
     private function getClassDetails($class){

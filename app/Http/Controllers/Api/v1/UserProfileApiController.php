@@ -6,7 +6,7 @@ use Illuminate\Validation\ValidationException;
 use Hash;
 use App\Models\User;
 use App\Models\UserProfile;
-use App\Helpers\apiResponse;
+use App\Helpers\ApiResponse;
 use App\Repositories\File\FileRepositoryS3;
 use App\Models\WorkExperience;
 use App\Models\JobSeekerSchooling;
@@ -43,26 +43,26 @@ class UserProfileApiController extends Controller {
             if(isset($userId) && $userId > 0){
                 $userModel = User::where('id', $userId)->first();
                 if(!Hash::check($reqData['oldPassword'], $userModel->password)) {
-                    $response = apiResponse::customJsonResponse(0, 201, trans("messages.incorrect_old_password")); 
+                    $response = ApiResponse::customJsonResponse(0, 201, trans("messages.incorrect_old_password")); 
                 }else if ($reqData['newPassword'] !== $reqData['confirmNewPassword']) {
-                    $response = apiResponse::customJsonResponse(0, 202, trans("messages.mismatch_pw_cpw")); 
+                    $response = ApiResponse::customJsonResponse(0, 202, trans("messages.mismatch_pw_cpw")); 
                 } else if (!empty($userModel)) {
                     $userModel->password = bcrypt($reqData['newPassword']);
                     $userModel->save();
-                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.password_update_successful")); 
+                    $response = ApiResponse::customJsonResponse(1, 200, trans("messages.password_update_successful")); 
                 } else {
-                    $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                    $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
                 }
             }else{
-                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
             
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            return ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $ex) {
             $message = $ex->getMessage();
-            $response =  apiResponse::responseError("Some error occoured", ["data" => $message]);
+            $response =  ApiResponse::responseError("Some error occoured", ["data" => $message]);
         }
         return $response;
     }
@@ -85,22 +85,22 @@ class UserProfileApiController extends Controller {
                     } else {
                         UserProfile::where('user_id', $userId)->update(['dental_state_board' => $response['file']]);
                     }
-                    apiResponse::chkProfileComplete($userId);
+                    ApiResponse::chkProfileComplete($userId);
                     
-                    $url['img_url'] = apiResponse::getThumbImage($response['file']);
-                    $response =  apiResponse::customJsonResponse(1, 200, trans("messages.image_upload_success"), $url);
+                    $url['img_url'] = ApiResponse::getThumbImage($response['file']);
+                    $response =  ApiResponse::customJsonResponse(1, 200, trans("messages.image_upload_success"), $url);
                 } else {
-                    $response =  apiResponse::responseError(trans("messages.prob_upload_image"));
+                    $response =  ApiResponse::responseError(trans("messages.prob_upload_image"));
                 }
             }else{
-                $response =  apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response =  ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $response =  apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            $response =  ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         }catch (\Exception $ex) {
             $message = $ex->getMessage();
-            $response =  apiResponse::responseError("Some error occoured", ["data" => $message]);
+            $response =  ApiResponse::responseError("Some error occoured", ["data" => $message]);
         }
         return $response;
     }
@@ -163,19 +163,19 @@ class UserProfileApiController extends Controller {
                 if(!empty($mappedSkillsArray)) {
                     JobSeekerSkills::addJobSeekerSkills($userId, $mappedSkillsArray);
                 }
-                apiResponse::chkProfileComplete($userId);
+                ApiResponse::chkProfileComplete($userId);
                 
                 $userData['userDetails'] = User::getUser($userId);
-                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"), apiResponse::convertToCamelCase($userData));
+                $response =  ApiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"), ApiResponse::convertToCamelCase($userData));
             }else{
-                $response =  apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response =  ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
             return $response;
          } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            return ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $e) {
-            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            return ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
     }
     
@@ -193,16 +193,16 @@ class UserProfileApiController extends Controller {
             $userId = $request->userServerData->user_id;
             if($userId > 0){
                 UserProfile::where('user_id', $userId)->update(['about_me' => $request->aboutMe,'is_completed' => 1]);
-                apiResponse::chkProfileComplete($userId);
-                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.profile_update_success"));
+                ApiResponse::chkProfileComplete($userId);
+                $response =  ApiResponse::customJsonResponse(1, 200, trans("messages.profile_update_success"));
             }else{
-                $response =  apiResponse::customJsonResponse(0, 204, "invalid user token");
+                $response =  ApiResponse::customJsonResponse(0, 204, "invalid user token");
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $response =  apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            $response =  ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $e) {
-            $response =  apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response =  ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
     }
@@ -218,20 +218,20 @@ class UserProfileApiController extends Controller {
             if($userId > 0){
                 $userProfileModel = UserProfile::where('user_id', $userId)->first();
                 $data['list']['aboutMe'] = $userProfileModel->about_me;
-                $data['list']['dentalStateBoard']['imageUrl'] = !empty($userProfileModel->dental_state_board) ? apiResponse::getThumbImage($userProfileModel->dental_state_board) : null;
+                $data['list']['dentalStateBoard']['imageUrl'] = !empty($userProfileModel->dental_state_board) ? ApiResponse::getThumbImage($userProfileModel->dental_state_board) : null;
                 
                 $licenceData = ['license_number' => $userProfileModel->license_number, 'state' => $userProfileModel->state];
                 $data['list']['licence'] = $licenceData;
                 
-                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.about_me_list"), apiResponse::convertToCamelCase($data));
+                $response =  ApiResponse::customJsonResponse(1, 200, trans("messages.about_me_list"), ApiResponse::convertToCamelCase($data));
             }else{
-                $response =  apiResponse::customJsonResponse(0, 204, "invalid user token");
+                $response =  ApiResponse::customJsonResponse(0, 204, "invalid user token");
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $response =  apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            $response =  ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $e) {
-            $response =  apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response =  ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
     }
@@ -291,15 +291,15 @@ class UserProfileApiController extends Controller {
                 $data['workExperience'] = $userWorkExperience;
                 $data['joblists'] = $jobTitle;
                 
-                $response =  apiResponse::customJsonResponse(1, 200, trans("messages.user_profile_list"), apiResponse::convertToCamelCase($data));
+                $response =  ApiResponse::customJsonResponse(1, 200, trans("messages.user_profile_list"), ApiResponse::convertToCamelCase($data));
             }else{
-                $response =  apiResponse::customJsonResponse(0, 204, "invalid user token");
+                $response =  ApiResponse::customJsonResponse(0, 204, "invalid user token");
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $response =  apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            $response =  ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $e) {
-            $response =  apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $response =  ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         return $response;
     }
@@ -326,11 +326,9 @@ class UserProfileApiController extends Controller {
             $isJobSeekerVerified = 1;
             $isLicenseRequired = 0;
             $jobTitleModel = JobTitles::where('id',$reqData['jobTitileId'])->first();
-            if($jobTitleModel) {
-                if($jobTitleModel->is_license_required) {
+            if(is_object($jobTitleModel) && $jobTitleModel->is_license_required) {
                     $this->validate($request, ['licenseNumber' => 'required', 'state'=> 'required']);
                     $isLicenseRequired = 1;
-                }
             }
             
             $userId = $request->userServerData->user_id;
@@ -379,18 +377,18 @@ class UserProfileApiController extends Controller {
                 $userProfile->is_job_seeker_verified = $isJobSeekerVerified;
                 $userProfile->save();
                 
-                apiResponse::chkProfileComplete($userId);
+                ApiResponse::chkProfileComplete($userId);
                 $message = trans("messages.user_profile_updated");
-                $returnResponse = apiResponse::customJsonResponse(1, 200, $message);
+                $returnResponse = ApiResponse::customJsonResponse(1, 200, $message);
             } else {
-                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
             
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = apiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $returnResponse = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
-            $returnResponse = apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         
         return $returnResponse;
@@ -422,16 +420,16 @@ class UserProfileApiController extends Controller {
                 $userProfile->preferred_state = $reqData['preferredState'];
                 $userProfile->preferred_country = $reqData['preferredCountry'];
                 $userProfile->save();
-                $returnResponse = apiResponse::customJsonResponse(1, 200, trans("messages.location_update_success"));
+                $returnResponse = ApiResponse::customJsonResponse(1, 200, trans("messages.location_update_success"));
             } else {
-                $returnResponse = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
             }
             return $returnResponse;
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            return ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         }catch (\Exception $e) {
-            return apiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            return ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
     }
     
@@ -445,7 +443,7 @@ class UserProfileApiController extends Controller {
                 $isVerified = 0;
                 if ($userModel->is_verified) {
                     $isVerified = 1;
-                    $response = apiResponse::customJsonResponse(1, 200, trans("messages.data_retrieved_successfully"), ['isVerified'=>$isVerified]); 
+                    $response = ApiResponse::customJsonResponse(1, 200, trans("messages.data_retrieved_successfully"), ['isVerified'=>$isVerified]); 
                 } else {
                     $url = url("/verification-code/".$userModel->verification_code);
                     $name = $userModel->first_name;
@@ -453,18 +451,18 @@ class UserProfileApiController extends Controller {
                     Mail::queue('email.pending-email-verification', ['name' => $name, 'url' => $url, 'email' => $email], function($message) use($email,$name) {
                             $message->to($email, $name)->subject('Pending Email Activation');
                         });
-                    $response = apiResponse::customJsonResponse(1, 200, "Email verification link has been sent to $email.", ['isVerified'=>$isVerified]); 
+                    $response = ApiResponse::customJsonResponse(1, 200, "Email verification link has been sent to $email.", ['isVerified'=>$isVerified]); 
                 }
             }else{
-                $response = apiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
             
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
-            return apiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            return ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $ex) {
             $message = $ex->getMessage();
-            $response =  apiResponse::responseError("Some error occoured", ["data" => $message]);
+            $response =  ApiResponse::responseError("Some error occoured", ["data" => $message]);
         }
         return $response;
     }

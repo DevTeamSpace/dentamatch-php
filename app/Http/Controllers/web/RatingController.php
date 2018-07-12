@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\JobRatings;
 use Log;
-use App\Models\RecruiterJobs;
 
 class RatingController extends Controller {
 
@@ -53,11 +52,5 @@ class RatingController extends Controller {
             Log::error($e->getMessage());
         }
         return redirect()->back();
-    }
-    
-    public function getRating(Request $request) {
-        $rating = RecruiterJobs::chkTempJObRatingPending();
-        print_r($rating->toArray());exit();
-    }
-    
+    }   
 }

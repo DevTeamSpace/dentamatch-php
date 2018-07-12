@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Helpers\apiResponse;
+use App\Helpers\ApiResponse;
 
 
 class JobseekerCertificates extends Model
@@ -25,7 +25,7 @@ class JobseekerCertificates extends Model
         if(!empty($list)) {
             foreach($list as $value) {
                 $returnData[$value['certificate_id']] = $value;
-                $returnData[$value['certificate_id']]['image_path'] =  apiResponse::getThumbImage($value['image_path']);
+                $returnData[$value['certificate_id']]['image_path'] =  ApiResponse::getThumbImage($value['image_path']);
                 
             }
         }

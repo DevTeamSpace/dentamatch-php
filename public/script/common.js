@@ -529,7 +529,7 @@ $(function () {
             var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
             if (filter.test(adminEmail)) {
             $.ajax({
-                url:public_path+'../api/admin/forgot-password',
+                url:public_path+'../api/v1/admin/forgot-password',
                 type:'POST',
                 dataType: 'json',
                 data:{email:adminEmail},
