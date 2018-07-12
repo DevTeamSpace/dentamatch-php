@@ -170,7 +170,7 @@
 @if(!empty($jobTemplateModalData))
 @include('web.recuriterJob.job-template-modal')
 @endif
-<!--<script src="{{ config('app.socketUrl') }}/socket.io/socket.io.js"></script>-->
+<script src="{{ config('app.socketUrl') }}/socket.io/socket.io.js"></script>
 <script type="text/javascript">
     var fromId = "{{ Auth::id() }}";
     var userName = '{{ Session::get("userData")["profile"]["office_name"] }}';
