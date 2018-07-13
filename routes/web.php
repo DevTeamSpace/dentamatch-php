@@ -24,7 +24,7 @@
   Route::post('login', 'web\SignupController@postLogin');
   Route::get('login', 'web\SignupController@getLogin');
   Route::get('verification-code/{code}', 'web\SignupController@getVerificationCode');
-  Route::get('user-activation/{code}', 'Api\UserApiController@getActivatejobseeker');
+  Route::get('user-activation/{code}', 'Api\v1\UserApiController@getActivatejobseeker');
   Route::get('logout', 'web\SignupController@logout');
   Route::get('users/notification/seen/{id}', 'web\NotificationController@seenNotification');
   Route::get('/aboutus', function () {
