@@ -21,8 +21,12 @@ $(function () {
         columns: [
             {data: 'zipcode', name: 'zipcode',searchable:true},
             {data: 'freeTrialPeriod', name: 'free_trial_period',searchable:true},
-            {data: 'active', name: 'active',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
+            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
+                return (row.isActive == 1) ?'Yes':'No';
+            }},
+            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+                return '<a href="'+public_path+'location/'+row.locationId+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
+            }}
         ]
     });
     
@@ -36,8 +40,12 @@ $(function () {
         //bFilter: false,
         columns: [
             {data: 'affiliation_name', name: 'affiliation_name',searchable:true},
-            {data: 'active', name: 'active',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
+            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
+                return (row.is_active == 1) ?'Yes':'No';
+            }},
+            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+                return '<a href="'+public_path+'affiliation/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
+            }}
         ]
     });
     
@@ -51,8 +59,12 @@ $(function () {
         //bFilter: false,
         columns: [
             {data: 'jobtitle_name', name: 'jobtitle_name',searchable:true},
-            {data: 'active', name: 'active',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
+            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
+                return (row.is_active == 1) ?'Yes':'No';
+            }},
+            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+                return '<a href="'+public_path+'jobtitle/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
+            }}
         ]
     });
     
@@ -66,8 +78,12 @@ $(function () {
         //bFilter: false,
         columns: [
             {data: 'officetype_name', name: 'officetype_name',searchable:true},
-            {data: 'active', name: 'active',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
+            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
+                return (row.is_active == 1) ?'Yes':'No';
+            }},
+            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+                return '<a href="'+public_path+'officetype/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
+            }}
         ]
     });
     
@@ -81,8 +97,12 @@ $(function () {
         //bFilter: false,
         columns: [
             {data: 'certificate_name', name: 'certificate_name',searchable:true},
-            {data: 'active', name: 'active',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
+            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
+                return (row.is_active == 1) ?'Yes':'No';
+            }},
+            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+                return '<a href="'+public_path+'certificate/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
+            }}
         ]
     });
     
@@ -96,9 +116,13 @@ $(function () {
         //bFilter: false,
         columns: [
             {data: 'skill_name', name: 'skill_name',searchable:true},
-            {data: 'parent_skill', name: 'parent_skill',searchable:false},
-            {data: 'active', name: 'active',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
+            {data: 'parent_skill_name', name: 'parent_skill',searchable:false},
+            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
+                return (row.is_active == 1) ?'Yes':'No';
+            }},
+            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+                return '<a href="'+public_path+'skill/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
+            }}
         ]
     });
     
@@ -112,9 +136,13 @@ $(function () {
         //bFilter: false,
         columns: [
             {data: 'school_name', name: 'school_name',searchable:true},
-            {data: 'parent_school', name: 'parent_school',searchable:false},
-            {data: 'active', name: 'active',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
+            {data: 'parent_school_name', name: 'parent_school',searchable:false},
+            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
+                return (row.is_active == 1) ?'Yes':'No';
+            }},
+            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+                return '<a href="'+public_path+'school/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
+            }}
         ]
     });
     
@@ -130,8 +158,14 @@ $(function () {
             {data: 'email', name: 'email',searchable:true},
             {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
             {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
-            {data: 'active', name: 'active',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
+            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
+                return (row.is_active == 1) ?'Yes':'No';
+            }},
+            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+                return '<a href="'+public_path+'jobseeker/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;\n\
+                        <a href="'+public_path+'recruiter/'+row.id+'/adminResetPassword"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;\n\
+                        <a href="'+public_path+'jobseeker/'+row.id+'/viewdetails"  class="btn btn-xs btn-primary">View Details</a>&nbsp;';
+            }}
         ]
     });
     
@@ -210,8 +244,14 @@ $(function () {
         columns: [
             {data: 'email', name: 'email',searchable:true},
             {data: 'office_name', name: 'recruiter_profiles.office_name',searchable:true},
-            {data: 'active', name: 'active',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
+            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
+                return (row.is_active == 1) ?'Yes':'No';
+            }},
+            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+                return '<a href="'+public_path+'recruiter/'+row.id+'/view"  class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> View</a>&nbsp;\n\
+                        <a href="'+public_path+'recruiter/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;\n\
+                        <a href="'+public_path+'recruiter/'+row.id+'/adminResetPassword"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;';
+            }}
         ]
     });
     
@@ -226,10 +266,22 @@ $(function () {
         //bFilter: false,
         columns: [
             {data: 'office_name', name: 'office_name',searchable:true},
-            {data: 'address', name: 'address',searchable:false},
+            {data: 'address', name: 'address',searchable:false,render: function (data, type, row) {
+                    return row.address.substring(0, 100);
+            }},
             {data: 'jobtitle_name', name: 'jobtitle_name',searchable:true},
-            {data: 'jobtype', name: 'jobtype',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
+            {data: 'job_type', name: 'jobtype',searchable:false,render: function (data, type, row) {
+                if(row.job_type==1){
+                    return 'Fulltime';
+                }else if(row.job_type==2){
+                    return 'Parttime';
+                }else if(row.job_type==3){
+                    return 'Temporary';
+                }
+            }},
+            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+                return '<a href="'+public_path+'report/'+row.id+'/view"  class="btn btn-xs btn-primary"><i class="fa fa-view"></i> View Details</a>&nbsp;';
+            }}
         ]
     });
     
@@ -244,7 +296,23 @@ $(function () {
         columns: [
             {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
             {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
-            {data: 'applied_status', name: 'job_lists.applied_status',searchable:false},
+            {data: 'applied_status', name: 'job_lists.applied_status',searchable:false,render: function (data, type, row) {
+                if(row.applied_status==1){
+                    return 'Invited';
+                }else if(row.applied_status==2){
+                    return 'Applied';
+                }else if(row.applied_status==3){
+                    return 'Shortlisted';
+                }else if(row.applied_status==4){
+                    return 'Hired';
+                }else if(row.applied_status==5){
+                    return 'Rejected';
+                }else if(row.applied_status==6){
+                    return 'Cancelled';
+                }else{
+                    return 'No Status';
+                }
+            }},
         ]
     });
     
@@ -275,7 +343,15 @@ $(function () {
         columns: [
             {data: 'office_name', name: 'recruiter_profiles.office_name',searchable:true},
             {data: 'jobtitle_name', name: 'job_titles.jobtitle_name',searchable:true},
-            {data: 'jobtype', name: 'jobtype',searchable:false},
+            {data: 'job_type', name: 'jobtype',searchable:false,render: function (data, type, row) {
+                if(row.job_type==1){
+                    return 'Fulltime';
+                }else if(row.job_type==2){
+                    return 'Parttime';
+                }else if(row.job_type==3){
+                    return 'Temporary';
+                }
+            }},
             {data: 'invited', name: 'invited',searchable:false},
             {data: 'applied', name: 'applied',searchable:false},
             {data: 'sortlisted', name: 'sortlisted',searchable:false},
@@ -311,11 +387,27 @@ $(function () {
         columns: [
             {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
             {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
-            {data: 'license_number', name: 'license_number',searchable:false},
-            {data: 'state', name: 'state',searchable:false},
-            {data: 'job_title', name: 'job_title',searchable:false},
-            {data: 'is_job_seeker_verified', name: 'is_job_seeker_verified',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
+            {data: 'license_number', name: 'license_number',searchable:false,searchable:false,render: function (data, type, row) {
+                    return (row.license_number!=null && row.license_number!='')?row.license_number:'N/A';
+            }},
+            {data: 'state', name: 'state',searchable:false,searchable:false,render: function (data, type, row) {
+                    return (row.state!=null && row.state!='')?row.state:'N/A';
+            }},
+            {data: 'jobtitle_name', name: 'job_title',searchable:false,searchable:false,render: function (data, type, row) {
+                    return (row.jobtitle_name!=null && row.jobtitle_name!='')?row.jobtitle_name:'N/A';
+            }},
+            {data: 'is_job_seeker_verified', name: 'is_job_seeker_verified',searchable:false,render: function (data, type, row) {
+                if(row.is_job_seeker_verified==0){
+                    return 'Not Verified';
+                }else if(row.is_job_seeker_verified==1){
+                    return 'Approved';
+                }else if(row.is_job_seeker_verified==2){
+                    return 'Rejected';
+                }
+            }},
+            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+                return '<a href="'+public_path+'jobseeker/'+row.id+'/verification"  class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> View</a>&nbsp;';
+            }}
         ]
     });
     
@@ -330,82 +422,6 @@ $(function () {
         });
     }
     
-    $('#group_list').DataTable({
-        processing: true,
-        serverSide: true,
-        responsive: true,
-        autoWidth: false,
-        ajax: public_path+'group/list',
-        ordering:false,
-        paging:false,
-        bFilter: false,
-        columns: [
-            {data: 'groupName', name: 'group_name'},
-            {data: 'termConditions', name: 'termConditions'}
-        ]
-
-    });
-    
-    $('#app_feedback_list').DataTable({
-        processing: true,
-        serverSide: true,
-        responsive: true,
-        autoWidth: false,
-        ajax: public_path+'appFeedback/list',
-        ordering:false,
-        //paging:false,
-        //bFilter: false,
-        columns: [
-            {data: 'userName', name: 'userName',searchable:true},
-            {data: 'userType', name: 'userType',searchable:false},
-            {data: 'message', name: 'message',searchable:false},
-            {data: 'createdAt', name: 'createdAt',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
-        ]
-
-    });
-    
-    $('#chat_message_list').DataTable({
-        processing: true,
-        serverSide: true,
-        responsive: true,
-        autoWidth: false,
-        ajax: public_path+'chatMessage/list',
-        ordering:false,
-        //paging:false,
-        //bFilter: false,
-        columns: [
-            {data: 'fromUserName', name: 'fromUserName',searchable:true},
-            {data: 'toUserName', name: 'toUserName',searchable:true},
-            {data: 'message', name: 'message',searchable:false},
-            {data: 'createdAt', name: 'createdAt',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
-        ]
-
-    });
-    
-    $('#rating_list').DataTable({
-        processing: true,
-        serverSide: true,
-        responsive: false,
-        autoWidth: false,
-        ajax: public_path+'rating/list',
-        ordering:false,
-        scrollX: true,
-        //paging:false,
-        //bFilter: false,
-        columns: [
-            {data: 'fromUserName', name: 'fromUserName',searchable:true},
-            {data: 'toUserName', name: 'toUserName',searchable:true},
-            {data: 'eventFolderUrl', name: 'eventFolderUrl',searchable:false},
-            {data: 'ratingScore', name: 'ratingScore',searchable:true},
-            //{data: 'feedback', name: 'feedback',searchable:false},
-            {data: 'createdAt', name: 'createdAt',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
-        ]
-
-    });
-    
     $('#appMessage_list').DataTable({
         processing: true,
         serverSide: true,
@@ -416,40 +432,29 @@ $(function () {
         //paging:false,
         //bFilter: false,
         columns: [
-            {data: 'messageTo', name: 'messageTo',searchable:true},
+            {data: 'messageTo', name: 'messageTo',searchable:true,render: function (data, type, row) {
+                if(row.messageTo==1){
+                    return 'All';
+                }else if(row.messageTo==2){
+                    return 'Recruiter';
+                }else if(row.messageTo==3){
+                    return 'Jobseeker';
+                }
+            }},
             {data: 'message', name: 'message',searchable:false},
-            {data: 'messageSent', name: 'messageSent',searchable:false},
-            {data: 'createdAt', name: 'createdAt',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
+            {data: 'messageSent', name: 'messageSent',searchable:false,render: function (data, type, row) {
+                return (row.messageSent)?'Notification Sent':'<a href="'+public_path+'notify/'+row.id+'/send"  class="btn btn-xs btn-primary"><i class="fa fa-send"></i> Send Notification</a>&nbsp;'
+            }},
+            {data: 'createdAt', name: 'createdAt',searchable:false,render: function (data, type, row) {
+                var time = row.createdAt.date.split('.')
+                return time[0];
+            }},
+            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+                return '<a href="'+public_path+'notify/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;\n\
+                        <a href="'+public_path+'notify/'+row.id+'/delete" onclick="deleteRecord(this);return false;"  class="delete btn btn-xs btn-primary"><i class="fa fa-remove"></i> Delete</a>';
+            }}
         ]
     });
-    $('#payment_list').DataTable({
-        processing: true,
-        serverSide: true,
-        responsive: true,
-        autoWidth: false,
-        ajax: public_path+'payments/list',
-        ordering:false,
-        //paging:false,
-        bFilter: false,
-        columns: [
-            {data: 'email', name: 'email',searchable:false},
-            {data: 'amount', name: 'amount',searchable:false},
-            {data: 'paypalTransactionId', name: 'paypalTransactionId',searchable:false},
-            {data: 'transactions', name: 'transactions',searchable:false},
-            {data: 'updatedAt', name: 'updatedAt',searchable:false},
-            {data: 'action', name: 'action',searchable:false}
-        ]
-    });
-    
-    $('.transactions').DataTable({
-        ordering:false,
-        paging:false,
-        bFilter: false,
-        dom: 'Bfrtip',
-        bInfo : false
-    });
-    
     $('#listType').change(function(){
         var listType = $('#listType').val();
         tlist.ajax.url(public_path+'payments/transactionList/'+listType).load();

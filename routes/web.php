@@ -136,7 +136,7 @@ Route::group(['middleware' => 'termCondition'], function () {
 });
 });
 
-Route::group(['middleware' => ['web', 'xssWeb', 'nocache'], 'prefix' => 'cms/'], function () {
+Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], function () {
 
     Route::get('login', 'Auth\LoginController@getLogin');
     Route::get('logout', 'Auth\LoginController@logout');

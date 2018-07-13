@@ -117,25 +117,6 @@ class SkillController extends Controller
                     ->select('skills.id','skills.skill_name','skills.is_active','skills.parent_id','sk.skill_name as parent_skill_name')
                     ->orderBy('skills.id', 'asc');
         return Datatables::of($skills)
-                ->removeColumn('id')
-                ->removeColumn('parent_id')
-                ->removeColumn('parent_skill_name')
-                 ->addColumn('parent_skill', function ($skills) {
-                	$parentSkill = ($skills->parent_skill_name) ? $skills->parent_skill_name:'';
-                    return $parentSkill;
-                })
-                ->addColumn('active', function ($skills) {
-                	$active = ($skills->is_active == 1) ? 'Yes':'No';
-                    return $active;
-                })
-                ->addColumn('action', function ($skills) {
-                    $edit = url('cms/skill/'.$skills->id.'/edit');
-                    
-                    $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-
-                    return $action;
-                       
-                })
                 ->make(true);
         }  catch(\Exception $e) {
             Log::error($e);

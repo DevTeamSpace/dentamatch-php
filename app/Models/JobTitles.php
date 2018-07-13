@@ -15,7 +15,7 @@ class JobTitles extends Model
         'JobtitleName' => 'jobtitle_name',
         'isLicenseRequired' => 'is_license_required',
         ];
-    protected $hidden       = ['is_active','created_at','updated_at'];
+    protected $hidden       = ['created_at','updated_at'];
     
     public static function getAll($active=''){
         $obj = self::select('id','jobtitle_name','is_license_required');

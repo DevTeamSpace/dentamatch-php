@@ -177,21 +177,6 @@ class JobSeekerController extends Controller
                         ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
-                ->removeColumn('id')
-                ->addColumn('active', function ($userData) {
-                	$active = ($userData->is_active == 1) ? 'Yes':'No';
-                    return $active;
-                })
-                ->addColumn('action', function ($userData) {
-                    $edit = url('cms/jobseeker/'.$userData->id.'/edit');
-                    $resetPassword = url('cms/recruiter/'.$userData->id.'/adminResetPassword');
-                    $viewDetails = url('cms/jobseeker/'.$userData->id.'/viewdetails');
-                    $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-                    $action .= '<a href="'.$resetPassword.'"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;';
-                    $action .= '<a href="'.$viewDetails.'"  class="btn btn-xs btn-primary">View Details</a>&nbsp;';
-                    return $action;
-                       
-                })
                 ->make(true);
         }catch (\Exception $e) {
             Log::error($e);
@@ -218,30 +203,6 @@ class JobSeekerController extends Controller
                         ->where('job_titles.is_license_required', 1)
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
-                ->removeColumn('id')
-                 ->addColumn('job_title', function ($userData) {
-                	$jobTitle = !empty($userData->jobtitle_name) ? $userData->jobtitle_name :'N/A';
-                    return $jobTitle;
-                })
-                ->addColumn('state', function ($userData) {
-                	$State = !empty($userData->state) ? $userData->state :'N/A';
-                    return $State;
-                })
-                ->addColumn('license_number', function ($userData) {
-                	$licenseNumber = !empty($userData->license_number) ? $userData->license_number : "N/A";
-                    return $licenseNumber;
-                })
-                ->addColumn('is_job_seeker_verified', function ($userData) {
-                        $statusCode = ['0'=>"Not Verified", '1'=>'Approved', '2'=>'Rejected'];
-                	$isVerified = $statusCode[$userData->is_job_seeker_verified];
-                    return $isVerified;
-                })
-                ->addColumn('action', function ($userData) {
-                    $edit = url('cms/jobseeker/'.$userData->id.'/verification');
-                    $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> View</a>&nbsp;';
-                    return $action;
-                       
-                })
                 ->make(true);
         }catch (\Exception $e) {
             Log::error($e);

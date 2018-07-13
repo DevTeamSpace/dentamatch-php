@@ -113,17 +113,6 @@ class CertificateController extends Controller
         try{
         $certificates = Certifications::SELECT('certificate_name','is_active','id')->orderBy('id', 'desc');
         return Datatables::of($certificates)
-                ->removeColumn('id')
-                ->addColumn('active', function ($certificates) {
-                	$active = ($certificates->is_active == 1) ? 'Yes':'No';
-                    return $active;
-                })
-                ->addColumn('action', function ($certificates) {
-                    $edit = url('cms/certificate/'.$certificates->id.'/edit');
-                    $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-                    return $action;
-                       
-                })
                 ->make(true);
         }catch (\Exception $e) {
             Log::error($e);

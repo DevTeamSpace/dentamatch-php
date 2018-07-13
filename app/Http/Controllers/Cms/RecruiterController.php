@@ -155,22 +155,6 @@ class RecruiterController extends Controller
                         ->where('user_groups.group_id', 2)
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
-                ->removeColumn('id')
-                ->addColumn('active', function ($userData) {
-                	$active = ($userData->is_active == 1) ? 'Yes':'No';
-                    return $active;
-                })
-                ->addColumn('action', function ($userData) {
-                    $edit = url('cms/recruiter/'.$userData->id.'/edit');
-                    
-                    $resetPassword = url('cms/recruiter/'.$userData->id.'/adminResetPassword');
-                    $view = url('cms/recruiter/'.$userData->id.'/view');
-                    $action = '<a href="'.$view.'"  class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> View</a>&nbsp;';
-                    $action .= '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-                    
-                    $action .= '<a href="'.$resetPassword.'"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;';
-                    return $action;
-                })
                 ->make(true);
         }  catch (\Exception $e) {
             Log::error($e);

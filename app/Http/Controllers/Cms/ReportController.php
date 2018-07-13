@@ -67,17 +67,6 @@ class ReportController extends Controller {
                             ->orderBy('recruiter_jobs.id', 'desc')->get();
             return Datatables::of($jobLists)
                             ->removeColumn('id')
-                            ->addColumn('jobtype', function ($jobLists) {
-                                $jobType = "";
-                                if ($jobLists->job_type == 1) {
-                                    $jobType = 'Fulltime';
-                                } else if ($jobLists->job_type == 2) {
-                                    $jobType = 'Parttime';
-                                } else {
-                                    $jobType = 'Temporary';
-                                }
-                                return $jobType;
-                            })
                             ->make(true);
         } catch (Exception $ex) {
             Log::error($e);
@@ -118,26 +107,6 @@ class ReportController extends Controller {
                             ->filterColumn('jobtitle_name', function ($query, $keyword) {
                                 $query->whereRaw("jobtitle_name like ?", ["%$keyword%"]);
                             })
-                            ->removeColumn('id')
-                            ->addColumn('jobtype', function ($jobLists) {
-                                $jobType = "";
-                                if ($jobLists->job_type == 1) {
-                                    $jobType = 'Fulltime';
-                                } else if ($jobLists->job_type == 2) {
-                                    $jobType = 'Parttime';
-                                } else {
-                                    $jobType = 'Temporary';
-                                }
-                                return $jobType;
-                            })
-                            ->addColumn('address', function ($jobLists) {
-                                return substr($jobLists->address, 0, 100);
-                            })
-                            ->addColumn('action', function ($jobLists) {
-                                $view = url('cms/report/' . $jobLists->id . '/view');
-                                $action = '<a href="' . $view . '"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> View Details</a>&nbsp;';
-                                return $action;
-                            })
                             ->make(true);
         } catch (\Exception $e) {
             Log::error($e);
@@ -152,32 +121,6 @@ class ReportController extends Controller {
                             ->orderBy('jobseeker_profiles.first_name', 'asc');
             return Datatables::of($seekerList)
                             ->removeColumn('user_id')
-                            ->addColumn('applied_status', function ($seekerList) {
-                                $status = "";
-                                switch ($seekerList->applied_status) {
-                                    case JobLists::INVITED:
-                                        $status = 'Invited';
-                                        break;
-                                    case JobLists::APPLIED:
-                                        $status = 'Applied';
-                                        break;
-                                    case JobLists::SHORTLISTED:
-                                        $status = 'Shortlisted';
-                                        break;
-                                    case JobLists::HIRED:
-                                        $status = 'Hired';
-                                        break;
-                                    case JobLists::REJECTED:
-                                        $status = 'Rejected';
-                                        break;
-                                    case JobLists::CANCELLED:
-                                        $status = 'Cancelled';
-                                        break;
-                                    default:
-                                        $status = 'No Status';
-                                }
-                                return $status;
-                            })
                             ->make(true);
         } catch (\Exception $e) {
             Log::error($e);

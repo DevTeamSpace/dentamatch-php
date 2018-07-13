@@ -121,25 +121,6 @@ class SchoolController extends Controller
                     
         
         return Datatables::of($schools)
-                ->removeColumn('id')
-                ->removeColumn('parent_id')
-                ->removeColumn('parent_school_name')
-                 ->addColumn('parent_school', function ($schools) {
-                    $parentSchool = ($schools->parent_school_name) ? $schools->parent_school_name:'';
-                    return $parentSchool;
-                })
-                ->addColumn('active', function ($schools) {
-                	$active = ($schools->is_active == 1) ? 'Yes':'No';
-                    return $active;
-                })
-                ->addColumn('action', function ($schools) {
-                    $edit = url('cms/school/'.$schools->id.'/edit');
-                    
-                    $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-
-                    return $action;
-                       
-                })
                 ->make(true);
         } catch(\Exception $e) {
             Session::flash('message',$e->getMessage());

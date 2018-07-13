@@ -128,27 +128,8 @@ class AppMessageController extends Controller
 
     public function messageList(){
         try{
-        $appMessages = AppMessage::SELECT(['message','message_to','message_sent','created_at','id'])->orderBy('created_at', 'desc')->get();
+        $appMessages = AppMessage::SELECT(['message','message_to','message_sent','created_at','id'])->orderBy('created_at', 'desc');
         return Datatables::of($appMessages)
-                ->removeColumn('id')
-                ->addColumn('messageTo', function ($appMessages) {
-                    $textMessage = ['1'=>'All','2'=>'Recruiter','3'=>'Jobseeker'];
-                    return $textMessage[$appMessages->message_to];
-                })
-                ->addColumn('messageSent', function ($appMessages) {
-                    $sentLink = url('cms/notify/'.$appMessages->id.'/send');
-                    $link = '<a href="'.$sentLink.'"  class="btn btn-xs btn-primary"><i class="fa fa-send"></i> Send Notification</a>&nbsp;';
-                    return ($appMessages->messageSent)?'Notification Sent':$link;})
-                ->addColumn('createdAt', function ($appMessages) {
-                    return $appMessages->created_at;})
-                ->addColumn('action', function ($appMessages) {
-                    $edit = url('cms/notify/'.$appMessages->id.'/edit');
-                    $delete =url('cms/notify/'.$appMessages->id.'/delete');
-                    $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-                    $action .= '<a href="'.$delete.'" onclick="deleteRecord(this);return false;"  class="delete btn btn-xs btn-primary"><i class="fa fa-remove"></i> Delete</a>';
-                    return $action;
-                       
-                })
                 ->make(true);
         }catch (\Exception $e) {
             Log::error($e);

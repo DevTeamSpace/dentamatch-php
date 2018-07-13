@@ -113,17 +113,6 @@ class OfficeTypeController extends Controller
         try{
         $officeTypes = OfficeType::SELECT('officetype_name','is_active','id')->orderBy('id', 'desc');
         return Datatables::of($officeTypes)
-                ->removeColumn('id')
-                ->addColumn('active', function ($officeTypes) {
-                	$active = ($officeTypes->is_active == 1) ? 'Yes':'No';
-                    return $active;
-                })
-                ->addColumn('action', function ($officeTypes) {
-                    $edit = url('cms/officetype/'.$officeTypes->id.'/edit');
-                    $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-                    return $action;
-                       
-                })
                 ->make(true);
         }  catch (\Exception $e) {
             Log::error($e);

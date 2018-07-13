@@ -18,11 +18,12 @@ class AppMessage extends Model
         'appMessageId' => 'id',
         'messageTo'=>'message_to',
         'messageSent'=>'message_sent',
-        'cronMessageSent' => 'cron_message_sent'
+        'cronMessageSent' => 'cron_message_sent',
+        'createdAt'=>'created_at',
         ];
-    protected $hidden       = ['id','message_to','message_sent', 'cron_message_sent','created_at','updated_at'];
+    protected $hidden       = ['message_to','message_sent', 'cron_message_sent','created_at','updated_at'];
     protected $fillable     = [];
-    protected $appends      = ['messageTo','messageSent', 'cronMessageSent'];
+    protected $appends      = ['messageTo','messageSent', 'cronMessageSent','createdAt'];
     protected $dates = ['deleted_at'];
     
     /**

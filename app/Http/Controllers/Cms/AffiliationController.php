@@ -113,17 +113,6 @@ class AffiliationController extends Controller
         try{
             $affiliations = Affiliation::select('affiliation_name','is_active','id')->orderBy('id', 'desc');
             return Datatables::of($affiliations)
-                    ->removeColumn('id')
-                    ->addColumn('active', function ($affiliations) {
-                            $active = ($affiliations->is_active == 1) ? 'Yes':'No';
-                        return $active;
-                    })
-                    ->addColumn('action', function ($affiliations) {
-                        $edit = url('cms/affiliation/'.$affiliations->id.'/edit');
-                        $action = '<a href="'.$edit.'"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-                        return $action;
-
-                    })
                     ->make(true);
         }catch (\Exception $e) {
             Log::error($e);

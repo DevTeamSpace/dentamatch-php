@@ -11,7 +11,7 @@ class Certifications extends Model
     protected $primaryKey = 'id';
     
     
-    protected $hidden       = ['created_at','updated_at','is_active'];
+    protected $hidden       = ['created_at','updated_at'];
     
     public static function getAllCertificates()
     {   
