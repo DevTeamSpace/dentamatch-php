@@ -29,7 +29,7 @@ class RecruiterController extends Controller
     }
 
     /**
-     * Show the form to create a new location.
+     * Show the form to create a new recruiter.
      *
      * @return Response 
      */
@@ -39,7 +39,7 @@ class RecruiterController extends Controller
     }
     
     /**
-     * List all locations.
+     * List all recruiter.
      *
      * @param  array  $data
      * @return User
@@ -50,7 +50,7 @@ class RecruiterController extends Controller
     }
     
     /**
-     * Show the form to update an existing location.
+     * Show the form to update an existing recruiter.
      *
      * @return Response
      */
@@ -65,7 +65,7 @@ class RecruiterController extends Controller
     }
 
     /**
-     * Store a new/update location.
+     * Store a new/update recruiter.
      *
      * @param  Request  $request
      * @return return to lisitng page
@@ -130,9 +130,9 @@ class RecruiterController extends Controller
     }
     
     /**
-     * Soft delete a location.
+     * Soft delete a recruiter.
      *
-     * @param  Location  $id
+     * @param  recruiter  $id
      * @return return to lisitng page
      */
     public function delete($id){
@@ -143,6 +143,10 @@ class RecruiterController extends Controller
         
     }
     
+    /**
+     * Method to get list of recruiter
+     * @return json
+     */
     public function recruiterList(){
         try{
         $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
@@ -162,6 +166,10 @@ class RecruiterController extends Controller
                        
     }
     
+    /**
+     * Method to view page for reset password
+     * @return view
+     */
     public function adminResetPassword($id)
     {
         $user = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
@@ -172,6 +180,10 @@ class RecruiterController extends Controller
         return view('cms.recruiter.admin-reset-password',['userProfile'=>$user]);
     }
     
+    /**
+     * Method to send email for reset password
+     * @return view
+     */
     public function storeAdminResetPassword(Request $request)
     {
         try {
@@ -209,6 +221,10 @@ class RecruiterController extends Controller
         
     }
     
+    /**
+     * Method to view recruiter detail view
+     * @return view
+     */
     public function recruiterView($id) {
         try{
             $userProfile = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')

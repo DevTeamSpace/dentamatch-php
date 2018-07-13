@@ -24,7 +24,7 @@ class AffiliationController extends Controller
     }
 
     /**
-     * Show the form to create a new location.
+     * Show the form to create a new Affiliation.
      *
      * @return Response 
      */
@@ -34,10 +34,10 @@ class AffiliationController extends Controller
     }
     
     /**
-     * List all locations.
+     * List all Affiliation.
      *
      * @param  array  $data
-     * @return User
+     * @return Affiliation ciew
      */
     protected function index()
     {  
@@ -45,7 +45,7 @@ class AffiliationController extends Controller
     }
     
     /**
-     * Show the form to update an existing location.
+     * Show the form to update an existing Affiliation.
      *
      * @return Response
      */
@@ -57,7 +57,7 @@ class AffiliationController extends Controller
     }
 
     /**
-     * Store a new/update location.
+     * Store a new/update Affiliation.
      *
      * @param  Request  $request
      * @return return to lisitng page
@@ -98,7 +98,7 @@ class AffiliationController extends Controller
     }
     
     /**
-     * Soft delete a location.
+     * Soft delete a Affiliation.
      *
      * @param  Location  $id
      * @return return to lisitng page
@@ -108,7 +108,13 @@ class AffiliationController extends Controller
         Session::flash('message',trans('messages.location_deleted'));
         
     }
-
+    
+    /**
+     * List all Affiliations.
+     *
+     * @param  array  $data
+     * @return Affiliation view
+     */
     public function affiliationsList(){
         try{
             $affiliations = Affiliation::select('affiliation_name','is_active','id')->orderBy('id', 'desc');

@@ -19,12 +19,20 @@ class CalenderController extends Controller
         $this->middleware('auth');
     }
     
+    /**
+     * Method to view user data on calendar
+     * @return view
+     */
     public function getCalender(){
         $userId = Auth::user()->id;
         $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
         return view('web.calender',['navActive'=>'calendar', 'jobTemplateModalData' => $jobTemplateModalData]);
     }
     
+    /**
+     * Method to get list of all temp job data
+     * @return json
+     */
     public function getCalenderDetails(){
         try{
             $allJobs = RecruiterJobs::getAllTempJobsHired();
@@ -67,6 +75,10 @@ class CalenderController extends Controller
         return $this->response;
     }
     
+    /**
+     * Method to get list seeker data 
+     * @return json
+     */
     public function getCalenderSeekers(CalenderSeekerRequest $request){
         try{
             $job = RecruiterJobs::where('id',$request->jobId)->first();

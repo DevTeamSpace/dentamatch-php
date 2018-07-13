@@ -19,6 +19,10 @@ use Session;
 
 class FavoriteJobseekerController extends Controller {
     
+    /**
+     * Method to get favorite list of seekers
+     * @return json
+     */
     public function getFavJobseeker(Request $request) {
         $userId = Auth::user()->id;
         
@@ -51,6 +55,10 @@ class FavoriteJobseekerController extends Controller {
         return view('web.fav-jobseeker', ['favJobSeeker' => $favJobSeeker, 'jobDetail' => $jobDetail, 'jobTemplateModalData' => $jobTemplateModalData, 'navActive'=>'favseeker']);
     }
 
+    /**
+     * Method to send invite to favorite job seeker
+     * @return json
+     */
     public function postInviteJobseeker(Request $request) {
         $validator = Validator::make($request->all(), [
                     'selectJobSeeker' => 'required',
@@ -125,6 +133,10 @@ class FavoriteJobseekerController extends Controller {
         return $return;
       }
     
+      /**
+     * Method to send push notification
+     * @return json
+     */
     public function sendPushUser($jobstatus, $sender, $receiverId, $jobId) {
               
         $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
@@ -151,6 +163,10 @@ class FavoriteJobseekerController extends Controller {
         }
     }
     
+      /**
+     * Method to favorite seeker job list
+     * @return json
+     */
     public function postFavouriteJobList(Request $request){
         $rejectedJobs = JobLists::where('seeker_id', '=', $request->userId)->whereIn('applied_status', [JobLists::HIRED, JobLists::INVITED])->get();
         $rejectedJobsArray = array();      
@@ -198,7 +214,7 @@ class FavoriteJobseekerController extends Controller {
                 }
             
         }
-        echo $returnData;exit();   
+        return $returnData;
     }
 
 }

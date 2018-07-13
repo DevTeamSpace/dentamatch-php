@@ -23,7 +23,7 @@ class OfficeTypeController extends Controller
     }
 
     /**
-     * Show the form to create a new location.
+     * Show the form to create a new officetype.
      *
      * @return Response 
      */
@@ -33,7 +33,7 @@ class OfficeTypeController extends Controller
     }
     
     /**
-     * List all locations.
+     * List all officetype.
      *
      * @param  array  $data
      * @return User
@@ -44,7 +44,7 @@ class OfficeTypeController extends Controller
     }
     
     /**
-     * Show the form to update an existing location.
+     * Show the form to update an existing officetype.
      *
      * @return Response
      */
@@ -56,7 +56,7 @@ class OfficeTypeController extends Controller
     }
 
     /**
-     * Store a new/update location.
+     * Store a new/update officetype.
      *
      * @param  Request  $request
      * @return return to lisitng page
@@ -98,7 +98,7 @@ class OfficeTypeController extends Controller
     }
     
     /**
-     * Soft delete a location.
+     * Soft delete a office type.
      *
      * @param  Location  $id
      * @return return to lisitng page
@@ -109,6 +109,10 @@ class OfficeTypeController extends Controller
         
     }
 
+    /**
+     * Method to get list of officetype
+     * @return json
+     */
     public function officeTypeList(){
         try{
         $officeTypes = OfficeType::SELECT('officetype_name','is_active','id')->orderBy('id', 'desc');

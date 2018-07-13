@@ -109,6 +109,10 @@ class CertificateController extends Controller
         
     }
 
+    /**
+     * Method to get list of certification
+     * @return type
+     */
     public function certificationList(){
         try{
         $certificates = Certifications::SELECT('certificate_name','is_active','id')->orderBy('id', 'desc');

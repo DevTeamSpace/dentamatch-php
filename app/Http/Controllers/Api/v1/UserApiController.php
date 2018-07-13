@@ -337,6 +337,11 @@ class UserApiController extends Controller {
         return $returnResponse;
     }
     
+    /**
+     * Method to get chat Recruiter List
+     * @param Request $request
+     * @return type
+     */
     public function chatRecruiterList(Request $request){
         try {
             
@@ -356,6 +361,11 @@ class UserApiController extends Controller {
         return $returnResponse;
     }
     
+    /**
+     * Method to Block Unblock Recruiter chat
+     * @param Request $request
+     * @return type
+     */
     public function chatBlockUnblockRecruiter(Request $request){
         try {
             $this->validate($request, [
@@ -378,6 +388,11 @@ class UserApiController extends Controller {
         return $returnResponse;
     }
     
+    /**
+     * Method to reset password mail by admin
+     * @param Request $request
+     * @return type
+     */
     public function postAdminForgotPassword(Request $request) {
         try {
             $this->validate($request, [

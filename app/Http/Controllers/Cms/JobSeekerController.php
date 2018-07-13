@@ -164,6 +164,10 @@ class JobSeekerController extends Controller
         
     }
 
+    /**
+     * Method to get list of job seekers
+     * @return json
+     */
     public function jobSeekerList(){
         try{
         $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
@@ -184,6 +188,10 @@ class JobSeekerController extends Controller
                        
     }
     
+    /**
+     * Method to get list of verified jobseekers
+     * @return json
+     */
     public function jobSeekerVerificationList(){
         try{
         $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')

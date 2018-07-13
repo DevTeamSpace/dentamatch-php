@@ -25,6 +25,10 @@ class UserProfileController extends Controller {
         return view('web.user-dashboard',['activeTab'=>'3']);
     }
 
+     /**
+     * Method to add office 
+     * @return json
+     */
     public function officeDetails(Request $request) {
         
         if (isset($request->phoneNumber) && !empty($request->phoneNumber)) {
@@ -50,6 +54,10 @@ class UserProfileController extends Controller {
         }
     }
     
+     /**
+     * Method to create Recruiter Office Address  
+     * @return view
+     */
     public static function createRecruiterOfficeAddress($request) {
         if(!empty($request->officeAddress)) {
             $recOfficeArr = [
@@ -91,6 +99,10 @@ class UserProfileController extends Controller {
         }
     }
 
+    /**
+     * Method to create Recruiter Office Address 2 
+     * @return view
+     */
     public static function createRecruiterOfficeAddress1($request) {
         if(!empty($request->officeAddress1)) {
             $recOfficeArr = [
@@ -132,6 +144,10 @@ class UserProfileController extends Controller {
         }
     }
     
+    /**
+     * Method to create Recruiter Office Address 3
+     * @return view
+     */
     public static function createRecruiterOfficeAddress2($request) {
         if(!empty($request->officeAddress2)) {
             $recOfficeArr = [
@@ -175,6 +191,10 @@ class UserProfileController extends Controller {
         
     }
 
+    /**
+     * Method to check valid locations  
+     * @return view
+     */
     public function checkValidLocation(Request $request) {
         try {
             $return = 0;
@@ -190,6 +210,10 @@ class UserProfileController extends Controller {
         }
     }
 
+    /**
+     * Method to create Recruiter profile 
+     * @return view
+     */
     public function createProfile(Request $request) {
         $this->validate($request, ['officeName' => 'required|max:100', 'officeDescription' => 'required|max:500']);
 
@@ -207,17 +231,33 @@ class UserProfileController extends Controller {
         }
     }
 
+    /**
+     * Method to view change password page  
+     * @return view
+     */
     public function getChangePassword() {
         return view('web.change-password',['activeTab'=>'3']);
     }
     
+    /**
+     * Method to view terms conditions
+     * @return view
+     */
     public function getTermsConditions() {
         return view('web.setting-terms-conditions',['activeTab'=>'5']);
     }
+    /**
+     * Method to view privacy policy  
+     * @return view
+     */
     public function getPrivacyPolicy() {
         return view('web.privacy-policy',['activeTab'=>'6']);
     }
 
+    /**
+     * Method to change password 
+     * @return view
+     */
     public function postChangePassword(Request $request) {
         $validator = Validator::make($request->all(), [
                     'oldPassword' => 'required',

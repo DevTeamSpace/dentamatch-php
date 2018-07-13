@@ -110,6 +110,10 @@ class LocationController extends Controller
         
     }
 
+    /**
+     * Method to get list of locations
+     * @return json
+     */
     public function locationsList(){
         try{
         $locations = Location::SELECT(['zipcode','free_trial_period','is_active','id'])->orderBy('id', 'desc');

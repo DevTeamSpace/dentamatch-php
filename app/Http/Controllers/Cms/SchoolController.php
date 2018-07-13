@@ -113,6 +113,10 @@ class SchoolController extends Controller
         
     }
 
+    /**
+     * Method to get list of all schools
+     * @return json
+     */
     public function schoolList(){
         try{
         $schools =  Schooling::leftJoin('schoolings as sc','sc.id','=','schoolings.parent_id')

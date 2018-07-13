@@ -40,6 +40,10 @@ class RecruiterJobController extends Controller {
         $this->viewData = ['navActive' => 'joblisting',];
     }
 
+      /**
+     * Method to view user data on dashboard
+     * @return view
+     */
     public function dashboard(){
         try {
             $activeTab = 3;
@@ -86,6 +90,10 @@ class RecruiterJobController extends Controller {
         return view('web.recuriterJob.' . $viewFileName, $this->viewData);
     }
 
+      /**
+     * Method to create a job
+     * @return view
+     */
     public function createJob($templateId) {
         try {
             $this->viewData['offices'] = RecruiterOffice::getAllRecruiterOffices(Auth::user()->id);
@@ -100,6 +108,10 @@ class RecruiterJobController extends Controller {
         }
     }
 
+      /**
+     * Method to search job seekers 
+     * @return view
+     */
     public function searchSeekers(Request $request,$jobId){
         try{
             $userId = Auth::user()->id;
@@ -128,6 +140,10 @@ class RecruiterJobController extends Controller {
         }
     }
 
+      /**
+     * Method to save/update a job
+     * @return view
+     */
     public function saveOrUpdate(Request $request) {
         $this->validate($request, [
             'templateId' => 'required',
@@ -197,6 +213,10 @@ class RecruiterJobController extends Controller {
         }
     }
 
+      /**
+     * Method to get list of jobs
+     * @return view
+     */
     public function listJobs(Request $request) {
         try{
             $userId = Auth::user()->id;
@@ -214,15 +234,10 @@ class RecruiterJobController extends Controller {
         }
     }
 
-    public function editJob(Request $request, $jobId) {
-        try {
-            dd('In progress');
-        } catch (\Exception $e) {
-            Log::error($e);
-            return view('web.error.', ["message" => $e->getMessage()]);
-        }
-    }
-
+      /**
+     * Method to view job details
+     * @return view
+     */
     public function jobDetails(Request $request,$jobId) {
         try{
             $userId = Auth::user()->id;
@@ -244,6 +259,10 @@ class RecruiterJobController extends Controller {
         }
     }
     
+      /**
+     * Method to get seeker details against a job
+     * @return view
+     */
     public function getJobSeekerDetails(Request $request,$jobId,$appliedStatus){
         $this->viewData['job'] = RecruiterJobs::getRecruiterJobDetails($jobId);
         $this->viewData['seekerList'] = $this->getData($this->viewData['job'],$appliedStatus);
@@ -261,10 +280,18 @@ class RecruiterJobController extends Controller {
         return $this->returnView('job-seeker-details');
     }
     
+      /**
+     * Method to get rating of jobs
+     * @return view
+     */
     public function getData($job,$dataType){
         return JobLists::getJobSeekerWithRatingList($job,$dataType);
     }
 
+      /**
+     * Method to update job status
+     * @return view
+     */
     public function updateStatus(Request $request) {
         $this->validate($request, [
             'jobId' => 'required|integer',
@@ -301,6 +328,10 @@ class RecruiterJobController extends Controller {
         }
     }
 
+      /**
+     * Method to get seeker details
+     * @return view
+     */
     public function jobSeekerDetails($seekerId, $jobId) {
         try {
             $matchedSkills = RecruiterJobs::getMatchingSkills($jobId, $seekerId);
@@ -314,6 +345,10 @@ class RecruiterJobController extends Controller {
         }
     }
 
+      /**
+     * Method to send push
+     * @return view
+     */
     public function sendPushUser($jobstatus, $sender, $receiverId, $jobId) {
         $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
         if ($jobstatus == JobLists::SHORTLISTED) {
@@ -371,6 +406,10 @@ class RecruiterJobController extends Controller {
         }
     }
 
+      /**
+     * Method to edit job
+     * @return view
+     */
     public function jobEdit(Request $request, $jobId) {
         $userId = Auth::user()->id;
         $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
@@ -397,6 +436,10 @@ class RecruiterJobController extends Controller {
         return $response;
     }
 
+     /**
+     * Method to edit job
+     * @return view
+     */
     public function postEditJob(Request $request) {
         try {
             DB::beginTransaction();
@@ -427,6 +470,10 @@ class RecruiterJobController extends Controller {
         return $this->result;
     }
 
+     /**
+     * Method to check same office in edit job or not
+     * @return json
+     */
     private function sameOfficeOrNot($allData, $recruiterOfficeObj) {
         try {
             if ((string) $recruiterOfficeObj['latitude'] == (string) $allData->selectedOffice[0]->selectedOfficeLat && (string) $recruiterOfficeObj['longitude'] == (string) $allData->selectedOffice[0]->selectedOfficeLng) {
@@ -447,6 +494,10 @@ class RecruiterJobController extends Controller {
         return $this->result;
     }
 
+     /**
+     * Method to check offce 
+     * @return view
+     */
     private function checkingOffice($allData, $recruiterOfficeObj) {
         try {
             $recruiterOfficeObj = RecruiterOffice::where([
@@ -477,6 +528,10 @@ class RecruiterJobController extends Controller {
         return $this->result;
     }
     
+     /**
+     * Method to save office
+     * @return view
+     */
     private function saveOffice($recruiterOfficeId, $allData){
         try{
             $recruiterOfficeObj = RecruiterOffice::where(['id' => $recruiterOfficeId])->first();
@@ -509,6 +564,10 @@ class RecruiterJobController extends Controller {
         return $this->result;
     }
 
+     /**
+     * Method to update office
+     * @return view
+     */
     private function updateOffice($allData, $requestType = '') {
         try {
             if ($requestType != '') {
@@ -535,6 +594,10 @@ class RecruiterJobController extends Controller {
         return $updateOfficeResult;
     }
 
+     /**
+     * Method to update job
+     * @return view
+     */
     private function updateJob($jobType, $allData, $office = '') {
         try {
             $jobObj = RecruiterJobs::where(['id' => $allData->jobId])->first();
@@ -589,6 +652,10 @@ class RecruiterJobController extends Controller {
         return $jobObj;
     }
 
+     /**
+     * Method to update office type
+     * @return view
+     */
     public function updateOfficeType($allData, $officeId = '') {
         try {
             if ($officeId == '') {
@@ -617,6 +684,10 @@ class RecruiterJobController extends Controller {
         return $updateOfficeTypeResult;
     }
     
+     /**
+     * Method to delete job
+     * @return view
+     */
     public function postDeleteJob(Request $request){
         try{
             $insertData = [];
@@ -688,6 +759,11 @@ class RecruiterJobController extends Controller {
         return $this->result;
     }
     
+    
+     /**
+     * Method to check job applied or not
+     * @return json
+     */
     public function appliedOrNot(CheckJobAppliedOrNotRequest $request){
         try{
             $jobs = RecruiterOffice::join('recruiter_jobs', 'recruiter_jobs.recruiter_office_id' ,'=', 'recruiter_offices.id')
@@ -702,6 +778,10 @@ class RecruiterJobController extends Controller {
         return $this->result;
     }
     
+     /**
+     * Method to view seeker profile
+     * @return view
+     */
     public function jobSeekerProfile($seekerId) {
         try {
             $seekerDetails = JobSeekerProfiles::getJobSeekerProfile($seekerId);

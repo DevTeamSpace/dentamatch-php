@@ -110,6 +110,10 @@ class JobTitleController extends Controller
         
     }
 
+    /**
+     * Method to get list of job titles
+     * @return json
+     */
     public function jobTitleList(){
         try{
         $jobtitles = JobTitles::SELECT('jobtitle_name','is_active','id')->orderBy('id', 'asc');

@@ -42,6 +42,10 @@ class SignupController extends Controller {
         $this->middleware('auth', ['except' => ['postJobseekerSignUp', 'getJobseekerSignUp','postSignUp', 'postLogin', 'getLogin', 'logout', 'resetPassword', 'getTermsAndCondition', 'dashboard', 'getVerificationCode']]);
     }
 
+     /**
+     * Method to view login page
+     * @return view
+     */
     public function getLogin(Request $request) {
         if(Auth::check()){
             return redirect('users/dashboard');
@@ -49,6 +53,10 @@ class SignupController extends Controller {
         return view('web.login');
     }
 
+     /**
+     * Method to check user login 
+     * @return view
+     */
     protected function postLogin(\Illuminate\Http\Request $request) {
         $validation_rules = array('email' => 'required|email', 'password' => 'required');
         $validator = Validator::make($request->all(), $validation_rules);
@@ -95,16 +103,28 @@ class SignupController extends Controller {
         return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
     }
 
+     /**
+     * Method to get Terms And Condition 
+     * @return view
+     */
     public function getTermsAndCondition(Request $request) {
         $request->session()->set('tutorial', 1);
         return view('web.terms-conditions');
     }
 
+     /**
+     * Method to home page 
+     * @return view
+     */
     public function dashboard() {
         $officeType = \App\Models\OfficeType::orderBy('officetype_name', 'ASC')->get();
         return view('web.dashboard')->with('officeType', $officeType);
     }
 
+     /**
+     * Method to get user registered
+     * @return view
+     */
     public function postSignUp(Request $request) {
         $redirect = 'login';
         try {
@@ -157,6 +177,10 @@ class SignupController extends Controller {
         return redirect($redirect);
     }
     
+     /**
+     * Method to get seeker  registered
+     * @return view
+     */
     public function postJobseekerSignUp(Request $request) {
 
         try {
@@ -283,12 +307,20 @@ class SignupController extends Controller {
         return redirect('jobseeker/signup');
     }
     
+     /**
+     * Method to get seeker signup page
+     * @return view
+     */
     public function getJobseekerSignUp() {
         $jobTitleData = JobTitles::getAll(JobTitles::ACTIVE);
         $preferredLocationId = PreferredJobLocation::getAllPreferrefJobLocation();
         return view('web.jobseekerSignup', ['jobTitleData'=> $jobTitleData, 'preferredLocationId'=> $preferredLocationId]);
     }
 
+     /**
+     * Method to check verification code
+     * @return view
+     */
     public function getVerificationCode($code) {
         $user = DB::table('users')
                 ->join('user_groups', 'users.id', '=', 'user_groups.user_id')
@@ -326,6 +358,10 @@ class SignupController extends Controller {
         return redirect($redirect);
     }
 
+     /**
+     * Method to view tutorials
+     * @return view
+     */
     public function getTutorial(Request $request) {
         try {
             $tutorial = $request->session()->pull('tutorial', 0);

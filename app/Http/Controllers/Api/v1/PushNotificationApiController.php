@@ -90,6 +90,13 @@ class PushNotificationApiController extends Controller {
         return $response;
     }
     
+    /**
+     * Description : send chat push notification 
+     * Method : userChatNotification 
+     * formMethod : POST
+     * @param Request $request
+     * @return type
+     */
     public function userChatNotification(Request $request){
         $this->success = 0;
         try{

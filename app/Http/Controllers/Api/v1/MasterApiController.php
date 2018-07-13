@@ -25,6 +25,13 @@ class MasterApiController extends Controller {
         return $response;
     }
     
+    /**
+     * Description : Get Preferred Job Location list
+     * Method : getPreferrefJobLocation
+     * formMethod : GET
+     * @param Request $request
+     * @return type
+     */
     public function getPreferrefJobLocation() {
         $preferreJobLocationModel = PreferredJobLocation::getAllPreferrefJobLocation();
         $response = ApiResponse::customJsonResponseObject(1, 200, "Skill list",'preferredJobLocations',  ApiResponse::convertToCamelCase($preferreJobLocationModel));

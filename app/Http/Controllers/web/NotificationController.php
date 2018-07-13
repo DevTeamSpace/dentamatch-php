@@ -13,7 +13,10 @@ class NotificationController extends Controller {
        
     }
 
-    
+      /**
+     * Method to get list of notification
+     * @return view
+     */
     public function getNotificationList(){
         $userId = Auth::user()->id;
         $notificationList = Notification::where('receiver_id', '=', $userId)->orderBy('id', 'DESC')->paginate(10);
@@ -23,11 +26,19 @@ class NotificationController extends Controller {
    
     }
     
+      /**
+     * Method to delete a notification
+     * @return view
+     */
     public function deleteNotification($id){
         Notification::findOrFail($id)->delete();
         return redirect('notification-lists');
     }
     
+      /**
+     * Method to mark notifications as read 
+     * @return view
+     */
     public function seenNotification($id){
        Notification::where('id',$id)->update(['seen' => 1]);
        return View('web.user-dashboard');

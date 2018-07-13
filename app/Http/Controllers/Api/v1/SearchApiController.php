@@ -110,6 +110,13 @@ class SearchApiController extends Controller {
         return $response;
     }
 
+    /**
+     * Description : post apply job
+     * Method : postApplyJob
+     * formMethod : POST
+     * @param Request $request
+     * @return type
+     */
     public function postApplyJob(Request $request) {
         try {
             $this->validate($request, [
@@ -168,6 +175,13 @@ class SearchApiController extends Controller {
         return $response;
     }
 
+    /**
+     * Description : post cancel job
+     * Method : postCancelJob
+     * formMethod : POST
+     * @param Request $request
+     * @return type
+     */
     public function postCancelJob(Request $request) {
         try {
             $this->validate($request, [
@@ -201,7 +215,14 @@ class SearchApiController extends Controller {
         }
         return $response;
     }
-
+    
+    /**
+     * Description : get list of jobs
+     * Method : getJobList
+     * formMethod : GET
+     * @param Request $request
+     * @return type
+     */
     public function getJobList(Request $request) {
         try {
             $this->validate($request, [
@@ -242,6 +263,13 @@ class SearchApiController extends Controller {
         return $response;
     }
 
+    /**
+     * Description : get details of job
+     * Method : postJobDetail
+     * formMethod : POST
+     * @param Request $request
+     * @return type
+     */
     public function postJobDetail(Request $request) {
         try {
             $this->validate($request, [
@@ -272,6 +300,13 @@ class SearchApiController extends Controller {
         return $returnResponse;
     }
 
+    /**
+     * Description : update job status
+     * Method : postAcceptRejectInvitedJob
+     * formMethod : POST
+     * @param Request $request
+     * @return type
+     */
     public function postAcceptRejectInvitedJob(Request $request) {
         try {
             $this->validate($request, [
@@ -392,6 +427,10 @@ class SearchApiController extends Controller {
         return $response;
     }
 
+    /**
+     * Description : update job status
+     * Method : acceptRejectJob
+     */
     public function acceptRejectJob($userId, $jobId, $acceptstatus, $recruiterId, $notificationId, $hired = 1) {
         $jobExists = JobLists::where('seeker_id', '=', $userId)
                 ->where('recruiter_job_id', '=', $jobId)
@@ -435,7 +474,11 @@ class SearchApiController extends Controller {
         }
         return $response;
     }
-
+    
+    /**
+     * Description : create notification on job status update
+     * Method : notifyAdmin
+     */
     public function notifyAdmin($jobId, $senderId, $notificationType) {
         $receiverDetails = RecruiterJobs::join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                         ->join('job_titles', 'job_templates.job_title_id', '=', 'job_titles.id')
@@ -454,6 +497,10 @@ class SearchApiController extends Controller {
         $notificationDetails = Notification::create($data);
     }
 
+    /**
+     * Description : create notification on job status cancel
+     * Method : notifyAdminForCancelJob
+     */
     public function notifyAdminForCancelJob($jobId, $senderId, $cancelReason) {
         $receiverDetails = RecruiterJobs::join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                         ->join('job_titles', 'job_templates.job_title_id', '=', 'job_titles.id')

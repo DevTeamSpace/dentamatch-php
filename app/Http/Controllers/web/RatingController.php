@@ -15,6 +15,10 @@ class RatingController extends Controller {
         $this->middleware('auth');
     }
     
+      /**
+     * Method to add rating
+     * @return view
+     */
     public function createOrUpdate(Request $request) {
         try{
             $requestData = $request->all();

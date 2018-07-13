@@ -433,6 +433,11 @@ class UserProfileApiController extends Controller {
         }
     }
     
+    /**
+     * Method to get seeker verified status
+     * @param Request $request
+     * @return type
+     */
     public function getIsUserVerified(Request $request) {
         try {
             $reqData = $request->all();

@@ -26,6 +26,10 @@ class JobtemplateController extends Controller
         return view('web.jobtemplate.'.$viewFileName,$this->viewData);
     }
 
+      /**
+     * Method to view list of templates
+     * @return view
+     */
     public function listJobTemplates(){
         try{
             $this->viewData['jobTemplates'] = JobTemplates::getAllUserTemplates(Auth::user()->id);
@@ -37,6 +41,10 @@ class JobtemplateController extends Controller
         }
     }
     
+      /**
+     * Method to view template details
+     * @return view
+     */
     public function viewTemplate($templateId) {
         try{
             $this->viewData['templateId'] = $templateId;
@@ -50,6 +58,10 @@ class JobtemplateController extends Controller
         }
     }
     
+      /**
+     * Method to edit template details
+     * @return view
+     */
     public function editJobTemplate($templateId){
         try{
             $this->viewData['templateData'] = JobTemplates::findById($templateId,Auth::user()->id);
@@ -63,6 +75,10 @@ class JobtemplateController extends Controller
         }
     }
     
+      /**
+     * Method to create template 
+     * @return view
+     */
     public function createJobTemplate(){
         try{
             $this->viewData['skillsData'] = Skills::getAllParentChildSkillList();
@@ -76,6 +92,10 @@ class JobtemplateController extends Controller
         }
     }
     
+      /**
+     * Method to delete template details
+     * @return view
+     */
     public function deleteJobTemplate(Request $request){
         try{
             
@@ -87,6 +107,10 @@ class JobtemplateController extends Controller
         }
     }
     
+      /**
+     * Method to save/update template details
+     * @return view
+     */
     public function saveOrUpdate(Request $request){
         $this->validate($request, [
                 'jobTitleId' => 'required|integer',

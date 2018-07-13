@@ -17,10 +17,18 @@ class ReportsController extends Controller
         $this->middleware('auth');
     }
     
+     /**
+     * Method to view report page
+     * @return view
+     */
     public function getReportsPage(){
         return view('web.reports',['activeTab'=>'2']);
     }
     
+     /**
+     * Method to view temp job report
+     * @return json
+     */
     public function getReportsTempJobs(){
         try{
             $allTempJobs = RecruiterJobs::getTempJobsReports();
@@ -35,6 +43,10 @@ class ReportsController extends Controller
         return $this->response;
     }
     
+     /**
+     * Method to view individual temp job
+     * @return json
+     */
     public function getIndividualTempJob(IndividualTempJobRequest $request){
         try{
             $getJob = RecruiterJobs::getIndividualTempJob($request->jobTitleId);
@@ -49,6 +61,10 @@ class ReportsController extends Controller
         return $this->response;
     }
     
+     /**
+     * Method to view seeker data in reports
+     * @return json
+     */
     public function getReportSeekers(ReportSeekersRequest $request){
         try{
             $job = RecruiterJobs::where('id',$request->jobId)->first();

@@ -126,6 +126,10 @@ class AppMessageController extends Controller
         Session::flash('message',trans('messages.app_message_deleted'));
     }
 
+    /**
+     * Method to get list of admin scheduled messages
+     * @return json
+     */
     public function messageList(){
         try{
         $appMessages = AppMessage::SELECT(['message','message_to','message_sent','created_at','id'])->orderBy('created_at', 'desc');

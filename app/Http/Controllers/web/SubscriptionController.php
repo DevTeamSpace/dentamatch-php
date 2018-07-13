@@ -24,6 +24,10 @@ class SubscriptionController extends Controller {
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
     }
 
+     /**
+     * Method to view subscription page
+     * @return view
+     */
     public function getSubscription(){
         $recruiter = RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
         if($recruiter['is_subscribed'] == config('constants.ZeroValue')){
@@ -34,6 +38,10 @@ class SubscriptionController extends Controller {
         return $result;
     }
     
+     /**
+     * Method to get subscription list 
+     * @return view
+     */
     public function getSubscriptionList(){
         $recruiterOffice = RecruiterOffice::getAllOffices();
         $subscription['data'] = [];
@@ -53,6 +61,10 @@ class SubscriptionController extends Controller {
         return $subscription;
     }
     
+     /**
+     * Method to create subscription
+     * @return json
+     */
     public function postCreateSubscription(CreateSubscriptionRequest $request){
         try{
             DB::beginTransaction();
@@ -105,6 +117,10 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
+     /**
+     * Method to add user to subscription 
+     * @return json
+     */
     private function addUserTOSubscription($customerId, $subscriptionType, $trailPeriod){
         try{
             $now = \Carbon\Carbon::now();
@@ -133,6 +149,10 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
+     /**
+     * Method to save subscription  
+     * @return view
+     */
     public function saveSubscription($subscription){
         $payments = new SubscriptionPayments;
         $payments->recruiter_id=Auth::user()->id;
@@ -143,7 +163,10 @@ class SubscriptionController extends Controller {
         $payments->save();
     }
 
-
+     /**
+     * Method to add card
+     * @return json
+     */
     public function postAddCard(AddCardRequest $request){
         try{
             $customerId = RecruiterProfile::where(['user_id' => Auth::user()->id])->pluck('customer_id');
@@ -178,6 +201,10 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
+     /**
+     * Method to add card for subscription 
+     * @return json
+     */
     private function addCardForSubscription($cardDetails, $customerId){
         try{
             $expiry = explode('/', $cardDetails['expiry']);
@@ -212,6 +239,10 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
+     /**
+     * Method to create customer on stripe
+     * @return json
+     */
     private function createCustomer(){
         try{
             $createCustomer = \Stripe\Customer::create(array(
@@ -230,10 +261,18 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
+     /**
+     * Method to view subscription page in settings 
+     * @return view
+     */
     public function getSettingSubscription(){
         return view('web.setting-subscription',['activeTab'=>'4']);
     }
     
+     /**
+     * Method to get subscription details 
+     * @return json
+     */
     public function getSubscriptionDetails(){
         try{
             $subscriptions = $this->fetchSubscription(Auth::user()->id);
@@ -247,6 +286,10 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
+     /**
+     * Method to fetch subscription 
+     * @return json
+     */
     private function fetchSubscription($userId){
         try{
             $customerId = RecruiterProfile::where(['user_id' => $userId])->pluck('customer_id');
@@ -268,6 +311,10 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
+     /**
+     * Method to fetch user from stripe 
+     * @return json
+     */
     private function fetchUser($customerId){
         try{
             $customer = \Stripe\Customer::retrieve($customerId);
@@ -292,6 +339,10 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
+     /**
+     * Method to delete card from stripe
+     * @return json
+     */
     public function postDeleteCard(DeleteCardRequest $request){
         try{
             $customerId = RecruiterProfile::where(['user_id' => Auth::user()->id])->pluck('customer_id');
@@ -316,6 +367,10 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
+     /**
+     * Method to get unsubscribed 
+     * @return json
+     */
     public function postUnsubscribe(UnsubscribeRequest $request){
         try{
             $sub = \Stripe\Subscription::retrieve($request->subscriptionId);
@@ -335,6 +390,10 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
+     /**
+     * Method to edit card
+     * @return json
+     */
     public function postEditCard(EditCardRequest $request){
         try{
             $expiry = explode('/', $request->expiry);
@@ -356,6 +415,10 @@ class SubscriptionController extends Controller {
         return $this->response;
     }
     
+     /**
+     * Method to change subscription plan 
+     * @return json
+     */
     public function postChangeSubscriptionPlan(ChangeSubscriptionPlanRequest $request){
         try{
             $plan = config('constants.SixMonths');

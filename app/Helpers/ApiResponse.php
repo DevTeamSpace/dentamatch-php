@@ -6,7 +6,11 @@ use App\Models\JobSeekerSkills;
 use App\Models\JobTitles;
 
 class ApiResponse {
-
+    
+    /**
+     * @param  message array  $data
+     * @return error response
+     */
     public static function responseError($message = '', $data = array()) {
         $key = !empty($data) ? key($data) : '';
         $response = array(
@@ -19,6 +23,10 @@ class ApiResponse {
         return static::convertToCamelCase($response);
     }
     
+    /**
+     * @param   array  $data
+     * @return camelcase data
+     */
     public static function convertToCamelCase($array) {
         $converted_array = [];
         foreach ($array as $old_key => $value) {
@@ -40,6 +48,10 @@ class ApiResponse {
         return $converted_array;
     }
     
+    /**
+     * @param  status statuscode message array  $data
+     * @return jsonencoded response
+     */
     public static function customJsonResponse($status, $statusCode, $message = '', $data = array()) {
         $response = array(
             'status' => $status,
@@ -52,6 +64,10 @@ class ApiResponse {
         return json_encode($response);
     }
     
+    /**
+     * @param  status statuscode message key array  $data
+     * @return jsonencoded response
+     */
     public static function customJsonResponseObject($status, $statusCode, $message = '',$key = '', $obj = null) {
         $response = array(
             'status' => $status,
@@ -64,6 +80,10 @@ class ApiResponse {
         return json_encode($response);
     }
     
+    /**
+     * @param  accesstoken
+     * @return userid or 0
+     */
     public static function loginUserId($accesstoken) {
         $user = Device::select('user_id')->where('user_token',$accesstoken)->first();
         if($user){
@@ -72,6 +92,11 @@ class ApiResponse {
             return 0;
         }
     }
+    
+    /**
+     * @param  image
+     * @return thumburl
+     */
     public static function getThumbImage($image){
         $profilePic = "";
             if($image && $image != ""){
@@ -82,6 +107,11 @@ class ApiResponse {
         return $profilePic;
     }
     
+    
+    /**
+     * Update user profile status 
+     * @param  userId
+     */
     public static function chkProfileComplete($userId){
         
         $userProfileModel = UserProfile::getUserProfile($userId);

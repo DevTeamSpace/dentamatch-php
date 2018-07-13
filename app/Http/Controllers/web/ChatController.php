@@ -15,10 +15,18 @@ class ChatController extends Controller
         $this->middleware('auth');
     }
     
+    /**
+     * Method to view chat page
+     * @return view
+     */
     public function returnView($viewFileName){
         return view('web.chat.'.$viewFileName,$this->viewData);
     }
     
+    /**
+     * Method to get list seekers for chat
+     * @return json
+     */
     public function getChatSeekerList(Request $request){
         try{
             $this->viewData['seekerList'] = ChatUserLists::getSeekerListForChat(Auth::id());

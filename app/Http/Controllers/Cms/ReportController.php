@@ -32,6 +32,10 @@ class ReportController extends Controller {
         return view('cms.report.job-list');
     }
 
+    /**
+     * Method to view applied job seeker list
+     * @return json
+     */
     public function appliedSeekers($id) {
         $jobDetail = RecruiterJobs::join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
@@ -41,14 +45,26 @@ class ReportController extends Controller {
         return view('cms.report.seeker-list', ['jobDetail' => $jobDetail]);
     }
 
+    /**
+     * Method to view cancel job seeker list
+     * @return view
+     */
     public function cancelLists() {
         return view('cms.report.cancel-list');
     }
 
+    /**
+     * Method to view details job response
+     * @return view
+     */
     public function jobResponse() {
         return view('cms.report.response-list');
     }
 
+    /**
+     * Method to get list of jobs with status 
+     * @return json
+     */
     public function jobResponseList() {
         try {
             $jobLists = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
@@ -73,6 +89,10 @@ class ReportController extends Controller {
         }
     }
 
+    /**
+     * Method to get list of cancel jobs
+     * @return json
+     */
     public function listCancel() {
         try {
             $seekerList = JobLists::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
@@ -91,6 +111,10 @@ class ReportController extends Controller {
         }
     }
 
+    /**
+     * Method to get list of jobs
+     * @return json
+     */
     public function jobLists() {
         try {
             $jobLists = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
@@ -113,6 +137,10 @@ class ReportController extends Controller {
         }
     }
 
+    /**
+     * Method to get list seekers for a job
+     * @return json
+     */
     public function seekerList($id) {
         try {
             $seekerList = JobLists::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
@@ -127,10 +155,18 @@ class ReportController extends Controller {
         }
     }
 
+    /**
+     * Method to view job location list
+     * @return view
+     */
     public function searchJobByLocation() {
         return view('cms.report.location-list');
     }
 
+    /**
+     * Method to get list location with search count
+     * @return json
+     */
     public function searchCountbyLocation() {
         try {
             $searchList = SearchFilter::select('city')
@@ -145,6 +181,10 @@ class ReportController extends Controller {
         }
     }
 
+    /**
+     * Method to download list as csv
+     * @return file
+     */
     public function downloadCsv($type) {
         $arr = [];
         if ($type == 'cancellist') {

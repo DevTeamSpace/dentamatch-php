@@ -111,6 +111,10 @@ class SkillController extends Controller
         
     }
 
+    /**
+     * Method to get list of all skills
+     * @return json
+     */
     public function skillList(){
         try{
         $skills =  Skills::leftJoin('skills as sk','sk.id','=','skills.parent_id')
