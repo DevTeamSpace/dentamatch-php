@@ -10,7 +10,7 @@
 <div class="container padding-container-template">
     <!--breadcrumb-->
     <ul class="breadcrumb">
-        <li><a href="{{ url('job/lists') }}">Favourites Listing</a></li>
+        <li><a href="{{ url('job/lists') }}">Favorites Listing</a></li>
         <li class="active">{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']." Profile"}}</li>
     </ul>
     <!--/breadcrumb-->

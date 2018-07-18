@@ -111,7 +111,7 @@
     <div class="jobCatbox mr-b-20">
         <div class="template-job-information pd-l-15 ">
             <div class="template-job-information-left">
-                <h4>No favourites to show</h4>
+                <h4>No favorites to show</h4>
             </div>
         </div>  
     </div>
