@@ -158,21 +158,26 @@ function officeDetail2() {
 function checkLocation(zip, indexField) {
     var msg = "";
     $('#location-msg' + indexField).html('');
-    $.ajax({
-        url: '/get-location/' + zip,
-        type: "GET",
-        success: function(data) {
-            console.log(data);
-            if (data == 0) {
-                msg = 'Please enter a valid address.';
-                $('#location-msg' + indexField).html(msg);
+    if(zip==''){
+        msg = 'Please enter a valid address.';
+        $('#location-msg' + indexField).html(msg);
+    }else{
+        $.ajax({
+            url: '/get-location/' + zip,
+            type: "GET",
+            success: function(data) {
+                console.log(data);
+                if (data == 0) {
+                    msg = 'Please enter a valid address.';
+                    $('#location-msg' + indexField).html(msg);
+                }
+            },
+            error: function(data) {
+               msg = 'Please enter a valid address.';
+               $('#location-msg' + indexField).html(msg);
             }
-        },
-        error: function(data) {
-           msg = 'Please enter a valid address.';
-           $('#location-msg' + indexField).html(msg);
-        }
-    });
+        });
+    }
 }
 
 function editofficedetail() {
