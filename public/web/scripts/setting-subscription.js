@@ -18,7 +18,7 @@ var SubscriptionModel = function (data) {
         me.subscriptionAutoRenewal(moment(d.current_period_end).format('LL'));
         me.leftDays(moment(d.current_period_end).diff(moment(d.current_period_start), 'days'));
         console.log(d.plan.interval_count);
-        if (d.plan.interval_count == 2) {
+        if (d.plan.interval_count == 6) {
             me.subscriptionPlan('Half Yearly');
         } else {
             me.subscriptionPlan('Yearly');

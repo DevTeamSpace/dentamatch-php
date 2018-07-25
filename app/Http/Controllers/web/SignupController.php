@@ -84,10 +84,10 @@ class SignupController extends Controller {
             }
         }elseif(!empty($users) && $users['is_active'] == 0){
            $message = trans("messages.deactivated_admin");
-           $redirect = 'login';   
+        }elseif(empty($users)){
+           $message = trans("messages.user_not_registered");
         }else{
            $message = trans("messages.invalid_credentials");
-           $redirect = 'login';
         }
         Session::flash('message', $message);
         return redirect($redirect);
