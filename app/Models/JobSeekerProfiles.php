@@ -125,6 +125,7 @@ class JobSeekerProfiles extends Model
 
         $obj->leftjoin('job_lists',function($query) use ($job){
                 $query->on('jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
+                ->whereIn('job_lists.applied_status',[JobLists::INVITED,JobLists::APPLIED,JobLists::SHORTLISTED,JobLists::HIRED])
                 ->where('job_lists.recruiter_job_id',$job['id']);
         });
 
