@@ -15,68 +15,68 @@
     return $request->user();
 })->middleware('auth:api');*/
 Route::group(['prefix'=>'v1/','middleware' => ['xss']], function () {
-    Route::post('users/sign-up','v1\Api\UserApiController@postSignup');
-    Route::post('users/sign-in','v1\Api\UserApiController@postSignIn');
-    Route::get('users/is-verified','v1\Api\UserProfileApiController@getIsUserVerified');
-    Route::delete('users/sign-out','v1\Api\UserApiController@deleteSignOut');
-    Route::get('privacy-policy','v1\Api\UserApiController@getPrivacypolicy');
-    Route::get('term-condition','v1\Api\UserApiController@getTermsAndCondition');
-    Route::put('users/forgot-password', 'v1\Api\UserApiController@putForgotPassword');
-    Route::put('users/reset-password', 'v1\Api\UserApiController@putForgotPassword');
-    Route::post('users/change-password','v1\Api\UserProfileApiController@postChangePassword');
-    Route::get('list-jobtitle','v1\Api\WorkExperienceApiController@getJobTitlelists');
-    Route::get('list-skills','v1\Api\SkillApiController@getSkilllists');
-    Route::post('users/update-skill','v1\Api\SkillApiController@postUpdateSkills');
-    Route::get('list-certifications','v1\Api\SkillApiController@getCertificationListing');
-    Route::post('users/update-certificate','v1\Api\SkillApiController@postUpdateCertifications');
-    Route::post('users/update-certificate-validity','v1\Api\SkillApiController@postUpdateCertificationsValidity');
+    Route::post('users/sign-up','Api\v1\UserApiController@postSignup');
+    Route::post('users/sign-in','Api\v1\UserApiController@postSignIn');
+    Route::get('users/is-verified','Api\v1\UserProfileApiController@getIsUserVerified');
+    Route::delete('users/sign-out','Api\v1\UserApiController@deleteSignOut');
+    Route::get('privacy-policy','Api\v1\UserApiController@getPrivacypolicy');
+    Route::get('term-condition','Api\v1\UserApiController@getTermsAndCondition');
+    Route::put('users/forgot-password', 'Api\v1\UserApiController@putForgotPassword');
+    Route::put('users/reset-password', 'Api\v1\UserApiController@putForgotPassword');
+    Route::post('users/change-password','Api\v1\UserProfileApiController@postChangePassword');
+    Route::get('list-jobtitle','Api\v1\WorkExperienceApiController@getJobTitlelists');
+    Route::get('list-skills','Api\v1\SkillApiController@getSkilllists');
+    Route::post('users/update-skill','Api\v1\SkillApiController@postUpdateSkills');
+    Route::get('list-certifications','Api\v1\SkillApiController@getCertificationListing');
+    Route::post('users/update-certificate','Api\v1\SkillApiController@postUpdateCertifications');
+    Route::post('users/update-certificate-validity','Api\v1\SkillApiController@postUpdateCertificationsValidity');
 
-    Route::post('users/upload-image', 'v1\Api\UserProfileApiController@postUploadImage');
-    Route::put('users/update-license', 'v1\Api\UserProfileApiController@putUpdateLicense');
-    Route::post('users/work-experience-save', 'v1\Api\WorkExperienceApiController@postWorkExperience');
-    Route::delete('users/work-experience-delete', 'v1\Api\WorkExperienceApiController@deleteWorkExperience');
-    Route::post('users/work-experience-list', 'v1\Api\WorkExperienceApiController@postListWorkExperience');
-    Route::get('users/school-list', 'v1\Api\WorkExperienceApiController@getSchoolList');
-    Route::post('users/school-add', 'v1\Api\WorkExperienceApiController@postSchoolSaveUpdate');
-    Route::get('users/affiliation-list', 'v1\Api\AffiliationsApiController@getAffiliationList');
-    Route::post('users/affiliation-save', 'v1\Api\AffiliationsApiController@postAffiliationSaveUpdate');
-    Route::post('users/about-me-save', 'v1\Api\UserProfileApiController@postAboutMe');
-    Route::get('users/about-me-list', 'v1\Api\UserProfileApiController@getAboutMe');
-
-
-    Route::get('users/search-job', 'v1\Api\SkillApiController@getJobSearch');
-    Route::get('users/user-profile', 'v1\Api\UserProfileApiController@getUserProfile');
-    Route::put('users/user-profile-update', 'v1\Api\UserProfileApiController@updateUserProfile');
-    Route::post('users/user-location-update', 'v1\Api\UserProfileApiController@updateUserLocationUpdate');
-
-    Route::post('users/acceptreject-job', 'v1\Api\SearchApiController@postAcceptRejectInvitedJob');
+    Route::post('users/upload-image', 'Api\v1\UserProfileApiController@postUploadImage');
+    Route::put('users/update-license', 'Api\v1\UserProfileApiController@putUpdateLicense');
+    Route::post('users/work-experience-save', 'Api\v1\WorkExperienceApiController@postWorkExperience');
+    Route::delete('users/work-experience-delete', 'Api\v1\WorkExperienceApiController@deleteWorkExperience');
+    Route::post('users/work-experience-list', 'Api\v1\WorkExperienceApiController@postListWorkExperience');
+    Route::get('users/school-list', 'Api\v1\WorkExperienceApiController@getSchoolList');
+    Route::post('users/school-add', 'Api\v1\WorkExperienceApiController@postSchoolSaveUpdate');
+    Route::get('users/affiliation-list', 'Api\v1\AffiliationsApiController@getAffiliationList');
+    Route::post('users/affiliation-save', 'Api\v1\AffiliationsApiController@postAffiliationSaveUpdate');
+    Route::post('users/about-me-save', 'Api\v1\UserProfileApiController@postAboutMe');
+    Route::get('users/about-me-list', 'Api\v1\UserProfileApiController@getAboutMe');
 
 
+    Route::get('users/search-job', 'Api\v1\SkillApiController@getJobSearch');
+    Route::get('users/user-profile', 'Api\v1\UserProfileApiController@getUserProfile');
+    Route::put('users/user-profile-update', 'Api\v1\UserProfileApiController@updateUserProfile');
+    Route::post('users/user-location-update', 'Api\v1\UserProfileApiController@updateUserLocationUpdate');
 
-    Route::post('users/update-availability', 'v1\Api\CalendarApiController@postJobAvailability');
-    Route::post('users/search-jobs', 'v1\Api\SearchApiController@postSearchjobs');
-    Route::get('users/chat-user-list', 'v1\Api\UserApiController@chatRecruiterList');
-    Route::post('users/chat-user-block-unblock', 'v1\Api\UserApiController@chatBlockUnblockRecruiter');
-    Route::post('users/save-job', 'v1\Api\SearchApiController@postSaveUnsavejob');
-    Route::post('users/apply-job', 'v1\Api\SearchApiController@postApplyJob');
-    Route::post('users/cancel-job', 'v1\Api\SearchApiController@postCancelJob');
-    Route::get('users/job-list', 'v1\Api\SearchApiController@getJobList');
-    Route::get('users/jobs', 'v1\Api\SearchApiController@getJobList1');
-    Route::post('jobs/job-detail', 'v1\Api\SearchApiController@postJobDetail');
-    Route::post('jobs/hired-jobs', 'v1\Api\CalendarApiController@postHiredJobsByDate');
+    Route::post('users/acceptreject-job', 'Api\v1\SearchApiController@postAcceptRejectInvitedJob');
 
-    Route::post('users/availability-list', 'v1\Api\CalendarApiController@postAvailability');
 
-    Route::get('users/notification-list', 'v1\Api\PushNotificationApiController@getNotificationlists');
-    Route::post('users/notification-read', 'v1\Api\PushNotificationApiController@PostUpdateNotification');
-    Route::get('users/unread-notification', 'v1\Api\PushNotificationApiController@GetunreadNotification');
-    Route::post('users/delete-notification', 'v1\Api\PushNotificationApiController@PostDeleteNotification');
 
-    Route::post('chat/send-message', 'v1\Api\PushNotificationApiController@userChatNotification');
-    Route::post('users/update-devicetoken', 'v1\Api\PushNotificationApiController@PostUpdateDeviceToken');
+    Route::post('users/update-availability', 'Api\v1\CalendarApiController@postJobAvailability');
+    Route::post('users/search-jobs', 'Api\v1\SearchApiController@postSearchjobs');
+    Route::get('users/chat-user-list', 'Api\v1\UserApiController@chatRecruiterList');
+    Route::post('users/chat-user-block-unblock', 'Api\v1\UserApiController@chatBlockUnblockRecruiter');
+    Route::post('users/save-job', 'Api\v1\SearchApiController@postSaveUnsavejob');
+    Route::post('users/apply-job', 'Api\v1\SearchApiController@postApplyJob');
+    Route::post('users/cancel-job', 'Api\v1\SearchApiController@postCancelJob');
+    Route::get('users/job-list', 'Api\v1\SearchApiController@getJobList');
+    Route::get('users/jobs', 'Api\v1\SearchApiController@getJobList1');
+    Route::post('jobs/job-detail', 'Api\v1\SearchApiController@postJobDetail');
+    Route::post('jobs/hired-jobs', 'Api\v1\CalendarApiController@postHiredJobsByDate');
 
-    Route::post('admin/forgot-password', 'v1\Api\UserApiController@postAdminForgotPassword');
+    Route::post('users/availability-list', 'Api\v1\CalendarApiController@postAvailability');
+
+    Route::get('users/notification-list', 'Api\v1\PushNotificationApiController@getNotificationlists');
+    Route::post('users/notification-read', 'Api\v1\PushNotificationApiController@PostUpdateNotification');
+    Route::get('users/unread-notification', 'Api\v1\PushNotificationApiController@GetunreadNotification');
+    Route::post('users/delete-notification', 'Api\v1\PushNotificationApiController@PostDeleteNotification');
+
+    Route::post('chat/send-message', 'Api\v1\PushNotificationApiController@userChatNotification');
+    Route::post('users/update-devicetoken', 'Api\v1\PushNotificationApiController@PostUpdateDeviceToken');
+
+    Route::post('admin/forgot-password', 'Api\v1\UserApiController@postAdminForgotPassword');
     
-    Route::get('jobs/preferred-job-locations', 'v1\Api\MasterApiController@getPreferrefJobLocation');
+    Route::get('jobs/preferred-job-locations', 'Apiv1\\MasterApiController@getPreferrefJobLocation');
        
 });
