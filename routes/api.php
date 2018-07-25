@@ -77,6 +77,6 @@ Route::group(['prefix'=>'v1/','middleware' => ['xss']], function () {
 
     Route::post('admin/forgot-password', 'Api\v1\UserApiController@postAdminForgotPassword');
     
-    Route::get('jobs/preferred-job-locations', 'Apiv1\\MasterApiController@getPreferrefJobLocation');
+    Route::get('jobs/preferred-job-locations', 'Api\v1\\MasterApiController@getPreferrefJobLocation');
        
 });
