@@ -123,6 +123,8 @@ $(document).ready(function() {
                         var appendHtml = writeHtmlBlock(msgObj);
                         $('#user-chat-content_'+seekerId).append(appendHtml);
                         chatScroll();
+                    }else{
+                        alert('You have been blocked by this jobseeker');
                     }
                 });
                 $(this).closest('.msgDiv').find('textarea').val('');
