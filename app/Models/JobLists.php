@@ -208,7 +208,10 @@ class JobLists extends Model {
                 ->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
                 ->join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
                 ->join('job_titles', 'jobseeker_profiles.job_titile_id', '=', 'job_titles.id')
-                ->leftjoin('chat_user_list', 'chat_user_list.recruiter_id', '=', 'recruiter_offices.user_id')
+                ->leftjoin('chat_user_list',function($query){
+                    $query->on('chat_user_list.recruiter_id','=','recruiter_offices.user_id')
+                        ->on('chat_user_list.seeker_id','=','job_lists.seeker_id');
+                    })
                 ->where('job_lists.recruiter_job_id', $job['id']);
         
         $obj->join('template_skills as tmp_skills','tmp_skills.job_template_id','=','recruiter_jobs.job_template_id');
