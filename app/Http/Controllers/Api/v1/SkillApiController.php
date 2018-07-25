@@ -46,7 +46,7 @@ class SkillApiController extends Controller {
                 $skillLists = Skills::where('parent_id', 0)
                                 ->where('is_active', 1)
                                 ->with(['children' => function ($query) {
-                                $query->orderBy('skill_name', 'asc');
+                                $query->orderBy('id', 'asc');
                                 }])
                                 ->get()
                                 ->toArray();
