@@ -16,6 +16,7 @@ use App\Models\JobseekerCertificates;
 use App\Models\Certifications;
 use App\Models\JobTitles;
 use Mail;
+use Log;
 
 class UserProfileApiController extends Controller {
 
@@ -388,6 +389,7 @@ class UserProfileApiController extends Controller {
             $messages = json_decode($e->getResponse()->content(), true);
             $returnResponse = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
+            Log::error($e);
             $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
         
