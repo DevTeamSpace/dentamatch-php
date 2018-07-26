@@ -19,7 +19,7 @@
                     </ul>
                     <div class="tab-content">
                         <div id="signup" class="tab-pane fade">
-                            <form id="signup-frm" method="post" action="signup" name="signupform" autocomplete="off" data-parsley-validate="" >
+                            <form id="signup-frm" method="post" action="{{ url('signup') }}" name="signupform" autocomplete="off" data-parsley-validate="" >
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <div class="floating-label">
                                     <div class="form-group ">
@@ -50,7 +50,7 @@
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                     {{ Session::get('success') }}</h6>
                             @endif
-                            <form id="signin-frm" method="post" action="login" name="loginform" autocomplete="off" data-parsley-validate="" >
+                            <form id="signin-frm" method="post" action="{{ url('login') }}" name="loginform" autocomplete="off" data-parsley-validate="" >
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <div class="floating-label">
                                     <div class="form-group ">
