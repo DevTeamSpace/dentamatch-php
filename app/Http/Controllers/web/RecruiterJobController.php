@@ -769,7 +769,7 @@ class RecruiterJobController extends Controller {
             $jobs = RecruiterOffice::join('recruiter_jobs', 'recruiter_jobs.recruiter_office_id' ,'=', 'recruiter_offices.id')
                     ->join('job_lists', 'job_lists.recruiter_job_id' ,'=', 'recruiter_jobs.id')
                     ->where('recruiter_offices.id', $request->officeId)
-                    ->where('recruiter_jobs.deleted_at is null')
+                    ->whereNull('recruiter_jobs.deleted_at')
                     ->select('job_lists.recruiter_job_id as recruiter_job_id')
                     ->get();
             $this->result['data'] = $jobs;
