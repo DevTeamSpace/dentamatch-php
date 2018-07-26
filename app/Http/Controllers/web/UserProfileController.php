@@ -281,7 +281,7 @@ class UserProfileController extends Controller {
     public function getRecruiterProfileDetails(){
         try{
             $user = RecruiterProfile::where('user_id', Auth::user()->id)->select('id', 'user_id', 'office_name', 'office_desc')->first();
-            $officeType = \App\Models\OfficeType::all();
+            $officeType = \App\Models\OfficeType::where('is_active',1)->get();
             $offices = RecruiterOffice::join('recruiter_office_types', 'recruiter_office_types.recruiter_office_id', '=', 'recruiter_offices.id')
                             ->join('office_types', 'recruiter_office_types.office_type_id', '=', 'office_types.id')
                             ->where('user_id', Auth::user()->id)
@@ -366,7 +366,7 @@ class UserProfileController extends Controller {
             if($new != "true"){
                 RecruiterOfficeType::where(['recruiter_office_id' => $office['id']])->delete();
             }
-            $allRecruiterOfficeType = OfficeType::get();
+            $allRecruiterOfficeType = OfficeType::where('is_active',1)->get();
             $newOfficeType = [];
             foreach($allRecruiterOfficeType as $officeType){
                 if(in_array($officeType['officetype_name'], $allData->officeType)){

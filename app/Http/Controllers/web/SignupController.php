@@ -117,7 +117,7 @@ class SignupController extends Controller {
      * @return view
      */
     public function dashboard() {
-        $officeType = \App\Models\OfficeType::orderBy('officetype_name', 'ASC')->get();
+        $officeType = \App\Models\OfficeType::where('is_active',1)->orderBy('officetype_name', 'ASC')->get();
         return view('web.dashboard')->with('officeType', $officeType);
     }
 
@@ -366,7 +366,7 @@ class SignupController extends Controller {
         try {
             $tutorial = $request->session()->pull('tutorial', 0);
             if($tutorial == 1){
-                $officeType = \App\Models\OfficeType::all();
+                $officeType = \App\Models\OfficeType::where('is_active',1)->get();
                 RecruiterProfile::where('user_id',Auth::user()->id)->update(['accept_term' => 1]);
                 return view('web.dashboard')->with('modal', 1)->with('officeType', $officeType);
             }else{
