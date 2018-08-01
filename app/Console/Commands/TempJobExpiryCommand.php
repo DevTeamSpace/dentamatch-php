@@ -72,7 +72,7 @@ class TempJobExpiryCommand extends Command
                 $insertData = [];
                 foreach($pushList as $listValue)
                 {
-                    $data = ['image' => url('web/images/dentaMatchLogo.png'),'message' => "Temporary job for ".$listValue['jobtitle_name']." is expiring on ".date('l, d M Y',strtotime($listValue['job_date']))];                  
+                    $data = ['image' => url('web/images/dentaMatchLogo.png'),'message' => "Temporary job for ".'<a href="/job/details/'.$listValue['id'].'"><b>'.$listValue['jobtitle_name']."</b></a> is expiring on ".date('l, d M Y',strtotime($listValue['job_date']))];                  
                     $insertData[] = ['sender_id' => $senderId->id, 'receiver_id' => $listValue['user_id'], 'notification_data'=> json_encode($data)];
                 }
                 Notification::insert($insertData);
