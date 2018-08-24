@@ -21,6 +21,7 @@ return [
         'Resolution' => 60,
         'FullTime' => 'Full Time',
         'PartTime' => 'Part Time',
+        'ThreeMonths' => 'three-months',
         'SixMonths' => 'six-months',
         'OneYear' => 'one-year',
         'Resubscribe' => 'resubscribe',

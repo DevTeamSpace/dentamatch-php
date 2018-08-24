@@ -18,7 +18,10 @@ var SubscriptionModel = function (data) {
         me.subscriptionAutoRenewal(moment(d.current_period_end).format('LL'));
         me.leftDays(moment(d.current_period_end).diff(moment(d.current_period_start), 'days'));
         console.log(d.plan.interval_count);
-        if (d.plan.interval_count == 6) {
+        if (d.plan.interval_count == 3) {
+            me.subscriptionPlan('Quarterly');
+        }
+        else if (d.plan.interval_count == 6) {
             me.subscriptionPlan('Half Yearly');
         } else {
             me.subscriptionPlan('Yearly');
@@ -64,6 +67,7 @@ var SubscriptionVM = function () {
     me.subscriptionType = ko.observable();
     me.switchVisible = ko.observable(false);
     me.switchToText = ko.observable('');
+    me.switchToText1 = ko.observable('');
 
     me.getSubscription = function () {
         me.isLoadingSubscription(true);
@@ -92,9 +96,14 @@ var SubscriptionVM = function () {
                         me.switchVisible(true);
                         console.log(d.data.data.data.subscriptions.data[i].plan.id);
                         if (d.data.data.data.subscriptions.data[i].plan.id === "one-year") {
-                            me.switchToText('Switch to Half Yearly');
+                            me.switchToText('Switch to Quarterly');
+                            me.switchToText1('Switch to Half Yearly');
+                        } else if (d.data.data.data.subscriptions.data[i].plan.id === "six-months") {
+                            me.switchToText('Switch to Quarterly');
+                            me.switchToText1('Switch to Yearly');
                         } else {
-                            me.switchToText('Switch to Yearly');
+                            me.switchToText('Switch to Half Yearly');
+                            me.switchToText1('Switch to Yearly');
                         }
                         break;
                     } else {
@@ -286,8 +295,10 @@ var SubscriptionVM = function () {
         me.actionButtonText('Subscribe');
 
         if (d.subscription()[0].subscriptionPlan() === 'Yearly') {
+            me.subscriptionType(3);
+        } else if (d.subscription()[0].subscriptionPlan() === 'Half Yearly') {
             me.subscriptionType(2);
-        } else {
+        }else {
             me.subscriptionType(1);
         }
         $('#actionModal').modal('show');
@@ -313,9 +324,16 @@ var SubscriptionVM = function () {
         me.showModalFooter(true);
         me.cancelButtonDelete(true);
         me.actionButtonText('Change');
-        if (d.subscription()[0].subscriptionPlan() === "Yearly") {
+        console.log(e.target.innerHTML);
+        var planId=1;
+        if (e.target.innerHTML === "Switch to Quarterly") {
+            planId=1;
+            me.prompt('Do you want to change plan to quarterly. ?');
+        } else if (e.target.innerHTML === "Switch to Half Yearly") {
+            planId=2;
             me.prompt('Do you want to change plan to half yearly. ?');
         } else {
+            planId=3;
             me.prompt('Do you want to change plan to annually. ?');
         }
         $('#actionModal').modal('show');
@@ -323,12 +341,12 @@ var SubscriptionVM = function () {
             me.prompt('Changing please wait.');
             me.cancelButtonDelete(false);
             me.showModalFooter(false);
-            if (d.subscription()[0].subscriptionPlan() == "Yearly") {
-                plan = 1;
-            } else {
-                plan = 2;
-            }
-            $.post('change-subscription-plan', {subscriptionId: d.subscription()[0].subscriptionId, plan: plan, type: "change"}, function (d) {
+//            if (d.subscription()[0].subscriptionPlan() == "Yearly") {
+//                plan = 1;
+//            } else {
+//                plan = 2;
+//            }
+            $.post('change-subscription-plan', {subscriptionId: d.subscription()[0].subscriptionId, plan: planId, type: "change"}, function (d) {
                 if (d.success == true) {
                     me.prompt('Plan changed successfully.');
                 } else {

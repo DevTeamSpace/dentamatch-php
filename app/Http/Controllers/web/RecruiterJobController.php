@@ -394,7 +394,7 @@ class RecruiterJobController extends Controller {
         $params['notification_details'] = $notificationDetails;
         $deviceModel = Device::getDeviceToken($receiverId);
         if ($deviceModel) {
-            NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params);
+            NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params,$receiverId);
         }elseif(!$deviceModel && $jobstatus == JobLists::INVITED){
             $email = \App\Models\User::where('id',$receiverId)->first();
             $name = \App\Models\JobSeekerProfile::where('user_id',$receiverId)->first();
@@ -729,7 +729,7 @@ class RecruiterJobController extends Controller {
                                 "type"=>1,
                                 "sender_id"=>$senderId
                                 ];
-                           NotificationServiceProvider::sendPushNotification($deviceModel, $message,$params);
+                           NotificationServiceProvider::sendPushNotification($deviceModel, $message,$params,$userId);
                         }
                     }
                     if(!empty($insertData)) {

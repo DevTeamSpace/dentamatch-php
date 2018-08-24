@@ -113,7 +113,7 @@ class PushNotificationApiController extends Controller {
             $this->validate($request, $validateKeys);
             $deviceModel = Device::getDeviceToken($requestData['toId']);
             if($deviceModel) {
-                NotificationServiceProvider::sendPushNotification($deviceModel, $requestData['message'], ["data" => $requestData]);
+                NotificationServiceProvider::sendPushNotification($deviceModel, $requestData['message'], ["data" => $requestData],$requestData['toId']);
             }
         } catch (ValidationException $e) {
             Log::error($e);

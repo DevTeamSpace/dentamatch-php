@@ -129,6 +129,8 @@ class SubscriptionController extends Controller {
             $trailPeriodDays = $addMonths->diff($fotDiff)->days;
             
             if($subscriptionType == 1){
+                $planId = config('constants.ThreeMonths');
+            }elseif($subscriptionType == 2){
                 $planId = config('constants.SixMonths');
             }else{
                 $planId = config('constants.OneYear');
@@ -421,8 +423,11 @@ class SubscriptionController extends Controller {
      */
     public function postChangeSubscriptionPlan(ChangeSubscriptionPlanRequest $request){
         try{
-            $plan = config('constants.SixMonths');
-            if($request->plan == 2){
+            if($request->plan == 1){
+                $plan = config('constants.ThreeMonths');
+            }elseif($request->plan == 2){
+                $plan = config('constants.SixMonths');
+            }else{
                 $plan = config('constants.OneYear');
             }
             $subscription = \Stripe\Subscription::retrieve($request->subscriptionId);

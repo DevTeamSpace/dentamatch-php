@@ -159,7 +159,7 @@ class FavoriteJobseekerController extends Controller {
         $params['notification_details'] = $notificationDetails;
         $deviceModel = Device::getDeviceToken($receiverId);
         if ($deviceModel) {
-            NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params);
+            NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params,$receiverId);
         }
     }
     

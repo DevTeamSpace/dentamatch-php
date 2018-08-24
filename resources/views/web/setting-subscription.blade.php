@@ -44,7 +44,10 @@
                                 <p>Your next <span data-bind="text: subscriptionPlan"></span> charge of <span data-bind="text: subscriptionAmount"></span> will be applied to your primary payment method on <span data-bind="text: subscriptionAutoRenewal"></span>.</p>
                                 <!--/ko-->
                                 <div class="text-right" data-bind="visible: switchVisible">
-                                    <button type="submit" class="btn btn-primary pd-l-30 pd-r-30 mr-t-10" data-bind="text: switchToText, click: $root.switchTo"></button>
+                                    <button type="submit" class="btn btn-primary pd-l-30 pd-r-30 mr-t-10" data-bind="text: switchToText, click: $root.switchTo"> Quarterly</button>
+                                    <button type="submit" class="btn btn-primary pd-l-30 pd-r-30 mr-t-10" data-bind="text: switchToText1, click: $root.switchTo"> Half Yearly</button>
+                                    
+                                    <!--<button type="submit" class="btn btn-primary pd-l-30 pd-r-30 mr-t-10" data-bind="text: switchToText, click: $root.switchTo"></button>-->
                                 </div>
                                 <hr>
                                 <div class="title pd-b-20 "><b>Payment Methods</b></div>

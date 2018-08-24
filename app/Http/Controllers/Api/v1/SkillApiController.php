@@ -237,7 +237,7 @@ class SkillApiController extends Controller {
     public function postUpdateCertificationsValidity(Request $request) {
         try {
             $this->validate($request, [
-                'certificateValidition.*.value' => 'required|date',
+                'certificateValidition.*.value' => 'required_unless:certificateValidition.*.id,7|date',
             ]);
             $userId = $request->userServerData->user_id;
             $reqData = $request->all();
