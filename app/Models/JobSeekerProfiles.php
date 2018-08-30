@@ -200,7 +200,11 @@ class JobSeekerProfiles extends Model
     
     public static function getJobSeekerProfile($seekerId){
         $obj = JobSeekerProfiles::where('jobseeker_profiles.user_id',$seekerId);
-
+        $obj->leftJoin('favourites',function($q){
+            $q->on('favourites.seeker_id','=','jobseeker_profiles.user_id')
+                ->where('favourites.recruiter_id','=',  Auth::user()->id)
+                ->whereNull('favourites.deleted_at');
+        });
         $obj->leftJoin('jobseeker_affiliations','jobseeker_profiles.user_id','=','jobseeker_affiliations.user_id')
             ->leftJoin('affiliations','jobseeker_affiliations.affiliation_id','=','affiliations.id');
 
@@ -221,7 +225,7 @@ class JobSeekerProfiles extends Model
         $obj->leftjoin('job_ratings', 'jobseeker_profiles.user_id', '=', 'job_ratings.seeker_id')
             ->addselect(DB::raw('(avg(job_ratings.punctuality) + avg(job_ratings.time_management) + avg(job_ratings.skills))/3 as sum'))
                 ->addSelect(DB::raw("avg(punctuality) as punctuality"),DB::raw("avg(time_management) as time_management"),
-                           DB::raw("avg(skills) as avgskills"));
+                           DB::raw("avg(skills) as avgskills"),'favourites.id as is_favourite');
         $searchResult   =   $obj->first();
         
         $result = array();

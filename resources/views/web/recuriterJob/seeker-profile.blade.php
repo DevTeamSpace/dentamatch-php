@@ -18,7 +18,8 @@
     <div class="commonBox">   
         <div class="row resultHeading">
             <div class="col-md-2 col-sm-2 resultImage">
-                <img src="{{ url('image/120/120/?src=' .$seekerDetails['profile_pic']) }}" class="img-circle">
+                <img src="{{ url('image/120/120/?src=' .$seekerDetails['profile_pic']) }}" class="media-object img-circle">
+                <span id="fav_{{ $seekerDetails['user_id'] }}" onclick="markFavourite({{ $seekerDetails['user_id'] }});" class="star {{ ($seekerDetails['is_favourite']==null)?'star-empty':'star-fill' }}"></span>
             </div> 
             <div class="col-md-7 col-sm-6">
                 <span class="mr-l-5 dropdown date_drop">
@@ -304,6 +305,7 @@
 <script src="{{asset('web/scripts/moment.min.js')}}"></script>
 <script src="{{asset('web/scripts/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
+    var urlFav = "{{ url('recruiter/markFavourite') }}";
     $(document).ready(function(){
         $('#showCalendarProfile').datepicker({
             format: 'yyyy/mm/dd',

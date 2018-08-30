@@ -102,6 +102,7 @@
                 <p>{{ $fav->jobtitle_name}}</p>
             </div>
             <div class="col-sm-4 pd-t-15 text-right">
+                <button type="button" class="btn btn-primary pd-l-30 pd-r-30 mr-r-20" onclick="markFavourite('{{$fav->seeker_id}}')" >Unfavorite</button>
                 <button type="button" class="btn btn-primary-outline pd-l-30 pd-r-30 " onclick="putValue('{{$fav->seeker_id}}')" >Invite</button>
             </div>
         </div>
@@ -155,12 +156,23 @@
 @section('js')
 
 <script>
+    var urlFav = "{{ url('recruiter/markFavourite') }}";
     $(document).ready(function () {
         $('#selectJobSeeker, #selectTemplate').selectpicker({
             style: 'btn btn-default'
         });
         
     });
+    function markFavourite(seekerId) {
+        url = urlFav+'/'+seekerId;
+        $.ajax({
+            url: url
+        }).done(function(data){
+            location.reload();
+        }).fail(function () {
+            alert("failed");
+        });
+    }
     function putValue(v){
         $('#seekerId').val(v);
         var userId = v;
