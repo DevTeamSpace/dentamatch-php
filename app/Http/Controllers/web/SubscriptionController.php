@@ -433,7 +433,7 @@ class SubscriptionController extends Controller {
             $subscription = \Stripe\Subscription::retrieve($request->subscriptionId);
             $subscription->plan = $plan;
             $subscription->save();
-            if($request->type == config('constants.Resubscribe')){
+            if($request->type == config('constants.Resubscribe') || $request->type == config('constants.Change')){
                 RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => config('constants.OneValue')]);
             }
             $this->response['success'] = true;

@@ -25,6 +25,7 @@ return [
         'SixMonths' => 'six-months',
         'OneYear' => 'one-year',
         'Resubscribe' => 'resubscribe',
+        'Change' => 'change',
         'AutoAvailabilityFlag' => 1,
         'defaultProfileImage' => 'defaultImg.png',
         'NonAvailabilityFlag' => 0
