@@ -13,7 +13,7 @@
                             <label class="col-md-4 control-label">Email</label>
 
                             <div class="col-md-6">
-                                <input type="text"  class="form-control" name="email" readonly="readonly" value="{{ $userProfile->email }}">
+                                <input type="text"  class="form-control" name="email" value="{{ $userProfile->email }}">
 
                                 @if ($errors->has('email'))
                                     <span class="help-block">

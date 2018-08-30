@@ -92,6 +92,7 @@ class JobSeekerController extends Controller
         if(isset($request->id)){
             $rules['firstname'] = "Required";
             $rules['lastname'] = "Required";
+            $rules['email'] = "email|required|Unique:users,email,".$request->id;
             $validator = Validator::make($reqData, $rules);
                 if ($validator->fails()) {
                     return redirect()->back()
@@ -103,7 +104,7 @@ class JobSeekerController extends Controller
             if($activationStatus == 0){
                 Device::unRegisterAll($request->id);
             }
-            User::where('id',$request->id)->update(['is_active' => $activationStatus]);
+            User::where('id',$request->id)->update(['email' => $request->email,'is_active' => $activationStatus]);
             $msg = trans('messages.jobseeker_updated_success');
         }
         else{

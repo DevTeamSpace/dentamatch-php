@@ -76,7 +76,7 @@ class RecruiterController extends Controller
         {
             $reqData = $request->all();
             if(isset($request->id)){
-                $rules['email'] = "email|required";
+                $rules['email'] = "email|required|Unique:users,email,".$request->id;
                 
                 $validator = Validator::make($reqData, $rules);
                 if ($validator->fails()) {
@@ -86,7 +86,7 @@ class RecruiterController extends Controller
                 }
                 $activationStatus  = isset($request->is_active) ? 1 : 0;
 
-                User::where('id',$request->id)->update(['is_active' => $activationStatus]);
+                User::where('id',$request->id)->update(['email'=>$request->email,'is_active' => $activationStatus]);
                 $msg = trans('messages.recruiter_updated_success');
             }
             else
