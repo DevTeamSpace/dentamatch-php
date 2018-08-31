@@ -119,6 +119,7 @@ class ChatUserLists extends Model
             ->where('chat_user_list.seeker_id',$userId)
             ->groupBy('chat_user_list.recruiter_id')
             ->select('recruiter_profiles.office_name as name','chat_user_list.recruiter_id as recruiterId',
+                    'chat_user_list.created_at as chatAdded',
                     DB::raw("max(user_chat.message) AS message"),
                     DB::raw("max(user_chat.created_at) AS timestamp"),
                     DB::raw("max(user_chat.id) AS messageId"),
@@ -135,7 +136,7 @@ class ChatUserLists extends Model
         $chatData = UserChat::whereIn('id',$messageIds)->pluck('message','id');
         foreach($responseData as $key=>$row){
             $responseData[$key]['message'] = ($row['messageId']!=null)?$chatData[$row['messageId']]:'';
-            $responseData[$key]['timestamp'] = ($row['timestamp']!=null)?(strtotime($row['timestamp'])*1000):null;
+            $responseData[$key]['timestamp'] = ($row['timestamp']!=null)?(strtotime($row['timestamp'])*1000):(strtotime($row['chatAdded'])*1000);
             $responseData[$key]['unreadCount'] = isset($chatCountData[$row['recruiterId']])?$chatCountData[$row['recruiterId']]:0;
         }
         return $responseData;
