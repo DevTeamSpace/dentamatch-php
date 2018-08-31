@@ -108,10 +108,10 @@ class ChatUserLists extends Model
                 $query->on('user_chat.to_id','=','chat_user_list.recruiter_id')
                     ->orOn('user_chat.from_id','=','chat_user_list.recruiter_id');
             })
-            ->where(function($query) use ($userId){
-                return $query->where('user_chat.from_id',$userId)
-                    ->orwhere('user_chat.to_id',$userId);
-            })
+//            ->where(function($query) use ($userId){
+//                return $query->where('user_chat.from_id',$userId)
+//                    ->orwhere('user_chat.to_id',$userId);
+//            })
             ->where('chat_user_list.seeker_id',$userId)
             ->groupBy('chat_user_list.recruiter_id')
             ->select('recruiter_profiles.office_name as name','chat_user_list.recruiter_id as recruiterId',
