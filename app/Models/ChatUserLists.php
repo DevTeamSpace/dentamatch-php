@@ -105,8 +105,8 @@ class ChatUserLists extends Model
     public static function getRecruiterListForChat($userId){
         $chatUserList = static::join('recruiter_profiles','recruiter_profiles.user_id','=','chat_user_list.recruiter_id')
             ->leftjoin('user_chat',function($query){
-                $query->on('user_chat.to_id','=','chat_user_list.recruiter_id')
-                    ->orOn('user_chat.from_id','=','chat_user_list.recruiter_id');
+                $query->on('user_chat.to_id=chat_user_list.recruiter_id and user_chat.from_id='.$userId)
+                    ->orOn('user_chat.from_id=chat_user_list.recruiter_id and user_chat.to_id='.$userId);
             })
 //            ->where(function($query) use ($userId){
 //                return $query->where('user_chat.from_id',$userId)
@@ -130,7 +130,7 @@ class ChatUserLists extends Model
         
         $chatData = UserChat::whereIn('id',$messageIds)->pluck('message','id');
         foreach($responseData as $key=>$row){
-            $responseData[$key]['message'] = $chatData[$row['messageId']];
+            $responseData[$key]['message'] = ($row['messageId']!=null)?$chatData[$row['messageId']]:null;
             $responseData[$key]['timestamp'] = strtotime($row['timestamp'])*1000;
             $responseData[$key]['unreadCount'] = isset($chatCountData[$row['recruiterId']])?$chatCountData[$row['recruiterId']]:0;
         }
