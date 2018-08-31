@@ -104,7 +104,7 @@ class ChatUserLists extends Model
     
     public static function getRecruiterListForChat($userId){
         $chatUserList = static::join('recruiter_profiles','recruiter_profiles.user_id','=','chat_user_list.recruiter_id')
-            ->leftjoin('user_chat',function($query){
+            ->leftjoin('user_chat',function($query) use($userId){
                 $query->on('user_chat.to_id=chat_user_list.recruiter_id and user_chat.from_id='.$userId)
                     ->orOn('user_chat.from_id=chat_user_list.recruiter_id and user_chat.to_id='.$userId);
             })
