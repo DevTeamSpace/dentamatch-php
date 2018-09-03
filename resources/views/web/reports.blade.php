@@ -15,7 +15,12 @@
                                 <div class="detailTitleBlock profilePadding">
                                     <div class="frm-title mr-b-25">Reports</div>
                                     <div class="row">
-                                        <div class="col-sm-6 col-xs-12 report-filter text-right">
+                                        <div class="col-sm-4 col-xs-12 text-left">
+                                            <label>Include deleted: </label>
+                                            <?php $checked = (request()->get('history')=='true')?'checked="checked"':''; ?>
+                                            <input type="checkbox" {{ $checked }} onchange="javascript:loadReportData();" id="includeDeleted" name="includeDeleted" value="1" style="-webkit-appearance: checkbox;">
+                                        </div>
+                                        <div class="col-sm-2 col-xs-12 report-filter text-right">
                                             <label>Filter:</label>
                                         </div>
                                         <div class="col-sm-3 col-xs-12 pull-right mr-b-10">
@@ -145,6 +150,12 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    var public_path = '<?php echo URL::to('');?>/';
+    var loadReportData = function loadReportData() {
+        var checked = $('#includeDeleted').is(':checked')
+        console.log(checked);
+        window.location.href = public_path+'reports?history='+checked;
+    }
 </script>
 <script src="{{asset('web/scripts/reports.js')}}"></script>
 @endsection

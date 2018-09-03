@@ -553,7 +553,7 @@ class RecruiterJobs extends Model
                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
                 ->groupBy('job_titles.jobtitle_name');
         $jobs->select('job_titles.id as job_title_id', 'job_titles.jobtitle_name',
-                DB::raw("COUNT(job_titles.id) as jobs_count"));
+                DB::raw("COUNT(job_titles.id) as jobs_count"))->withTrashed();
         return $jobs->get();
     }
     
@@ -565,6 +565,7 @@ class RecruiterJobs extends Model
                 ->join('temp_job_dates', 'temp_job_dates.recruiter_job_id', '=', 'recruiter_jobs.id')
                 ->orderBy('temp_job_dates.job_date', 'desc');
         $jobs->select('temp_job_dates.job_date as job_created_at', 'recruiter_jobs.id as recruiter_job_id', 'recruiter_jobs.job_type');
+        $jobs->withTrashed();
         return $jobs->get();
     }
     
