@@ -169,19 +169,28 @@ class JobSeekerController extends Controller
      * Method to get list of job seekers
      * @return json
      */
-    public function jobSeekerList(){
+    public function jobSeekerList(Request $request){
         try{
         $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->leftjoin('job_titles','job_titles.id' , '=','jobseeker_profiles.job_titile_id')
+                        ->leftjoin('preferred_job_locations','jobseeker_profiles.preferred_job_location' , '=','preferred_job_locations.id')
                         ->select(
                                 'users.email','users.id',
                                 'jobseeker_profiles.first_name',
                                 'jobseeker_profiles.last_name',
-                                'users.is_verified','users.is_active'
+                                'users.is_verified','users.is_active',
+                                'users.created_at as registered_on',
+                                'job_titles.jobtitle_name',
+                                'preferred_job_locations.preferred_location_name'
                                 )
-                        ->where('user_groups.group_id', UserGroup::JOBSEEKER)
-                        ->orderBy('users.id', 'desc');
+                        ->where('user_groups.group_id', UserGroup::JOBSEEKER);
+                        //->orderBy('users.id', 'desc');
+        //dd(request()->get('order'));
         return Datatables::of($userData)
+                ->order(function ($query) {
+                    $query->orderBy('users.created_at', request()->get('order')[0]['dir']);
+                })
                 ->make(true);
         }catch (\Exception $e) {
             Log::error($e);

@@ -146,22 +146,26 @@ $(function () {
         ]
     });
     
-    $('#jonseeker_list').DataTable({
+    $('#jobseeker_list').DataTable({
         processing: true,
         serverSide: true,
         //responsive: true,
         //autoWidth: false,
         ajax: public_path+'jobseeker/list',
-        ordering:false,
+        //ordering:true,
+        order: [[ 5, "desc" ]],
         //bFilter: false,
         columns: [
-            {data: 'email', name: 'email',searchable:true},
-            {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
-            {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
-            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
+            {data: 'email', name: 'email',searchable:true,sortable:false},
+            {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true,sortable:false},
+            {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true,sortable:false},
+            {data: 'jobtitle_name', name: 'job_titles.jobtitle_name',searchable:true,sortable:false},
+            {data: 'preferred_location_name', name: 'preferred_job_locations.preferred_location_name',searchable:true,sortable:false},
+            {data: 'registered_on', name: 'created_at',sortable:true,searchable:false},
+            {data: 'active', name: 'active',searchable:false,sortable:false,render: function (data, type, row) {
                 return (row.is_active == 1) ?'Yes':'No';
             }},
-            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+            {data: 'action', name: 'action',searchable:false,sortable:false,render: function (data, type, row) {
                 return '<a href="'+public_path+'jobseeker/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;\n\
                         <a href="'+public_path+'recruiter/'+row.id+'/adminResetPassword"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;\n\
                         <a href="'+public_path+'jobseeker/'+row.id+'/viewdetails"  class="btn btn-xs btn-primary">View Details</a>&nbsp;';
@@ -280,7 +284,8 @@ $(function () {
                 }
             }},
             {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
-                return '<a href="'+public_path+'report/'+row.id+'/view"  class="btn btn-xs btn-primary"><i class="fa fa-view"></i> View Details</a>&nbsp;';
+                return '<a href="'+public_path+'report/'+row.id+'/view"  class="btn btn-xs btn-primary"><i class="fa fa-view"></i> View Details</a>&nbsp;'
+                +'<a href="javascript:deleteJob('+row.id+');"  class="btn btn-xs btn-primary"><i class="fa fa-delete"></i> Delete</a>&nbsp;';
             }}
         ]
     });
@@ -663,4 +668,11 @@ function deleteRecord(obj) {
             window.location.reload();
         });
         return false;
+}
+
+function deleteJob(jobId){
+    $.post(public_path+'report/delete-job',{'jobId':jobId}, function(data) {
+            //do refresh
+            window.location.reload();
+        });
 }

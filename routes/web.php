@@ -283,6 +283,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('index', 'Cms\ReportController@index');
         Route::get('list', 'Cms\ReportController@jobLists');
         Route::get('{id}/view', 'Cms\ReportController@appliedSeekers');
+        Route::post('delete-job', 'Cms\ReportController@postDeleteJob');
         Route::get('seekerlist/{id}', 'Cms\ReportController@seekerList');
         Route::get('list', 'Cms\ReportController@jobLists');
         Route::get('cancellist', 'Cms\ReportController@cancelLists');

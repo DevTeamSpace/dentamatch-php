@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use Yajra\Datatables\Datatables;
 use App\Models\User;
 use App\Models\RecruiterJobs;
+use App\Models\Device;
+use App\Models\Notification;
+use App\Models\JobRatings;
+use App\Models\TempJobDates;
+use App\Models\SavedJobs;
 use Log;
 use App\Models\JobLists;
 use DB;
@@ -261,6 +266,87 @@ class ReportController extends Controller {
 
         fgets($outstream);
         fclose($outstream);
+    }
+    
+     /**
+     * Method to delete job
+     * @return view
+     */
+    public function postDeleteJob(Request $request){
+        try{
+            $insertData = [];
+            $jobId = $request->jobId;
+            $jobObj = RecruiterJobs::where('id', $jobId)->first();
+            if($jobObj) {
+                $jobData = RecruiterJobs::where('recruiter_jobs.id',$jobId)
+                                ->select('job_lists.seeker_id', 'job_type', 'job_templates.user_id', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name')
+                                ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
+                                ->join('job_lists', 'job_lists.recruiter_job_id', 'recruiter_jobs.id')
+                                ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
+                                ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'job_templates.user_id')
+                                ->groupby('recruiter_jobs.id')
+                                ->groupby('job_lists.seeker_id')
+                                ->get();
+                $list = $jobData->toArray();
+                if(!empty($list)) {
+                    $pushList = array_map(function ($value) {
+                                        return  $value;
+                                }, $list);
+                }
+                if(!empty($pushList)) {
+                    foreach($pushList as $value) {
+                        $message = "Delete job notification | ".$value['office_name']." has deleted the ".strtolower(RecruiterJobs::$jobTypeName[$value['job_type']])." job vacancy for ".$value['jobtitle_name'];
+                        $userId = $value['seeker_id'];
+                        $senderId = $value['user_id'];
+
+                        $deviceModel = Device::getDeviceToken($userId);
+                        if($deviceModel) {
+                            $insertData[] = ['receiver_id'=>$userId,
+                            'sender_id'=>$senderId,
+                            'notification_data'=>$message,
+                            'created_at'=>date('Y-m-d h:i:s'),
+                            'notification_type' => Notification::OTHER,
+                            ];
+                            $params['data']  = ["notificationData"=>$message,
+                                "notification_title"=>"Job deleted",
+                                "notificationType"=>Notification::OTHER,
+                                "type"=>1,
+                                "sender_id"=>$senderId
+                                ];
+                           NotificationServiceProvider::sendPushNotification($deviceModel, $message,$params,$userId);
+                        }
+                    }
+                    if(!empty($insertData)) {
+                        Notification::createNotification($insertData);
+                    }
+                }
+                //send message to recruiter
+                $adminUser = User::getAdminUserDetailsForNotification();
+                
+                Notification::createNotification(['sender_id' => $adminUser->id, 'receiver_id' => $senderId, 
+                    'notification_data'=> json_encode(['image' => url('web/images/dentaMatchLogo.png'),
+                        'message' => $message])]);
+                
+                JobLists::where('recruiter_job_id', $jobId)->delete();
+                JobRatings::where('recruiter_job_id', $jobId)->delete();
+                TempJobDates::where('recruiter_job_id', $jobId)->delete();
+                //JobseekerTempHired::where('job_id',$jobId)->forceDelete();
+                RecruiterJobs::where('id', $jobId)->delete();
+                SavedJobs::where('recruiter_job_id', $jobId)->delete();
+                Notification::where('job_list_id', $jobId)->delete();
+            }
+            if(!empty($request->requestOrigin)) {
+                Session::flash('message', trans('messages.job_deleted'));
+                return redirect('job/lists');
+            }
+            $this->result['success'] = true;
+            $this->result['message'] = trans('messages.job_deleted');
+        } catch (\Exception $e) {
+            Log::error($e);
+            $this->result['success'] = false;
+            $this->result['message'] = $e->getMessage();
+        }
+        return $this->result;
     }
 
 }
