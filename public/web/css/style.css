@@ -149,10 +149,11 @@ and open the template in the editor.
 .customPreferDrop .filter-option {    font-weight: 500;
     font-size: 20px;}
     .customPreferDrop  .caret{color:#8a8a8a}
-    .customPreferDrop .dropdown-toggle{background-color:r#fff;}
+    .customPreferDrop .dropdown-toggle{background-color:#fff;}
    .customInfo .close{color:inherit; opacity:1;}
    .customInfo{border-radius:8px;}
    .infoContent{padding: 3px 35px 0 10px}
+   .infoContent a {color:#fff;}
    .welcomeLeftheader{background: rgba(4, 112, 192,0.1); border-radius: 7px 7px 0 0px; position: relative;    padding: 27px 18px 19px 25px;}
    .dashboarFinalInnerBox .commonBox{padding:0px;}
    .welcomeLeftheader h6{ margin-top:0px; color:#0d112f; opacity:0.5; margin-bottom:-5px;}
