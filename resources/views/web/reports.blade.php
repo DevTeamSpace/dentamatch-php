@@ -17,7 +17,7 @@
                                     <div class="row">
                                         <div class="col-sm-4 col-xs-12 text-left">
                                             <label>Include deleted: </label>
-                                            <?php $checked = (request()->get('history')=='true')?'checked="checked"':''; ?>
+                                            <?php $checked = ($history=='true')?'checked="checked"':''; ?>
                                             <input type="checkbox" {{ $checked }} onchange="javascript:loadReportData();" id="includeDeleted" name="includeDeleted" value="1" style="-webkit-appearance: checkbox;">
                                         </div>
                                         <div class="col-sm-2 col-xs-12 report-filter text-right">
@@ -151,10 +151,11 @@
         }
     });
     var public_path = '<?php echo URL::to('');?>/';
+    var historyLoad = {{ $history }};
     var loadReportData = function loadReportData() {
         var checked = $('#includeDeleted').is(':checked')
         console.log(checked);
-        window.location.href = public_path+'reports?history='+checked;
+        window.location.href = public_path+'reports/'+checked;
     }
 </script>
 <script src="{{asset('web/scripts/reports.js')}}"></script>

@@ -90,11 +90,11 @@
                 Route::get('chat', 'web\ChatController@getChatSeekerList');
                 Route::get('calender', 'web\CalenderController@getCalender');
                 Route::get('calender-details', 'web\CalenderController@getCalenderDetails');
-                Route::get('calender-seeker-details', 'web\CalenderController@getCalenderSeekers');
-                Route::get('reports', 'web\ReportsController@getReportsPage');
-                Route::get('reports-temp-jobs', 'web\ReportsController@getReportsTempJobs');
+                Route::get('reports/calender-seeker-details', 'web\CalenderController@getCalenderSeekers');
+                Route::get('reports/individual-temp-job', 'web\ReportsController@getIndividualTempJob');
+                Route::get('reports/reports-temp-jobs', 'web\ReportsController@getReportsTempJobs');
+                Route::get('reports/{history}', 'web\ReportsController@getReportsPage');
                 Route::get('report-seekers', 'web\ReportsController@getReportSeekers');
-                Route::get('individual-temp-job', 'web\ReportsController@getIndividualTempJob');
                 Route::get('job-applied-or-not', 'web\RecruiterJobController@appliedOrNot');
                 Route::post('edit-recruiter-office', 'web\UserProfileController@postEditRecruiterOffice');
                 Route::post('delete-office', 'web\UserProfileController@postDeleteOffice');
@@ -283,7 +283,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('index', 'Cms\ReportController@index');
         Route::get('list', 'Cms\ReportController@jobLists');
         Route::get('{id}/view', 'Cms\ReportController@appliedSeekers');
-        Route::post('delete-job', 'Cms\ReportController@postDeleteJob');
+        Route::get('delete-job', 'Cms\ReportController@getDeleteJob');
         Route::get('seekerlist/{id}', 'Cms\ReportController@seekerList');
         Route::get('list', 'Cms\ReportController@jobLists');
         Route::get('cancellist', 'Cms\ReportController@cancelLists');

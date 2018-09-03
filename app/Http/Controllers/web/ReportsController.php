@@ -21,8 +21,8 @@ class ReportsController extends Controller
      * Method to view report page
      * @return view
      */
-    public function getReportsPage(){
-        return view('web.reports',['activeTab'=>'2']);
+    public function getReportsPage($history){
+        return view('web.reports',['activeTab'=>'2','history'=>$history]);
     }
     
      /**
@@ -31,7 +31,8 @@ class ReportsController extends Controller
      */
     public function getReportsTempJobs(){
         try{
-            $allTempJobs = RecruiterJobs::getTempJobsReports();
+            $history = request()->get('historyLoad');
+            $allTempJobs = RecruiterJobs::getTempJobsReports($history);
             $this->response['data'] = $allTempJobs;
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.reports_temp_jobs');
@@ -49,7 +50,8 @@ class ReportsController extends Controller
      */
     public function getIndividualTempJob(IndividualTempJobRequest $request){
         try{
-            $getJob = RecruiterJobs::getIndividualTempJob($request->jobTitleId);
+            $history = request()->get('historyLoad');
+            $getJob = RecruiterJobs::getIndividualTempJob($request->jobTitleId,$history);
             $this->response['data'] = $getJob;
             $this->response['success'] = true;
             $this->response['message'] = trans('messages.individual_report');

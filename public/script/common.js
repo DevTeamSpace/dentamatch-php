@@ -671,7 +671,8 @@ function deleteRecord(obj) {
 }
 
 function deleteJob(jobId){
-    $.post(public_path+'report/delete-job',{'jobId':jobId}, function(data) {
+    console.log(public_path+'report/delete-job');
+    $.get(public_path+'report/delete-job',{'jobId':jobId}, function(data) {
             //do refresh
             window.location.reload();
         });

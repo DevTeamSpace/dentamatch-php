@@ -351,7 +351,7 @@ class RecruiterJobs extends Model
             DB::raw("group_concat(distinct(office_types.officetype_name)) AS officetype_name"),
             DB::raw("group_concat(distinct(temp_job_dates.job_date) ORDER BY temp_job_dates.job_date ASC) AS temp_job_dates"),
             DB::raw("group_concat(distinct(template_skills.skill_id)) AS required_skills"),
-            DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
+            DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"))->withTrashed();
             
         return $jobObj->first()->toArray();
     }
@@ -546,18 +546,21 @@ class RecruiterJobs extends Model
         return $jobObj->orderBy('temp_job_dates.job_date','desc')->get();
     }
     
-    public static function getTempJobsReports(){
+    public static function getTempJobsReports($history=false){
         $jobs = RecruiterJobs::where(['recruiter_jobs.job_type' => RecruiterJobs::TEMPORARY, 'recruiter_offices.user_id' => Auth::user()->id])
                 ->join('recruiter_offices', 'recruiter_offices.id', '=', 'recruiter_jobs.recruiter_office_id')
                 ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
                 ->groupBy('job_titles.jobtitle_name');
         $jobs->select('job_titles.id as job_title_id', 'job_titles.jobtitle_name',
-                DB::raw("COUNT(job_titles.id) as jobs_count"))->withTrashed();
+                DB::raw("COUNT(job_titles.id) as jobs_count"));
+        if($history==true){
+          $jobs->withTrashed();
+        }
         return $jobs->get();
     }
     
-    public static function getIndividualTempJob($job_title_id){
+    public static function getIndividualTempJob($job_title_id,$history=false){
         $jobs = RecruiterJobs::where(['recruiter_jobs.job_type' => RecruiterJobs::TEMPORARY, 'recruiter_offices.user_id' => Auth::user()->id, 'job_titles.id' => $job_title_id])
                 ->join('recruiter_offices', 'recruiter_offices.id', '=', 'recruiter_jobs.recruiter_office_id')
                 ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
@@ -565,7 +568,9 @@ class RecruiterJobs extends Model
                 ->join('temp_job_dates', 'temp_job_dates.recruiter_job_id', '=', 'recruiter_jobs.id')
                 ->orderBy('temp_job_dates.job_date', 'desc');
         $jobs->select('temp_job_dates.job_date as job_created_at', 'recruiter_jobs.id as recruiter_job_id', 'recruiter_jobs.job_type');
-        $jobs->withTrashed();
+        if($history==true){
+          $jobs->withTrashed();
+        }
         return $jobs->get();
     }
     

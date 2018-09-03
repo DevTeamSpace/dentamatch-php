@@ -272,10 +272,10 @@ class ReportController extends Controller {
      * Method to delete job
      * @return view
      */
-    public function postDeleteJob(Request $request){
+    public function getDeleteJob(){
         try{
             $insertData = [];
-            $jobId = $request->jobId;
+            $jobId = request()->get('jobId');
             $jobObj = RecruiterJobs::where('id', $jobId)->first();
             if($jobObj) {
                 $jobData = RecruiterJobs::where('recruiter_jobs.id',$jobId)
@@ -339,14 +339,14 @@ class ReportController extends Controller {
                 Session::flash('message', trans('messages.job_deleted'));
                 return redirect('job/lists');
             }
-            $this->result['success'] = true;
-            $this->result['message'] = trans('messages.job_deleted');
+            $result['success'] = true;
+            $result['message'] = trans('messages.job_deleted');
         } catch (\Exception $e) {
             Log::error($e);
-            $this->result['success'] = false;
-            $this->result['message'] = $e->getMessage();
+            $result['success'] = false;
+            $result['message'] = $e->getMessage();
         }
-        return $this->result;
+        return $result;
     }
 
 }

@@ -30,7 +30,7 @@ var SeekerModel = function (d) {
             }
             me.jobDate(moment(d.job_created_at).format('ll'));
             me.jobId(d.recruiter_job_id);
-            $.get('calender-seeker-details', {jobId: me.jobId,jobDate: me.jobDate}, function(d){
+            $.get('calender-seeker-details', {jobId: me.jobId,jobDate: me.jobDate,historyLoad:historyLoad}, function(d){
                 for (i in d.data) {
                     if (d.data[i].length > 4) {
                         me.extraJobSeekers((d.data[i].length - 4).toString() + '+');
@@ -39,7 +39,7 @@ var SeekerModel = function (d) {
                         me.jobSeekers.push(new SeekerModel(d.data[i][j]));
                     }
                     for(i in me.jobSeekers()){
-                        me.jobSeekers()[i].seekerUrl('job/seekerdetails/'+me.jobSeekers()[i].seekerId()+'/'+me.jobId());
+                        me.jobSeekers()[i].seekerUrl(public_path+'job/seekerdetails/'+me.jobSeekers()[i].seekerId()+'/'+me.jobId());
                     }
                 }
             });
@@ -60,7 +60,7 @@ var SeekerModel = function (d) {
             }
             me.jobTitle(d.jobtitle_name);
             me.noOfJobs(d.jobs_count);
-            $.get('individual-temp-job', {jobTitleId: d.job_title_id}, function(data){
+            $.get('individual-temp-job', {jobTitleId: d.job_title_id,historyLoad:historyLoad}, function(data){
                 for(i in data.data){
                     me.jobs.push(new JobModel(data.data[i]));
                 }
@@ -93,7 +93,8 @@ var SeekerModel = function (d) {
         me.modalJobId = ko.observable();
 
         me.getAllTempJobs = function () {
-            $.get('reports-temp-jobs', function (d) {
+            console.log(historyLoad);
+            $.get('reports-temp-jobs',{ historyLoad:historyLoad }, function (d) {
                 for (i in d.data) {
                     me.allJobs.push(new allJobModel(d.data[i]));
                 }
@@ -133,7 +134,7 @@ var SeekerModel = function (d) {
             me.modalJobDate(d.jobDate());
             me.modalJobId(d.jobId);
             for(i in d.jobSeekers()){
-                d.jobSeekers()[i].seekerUrl('job/seekerdetails/'+d.jobSeekers()[i].seekerId()+'/'+d.jobId());
+                d.jobSeekers()[i].seekerUrl(public_path+'job/seekerdetails/'+d.jobSeekers()[i].seekerId()+'/'+d.jobId());
                 me.modalSeekers.push(d.jobSeekers()[i]);
             }
             $('.reportsModal').modal('show');
