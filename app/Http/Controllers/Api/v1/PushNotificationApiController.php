@@ -7,6 +7,7 @@ use App\Models\Notification;
 use App\Models\RecruiterJobs;
 use App\Models\Device;
 use App\Models\UserChat;
+use App\Models\JobSeekerTempAvailability;
 use App\Providers\NotificationServiceProvider;
 use Log;
 
@@ -32,13 +33,18 @@ class PushNotificationApiController extends Controller {
             if($userId > 0){
                 $reqData = $request->all();
                 $reqData['userId'] = $userId;
+                $userAvailability = JobSeekerTempAvailability::where('user_id',$userId)->pluck('temp_job_date')->toArray();
                 $notificationList = Notification::userNotificationList($reqData);
                 if(count($notificationList['list']) > 0){
-                    foreach($notificationList['list'] as $notification){
+                    foreach($notificationList['list'] as $key=>$notification){
                         if($notification['job_list_id'] && $notification['job_list_id'] > 0){
                             $data = RecruiterJobs::getJobDetail($notification['job_list_id'], $userId); 
                             if(!empty($data)){
+                                $notification['currentAvailability'] = array_values(array_intersect($userAvailability,$data['job_type_dates']));
                                 $notification['job_details'] = $data;
+                                if(count($notification['currentAvailability'])==0){
+                                    $notificationList['list'][$key]['notification_data'].= trans("messages.seeker_set_availabilty");
+                                }
                             }
                         }
                     }
