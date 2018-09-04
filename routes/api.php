@@ -73,6 +73,7 @@ Route::group(['prefix'=>'v1/','middleware' => ['xss']], function () {
     Route::post('users/delete-notification', 'Api\v1\PushNotificationApiController@PostDeleteNotification');
 
     Route::post('chat/send-message', 'Api\v1\PushNotificationApiController@userChatNotification');
+    Route::post('chat/delete', 'Api\v1\PushNotificationApiController@userChatDelete');
     Route::post('users/update-devicetoken', 'Api\v1\PushNotificationApiController@PostUpdateDeviceToken');
 
     Route::post('admin/forgot-password', 'Api\v1\UserApiController@postAdminForgotPassword');

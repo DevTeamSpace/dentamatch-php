@@ -6,6 +6,7 @@ use App\Helpers\ApiResponse;
 use App\Models\Notification;
 use App\Models\RecruiterJobs;
 use App\Models\Device;
+use App\Models\UserChat;
 use App\Providers\NotificationServiceProvider;
 use Log;
 
@@ -199,6 +200,28 @@ class PushNotificationApiController extends Controller {
                 $total = $query->count();
                 $unread['notificationCount'] = $total;
                 $response =  ApiResponse::customJsonResponse(1, 200,"",$unread);
+            }else{
+                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
+            } 
+        }catch (\Exception $e) {
+            $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+        }
+        return $response;
+    }
+    
+    public function userChatDelete(Request $request){
+        try{
+            $userId = $request->userServerData->user_id;
+            $this->validate($request, [
+                'recruiterId' => 'required',
+            ]);
+            if($userId > 0){
+                UserChat::where(function($query) use($userId,$request) {
+                    $query->where('from_id',$userId)->where('to_id',$request->recruiterId);
+                })->orwhere(function($query) use($userId,$request) {
+                    $query->where('to_id',$userId)->where('from_id',$request->recruiterId);
+                })->delete();
+                $response =  ApiResponse::customJsonResponse(1, 200);
             }else{
                 $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             } 
