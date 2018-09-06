@@ -184,5 +184,5 @@ return [
     'seeker_already_applied'=>'This seeker is already applied for this job',
     'seeker_already_shortlisted'=>'This seeker is already shortlisted for this job',
     'seeker_already_hired'=>'This seeker is already hired for this job',
-    'seeker_set_availabilty'=>". Please set your availabilty to accept this job",
+    'seeker_set_availabilty'=>". Please set your availability for ##DATES## to accept this job",
 ];

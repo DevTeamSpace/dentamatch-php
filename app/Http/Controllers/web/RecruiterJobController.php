@@ -377,7 +377,7 @@ class RecruiterJobController extends Controller {
             );
         } else if ($jobstatus == JobLists::INVITED) {
             $notificationData = array(
-                'notificationData' => $jobDetails['office_name'] . " has sent you a job invitation for " . $jobDetails['jobtitle_name'].". Tap to see more info.",
+                'notificationData' => $jobDetails['office_name'] . " has sent you a job invitation for " . $jobDetails['jobtitle_name'],
                 'notification_title' => 'User invited',
                 'sender_id' => $sender,
                 'type' => 1,

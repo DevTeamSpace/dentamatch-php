@@ -40,10 +40,18 @@ class PushNotificationApiController extends Controller {
                         if($notification['job_list_id'] && $notification['job_list_id'] > 0){
                             $data = RecruiterJobs::getJobDetail($notification['job_list_id'], $userId); 
                             if(!empty($data)){
-                                $notification['currentAvailability'] = array_values(array_intersect($userAvailability,$data['job_type_dates']));
                                 $notification['job_details'] = $data;
-                                if(count($notification['currentAvailability'])==0){
-                                    $notificationList['list'][$key]['notification_data'].= trans("messages.seeker_set_availabilty");
+                                $notification['currentAvailability'] = [];
+                                if($data['job_type']==RecruiterJobs::TEMPORARY){
+                                    $notification['currentAvailability'] = array_values(array_intersect($userAvailability,$data['job_type_dates']));
+                                    if(count($notification['currentAvailability'])==0){
+                                        $dateMsgString = [];
+                                        foreach($data['job_type_dates'] as $jobDate){
+                                            $dateMsgString[]= date('d M',strtotime($jobDate));
+                                        }
+                                        $message= str_replace('##DATES##', implode($dateMsgString,','), trans("messages.seeker_set_availabilty"));
+                                        $notificationList['list'][$key]['notification_data'].= $message;
+                                    }
                                 }
                             }
                         }
