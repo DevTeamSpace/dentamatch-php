@@ -174,7 +174,7 @@ class JobSeekerController extends Controller
         $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                         ->leftjoin('job_titles','job_titles.id' , '=','jobseeker_profiles.job_titile_id')
-                        ->leftjoin('preferred_job_locations','jobseeker_profiles.preferred_job_location' , '=','preferred_job_locations.id')
+                        ->leftjoin('preferred_job_locations','jobseeker_profiles.preferred_job_location_id' , '=','preferred_job_locations.id')
                         ->select(
                                 'users.email','users.id',
                                 'jobseeker_profiles.first_name',
@@ -185,8 +185,14 @@ class JobSeekerController extends Controller
                                 'preferred_job_locations.preferred_location_name'
                                 )
                         ->where('user_groups.group_id', UserGroup::JOBSEEKER);
-                        //->orderBy('users.id', 'desc');
-        //dd(request()->get('order'));
+        $startDate=$request->get('startDate');
+        $endDate=$request->get('endDate');
+        if($startDate!=''){
+            $userData->where('users.created_at','>=',date('Y-m-d H:i:00',  strtotime($startDate)));
+        }
+        if($endDate!=''){
+            $userData->where('users.created_at','<=',date('Y-m-d H:i:00',  strtotime($endDate)));
+        }
         return Datatables::of($userData)
                 ->order(function ($query) {
                     $query->orderBy('users.created_at', request()->get('order')[0]['dir']);
@@ -358,11 +364,15 @@ class JobSeekerController extends Controller
         try{
         $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->leftjoin('job_titles','job_titles.id' , '=','jobseeker_profiles.job_titile_id')
+                        ->leftjoin('preferred_job_locations','jobseeker_profiles.preferred_job_location_id' , '=','preferred_job_locations.id')
                         ->select(
                                 'users.email','users.id',
-                                'jobseeker_profiles.first_name',
-                                'jobseeker_profiles.last_name',
-                                'users.is_verified','users.is_active'
+                                'jobseeker_profiles.first_name','jobseeker_profiles.state',
+                                'jobseeker_profiles.last_name','jobseeker_profiles.license_number',
+                                'users.is_verified','users.is_active',
+                                'job_titles.jobtitle_name',
+                                'preferred_job_locations.preferred_location_name'
                                 )
                         ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->where('users.is_verified', 0)
@@ -380,11 +390,15 @@ class JobSeekerController extends Controller
         try{
         $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->leftjoin('job_titles','job_titles.id' , '=','jobseeker_profiles.job_titile_id')
+                        ->leftjoin('preferred_job_locations','jobseeker_profiles.preferred_job_location_id' , '=','preferred_job_locations.id')
                         ->select(
                                 'users.email','users.id',
-                                'jobseeker_profiles.first_name',
-                                'jobseeker_profiles.last_name',
-                                'jobseeker_profiles.is_completed','users.is_active'
+                                'jobseeker_profiles.first_name','jobseeker_profiles.license_number',
+                                'jobseeker_profiles.last_name','jobseeker_profiles.state',
+                                'jobseeker_profiles.is_completed','users.is_active',
+                                'job_titles.jobtitle_name',
+                                'preferred_job_locations.preferred_location_name'
                                 )
                         ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->where('jobseeker_profiles.is_completed', 0)
@@ -487,20 +501,19 @@ class JobSeekerController extends Controller
     
     public function listNonAvailableUsers(){
         try{
-        $availableUsers = JobSeekerTempAvailability::select('user_id')
-                ->groupBy('user_id')
-                ->get('user_id')
-                ->map(function($query) {
-                    return $query['user_id'];
-                })->toArray();
+        $availableUsers = JobSeekerTempAvailability::select('user_id')->groupBy('user_id')->get('user_id');
                 
         $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
+                        ->leftjoin('job_titles','job_titles.id' , '=','jobseeker_profiles.job_titile_id')
+                        ->leftjoin('preferred_job_locations','jobseeker_profiles.preferred_job_location_id' , '=','preferred_job_locations.id')
                         ->select(
                                 'users.email','users.id',
-                                'jobseeker_profiles.first_name',
-                                'jobseeker_profiles.last_name',
-                                'jobseeker_profiles.is_completed','users.is_active'
+                                'jobseeker_profiles.first_name','jobseeker_profiles.license_number',
+                                'jobseeker_profiles.last_name','jobseeker_profiles.state',
+                                'jobseeker_profiles.is_completed','users.is_active',
+                                'job_titles.jobtitle_name',
+                                'preferred_job_locations.preferred_location_name'
                                 )
                         ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->whereNotIn('users.id', $availableUsers)
@@ -529,15 +542,20 @@ class JobSeekerController extends Controller
         $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                         ->join('job_lists','job_lists.seeker_id' , '=','users.id')
+                        ->leftjoin('job_titles','job_titles.id' , '=','jobseeker_profiles.job_titile_id')
+                        ->leftjoin('preferred_job_locations','jobseeker_profiles.preferred_job_location_id' , '=','preferred_job_locations.id')
                         ->select(
                                 'users.email','users.id',
-                                'jobseeker_profiles.first_name',
-                                'jobseeker_profiles.last_name',
-                                'users.is_verified','users.is_active'
+                                'users.is_verified','users.is_active',
+                                'jobseeker_profiles.first_name','jobseeker_profiles.license_number',
+                                'jobseeker_profiles.last_name','jobseeker_profiles.state',
+                                'job_titles.jobtitle_name',
+                                'preferred_job_locations.preferred_location_name'
                                 )
                         ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->where('job_lists.applied_status',1)
                         ->whereNotIn('job_lists.applied_status', [2,3,4,5])
+                        ->whereNull('job_lists.deleted_at')
                         ->groupBy('users.id')
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)

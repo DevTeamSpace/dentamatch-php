@@ -21,8 +21,10 @@
                                   <th>Email</th>
                                   <th>First Name</th>
                                   <th>Last Name</th>
-<!--                                  <th>Active</th>-->
-<!--                                  <th>Action</th>-->
+                                  <th>Job Title</th>
+                                  <th>Preferred Job Location</th>
+                                  <th>License</th>
+                                  <th>State</th>
                               </tr>
                           </thead>
 

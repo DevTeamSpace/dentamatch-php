@@ -86,6 +86,7 @@
                                 <li><a href="{{ url('cms/jobseeker/verification') }}">Verification Status</a></li>
                                 <li><a href="{{ url('cms/recruiter/index') }}">Recruiter</a></li>
                                 <li><a href="{{ url('cms/notify/index') }}">Notify Users</a></li>
+                                <li><a href="{{ url('cms/config/pay-rate') }}">Pay-rate</a></li>
                                
 <!--                                <li><a href="{{ url('cms/report/search-location') }}">Search Location</a></li>-->
                             </ul>
@@ -135,9 +136,10 @@
     <script src="{{ asset('bootstrap/js/bootstrap.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('script/jquery.dataTables.min.js')}}" ></script>
     <script type="text/javascript" src="{{ asset('script/dataTables.responsive.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('script/datepicker/js/bootstrap-datepicker.js')}}"></script>
+    <script type="text/javascript" src="{{asset('web/scripts/moment.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('script/datepicker/js/bootstrap-datepicker_new.js')}}"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
-<link rel="stylesheet" type="text/css" href="{{ asset('script/datepicker/css/datepicker.css')}}" >
+<link rel="stylesheet" type="text/css" href="{{ asset('script/datepicker/css/bootstrap-datepicker_new.css')}}" >
 <script type="text/javascript" src="{{ asset('script/common.js')}}" ></script>
     @yield('js')
     @yield('innerViewJs')

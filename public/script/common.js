@@ -146,7 +146,7 @@ $(function () {
         ]
     });
     
-    $('#jobseeker_list').DataTable({
+    var jobseekerList = $('#jobseeker_list').DataTable({
         processing: true,
         serverSide: true,
         //responsive: true,
@@ -173,10 +173,23 @@ $(function () {
         ]
     });
     
+    var ajaxUrl = jobseekerList.ajax.url();
+    function getDataTableUrl(){
+        var startDate=$('#startDate').val();
+        var endDate=$('#endDate').val();
+        console.log(startDate);console.log(endDate);
+        return ajaxUrl+'?startDate='+startDate+'&endDate='+endDate;
+    }
+    $('#search').click( function() {
+        console.log(jobseekerList.ajax.url());
+        jobseekerList.ajax.url(getDataTableUrl())
+        jobseekerList.load(); 
+    } );
+    
     $('#jobseeker_unverified_list').DataTable({
         processing: true,
         serverSide: true,
-        //responsive: true,
+        responsive: true,
         //autoWidth: false,
         ajax: public_path+'jobseeker/listUnverifiedJobseeker',
         ordering:false,
@@ -185,14 +198,17 @@ $(function () {
             {data: 'email', name: 'email',searchable:true},
             {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
             {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
-//            {data: 'active', name: 'active',searchable:false},
+            {data: 'jobtitle_name', name: 'job_titles.jobtitle_name',searchable:true},
+            {data: 'preferred_location_name', name: 'preferred_job_locations.preferred_location_name',searchable:true},
+            {data: 'license_number', name: 'jobseeker_profiles.license_number',searchable:true},
+            {data: 'state', name: 'jobseeker_profiles.state',searchable:true},
         ]
     });
     
     $('#jobseeker_incomplete_list').DataTable({
         processing: true,
         serverSide: true,
-        //responsive: true,
+        responsive: true,
         //autoWidth: false,
         ajax: public_path+'jobseeker/listIncompleteJobseeker',
         ordering:false,
@@ -201,7 +217,10 @@ $(function () {
             {data: 'email', name: 'email',searchable:true},
             {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
             {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
-//            {data: 'active', name: 'active',searchable:false},
+            {data: 'jobtitle_name', name: 'job_titles.jobtitle_name',searchable:true},
+            {data: 'preferred_location_name', name: 'preferred_job_locations.preferred_location_name',searchable:true},
+            {data: 'license_number', name: 'jobseeker_profiles.license_number',searchable:true},
+            {data: 'state', name: 'jobseeker_profiles.state',searchable:true},
         ]
     });
     
@@ -217,7 +236,10 @@ $(function () {
             {data: 'email', name: 'email',searchable:true},
             {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
             {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
-//            {data: 'active', name: 'active',searchable:false},
+            {data: 'jobtitle_name', name: 'job_titles.jobtitle_name',searchable:true},
+            {data: 'preferred_location_name', name: 'preferred_job_locations.preferred_location_name',searchable:true},
+            {data: 'license_number', name: 'jobseeker_profiles.license_number',searchable:true},
+            {data: 'state', name: 'jobseeker_profiles.state',searchable:true},
         ]
     });
     
@@ -233,7 +255,10 @@ $(function () {
             {data: 'email', name: 'email',searchable:true},
             {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
             {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
-//            {data: 'active', name: 'active',searchable:false},
+            {data: 'jobtitle_name', name: 'job_titles.jobtitle_name',searchable:true},
+            {data: 'preferred_location_name', name: 'preferred_job_locations.preferred_location_name',searchable:true},
+            {data: 'license_number', name: 'jobseeker_profiles.license_number',searchable:true},
+            {data: 'state', name: 'jobseeker_profiles.state',searchable:true},
         ]
     });
     
@@ -469,64 +494,64 @@ $(function () {
     var nowTemp = new Date();
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
     console.log(now);
-    var start_date = $('#start_date').datepicker({
-        format:"yyyy-mm-dd",
-        onRender: function(date) {
-            return date.valueOf() < now.valueOf() ? 'disabled' : '';
-        }
-    }).on('click', function(ev) {
-        end_date.hide();
-    }).on('changeDate', function(ev) {
-        if (ev.date.valueOf() >= end_date.date.valueOf()) {
-            var newDate = new Date(ev.date);
-            newDate.setDate(newDate.getDate());
-            end_date.setValue(newDate);
-        }else{
-            end_date.setValue(end_date.date);
-        }
-        start_date.hide();
-        $('#end_date')[0].focus();
-    }).data('datepicker');
-    var end_date = $('#end_date').datepicker({
-        format:"yyyy-mm-dd",
-        onRender: function(date) {
-            return date.valueOf() < start_date.date.valueOf() ? 'disabled' : '';
-        }
-    }).on('click', function(ev) {
-        start_date.hide();
-    }).on('changeDate', function(ev) {
-      end_date.hide();
-    }).data('datepicker');
-    
-    var startDate = $('#startDate').datepicker({
-        format:"yyyy-mm-dd",
-        onRender: function(date) {
-            return date.valueOf() > now.valueOf() ? 'disabled' : '';
-        }
-    }).on('click', function(ev) {
-        endDate.hide();
-    }).on('changeDate', function(ev) {
-        if (ev.date.valueOf() >= endDate.date.valueOf()) {
-            var newDate = new Date(ev.date);
-            newDate.setDate(newDate.getDate());
-            endDate.setValue(newDate);
-        }else{
-            endDate.setValue(endDate.date);
-        }
-        startDate.hide();
-        $('#endDate')[0].focus();
-    }).data('datepicker');
-    var endDate = $('#endDate').datepicker({
-        format:"yyyy-mm-dd",
-        onRender: function(date) {
-            return (date.valueOf() < startDate.date.valueOf() || 
-                    date.valueOf() > now.valueOf())?'disabled':'';
-        }
-    }).on('click', function(ev) {
-        startDate.hide();
-    }).on('changeDate', function(ev) {
-      endDate.hide();
-    }).data('datepicker');
+//    var start_date = $('#start_date').datepicker({
+//        format:"yyyy-mm-dd",
+//        onRender: function(date) {
+//            return date.valueOf() < now.valueOf() ? 'disabled' : '';
+//        }
+//    }).on('click', function(ev) {
+//        end_date.hide();
+//    }).on('changeDate', function(ev) {
+//        if (ev.date.valueOf() >= end_date.date.valueOf()) {
+//            var newDate = new Date(ev.date);
+//            newDate.setDate(newDate.getDate());
+//            end_date.setValue(newDate);
+//        }else{
+//            end_date.setValue(end_date.date);
+//        }
+//        start_date.hide();
+//        $('#end_date')[0].focus();
+//    }).data('datepicker');
+//    var end_date = $('#end_date').datepicker({
+//        format:"yyyy-mm-dd",
+//        onRender: function(date) {
+//            return date.valueOf() < start_date.date.valueOf() ? 'disabled' : '';
+//        }
+//    }).on('click', function(ev) {
+//        start_date.hide();
+//    }).on('changeDate', function(ev) {
+//      end_date.hide();
+//    }).data('datepicker');
+//    
+//    var startDate = $('#startDate').datepicker({
+//        format:"yyyy-mm-dd",
+//        onRender: function(date) {
+//            return date.valueOf() > now.valueOf() ? 'disabled' : '';
+//        }
+//    }).on('click', function(ev) {
+//        endDate.hide();
+//    }).on('changeDate', function(ev) {
+//        if (ev.date.valueOf() >= endDate.date.valueOf()) {
+//            var newDate = new Date(ev.date);
+//            newDate.setDate(newDate.getDate());
+//            endDate.setValue(newDate);
+//        }else{
+//            endDate.setValue(endDate.date);
+//        }
+//        startDate.hide();
+//        $('#endDate')[0].focus();
+//    }).data('datepicker');
+//    var endDate = $('#endDate').datepicker({
+//        format:"yyyy-mm-dd",
+//        onRender: function(date) {
+//            return (date.valueOf() < startDate.date.valueOf() || 
+//                    date.valueOf() > now.valueOf())?'disabled':'';
+//        }
+//    }).on('click', function(ev) {
+//        startDate.hide();
+//    }).on('changeDate', function(ev) {
+//      endDate.hide();
+//    }).data('datepicker');
     
     $('#forgotLink, #loginLink').click(function(){
         $('#ForgetError').html('').addClass('hidden');
