@@ -206,6 +206,8 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
     });
     
     Route::group(['prefix' => 'config/'], function() {
+        Route::get('pay-rate', 'Cms\ConfigurationController@index');
+        Route::post('store-pay-rate', 'Cms\ConfigurationController@updatePayrate');
         Route::get('create-radius', 'Cms\ConfigurationController@create');
         Route::post('store-radius', 'Cms\ConfigurationController@store');
     });
