@@ -16,7 +16,7 @@
                         <span class="price-symbol ">$</span>
                         <span class="price" data-bind="text: quarterlyPrice">387</span>
                         <span class="price-duration">/ 3 mo.</span>
-                        <p data-bind="text: free_trial_period">with 1 months free trial</p>
+                        <p data-bind="text: free_trial_period">with no free trial</p>
                         <input type="hidden" id="stype" value="1">
                     </div>
                 </div>

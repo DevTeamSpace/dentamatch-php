@@ -149,8 +149,10 @@
         me.abcd = ko.observableArray([]);
         me.jobType = ko.observable('');
         me.totalJobOpening = ko.observable();
+        me.payRate = ko.observable();
         me.jobOfficeId = ko.observable();
         me.showTotalJobOpenings = ko.observable(false);
+        me.showPayRate = ko.observable(false);
         me.selectedOffice = ko.observableArray([]);
         me.allOfficeTypes = ko.observableArray([]);
         me.selectedJobType = ko.observable('');
@@ -170,6 +172,7 @@
         me.everydayTimeError = ko.observable('');
         me.phoneNumberError = ko.observable('');
         me.totalJobOpeningError = ko.observable('');
+        me.payRateError = ko.observable('');
         me.partTimeJobDaysError = ko.observable('');
         me.temporaryJobError = ko.observable('');
         me.officeTypeError = ko.observable('');
@@ -235,6 +238,7 @@
                     me.selectedJobType("Temporary");
                     me.jobType("Temporary");
                     me.showTotalJobOpenings(true);
+                    me.showPayRate(true);
                     var splitedTempJobDates;
                     if(d.jobDetails.temp_job_dates != null){
                         splitedTempJobDates = d.jobDetails.temp_job_dates.split(',');
@@ -244,6 +248,7 @@
                             me.tempJobDates.push(splitedTempJobDates[i]);
                         }
                     }
+                    $('.job-opening').removeClass('hide');
                     var selectedDates = [];
                     for(i in me.tempJobDates()){
                         splitedDate = me.tempJobDates()[i].split('-');
@@ -257,6 +262,7 @@
                     $('#CoverStartDateOtherPicker').datepicker('setDates', selectedDates);
                 }
                 me.totalJobOpening(d.jobDetails.no_of_jobs);
+                me.payRate(d.jobDetails.pay_rate);
                 me.jobOfficeId(d.jobDetails.recruiter_office_id);
                 
                 for(i in d.allOfficeTypes){
@@ -355,6 +361,7 @@
     
     me.selecteJobType = function(d, e){
         me.totalJobOpeningError('');
+        me.payRateError('');
         me.partTimeJobDaysError('');
         me.temporaryJobError('');
         checkJobType = $(e.currentTarget).prev().val();
@@ -365,6 +372,7 @@
         }else{
             me.selectedJobType('Temporary');
             me.showTotalJobOpenings(true);
+            me.showPayRate(true);
         }
     };
     
@@ -443,6 +451,7 @@
         me.everydayTimeError('');
         me.phoneNumberError('');
         me.totalJobOpeningError('');
+        me.payRateError('');
         me.partTimeJobDaysError('');
         me.temporaryJobError('');
         me.officeTypeError('');
@@ -457,6 +466,10 @@
         }else{
             if(me.totalJobOpening() == null || me.totalJobOpening() == ''){
                 me.totalJobOpeningError('Total job openings required');
+                return false;
+            }
+            if(me.payRate() == null || me.payRate() == ''){
+                me.payRateError('Pay rate required');
                 return false;
             }
             if($('#CoverStartDateOtherPicker').val() == '' || $('#CoverStartDateOtherPicker').val() == null){

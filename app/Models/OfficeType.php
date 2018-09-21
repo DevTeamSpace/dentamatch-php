@@ -11,7 +11,7 @@ class OfficeType extends Model {
     protected $fillable = ['officetype_name', 'is_acitve'];
     
     public static function allOfficeTypes(){
-        return OfficeType::where('is_acitve',1)->get();
+        return OfficeType::where('is_active',1)->get();
     }
 
 }

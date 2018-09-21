@@ -208,6 +208,9 @@ $seekerDatesCount = count($datesTemp);
                 </ul>
             @endforeach
         @endif
+        @if($jobDetails['pay_rate']!='')
+        <ul class="skill_List"><li class="payrate-red"><strong>Hourly Wage Offered: ${{ $jobDetails['pay_rate'] }}</strong></li></ul>
+        @endif
     </div>
 </div>
 

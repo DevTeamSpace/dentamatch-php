@@ -78,7 +78,7 @@
                     @endforeach
 
                 </select>
-            </div>
+            </div>           
             <div class="form-group">
                 <label  >Job Type</label>
                 <div class="row">
@@ -125,10 +125,35 @@
                 <label >Number of Candidates Needed</label>
                 <input name="noOfJobs" type="text" id="jobopening" class="form-control" data-parsley-min="1" data-parsley-pattern="^[0-9]*$" data-parsley-pattern-message="numeric only "  data-parsley-required-message="required" data-parsley-min-message="zero should not be allowed"/>
             </div>
+            <div class="form-group job-opening hide">
+                <label >Hourly Wage Offered</label>
+                <div class="row">
+                    <div class="col-md-4 col-lg-4">
+                        <input name="payRate" type="text" id="payRate" class="form-control" data-parsley-min="1" data-parsley-pattern="^[0-9]*$" data-parsley-pattern-message="numeric only "  data-parsley-required-message="required" data-parsley-min-message="zero should not be allowed"/>
+                    </div>
+                    @if($payrateUrl!='')
+<!--                    <a target="_blank" href="{{ $payrateUrl }}">Click here for reference pay rate</a>-->
+                    <a class="modalClick" data-toggle="modal" data-target="#payrate_div">Click here for reference pay rate</a>
+                    @endif
+                </div>
+            </div>
         </div>  
     </form>
 </div>    
-
+<div id="payrate_div" class="modal fade " role="dialog">
+    <div class="modal-dialog custom-modal popup-wd768" style="width: auto !important;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Reference Hourly Wage Offered</h4>
+            </div>
+            <div class="modal-body ">
+                <img src="{{ $payrateUrl }}">
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('js')

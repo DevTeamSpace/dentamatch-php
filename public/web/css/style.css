@@ -254,6 +254,8 @@ and open the template in the editor.
     .ex-text {
         font-size:9px;
     }
+    .payrate-red {color:red !important;}
+    .payrate-red strong {color:red !important;}
 @media only screen and (min-width: 768px) {
     .template-job-information-left {
         width: 65%;

@@ -29,6 +29,8 @@ use App\Models\PreferredJobLocation;
 use App\Models\User;
 use App\Helpers\NotificationHelper;
 use Mail;
+use App\Models\Configs;
+use Illuminate\Support\Facades\Storage;
 
 class RecruiterJobController extends Controller {
 
@@ -100,6 +102,11 @@ class RecruiterJobController extends Controller {
             $this->viewData['templateId'] = $templateId;
             $this->viewData['jobTemplates'] = JobTemplates::findById($templateId);
             $this->viewData['preferredLocationId'] = PreferredJobLocation::getAllPreferrefJobLocation();
+            $payrate = Configs::select('config_data')->where('config_name','=','PAYRATE')->first();
+            $this->viewData['payrateUrl']='';
+            if($payrate->config_data!=null){
+                $this->viewData['payrateUrl'] = Storage::url($payrate->config_data);
+            }
 
             return $this->returnView('create');
         } catch (\Exception $e) {
@@ -179,6 +186,7 @@ class RecruiterJobController extends Controller {
             $recruiterJobObj->job_template_id = $request->templateId;
             $recruiterJobObj->recruiter_office_id = $request->dentalOfficeId;
             $recruiterJobObj->job_type = $request->jobType;
+            $recruiterJobObj->pay_rate = $request->payRate;
             $recruiterJobObj->no_of_jobs = ($request->noOfJobs != '') ? $request->noOfJobs : 0;
             $recruiterJobObj->preferred_job_location_id = $request->preferredJobLocationId;
 
@@ -413,7 +421,12 @@ class RecruiterJobController extends Controller {
     public function jobEdit(Request $request, $jobId) {
         $userId = Auth::user()->id;
         $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
-        return view('web.recuriterJob.edit', compact('jobId', 'jobTemplateModalData'));
+        $payrate = Configs::select('config_data')->where('config_name','=','PAYRATE')->first();
+        $payrateUrl='';
+        if($payrate->config_data!=null){
+            $payrateUrl = Storage::url($payrate->config_data);
+        }
+        return view('web.recuriterJob.edit', compact('jobId', 'jobTemplateModalData','payrateUrl'));
     }
 
     public function jobEditDetails(Request $request) {
@@ -633,6 +646,7 @@ class RecruiterJobController extends Controller {
               
             } elseif ($jobType == config('constants.TemporaryJob')) {
                 $jobObj->no_of_jobs = $allData->totalJobOpening;
+                $jobObj->pay_rate = $allData->payRate;
                 $jobObj->save();
                 foreach ($allData->tempJobDates as $tempJobDate) {
                     $newTemJobObj = new TempJobDates();

@@ -121,7 +121,7 @@ class JobLists extends Model {
                         ->select('recruiter_jobs.id','recruiter_jobs.job_type','recruiter_jobs.is_monday',
                             'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
                             'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
-                            'recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
+                            'recruiter_jobs.is_saturday','recruiter_jobs.is_sunday','recruiter_jobs.pay_rate',
                             'job_titles.jobtitle_name','recruiter_profiles.office_name',
                             'recruiter_offices.address','recruiter_offices.zipcode',
                             'recruiter_offices.latitude','recruiter_offices.longitude',

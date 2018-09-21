@@ -52,6 +52,7 @@ var SeekerModel = function (d) {
         var me = this;
         me.jobTitle = ko.observable('');
         me.noOfJobs = ko.observable();
+        me.payRate = ko.observable();
         me.jobs = ko.observableArray([]);
 
         me._init = function (d) {
@@ -60,6 +61,7 @@ var SeekerModel = function (d) {
             }
             me.jobTitle(d.jobtitle_name);
             me.noOfJobs(d.jobs_count);
+            me.payRate(d.pay_rate);
             $.get('individual-temp-job', {jobTitleId: d.job_title_id,historyLoad:historyLoad}, function(data){
                 for(i in data.data){
                     me.jobs.push(new JobModel(data.data[i]));

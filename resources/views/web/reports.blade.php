@@ -53,12 +53,13 @@
                                             <th>No. of Jobs</th>
                                             <th>Date</th>
                                             <th>Hired</th>
+                                            <th>Hourly Wage Paid</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <!--ko foreach: filterJobList-->
                                         <tr>
-                                            <td colspan="4">
+                                            <td colspan="5">
                                                 <div class="scroll-table">
                                                     <table class="table ">
                                                         <td><strong data-bind="text: jobTitle"></strong></td>
@@ -88,6 +89,7 @@
                                                             </ul>
                                                             <!--/ko-->
                                                         </td>
+                                                        <td data-bind="text: payRate"></td>
                                                     </table>
                                                 </div>
                                             </td>

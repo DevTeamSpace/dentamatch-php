@@ -225,7 +225,7 @@ class RecruiterJobs extends Model
         $searchQueryObj->select('recruiter_jobs.id', 'recruiter_jobs.no_of_jobs','recruiter_jobs.job_type','recruiter_jobs.is_monday',
                             'recruiter_jobs.is_tuesday','recruiter_jobs.is_wednesday',
                             'recruiter_jobs.is_thursday','recruiter_jobs.is_friday',
-                            'recruiter_jobs.is_saturday','recruiter_jobs.is_sunday',
+                            'recruiter_jobs.is_saturday','recruiter_jobs.is_sunday','recruiter_jobs.pay_rate',
                             'job_templates.template_name', 'job_templates.template_desc',
                             'recruiter_offices.work_everyday_start', 'recruiter_offices.work_everyday_end', 
                             'recruiter_offices.monday_start', 'recruiter_offices.monday_end', 
@@ -315,7 +315,7 @@ class RecruiterJobs extends Model
             'recruiter_profiles.office_name','recruiter_profiles.office_desc',
             'recruiter_offices.address','recruiter_offices.zipcode',
             'job_templates.template_name','job_templates.template_desc','job_templates.job_title_id',
-            'job_titles.jobtitle_name',
+            'job_titles.jobtitle_name','recruiter_jobs.pay_rate',
             DB::raw("group_concat(distinct concat(job_lists.seeker_id,'_', job_lists.applied_status)) AS applied_status"),
             DB::raw("group_concat(distinct concat(office_types.officetype_name)) AS office_types_name"),
             DB::raw("group_concat(distinct(temp_job_dates.job_date) ORDER BY temp_job_dates.job_date ASC) AS temp_job_dates"),
@@ -347,7 +347,7 @@ class RecruiterJobs extends Model
             'recruiter_profiles.office_name','recruiter_profiles.office_desc',
             'recruiter_offices.address','recruiter_offices.zipcode','recruiter_offices.latitude','recruiter_offices.longitude',
             'job_templates.template_name','job_templates.template_desc','job_templates.job_title_id',
-            'job_titles.jobtitle_name', 'preferred_job_location_id',
+            'job_titles.jobtitle_name', 'preferred_job_location_id','recruiter_jobs.pay_rate',
             DB::raw("group_concat(distinct(office_types.officetype_name)) AS officetype_name"),
             DB::raw("group_concat(distinct(temp_job_dates.job_date) ORDER BY temp_job_dates.job_date ASC) AS temp_job_dates"),
             DB::raw("group_concat(distinct(template_skills.skill_id)) AS required_skills"),
@@ -551,9 +551,9 @@ class RecruiterJobs extends Model
                 ->join('recruiter_offices', 'recruiter_offices.id', '=', 'recruiter_jobs.recruiter_office_id')
                 ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
-                ->groupBy('job_titles.jobtitle_name');
-        $jobs->select('job_titles.id as job_title_id', 'job_titles.jobtitle_name',
-                DB::raw("COUNT(job_titles.id) as jobs_count"));
+                ->groupBy('recruiter_jobs.id');
+        $jobs->select('recruiter_jobs.id as job_title_id', 'job_titles.jobtitle_name','recruiter_jobs.pay_rate',
+                DB::raw("recruiter_jobs.no_of_jobs as jobs_count"));
         if($history==true){
           $jobs->withTrashed();
         }
@@ -561,7 +561,7 @@ class RecruiterJobs extends Model
     }
     
     public static function getIndividualTempJob($job_title_id,$history=false){
-        $jobs = RecruiterJobs::where(['recruiter_jobs.job_type' => RecruiterJobs::TEMPORARY, 'recruiter_offices.user_id' => Auth::user()->id, 'job_titles.id' => $job_title_id])
+        $jobs = RecruiterJobs::where(['recruiter_jobs.job_type' => RecruiterJobs::TEMPORARY, 'recruiter_offices.user_id' => Auth::user()->id, 'recruiter_jobs.id' => $job_title_id])
                 ->join('recruiter_offices', 'recruiter_offices.id', '=', 'recruiter_jobs.recruiter_office_id')
                 ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')

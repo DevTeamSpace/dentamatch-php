@@ -72,6 +72,9 @@
                         @if($job['job_type']==\App\Models\RecruiterJobs::TEMPORARY)
                         <span>Number of Candidates Needed: {{ $job['no_of_jobs'] }}</span>
                         @endif
+                        @if($job['pay_rate']!='')
+                        <span class="payrate-red row"><strong>Hourly Wage Offered: ${{ $job['pay_rate'] }}</strong></span>
+                        @endif
                     </address> 
 
 
