@@ -17,10 +17,13 @@ class JobTitles extends Model
         ];
     protected $hidden       = ['created_at','updated_at'];
     
-    public static function getAll($active=''){
+    public static function getAll($active='',$template=''){
         $obj = self::select('id','jobtitle_name','is_license_required');
         if($active!=''){
             $obj->where('is_active',$active)->orderby('id','asc');
+        }
+        if($template!=''){
+            $obj->whereNull('parent_id')->orderby('id','asc');
         }
         return $obj->get()->toArray();
        

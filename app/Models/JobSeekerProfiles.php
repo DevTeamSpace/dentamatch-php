@@ -16,9 +16,9 @@ class JobSeekerProfiles extends Model
     const DISTANCE = 10;
 
     public static function getJobSeekerProfiles($job,$reqData){
-        $obj = JobSeekerProfiles::where('jobseeker_profiles.job_titile_id',$job['job_title_id']);
-
-        $obj->leftJoin('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id');
+        $obj = JobSeekerProfiles::join('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id');
+                
+        $obj->whereRaw(DB::raw('(job_titles.parent_id='.$job['job_title_id'].' or job_titles.id='.$job['job_title_id'].')'));        
         if(!empty($reqData['preferredLocationId'])) {
             $obj->where('jobseeker_profiles.preferred_job_location_id',$reqData['preferredLocationId']);
         }
