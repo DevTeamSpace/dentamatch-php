@@ -55,6 +55,6 @@ class RatingController extends Controller {
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
-        return redirect()->back();
+        return redirect()->back()->withInput(['tab'=>$seekerId]);;
     }   
 }

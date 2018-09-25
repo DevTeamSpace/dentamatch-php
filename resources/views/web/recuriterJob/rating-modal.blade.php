@@ -16,7 +16,7 @@
                     <div class="media-left ">
                         <div class="img-holder pos-rel">
                             <img class="media-object img-circle" src="{{ url("image/66/66/?src=" .$seeker['profile_pic']) }}" alt="...">
-                            <span class="star star-fill"></span>
+                            <span class="star {{ ($seeker['is_favourite']==null)?'star-empty':'star-fill' }}"></span>
                         </div>
                     </div>
                     <div class="media-body row">
@@ -71,7 +71,7 @@
                         <div class="media-left ">
                             <div class="img-holder pos-rel">
                                 <img class="media-object img-circle" src="{{ url("image/66/66/?src=" .$seeker['profile_pic']) }}" alt="...">
-                                <span class="star star-fill"></span>
+                                <span class="star {{ ($seeker['is_favourite']==null)?'star-empty':'star-fill' }}"></span>
                             </div>
                         </div>
                         <div class="media-body row">
@@ -129,8 +129,70 @@
         </div>
     </div>
 </div>
-    
-<script>
+
+<!-- Fav Modal -->
+<div id="favsekeerPopup_{{ $seeker['seeker_id'] }}" class="modal fade " role="dialog">
+    <div class="modal-dialog custom-modal popup-wd522">
+        <!-- Modal content-->
+        <div class="modal-content">
+            {!! csrf_field() !!}
+            <input type="hidden" name="recruiter_job_id" value="{{ $job['id'] }}">
+            <input type="hidden" name="seeker_id" value="{{ $seeker['seeker_id'] }}">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Favorite Candidate</h4>
+            </div>
+            <div class="modal-body ">
+                <div class="media nopadding">
+                    <div class="media-left ">
+                        <div class="img-holder pos-rel">
+                            <img class="media-object img-circle" src="{{ url("image/66/66/?src=" .$seeker['profile_pic']) }}" alt="...">
+                            <span class="star {{ ($seeker['is_favourite']==null)?'star-empty':'star-fill' }}"></span>
+                        </div>
+                    </div>
+                    <div class="media-body row">
+                        <div class="col-sm-8 pd-t-10 ">
+                            <div>
+                                <a href="#" class="media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a>
+                                @if(!empty($seeker['avg_rating']))
+                                    <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{ number_format($seeker['avg_rating'], 1, '.', '') }}</span>
+                                @else
+                                    <span class=" dropdown-toggle label label-success">Not Yet Rated</span>
+                                @endif
+                            </div>
+                            <p class="nopadding">{{ $job['jobtitle_name'] }}</p>
+                            @php 
+                                $dates = explode(',',$job['temp_job_dates']);
+                            @endphp
+                            <p class="nopadding">
+                                @foreach ($dates as $date)
+                                    {{ date('l, d M Y',strtotime($date)) }},
+                                @endforeach
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mr-t-40 text-center">
+                    <hr>
+                    <p>Do you want to favorite <span>{{ $seeker['first_name'].' '.$seeker['last_name'] }}</span>?</p>
+                    <div class="text-primary">
+                        <button type="button" onclick="markFavourite({{ $seeker['seeker_id'] }});" id="fav-yes_{{ $seeker["seeker_id"] }}" class=" nopadding btn-link ">Yes</button>/
+                        <button type="submit" id="fav-no_{{ $seeker['seeker_id'] }}" class=" nopadding btn-link ">No </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Fav Modal -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#favsekeerPopup_22').modal('show');
+        var spanClassFav=$('#favsekeerPopup_{{ old("tab") }}').find('span.star').hasClass('star-empty');
+        if(spanClassFav==true){
+            $('#favsekeerPopup_{{ old("tab") }}').modal('show');
+        }
+    });
     $('#punctuality_{{ $seeker["seeker_id"] }}').rating({
         icon: '',
         color: '#fff',
@@ -162,6 +224,15 @@
         validationMessage: 'Oops! Please rate us!'
     }).change(function() {
         $('#personal-skill_{{ $seeker["seeker_id"] }}').val($(this).val());
+    });
+    
+    $('#fav-yes_{{ $seeker["seeker_id"] }}').click(function() {
+        $('#favsekeerPopup_{{ $seeker["seeker_id"] }}').modal('hide');
+        $('#favbutton_{{ $seeker["seeker_id"] }}').hide();
+    });
+    
+    $('#fav-no_{{ $seeker["seeker_id"] }}').click(function() {
+        $('#favsekeerPopup_{{ $seeker["seeker_id"] }}').modal('hide');
     });
     
     $('#rating-yes_{{ $seeker["seeker_id"] }}').click(function() {
