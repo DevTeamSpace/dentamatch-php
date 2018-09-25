@@ -14,7 +14,7 @@
                             <label class="col-md-4 control-label">JobTitle</label>
 
                             <div class="col-md-6">
-                                <input type="text"  class="form-control" name="jobtitle" value="{{ $jobtitle->jobtitle_name }}">
+                                <input readonly="true" type="text"  class="form-control" name="jobtitle" value="{{ $jobtitle->jobtitle_name }}">
                                 <input type="hidden" name="id" value="{{ $jobtitle->id }}">
                                 @if ($errors->has('jobtitle'))
                                     <span class="help-block">
