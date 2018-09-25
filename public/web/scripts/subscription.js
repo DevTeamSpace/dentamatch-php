@@ -26,8 +26,8 @@ var FirstSubscriptionVM = function () {
         $.get('get-subscription-list', {}, function (d) {
             if(typeof d.data != "undefined"){
                 if(d.data.length == 0){
-                    d.data['trailPeriod'] = 0;
-                    d.data['free_trial_period'] = 'with 0 months of free trial'
+                    d.data['trailPeriod'] = 1;
+                    d.data['free_trial_period'] = 'with 1 month free trial'
                 }else{
                     //d.data['trailPeriod'] = d.data['free_trial_period'];
                     //d.data['free_trial_period'] = 'with '+d.data['free_trial_period']+' months free trial';

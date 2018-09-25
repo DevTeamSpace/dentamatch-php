@@ -34,7 +34,7 @@
                         <span class="price-symbol ">$</span>
                         <span class="price" data-bind="text: halfYearPrice">594</span>
                         <span class="price-duration">/ 6 mo.</span>
-                        <p data-bind="text: free_trial_period">with 1 months free trial</p>
+                        <p data-bind="text: free_trial_period">with 1 month free trial</p>
                         <input type="hidden" id="stype" value="2">
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                         <span class="price-symbol ">$</span>
                         <span class="price" data-bind="text: fullYearPrice">948</span>
                         <span class="price-duration">/ yr.</span>
-                        <p data-bind="text: free_trial_period">with 1 months free trial</p>
+                        <p data-bind="text: free_trial_period">with 1 month free trial</p>
                         <input type="hidden" id="stype" value="3">
                     </div>
                 </div>
