@@ -29,8 +29,10 @@ var FirstSubscriptionVM = function () {
                     d.data['trailPeriod'] = 0;
                     d.data['free_trial_period'] = 'with 0 months of free trial'
                 }else{
-                    d.data['trailPeriod'] = d.data['free_trial_period'];
-                    d.data['free_trial_period'] = 'with '+d.data['free_trial_period']+' months free trial';
+                    //d.data['trailPeriod'] = d.data['free_trial_period'];
+                    //d.data['free_trial_period'] = 'with '+d.data['free_trial_period']+' months free trial';
+                    d.data['trailPeriod'] = 1;
+                    d.data['free_trial_period'] = 'with 1 months free trial';
                 }
                 d.data['quarterlyPrice'] = 387;
                 d.data['halfYearPrice'] = 594;
@@ -68,8 +70,12 @@ var FirstSubscriptionVM = function () {
 //            return me.expiry();
 //        });
         me.cvv();
-        me.trailPeriod(d.trailPeriod);
         subType = $(e.currentTarget).parent().find('#stype').val();
+        d.trailPeriod=1;
+        if(subType==1){
+            d.trailPeriod=0;
+        }
+        me.trailPeriod(d.trailPeriod);
         me.subscriptionType(subType);
         me.creatingMessage('');
         me.disableInput(false);
