@@ -77,7 +77,7 @@ class ReportController extends Controller {
                             ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
                             ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'recruiter_offices.user_id')
                             ->leftjoin('job_lists', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
-                            ->select('recruiter_jobs.id', 'recruiter_jobs.job_type', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name')
+                            ->select('recruiter_jobs.id', 'recruiter_jobs.pay_rate', 'recruiter_jobs.job_type', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name')
                             ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 1, 1,0)) AS invited"))
                             ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 2, 1,0)) AS applied"))
                             ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 3, 1,0)) AS sortlisted"))
@@ -126,7 +126,7 @@ class ReportController extends Controller {
                             ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                             ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
                             ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'recruiter_offices.user_id')
-                            ->select('recruiter_jobs.id', 'recruiter_jobs.job_type', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name', 'recruiter_offices.address')
+                            ->select('recruiter_jobs.id',  'recruiter_jobs.pay_rate','recruiter_jobs.job_type', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name', 'recruiter_offices.address')
                             ->orderBy('recruiter_jobs.id', 'desc');
  
             return Datatables::of($jobLists)

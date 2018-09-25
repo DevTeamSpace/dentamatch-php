@@ -13,13 +13,14 @@
                 </div>
 
                 <div class="panel-body">
-                    <table id="job_list" class="display responsive nowrap" cellspacing="0" width="100%">
+                    <table id="job_list" class="display responsive wrap" cellspacing="0" width="100%">
                           <thead>
                               <tr>
                                   <th>Office Name</th>
                                   <th>Office Location</th>
                                   <th>Job Title</th>
                                   <th>Job Type</th>
+                                  <th>Hourly Wage Offered</th>
                                   <th>Action</th>
                               </tr>
                           </thead>

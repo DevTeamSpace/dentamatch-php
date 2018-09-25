@@ -308,6 +308,7 @@ $(function () {
                     return 'Temporary';
                 }
             }},
+            {data: 'pay_rate', name: 'pay_rate',searchable:false},
             {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
                 return '<a href="'+public_path+'report/'+row.id+'/view"  class="btn btn-xs btn-primary"><i class="fa fa-view"></i> View Details</a>&nbsp;'
                 +'<a href="javascript:deleteJob('+row.id+');"  class="btn btn-xs btn-primary"><i class="fa fa-delete"></i> Delete</a>&nbsp;';
@@ -382,6 +383,7 @@ $(function () {
                     return 'Temporary';
                 }
             }},
+            {data: 'pay_rate', name: 'pay_rate',searchable:false},
             {data: 'invited', name: 'invited',searchable:false},
             {data: 'applied', name: 'applied',searchable:false},
             {data: 'sortlisted', name: 'sortlisted',searchable:false},
