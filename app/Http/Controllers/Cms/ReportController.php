@@ -15,6 +15,7 @@ use Log;
 use App\Models\JobLists;
 use DB;
 use App\Models\SearchFilter;
+use App\Providers\NotificationServiceProvider;
 
 class ReportController extends Controller {
 
