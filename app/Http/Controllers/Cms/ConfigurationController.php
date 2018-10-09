@@ -52,7 +52,7 @@ class ConfigurationController extends Controller
         try{
         $reqData = $request->all();
         $rules = array(
-            'payrate' => 'required|mimes:jpeg,bmp,png,jpg,pdf',
+            'payrate' => 'required|max:2048|mimes:jpeg,bmp,png,jpg,pdf',
         );
         $validator = Validator::make($reqData, $rules);
         if ($validator->fails()) {

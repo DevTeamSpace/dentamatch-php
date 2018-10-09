@@ -132,8 +132,8 @@
                         <input name="payRate" type="text" id="payRate" class="form-control" data-parsley-min="1" data-parsley-pattern="^[0-9]*$" data-parsley-pattern-message="numeric only "  data-parsley-required-message="required" data-parsley-min-message="zero should not be allowed"/>
                     </div>
                     @if($payrateUrl!='')
-<!--                    <a target="_blank" href="{{ $payrateUrl }}">Click here for reference pay rate</a>-->
-                    <a class="modalClick" data-toggle="modal" data-target="#payrate_div">Click here for reference pay rate</a>
+                    <a target="_blank" href="{{ $payrateUrl }}">Click here for reference pay rate</a>
+                    <!--<a class="modalClick" data-toggle="modal" data-target="#payrate_div">Click here for reference pay rate</a>-->
                     @endif
                 </div>
             </div>
