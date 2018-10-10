@@ -87,7 +87,7 @@
                 <label >Hourly Wage Offered</label>
                 <div class="row">
                     <div class="col-md-4 col-lg-4">
-                        <input name="payRate" type="text" min="1" id="payRate" class="form-control" data-parsley-required-message="Pay rate required" data-bind="visible: showPayRate,value: payRate, attr:{'data-parsley-required': showPayRate}" />
+                        <input placeholder="Amount will be in $" name="payRate" type="text" min="1" id="payRate" class="form-control" data-parsley-required-message="Pay rate required" data-bind="visible: showPayRate,value: payRate, attr:{'data-parsley-required': showPayRate}" />
                     </div>
                     <a target="_blank" href="{{ $payrateUrl }}">Click here for reference pay rate</a>
                     <!--<a class="modalClick" data-toggle="modal" data-target="#payrate_div">Click here for reference pay rate</a>-->
