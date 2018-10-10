@@ -74,7 +74,7 @@
                                 </a>
 
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('/cms') }}">Location</a></li>
+                                <li><a href="{{ url('cms/location/index') }}">Location</a></li>
                                 <li><a href="{{ url('cms/affiliation/index') }}">Affiliations</a></li>
                                 <li><a href="{{ url('cms/jobtitle/index') }}">Job Title</a></li>
                                 <li><a href="{{ url('cms/officetype/index') }}">Office Type</a></li>
