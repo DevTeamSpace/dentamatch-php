@@ -280,7 +280,7 @@ class ReportController extends Controller {
             $jobObj = RecruiterJobs::where('recruiter_jobs.id', $jobId)
                     ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
                     ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
-                    ->select('job_templates.user_id','recruiter_jobs.job_type','job_titles.jobtitle_name')->get()->toArray();
+                    ->select('job_templates.user_id','recruiter_jobs.job_type','job_titles.jobtitle_name')->first()->toArray();
             if($jobObj) {
                 $jobData = RecruiterJobs::where('recruiter_jobs.id',$jobId)
                                 ->select('job_lists.seeker_id', 'job_type', 'job_templates.user_id', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name')
