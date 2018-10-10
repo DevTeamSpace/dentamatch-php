@@ -25,6 +25,7 @@
                                   <th>Preferred Job Location</th>
                                   <th>License</th>
                                   <th>State</th>
+                                  <th>Registered On</th>
                               </tr>
                           </thead>
 

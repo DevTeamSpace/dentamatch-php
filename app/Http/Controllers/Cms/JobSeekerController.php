@@ -367,7 +367,7 @@ class JobSeekerController extends Controller
                         ->leftjoin('job_titles','job_titles.id' , '=','jobseeker_profiles.job_titile_id')
                         ->leftjoin('preferred_job_locations','jobseeker_profiles.preferred_job_location_id' , '=','preferred_job_locations.id')
                         ->select(
-                                'users.email','users.id',
+                                'users.email','users.id','jobseeker_profiles.created_at',
                                 'jobseeker_profiles.first_name','jobseeker_profiles.state',
                                 'jobseeker_profiles.last_name','jobseeker_profiles.license_number',
                                 'users.is_verified','users.is_active',
@@ -393,7 +393,7 @@ class JobSeekerController extends Controller
                         ->leftjoin('job_titles','job_titles.id' , '=','jobseeker_profiles.job_titile_id')
                         ->leftjoin('preferred_job_locations','jobseeker_profiles.preferred_job_location_id' , '=','preferred_job_locations.id')
                         ->select(
-                                'users.email','users.id',
+                                'users.email','users.id','jobseeker_profiles.created_at',
                                 'jobseeker_profiles.first_name','jobseeker_profiles.license_number',
                                 'jobseeker_profiles.last_name','jobseeker_profiles.state',
                                 'jobseeker_profiles.is_completed','users.is_active',
@@ -508,7 +508,7 @@ class JobSeekerController extends Controller
                         ->leftjoin('job_titles','job_titles.id' , '=','jobseeker_profiles.job_titile_id')
                         ->leftjoin('preferred_job_locations','jobseeker_profiles.preferred_job_location_id' , '=','preferred_job_locations.id')
                         ->select(
-                                'users.email','users.id',
+                                'users.email','users.id','jobseeker_profiles.created_at',
                                 'jobseeker_profiles.first_name','jobseeker_profiles.license_number',
                                 'jobseeker_profiles.last_name','jobseeker_profiles.state',
                                 'jobseeker_profiles.is_completed','users.is_active',
@@ -545,7 +545,7 @@ class JobSeekerController extends Controller
                         ->leftjoin('job_titles','job_titles.id' , '=','jobseeker_profiles.job_titile_id')
                         ->leftjoin('preferred_job_locations','jobseeker_profiles.preferred_job_location_id' , '=','preferred_job_locations.id')
                         ->select(
-                                'users.email','users.id',
+                                'users.email','users.id','jobseeker_profiles.created_at',
                                 'users.is_verified','users.is_active',
                                 'jobseeker_profiles.first_name','jobseeker_profiles.license_number',
                                 'jobseeker_profiles.last_name','jobseeker_profiles.state',

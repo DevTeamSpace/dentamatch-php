@@ -202,6 +202,7 @@ $(function () {
             {data: 'preferred_location_name', name: 'preferred_job_locations.preferred_location_name',searchable:true},
             {data: 'license_number', name: 'jobseeker_profiles.license_number',searchable:true},
             {data: 'state', name: 'jobseeker_profiles.state',searchable:true},
+            {data: 'created_at', name: 'created_at',searchable:false},
         ]
     });
     
@@ -221,6 +222,7 @@ $(function () {
             {data: 'preferred_location_name', name: 'preferred_job_locations.preferred_location_name',searchable:true},
             {data: 'license_number', name: 'jobseeker_profiles.license_number',searchable:true},
             {data: 'state', name: 'jobseeker_profiles.state',searchable:true},
+            {data: 'created_at', name: 'created_at',searchable:false},
         ]
     });
     
@@ -240,6 +242,7 @@ $(function () {
             {data: 'preferred_location_name', name: 'preferred_job_locations.preferred_location_name',searchable:true},
             {data: 'license_number', name: 'jobseeker_profiles.license_number',searchable:true},
             {data: 'state', name: 'jobseeker_profiles.state',searchable:true},
+            {data: 'created_at', name: 'created_at',searchable:false},
         ]
     });
     
@@ -259,6 +262,7 @@ $(function () {
             {data: 'preferred_location_name', name: 'preferred_job_locations.preferred_location_name',searchable:true},
             {data: 'license_number', name: 'jobseeker_profiles.license_number',searchable:true},
             {data: 'state', name: 'jobseeker_profiles.state',searchable:true},
+            {data: 'created_at', name: 'created_at',searchable:false},
         ]
     });
     
