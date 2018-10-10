@@ -15,7 +15,7 @@
                     <div class="subcription-price pos-rel">
                         <span class="price-symbol ">$</span>
                         <span class="price" data-bind="text: quarterlyPrice">387</span>
-                        <span class="price-duration">/ 3 mo.</span>
+                        <span class="price-duration">per 3 mo.</span>
                         <p>with no free trial</p>
                         <input type="hidden" id="stype" value="1">
                     </div>
@@ -52,7 +52,7 @@
                     <div class="subcription-price pos-rel">
                         <span class="price-symbol ">$</span>
                         <span class="price" data-bind="text: fullYearPrice">948</span>
-                        <span class="price-duration">/ yr.</span>
+                        <span class="price-duration">/ 12 mo.</span>
                         <p data-bind="text: free_trial_period">with 1 month free trial</p>
                         <input type="hidden" id="stype" value="3">
                     </div>
