@@ -141,7 +141,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
     Route::get('login', 'Auth\LoginController@getLogin');
     Route::get('logout', 'Auth\LoginController@logout');
     Route::post('/login', 'Auth\LoginController@login');
-    Route::get('/', 'Cms\LocationController@index');
+    Route::get('/', 'Cms\JobSeekerController@verificationLicense');
     Route::get('/home', 'cms\LocationController@index');
     Route::group(['prefix' => 'user/'], function() {
         Route::get('listPhotographer', 'Cms\UserController@getPhotographerList');
