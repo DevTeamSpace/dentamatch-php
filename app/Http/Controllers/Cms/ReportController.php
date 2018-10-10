@@ -277,7 +277,10 @@ class ReportController extends Controller {
         try{
             $insertData = [];
             $jobId = request()->get('jobId');
-            $jobObj = RecruiterJobs::where('id', $jobId)->first();
+            $jobObj = RecruiterJobs::where('recruiter_jobs.id', $jobId)
+                    ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
+                    ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
+                    ->select('job_templates.user_id','job_type','job_titles.jobtitle_name')->get()->toArray();
             if($jobObj) {
                 $jobData = RecruiterJobs::where('recruiter_jobs.id',$jobId)
                                 ->select('job_lists.seeker_id', 'job_type', 'job_templates.user_id', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name')
@@ -323,8 +326,9 @@ class ReportController extends Controller {
                 }
                 //send message to recruiter
                 $adminUser = User::getAdminUserDetailsForNotification();
-                
-                Notification::createNotification(['sender_id' => $adminUser->id, 'receiver_id' => $senderId, 
+                $message = "Admin has deleted your ".strtolower(RecruiterJobs::$jobTypeName[$jobObj['job_type']])." job vacancy for ".$jobObj['jobtitle_name'];
+                        
+                Notification::createNotification(['sender_id' => $adminUser->id, 'receiver_id' => $jobObj['user_id'], 
                     'notification_data'=> json_encode(['image' => url('web/images/dentaMatchLogo.png'),
                         'message' => $message])]);
                 
