@@ -9,8 +9,10 @@ use Session;
 use App\Models\Configs;
 use Log; 
 use Illuminate\Support\Facades\Storage;
+use App\Repositories\File\FileRepositoryS3;
 class ConfigurationController extends Controller
 {
+    use FileRepositoryS3;
     /**
      * Create a new controller instance.
      *
@@ -60,8 +62,10 @@ class ConfigurationController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-        $path = $request->file('payrate')->store('payrate');
-        Configs::where('config_name', 'PAYRATE')->update(['config_data' => $path]);
+        
+        $filename = $this->generateFilename('payrate');
+        $res = $this->uploadFileToAWS($request,$filename);
+        Configs::where('config_name', 'PAYRATE')->update(['config_data' => $filename]);
         Session::flash('message',trans('messages.payrate_update'));
         return redirect('cms/config/pay-rate');
         }catch (\Exception $e) {

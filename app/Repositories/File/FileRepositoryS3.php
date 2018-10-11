@@ -18,11 +18,13 @@ trait FileRepositoryS3 {
     }
 
     public function uploadFileToAWS(Request $request, &$filename) {
-        $file = file_get_contents($request->file('image')->getRealPath());
-        $check = getimagesize($request->file('image')->getRealPath());
+        $file = file_get_contents($request->file('payrate')->getRealPath());
+        $check = $request->file('payrate')->getMimeType();
+        $fileExt = str_replace('application/', '', $check);
+        $fileExt = str_replace('image/', '', $fileExt);
         $res = 0;
-        if (in_array(strtolower($check['mime']), ['image/jpeg', 'image/jpg', 'image/png'])) {
-            $filename = $filename . str_replace("image/", ".", $check['mime']);
+        if (in_array(strtolower($fileExt), ['jpeg', 'jpg', 'png','pdf'])) {
+            $filename = $filename .'.'. $fileExt;
             $this->createObject();
             $res = $this->awsObj->put($filename, $file, 'public');
             if ($res != 1) {
