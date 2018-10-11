@@ -20,7 +20,7 @@ $(function () {
         //bFilter: false,
         columns: [
             {data: 'zipcode', name: 'zipcode',searchable:true},
-            {data: 'freeTrialPeriod', name: 'free_trial_period',searchable:true},
+            //{data: 'freeTrialPeriod', name: 'free_trial_period',searchable:true},
             {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
                 return (row.isActive == 1) ?'Yes':'No';
             }},

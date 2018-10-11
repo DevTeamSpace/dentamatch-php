@@ -23,7 +23,7 @@
                             <label class="col-md-4 control-label">Upload Payrate</label>
 
                             <div class="col-md-6 no-border">
-                                <input type="file" name="payrate">
+                                <input type="file" name="payrate" accept="application/pdf, image/gif, image/jpeg, image/png, image/jpg" />
 
                                 @if ($errors->has('payrate'))
                                     <span class="help-block">

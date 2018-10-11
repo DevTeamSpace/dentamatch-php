@@ -19,7 +19,7 @@
                           <thead>
                               <tr>
                                   <th>Zipcode</th>
-                                  <th>Free Trail Period</th>
+                                  <!--<th>Free Trail Period</th>-->
                                   <th>Active</th>
                                   <th>Action</th>
                               </tr>
