@@ -23,7 +23,7 @@ return [
     'location_updated'=>'Successfully updated location zipcode!',
     'about_me_list' => "AboutMe Successfully Retrieved",
     'user_exist_same_email' => 'User already exists with this email',
-    'user_registration_successful' => 'You are successfully registered. Please check your mail box to verify the email',
+    'user_registration_successful' => 'Please check your email to verify your new account.',
     'user_logged_successful' => 'User logged in successfully',
     'user_account_not_active' => 'User has been deactivated.Please contact admin',
     'invalid_login_credentials' => 'Invalid login credentials',
