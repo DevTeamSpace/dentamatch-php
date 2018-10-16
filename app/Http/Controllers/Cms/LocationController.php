@@ -88,7 +88,7 @@ class LocationController extends Controller
         
         $location->zipcode = trim($request->zipcode);
         $location->description = trim($request->description);
-        $location->free_trial_period = $request->free_trial_period;
+        //$location->free_trial_period = $request->free_trial_period;
         $location->is_active = ($request->is_active)?1:0;
         $location->save();
         Session::flash('message',$msg);
