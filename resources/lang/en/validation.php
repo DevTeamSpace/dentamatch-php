@@ -80,7 +80,7 @@ return [
     'string' => 'The :attribute must be a string.',
     'timezone' => 'The :attribute must be a valid zone.',
     'unique' => 'The :attribute has already been taken.',
-    'uploaded' => 'The :attribute failed to upload.',
+    'uploaded' => 'The pay rate file must be less than 2Mb.',
     'url' => 'The :attribute format is invalid.',
     /*
       |--------------------------------------------------------------------------
