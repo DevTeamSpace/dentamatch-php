@@ -5,11 +5,11 @@ namespace App\Http\Controllers\cms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
-use App\Models\AppMessage as AppMessageJob;
+use App\Models\AppMessage;
 use Yajra\Datatables\Datatables;
 use Session;
 use Log;
-use App\Jobs\AppMessage;
+use App\Jobs\AppMessage as AppMessageJob;
 class AppMessageController extends Controller
 {
     /**
