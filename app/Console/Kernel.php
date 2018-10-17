@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('user:profileCompletion')->daily()->withoutOverlapping();
         $schedule->command('user:certificateExpiry')->daily()->withoutOverlapping();
-        $schedule->command('notify:adminNotification')->everyTenMinutes()->withoutOverlapping();
+        //$schedule->command('notify:adminNotification')->everyTenMinutes()->withoutOverlapping();
         $schedule->command('notify:tempJobExpiryNotification')->daily()->withoutOverlapping();
         $schedule->command('notify:tempJobRatingNotification')->daily()->withoutOverlapping();
         $schedule->command('jobseeker:unverified')->daily()->withoutOverlapping();

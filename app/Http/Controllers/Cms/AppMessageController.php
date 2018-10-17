@@ -9,6 +9,7 @@ use App\Models\AppMessage;
 use Yajra\Datatables\Datatables;
 use Session;
 use Log;
+use App\Jobs\AppMessage;
 class AppMessageController extends Controller
 {
     /**
@@ -108,6 +109,7 @@ class AppMessageController extends Controller
             $appMessage->messageSent=1;
             $appMessage->cronMessageSent=0;
             $appMessage->save();   
+            dispatch($appMessage);
        }else {
             Session::flash('message',trans('messages.already_sent_message'));
         }
