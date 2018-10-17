@@ -5,7 +5,7 @@ namespace App\Http\Controllers\cms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
-use App\Models\AppMessage;
+use App\Models\AppMessage as AppMessageJob;
 use Yajra\Datatables\Datatables;
 use Session;
 use Log;
@@ -108,8 +108,8 @@ class AppMessageController extends Controller
         if(!$appMessage->messageSent){
             $appMessage->messageSent=1;
             $appMessage->cronMessageSent=0;
-            $appMessage->save();   
-            dispatch($appMessage);
+            $appMessage->save(); 
+            AppMessageJob::dispatch($appMessage);
        }else {
             Session::flash('message',trans('messages.already_sent_message'));
         }
