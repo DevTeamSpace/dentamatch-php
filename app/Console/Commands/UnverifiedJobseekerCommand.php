@@ -67,7 +67,7 @@ class UnverifiedJobseekerCommand extends Command
                 $email = $user['email'];
                 $fname = $user['first_name'];
                 Mail::queue('email.pending-email-verification', ['name' => $name, 'url' => $url, 'email' => $user['email']], function($message) use($email,$fname) {
-                        $message->to($email, $fname)->subject('Pending Email Activation');
+                        $message->to($email, $fname)->subject(trans("messages.pending_email"));
                     });
             }
         }

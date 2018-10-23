@@ -11,18 +11,16 @@
             
             <tr>
                 <td align="left" style="line-height:20px;"><div style="border-left:1px solid #f4f4f4; border-right:1px solid #f4f4f4; border-bottom:1px solid #f4f4f4; padding:30px 24px 19px;">
-                        <!--<h2 style="margin:0 0 40px 0; text-align:center;">Reset Password Request </h2>-->
                         <h3 style="margin:0 0 15px 0">Hi {{ $name }},</h3>
                         <div style="font-size:15px;">
                             <p style="line-height: 24px;">
-                                You have requested to activate your account.<br/><br/>
-                                Please visit the link below to activate your account.<br/>
-                                <a href="{{ $url }}">Click to Activate</a>
+                                Your DentaMatch account is waiting for you!<br/><br/>
+                                Please <a href="{{ $url }}">click here</a> to activate your account and set your password.<br/>
                             </p>
                             <br/>
-                            <p style="margin: 0">(Link)</p>
-                            <p style="margin:20px 0 0 0; padding: 0;">Sincerely Captured</p>
-                            <p style="margin: 0">DentaMatch Team</p>
+                            <!--<p style="margin: 0">(Link)</p>-->
+                            <p style="margin:20px 0 0 0; padding: 0;">See you soon,</p>
+                            <p style="margin: 0">The DentaMatch Team</p>
 
                         </div>
                     </div>

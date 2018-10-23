@@ -53,7 +53,7 @@ use ResetsPasswords;
         );
 
         if ($response == 'passwords.user') {
-            $response = 'Token has been expired.';
+            $response = 'Sorry, that link expired. Please try again.';
         }
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can

@@ -10,16 +10,14 @@
         <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; max-width:640px;">
             <tr>
                 <td align="left" style="line-height:20px;"><div style="border-left:1px solid #f4f4f4; border-right:1px solid #f4f4f4; border-bottom:1px solid #f4f4f4; padding:30px 24px 19px;">
-                        <!--<h2 style="margin:0 0 40px 0; text-align:center;">Reset Password Request </h2>-->
                         <h3 style="margin:0 0 15px 0">Hi {{ $name }},</h3>
                         <div style="font-size:15px;">
                             <p style="line-height: 24px;">
-                                You have requested to reset your password.<br/><br/>
-                                Please visit the link below to reset your password.<br/>
-                                <a href="{{ $url }}">Click to Reset</a>
+                                Don’t worry, we’ve got this.<br/><br/>
+                                Please <a href="{{ $url }}">click here</a> to reset your DentaMatch password.<br/>
                             </p>
-                            <br/><p style="margin:20px 0 0 0; padding: 0;">Sincerely Captured</p>
-                            <p style="margin: 0">DentaMatch Team</p>
+                            <br/><p style="margin:20px 0 0 0; padding: 0;">See you soon,</p>
+                            <p style="margin: 0">The DentaMatch Team</p>
 
                         </div>
                     </div>

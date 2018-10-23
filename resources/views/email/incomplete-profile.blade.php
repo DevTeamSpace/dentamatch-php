@@ -12,12 +12,12 @@
                         <h3 style="margin:0 0 15px 0">Hi {{ $name }},</h3>
                         <div style="font-size:15px;">
                             <p style="line-height: 24px;">
-                                Your profile is not yet complete.<br/><br/>
-                                Kindly login to the DentaMatch App to complete the profile.<br/>
+                                We can’t wait to match your skills to dental offices near you, but we need your help.<br/><br/>
+                                Please <a href="#">visit the DentaMatch app</a> to complete your profile. All you have to do is select your skills and list some basic information and we’ll take it from there. <br/>
                             </p>
                             <br/>
-                            <p style="margin:20px 0 0 0; padding: 0;">Sincerely, </p>
-                            <p style="margin: 0">DentaMatch Team</p>
+                            <p style="margin:20px 0 0 0; padding: 0;">See you soon, </p>
+                            <p style="margin: 0">The DentaMatch Team</p>
                         </div>
                     </div>
                 </td>

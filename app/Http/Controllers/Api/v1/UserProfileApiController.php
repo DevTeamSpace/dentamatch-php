@@ -141,11 +141,11 @@ class UserProfileApiController extends Controller {
                     if($isLicenseRequired && ($userProfileModel->license_number != $request->license || $userProfileModel->state != $request->state)) {
                         if(!empty($request->license) && !empty($request->state)) {
                             $userLicenData = User::getUser($userId);
-                            $userName = $userLicenData['first_name'];
+                            $userName = $userLicenData['first_name'].' '.$userLicenData['last_name'];
                             $userEmail = $userLicenData['email'];
                             $adminEmail = env('ADMIN_EMAIL');
                             Mail::queue('email.admin-verify-jobseeker', ['name' => $userName, 'email' => $userEmail], function($message ) use($adminEmail) {
-                                    $message->to($adminEmail, "Dentamatch Admin")->subject('Verify Jobseeker');
+                                    $message->to($adminEmail, "Dentamatch Admin")->subject(trans("messages.verify_seeker"));
                                 });
                         }
                         $isJobSeekerVerified = 0;
@@ -339,11 +339,11 @@ class UserProfileApiController extends Controller {
                     if($isLicenseRequired && ((isset($reqData['licenseNumber']) && $userProfile->license_number != $reqData['licenseNumber']) || (isset($reqData['state']) && $userProfile->state != $reqData['state']))) {
                         if(!empty($reqData['licenseNumber']) && !empty($reqData['state'])) {
                             $userLicenData = User::getUser($userId);
-                            $userName = $userLicenData['first_name'];
+                            $userName = $userLicenData['first_name'].' '.$userLicenData['last_name'];
                             $userEmail = $userLicenData['email'];
                             $adminEmail = env('ADMIN_EMAIL');
                             Mail::queue('email.admin-verify-jobseeker', ['name' => $userName, 'email' => $userEmail], function($message ) use($adminEmail) {
-                                    $message->to($adminEmail, "Dentamatch Admin")->subject('Verify Jobseeker');
+                                    $message->to($adminEmail, "Dentamatch Admin")->subject(trans("messages.verify_seeker"));
                                 });
                         }
                         $isJobSeekerVerified = 0;
@@ -351,11 +351,11 @@ class UserProfileApiController extends Controller {
                 } else if($isLicenseRequired && (isset($reqData['licenseNumber']) && isset($reqData['state']))) {
                     if(!empty($reqData['licenseNumber']) && !empty($reqData['state'])) {
                         $userLicenData = User::getUser($userId);
-                        $userName = $userLicenData['first_name'];
+                        $userName = $userLicenData['first_name'].' '.$userLicenData['last_name'];
                         $userEmail = $userLicenData['email'];
                         $adminEmail = env('ADMIN_EMAIL');
                         Mail::queue('email.admin-verify-jobseeker', ['name' => $userName, 'email' => $userEmail], function($message ) use($adminEmail) {
-                                $message->to($adminEmail, "Dentamatch Admin")->subject('Verify Jobseeker');
+                                $message->to($adminEmail, "Dentamatch Admin")->subject(trans("messages.verify_seeker"));
                             });
                     }
                     $isJobSeekerVerified = 0;
@@ -456,7 +456,7 @@ class UserProfileApiController extends Controller {
                     $name = $userModel->first_name;
                     $email = $userModel->email;
                     Mail::queue('email.pending-email-verification', ['name' => $name, 'url' => $url, 'email' => $email], function($message) use($email,$name) {
-                            $message->to($email, $name)->subject('Pending Email Activation');
+                            $message->to($email, $name)->subject(trans("messages.pending_email"));
                         });
                     $response = ApiResponse::customJsonResponse(1, 200, "Email verification link has been sent to $email.", ['isVerified'=>$isVerified]); 
                 }

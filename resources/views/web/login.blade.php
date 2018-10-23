@@ -29,11 +29,11 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label" for="signup-pwd">Password</label>
-                                        <input type="password" name="password" class="form-control " id="signup-pwd" required data-parsley-trigger="keyup"  data-parsley-length="[6, 14]"  data-parsley-length-message="character count should be between [6 -14] chars" data-parsley-required-message="password required">
+                                        <input type="password" name="password" class="form-control " id="signup-pwd" required data-parsley-trigger="keyup"  data-parsley-length="[6, 14]"  data-parsley-length-message="Password should be 6-14 characters long" data-parsley-required-message="Password required">
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label" for="signup-confirmpwd">Confirm Password</label>
-                                        <input type="password" name="confirmPassword" class="form-control " id="signup-confirmpwd" required data-parsley-trigger="keyup"  data-parsley-length="[6, 14]"  data-parsley-length-message="character count should be between [6 -14] chars" data-parsley-required-message="password required" data-parsley-equalto="#signup-pwd" data-parsley-equalto-message="password must be same">
+                                        <input type="password" name="confirmPassword" class="form-control " id="signup-confirmpwd" required data-parsley-trigger="keyup"  data-parsley-length="[6, 14]"  data-parsley-length-message="Password should be 6-14 characters long" data-parsley-required-message="Password required" data-parsley-equalto="#signup-pwd" data-parsley-equalto-message="Passwords must match">
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-denta-sm btn-primary  btn-block mr-t-20">Sign up</button>

@@ -12,12 +12,13 @@
                         <h3 style="margin:0 0 15px 0">Hello Admin,</h3>
                         <div style="font-size:15px;">
                             <p style="line-height: 24px;">
-                                Candidate <strong>{{ $name }} ( {{ $email }} )</strong> has updated the profile.<br/><br/>
-                                The license and state for this user is pending for approval.<br/><br/>
-                                Kindly login to the DentaMatch Admin to Approve / Reject jobseeker.<br/>
+                                A candidate requires your approval.<br/><br/>
+                                Please login to the DentaMatch Admin panel to approve or reject license and state for the candidate below.<br/><br/>
+                                Candidate Name: {{ $name }}<br/>
+                                Email: {{ $email }}<br/>
                             </p>
-                            <p style="margin:20px 0 0 0; padding: 0;">Sincerely, </p>
-                            <p style="margin: 0">DentaMatch Team</p>
+                            <p style="margin:20px 0 0 0; padding: 0;">Thank You,</p>
+                            <p style="margin: 0">The DentaMatch Team</p>
                         </div>
                     </div>
                 </td>

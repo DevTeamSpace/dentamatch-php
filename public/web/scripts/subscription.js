@@ -27,12 +27,12 @@ var FirstSubscriptionVM = function () {
             if(typeof d.data != "undefined"){
                 if(d.data.length == 0){
                     d.data['trailPeriod'] = 1;
-                    d.data['free_trial_period'] = 'with 1 month free trial'
+                    d.data['free_trial_period'] = 'plus a 1 month free trial'
                 }else{
                     //d.data['trailPeriod'] = d.data['free_trial_period'];
                     //d.data['free_trial_period'] = 'with '+d.data['free_trial_period']+' months free trial';
                     d.data['trailPeriod'] = 1;
-                    d.data['free_trial_period'] = 'with 1 months free trial';
+                    d.data['free_trial_period'] = 'plus a 1 month free trial';
                 }
                 d.data['quarterlyPrice'] = 387;
                 d.data['halfYearPrice'] = 594;

@@ -29,9 +29,7 @@
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
                                 @endif
-                            <p >Enter the email address you used when you 
-                                joined and we’ll send you instructions to 
-                                reset your password.</p>
+                            <p >Enter your email address so we can email you a link to reset your password.</p>
                             <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
 
                                 <label class=" control-label" for="email">Email </label>

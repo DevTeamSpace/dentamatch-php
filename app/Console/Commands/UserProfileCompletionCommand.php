@@ -75,7 +75,7 @@ class UserProfileCompletionCommand extends Command
                     $name = $value->first_name;
                     $email = $value->email;
                     Mail::queue('email.incomplete-profile', ['name' => $name, 'email' => $email], function($message ) use($email,$name) {
-                        $message->to($email, $name)->subject('Pending Profile');
+                        $message->to($email, $name)->subject(trans("messages.incomplete_profile_mail"));
                     });
                 }
             }

@@ -27,7 +27,7 @@ class VerifyCsrfToken extends BaseVerifier
         ) {
             return $this->addCookieToResponse($request, $next($request));
         }
-        return redirect('login')->with('message', 'Sorry, we could not verify your request. Please try again.');
+        return redirect('login')->with('message', 'Hmm. We don’t have a record of that email or password. Please try again.');
     }
     
     protected function addCookieToResponse($request, $response)

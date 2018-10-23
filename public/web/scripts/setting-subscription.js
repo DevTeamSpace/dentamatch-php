@@ -22,7 +22,7 @@ var SubscriptionModel = function (data) {
             me.subscriptionPlan('Quarterly');
         }
         else if (d.plan.interval_count == 6) {
-            me.subscriptionPlan('Half Yearly');
+            me.subscriptionPlan('Semi Annual');
         } else {
             me.subscriptionPlan('Yearly');
         }
@@ -97,12 +97,12 @@ var SubscriptionVM = function () {
                         console.log(d.data.data.data.subscriptions.data[i].plan.id);
                         if (d.data.data.data.subscriptions.data[i].plan.id === "one-year") {
                             me.switchToText('Switch to Quarterly');
-                            me.switchToText1('Switch to Half Yearly');
+                            me.switchToText1('Switch to Semi Annual');
                         } else if (d.data.data.data.subscriptions.data[i].plan.id === "six-months") {
                             me.switchToText('Switch to Quarterly');
                             me.switchToText1('Switch to Yearly');
                         } else {
-                            me.switchToText('Switch to Half Yearly');
+                            me.switchToText('Switch to Semi Annual');
                             me.switchToText1('Switch to Yearly');
                         }
                         break;
@@ -296,7 +296,7 @@ var SubscriptionVM = function () {
 
         if (d.subscription()[0].subscriptionPlan() === 'Yearly') {
             me.subscriptionType(3);
-        } else if (d.subscription()[0].subscriptionPlan() === 'Half Yearly') {
+        } else if (d.subscription()[0].subscriptionPlan() === 'Semi Annual') {
             me.subscriptionType(2);
         }else {
             me.subscriptionType(1);
@@ -328,13 +328,13 @@ var SubscriptionVM = function () {
         var planId=1;
         if (e.target.innerHTML === "Switch to Quarterly") {
             planId=1;
-            me.prompt('Do you want to change plan to quarterly. ?');
-        } else if (e.target.innerHTML === "Switch to Half Yearly") {
+            me.prompt('Do you want to change plan to quarterly?');
+        } else if (e.target.innerHTML === "Switch to Semi Annual") {
             planId=2;
-            me.prompt('Do you want to change plan to half yearly. ?');
+            me.prompt('Do you want to change plan to semi annual?');
         } else {
             planId=3;
-            me.prompt('Do you want to change plan to annually. ?');
+            me.prompt('Do you want to change plan to annually?');
         }
         $('#actionModal').modal('show');
         $('#actionButton').on('click', function () {

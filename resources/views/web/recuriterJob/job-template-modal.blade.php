@@ -6,11 +6,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Create New Job Listing</h4>
+                <h4 class="modal-title">Create New Job Post</h4>
             </div>
             <div class="modal-body ">
                 <div class="form-group custom-select">
-                    <label for="templateModal">Select From Your List of Position Templates</label>
+                    <label for="templateModal">Select from your Position Templates</label>
                     <select  id="templateModal" name="templateModal"  class="selectpicker" required="" data-parsley-required-message="Please select the template." >
                         <option value="" disabled selected>Select </option>
                         <option data-divider="true"></option>

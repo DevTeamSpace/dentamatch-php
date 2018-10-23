@@ -13,7 +13,7 @@
     <ul class="breadcrumb">
         <li><a href="{{ url('jobtemplates') }}">Position Templates</a></li>
         <li><a href="{{ url('jobtemplates/view',[$jobTemplates->id]) }}">{{ $jobTemplates->templateName }}</a></li>
-        <li class="active">Create New Job Listing</li>
+        <li class="active">Create New Job Post</li>
     </ul>
     <!--/breadcrumb-->
 
@@ -26,14 +26,14 @@
     <form data-parsley-validate method="post" action="{{ url('createJob/saveOrUpdate') }}" novalidate autocomplete="off">
         <div class="row sec-mob">
             <div class="col-sm-6 mr-b-10 col-xs-6">
-                <div class="section-title">Create New Job Listing</div>
+                <div class="section-title">Create New Job Post</div>
             </div>
             <div class="col-sm-6 text-right mr-b-10 col-xs-6">
                 {!! csrf_field() !!}
                 <input type="hidden" name="templateId" value="{{ $templateId }}">
                 <a href="{{ url('jobtemplates') }}" class="btn-link-noline mr-r-10">Cancel</a>
 
-                <button type="submit" class="btn btn-primary pd-l-25 pd-r-25">Publish</button>
+                <button type="submit" class="btn btn-primary pd-l-25 pd-r-25">Post Job</button>
             </div>
         </div>
 
@@ -48,9 +48,9 @@
             </div>
             @endif
             <div class="form-group custom-select">
-                <label >Office Address</label>
-                <select data-parsley-required data-parsley-required-message= "Select office address" name="dentalOfficeId" id="dentalOfficeId" class="selectpicker mr-b-5">
-                    <option value="">Select office address</option>
+                <label >Office Location</label>
+                <select data-parsley-required data-parsley-required-message= "Select Office Location" name="dentalOfficeId" id="dentalOfficeId" class="selectpicker mr-b-5">
+                    <option value="">Select Office Location</option>
                     @foreach ($offices as $key=>$office)
                     @if($key==0)
                     <option data-divider="true"></option>
@@ -62,11 +62,11 @@
                 </select>
                 <input type="hidden" value="{{ json_encode($offices) }}" id="officeJson">
                 <input type="hidden" value="add" name="action">
-                <p class="error-div hide">Position cannot currently be created for this location. We will soon be available in your area.</p>
+                <p class="error-div hide">We do not currently support this location, but we hope to be available there soon!</p>
 
             </div>
             <div class="form-group custom-select">
-                <label >Preferred Job Locations</label>
+                <label >Search for Candidates In</label>
                 <select data-parsley-required data-parsley-required-message= "Select preferred location" name="preferredJobLocationId" id="preferredJobLocationId" class="selectpicker mr-b-5">
                     <option value="">Select preferred job locations</option>
                     @foreach ($preferredLocationId as $key=>$prefLocation)
@@ -82,12 +82,14 @@
             <div class="form-group">
                 <label  >Job Type</label>
                 <div class="row">
-                    <div class="col-md-4 col-lg-4">
+                    <div class="col-md-4 col-lg-4 ">
                         <div class="full-time-box">
-                            <input data-parsley-required data-parsley-required-message= "job type required" class="magic-radio" type="radio" name="jobType" id="fulltime" value="{{ \App\Models\RecruiterJobs::FULLTIME }}">
-                            <label for="Full Time">
-                                Full Time
+                            <input class="magic-radio" type="radio" name="jobType" id="temporary" value="{{ \App\Models\RecruiterJobs::TEMPORARY }}">
+
+                            <label for="Temporary">
+                                Temporary Job / Service Technician
                             </label>
+                            <input name="tempDates" type="text" id="CoverStartDateOtherPicker" data-date="" class="date-instance" />
                         </div>  
                     </div>
                     <div class="col-md-4  col-lg-4 ">
@@ -108,14 +110,12 @@
                             </select>
                         </div>  
                     </div>
-                    <div class="col-md-4 col-lg-4 ">
+                    <div class="col-md-4 col-lg-4">
                         <div class="full-time-box">
-                            <input class="magic-radio" type="radio" name="jobType" id="temporary" value="{{ \App\Models\RecruiterJobs::TEMPORARY }}">
-
-                            <label for="Temporary">
-                                Temporary Job / Service Technician
+                            <input data-parsley-required data-parsley-required-message= "job type required" class="magic-radio" type="radio" name="jobType" id="fulltime" value="{{ \App\Models\RecruiterJobs::FULLTIME }}">
+                            <label for="Full Time">
+                                Full Time
                             </label>
-                            <input name="tempDates" type="text" id="CoverStartDateOtherPicker" data-date="" class="date-instance" />
                         </div>  
                     </div>
                 </div>
@@ -123,13 +123,13 @@
             </div>
             <div class="form-group  job-opening hide">
                 <label >Number of Candidates Needed</label>
-                <input name="noOfJobs" type="text" id="jobopening" class="form-control" data-parsley-min="1" data-parsley-pattern="^[0-9]*$" data-parsley-pattern-message="numeric only "  data-parsley-required-message="required" data-parsley-min-message="zero should not be allowed"/>
+                <input name="noOfJobs" type="text" id="jobopening" class="form-control" data-parsley-min="1" data-parsley-pattern="^[0-9]*$" data-parsley-pattern-message="numeric only "  data-parsley-required-message="Please enter number of candidates" data-parsley-min-message="zero should not be allowed"/>
             </div>
             <div class="form-group job-opening hide">
                 <label >Hourly Wage Offered</label>
                 <div class="row">
                     <div class="col-md-4 col-lg-4">
-                        <input placeholder="Amount will be in $" name="payRate" type="text" id="payRate" class="form-control" data-parsley-min="1" data-parsley-pattern="^[0-9]*$" data-parsley-pattern-message="numeric only "  data-parsley-required-message="required" data-parsley-min-message="zero should not be allowed"/>
+                        <input placeholder="Amount will be in $" name="payRate" type="text" id="payRate" class="form-control" data-parsley-min="1" data-parsley-pattern="^[0-9]*$" data-parsley-pattern-message="numeric only "  data-parsley-required-message="Please enter pay rate" data-parsley-min-message="zero should not be allowed"/>
                     </div>
                     @if($payrateUrl!='')
                     <a target="_blank" href="{{ $payrateUrl }}">Click here for reference pay rate</a>

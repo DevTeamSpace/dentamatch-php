@@ -7,12 +7,12 @@
 <form data-parsley-validate method="post" action="{{ url('jobtemplates/saveOrUpdate') }}">
     <div class="customContainer center-block containerBottom">
         <div class="profieBox">
-            <h3>Create Position Template</h3>
+            <h3>Create New Job Listing Template</h3>
             <div class="commonBox cboxbottom">
 
                 <div class="form-group">
-                    <label >Position Name</label>
-                    <input value="{{ (isset($templateData->templateName)?$templateData->templateName:'') }}" name="templateName" type="text" class="form-control" data-parsley-pattern="/^[a-zA-Z0-9\-\s]+$/" data-parsley-required data-parsley-required-message="Required">
+                    <label >Template Nickname<span class="ex-text">(Example: Dental Assistant Temp)</span></label>
+                    <input value="{{ (isset($templateData->templateName)?$templateData->templateName:'') }}" name="templateName" type="text" class="form-control" data-parsley-pattern="/^[a-zA-Z0-9\.\-\s]+$/" data-parsley-required data-parsley-required-message="Required">
                 </div>
                 <div class="form-group">
                     <label >Job Title</label>
@@ -36,11 +36,11 @@
             <div class="commonBox cboxbottom masterBox">
                 <div class="form-group">
                     <div class="detailTitleBlock">
-                        <h5>KEY SKILLS & TECHNOLOGY EXPERIENCE SPECIFIC TO YOUR OFFICE</h5>
+                        <h5>KEY SKILLS & TECHNOLOGY NEEDS FOR THIS ROLE</h5>
                     </div>
                     @foreach ($skillsData as $key => $skills)
                     <div class="form-group">
-                        <label ><?=$key?> <span class="ex-text">(click all that apply)</span></label>
+                        <label ><?=$key?> <!--<span class="ex-text">(click all that apply)</span>--></label>
                         <select class="my-select" name="skills[]" multiple="multiple" style="display:none" autocomplete="off">
                             @foreach ($skills as $skillData)
                             <option {{ (isset($skillData['sel_skill_id']) && $skillData['sel_skill_id']==$skillData['id'])?'selected':'' }} value="{{ $skillData['id'] }}">{{ $skillData['skill_name'] }}</option>

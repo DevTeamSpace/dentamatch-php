@@ -124,6 +124,7 @@
                             {!! csrf_field() !!}
                             <input type="hidden" name="jobId" value="{{ $job['id'] }}">
                             <input type="hidden" name="seekerId" value="{{ $seeker['seeker_id'] }}">
+                            <input type="hidden" name="jobType" value="{{ $seeker['job_type'] }}">
                             @if($key==\App\Models\JobLists::HIRED)
                             @if($seeker['seeker_block']==0 && $seeker['recruiter_block']==0)
                             <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
@@ -131,9 +132,9 @@
                             @endif
                             @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY && ($seeker['ratingId']!=$seeker['seeker_id']))
                             @if(!empty($dates) && date("Y-m-d")>$dates[$seekerDatesCount-1])
-                            <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 " data-toggle="modal" data-target="#ratesekeerPopup_{{ $seeker['seeker_id'] }}">Rate {{ $seeker['first_name']}}</button>
+                            <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 " data-toggle="modal" data-target="#ratesekeerPopup_{{ $seeker['seeker_id'] }}">Leave a Rating</button>
                             @else
-                            <button type="button" class="btn btn-primary-outline pd-l-30 pd-r-30">Rate {{ $seeker['first_name']}}</button>
+                            <button type="button" class="btn btn-primary-outline pd-l-30 pd-r-30">Leave a Rating</button>
                             @endif
                             @endif
                             @elseif($key==\App\Models\JobLists::SHORTLISTED)

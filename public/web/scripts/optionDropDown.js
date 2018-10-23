@@ -58,7 +58,7 @@
                 selectAll: 'Select all',
                 selectNone: 'Select none',
                 quickDelete: '&times;',
-                searchplaceholder: 'Add Multiple Options',
+                searchplaceholder: 'Check All That Apply',
                 loadingData: 'Still loading data...',
                 itemsSelected: '{$a} items selected'
             },

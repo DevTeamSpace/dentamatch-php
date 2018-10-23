@@ -12,11 +12,12 @@
                         <h3 style="margin:0 0 15px 0">Hi {{$name}},</h3>
                         <div style="font-size:15px;">
                             <p style="line-height: 24px;">
-                                You have a new job invite in your account.<br/><br/>
-                                Kindly login to the DentaMatch App to Review and Accept invitations.<br/>
+                                At DentaMatch, we match dental offices with skilled dental professionals like you. And it just so happens one of our partners has a role you might be perfect for.<br/><br/>
+                                To view this offer or set your availability for temp, part-time, or full time work just <a>use this custom link</a> to download our app and complete your profile.<br/><br/>
+                                Want more details about who we are and what we do? Right this way.
                             </p>
-                            <p style="margin:20px 0 0 0; padding: 0;">Sincerely, </p>
-                            <p style="margin: 0">DentaMatch Team</p>
+                            <p style="margin:20px 0 0 0; padding: 0;">Thank You,</p>
+                            <p style="margin: 0">The DentaMatch Team</p>
                         </div>
                     </div>
                 </td>

@@ -9,6 +9,7 @@ $seekerDatesCount = count($datesTemp);
     {!! csrf_field() !!}
     <input type="hidden" name="jobId" value="{{ $jobDetails['id'] }}">
     <input type="hidden" name="seekerId" value="{{ $seeker['user_id'] }}">
+    <input type="hidden" name="jobType" value="{{ $jobDetails['job_type'] }}">
     <div class="media jobCatbox">
         <div class="media-left ">
             <div class="img-holder ">
@@ -140,7 +141,7 @@ $seekerDatesCount = count($datesTemp);
             <input type="hidden" class="tempDates" value="{{ $seeker['temp_job_dates'] }}">
             <a href="javascript:void(0);" class=" dropdown-toggle showCalendarProfile" >
                 <span class="day-drop">{{ date('l, M d, Y',strtotime($dates[0])) }}</span>
-                <span class="fa fa-calendar"></span> Click to view dates</a>
+                <span class="fa fa-calendar"></span> View All Dates</a>
 <!--                <ul class="dropdown-menu">
                     @foreach ($dates as $date)
                     <li>{{ date('l, M d, Y',strtotime($date)) }}</li>

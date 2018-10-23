@@ -36,12 +36,12 @@
                         <div class="descriptionBox">
                             <div class="viewProfileRightCard form-group">
                                 <label>Office Name</label>
-                                <input type="text" id="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="required" data-bind="value: dentalOfficeName">
+                                <input type="text" id="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="required" data-bind="value: dentalOfficeName" placeholder="Enter Office Name">
                                 <p class="error-div" data-bind="text: officeNameError"></p>
                             </div>
                             <div class="detailTitleBlock">
                                 <label>About Our Office</label>
-                                <textarea class="form-control  txtHeight txtBtnDisable chacterValidtion" data-parsley-required data-parsley-required-message="required" maxlength=500 data-bind="value: dentalOfficeDescription, valueUpdate: 'blur'">
+                                <textarea class="form-control  txtHeight txtBtnDisable chacterValidtion" data-parsley-required data-parsley-required-message="required" maxlength=500 data-bind="value: dentalOfficeDescription, valueUpdate: 'blur'" placeholder="Write a sentence or two describing your office for potential candidates.">
                                 </textarea>
                                 <p class="error-div" data-bind="text: officeDescError"></p>
                             </div>
@@ -128,7 +128,7 @@
             <br>
             <!-- ko if: offices().length < 3 -->
             <div class="pull-right text-right" data-bind="visible: showAddMoreOfficeButton">
-                <div class="addProfileBtn1" data-bind="click: $root.addOfficeFunction"><span class="icon icon-plus"></span>Add up to <span data-bind="text: 3-offices().length"></span><span> Office Location(s)</span></div>
+                <div class="addProfileBtn1" data-bind="click: $root.addOfficeFunction"><span class="icon icon-plus"></span>Add another office location (up to <span data-bind="text: 3-offices().length"></span>) </div>
             </div>
             <!--/ko-->
         </div>
@@ -148,12 +148,12 @@
             </div>
             <div class="form-group">
                 <label>Office Address</label>
-                <input type="text" value="" id="officeAddress" name="officeName" placeholder="Office name, Street, City, Zip Code and Country" class="form-control txtBtnDisable officeAddressMap"  data-parsley-required data-parsley-required-message="Required" data-bind="value: officeAddress, event: {focus: $root.getOfficeName}">
+                <input type="text" value="" id="officeAddress" name="officeName" placeholder="Street Address, City, State, and Zip Code" class="form-control txtBtnDisable officeAddressMap"  data-parsley-required data-parsley-required-message="Required" data-bind="value: officeAddress, event: {focus: $root.getOfficeName}">
                 <p class="error-div" data-bind="text: locationError"></p>
             </div>
             <div class="form-group">
-                <label>Phone Number</label>
-                <input type="text" class="form-control phoneNumberInput" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits" data-bind="value: officePhone" >
+                <label>Office Phone Number</label>
+                <input type="text" class="form-control phoneNumberInput" placeholder="Office Phone Number" data-parsley-required data-parsley-required-message="phone number required" data-parsley-maxlength="10" data-parsley-maxlength-message="number should be 10" data-parsley-trigger="keyup" data-parsley-type="digits" data-bind="value: officePhone" >
                 <p class="error-div" data-bind="text: phoneNumberError"></p>
             </div>
             <div class="form-group dpc">
@@ -316,7 +316,7 @@
             </div>	
             <div class="form-group">
                 <label>Additional Helpful Information <i class="optional">(Optional)</i></label>
-                <label class="ex-text">example:where to park, lunch hour, what to wear, etc.</label>
+                <!--<label class="ex-text">example:where to park, lunch hour, what to wear, etc.</label>-->
                 <textarea class="form-control txtHeight" data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: officeInfo" ></textarea>
                 <p class="error-div" data-bind="text: officeInfoError"></p>
             </div>

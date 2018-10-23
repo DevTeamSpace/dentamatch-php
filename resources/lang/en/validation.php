@@ -93,9 +93,9 @@ return [
       |
      */
     'custom' => [
-        'partTimeDays' => ['required_if' => 'The part time days field is required when job type is part time'],
-        'tempDates' => ['required_if' => 'The temp dates field is required when job type is temporary'],
-        'noOfJobs' => ['required_if' => 'The no of opening field is required when job type is temporary'],
+        'partTimeDays' => ['required_if' => 'Please select day(s) for this part time job.'],
+        'tempDates' => ['required_if' => 'Please select date(s) for this temporary job.'],
+        'noOfJobs' => ['required_if' => 'Please enter number of candidates'],
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],

@@ -51,7 +51,7 @@
                         <p data-bind="text: particularOfficeAddress"></p>
                     </div>
                     <div class="col-xs-4">
-                        <a type="button" class="btn btn-primary pull-right" data-bind="attr: { href: particularJobUrl }">View Detail</a>
+                        <a type="button" class="btn btn-primary pull-right" data-bind="attr: { href: particularJobUrl }">View Details</a>
                     </div>
                 </div>
                 <div class="cal-hired-seeker mr-t-20">

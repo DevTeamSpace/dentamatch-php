@@ -11,6 +11,7 @@
                 <div class="chat-list-title">All Messages</div>
                 <div class="content mCustomScrollbar light" data-mcs-theme="minimal-dark">
                     <ul class="list-group nav-stacked" role="tablist">
+                        @if(count($seekerList))
                         @foreach ($seekerList as $seeker)
                         <li id="li_{{ $seeker['seekerId'] }}" class="nav-item leftSeekerPanelRow" data-loaded="0" data-user="{{ $seeker['seekerId'] }}">
                             <a data-toggle="tab" href="#pr_{{ $seeker['seekerId'] }}" role="tab">
@@ -32,6 +33,9 @@
                             </a>
                         </li>
                         @endforeach
+                        @else
+                            <li><h4>No messages yet</h4></li>
+                        @endif
                     </ul>
                 </div>
             </div>

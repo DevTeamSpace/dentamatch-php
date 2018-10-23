@@ -132,28 +132,28 @@ class Inspire extends Command
     }
     
     public function testEmails(){
-        $name='Jasvinder';
+        $name='Jasvinder Singh';
         $email ='jasvinder.singh@appster.in';
         $url = url("/verification-code/klfjdlkfsdkf34234234");
         
         Mail::send('email.pending-accept', ['name' => $name, 'email' => $email], function($message) use($email,$name) {
-            $message->to($email, $name)->subject('Pending Invites');
+            $message->to($email, $name)->subject(trans("messages.pending_invite_email"));
         });
         $this->comment(PHP_EOL.'First Sent'.PHP_EOL);
         Mail::send('email.set-availability', ['name' => $name, 'email' => $email], function($message) use($email,$name) {
-            $message->to($email, $name)->subject('Set Availability');
+            $message->to($email, $name)->subject(trans("messages.set_availability_email"));
         });
         $this->comment(PHP_EOL.'Second Sent'.PHP_EOL);
         Mail::send('email.pending-email-verification', ['name' => $name, 'url' => $url, 'email' => $email], function($message) use($email,$name) {
-            $message->to($email, $name)->subject('Pending Email Activation');
+            $message->to($email, $name)->subject(trans("messages.pending_email"));
         });
         $this->comment(PHP_EOL.'Third Sent'.PHP_EOL);
         Mail::send('email.incomplete-profile', ['name' => $name, 'email' => $email], function($message ) use($email,$name) {
-            $message->to($email, $name)->subject('Pending Profile');
+            $message->to($email, $name)->subject(trans("messages.incomplete_profile_mail"));
         });
         $this->comment(PHP_EOL.'Fourth Sent'.PHP_EOL);
         Mail::send('email.user-activation', ['name' => $name, 'url' => $url, 'email' => $email], function($message ) use($email,$name) {
-            $message->to($email, $name)->subject('Activation Email');
+            $message->to($email, $name)->subject(trans("messages.confirmation_link"));
         });
         $this->comment(PHP_EOL.'Fifth Sent'.PHP_EOL);
         Mail::send('email.reset-password-token', ['name' => $name, 'url' => url('password/reset', ['token' => 'dajdgadjhagdsjhasdga']), 'email' => $email], function($message) use ($email, $name) {
@@ -161,7 +161,7 @@ class Inspire extends Command
         });
         $this->comment(PHP_EOL.'Sixth Sent'.PHP_EOL);
         Mail::send('email.admin-verify-jobseeker', ['name' => $name, 'email' => 'jasvinder@yopmail.com'], function($message ) use($email) {
-            $message->to($email, "Dentamatch Admin")->subject('Verify Jobseeker');
+            $message->to($email, "Dentamatch Admin")->subject(trans("messages.verify_seeker"));
         });
         $this->comment(PHP_EOL.'Seventh Sent'.PHP_EOL);
         Mail::send('email.new-invite', ['name' => $name ], function ($message) use ($email) {

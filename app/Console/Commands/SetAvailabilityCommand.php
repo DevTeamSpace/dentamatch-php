@@ -97,7 +97,7 @@ class SetAvailabilityCommand extends Command
                     $name = $value->first_name;
                     $email = $value->email;
                     Mail::queue('email.set-availability', ['name' => $name, 'email' => $email], function($message) use($email,$name) {
-                        $message->to($email, $name)->subject('Set Availability');
+                        $message->to($email, $name)->subject(trans("messages.set_availability_email"));
                     });
                 }
             }

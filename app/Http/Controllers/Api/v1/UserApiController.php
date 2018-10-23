@@ -102,7 +102,7 @@ class UserApiController extends Controller {
             $email = $reqData['email'];
             $fname = $reqData['firstName'];
             Mail::queue('email.user-activation', ['name' => $name, 'url' => $url, 'email' => $reqData['email']], function($message ) use($email,$fname) {
-                    $message->to($email, $fname)->subject('Activation Email');
+                    $message->to($email, $fname)->subject(trans("messages.confirmation_link"));
                 });
             $userData['userDetails'] = User::getUser($userDetails->id);
             $response = ApiResponse::customJsonResponse(1, 200, trans("messages.user_registration_successful"), ApiResponse::convertToCamelCase($userData)); 
@@ -291,7 +291,7 @@ class UserApiController extends Controller {
                     $passwordModel->save();
                 
                     Mail::queue('email.reset-password-token', ['name' => $user->first_name, 'url' => url('password/reset', ['token' => $token]), 'email' => $user->email], function($message) use ($user) {
-                        $message->to($user->email, $user->first_name)->subject('Reset Password Request ');
+                        $message->to($user->email, $user->first_name)->subject(trans("messages.reset_pw_email_sub"));
                     });
                     $response = ApiResponse::customJsonResponse(1, 200, trans("messages.reset_pw_email_sent"));
                 }else{
@@ -419,7 +419,7 @@ class UserApiController extends Controller {
                     $passwordModel->save();
                 
                     Mail::queue('email.reset-password-token', ['name' => 'Admin', 'url' => url('password/reset', ['token' => $token]), 'email' => $user->email], function($message) use ($user) {
-                        $message->to($user->email, $user->first_name)->subject('Reset Password Request ');
+                        $message->to($user->email, $user->first_name)->subject(trans("messages.reset_pw_email_sub"));
                     });
                     $response = ApiResponse::customJsonResponse(1, 200, trans("messages.reset_pw_email_sent"));
                 }else{

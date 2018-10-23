@@ -24,7 +24,7 @@
             <div class="col-sm-6 text-right mr-b-10 col-xs-6" data-bind="visible: showEdit">
                 <button type="button" class="btn-link mr-r-5" data-bind="click: $root.cancelJob">Cancel</button>
                 <button type="button" class="btn pd-l-25 pd-r-25 btn-primary-outline" data-bind="click: $root.deleteJob">Delete</button>
-                <button type="submit" class="btn btn-primary pd-l-25 pd-r-25">Publish</button>
+                <button type="submit" class="btn btn-primary pd-l-25 pd-r-25">Post Job</button>
             </div>
             <div class="col-sm-6 text-right mr-b-10 col-xs-6" data-bind="visible: cannotEdit">
                 <p class="pull-right">Cannot edit this job</p>
@@ -35,24 +35,26 @@
 
             <div class="form-group custom-select">
                 <input hidden value="{{$jobId}}" id="jobIdValue">
-                <label >Office Address</label>
+                <label >Office Location</label>
                 <select class="selectpicker" id="select-office-address" data-bind="options: allLocations, optionsText: 'address', optionsValue: 'address', selectedOptions: defaultSelectLocation, event: {change: showOfficeDetails}">
                 </select>
             </div>
             <div class="form-group custom-select">
-                <label >Preferred Job Locations</label>
+                <label >Search for Candidates In</label>
                 <select class="selectpicker" id="select-preferred-location" data-bind="options: preferredJobLocations, optionsText: 'preferred_location_name', optionsValue: 'id', selectedOptions: defaultSelectPreferredJobLocation">
                 </select>
             </div>
             <div class="form-group">
                 <label  >Job Type</label>
                 <div class="row">
-                    <div class="col-md-4 col-lg-4">
+                    <div class="col-md-4 col-lg-4 ">
                         <div class="full-time-box">
-                            <input class="magic-radio" type="radio" name="radio" id="fulltime" value="Full Time" data-bind="checked: jobType">
-                            <label for="Full Time" data-bind="click: $root.selecteJobType">
-                                Full Time
+                            <input class="magic-radio" type="radio" name="radio" id="temporary" value="Temporary" data-bind="checked: jobType">
+                            <label for="Temporary" data-bind="click: $root.selecteJobType">
+                                Temporary
                             </label>
+                            <input type="text" name="tempJobDates" id="CoverStartDateOtherPicker" class="date-instance" />
+                            <p class="error-div" data-bind="text: temporaryJobError"></p>
                         </div>  
                     </div>
                     <div class="col-md-4  col-lg-4 ">
@@ -66,14 +68,12 @@
                         </div>  
 
                     </div>
-                    <div class="col-md-4 col-lg-4 ">
+                    <div class="col-md-4 col-lg-4">
                         <div class="full-time-box">
-                            <input class="magic-radio" type="radio" name="radio" id="temporary" value="Temporary" data-bind="checked: jobType">
-                            <label for="Temporary" data-bind="click: $root.selecteJobType">
-                                Temporary
+                            <input class="magic-radio" type="radio" name="radio" id="fulltime" value="Full Time" data-bind="checked: jobType">
+                            <label for="Full Time" data-bind="click: $root.selecteJobType">
+                                Full Time
                             </label>
-                            <input type="text" name="tempJobDates" id="CoverStartDateOtherPicker" class="date-instance" />
-                            <p class="error-div" data-bind="text: temporaryJobError"></p>
                         </div>  
                     </div>
                 </div>
@@ -81,13 +81,13 @@
             </div>
             <div class="form-group custom-select job-opening hide">
                 <label >Number of Candidates Needed</label>
-                <input name="noOfJobs" type="text" min="1" id="jobopening" class="form-control" data-parsley-required-message="Total job openings required" data-bind="visible: showTotalJobOpenings,value: totalJobOpening, attr:{'data-parsley-required': showTotalJobOpenings}" />
+                <input name="noOfJobs" type="text" min="1" id="jobopening" class="form-control" data-parsley-required-message="Please enter number of candidates" data-bind="visible: showTotalJobOpenings,value: totalJobOpening, attr:{'data-parsley-required': showTotalJobOpenings}" />
             </div>
             <div class="form-group job-opening hide">
                 <label >Hourly Wage Offered</label>
                 <div class="row">
                     <div class="col-md-4 col-lg-4">
-                        <input placeholder="Amount will be in $" name="payRate" type="text" min="1" id="payRate" class="form-control" data-parsley-required-message="Pay rate required" data-bind="visible: showPayRate,value: payRate, attr:{'data-parsley-required': showPayRate}" />
+                        <input placeholder="Amount will be in $" name="payRate" type="text" min="1" id="payRate" class="form-control" data-parsley-required-message="Please enter pay rate" data-bind="visible: showPayRate,value: payRate, attr:{'data-parsley-required': showPayRate}" />
                     </div>
                     <a target="_blank" href="{{ $payrateUrl }}">Click here for reference pay rate</a>
                     <!--<a class="modalClick" data-toggle="modal" data-target="#payrate_div">Click here for reference pay rate</a>-->

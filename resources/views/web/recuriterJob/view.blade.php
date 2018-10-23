@@ -54,7 +54,7 @@
                 @endphp
                 <input type="hidden" id="tempDates" value="{{ $job['temp_job_dates'] }}">
                 <a href="#" class=" dropdown-toggle" id="showCalendarProfile"><span class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
-                <span class="fa fa-calendar"></span> Click to view dates</a>
+                <span class="fa fa-calendar"></span> View All Dates</a>
 <!--                    <ul class="dropdown-menu">
                         @foreach ($dates as $date)
                         <li>{{ date('l, d M Y',strtotime($date)) }}</li>
@@ -83,7 +83,7 @@
             <div class="job-information-detail">
                 <div class="search-seeker">
                     <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary btn-block">Search Available Candidates</a>
-                    <button type="button" class="btn btn-primary pd-l-30 pd-r-20 btn-block deleteJobModal" data-target="#actionModal" data-toggle="modal" data-job-id="{{ $job['id'] }}">Delete</button>
+                    <button type="button" class="btn btn-primary pd-l-30 pd-r-20 btn-block deleteJobModal" data-target="#actionModal" data-toggle="modal" data-job-id="{{ $job['id'] }}">Delete Job Listing</button>
                     <?php
                     $seekerListHiredArray = $seekerListHired->toArray();
                     $seekerListInvitedArray = $seekerListInvited->toArray();
@@ -125,13 +125,13 @@
 
 <!--Job Detail-->
 <div class="job-seeker mr-t-40">
-    <label >Available Candidates</label>
+    <label >Invited Candidates</label>
     <div class="jobseeker-border  mr-t-15 mr-b-25"></div>
     @if($seekerListHiredArray['total'] == 0 && $seekerListInvitedArray['total'] == 0 && $seekerListSortListedArray['total'] == 0 && $seekerListAppliedArray['total'] == 0 )
     <div class="text-center">
         <img src="{{ asset('web/images/denta_create_profile.png')}}" alt="create profile">
         <div class="mr-b-10">
-            <label class="mr-t-15">No available candidate yet</label>
+            <label class="mr-t-15">You haven’t invited any candidates yet</label>
         </div>
     </div>
     @else

@@ -31,7 +31,7 @@
                 </div>
                 <div class="form-group">
                     <label  >About Our Office</label>
-                    <textarea class="form-control  txtHeight txtBtnDisable chacterValidtion"  name="officeDescription"  data-parsley-required data-parsley-required-message="Required" maxlength=500 >{{ old('officeDescription') }}</textarea>
+                    <textarea class="form-control  txtHeight txtBtnDisable chacterValidtion"  name="officeDescription"  data-parsley-required data-parsley-required-message="Required" maxlength=500 placeholder="Write a sentence or two describing your office for potential candidates.">{{ old('officeDescription') }}</textarea>
                 </div>
             </div>	
             <div class="clearfix"></div>
@@ -61,15 +61,15 @@
                         <div class="form-group">
                             <label>Office Address</label>
                             <div id="locationField">
-                                <input  id="autocomplete" name="officeAddress" value="{{ old('officeAddress') }}" type="text" class="form-control"  placeholder="Office name, Street, City, Zip Code and Country" data-parsley-required data-parsley-required-message="Required">
+                                <input  id="autocomplete" name="officeAddress" value="{{ old('officeAddress') }}" type="text" class="form-control"  placeholder="Street Address, City, State, and Zip Code" data-parsley-required data-parsley-required-message="Required">
                                 <div id="location-msg"></div>
                             </div>
                         </div>
 
 
                         <div class="form-group">
-                            <label>Phone Number</label>
-                            <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control phone-number" data-parsley-required data-parsley-required-message="Please, Provide a valid Phone number of 10 digits" data-parsley-minlength-message="Please, Provide a valid Phone number of 10 digits"   data-parsley-trigger="keyup" data-parsley-minlength="14"  >
+                            <label>Office Phone Number</label>
+                            <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text" class="form-control phone-number" placeholder="Office Phone Number" data-parsley-required data-parsley-required-message="Please, Provide a valid Phone number of 10 digits" data-parsley-minlength-message="Please, Provide a valid Phone number of 10 digits"   data-parsley-trigger="keyup" data-parsley-minlength="14"  >
 
                         </div>
 
@@ -258,8 +258,8 @@
                         </div>	
                         <div class="form-group">
                             <label class="mr-0">Additional Helpful Information <i class="optional">(Optional)</i></label>
-                            <label class="ex-text">example:where to park, lunch hour, what to wear, etc.</label>
-                            <textarea name="officeLocation" id="officeLocation" class="form-control txtHeight"   data-parsley-required-message="Required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
+                            <!--<label class="ex-text">example:where to park, lunch hour, what to wear, etc.</label>-->
+                            <textarea placeholder="Let future hires know where to park, what to wear, when to expect their lunch hour, etc." name="officeLocation" id="officeLocation" class="form-control txtHeight"   data-parsley-required-message="Required"  data-parsley-maxlength="500" data-parsley-maxlength-message="Character limit should be 500 characters." >{{ old('officeLocation') }}</textarea>
 
                         </div>	
                     </div>
@@ -269,7 +269,7 @@
             </div>
             <div class="profieBox"></div>
             <div class="clearfix"></div>
-            <div class="addBtn DynamicAddder pull-right pd-t-10 "><span class="icon icon-plus"></span>Add upto 3 office locations</div>
+            <div class="addBtn DynamicAddder pull-right pd-t-10 "><span class="icon icon-plus"></span>Add another office location (up to 3)</div>
             <div class="clearfix"></div>
             <div  class="pull-right text-right pd-b-20">
                 <div class="pull-right text-right pd-b-15">
@@ -305,41 +305,51 @@
                             <div class="active item">
 
                                 <div class="onboard-img" ><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
-                                <h3 class="onboard-title">Lorem ipsum</h3>
+                                <h3 class="onboard-title">Step 1: Let’s make this easy</h3>
                                 <blockquote>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio .</p>
+                                    <p>Welcome to DentaMatch! Follow these steps to build your profile and get started.
+
+First up, set your office location(s), hours, and any key information you want temps or job candidates to know about your practice.</p>
                                 </blockquote>	
                             </div>
                             <div class="item">
 
                                 <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
-                                <h3 class="onboard-title">Lorem ipsum</h3>
+                                <h3 class="onboard-title">Step 2: Create a Template for each Position in your practice</h3>
                                 <blockquote>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio </p>
+                                    <p>We’re all about working smarter, so we offer Position Templates you can edit and repost as needed. 
+
+Just set one up for each position in your office and select the exact skills you want us to match when the time comes.</p>
                                 </blockquote>
                             </div>
                             <div class=" item">
 
                                 <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
-                                <h3 class="onboard-title">Lorem ipsum</h3>
+                                <h3 class="onboard-title">Step 3: Post Jobs</h3>
                                 <blockquote>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio doloremque laboriosam quas, quos eaque molestias odio aut eius animi. Impedit temporibus nisi accusamus.</p>
+                                    <p>When you need a temp or a new hire, just select from the list of  positions you created and post your job. 
+
+Our matches are based on location, schedule, and skills–so you’ll always get the most qualified candidates available.</p>
                                 </blockquote>
                             </div>
                             <div class=" item">
 
                                 <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
-                                <h3 class="onboard-title">Create Your Profile </h3>
+                                <h3 class="onboard-title">Step 4: Skip the Middleman</h3>
                                 <blockquote>
-                                    <p>Modern medicine has known a rapid progress in the last decades and many traditional forms of treatment have been replaced by new, improved medical…Modern medicine has known a rapid progress in the last decades and many traditional forms.</p>
+                                    <p>Invite candidates to accept a temp job with a just a click, and save your favorites for recall work.
+
+Plus you can clarify details and answer questions directly with in-app messaging.</p>
                                 </blockquote>
                             </div>
                             <div class="item">
 
                                 <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
-                                <h3 class="onboard-title">Lorem ipsum</h3>
+                                <h3 class="onboard-title">Step 5: Know What to Expect</h3>
                                 <blockquote>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio doloremque laboriosam quas, quos eaque molestias odio aut eius animi. Impedit temporibus nisi accusamus.</p>
+                                    <p>Your Dashboard view keeps key actions and activities at-a-glance.
+
+And the Calendar view makes it easy to track open invites and upcoming bookings.</p>
                                 </blockquote>
                             </div>
                         </div>

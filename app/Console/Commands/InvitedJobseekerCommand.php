@@ -85,7 +85,7 @@ class InvitedJobseekerCommand extends Command
                     $name = $value->first_name;
                     $email = $value->email;
                     Mail::queue('email.pending-accept', ['name' => $name, 'email' => $email], function($message) use($email,$name) {
-                        $message->to($email, $name)->subject('Pending Invites');
+                        $message->to($email, $name)->subject(trans("messages.pending_invite_email"));
                     });
                 }
             }

@@ -12,11 +12,11 @@
                         <h3 style="margin:0 0 15px 0">Hi {{ $name }},</h3>
                         <div style="font-size:15px;">
                             <p style="line-height: 24px;">
-                                You pending invites in your account..<br/><br/>
-                                Kindly login to the DentaMatch App to accept/reject jobs.<br/>
+                                Good news! A dental office has invited you to apply for a job.<br/><br/>
+                                Please login into your DentaMatch account to learn more and accept or reject this offer.<br/>
                             </p>
-                            <p style="margin:20px 0 0 0; padding: 0;">Sincerely, </p>
-                            <p style="margin: 0">DentaMatch Team</p>
+                            <p style="margin:20px 0 0 0; padding: 0;">Best of luck, </p>
+                            <p style="margin: 0">The DentaMatch Team</p>
                         </div>
                     </div>
                 </td>

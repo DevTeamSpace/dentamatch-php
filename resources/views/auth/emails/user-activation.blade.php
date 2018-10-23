@@ -14,14 +14,11 @@
                         <h3 style="margin:0 0 15px 0">Hi,</h3>
                         <div style="font-size:15px;">
                             <p style="line-height: 24px;">
-                                You have requested to activate your account.<br/><br/>
-                                Please visit the link below to activate your account.<br/>
-                                <a href="{{ $url }}">Click to Activate</a>
+                                Almost there!<br/><br/>
+                                Please <a href="{{ $url }}">click here</a> to activate your DentaMatch account.<br/>
                             </p>
-                            <br/>
-                            
-                            <p style="margin:20px 0 0 0; padding: 0;">Sincerely Captured</p>
-                            <p style="margin: 0">DentaMatch Team</p>
+                            <p style="margin:20px 0 0 0; padding: 0;">See you soon,</p>
+                            <p style="margin: 0">The DentaMatch Team</p>
 
                         </div>
                     </div>

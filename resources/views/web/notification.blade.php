@@ -41,7 +41,7 @@
                 @else
                 <ul class="notificationListContainer">
                    <li>
-                    <h4>No notifications to show</h4>
+                    <h4>No notifications yet</h4>
                 </li>
             </ul>
             @endif

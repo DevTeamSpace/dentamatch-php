@@ -126,7 +126,7 @@
                                 </li>
                                 <li>
                                      <div class="list-image"><a href="/job/lists"><img src="{{asset('web/images/dentamatch-foldercurrentJob.png')}}" ></a></div>
-                                     <p>View Current Jobs</p>
+                                     <p>View Active Job Posts</p>
                                 </li>
                             </ul>
                         </div>

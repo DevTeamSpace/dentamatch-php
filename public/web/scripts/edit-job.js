@@ -344,7 +344,7 @@
                         me.locationError('Please enter a valid address.');
                         me.errors(true);
                     } else if (data == 2) {
-                        me.locationError('Position cannot currently be created for this location. We will soon be available in your area.');
+                        me.locationError('We do not currently support this location, but we hope to be available there soon!');
                         //me.errors(true);
                     }else{
                         me.errors(false);

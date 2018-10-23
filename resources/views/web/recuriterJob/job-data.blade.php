@@ -46,7 +46,7 @@
                     <input type="hidden" class="tempDates" value="{{ $job['temp_job_dates'] }}">
                     <a href="javascript:void(0);" class=" dropdown-toggle showCalendarProfile">
                         <span class="day-drop">{{ date('l, M d, Y',strtotime($dates[0])) }}</span>
-                        <span class="fa fa-calendar"></span> Click to view dates</a>
+                        <span class="fa fa-calendar"></span> View All Dates</a>
 <!--                        <ul class="dropdown-menu">
                             @foreach ($dates as $date)
                             <li>{{ date('l, M d, Y',strtotime($date)) }}</li>
@@ -105,13 +105,13 @@
             @if($valueCountArr["1"]>0)
             <li><a href="{{ url('job/details/'.$job['id']) }}">{{ $valueCountArr['1'] }} Candidate{{ ($valueCountArr['1']>1)?'s':'' }} Invited </a></li>
             @endif
-            <li><a href="{{ url('job/details/'.$job['id']) }}"> View Detail</a></li>
+            <li><a href="{{ url('job/details/'.$job['id']) }}"> View Details</a></li>
         </ul>
     </div>
     <div class="col-sm-4 ">
        
         <div class="search-seeker">
-            <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pull-right">Search Candidates</a>
+            <a href="{{ url('job/search',[$job['id']]) }}" class="btn btn-primary pull-right">Search Available Candidates</a>
         </div>
     </div>
 

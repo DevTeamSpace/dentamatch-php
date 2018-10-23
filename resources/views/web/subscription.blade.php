@@ -6,7 +6,7 @@
 <div class="container" id="subscription">
     <div class="frm-cred-access-box subscription-box" data-bind="visible: visibleSubcription">
         <h4 class="frm-title">Our Subscription Plan</h4>
-        <p>Unlock unlimited access to jobs post and finding suitable jobseekers.</p>
+        <p>Unlock unlimited template creation, job postings, candidate searches, messaging, and reports.</p>
         <div class="subs-holder text-center ">
             <!--ko foreach: subscriptionDetails-->
             <div class="subscription-inr-box ">
@@ -15,35 +15,35 @@
                     <div class="subcription-price pos-rel">
                         <span class="price-symbol ">$</span>
                         <span class="price" data-bind="text: quarterlyPrice">387</span>
-                        <span class="price-duration">per 3 mo.</span>
-                        <p>with no free trial</p>
+                        <span class="price-duration">Quarterly</span>
+                        <!--<p>with no free trial</p>-->
                         <input type="hidden" id="stype" value="1">
                     </div>
                 </div>
-                <div class="subscription-desc">
+<!--                <div class="subscription-desc">
                     <p>Unlimited template creation,
                         job posting, searching jobseeker, message & reports</p>
-                </div>
+                </div>-->
 
-                <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
+                <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Next Step</a>
             </div>
             <div class="subscription-inr-box ">
                 <div class="subscription-type">
-                    <p class="mr-b-25">Half Yearly</p>
+                    <p class="mr-b-25">Semi Annual</p>
                     <div class="subcription-price pos-rel">
                         <span class="price-symbol ">$</span>
                         <span class="price" data-bind="text: halfYearPrice">594</span>
-                        <span class="price-duration">/ 6 mo.</span>
-                        <p data-bind="text: free_trial_period">with 1 month free trial</p>
+                        <span class="price-duration">Semi-Annual</span>
+                        <p data-bind="text: free_trial_period">plus a 1 month free trial</p>
                         <input type="hidden" id="stype" value="2">
                     </div>
                 </div>
-                <div class="subscription-desc">
+<!--                <div class="subscription-desc">
                     <p>Unlimited template creation,
                         job posting, searching jobseeker, message & reports</p>
-                </div>
+                </div>-->
 
-                <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
+                <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Next Step</a>
             </div>
 
             <div class="subscription-inr-box ">
@@ -52,17 +52,17 @@
                     <div class="subcription-price pos-rel">
                         <span class="price-symbol ">$</span>
                         <span class="price" data-bind="text: fullYearPrice">948</span>
-                        <span class="price-duration">/ 12 mo.</span>
-                        <p data-bind="text: free_trial_period">with 1 month free trial</p>
+                        <span class="price-duration">Annual Best Value</span>
+                        <p data-bind="text: free_trial_period">plus a 1 month free trial</p>
                         <input type="hidden" id="stype" value="3">
                     </div>
                 </div>
-                <div class="subscription-desc">
+<!--                <div class="subscription-desc">
                     <p>Unlimited template creation,
                         job posting, searching jobseeker, message & reports</p>
-                </div>
+                </div>-->
 
-                <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Get Started</a>
+                <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Next Step</a>
             </div>
 
             <!--/ko-->

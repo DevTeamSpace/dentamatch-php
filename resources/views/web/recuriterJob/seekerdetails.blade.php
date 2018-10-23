@@ -15,7 +15,7 @@ $seekerDatesCount = count($datesTemp);
     <ul class="breadcrumb">
         <li><a href="{{ url('job/lists') }}">Jobs Listing</a></li>
         <li><a href="{{ url('job/details/'.$jobId) }}">Jobs Detail</a></li>
-        <li><a href="{{ url('job/search/'.$jobId) }}">Search Preference</a></li>
+        <li><a href="{{ url('job/search/'.$jobId) }}">Search Results</a></li>
         <li class="active">{{$seekerDetails['first_name'].' '.$seekerDetails['last_name']." Profile"}}</li>
     </ul>
     <!--/breadcrumb-->
@@ -142,8 +142,7 @@ $seekerDatesCount = count($datesTemp);
                             <input type="hidden" id="tempDates" value="{{ $seekerDetails['temp_job_dates'] }}">
                             <a href="#" class=" dropdown-toggle" id="showCalendarProfile">
                                 <span class="day-drop">{{ date('l, M d, Y',strtotime($dates[0])) }}</span>
-                                <span class="fa fa-calendar"></span> Click to view dates
-                            </a>
+                                <span class="fa fa-calendar"></span> View All Dates</a>
 <!--                            <ul class="dropdown-menu">
                               @foreach ($dates as $date)
                               <li>{{ date('l, M d, Y',strtotime($date)) }}</li>
@@ -159,6 +158,7 @@ $seekerDatesCount = count($datesTemp);
                 {!! csrf_field() !!}
                 <input type="hidden" name="jobId" value="{{ $jobId }}">
                 <input type="hidden" name="seekerId" value="{{ $seekerDetails['user_id'] }}">
+                <input type="hidden" name="jobType" value="{{ $jobDetails['job_type'] }}">
                 @if($seekerDetails['applied_status'] == \App\Models\JobLists::INVITED)
                 <h6>INVITED</h6>
                 @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::APPLIED)

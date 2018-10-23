@@ -274,17 +274,17 @@ class SignupController extends Controller {
                 JobSeekerTempAvailability::addTempDateAvailability($userDetails->id, $current, $last);
 
                 $url = url("/verification-code/$uniqueCode");
-                $name = $reqData['firstName'];
+                $name = $reqData['firstName'].' '.$reqData['lastName'];
                 $email = $reqData['email'];
                 $fname = $reqData['firstName'];
                 Mail::queue('email.user-activation', ['name' => $name, 'url' => $url, 'email' => $reqData['email']], function($message ) use($email,$fname) {
-                        $message->to($email, $fname)->subject('Activation Email');
+                        $message->to($email, $fname)->subject(trans("messages.confirmation_link"));
                     });
                     
                 if(!empty($reqData['license']) && !empty($reqData['state'])) {
                     $adminEmail = env('ADMIN_EMAIL');
                     Mail::queue('email.admin-verify-jobseeker', ['name' => $name, 'email' => $email], function($message ) use($adminEmail) {
-                            $message->to($adminEmail, "Dentamatch Admin")->subject('Verify Jobseeker');
+                            $message->to($adminEmail, "Dentamatch Admin")->subject(trans("messages.verify_seeker"));
                         });
                 }
                     
@@ -336,7 +336,7 @@ class SignupController extends Controller {
                 Session::flash('success', trans("messages.verified_user"));
                 if ($user->group_id == UserGroup::JOBSEEKER) {
                     $userProfileModel = UserProfile::getUserProfile($user->id);
-                    $msg = "Hi ".$userProfileModel['first_name']." , <br />Your account has been activated successfully. Now you can login in DentaMatch app";
+                    $msg = "Hi ".$userProfileModel['first_name']." , <br />Your account is ready for you! Please login with the DentaMatch app.";
                     Session::flash('message', $msg);
                     $redirect = 'success-active';
                     if($userProfileModel['signup_source'] == 2) {
@@ -344,7 +344,7 @@ class SignupController extends Controller {
                         $passwordModel = PasswordReset::firstOrNew(array('user_id' => $user->id, 'email' => $user->email));
                         $passwordModel->fill(['token' => $token]);
                         $passwordModel->save();
-                        $msg = "Hi ".$userProfileModel['first_name']." , <br />Your account has been activated successfully. Kindly set your password to login in DentaMatch app";
+                        $msg = "Hi ".$userProfileModel['first_name']." , <br />Your account is ready for you! Please set your password to login in DentaMatch app";
                         $redirect = 'password/reset/'.$token;
                     }
                 }

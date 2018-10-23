@@ -15,7 +15,7 @@ return [
 
     'password' => 'Passwords must be at least six characters and match the confirmation.',
     'reset' => 'Your password has been reset!',
-    'sent' => 'We have sent a temporary password to your email Id. Please check your email inbox.',
+    'sent' => 'Ok, a password reset email is on the way. Please check your inbox.',
     'token' => 'This password reset token is invalid.',
     'user' => "This email id is not registered with us.",
 

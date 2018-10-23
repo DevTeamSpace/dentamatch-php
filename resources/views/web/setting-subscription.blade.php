@@ -45,7 +45,7 @@
                                 <!--/ko-->
                                 <div class="text-right" data-bind="visible: switchVisible">
                                     <button type="submit" class="btn btn-primary pd-l-30 pd-r-30 mr-t-10" data-bind="text: switchToText, click: $root.switchTo"> Quarterly</button>
-                                    <button type="submit" class="btn btn-primary pd-l-30 pd-r-30 mr-t-10" data-bind="text: switchToText1, click: $root.switchTo"> Half Yearly</button>
+                                    <button type="submit" class="btn btn-primary pd-l-30 pd-r-30 mr-t-10" data-bind="text: switchToText1, click: $root.switchTo"> Semi Annual</button>
                                     
                                     <!--<button type="submit" class="btn btn-primary pd-l-30 pd-r-30 mr-t-10" data-bind="text: switchToText, click: $root.switchTo"></button>-->
                                 </div>

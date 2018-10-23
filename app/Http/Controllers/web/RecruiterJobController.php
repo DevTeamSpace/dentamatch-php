@@ -305,6 +305,7 @@ class RecruiterJobController extends Controller {
             'jobId' => 'required|integer',
             'seekerId' => 'required|integer',
             'appliedStatus' => 'required|integer',
+            'jobType' => 'required|integer',
         ]);
         try { 
             $requestData = $request->all();
@@ -328,6 +329,9 @@ class RecruiterJobController extends Controller {
                 JobLists::insert($inviteJobs);
                 $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $requestData['seekerId'], $requestData['jobId']);
                 Session::flash('message', trans('messages.invited_success'));
+                if($requestData['jobType']==3){
+                    Session::flash('message', trans('messages.invited_success_temp'));
+                }
                 return redirect('job/search/'.$requestData['jobId']);
             }
         } catch (\Exception $e) {

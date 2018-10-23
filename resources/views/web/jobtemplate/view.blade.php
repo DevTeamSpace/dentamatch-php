@@ -14,7 +14,7 @@
             <div class="section-title mr-b-10">{{ $templateData->templateName }}</div>
         </div>
         <div class="col-sm-6 text-right col-xs-6">
-            <a href="{{ url('createJob/'.$templateId)}}" class="btn btn-primary pd-l-25 pd-r-25">Create New Job Listing</a>
+            <a href="{{ url('createJob/'.$templateId)}}" class="btn btn-primary pd-l-25 pd-r-25">Post This Job</a>
         </div>  
     </div>    
     <div class="commonBox">
