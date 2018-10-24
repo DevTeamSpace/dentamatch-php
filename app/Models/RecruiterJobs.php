@@ -259,7 +259,7 @@ class RecruiterJobs extends Model
             $searchResult = $searchQueryObj->first()->toArray();
         }
         
-        if($searchResult)
+        if(!empty($searchResult))
         {
             $searchResult['job_type_string'] = static::$jobTypeName[$searchResult['job_type']];
             $searchResult['job_type_dates'] = $tempJob;
