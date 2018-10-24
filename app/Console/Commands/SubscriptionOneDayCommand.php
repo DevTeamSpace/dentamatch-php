@@ -53,12 +53,12 @@ class SubscriptionOneDayCommand extends Command
                                 ->get();
             $list = $recruiterModel->toArray();
             if(!empty($list)) {
+                $insertData = [];
                 foreach($list as $listValue)
                 {
-                 
                     $customer = \Stripe\Customer::retrieve($listValue['customer_id']);
                     foreach($customer->subscriptions['data'] as $subscription){
-                        $current_period_end = date('Y-m-d', $subscription['current_period_end']);
+                        $current_period_end = date('Y-m-d',strtotime($subscription['current_period_end']));
                     }
                     if($current_period_end>$listValue['subscription_expiry_date']){
                         if($listValue['trial_end']!=$listValue['subscription_expiry_date']){
@@ -68,7 +68,7 @@ class SubscriptionOneDayCommand extends Command
                         }
                         $isSubscribed=1;
                         SubscriptionPayments::where('recruiter_id',$listValue['user_id'])
-                                ->update(['subscription_expiry_date' => $current_period_end, 'payment_response' => json_encode($customer)]);
+                                ->update(['subscription_expiry_date' => date('Y-m-d', $current_period_end), 'payment_response' => json_encode($customer)]);
                     }else{
                         $isSubscribed=0;
                     }

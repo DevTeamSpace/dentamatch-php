@@ -174,7 +174,7 @@ class SignupController extends Controller {
             DB::rollback();
             Session::flash('message', $e->getMessage());
         }
-        return redirect($redirect);
+        return redirect()->intended($redirect);
     }
     
      /**
