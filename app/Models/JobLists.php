@@ -114,6 +114,7 @@ class JobLists extends Model {
                         ->join('job_titles','job_titles.id', '=' , 'job_templates.job_title_id')
                         ->join('recruiter_profiles','recruiter_profiles.user_id', '=' , 'recruiter_offices.user_id')
                         ->where('jobseeker_temp_hired.jobseeker_id','=' ,$userId)
+                        ->whereNull('job_lists.deleted_at')->whereNull('recruiter_jobs.deleted_at')
                         ->where('job_lists.applied_status', '=' , JobLists::HIRED)
                         ->where('recruiter_jobs.job_type', RecruiterJobs::TEMPORARY)
                         ->where('jobseeker_temp_hired.job_date', ">=",$jobStartDate)
