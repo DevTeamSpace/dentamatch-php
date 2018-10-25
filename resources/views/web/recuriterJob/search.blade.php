@@ -23,7 +23,7 @@
         </div>
         
         <div class="jobCatbox row searchpreference">
-            <div class="col-sm-4 mr-b-5">
+            <div class="col-sm-7 mr-b-5">
                 <label class="fnt-16 nopadding">Job Title</label>
                 <h4 class="textcolr-38 nopadding"><strong>{{$jobDetails['jobtitle_name']}}</strong></h4>
             </div>
@@ -40,7 +40,7 @@
               </h4>
             </div>
             <div class="col-sm-5">
-              <div class="form-group"> <!--  custom-select -->
+<!--                <div class="form-group">   custom-select 
                 <label class="fnt-16 nopadding">Preferred Job Locations</label>
                 <div class="clearfix"></div>
                 <select name="preferredLocationId" id="preferredLocationIdSearch" class="customPreferDrop selectpicker">
@@ -54,10 +54,10 @@
                     @endforeach
 
                 </select>
-            </div>
-              <div >
+                </div>-->
+                <div >
                 <input type="hidden" id="avail_all" name="avail_all" value="{{ $searchData['avail_all'] }}">
-              </div>
+                </div>
             </div>
         </div>
     </div>

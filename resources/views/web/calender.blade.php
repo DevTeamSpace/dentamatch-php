@@ -16,7 +16,7 @@
                     <!--ko foreach: allJobs-->
                     <div class="panel ">
                         <a data-toggle="modal" data-dismiss="modal" class="panel-body" data-bind="click: $root.showSeekers">
-                            <div class="calender-list-title" data-bind="text: title"></div>
+                            <div class="calender-list-title" data-bind="text: poptitle"></div>
                             <div class="seeker-list">
                                 <!--ko foreach: userDetails-->
                                 <img src="http://placehold.it/28x28" onerror="this.src = 'http://placehold.it/28x28'" data-bind="attr: {src: pic}" class="img-circle cir-28">

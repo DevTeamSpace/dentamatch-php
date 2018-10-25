@@ -11,6 +11,7 @@
             </div>
             <div class="col-sm-6 nopadding col">
                 <div class="frm-inr-credbox bg-white ">
+                    <div class="mr-b-20">Please sign up or login to access our dental office portal.</div>
                     <ul class="nav nav-pills">
                         <li><a data-toggle="pill" href="#signup">Sign up</a></li>
                         <li class="active">
@@ -36,8 +37,9 @@
                                         <input type="password" name="confirmPassword" class="form-control " id="signup-confirmpwd" required data-parsley-trigger="keyup"  data-parsley-length="[6, 14]"  data-parsley-length-message="Password should be 6-14 characters long" data-parsley-required-message="Password required" data-parsley-equalto="#signup-pwd" data-parsley-equalto-message="Passwords must match">
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-denta-sm btn-primary  btn-block mr-t-20">Sign up</button>
+                                <button type="submit" class="btn btn-denta-sm btn-primary  btn-block mr-t-20">Create Account</button>
                             </form>
+                            <div class="mr-t-20">Download our <a href="#">iOS</a> or <a href="#">Android</a> app if you’re dental professional looking for temp, full-time, or part-time work.</div>
                         </div>
                         <div id="login" class="tab-pane fade in active">
                             @if(Session::has('message'))

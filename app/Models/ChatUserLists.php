@@ -55,10 +55,15 @@ class ChatUserLists extends Model
 
         $chatData = UserChat::whereIn('id',$messageIds)->pluck('message','id');
         foreach($responseData as $key=>$row){
+            $diff = time() - strtotime($row['timestamp']);
             if(isset($chatCountData[$row['seekerId']])){
             $responseData[$key]['message'] = $chatData[$row['messageId']];
             $responseData[$key]['timestamp'] = date('M d', strtotime($row['timestamp']));
             $responseData[$key]['unreadCount'] = $chatCountData[$row['seekerId']];
+            }elseif($diff<86400){
+            $responseData[$key]['message'] = $chatData[$row['messageId']];
+            $responseData[$key]['timestamp'] = date('M d', strtotime($row['timestamp']));
+            $responseData[$key]['unreadCount'] = 0;
             }else{
                 unset($responseData[$key]);
             }

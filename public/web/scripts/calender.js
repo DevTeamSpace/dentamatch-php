@@ -1,6 +1,7 @@
 var JobModel = function (data, tempJobDate) {
         var me = this;
         me.title = ko.observable('');
+        me.poptitle = ko.observable('');
         me.start = ko.observable();
         me.officeTypeName = ko.observable('');
         me.userDetails = ko.observableArray([]);
@@ -9,12 +10,15 @@ var JobModel = function (data, tempJobDate) {
         me.jobId = ko.observable();
 
         me._init = function (d, tempJobDate) {
-            me.title = d.jobtitle_name;
+            me.poptitle = me.title = d.jobtitle_name;
             me.start = moment(new Date(tempJobDate)).utc().format('YYYY-MM-DD');
             me.officeTypeName = d.office_type_name;
             me.officeAddress = d.address;
             me.officeName = d.office_name;
             me.jobId = d.id;
+            if(d.seekers.length==0){
+                me.title = me.title +'(Pending)';
+            }
             for (i in d.seekers) {
                 for (j in d.seekers[i]) {
                     d.seekers[i][j].pic = d.seekers[i][j].profile_pic;
@@ -138,7 +142,7 @@ var JobModel = function (data, tempJobDate) {
             me.particularOfficeAddress('');
             me.seekersOfParticularJob([]);
 
-            me.particularJobTitle(d.title);
+            me.particularJobTitle(d.poptitle);
             me.particularOfficeName(d.officeName);
             me.particularOfficeTypeName(d.officeTypeName);
             me.particularOfficeAddress(d.officeAddress);

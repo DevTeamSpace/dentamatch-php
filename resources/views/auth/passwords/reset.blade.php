@@ -18,7 +18,7 @@
                         <input type="hidden" name="token" value="{{ $token }}">
                         <input type="hidden" class="form-control" name="email" value="{{ count($email)>0 ? $email[0] : '' }}">
                         <div class="floating-label">
-                            <div class="frm-title mr-b-25">New Password</div>
+                            <div class="frm-title mr-b-25">Reset Password</div>
                             @if ($errors->has('email'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('email') }}</strong>
@@ -35,7 +35,7 @@
                             </span>
                             @endif
                             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                <label class="control-label" for="new-pwd">Password</label>
+                                <label class="control-label" for="new-pwd">New Password</label>
                                 <input name="password" type="password" class="form-control " id="new-pwd" required data-parsley-trigger="keyup"  data-parsley-length="[6, 14]"  data-parsley-length-message="Password should be 6-14 characters long" data-parsley-required-message="Password required">
 
                             </div>
