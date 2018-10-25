@@ -247,7 +247,7 @@ class RecruiterJobs extends Model
         $searchQueryObj->addSelect(DB::raw("IF(count(distinct(template_skills.skill_id))>0, (count(distinct(template_skills.skill_id))/count(distinct(tmp_skills.skill_id)))*100,0) AS percentaSkillsMatch")); 
         
         $data = $searchQueryObj->first();
-        if(!$data) {
+        if($data->id!=null) {
             $tempDates = $data->tempJobActiveDates;
             if(!empty($tempDates)) {
                 $searchResult['job_type_dates'] = [];
