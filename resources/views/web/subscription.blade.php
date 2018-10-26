@@ -48,7 +48,7 @@
 
             <div class="subscription-inr-box ">
                 <div class="subscription-type">
-                    <p class="mr-b-25">Yearly</p>
+                    <p class="mr-b-25">Annual</p>
                     <div class="subcription-price pos-rel">
                         <span class="price-symbol ">$</span>
                         <span class="price" data-bind="text: fullYearPrice">948</span>
