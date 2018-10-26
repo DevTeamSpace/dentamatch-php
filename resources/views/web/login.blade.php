@@ -11,7 +11,7 @@
             </div>
             <div class="col-sm-6 nopadding col">
                 <div class="frm-inr-credbox bg-white ">
-                    <div class="mr-b-20">Please sign up or login to access our dental office portal.</div>
+                    <div class="f14w300 mr-b-20">Please sign up or login to access our dental office portal.</div>
                     <ul class="nav nav-pills">
                         <li><a data-toggle="pill" href="#signup">Sign up</a></li>
                         <li class="active">
@@ -39,7 +39,7 @@
                                 </div>
                                 <button type="submit" class="btn btn-denta-sm btn-primary  btn-block mr-t-20">Create Account</button>
                             </form>
-                            <div class="mr-t-20">Download our <a href="#">iOS</a> or <a href="#">Android</a> app if you’re dental professional looking for temp, full-time, or part-time work.</div>
+                            <div class="f14w300 mr-t-20">Download our <a href="#">iOS</a> or <a href="#">Android</a> app if you’re dental professional looking for temp, full-time, or part-time work.</div>
                         </div>
                         <div id="login" class="tab-pane fade in active">
                             @if(Session::has('message'))

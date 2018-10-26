@@ -1526,6 +1526,10 @@
                             text-decoration: none;
                             color: #fff;
                         }
+                        .f14w300{
+                            font-weight: 300;
+                            font-size: 14px;
+                        }
                         
                         @media only screen and (min-width: 768px) {
                             .report-filter label {
