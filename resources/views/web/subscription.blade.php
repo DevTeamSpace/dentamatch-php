@@ -15,7 +15,7 @@
                     <div class="subcription-price pos-rel">
                         <span class="price-symbol ">$</span>
                         <span class="price" data-bind="text: quarterlyPrice">387</span>
-                        <span class="price-duration">Quarterly</span>
+                        <!--<span class="price-duration">Quarterly</span>-->
                         <!--<p>with no free trial</p>-->
                         <input type="hidden" id="stype" value="1">
                     </div>
@@ -29,11 +29,11 @@
             </div>
             <div class="subscription-inr-box ">
                 <div class="subscription-type">
-                    <p class="mr-b-25">Semi Annual</p>
+                    <p class="mr-b-25">Semi-Annual</p>
                     <div class="subcription-price pos-rel">
                         <span class="price-symbol ">$</span>
                         <span class="price" data-bind="text: halfYearPrice">594</span>
-                        <span class="price-duration">Semi-Annual</span>
+                        <!--<span class="price-duration">Semi-Annual</span>-->
                         <p data-bind="text: free_trial_period">plus a 1 month free trial</p>
                         <input type="hidden" id="stype" value="2">
                     </div>
@@ -52,7 +52,7 @@
                     <div class="subcription-price pos-rel">
                         <span class="price-symbol ">$</span>
                         <span class="price" data-bind="text: fullYearPrice">948</span>
-                        <span class="price-duration">Annual Best Value</span>
+                        <span class="price-duration">Best Value</span>
                         <p data-bind="text: free_trial_period">plus a 1 month free trial</p>
                         <input type="hidden" id="stype" value="3">
                     </div>
