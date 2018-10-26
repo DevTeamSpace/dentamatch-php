@@ -52,15 +52,14 @@
                     <div class="subcription-price pos-rel">
                         <span class="price-symbol ">$</span>
                         <span class="price" data-bind="text: fullYearPrice">948</span>
-                        <div class="price-duration">Best Value</div>
+                        <!--<span class="price-duration">Best Value</span>-->
                         <p data-bind="text: free_trial_period">plus a 1 month free trial</p>
                         <input type="hidden" id="stype" value="3">
                     </div>
                 </div>
-<!--                <div class="subscription-desc">
-                    <p>Unlimited template creation,
-                        job posting, searching jobseeker, message & reports</p>
-                </div>-->
+                <div class="subscription-desc">
+                    <p>Best Value</p>
+                </div>
 
                 <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Next Step</a>
             </div>
