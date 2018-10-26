@@ -608,10 +608,12 @@
                         
                         .subs-holder {
                             margin-top: 35px;
+                            display:flex;
                         }
                         
                         .subscription-type {
                             padding: 30px 30px 18px;
+                            min-height: 207px;
                         }
                         
                         .subscription-inr-box {
