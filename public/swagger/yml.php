@@ -6,7 +6,7 @@ info:
   description: Move your app forward with the DentaMatch APIs
   version: "1.0.0"
 # the domain of the service
-host: <?php echo $_SERVER['HTTP_HOST']; ?>/api
+host: <?php echo $_SERVER['HTTP_HOST']; ?>/api/v1
 # array of all schemes that your API supports
 schemes:
   - https
@@ -255,7 +255,7 @@ paths:
       tags:
         - Users onboarding
         
-        
+  
   /list-skills:
     get:
       summary: Skill Apis
@@ -276,6 +276,26 @@ paths:
           type: string
       tags:
         - User Skills
+        
+  /list-states:
+    get:
+      summary: States Apis
+      description: Api to list states based on access token
+      responses: 
+          200:
+            description: States list
+          default:
+            description: Unexpected error
+            schema:
+             $ref: '#/definitions/Error'
+             
+      parameters:
+        - name: q
+          in: query
+          description: search state name (optional) or leave blank
+          type: string
+      tags:
+        - Master State List
         
   /users/update-skill:
     post:
