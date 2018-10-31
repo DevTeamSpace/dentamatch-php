@@ -24,7 +24,7 @@ class JobSeekerTempAvailability extends Model
     public static function addTempDateAvailability($userId, $currentDate, $endDate) {
         $tempDateArray = [];
         $dayArray = [1,2,3,4,5];
-        while(count($tempDateArray) < 60) {
+        while(count($tempDateArray) < 23) {
                 $dateString = (int) date("w", $currentDate);
                 $insertDate = date( "Y-m-d",$currentDate);
                 if($dateString!=6 && $dateString!=0) {
