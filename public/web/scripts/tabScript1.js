@@ -11,7 +11,7 @@ $(function() {
     function totalCount() {
         boxLength = $('.masterBox').length;
 
-        $('.DynamicAddder').html(`<span class='icon icon-plus'></span> Add another office location (up to ${3 - boxLength})`);
+        $('.DynamicAddder').html(`<span class='icon icon-plus'></span> Add another office location (up to 3)`);
         if (boxLength >= 3) {
             $('.addProfileBtn').removeClass('DynamicAddder');
 
@@ -100,7 +100,7 @@ $(function() {
     function boxdel() {
         boxLength = $('.masterBox').length;
 
-        $('.DynamicAddder').html(`<span class="icon icon-plus"></span> Add another office location (up to ${3 - boxLength})`);
+        $('.DynamicAddder').html(`<span class="icon icon-plus"></span> Add another office location (up to 3)`);
     }
 
     function editBox() {

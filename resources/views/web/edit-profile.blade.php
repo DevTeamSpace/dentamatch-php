@@ -128,7 +128,7 @@
             <br>
             <!-- ko if: offices().length < 3 -->
             <div class="pull-right text-right" data-bind="visible: showAddMoreOfficeButton">
-                <div class="addProfileBtn1" data-bind="click: $root.addOfficeFunction"><span class="icon icon-plus"></span>Add another office location (up to <span data-bind="text: 3-offices().length"></span>) </div>
+                <div class="addProfileBtn1" data-bind="click: $root.addOfficeFunction"><span class="icon icon-plus"></span>Add another office location (up to <span data-bind="text: 3"></span>) </div>
             </div>
             <!--/ko-->
         </div>

@@ -21,7 +21,7 @@ $(function() {
         dynamicLength = $(".mainMasterBox").length;
         console.log(dynamicLength);
         var total = 3 - dynamicLength;
-        $(".DynamicAddder").html('<span class="icon icon-plus"></span>Add another office location (up to ' + total + ')');
+        $(".DynamicAddder").html('<span class="icon icon-plus"></span>Add another office location (up to 3)');
         if (dynamicLength >= 3) {
             $(".addBtn").removeClass("DynamicAddder");
             $(".addBtn").empty();
@@ -64,7 +64,7 @@ $(function() {
 
 
             $(".masterBox:last").html(masterCLone);
-            $("#officeLocation"+ dynamicLength).Editor();
+            //$("#officeLocation"+ dynamicLength).Editor();
             dropDownDynamic();
             $(".masterBox:last").find(".dropCheck input").after("<div></div>");
             DynamicTickName();
@@ -122,7 +122,7 @@ $(function() {
         dynamicLength = $(".mainMasterBox").length;
         var total = 3 - dynamicLength; 
         $(".addBtn").addClass("DynamicAddder");
-        $(".DynamicAddder").html('<span class="icon icon-plus"></span>Add another office location (up to ' + total + ')');
+        $(".DynamicAddder").html('<span class="icon icon-plus"></span>Add another office location (up to 3)');
 
     }
     //----- customValidation-----//

@@ -375,16 +375,16 @@ And the Calendar view makes it easy to track open invites and upcoming bookings.
     async defer></script>
 
     <script>
-        $("#officeLocation").Editor();
-        $("button:submit").click(function(){
-            $('#officeLocation').text($('#officeLocation').Editor("getText"));
-            if($('#officeLocation1').length==1){
-                $('#officeLocation1').text($('#officeLocation1').Editor("getText"));
-            }
-            if($('#officeLocation2').length==1){
-                $('#officeLocation2').text($('#officeLocation2').Editor("getText"));
-            }
-        });
+        //$("#officeLocation").Editor();
+//        $("button:submit").click(function(){
+//            $('#officeLocation').text($('#officeLocation').Editor("getText"));
+//            if($('#officeLocation1').length==1){
+//                $('#officeLocation1').text($('#officeLocation1').Editor("getText"));
+//            }
+//            if($('#officeLocation2').length==1){
+//                $('#officeLocation2').text($('#officeLocation2').Editor("getText"));
+//            }
+//        });
     </script>
 
     <!--&callback=initAutocomplete-->
