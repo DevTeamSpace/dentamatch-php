@@ -13,7 +13,9 @@
                 <div class="frm-inr-credbox bg-white ">
                     @if(Session::has('message'))
                                     <?php print_r(Session::get('message')) ?>
-                            @endif
+                    @endif
+                    <br/><br/>
+                    Still need the app? Download it on <a href="">iOS</a> or <a href="">Android</a>.
                 </div>
             </div>
         </div>

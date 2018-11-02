@@ -62,7 +62,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label" for="pwd">Password</label>
-                                        <input type="password" name="password" class="form-control " id="pwd" required data-parsley-trigger="keyup" data-parsley-length="[6, 14]"  data-parsley-length-message="character count should be between [6 -14] chars"  data-parsley-required-message="password required">
+                                        <input type="password" name="password" class="form-control " id="pwd" required data-parsley-trigger="keyup" data-parsley-length="[6, 14]"  data-parsley-length-message="Password should be 6-14 characters long"  data-parsley-required-message="password required">
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-denta-sm btn-primary btn-block mr-t-20">Login</button>

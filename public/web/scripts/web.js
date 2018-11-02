@@ -170,7 +170,10 @@ function checkLocation(zip, indexField) {
                 if (data == 0) {
                     msg = 'Please enter a valid address.';
                     $('#location-msg' + indexField).html(msg);
-                }
+                }else if (data == 2) {
+                    msg = 'We do not currently support this location, but we hope to be available there soon!';
+                    $('#location-msg' + indexField).html(msg);
+                } 
             },
             error: function(data) {
                msg = 'Please enter a valid address.';

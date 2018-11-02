@@ -317,7 +317,7 @@
             <div class="form-group">
                 <label>Additional Helpful Information <i class="optional">(Optional)</i></label>
                 <!--<label class="ex-text">example:where to park, lunch hour, what to wear, etc.</label>-->
-                <textarea class="form-control txtHeight" data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: officeInfo" ></textarea>
+                <textarea placeholder="Let future hires know where to park, what to wear, when to expect their lunch hour, etc." class="form-control txtHeight" data-parsley-maxlength="500" data-parsley-maxlength-message="Charcter should be 500" data-bind="value: officeInfo" ></textarea>
                 <p class="error-div" data-bind="text: officeInfoError"></p>
             </div>
             <div class="pull-right text-right">

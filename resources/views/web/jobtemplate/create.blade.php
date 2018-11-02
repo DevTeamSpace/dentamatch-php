@@ -11,8 +11,8 @@
             <div class="commonBox cboxbottom">
 
                 <div class="form-group">
-                    <label >Template Nickname<span class="ex-text">(Example: Dental Assistant Temp)</span></label>
-                    <input value="{{ (isset($templateData->templateName)?$templateData->templateName:'') }}" name="templateName" type="text" class="form-control" data-parsley-pattern="/^[a-zA-Z0-9\.\-\s]+$/" data-parsley-required data-parsley-required-message="Required">
+                    <label >Template Nickname</label>
+                    <input placeholder="Example: Dental Assistant Temp" value="{{ (isset($templateData->templateName)?$templateData->templateName:'') }}" name="templateName" type="text" class="form-control" data-parsley-pattern="/^[a-zA-Z0-9\.\-\s]+$/" data-parsley-required data-parsley-required-message="Required">
                 </div>
                 <div class="form-group">
                     <label >Job Title</label>
