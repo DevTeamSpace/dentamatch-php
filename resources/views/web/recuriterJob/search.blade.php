@@ -82,11 +82,12 @@
         </div>
     @else
     <div class="jobCatbox mr-b-20">
-        <div class="template-job-information ">
-            <div class="template-job-information-left">
-                <h4>Nothing to show</h4>
+        <div class="text-center">
+            <img src="{{ asset('web/images/denta_create_profile.png')}}" alt="create profile">
+            <div class="mr-b-10">
+                <label class="mr-t-15">You available candidates yet</label>
             </div>
-        </div>  
+        </div>
     </div>
     @endif    
 <!--loader part-->
