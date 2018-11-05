@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use DB;
 
 class JobseekerTempHired extends Model {
-
-    use Eloquence,
+    
+    use Eloquence,SoftDeletes,
         Mappable;
 
     protected $table = 'jobseeker_temp_hired';
