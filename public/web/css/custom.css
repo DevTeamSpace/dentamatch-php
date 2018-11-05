@@ -235,7 +235,7 @@
                         /*-------------------------*/
                         
                         .denta-access-bg {
-                            background-image: url('../images/denta_bg.jpg');
+                            background-image: url('../images/denta_new_bg.png');
                             background-size: cover;
                             min-height: 100vh;
                             background-repeat: no-repeat;
@@ -1549,7 +1549,7 @@
                             }
                             .frm-cred-access-box {
                                 position: absolute;
-                                top: 50%;
+                                top: 55.5%;
                                 left: 50%;
                                 transform: translate(-50%, -50%);
                             }
@@ -1559,7 +1559,7 @@
                                 min-height: 415px;
                             }
                             .frm-inr-credbox {
-                                min-height: 415px;
+                                min-height: 465px;
                             }
                             .child_scrollable_div {
                                 width: 102%;
