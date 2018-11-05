@@ -78,7 +78,10 @@ var SubscriptionVM = function () {
         me.isLoading(true);
         $.get('get-subscription-details', {}, function (d) {
             me.isLoadingSubscription(false);
-            if (d.success == false || d.data.data.data.subscriptions.data.length == 0) {
+            if (d.success == true && d.data.success == false && d.data.data==null && d.data.message=='No customer found.') {
+                console.log(d);
+                location.href='subscription-detail';
+            } else if (d.success == false || d.data.data.data.subscriptions.data.length == 0) {
                 me.noSubscription(true);
                 me.visibleSubcription(false);
                 me.noSubscriptionDetails('No subscription availed.');
