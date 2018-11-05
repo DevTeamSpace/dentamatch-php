@@ -335,7 +335,7 @@ class ReportController extends Controller {
                 JobLists::where('recruiter_job_id', $jobId)->delete();
                 JobRatings::where('recruiter_job_id', $jobId)->delete();
                 TempJobDates::where('recruiter_job_id', $jobId)->delete();
-                //JobseekerTempHired::where('job_id',$jobId)->forceDelete();
+                JobseekerTempHired::where('job_id',$jobId)->delete();
                 RecruiterJobs::where('id', $jobId)->delete();
                 SavedJobs::where('recruiter_job_id', $jobId)->delete();
                 Notification::where('job_list_id', $jobId)->delete();
