@@ -200,7 +200,8 @@ class UserProfileController extends Controller {
             $return = 0;
             if (isset($request->zip) && !empty($request->zip)) {
                 $return = 2;
-                if (in_array($request->zip, Location::getList())) {
+                $location = Location::getList($request->zip);
+                if ($location) {
                     $return = 1;
                 }
             }

@@ -25,7 +25,7 @@ class Location extends \Eloquent
 
     protected $dates = ['deleted_at'];
     
-    public static function getList(){
-        return static::where('is_active',1)->pluck('zipcode')->all();
+    public static function getList($zipcode){
+        return static::where('zipcode',$zipcode)->where('is_active',1)->pluck('zipcode')->all();
     }    
 }
