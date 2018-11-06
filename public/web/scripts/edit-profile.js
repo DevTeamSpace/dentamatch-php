@@ -695,7 +695,7 @@ var EditProfileVM = function () {
                                 }, 1000);
                     } else {
                         d.errorMessage(data.message);
-                        me.prompt('Error in updating office.');
+                        me.prompt(data.message);
                         setTimeout(
                                 function () {
                                     $('#actionModal').modal('hide');
