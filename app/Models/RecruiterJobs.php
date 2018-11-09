@@ -269,19 +269,21 @@ class RecruiterJobs extends Model
     }
     
     
-    public static function getJobs($limit=""){
+    public static function getJobs($limit="", $tempRating=false){
         $paginationLimit = RecruiterJobs::LIMIT;
         if(!empty($limit)) {
             $paginationLimit = $limit;
         }
         
         $tempPrevious = RecruiterJobs::chkTempJObRatingPending();
-        $excludeJob = [];
+        $excludeJob = $ratingPendingJob = [];
         if($tempPrevious){
             $tempPreviousArray = $tempPrevious->toArray();
             foreach($tempPreviousArray as $previousTempJob){
                 if($previousTempJob['total_hired'] == $previousTempJob['total_rating']){
                     $excludeJob[] = $previousTempJob['id'];
+                }else{
+                    $ratingPendingJob[] = $previousTempJob['id'];
                 }
             }
         }
@@ -298,6 +300,10 @@ class RecruiterJobs extends Model
             
             if(is_array($excludeJob) && count($excludeJob) > 0){
                 $jobObj->whereNotIn('recruiter_jobs.id',$excludeJob);
+            }
+            
+            if($tempRating==true && count($ratingPendingJob) > 0){
+                $jobObj->whereIn('recruiter_jobs.id',$ratingPendingJob);
             }
         
             $jobObj ->leftJoin('temp_job_dates',function($query){

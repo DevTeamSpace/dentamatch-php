@@ -65,6 +65,7 @@
                 Route::post('jobtemplates/saveOrUpdate', 'web\JobtemplateController@saveOrUpdate');
                 Route::get('createJob/{templateId}', 'web\RecruiterJobController@createJob');
                 Route::get('job/lists', 'web\RecruiterJobController@listJobs');
+                Route::get('job/pending-rating', 'web\RecruiterJobController@listRatingPendingJobs');
                 Route::get('job/search/{jobId}', 'web\RecruiterJobController@searchSeekers');
                 Route::get('job/details/{jobId}', 'web\RecruiterJobController@jobDetails');
                 Route::get('job/details/{jobId}/{appliedStatus}', 'web\RecruiterJobController@getJobSeekerDetails');

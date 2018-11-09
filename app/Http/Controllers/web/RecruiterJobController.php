@@ -177,7 +177,8 @@ class RecruiterJobController extends Controller {
                     foreach($tempPreviousArray as $previousTempJob){
                         $tempJobLastDate = date("Y-m-d", strtotime($previousTempJob['job_date']." +1 days"));
                         if(($previousTempJob['total_hired'] != $previousTempJob['total_rating']) && ($tempJobLastDate >= date("Y-m-d"))){
-                            $message = str_replace('###LINK###', url('job/details/'.$tempJobLastDate['id']), trans('messages.rate_previous_jobseeker'));
+                            //$message = str_replace('###LINK###', url('job/details/'.$tempJobLastDate['id']), trans('messages.rate_previous_jobseeker'));
+                            $message = str_replace('###LINK###', url('job/pending-rating'), trans('messages.rate_previous_jobseeker'));
                             Session::flash('message', $message);
                             return redirect('createJob/'.$request->templateId);
                         }
@@ -231,6 +232,28 @@ class RecruiterJobController extends Controller {
             $userId = Auth::user()->id;
             $this->viewData['jobList'] = RecruiterJobs::getJobs();
             $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
+            
+            if ($request->ajax()) {
+                return view('web.recuriterJob.job-data', ['jobList' => $this->viewData['jobList'], 'jobTemplateModalData' => $this->viewData['jobTemplateModalData']])->render();
+            }
+
+            return $this->returnView('list');
+        } catch (\Exception $e) {
+            Log::error($e);
+            return view('web.error.', ["message" => $e->getMessage()]);
+        }
+    }
+    
+      /**
+     * Method to get list of temp pending rating jobs
+     * @return view
+     */
+    public function listRatingPendingJobs(Request $request) {
+        try{
+            $userId = Auth::user()->id;
+            $this->viewData['jobList'] = RecruiterJobs::getJobs(10,true);
+            $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
+            $this->viewData['navActive'] = 'pending-rating';
             
             if ($request->ajax()) {
                 return view('web.recuriterJob.job-data', ['jobList' => $this->viewData['jobList'], 'jobTemplateModalData' => $this->viewData['jobTemplateModalData']])->render();
