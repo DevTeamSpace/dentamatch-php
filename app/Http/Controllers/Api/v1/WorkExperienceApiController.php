@@ -42,6 +42,7 @@ class WorkExperienceApiController extends Controller {
                 'monthsOfExpereince' => 'required|integer',
                 'officeName' => 'required',
                 'officeAddress' => 'required',
+                'state' => 'required',
                 'city' => 'required',
                 'reference1Name'=>'sometimes',
                 'reference1Mobile'=>'sometimes',
@@ -64,6 +65,7 @@ class WorkExperienceApiController extends Controller {
                 $workExp->months_of_expereince = $request->monthsOfExpereince;
                 $workExp->office_name = $request->officeName;
                 $workExp->office_address = $request->officeAddress;
+                $workExp->state = $request->state;
                 $workExp->city = $request->city;
                 $workExp->reference1_name = $request->reference1Name;
                 $workExp->reference1_mobile = $request->reference1Mobile;
