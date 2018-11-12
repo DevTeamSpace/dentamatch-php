@@ -176,7 +176,7 @@ class RecruiterJobController extends Controller {
                     $tempPreviousArray = $tempPrevious->toArray();
                     foreach($tempPreviousArray as $previousTempJob){
                         $tempJobLastDate = date("Y-m-d", strtotime($previousTempJob['job_date']." +1 days"));
-                        if(($previousTempJob['total_hired'] != $previousTempJob['total_rating']) && ($tempJobLastDate >= date("Y-m-d"))){
+                        if(($previousTempJob['total_hired'] != $previousTempJob['total_rating']) && ($tempJobLastDate <= date("Y-m-d"))){
                             //$message = str_replace('###LINK###', url('job/details/'.$tempJobLastDate['id']), trans('messages.rate_previous_jobseeker'));
                             $message = str_replace('###LINK###', url('job/pending-rating'), trans('messages.rate_previous_jobseeker'));
                             Session::flash('message', $message);
