@@ -615,7 +615,7 @@ class RecruiterJobs extends Model
             DB::raw("count(distinct job_ratings.seeker_id) as total_rating"),
             DB::raw("max(temp_job_dates.job_date) as job_date")
             )
-            ->whereDate('job_date','<',date('Y-m-d'))
+            ->having('job_date','<',date('Y-m-d'))
             ->groupBy('temp_job_dates.recruiter_job_id')
             ->orderBy('recruiter_jobs.id','desc');  
         return $jobObj->get();
