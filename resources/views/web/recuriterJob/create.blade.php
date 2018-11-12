@@ -19,7 +19,7 @@
 
     @if(Session::has('message'))
     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">
-        {{ Session::get('message') }} 
+        {{!! Session::get('message') !!}} 
         <span class="close" data-dismiss="alert">&times;</span>
     </p>
     @endif
