@@ -24,6 +24,7 @@ return [
     'about_me_list' => "AboutMe Successfully Retrieved",
     'user_exist_same_email' => 'User already exists with this email',
     'user_registration_successful' => 'Please check your email to verify your new account.',
+    'user_registration_successful_old' => 'Please check your email to verify your account.',
     'user_logged_successful' => 'User logged in successfully',
     'user_account_not_active' => 'User has been deactivated.Please contact admin',
     'invalid_login_credentials' => 'Invalid login credentials',
