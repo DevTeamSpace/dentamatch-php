@@ -78,7 +78,7 @@ class UserProfileApiController extends Controller {
             $userId = $request->userServerData->user_id;
             if($userId > 0){
                 $filename = $this->generateFilename($request->type);
-                $response = $this->uploadFileToAWS($request, $filename);
+                $response = $this->uploadFileToAWS($request, $filename,'image');
                 if ($response['res']) {
                     
                     if ($request->type == 'profile_pic') {

@@ -17,9 +17,9 @@ trait FileRepositoryS3 {
         return $imageType . '/' . uniqid(TRUE);
     }
 
-    public function uploadFileToAWS(Request $request, &$filename) {
-        $file = file_get_contents($request->file('payrate')->getRealPath());
-        $check = $request->file('payrate')->getMimeType();
+    public function uploadFileToAWS(Request $request, &$filename, $key) {
+        $file = file_get_contents($request->file($key)->getRealPath());
+        $check = $request->file($key)->getMimeType();
         $fileExt = str_replace('application/', '', $check);
         $fileExt = str_replace('image/', '', $fileExt);
         $res = 0;

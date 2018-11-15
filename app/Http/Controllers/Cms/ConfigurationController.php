@@ -64,7 +64,7 @@ class ConfigurationController extends Controller
         }
         
         $filename = $this->generateFilename('payrate');
-        $res = $this->uploadFileToAWS($request,$filename);
+        $res = $this->uploadFileToAWS($request,$filename,'payrate');
         Configs::where('config_name', 'PAYRATE')->update(['config_data' => $filename]);
         Session::flash('message',trans('messages.payrate_update'));
         return redirect('cms/config/pay-rate');
