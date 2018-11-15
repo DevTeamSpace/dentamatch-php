@@ -158,7 +158,7 @@ class UserApiController extends Controller {
             if($userData['group_id'] == UserGroup::JOBSEEKER){
                 if($userData['is_verified'] == 0){
                     $response = ApiResponse::customJsonResponse(0, 202, trans("messages.user_registration_successful_old")); 
-                }else if($userData['is_verified'] == UserProfile::JOBSEEKER_VERIFY_APPROVED && $userData['is_active'] == 1){
+                }else if($userData['is_verified'] == UserProfile::JOBSEEKER_VERIFY_APPROVED  && $userData['is_active'] == 1){
                         $device = Device::where('user_id', $userId)->orWhere('device_id', $reqData['deviceId'])->first();
                         $reqData['deviceOs'] = isset($reqData['deviceOs'])?$reqData['deviceOs']:'';
                         $reqData['appVersion'] = isset($reqData['appVersion'])?$reqData['appVersion']:'';
