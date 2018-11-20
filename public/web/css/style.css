@@ -217,7 +217,7 @@ and open the template in the editor.
 /* .dashboadPostBlock li:first-child{margin-left:5%;} */
 .dashboadPostBlock{    margin-top: 35px;
     margin-bottom: 15px;}
-.dashboadPostBlock li{margin-right:10%; margin-bottom:10px;}
+.dashboadPostBlock li{margin-right:7%; margin-bottom:10px;}
 .dashboadPostBlock li:last-child{margin-right:0px;}
 .dashboadPostBlock li .list-image {
     height: 50px;
