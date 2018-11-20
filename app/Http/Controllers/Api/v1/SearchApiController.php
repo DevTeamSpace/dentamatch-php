@@ -323,13 +323,13 @@ class SearchApiController extends Controller {
                     $seekerDetails = UserProfile::where('user_id',$userId)->first();
                     if (($jobDetails->job_type == RecruiterJobs::FULLTIME && $seekerDetails->is_fulltime==1) ||
                         ($jobDetails->job_type == RecruiterJobs::PARTTIME && 
-                        (($jobDetails->is_monday=1 && $seekerDetails->is_parttime_monday==1) ||
-                        ($jobDetails->is_tuesday=1 && $seekerDetails->is_parttime_tuesday==1) ||
-                        ($jobDetails->is_wednesday=1 && $seekerDetails->is_parttime_wednesday==1) ||
-                        ($jobDetails->is_thursday=1 && $seekerDetails->is_parttime_thursday==1) ||
-                        ($jobDetails->is_friday=1 && $seekerDetails->is_parttime_friday==1) ||
-                        ($jobDetails->is_saturday=1 && $seekerDetails->is_parttime_saturday==1) ||
-                        ($jobDetails->is_sunday=1 && $seekerDetails->is_parttime_sunday==1)))){
+                        (($jobDetails->is_monday==1 && $seekerDetails->is_parttime_monday==1) ||
+                        ($jobDetails->is_tuesday==1 && $seekerDetails->is_parttime_tuesday==1) ||
+                        ($jobDetails->is_wednesday==1 && $seekerDetails->is_parttime_wednesday==1) ||
+                        ($jobDetails->is_thursday==1 && $seekerDetails->is_parttime_thursday==1) ||
+                        ($jobDetails->is_friday==1 && $seekerDetails->is_parttime_friday==1) ||
+                        ($jobDetails->is_saturday==1 && $seekerDetails->is_parttime_saturday==1) ||
+                        ($jobDetails->is_sunday==1 && $seekerDetails->is_parttime_sunday==1)))){
                             $response = $this->acceptRejectJob($userId, $notificationDetails->job_list_id, $reqData['acceptStatus'], $notificationDetails->sender_id, $reqData['notificationId'], 0);
                     }else{
                         return ApiResponse::customJsonResponse(0, 201, trans("messages.set_availability"));
