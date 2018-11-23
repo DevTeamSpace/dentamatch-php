@@ -31,15 +31,15 @@
                                 @endif
                                 <div class="form-group profieBox">
                                     <label for="oldpassword">Old Password</label>
-                                    <input type="password" name="oldPassword" class="form-control" id="oldpassword" data-parsley-required-message="Old password required" required >
+                                    <input type="password" name="oldPassword" class="form-control" id="oldpassword" data-parsley-required-message="Old password required" required data-parsley-trigger="keyup" data-parsley-length="[6, 14]"  data-parsley-length-message="Password should be 6-14 characters long" >
                                 </div>
                                 <div class="form-group profieBox">
                                     <label for="password">New Password</label>
-                                    <input type="password" name="password" class="form-control" id="password" data-parsley-required-message="New password required" required>
+                                    <input type="password" name="password" class="form-control" id="password" data-parsley-required-message="New password required" required data-parsley-trigger="keyup"  data-parsley-length="[6, 14]"  data-parsley-length-message="Password should be 6-14 characters long" >
                                 </div>
                                 <div class="form-group profieBox">
                                     <label for="password_confirmation">Confirm Password</label>
-                                    <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" data-parsley-required-message="Confirm password required" required>
+                                    <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" data-parsley-required-message="Confirm password required" required data-parsley-trigger="keyup"  data-parsley-length="[6, 14]"  data-parsley-length-message="Password should be 6-14 characters long" data-parsley-equalto="#password" data-parsley-equalto-message="Passwords must match">
                                 </div>
                                 <div class="pull-right text-right"> <button type="submit" class="btn btn-primary pd-l-40 pd-r-40">Update</button> </div>
                                 <br><br>					
