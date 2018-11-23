@@ -18,10 +18,10 @@ var SubscriptionModel = function (data) {
         me.subscriptionAutoRenewal(moment(d.current_period_end).format('LL'));
         me.leftDays(moment(d.current_period_end).diff(moment(d.current_period_start), 'days'));
         console.log(d.plan.interval_count);
-        if (d.plan.interval_count == 3) {
+        if (d.plan.id == 'three-months') {
             me.subscriptionPlan('Quarterly');
         }
-        else if (d.plan.interval_count == 6) {
+        else if (d.plan.id == 'six-months') {
             me.subscriptionPlan('Semi Annual');
         } else {
             me.subscriptionPlan('Yearly');
@@ -85,6 +85,7 @@ var SubscriptionVM = function () {
                 me.noSubscription(true);
                 me.visibleSubcription(false);
                 me.noSubscriptionDetails('No subscription availed.');
+                location.href='subscription-detail';
             } else {
                 for (i in d.data.data.data.subscriptions.data) {
                     if (d.data.data.data.subscriptions.data[i].cancel_at_period_end === false) {
