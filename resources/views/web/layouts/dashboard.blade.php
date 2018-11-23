@@ -112,6 +112,7 @@
                         <li><span class="icon icon-lock navRightIcon"><a href="#"></a></span><a href="{{ url('change-password') }}">Change Password</a></li>
                         <li><span class="icon icon-drive-form navRightIcon"></span><a href="{{ url('setting-subscription') }}">Subscription Details</a></li>
                         <li><span class="icon icon-text-document-black-interface-symbol navRightIcon"></span><a href="{{ url('setting-terms-conditions') }}">Terms &amp; Conditions</a></li>
+                        <li><span class="icon icon-text-document-black-interface-symbol navRightIcon"></span><a href="{{ url('setting-privacy-policy') }}">Privacy Policy</a></li>
                         <li><span class="icon icon-logout-web-button navRightIcon"></span><a href="{{ url('logout') }}">Logout</a></li>
 
                     </ul>
@@ -134,6 +135,9 @@
                     <li class="{{ ($navActive=='template')?'active':''}}">
                         <a href="{{ url('jobtemplates') }}">Position Templates</a>
                     </li>
+<!--                    <li class="{{ ($navActive=='pending-rating')?'active':''}}">
+                        <a href="{{ url('job/pending-rating') }}">Pending Jobs</a>
+                    </li>-->
                 </ul>
             </div><!-- /.navbar-collapse -->
             @if(!empty($jobTemplateModalData))
