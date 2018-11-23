@@ -34,7 +34,7 @@
                         </li>
                         @endforeach
                         @else
-                            <li><h4>No messages yet</h4></li>
+                        <li class="mr-l-20 mr-t-10"><p>No messages yet</p></li>
                         @endif
                     </ul>
                 </div>
