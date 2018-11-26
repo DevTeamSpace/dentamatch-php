@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use \App\Models\User;
+use Session;
 
 class Recruiter {
 
@@ -16,9 +18,13 @@ class Recruiter {
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null) {
-        $term = Auth::user();
-        if (!empty($term) && isset($term)) {
-            if ($term->userGroup->group_id == \App\Models\UserGroup::ADMIN) {
+        $user = User::where('id', Auth::user()->id)->first();
+        
+        if(isset($user) && $user->is_active!=1){
+            Session::flash('message', trans("messages.deactivated_admin"));
+            return redirect("logout");
+        }elseif (!empty($user) && isset($user)) {
+            if ($user->userGroup->group_id == \App\Models\UserGroup::ADMIN) {
                 return redirect('cms');
             }
             return $next($request);
