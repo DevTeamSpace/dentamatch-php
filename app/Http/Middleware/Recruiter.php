@@ -16,7 +16,7 @@ class Recruiter {
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null) {
-        $term = \App\Models\UserGroup::where('user_id', Auth::user()->id)->first();
+        $term = Auth::user()->userGroup();
         if (!empty($term) && isset($term)) {
             if ($term->group_id == \App\Models\UserGroup::ADMIN) {
                 return redirect('cms');
