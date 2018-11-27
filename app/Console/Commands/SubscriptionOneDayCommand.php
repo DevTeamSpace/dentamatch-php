@@ -57,20 +57,21 @@ class SubscriptionOneDayCommand extends Command
                 foreach($list as $listValue)
                 {
                     $customer = \Stripe\Customer::retrieve($listValue['customer_id']);
-                    foreach($customer->subscriptions['data'] as $subscription){
-                        $current_period_end = date('Y-m-d',strtotime($subscription['current_period_end']));
-                    }
-                    if($current_period_end>$listValue['subscription_expiry_date']){
-                        if($listValue['trial_end']!=$listValue['subscription_expiry_date']){
-                            $data = ['image' => url('web/images/dentaMatchLogo.png'),'message' => 'You subscription has been renewed to'.' '.$listValue['subscription_expiry_date']];
-                            $insertData = ['sender_id' => $senderId->id, 'receiver_id' => $listValue['user_id'], 'notification_data'=> json_encode($data)];  
-                            Notification::insert($insertData);
+                    $isSubscribed=0;
+                    if(!empty($customer->subscriptions['data'])){
+                        foreach($customer->subscriptions['data'] as $subscription){
+                            $current_period_end = date('Y-m-d',strtotime($subscription['current_period_end']));
                         }
-                        $isSubscribed=1;
-                        SubscriptionPayments::where('recruiter_id',$listValue['user_id'])
-                                ->update(['subscription_expiry_date' => date('Y-m-d', $current_period_end), 'payment_response' => json_encode($customer)]);
-                    }else{
-                        $isSubscribed=0;
+                        if($current_period_end>$listValue['subscription_expiry_date']){
+                            if($listValue['trial_end']!=$listValue['subscription_expiry_date']){
+                                $data = ['image' => url('web/images/dentaMatchLogo.png'),'message' => 'You subscription has been renewed to'.' '.$listValue['subscription_expiry_date']];
+                                $insertData = ['sender_id' => $senderId->id, 'receiver_id' => $listValue['user_id'], 'notification_data'=> json_encode($data)];  
+                                Notification::insert($insertData);
+                            }
+                            $isSubscribed=1;
+                            SubscriptionPayments::where('recruiter_id',$listValue['user_id'])
+                                    ->update(['subscription_expiry_date' => date('Y-m-d', $current_period_end), 'payment_response' => json_encode($customer)]);
+                        }
                     }
                     RecruiterProfile::where(['user_id' => $listValue['user_id']])
                             ->update(['is_subscribed'=>$isSubscribed]);
