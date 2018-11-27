@@ -96,6 +96,7 @@ var JobModel = function (data, tempJobDate) {
                         right: 'next'
                     },
                     defaultView: "month",
+                    timezone:'America/New_York',
                     editable: false,
                     firstDay: 1,
                     columnFormat: 'dddd',
