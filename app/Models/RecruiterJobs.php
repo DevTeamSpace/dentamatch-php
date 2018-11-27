@@ -560,7 +560,7 @@ class RecruiterJobs extends Model
                 ->groupBy('recruiter_jobs.id');
         $jobs->select('recruiter_jobs.id as job_title_id', 'job_titles.jobtitle_name','recruiter_jobs.pay_rate',
                 DB::raw("recruiter_jobs.no_of_jobs as jobs_count"));
-        if($history==true){
+        if($history=='true'){
           $jobs->withTrashed();
         }
         return $jobs->get();
