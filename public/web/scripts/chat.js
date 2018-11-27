@@ -72,8 +72,8 @@ $(document).ready(function() {
             $('#chatMsg').val('');
         });
         socket.on('logoutPreviousSession',function(response){
-            $('#logoutMessageBox').modal('show');
-            setTimeout(function(){ window.location.href='/logout'; }, 3000);
+            //$('#logoutMessageBox').modal('show');
+            //setTimeout(function(){ window.location.href='/logout'; }, 3000);
         });
         $('.leftSeekerPanelRow').click(function(e) {
             var dataLoaded = $(this).attr('data-loaded');
