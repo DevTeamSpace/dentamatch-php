@@ -463,9 +463,17 @@ class RecruiterJobController extends Controller {
             $jobDetails = RecruiterJobs::getRecruiterJobDetails($request->jobId);
             $jobSeekerStatus = JobLists::getJobSeekerStatus($request->jobId);
             $recruiterOffices = RecruiterOffice::getAllOffices();
+            $locationActive=0;
+            foreach ($recruiterOffices as $recruiterOffice){
+                if($recruiterOffice->id==$jobDetails->recruiter_office_id){
+                    $locationActive=1;
+                    break;
+                }
+            }
             $allOfficeTypes = OfficeType::allOfficeTypes();
             $allData['jobDetails'] = $jobDetails;
             $allData['jobSeekerStatus'] = $jobSeekerStatus;
+            $allData['officeStatus'] = $locationActive;
             $allData['recruiterOffices'] = $recruiterOffices;
             $allData['allOfficeTypes'] = $allOfficeTypes;
             $allData['preferredJobLocations'] = PreferredJobLocation::getAllPreferrefJobLocation();

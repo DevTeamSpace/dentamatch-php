@@ -186,7 +186,7 @@
             jobId = $('#jobIdValue').val();
             $.get('/job/edit-details', {jobId: jobId}, function (d) {
                 me.jobId(d.jobDetails.id);
-                if (d.jobSeekerStatus != 0) {
+                if (d.jobSeekerStatus != 0 || d.officeStatus == 0 ) {
                     me.cannotEdit(true);
                     me.showEdit(false);
                 } else {

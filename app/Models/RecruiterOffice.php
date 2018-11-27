@@ -19,6 +19,7 @@ class RecruiterOffice extends Model {
     public static function getAllRecruiterOffices($userId) {
         return RecruiterOffice::leftJoin('locations', 'locations.zipcode', '=', 'recruiter_offices.zipcode')
                         ->where('user_id', $userId)
+                        ->where('locations.is_active' , config('constants.LocationActive'))
                         ->select('recruiter_offices.id', 'recruiter_offices.address', 'locations.zipcode')
                         ->get()->toArray();
     }
