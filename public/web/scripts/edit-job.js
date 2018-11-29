@@ -276,6 +276,7 @@
                     }
                 }
                 me.showOfficeDetailsTwo(me, office_Id);
+                $('.selectpicker').selectpicker('refresh');
         });
     };
     
@@ -317,7 +318,9 @@
 
     var autocomplete = {};
     var autocompletesWraps = ['autocomplete', 'autocomplete1', 'autocomplete2'];
-
+    var componentForm = {
+        postal_code: 'short_name'
+    };
     me.getOfficeName = function(d, e) {
         officeName = new google.maps.places.SearchBox(
                 (document.getElementById('officeAddress')),
@@ -330,7 +333,14 @@
             d.selectedOfficeLat(place[0].geometry.location.lat());
             d.selectedOfficeLng(place[0].geometry.location.lng());
             d.selectedOfficeAddress(place[0].formatted_address);
-            lastAddressComponent = place[0].address_components.pop().short_name;
+            //lastAddressComponent = place[0].address_components.pop().short_name;
+            for (var i = 0; i < place[0].address_components.length; i++) {
+                    var addressType = place[0].address_components[i].types[0];
+                    if (componentForm[addressType]) {
+                        var val = place[0].address_components[i][componentForm[addressType]];
+                        lastAddressComponent = val;
+                    }
+                }
             d.selectedOfficeZipcode(lastAddressComponent);
             $.ajax(
             {
