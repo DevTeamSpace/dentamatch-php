@@ -11,7 +11,7 @@
                 <div class="panel-heading">Update Pay-rate file
                     @if ($payrateUrl!='')
                     <div class="span6 pull-right" style="text-align:right">
-                        <a href="{{ $payrateUrl }}" target="_blank">View Payrate</a>
+                        <a href="{{ $payrateUrl }}" target="_blank">View Existing Payrate</a>
                     </div>
                     @endif
                 </div>
