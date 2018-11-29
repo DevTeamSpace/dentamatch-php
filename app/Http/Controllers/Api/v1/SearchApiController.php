@@ -321,7 +321,7 @@ class SearchApiController extends Controller {
 
                 if ($jobDetails->job_type == RecruiterJobs::FULLTIME || $jobDetails->job_type == RecruiterJobs::PARTTIME) {
                     $seekerDetails = UserProfile::where('user_id',$userId)->first();
-                    if ($reqData['acceptStatus'] == 2 ||
+                    if ($reqData['acceptStatus'] == 0 ||
                         ($jobDetails->job_type == RecruiterJobs::FULLTIME && $seekerDetails->is_fulltime==1) ||
                         ($jobDetails->job_type == RecruiterJobs::PARTTIME && 
                         (($jobDetails->is_monday==1 && $seekerDetails->is_parttime_monday==1) ||
