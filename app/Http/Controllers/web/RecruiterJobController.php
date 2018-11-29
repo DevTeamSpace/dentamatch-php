@@ -467,7 +467,7 @@ class RecruiterJobController extends Controller {
             $recruiterOffices = RecruiterOffice::getAllOffices();
             $locationActive=0;
             foreach ($recruiterOffices as $recruiterOffice){
-                if($recruiterOffice->id==$jobDetails->recruiter_office_id){
+                if($recruiterOffice->id==$jobDetails['recruiter_office_id']){
                     $locationActive=1;
                     break;
                 }

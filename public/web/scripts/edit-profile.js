@@ -347,7 +347,9 @@ var EditProfileVM = function () {
 
     var autocomplete = {};
     var autocompletesWraps = ['autocomplete', 'autocomplete1', 'autocomplete2'];
-
+    var componentForm = {
+        postal_code: 'short_name'
+    };
     me.getOfficeName = function (d, e) {
         officeName = new google.maps.places.SearchBox(
                 (e.currentTarget), {types: ['geocode']});
@@ -360,7 +362,14 @@ var EditProfileVM = function () {
             d.officeLat(place[0].geometry.location.lat());
             d.officeLng(place[0].geometry.location.lng());
             d.officeAddress(place[0].formatted_address);
-            lastAddressComponent = place[0].address_components.pop().short_name;
+            for (var i = 0; i < place[0].address_components.length; i++) {
+                    var addressType = place[0].address_components[i].types[0];
+                    if (componentForm[addressType]) {
+                        var val = place[0].address_components[i][componentForm[addressType]];
+                        lastAddressComponent = val;
+                    }
+                }
+            //lastAddressComponent = place[0].address_components.pop().short_name;
             d.officeZipcode(lastAddressComponent);
             $.ajax({
                 url: '/get-location/' + lastAddressComponent,
