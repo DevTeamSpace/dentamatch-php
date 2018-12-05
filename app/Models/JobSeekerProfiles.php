@@ -139,7 +139,7 @@ class JobSeekerProfiles extends Model
             ->groupby('jobseeker_profiles.user_id', 'jobseeker_affiliations.user_id');
 
         $obj->addSelect(DB::raw("group_concat(distinct(affiliations.affiliation_name) SEPARATOR ', ') AS affiliations"));
-
+        $obj->addSelect(DB::raw("group_concat(distinct(jobseeker_affiliations.other_affiliation) SEPARATOR ', ') AS other_affiliation"));
         $obj->addSelect(DB::raw("group_concat(distinct(jobseeker_temp_availability.temp_job_date) SEPARATOR ' | ') AS temp_job_dates"));
         $obj->leftjoin('job_ratings', 'jobseeker_profiles.user_id', '=', 'job_ratings.seeker_id')
             ->addselect(DB::raw('(avg(job_ratings.punctuality) + avg(job_ratings.time_management) + avg(job_ratings.skills))/3 as sum'))

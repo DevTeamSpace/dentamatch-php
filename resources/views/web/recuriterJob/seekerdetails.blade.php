@@ -314,7 +314,11 @@ $seekerDatesCount = count($datesTemp);
                 <ul class="job-detail-listing bullet-list">
                      @foreach($affiliations as $affiliation)
                     <li>
+                        @if(trim($affiliation) == "Other")
+                        {{ $affiliation }} -- {{ $seekerDetails['other_affiliation'] }}
+                        @else
                         {{ $affiliation }}
+                        @endif
                     </li>
                     @endforeach
                 </ul>
