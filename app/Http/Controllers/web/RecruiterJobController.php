@@ -50,10 +50,10 @@ class RecruiterJobController extends Controller {
         try {
             $activeTab = 3;
             $userId = Auth::user()->id;
-            date_default_timezone_set('America/New_York');
+            //date_default_timezone_set('America/New_York');
             $currentDay = date("l"); 
             $currentDate = date('F d, Y',time());
-            date_default_timezone_set('UTC');
+            //date_default_timezone_set('UTC');
             $userDetails = User::getUser($userId);
             $hiredListByCurrentDate = JobseekerTempHired::getCurrentDayJobSeekerList();
             $latestMessage = ChatUserLists::getSeekerListForChatDashboard(Auth::id());
