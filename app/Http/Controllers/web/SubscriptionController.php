@@ -158,7 +158,7 @@ class SubscriptionController extends Controller {
     public function saveSubscription($subscription){
         $payments = new SubscriptionPayments;
         $payments->recruiter_id=Auth::user()->id;
-        $payments->expiryDate = date('Y-m-d', $subscription['current_period_end']);
+        $payments->expiryDate = date('Y-m-d H:i:s', $subscription['current_period_end']);
         $payments->trialEnd = date('Y-m-d', $subscription['trial_end']);
         $payments->paymentId = $subscription['id'];
         $payments->paymentResponse = json_encode($subscription);

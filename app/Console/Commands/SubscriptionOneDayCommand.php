@@ -11,7 +11,7 @@ use DB;
 
 class SubscriptionOneDayCommand extends Command
 {
-    const NOTIFICATION_INTERVAL = 1;
+    const NOTIFICATION_INTERVAL = 10; //in minutes
     /**
      * The name and signature of the console command.
      *
@@ -48,7 +48,7 @@ class SubscriptionOneDayCommand extends Command
             $senderId = User::getAdminUserDetailsForNotification();
             $recruiterModel = SubscriptionPayments::select('subscription_payments.payment_id', 'subscription_payments.subscription_expiry_date','subscription_payments.trial_end', 'recruiter_profiles.user_id','recruiter_profiles.customer_id')
                                 ->join('recruiter_profiles', 'recruiter_profiles.user_id','=','subscription_payments.recruiter_id')
-                                ->where(DB::raw("DATEDIFF(now(), subscription_payments.subscription_expiry_date)"),'=', static::NOTIFICATION_INTERVAL)
+                                ->where(DB::raw("TIMEDIFF(now(), subscription_payments.subscription_expiry_date)"),'<=', static::NOTIFICATION_INTERVAL)
                                 //->where('recruiter_profiles.is_subscribed',1)
                                 ->get();
             $list = $recruiterModel->toArray();
