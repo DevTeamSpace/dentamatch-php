@@ -36,7 +36,7 @@
                         <div class="descriptionBox">
                             <div class="viewProfileRightCard form-group">
                                 <label>Office Name</label>
-                                <input type="text" id="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="required" data-bind="value: dentalOfficeName" placeholder="Enter Office Name">
+                                <input maxlength="55" type="text" id="officeName" class="form-control txtBtnDisable"  data-parsley-required data-parsley-required-message="required" data-bind="value: dentalOfficeName" placeholder="Enter Office Name">
                                 <p class="error-div" data-bind="text: officeNameError"></p>
                             </div>
                             <div class="detailTitleBlock">
