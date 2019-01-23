@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'Laravel',
+    'name' => 'DentaMatch',
 
     /*
     |--------------------------------------------------------------------------
@@ -177,6 +177,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\HelperServiceProvider::class,
 
     ],
 
@@ -225,7 +226,10 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'ApiResponse' => App\Helpers\rapidConnect::class,
+        'NotificationService' => \App\Providers\NotificationServiceProvider::class,
     ],
-
+    
+    'defaul_product_per_page' => 20,
+    'socketUrl' => env('SOCKET_URL', 'http://localhost:3000'),
 ];

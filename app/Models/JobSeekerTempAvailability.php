@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Models;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Log;
+
+class JobSeekerTempAvailability extends Model
+{
+    use SoftDeletes;
+  
+    protected $table  = 'jobseeker_temp_availability';
+    protected $primaryKey = 'id';
+    protected $dates = ['deleted_at'];
+    /**
+    * The attributes that should be hidden for arrays.
+    *
+    * @var array
+    */
+    protected $hidden = [
+       'updated_at', 'deleted_at','created_at'
+    ];
+    
+    public static function addTempDateAvailability($userId, $currentDate, $endDate) {
+        $tempDateArray = [];
+        $dayArray = [1,2,3,4,5];
+        while(count($tempDateArray) < 23) {
+                $dateString = (int) date("w", $currentDate);
+                $insertDate = date( "Y-m-d",$currentDate);
+                if($dateString!=6 && $dateString!=0) {
+                    Log::info($dateString);
+                    Log::info($insertDate);
+                    $tempDateArray[] = array('user_id' => $userId, 'temp_job_date' => $insertDate);
+                }
+                $currentDate = strtotime($insertDate." +1 days");
+        }
+        self::insert($tempDateArray);
+    }
+    
+    
+}

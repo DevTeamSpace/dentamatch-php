@@ -30,10 +30,11 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Illuminate\Http\Middleware\FrameGuard::class,
         ],
 
         'api' => [
-            'throttle:60,1',
+            //'throttle:60,1',
             'bindings',
         ],
     ];
@@ -47,10 +48,19 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+        'cms' => \App\Http\Middleware\Cms::class,
+        'xss' => \App\Http\Middleware\Xss::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'ApiAuth'=> \App\Http\Middleware\ApiAuth::class,
+        'termCondition'=> \App\Http\Middleware\TermConditions::class,
+        'recruiter'=> \App\Http\Middleware\Recruiter::class,
+        'acceptedTerms'=> \App\Http\Middleware\AcceptedTerms::class,
+        'officeDetails'=> \App\Http\Middleware\OfficeDetails::class,
+        'nocache' => \App\Http\Middleware\NocacheMiddleware::class,
+        'subscription' => \App\Http\Middleware\Subscription::class,
     ];
 }

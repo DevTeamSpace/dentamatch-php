@@ -14,6 +14,18 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        Commands\Inspire::class,
+        Commands\UserProfileCompletionCommand::class,
+        Commands\CertificateExpiryCommand::class,
+        Commands\AppMessageCommand::class,
+        Commands\InactiveJobCommand::class,
+        Commands\TempJobExpiryCommand::class,
+        Commands\TempJobRatingCommand::class,
+        Commands\UnverifiedJobseekerCommand::class,
+        Commands\SetAvailabilityCommand::class,
+        Commands\InvitedJobseekerCommand::class,
+        Commands\SubscriptionCommand::class,
+        Commands\SubscriptionOneDayCommand::class,
     ];
 
     /**
@@ -24,8 +36,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command('user:profileCompletion')->daily()->withoutOverlapping();
+        $schedule->command('user:certificateExpiry')->daily()->withoutOverlapping();
+        //$schedule->command('notify:adminNotification')->everyTenMinutes()->withoutOverlapping();
+        $schedule->command('notify:tempJobExpiryNotification')->daily()->withoutOverlapping();
+        $schedule->command('notify:tempJobRatingNotification')->daily()->withoutOverlapping();
+        $schedule->command('jobseeker:unverified')->daily()->withoutOverlapping();
+        $schedule->command('user:availability')->daily()->withoutOverlapping();
+        $schedule->command('user:pendinginvites')->daily()->withoutOverlapping();
+        $schedule->command('user:onedaysubscription')->everyTenMinutes()->withoutOverlapping();
     }
 
     /**

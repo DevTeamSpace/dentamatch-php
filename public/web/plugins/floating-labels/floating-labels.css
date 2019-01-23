@@ -1,0 +1,79 @@
+.floating-label-form-group {
+    /* border-bottom: 1px solid #9d9d9d; */
+    /*margin-bottom: 0;*/
+    position: relative;
+    /* padding-bottom: 0.5em;*/
+    /* border: solid 1px #d7d7d7; */
+}
+
+.floating-label-form-group input,
+.floating-label-form-group textarea {
+    background: #fff;
+    border: solid 1px #0470c0;
+    border-radius: 0;
+    padding-left: 13px;
+    padding-right: 13px;
+    box-shadow: none !important;
+    position: relative;
+    z-index: 1;
+    font-size: 1.25em;
+    resize: none;
+}
+
+.floating-label-form-group select {
+    margin-top: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    font-size: 1.25em;
+    box-shadow: none;
+    margin-left: -4px;
+    background: transparent;
+}
+
+.floating-label-form-group label {
+    pointer-events: none;
+    display: block;
+    position: relative;
+    color:#8c8c8c;
+    top: 2em;
+    opacity: 0;
+    z-index: 0;
+    font-size: 0.85em;
+    line-height: 1.764705882em;
+    vertical-align: baseline;
+    margin: 0;
+    -webkit-transition: top 0.3s ease, opacity 0.3s ease;
+    -moz-transition: top 0.3s ease, opacity 0.3s ease;
+    -ms-transition: top 0.3s ease, opacity 0.3s ease;
+    transition: top 0.3s ease, opacity 0.3s ease;
+}
+
+.floating-label-form-group:not(:first-child) {
+   /* border-left: 1px solid #ccc;
+   padding-left: 14px;*/
+}
+
+.floating-label-form-group-with-value label {
+    top: 0;
+    opacity: 1;
+}
+
+.floating-label-form-group-with-focus label {
+    color: #8c8c8c;
+}
+
+/*form .row:first-child .floating-label-form-group {
+    border-top: 1px solid #ccc;
+    }*/
+
+    /*-----------custom float label css--------*/
+    .floating-label-form-group input:first-child{
+
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+    }   
+    
+    .floating-label-form-group input, 
+    .floating-label-form-group textarea{}
+

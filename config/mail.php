@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => 'hello@example.com',
-        'name' => 'Example',
+        'address' => env('MAIL_FROM', 'ondemand@appster.in'),
+        'name' => 'DentaMatch',
     ],
 
     /*
