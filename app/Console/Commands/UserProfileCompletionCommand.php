@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\IncompleteProfile;
 use Illuminate\Console\Command;
 use App\Models\UserProfile;
 use App\Models\Notification;
@@ -74,9 +75,7 @@ class UserProfileCompletionCommand extends Command
                 } else {
                     $name = $value->first_name;
                     $email = $value->email;
-                    Mail::queue('email.incomplete-profile', ['name' => $name, 'email' => $email], function($message ) use($email,$name) {
-                        $message->to($email, $name)->subject(trans("messages.incomplete_profile_mail"));
-                    });
+                    Mail::to($email)->queue(new IncompleteProfile($name));
                 }
             }
         }

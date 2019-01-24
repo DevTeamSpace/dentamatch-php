@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Cms;
 
+use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
@@ -114,11 +115,11 @@ class RecruiterController extends Controller
                 $passwordModel->fill(['token' => $token]);
                 $passwordModel->save();
                 
-                 RecruiterProfile::create(['user_id' => $userId]);
-                 
-                Mail::queue('email.reset-password-token', ['name' => "Recruiter", 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($reqData) {
-                    $message->to($reqData['email'], "Recruiter")->subject('Set Password Email');
-                });
+                RecruiterProfile::create(['user_id' => $userId]);
+
+                $url = url('password/reset', ['token' => $token]);
+                Mail::to($reqData['email'])->queue(new ResetPassword('Recruiter', $url));
+
                 $msg = trans('messages.recruiter_added_success');
             }
 
@@ -200,9 +201,8 @@ class RecruiterController extends Controller
                 $passwordModel = PasswordReset::firstOrNew(array('user_id' => $userId, 'email' => $email));
                 $passwordModel->fill(['token' => $token]);
                 if($passwordModel->save()) {
-                    Mail::queue('email.reset-password-token', ['name' => "Recruiter", 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($email) {
-                        $message->to($email, "Recruiter")->subject('Set Password Email');
-                    });
+                    $url = url('password/reset', ['token' => $token]);
+                    Mail::to($email)->queue(new ResetPassword('Recruiter', $url));
                 }
 
                 $msg = trans('messages.admin_recruiter_password_success');

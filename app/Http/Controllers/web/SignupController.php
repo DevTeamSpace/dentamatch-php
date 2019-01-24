@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\web;
 
+use App\Mail\AdminVerifyJobseeker;
+use App\Mail\UserActivation;
 use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\RecruiterProfile;
@@ -162,10 +164,9 @@ class SignupController extends Controller {
                 $userGroupModel->user_id = $user_details->id;
                 $userGroupModel->save();
 
-                Mail::queue('auth.emails.user-activation', ['url' => url("/verification-code/$uniqueCode")], function ($message) use ($reqData) {
-                    $message->to($reqData['email'])
-                            ->subject(trans("messages.confirmation_link"));
-                });
+                $url = url("/verification-code/$uniqueCode");
+                Mail::to($reqData['email'])->queue(new UserActivation(null, $url, 'auth.emails.user-activation'));
+
                 DB::commit();
                 Session::flash('success', trans("messages.successfully_register"));
             }
@@ -276,16 +277,12 @@ class SignupController extends Controller {
                 $url = url("/verification-code/$uniqueCode");
                 $name = $reqData['firstName'].' '.$reqData['lastName'];
                 $email = $reqData['email'];
-                $fname = $reqData['firstName'];
-                Mail::queue('email.user-activation', ['name' => $name, 'url' => $url, 'email' => $reqData['email']], function($message ) use($email,$fname) {
-                        $message->to($email, $fname)->subject(trans("messages.confirmation_link"));
-                    });
+
+                Mail::to($email)->queue(new UserActivation($name, $url));
                     
                 if(!empty($reqData['license']) && !empty($reqData['state'])) {
                     $adminEmail = env('ADMIN_EMAIL');
-                    Mail::queue('email.admin-verify-jobseeker', ['name' => $name, 'email' => $email], function($message ) use($adminEmail) {
-                            $message->to($adminEmail, "Dentamatch Admin")->subject(trans("messages.verify_seeker"));
-                        });
+                    Mail::to($adminEmail)->queue(new AdminVerifyJobseeker($name, $email));
                 }
                     
                 Session::flash('message', trans("messages.user_registration_successful")); 
