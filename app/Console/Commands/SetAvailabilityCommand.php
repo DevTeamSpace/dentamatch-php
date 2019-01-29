@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\SetAvailability;
 use Illuminate\Console\Command;
 use App\Models\JobSeekerTempAvailability;
 use App\Models\User;
@@ -96,9 +97,7 @@ class SetAvailabilityCommand extends Command
                 } else {
                     $name = $value->first_name;
                     $email = $value->email;
-                    Mail::queue('email.set-availability', ['name' => $name, 'email' => $email], function($message) use($email,$name) {
-                        $message->to($email, $name)->subject(trans("messages.set_availability_email"));
-                    });
+                    Mail::to($email)->queue(new SetAvailability($name));
                 }
             }
         }

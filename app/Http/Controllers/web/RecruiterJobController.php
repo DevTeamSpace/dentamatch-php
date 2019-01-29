@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\web;
 
+use App\Mail\NewInvite;
 use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -437,10 +438,8 @@ class RecruiterJobController extends Controller {
             $email = \App\Models\User::where('id',$receiverId)->first();
             $name = \App\Models\JobSeekerProfile::where('user_id',$receiverId)->first();
             $dataName = $name['first_name'];
-            Mail::queue('email.new-invite', ['name' => $dataName ], function ($message) use ($email) {
-            $message->to($email['email'])
-                 ->subject(trans("messages.new_job_invite"));
-            });
+
+            Mail::to($email['email'])->queue(new NewInvite($dataName));
         }
     }
 
