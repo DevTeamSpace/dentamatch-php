@@ -14,15 +14,17 @@
 
     <title>DentaMatch</title>
     <style>
-        body{background-color:rgb(240,240,240);padding:0 10px;}
-        p{color:#686868; margin-top:30px;}
+        body{padding:0 10px;}
+        p{color:#686868;}
+        h1{margin-top: 50px; margin-bottom: 30px}
+        h4{margin-top: 35px; margin-bottom: 15px; font-weight: 500;}
     </style>
 
 </head>
 
 <body>
     <div class="container doc-cont terms">
-       <h3 class="pg-heading mr-b-30">Privacy Policy</h3> 
+       <h1 class="pg-heading">Privacy Policy</h1>
         <p class="mr-t-30">
             This Privacy Policy governs the manner in which Health Match Inc. collects, uses, maintains and discloses
             information collected from users (each, a "User") of the http://www.dentamatch.co website ("Site"). This privacy

@@ -10,40 +10,35 @@
   | to using a Closure or controller method. Build something great!
   |
  */
-  Route::post('stripe-test', 'web\SubscriptionController@getStripeTest');
-  Route::get('image/{w}/{h}/', function(League\Glide\Server $server, $w, $h) {
+Route::post('stripe-test', 'web\SubscriptionController@getStripeTest');
+Route::get('image/{w}/{h}/', function (League\Glide\Server $server, $w, $h) {
     $server->outputImage($_GET['src'], ['w' => $w, 'h' => $h, 'fit' => 'crop']);
-    });
-  Route::get('/', 'web\SignupController@getLogin');
- 
-  Route::get('signup', 'web\SignupController@getLogin');
-  Route::post('signup', 'web\SignupController@postSignUp');
-  Route::post('jobseeker/storeSignup', 'web\SignupController@postJobseekerSignUp');
-  Route::get('jobseeker/signup', 'web\SignupController@getJobseekerSignUp');
-
-  Route::post('login', 'web\SignupController@postLogin');
-  Route::get('login', 'web\SignupController@getLogin');
-  Route::get('verification-code/{code}', 'web\SignupController@getVerificationCode');
-  Route::get('user-activation/{code}', 'Api\v1\UserApiController@getActivatejobseeker');
-  Route::get('logout', 'web\SignupController@logout');
-  Route::get('users/notification/seen/{id}', 'web\NotificationController@seenNotification');
-  Route::get('/aboutus', function () {
-    return view('about');
 });
-  Route::get('/success-register', function () {
-    return view('auth.passwords.successfully_reg');
-});
-  Route::get('/success-active', function () {
-    return view('auth.passwords.successfully_active');
-});
+Route::get('/', 'web\SignupController@getLogin');
 
-  Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
-  Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm');
-  Route::post('password/reset', 'Auth\ResetPasswordController@reset');
-  Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
-  
+Route::get('signup', 'web\SignupController@getLogin');
+Route::post('signup', 'web\SignupController@postSignUp');
+Route::post('jobseeker/storeSignup', 'web\SignupController@postJobseekerSignUp');
+Route::get('jobseeker/signup', 'web\SignupController@getJobseekerSignUp');
 
-  Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
+Route::post('login', 'web\SignupController@postLogin');
+Route::get('login', 'web\SignupController@getLogin');
+Route::get('verification-code/{code}', 'web\SignupController@getVerificationCode');
+Route::get('user-activation/{code}', 'Api\v1\UserApiController@getActivatejobseeker');
+Route::get('logout', 'web\SignupController@logout');
+Route::get('users/notification/seen/{id}', 'web\NotificationController@seenNotification');
+Route::get('/aboutus', function () { return view('about'); });
+Route::get('/privacy-policy', function () { return view('privacy-policy');});
+Route::get('/success-register', function () { return view('auth.passwords.successfully_reg'); });
+Route::get('/success-active', function () { return view('auth.passwords.successfully_active'); });
+
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
+
+
+Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
     Route::group(['middleware' => 'recruiter'], function () {
         Route::group(['middleware' => 'acceptedTerms'], function () {
             Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails');
@@ -77,10 +72,10 @@
                 Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
                 Route::get('/jobseeker/{seekerId}', 'web\RecruiterJobController@jobSeekerProfile');
                 Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
-                                
-                Route::get('favorite-jobseeker','web\FavoriteJobseekerController@getFavJobseeker');
-                Route::get('get-favorite-job-lists','web\FavoriteJobseekerController@postFavouriteJobList');
-                Route::post('invite-jobseeker','web\FavoriteJobseekerController@postInviteJobseeker');              
+
+                Route::get('favorite-jobseeker', 'web\FavoriteJobseekerController@getFavJobseeker');
+                Route::get('get-favorite-job-lists', 'web\FavoriteJobseekerController@postFavouriteJobList');
+                Route::post('invite-jobseeker', 'web\FavoriteJobseekerController@postInviteJobseeker');
                 Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
                 Route::get('recruiter-profile-details', 'web\UserProfileController@getRecruiterProfileDetails');
                 Route::post('update-recruiter-info', 'web\UserProfileController@postUpdateRecruiterProfile');
@@ -121,7 +116,7 @@
             Route::get('setting-terms-conditions', 'web\UserProfileController@getTermsConditions');
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
             Route::post('change-password', 'web\UserProfileController@postChangePassword');
-            Route::get('get-plans','web\SubscriptionController@getPlans');
+            Route::get('get-plans', 'web\SubscriptionController@getPlans');
 
             //Route::get('chat', 'web\ChatController@getChatSeekerList');
             Route::get('calender', 'web\CalenderController@getCalender');
@@ -130,11 +125,11 @@
             Route::post('recruiter/rating', 'web\RatingController@createOrUpdate');
         });
 
-Route::group(['middleware' => 'termCondition'], function () {
-    Route::get('terms-conditions', 'web\SignupController@getTermsAndCondition');
-    Route::get('tutorial', 'web\SignupController@getTutorial')->middleware('officeDetails');;
-});
-});
+        Route::group(['middleware' => 'termCondition'], function () {
+            Route::get('terms-conditions', 'web\SignupController@getTermsAndCondition');
+            Route::get('tutorial', 'web\SignupController@getTutorial')->middleware('officeDetails');;
+        });
+    });
 });
 
 Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], function () {
@@ -144,7 +139,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
     Route::post('/login', 'Auth\LoginController@login');
     Route::get('/', 'Cms\JobSeekerController@verificationLicense');
     Route::get('/home', 'cms\LocationController@index');
-    Route::group(['prefix' => 'user/'], function() {
+    Route::group(['prefix' => 'user/'], function () {
         Route::get('listPhotographer', 'Cms\UserController@getPhotographerList');
         Route::get('listConsumer', 'Cms\UserController@getConsumerList');
         Route::get('listDesigner', 'Cms\UserController@getDesignerList');
@@ -161,7 +156,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::post('updatePassword', 'Cms\UserController@updatePassword');
     });
 
-    Route::group(['prefix' => 'location/'], function() {
+    Route::group(['prefix' => 'location/'], function () {
         Route::get('index', 'Cms\LocationController@index');
         Route::get('list', 'Cms\LocationController@locationsList');
         Route::delete('{id}/delete', 'Cms\LocationController@delete');
@@ -169,8 +164,8 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('create', 'Cms\LocationController@create');
         Route::post('store', 'Cms\LocationController@store');
     });
-    
-    Route::group(['prefix' => 'affiliation/'], function() {
+
+    Route::group(['prefix' => 'affiliation/'], function () {
         Route::get('index', 'Cms\AffiliationController@index');
         Route::get('list', 'Cms\AffiliationController@affiliationsList');
         Route::delete('{id}/delete', 'Cms\AffiliationController@delete');
@@ -178,8 +173,8 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('create', 'Cms\AffiliationController@create');
         Route::post('store', 'Cms\AffiliationController@store');
     });
-    
-    Route::group(['prefix' => 'jobtitle/'], function() {
+
+    Route::group(['prefix' => 'jobtitle/'], function () {
         Route::get('index', 'Cms\JobTitleController@index');
         Route::get('list', 'Cms\JobTitleController@jobTitleList');
         Route::delete('{id}/delete', 'Cms\JobTitleController@delete');
@@ -187,8 +182,8 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('create', 'Cms\JobTitleController@create');
         Route::post('store', 'Cms\JobTitleController@store');
     });
-    
-    Route::group(['prefix' => 'officetype/'], function() {
+
+    Route::group(['prefix' => 'officetype/'], function () {
         Route::get('index', 'Cms\OfficeTypeController@index');
         Route::get('list', 'Cms\OfficeTypeController@officeTypeList');
         Route::delete('{id}/delete', 'Cms\OfficeTypeController@delete');
@@ -196,8 +191,8 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('create', 'Cms\OfficeTypeController@create');
         Route::post('store', 'Cms\OfficeTypeController@store');
     });
-    
-    Route::group(['prefix' => 'certificate/'], function() {
+
+    Route::group(['prefix' => 'certificate/'], function () {
         Route::get('index', 'Cms\CertificateController@index');
         Route::get('list', 'Cms\CertificateController@certificationList');
         Route::delete('{id}/delete', 'Cms\CertificateController@delete');
@@ -205,15 +200,15 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('create', 'Cms\CertificateController@create');
         Route::post('store', 'Cms\CertificateController@store');
     });
-    
-    Route::group(['prefix' => 'config/'], function() {
+
+    Route::group(['prefix' => 'config/'], function () {
         Route::get('pay-rate', 'Cms\ConfigurationController@index');
         Route::post('store-pay-rate', 'Cms\ConfigurationController@updatePayrate');
         Route::get('create-radius', 'Cms\ConfigurationController@create');
         Route::post('store-radius', 'Cms\ConfigurationController@store');
     });
-    
-    Route::group(['prefix' => 'skill/'], function() {
+
+    Route::group(['prefix' => 'skill/'], function () {
         Route::get('index', 'Cms\SkillController@index');
         Route::get('list', 'Cms\SkillController@skillList');
         Route::delete('{id}/delete', 'Cms\SkillController@delete');
@@ -221,8 +216,8 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('create', 'Cms\SkillController@create');
         Route::post('store', 'Cms\SkillController@store');
     });
-    
-    Route::group(['prefix' => 'school/'], function() {
+
+    Route::group(['prefix' => 'school/'], function () {
         Route::get('index', 'Cms\SchoolController@index');
         Route::get('list', 'Cms\SchoolController@schoolList');
         Route::delete('{id}/delete', 'Cms\SchoolController@delete');
@@ -230,8 +225,8 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('create', 'Cms\SchoolController@create');
         Route::post('store', 'Cms\SchoolController@store');
     });
-    
-    Route::group(['prefix' => 'jobseeker/'], function() {
+
+    Route::group(['prefix' => 'jobseeker/'], function () {
         Route::get('index', 'Cms\JobSeekerController@index');
         Route::get('verification', 'Cms\JobSeekerController@verificationLicense');
         Route::get('list', 'Cms\JobSeekerController@jobSeekerList');
@@ -243,25 +238,25 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('verification-list', 'Cms\JobSeekerController@jobSeekerVerificationList');
         Route::get('{id}/verification', 'Cms\JobSeekerController@jobSeekerVerificationView');
         Route::post('storeVerification', 'Cms\JobSeekerController@storeVerification');
-        
+
         Route::get('unverified', 'Cms\JobSeekerController@unverified');
         Route::get('listUnverifiedJobseeker', 'Cms\JobSeekerController@unverifiedJobseekerList');
         Route::get('downloadUnverifiedJobseeker', 'Cms\JobSeekerController@downloadUnverifiedJobseekerCsv');
-        
+
         Route::get('incomplete', 'Cms\JobSeekerController@incomplete');
         Route::get('listIncompleteJobseeker', 'Cms\JobSeekerController@incompleteJobseekerList');
         Route::get('downloadIncompleteJobseeker', 'Cms\JobSeekerController@downloadIncompleteJobseekerCsv');
-        
+
         Route::get('nonavailableusers', 'Cms\JobSeekerController@nonAvailableUsers');
         Route::get('listNonAvailableUsers', 'Cms\JobSeekerController@listNonAvailableUsers');
         Route::get('downloadNonAvailableUsers', 'Cms\JobSeekerController@downloadNonAvailableUsersCsv');
-        
+
         Route::get('invited', 'Cms\JobSeekerController@invited');
         Route::get('listInvitedUsers', 'Cms\JobSeekerController@listInvitedUsers');
         Route::get('downloadInvitedUsers', 'Cms\JobSeekerController@downloadInvitedUsersCsv');
     });
-    
-    Route::group(['prefix' => 'recruiter/'], function() {
+
+    Route::group(['prefix' => 'recruiter/'], function () {
         Route::get('index', 'Cms\RecruiterController@index');
         Route::get('list', 'Cms\RecruiterController@recruiterList');
         Route::get('{id}/delete', 'Cms\RecruiterController@delete');
@@ -272,8 +267,8 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('{id}/adminResetPassword', 'Cms\RecruiterController@adminResetPassword');
         Route::get('{id}/view', 'Cms\RecruiterController@recruiterView');
     });
-    
-    Route::group(['prefix' => 'notify/'], function() {
+
+    Route::group(['prefix' => 'notify/'], function () {
         Route::get('index', 'Cms\AppMessageController@index');
         Route::get('list', 'Cms\AppMessageController@messageList');
         Route::get('{id}/delete', 'Cms\AppMessageController@delete');
@@ -282,7 +277,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('create', 'Cms\AppMessageController@create');
         Route::post('store', 'Cms\AppMessageController@store');
     });
-    Route::group(['prefix' => 'report/'], function() {
+    Route::group(['prefix' => 'report/'], function () {
         Route::get('index', 'Cms\ReportController@index');
         Route::get('list', 'Cms\ReportController@jobLists');
         Route::get('{id}/view', 'Cms\ReportController@appliedSeekers');
@@ -297,7 +292,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('location', 'Cms\ReportController@searchCountbyLocation');
         Route::get('download/{type}', 'Cms\ReportController@downloadCsv');
     });
-    
+
     Route::get('push-notification', 'Cms\JobSeekerController@sendPushAndroid');
 });
 
