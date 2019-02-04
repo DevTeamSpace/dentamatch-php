@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\PendingAccept;
 use Illuminate\Console\Command;
 use App\Models\User;
 use App\Models\Notification;
@@ -84,9 +85,7 @@ class InvitedJobseekerCommand extends Command
                 } else {
                     $name = $value->first_name;
                     $email = $value->email;
-                    Mail::queue('email.pending-accept', ['name' => $name, 'email' => $email], function($message) use($email,$name) {
-                        $message->to($email, $name)->subject(trans("messages.pending_invite_email"));
-                    });
+                    Mail::to($email)->queue(new PendingAccept($name));
                 }
             }
         }

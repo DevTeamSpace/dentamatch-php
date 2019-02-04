@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Cms;
 
+use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
@@ -141,9 +142,9 @@ class JobSeekerController extends Controller
             $passwordModel->fill(['token' => $token]);
             $passwordModel->save();
 
-            Mail::queue('email.reset-password-token', ['name' => $reqData['firstname'], 'url' => url('password/reset', ['token' => $token]), 'email' => $reqData['email']], function($message) use ($reqData) {
-                $message->to($reqData['email'], $reqData['firstname'])->subject('Set Password Email');
-            });
+            $url = url('password/reset', ['token' => $token]);
+            Mail::to($reqData['email'])->queue(new ResetPassword($reqData['firstname'], $url));
+
             $msg = trans('messages.jobseeker_added_success');
         }  
         Session::flash('message',$msg);

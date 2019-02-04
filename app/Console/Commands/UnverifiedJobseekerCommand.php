@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\PendingEmailVerification;
 use Illuminate\Console\Command;
 use App\Models\User;
 use Log;
@@ -65,10 +66,7 @@ class UnverifiedJobseekerCommand extends Command
                 $url = url("/verification-code/".$user['verification_code']);
                 $name = $user['first_name'];
                 $email = $user['email'];
-                $fname = $user['first_name'];
-                Mail::queue('email.pending-email-verification', ['name' => $name, 'url' => $url, 'email' => $user['email']], function($message) use($email,$fname) {
-                        $message->to($email, $fname)->subject(trans("messages.pending_email"));
-                    });
+                Mail::to($email)->queue(new PendingEmailVerification($name, $url));
             }
         }
         

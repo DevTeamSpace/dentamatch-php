@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
+use App\Mail\AdminVerifyJobseeker;
+use App\Mail\PendingEmailVerification;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Hash;
@@ -144,9 +146,7 @@ class UserProfileApiController extends Controller {
                             $userName = $userLicenData['first_name'].' '.$userLicenData['last_name'];
                             $userEmail = $userLicenData['email'];
                             $adminEmail = env('ADMIN_EMAIL');
-                            Mail::queue('email.admin-verify-jobseeker', ['name' => $userName, 'email' => $userEmail], function($message ) use($adminEmail) {
-                                    $message->to($adminEmail, "Dentamatch Admin")->subject(trans("messages.verify_seeker"));
-                                });
+                            Mail::to($adminEmail)->queue(new AdminVerifyJobseeker($userName, $userEmail));
                         }
                         $isJobSeekerVerified = 0;
                     }
@@ -342,9 +342,7 @@ class UserProfileApiController extends Controller {
                             $userName = $userLicenData['first_name'].' '.$userLicenData['last_name'];
                             $userEmail = $userLicenData['email'];
                             $adminEmail = env('ADMIN_EMAIL');
-                            Mail::queue('email.admin-verify-jobseeker', ['name' => $userName, 'email' => $userEmail], function($message ) use($adminEmail) {
-                                    $message->to($adminEmail, "Dentamatch Admin")->subject(trans("messages.verify_seeker"));
-                                });
+                            Mail::to($adminEmail)->queue(new AdminVerifyJobseeker($userName, $userEmail));
                         }
                         $isJobSeekerVerified = 0;
                     }
@@ -354,9 +352,7 @@ class UserProfileApiController extends Controller {
                         $userName = $userLicenData['first_name'].' '.$userLicenData['last_name'];
                         $userEmail = $userLicenData['email'];
                         $adminEmail = env('ADMIN_EMAIL');
-                        Mail::queue('email.admin-verify-jobseeker', ['name' => $userName, 'email' => $userEmail], function($message ) use($adminEmail) {
-                                $message->to($adminEmail, "Dentamatch Admin")->subject(trans("messages.verify_seeker"));
-                            });
+                        Mail::to($adminEmail)->queue(new AdminVerifyJobseeker($userName, $userEmail));
                     }
                     $isJobSeekerVerified = 0;
                 }
@@ -455,9 +451,7 @@ class UserProfileApiController extends Controller {
                     $url = url("/verification-code/".$userModel->verification_code);
                     $name = $userModel->first_name;
                     $email = $userModel->email;
-                    Mail::queue('email.pending-email-verification', ['name' => $name, 'url' => $url, 'email' => $email], function($message) use($email,$name) {
-                            $message->to($email, $name)->subject(trans("messages.pending_email"));
-                        });
+                    Mail::to($email)->queue(new PendingEmailVerification($name, $url));
                     $response = ApiResponse::customJsonResponse(1, 200, "Email verification link has been sent to $email.", ['isVerified'=>$isVerified]); 
                 }
             }else{

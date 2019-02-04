@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
+use App\Mail\ResetPassword;
+use App\Mail\UserActivation;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
@@ -100,10 +102,7 @@ class UserApiController extends Controller {
             $url = url("/verification-code/$uniqueCode");
             $name = $reqData['firstName'];
             $email = $reqData['email'];
-            $fname = $reqData['firstName'];
-            Mail::queue('email.user-activation', ['name' => $name, 'url' => $url, 'email' => $reqData['email']], function($message ) use($email,$fname) {
-                    $message->to($email, $fname)->subject(trans("messages.confirmation_link"));
-                });
+            Mail::to($email)->queue(new UserActivation($name, $url));
             $userData['userDetails'] = User::getUser($userDetails->id);
             $response = ApiResponse::customJsonResponse(1, 200, trans("messages.user_registration_successful"), ApiResponse::convertToCamelCase($userData)); 
         }
@@ -291,10 +290,10 @@ class UserApiController extends Controller {
                     $passwordModel = PasswordReset::firstOrNew(array('user_id' => $user->id, 'email' => $user->email));
                     $passwordModel->fill(['token' => $token]);
                     $passwordModel->save();
-                
-                    Mail::queue('email.reset-password-token', ['name' => $user->first_name, 'url' => url('password/reset', ['token' => $token]), 'email' => $user->email], function($message) use ($user) {
-                        $message->to($user->email, $user->first_name)->subject(trans("messages.reset_pw_email_sub"));
-                    });
+
+                    $url = url('password/reset', ['token' => $token]);
+                    Mail::to($user->email)->queue(new ResetPassword($user->first_name, $url));
+
                     $response = ApiResponse::customJsonResponse(1, 200, trans("messages.reset_pw_email_sent"));
                 }else{
                     $response = ApiResponse::customJsonResponse(0, 202, trans("messages.user_account_not_active")); 
@@ -419,10 +418,10 @@ class UserApiController extends Controller {
                     $passwordModel = PasswordReset::firstOrNew(array('user_id' => $user->id, 'email' => $user->email));
                     $passwordModel->fill(['token' => $token]);
                     $passwordModel->save();
-                
-                    Mail::queue('email.reset-password-token', ['name' => 'Admin', 'url' => url('password/reset', ['token' => $token]), 'email' => $user->email], function($message) use ($user) {
-                        $message->to($user->email, $user->first_name)->subject(trans("messages.reset_pw_email_sub"));
-                    });
+
+                    $url = url('password/reset', ['token' => $token]);
+                    Mail::to($user->email)->queue(new ResetPassword('Admin', $url));
+
                     $response = ApiResponse::customJsonResponse(1, 200, trans("messages.reset_pw_email_sent"));
                 }else{
                 $response = ApiResponse::customJsonResponse(0, 201, trans("messages.email_not_exists"));
