@@ -3,6 +3,36 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Device
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $device_type
+ * @property string $device_id
+ * @property string $user_token
+ * @property string|null $ip_address
+ * @property string $device_os
+ * @property string $application_version
+ * @property string $device_token
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Device newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Device newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Device query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Device whereApplicationVersion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Device whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Device whereDeviceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Device whereDeviceOs($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Device whereDeviceToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Device whereDeviceType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Device whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Device whereIpAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Device whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Device whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Device whereUserToken($value)
+ * @mixin \Eloquent
+ */
 class Device extends Model  {
     
     const DEVICE_TYPE_IOS = "ios";

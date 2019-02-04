@@ -4,6 +4,35 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\JobSeekerSchooling
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $schooling_id
+ * @property string $other_schooling
+ * @property string $year_of_graduation
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSchooling newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSchooling newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\JobSeekerSchooling onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSchooling query()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSchooling whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSchooling whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSchooling whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSchooling whereOtherSchooling($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSchooling whereSchoolingId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSchooling whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSchooling whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSchooling whereYearOfGraduation($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\JobSeekerSchooling withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\JobSeekerSchooling withoutTrashed()
+ * @mixin \Eloquent
+ */
 class JobSeekerSchooling extends Model
 {
     use SoftDeletes;

@@ -7,6 +7,37 @@ use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\JobTemplates
+ *
+ * @property string $id
+ * @property int $user_id
+ * @property int $job_title_id
+ * @property string $template_name
+ * @property string $template_desc
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read string|null $mapping_for
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateSkills[] $templateSkills
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTemplates newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTemplates newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\JobTemplates onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTemplates query()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTemplates whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTemplates whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTemplates whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTemplates whereJobTitleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTemplates whereTemplateDesc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTemplates whereTemplateName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTemplates whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTemplates whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\JobTemplates withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\JobTemplates withoutTrashed()
+ * @mixin \Eloquent
+ */
 class JobTemplates extends Model
 {
     use Eloquence, Mappable;

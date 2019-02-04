@@ -4,6 +4,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Notification
+ *
+ * @property int $id
+ * @property int|null $sender_id
+ * @property int $receiver_id
+ * @property int|null $job_list_id
+ * @property string $notification_data
+ * @property int $seen
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property string|null $deleted_at
+ * @property int $notification_type
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereJobListId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereNotificationData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereNotificationType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereReceiverId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereSeen($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereSenderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Notification extends Model {
 
     protected $table = 'notification_logs';

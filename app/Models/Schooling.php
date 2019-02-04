@@ -4,6 +4,33 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\Schooling
+ *
+ * @property int $id
+ * @property int|null $parent_id
+ * @property string $school_name
+ * @property int $is_active
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Schooling onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling query()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling whereSchoolName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Schooling withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Schooling withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Schooling extends Model
 {
     use SoftDeletes;

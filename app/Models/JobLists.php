@@ -9,6 +9,38 @@ use Auth;
 use App\Models\TempJobDates;
 
 
+/**
+ * App\Models\JobLists
+ *
+ * @property int $id
+ * @property int $recruiter_job_id
+ * @property int|null $temp_job_id
+ * @property int $seeker_id
+ * @property int $applied_status '1'=>Invited,'2'=>Applied,'3'=>Shortlisted,'4'=>Hired,'5'=>Canceled
+ * @property string|null $cancel_reason
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property string|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TempJobDates[] $tempJobDates
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobLists newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobLists newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\JobLists onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobLists query()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobLists whereAppliedStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobLists whereCancelReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobLists whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobLists whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobLists whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobLists whereRecruiterJobId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobLists whereSeekerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobLists whereTempJobId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobLists whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\JobLists withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\JobLists withoutTrashed()
+ * @mixin \Eloquent
+ */
 class JobLists extends Model {
 
     use SoftDeletes;

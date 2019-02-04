@@ -6,6 +6,40 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Helpers\ApiResponse;
 
+/**
+ * App\Models\User
+ *
+ * @property int $id
+ * @property string $email
+ * @property string|null $password
+ * @property int $is_active
+ * @property string $verification_code
+ * @property int $is_verified
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property string|null $deleted_at
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read \App\Models\UserGroup $userGroup
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereIsVerified($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereVerificationCode($value)
+ * @mixin \Eloquent
+ */
 class User extends Authenticatable
 {
     use Notifiable;
