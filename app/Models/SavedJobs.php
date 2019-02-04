@@ -5,6 +5,33 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
 
+/**
+ * App\Models\SavedJobs
+ *
+ * @property int $id
+ * @property int $recruiter_job_id
+ * @property int|null $temp_job_id
+ * @property int $seeker_id
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property string|null $deleted_at
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\SavedJobs newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\SavedJobs newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\SavedJobs onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\SavedJobs query()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\SavedJobs whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\SavedJobs whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\SavedJobs whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\SavedJobs whereRecruiterJobId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\SavedJobs whereSeekerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\SavedJobs whereTempJobId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\SavedJobs whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\SavedJobs withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\SavedJobs withoutTrashed()
+ * @mixin \Eloquent
+ */
 class SavedJobs extends Model
 {
     use SoftDeletes;

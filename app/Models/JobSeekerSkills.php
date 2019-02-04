@@ -6,6 +6,28 @@ use Illuminate\Database\Eloquent\Model;
 
 use DB;
 
+/**
+ * App\Models\JobSeekerSkills
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $skill_id
+ * @property string $other_skill
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSkills newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSkills newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSkills query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSkills whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSkills whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSkills whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSkills whereOtherSkill($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSkills whereSkillId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSkills whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerSkills whereUserId($value)
+ * @mixin \Eloquent
+ */
 class JobSeekerSkills extends Model
 {
     const ACTIVE = 1;

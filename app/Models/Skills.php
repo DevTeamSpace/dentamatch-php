@@ -4,6 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Skills
+ *
+ * @property int $id
+ * @property int|null $parent_id
+ * @property string $skill_name
+ * @property int $is_active
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Skills[] $children
+ * @property-read \App\Models\Skills|null $parent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skills newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skills newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skills query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skills whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skills whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skills whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skills whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skills whereSkillName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Skills whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Skills extends Model
 {
     const ACTIVE = 1;

@@ -4,6 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Configs
+ *
+ * @property int $id
+ * @property string $config_name
+ * @property string $config_desc
+ * @property string $config_data
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs whereConfigData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs whereConfigDesc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs whereConfigName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Configs extends Model
 {
     protected $table = 'configs';
