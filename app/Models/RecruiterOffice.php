@@ -6,6 +6,71 @@ use Illuminate\Database\Eloquent\Model;
 use Auth;
 use DB;
 
+/**
+ * App\Models\RecruiterOffice
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string|null $address
+ * @property int|null $zipcode
+ * @property float|null $latitude
+ * @property float|null $longitude
+ * @property string $phone_no
+ * @property string|null $office_info
+ * @property string|null $work_everyday_start
+ * @property string|null $work_everyday_end
+ * @property string|null $monday_start
+ * @property string|null $monday_end
+ * @property string|null $tuesday_start
+ * @property string|null $tuesday_end
+ * @property string|null $wednesday_start
+ * @property string|null $wednesday_end
+ * @property string|null $thursday_start
+ * @property string|null $thursday_end
+ * @property string|null $friday_start
+ * @property string|null $friday_end
+ * @property string|null $saturday_start
+ * @property string|null $saturday_end
+ * @property string|null $sunday_start
+ * @property string|null $sunday_end
+ * @property string|null $office_location
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property string|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RecruiterOfficeType[] $officeTypes
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereFridayEnd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereFridayStart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereLatitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereLongitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereMondayEnd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereMondayStart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereOfficeInfo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereOfficeLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice wherePhoneNo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereSaturdayEnd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereSaturdayStart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereSundayEnd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereSundayStart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereThursdayEnd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereThursdayStart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereTuesdayEnd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereTuesdayStart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereWednesdayEnd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereWednesdayStart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereWorkEverydayEnd($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereWorkEverydayStart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereZipcode($value)
+ * @mixin \Eloquent
+ */
 class RecruiterOffice extends Model {
 
     protected $table = 'recruiter_offices';

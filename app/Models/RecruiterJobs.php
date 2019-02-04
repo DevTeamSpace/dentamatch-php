@@ -13,6 +13,57 @@ use App\Models\TempJobDates;
 use App\Models\RecruiterJobs;
 
 
+/**
+ * App\Models\RecruiterJobs
+ *
+ * @property int $id
+ * @property int $job_template_id
+ * @property int $recruiter_office_id
+ * @property int $preferred_job_location_id
+ * @property int $job_type '1'=>Full time,'2'=>Part time,'3'=>Temp
+ * @property int|null $no_of_jobs
+ * @property int|null $is_monday
+ * @property int|null $is_tuesday
+ * @property int|null $is_wednesday
+ * @property int|null $is_thursday
+ * @property int|null $is_friday
+ * @property int|null $is_saturday
+ * @property int|null $is_sunday
+ * @property int|null $is_published
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int $pay_rate
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TempJobDates[] $tempJobActiveDates
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TempJobDates[] $tempJobDates
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\RecruiterJobs onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs query()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs whereIsFriday($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs whereIsMonday($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs whereIsPublished($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs whereIsSaturday($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs whereIsSunday($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs whereIsThursday($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs whereIsTuesday($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs whereIsWednesday($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs whereJobTemplateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs whereJobType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs whereNoOfJobs($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs wherePayRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs wherePreferredJobLocationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs whereRecruiterOfficeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterJobs whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\RecruiterJobs withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\RecruiterJobs withoutTrashed()
+ * @mixin \Eloquent
+ */
 class RecruiterJobs extends Model
 {
     use SoftDeletes;

@@ -9,6 +9,34 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 use DB;
 
+/**
+ * App\Models\JobseekerTempHired
+ *
+ * @property int $id
+ * @property int $jobseeker_id
+ * @property int $job_id
+ * @property string $job_date
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property string|null $deleted_at
+ * @property-read string|null $mapping_for
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerTempHired newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerTempHired newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\JobseekerTempHired onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerTempHired query()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerTempHired whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerTempHired whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerTempHired whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerTempHired whereJobDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerTempHired whereJobId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerTempHired whereJobseekerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerTempHired whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\JobseekerTempHired withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\JobseekerTempHired withoutTrashed()
+ * @mixin \Eloquent
+ */
 class JobseekerTempHired extends Model {
     
     use Eloquence,SoftDeletes,

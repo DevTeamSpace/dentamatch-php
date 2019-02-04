@@ -5,6 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
+/**
+ * App\Models\ChatUserLists
+ *
+ * @property int $id
+ * @property int $recruiter_id
+ * @property int $seeker_id
+ * @property int $recruiter_block
+ * @property int $seeker_block
+ * @property int $chat_active
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ChatUserLists newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ChatUserLists newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ChatUserLists query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ChatUserLists whereChatActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ChatUserLists whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ChatUserLists whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ChatUserLists whereRecruiterBlock($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ChatUserLists whereRecruiterId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ChatUserLists whereSeekerBlock($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ChatUserLists whereSeekerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ChatUserLists whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class ChatUserLists extends Model
 {
     const ACTIVE = 1;

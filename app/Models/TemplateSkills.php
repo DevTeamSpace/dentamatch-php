@@ -7,6 +7,25 @@ use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
 use DB;
 
+/**
+ * App\Models\TemplateSkills
+ *
+ * @property int $id
+ * @property int $job_template_id
+ * @property int $skill_id
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property-read string|null $mapping_for
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TemplateSkills newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TemplateSkills newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TemplateSkills query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TemplateSkills whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TemplateSkills whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TemplateSkills whereJobTemplateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TemplateSkills whereSkillId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TemplateSkills whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class TemplateSkills extends Model
 {
     use Eloquence, Mappable;

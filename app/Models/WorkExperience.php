@@ -5,6 +5,53 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\WorkExperience
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $job_title_id
+ * @property int $months_of_expereince
+ * @property string $office_name
+ * @property string $office_address
+ * @property string $city
+ * @property string|null $state
+ * @property string|null $reference1_name
+ * @property string|null $reference1_mobile
+ * @property string|null $reference1_email
+ * @property string|null $reference2_name
+ * @property string|null $reference2_mobile
+ * @property string|null $reference2_email
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property string|null $deleted_at
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\WorkExperience onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience query()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereCity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereJobTitleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereMonthsOfExpereince($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereOfficeAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereOfficeName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereReference1Email($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereReference1Mobile($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereReference1Name($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereReference2Email($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereReference2Mobile($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereReference2Name($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereState($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\WorkExperience whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\WorkExperience withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\WorkExperience withoutTrashed()
+ * @mixin \Eloquent
+ */
 class WorkExperience extends Model {
     use SoftDeletes;
 

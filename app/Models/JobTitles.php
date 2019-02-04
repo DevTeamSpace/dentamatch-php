@@ -4,6 +4,32 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\JobTitles
+ *
+ * @property int $id
+ * @property string $jobtitle_name
+ * @property string|null $short_name
+ * @property int|null $parent_id
+ * @property string $mapped_skills_id
+ * @property int|null $is_license_required
+ * @property int $is_active
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTitles newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTitles newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTitles query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTitles whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTitles whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTitles whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTitles whereIsLicenseRequired($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTitles whereJobtitleName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTitles whereMappedSkillsId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTitles whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTitles whereShortName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTitles whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class JobTitles extends Model
 {
     const ACTIVE = 1;

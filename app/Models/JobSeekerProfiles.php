@@ -6,6 +6,76 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 use Auth;
 
+/**
+ * App\Models\JobSeekerProfiles
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $first_name
+ * @property string $last_name
+ * @property string|null $profile_pic
+ * @property string|null $zipcode
+ * @property float|null $latitude
+ * @property float|null $longitude
+ * @property int|null $preferred_job_location_id
+ * @property string|null $preferred_job_location
+ * @property int|null $job_titile_id
+ * @property string|null $dental_state_board
+ * @property string|null $license_number
+ * @property string|null $state
+ * @property string|null $about_me
+ * @property int $is_completed
+ * @property int $is_job_seeker_verified 0=Not Verified,1=>Approved,2=>Reject
+ * @property int $is_fulltime
+ * @property int $is_parttime_monday
+ * @property int $is_parttime_tuesday
+ * @property int $is_parttime_wednesday
+ * @property int $is_parttime_thursday
+ * @property int $is_parttime_friday
+ * @property int $is_parttime_saturday
+ * @property int $is_parttime_sunday
+ * @property int $signup_source 1=>App, 2=>Web
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property string|null $preferred_city
+ * @property string|null $preferred_state
+ * @property string|null $preferred_country
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereAboutMe($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereDentalStateBoard($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereFirstName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsCompleted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsFulltime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsJobSeekerVerified($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsParttimeFriday($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsParttimeMonday($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsParttimeSaturday($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsParttimeSunday($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsParttimeThursday($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsParttimeTuesday($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsParttimeWednesday($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereJobTitileId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereLatitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereLicenseNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereLongitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles wherePreferredCity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles wherePreferredCountry($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles wherePreferredJobLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles wherePreferredJobLocationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles wherePreferredState($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereProfilePic($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereSignupSource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereState($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereZipcode($value)
+ * @mixin \Eloquent
+ */
 class JobSeekerProfiles extends Model
 {
     
