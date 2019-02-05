@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Mail\SetAvailability;
+use App\Models\UserGroup;
 use Illuminate\Console\Command;
 use App\Models\JobSeekerTempAvailability;
 use App\Models\User;
@@ -69,7 +70,7 @@ class SetAvailabilityCommand extends Command
                                 'users.is_active',
                                 'users.created_at'
                                 )
-                        ->where('user_groups.group_id', 3)
+                        ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->whereNotIn('users.id', $availableUsers)
                         ->where('is_fulltime',0)
                         ->where('is_parttime_monday',0)

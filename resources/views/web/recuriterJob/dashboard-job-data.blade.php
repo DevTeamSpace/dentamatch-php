@@ -7,13 +7,13 @@
                     <h4>{{ $job['jobtitle_name'] }}</h4>
                 </div>
             </div>
-            @if($job['job_type']==\App\Models\RecruiterJobs::FULLTIME)
+            @if($job['job_type']==\App\Enums\JobType::FULLTIME)
                 <div class="job-type-detail">
                     <div class="job-type-info">
                         <span class="bg-ltgreen statusBtn mr-r-5">Full Time</span>
                     </div>
                 </div>
-            @elseif($job['job_type']==\App\Models\RecruiterJobs::PARTTIME)
+            @elseif($job['job_type']==\App\Enums\JobType::PARTTIME)
                 <div class="job-type-detail">
                     <div class="job-type-info">
                         <span class="bg-ltgreen statusBtn mr-r-5">Part Time</span>

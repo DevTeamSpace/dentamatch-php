@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Enums\JobAppliedStatus;
+use App\Enums\JobType;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -135,14 +137,14 @@ class SearchApiController extends Controller {
                     $jobExists = RecruiterJobs::leftJoin('job_lists',function($query) use ($userId){
                             $query->on('job_lists.recruiter_job_id','=','recruiter_jobs.id')
                                   ->where('job_lists.seeker_id', '=', $userId)
-                                  ->whereIn('job_lists.applied_status',[JobLists::INVITED,JobLists::APPLIED]);
+                                  ->whereIn('job_lists.applied_status',[JobAppliedStatus::INVITED, JobAppliedStatus::APPLIED]);
                             })->where('recruiter_jobs.id', '=', $reqData['jobId'])
                             ->first();
-                    if (!empty($jobExists) && $jobExists->applied_status==JobLists::INVITED) {
-                        JobLists::where('id', $jobExists->id)->update(['applied_status' => JobLists::APPLIED]);
+                    if (!empty($jobExists) && $jobExists->applied_status==JobAppliedStatus::INVITED) {
+                        JobLists::where('id', $jobExists->id)->update(['applied_status' => JobAppliedStatus::APPLIED]);
                         $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
                         $response = ApiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
-                    }elseif (!empty($jobExists) && $jobExists->applied_status==JobLists::APPLIED) {
+                    }elseif (!empty($jobExists) && $jobExists->applied_status==JobAppliedStatus::APPLIED) {
                         $response = ApiResponse::customJsonResponse(1, 200, trans("messages.job_already_applied"));
                     } elseif(($jobExists->job_type == 1 && $profileComplete->is_fulltime == 1) ||
                             ($jobExists->job_type == 2 && $profileComplete->is_parttime_monday == $jobExists->is_monday && $jobExists->is_monday==1) ||
@@ -153,7 +155,7 @@ class SearchApiController extends Controller {
                             ($jobExists->job_type == 2 && $profileComplete->is_parttime_saturday == $jobExists->is_saturday && $jobExists->is_saturday==1) ||
                             ($jobExists->job_type == 2 && $profileComplete->is_parttime_sunday == $jobExists->is_sunday && $jobExists->is_sunday==1)) 
                           {    
-                            $applyJobs = array('seeker_id' => $userId, 'recruiter_job_id' => $reqData['jobId'], 'applied_status' => JobLists::APPLIED);
+                            $applyJobs = array('seeker_id' => $userId, 'recruiter_job_id' => $reqData['jobId'], 'applied_status' => JobAppliedStatus::APPLIED);
                             JobLists::insert($applyJobs);
                             $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
                             $response = ApiResponse::customJsonResponse(1, 200, trans("messages.apply_job_success"));
@@ -192,9 +194,9 @@ class SearchApiController extends Controller {
             if ($userId > 0) {
                 $reqData = $request->all();
                 $jobExists = JobLists::select('id')->where('seeker_id', '=', $userId)->where('recruiter_job_id', '=', $reqData['jobId'])
-                                ->whereIn('applied_status', [JobLists::SHORTLISTED, JobLists::APPLIED, JobLists::HIRED])->first();
+                                ->whereIn('applied_status', [JobAppliedStatus::SHORTLISTED, JobAppliedStatus::APPLIED, JobAppliedStatus::HIRED])->first();
                 if ($jobExists) {
-                    $jobExists->applied_status = JobLists::CANCELLED;
+                    $jobExists->applied_status = JobAppliedStatus::CANCELLED;
                     $jobExists->cancel_reason = $reqData['cancelReason'];
                     $jobExists->save();
                     //delete from temp hired jobs
@@ -319,11 +321,11 @@ class SearchApiController extends Controller {
                 $notificationDetails = Notification::where('id', $reqData['notificationId'])->first();
                 $jobDetails = RecruiterJobs::where('recruiter_jobs.id', $notificationDetails->job_list_id)->first();
 
-                if ($jobDetails->job_type == RecruiterJobs::FULLTIME || $jobDetails->job_type == RecruiterJobs::PARTTIME) {
+                if ($jobDetails->job_type == JobType::FULLTIME || $jobDetails->job_type == JobType::PARTTIME) {
                     $seekerDetails = UserProfile::where('user_id',$userId)->first();
                     if ($reqData['acceptStatus'] == 0 ||
-                        ($jobDetails->job_type == RecruiterJobs::FULLTIME && $seekerDetails->is_fulltime==1) ||
-                        ($jobDetails->job_type == RecruiterJobs::PARTTIME && 
+                        ($jobDetails->job_type == JobType::FULLTIME && $seekerDetails->is_fulltime==1) ||
+                        ($jobDetails->job_type == JobType::PARTTIME &&
                         (($jobDetails->is_monday==1 && $seekerDetails->is_parttime_monday==1) ||
                         ($jobDetails->is_tuesday==1 && $seekerDetails->is_parttime_tuesday==1) ||
                         ($jobDetails->is_wednesday==1 && $seekerDetails->is_parttime_wednesday==1) ||
@@ -452,19 +454,19 @@ class SearchApiController extends Controller {
                 ->first();
 
         if ($jobExists) {
-            if ($jobExists->applied_status == JobLists::INVITED) {
+            if ($jobExists->applied_status == JobAppliedStatus::INVITED) {
                 if ($acceptstatus == 0) {
-                    $jobExists->applied_status = JobLists::CANCELLED;
+                    $jobExists->applied_status = JobAppliedStatus::CANCELLED;
                     $msg = trans("messages.job_cancelled_success");
                 } elseif ($hired == 1) {
-                    $jobExists->applied_status = JobLists::HIRED;
+                    $jobExists->applied_status = JobAppliedStatus::HIRED;
                     $userChat = new ChatUserLists();
                     $userChat->recruiter_id = $recruiterId;
                     $userChat->seeker_id = $userId;
                     $userChat->checkAndSaveUserToChatList();
                     $msg = trans("messages.job_hired_success");
                 } else {
-                    $jobExists->applied_status = JobLists::APPLIED;
+                    $jobExists->applied_status = JobAppliedStatus::APPLIED;
                     $msg = trans("messages.job_hired_success");
                 }
                 $jobExists->save();
@@ -476,7 +478,7 @@ class SearchApiController extends Controller {
                 }
                 $response = ApiResponse::customJsonResponse(1, 200, $msg);
             } else {
-                if ($jobExists->applied_status == JobLists::HIRED) {
+                if ($jobExists->applied_status == JobAppliedStatus::HIRED) {
                     $msg = trans("messages.seeker_already_hired");
                 } else {
                     $msg = trans("messages.seeker_already_cancelled");

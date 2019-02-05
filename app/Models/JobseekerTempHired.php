@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\JobAppliedStatus;
 use Illuminate\Database\Eloquent\Model;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
@@ -53,7 +54,7 @@ class JobseekerTempHired extends Model {
                 ->leftjoin('job_titles', 'jobseeker_profiles.job_titile_id', '=', 'job_titles.id')
                 ->leftjoin('job_lists', 'jobseeker_temp_hired.job_id', '=', 'job_lists.recruiter_job_id')
                 ->where('jobseeker_temp_hired.job_id', $job['id'])
-                ->whereIn('job_lists.applied_status', [JobLists::HIRED]);
+                ->whereIn('job_lists.applied_status', [JobAppliedStatus::HIRED]);
         
         $obj->select('jobseeker_temp_hired.id','jobseeker_temp_hired.job_date','job_lists.applied_status', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'jobseeker_profiles.profile_pic', 'jobseeker_temp_hired.jobseeker_id as seeker_id', 'job_titles.jobtitle_name', 'recruiter_jobs.job_type');
 
@@ -89,7 +90,7 @@ class JobseekerTempHired extends Model {
                 ->leftjoin('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
                 ->leftjoin('job_titles', 'jobseeker_profiles.job_titile_id', '=', 'job_titles.id')
                 ->whereDate('job_lists.updated_at', '=', date('Y-m-d'))
-                ->whereIn('job_lists.applied_status', [JobLists::HIRED])
+                ->whereIn('job_lists.applied_status', [JobAppliedStatus::HIRED])
                 ->where('job_lists.deleted_at', NULL)
                 ->where('recruiter_offices.user_id', Auth::user()->id);
         

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\web;
 
+use App\Enums\JobType;
 use App\Http\Controllers\Controller;
 use App\Models\RecruiterJobs;
 use App\Models\JobLists;
@@ -45,7 +46,7 @@ class CalenderController extends Controller
                     $jobDetails['job_type'] = $job['job_type'];
                     $jobDetails['job_date'] = $value;
                     
-                    if($job['job_type'] == RecruiterJobs::TEMPORARY){
+                    if($job['job_type'] == JobType::TEMPORARY){
                         $seekers = JobseekerTempHired::getTempJobSeekerList($jobDetails, config('constants.OneValue'));
                     }
                     else{
@@ -93,7 +94,7 @@ class CalenderController extends Controller
             $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));
             $jobDetails['job_date'] = $request->jobDate;
             
-            if($job['job_type'] == RecruiterJobs::TEMPORARY)
+            if($job['job_type'] == JobType::TEMPORARY)
                 $seekers = JobseekerTempHired::getTempJobSeekerList($jobDetails, config('constants.OneValue'));
             else        
                 $seekers = JobLists::getJobSeekerList($jobDetails, config('constants.OneValue'));

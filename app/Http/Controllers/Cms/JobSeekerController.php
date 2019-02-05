@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Cms;
 
+use App\Enums\JobAppliedStatus;
 use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -554,8 +555,8 @@ class JobSeekerController extends Controller
                                 'preferred_job_locations.preferred_location_name'
                                 )
                         ->where('user_groups.group_id', UserGroup::JOBSEEKER)
-                        ->where('job_lists.applied_status',1)
-                        ->whereNotIn('job_lists.applied_status', [2,3,4,5])
+                        ->where('job_lists.applied_status',JobAppliedStatus::INVITED)
+//                        ->whereNotIn('job_lists.applied_status', [2,3,4,5])
                         ->whereNull('job_lists.deleted_at')
                         ->groupBy('users.id')
                         ->orderBy('users.id', 'desc');
@@ -636,8 +637,8 @@ class JobSeekerController extends Controller
                                 'jobseeker_profiles.last_name'
                                 )
                         ->where('user_groups.group_id', UserGroup::JOBSEEKER)
-                        ->where('job_lists.applied_status',1)
-                        ->whereNotIn('job_lists.applied_status', [2,3,4,5])
+                        ->where('job_lists.applied_status',JobAppliedStatus::INVITED)
+//                        ->whereNotIn('job_lists.applied_status', [2,3,4,5])
                         ->groupBy('users.id')
                         ->orderBy('users.id', 'desc')
                         ->get();

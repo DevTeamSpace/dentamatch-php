@@ -43,7 +43,8 @@ class UserChat extends Model
         ];  
     
     public static function getChatCountsForRecruiter($recruiterId) {
-        return static::where('to_id', $recruiterId)->where('read_status',0)->get()->count();
+        // todo why using get?
+        return static::where('to_id', $recruiterId)->where('read_status',self::UNREAD)->get()->count();
     }
    
 }

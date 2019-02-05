@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Cms;
 
+use App\Enums\JobAppliedStatus;
+use App\Enums\JobType;
 use App\Http\Controllers\Controller;
 use Yajra\Datatables\Datatables;
 use App\Models\User;
@@ -103,7 +105,7 @@ class ReportController extends Controller {
         try {
             $seekerList = JobLists::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
                             ->join('users','jobseeker_profiles.user_id','=','users.id')
-                            ->where('job_lists.applied_status', JobLists::CANCELLED)
+                            ->where('job_lists.applied_status', JobAppliedStatus::CANCELLED)
                             ->select('jobseeker_profiles.user_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'users.email')
                             ->addSelect(DB::raw("count(job_lists.id) as cancelno"))
                             ->groupby('jobseeker_profiles.user_id')
@@ -129,7 +131,15 @@ class ReportController extends Controller {
                             ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'recruiter_offices.user_id')
                             ->select('recruiter_jobs.id',  'recruiter_jobs.pay_rate','recruiter_jobs.job_type', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name', 'recruiter_offices.address')
                             ->orderBy('recruiter_jobs.id', 'desc');
- 
+
+
+
+
+
+
+
+
+
             return Datatables::of($jobLists)
                             ->filterColumn('office_name', function ($query, $keyword) {
                                 $query->whereRaw("office_name like ?", ["%$keyword%"]);
@@ -195,7 +205,7 @@ class ReportController extends Controller {
         $arr = [];
         if ($type == 'cancellist') {
             $data = JobLists::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
-                            ->where('job_lists.applied_status', JobLists::CANCELLED)
+                            ->where('job_lists.applied_status', JobAppliedStatus::CANCELLED)
                             ->select('jobseeker_profiles.first_name', 'jobseeker_profiles.last_name')
                             ->addSelect(DB::raw("count(job_lists.id) as cancelno"))
                             ->groupby('jobseeker_profiles.user_id')
@@ -222,9 +232,9 @@ class ReportController extends Controller {
                             ->orderBy('recruiter_jobs.id', 'desc')->get();
             
             foreach ($data as $val) {
-                if ($val->job_type == 1) {
+                if ($val->job_type == JobType::FULLTIME) {
                     $val->job_type = 'Fulltime';
-                } elseif ($val->job_type == 2) {
+                } elseif ($val->job_type == JobType::PARTTIME) {
                     $val->job_type = 'Parttime';
                 } else {
                     $val->job_type = 'Temporary';
@@ -299,7 +309,7 @@ class ReportController extends Controller {
                 }
                 if(!empty($pushList)) {
                     foreach($pushList as $value) {
-                        $message = "Delete job notification | ".$value['office_name']." has deleted the ".strtolower(RecruiterJobs::$jobTypeName[$value['job_type']])." job vacancy for ".$value['jobtitle_name'];
+                        $message = "Delete job notification | ".$value['office_name']." has deleted the ".strtolower(JobType::ToString($value['job_type']))." job vacancy for ".$value['jobtitle_name'];
                         $userId = $value['seeker_id'];
                         $senderId = $value['user_id'];
 
@@ -326,7 +336,7 @@ class ReportController extends Controller {
                 }
                 //send message to recruiter
                 $adminUser = User::getAdminUserDetailsForNotification();
-                $message = "Admin has deleted your ".strtolower(RecruiterJobs::$jobTypeName[$jobObj['job_type']])." job vacancy for ".$jobObj['jobtitle_name'];
+                $message = "Admin has deleted your ".strtolower(JobType::ToString($jobObj['job_type']))." job vacancy for ".$jobObj['jobtitle_name'];
                         
                 Notification::createNotification(['sender_id' => $adminUser->id, 'receiver_id' => $jobObj['user_id'], 
                     'notification_data'=> json_encode(['image' => url('web/images/dentaMatchLogo.png'),

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\JobType;
 use Illuminate\Console\Command;
 use App\Models\RecruiterJobs;
 use App\Models\User;
@@ -50,7 +51,7 @@ class InactiveJobCommand extends Command
                                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
                                 ->leftjoin('job_lists', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
                                 ->where(DB::raw("DATEDIFF(now(), recruiter_jobs.created_at)"),'=', static::NOTIFICATION_INTERVAL)
-                                ->whereIn('recruiter_jobs.job_type', [1,2])
+                                ->whereIn('recruiter_jobs.job_type', [JobType::FULLTIME,JobType::PARTTIME])
                                 ->groupBy('recruiter_jobs.id')
                                 ->get();
             $list = $recruiterModel->toArray();

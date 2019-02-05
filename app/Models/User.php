@@ -77,7 +77,7 @@ class User extends Authenticatable
     }
     
     public static function getAdminUserDetailsForNotification() {
-        return static::where('is_active',1)->where('group_id',1)
+        return static::where('is_active',1)->where('group_id',UserGroup::ADMIN)
                 ->join('user_groups','users.id','=','user_groups.user_id')->first();
     }
     

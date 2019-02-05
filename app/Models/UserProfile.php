@@ -169,7 +169,7 @@ class UserProfile extends Model {
                         ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
                         ->select('is_fulltime', 'is_parttime_monday','is_parttime_tuesday', 'is_parttime_wednesday',
                                 'is_parttime_thursday','is_parttime_friday', 'is_parttime_saturday', 'is_parttime_sunday')
-                        ->where('user_groups.group_id', 3)
+                        ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->where('users.id', $userId)
                         ->first();
         if($userAvailability) {

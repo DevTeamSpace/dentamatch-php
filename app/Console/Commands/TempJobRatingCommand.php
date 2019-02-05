@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\JobAppliedStatus;
+use App\Enums\JobType;
 use Illuminate\Console\Command;
-use App\Models\RecruiterJobs;
 use App\Models\User;
 use App\Models\Notification;
 use App\Models\TempJobDates;
 use App\Models\Configs;
-use App\Models\JobLists;
 use DB;
 
 class TempJobRatingCommand extends Command
@@ -59,8 +59,8 @@ class TempJobRatingCommand extends Command
                                 ->leftjoin('job_lists', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
                                 //->where('temp_job_dates.job_date','=', $cronDate)
                                 ->having('max_date','=',$cronDate)
-                                ->where("recruiter_jobs.job_type",  RecruiterJobs::TEMPORARY)
-                                ->where('job_lists.applied_status', JobLists::HIRED)
+                                ->where("recruiter_jobs.job_type",  JobType::TEMPORARY)
+                                ->where('job_lists.applied_status', JobAppliedStatus::HIRED)
                                 ->groupBy('temp_job_dates.recruiter_job_id')
                                 ->orderBy('temp_job_dates.job_date', 'desc')
                                 ->get();

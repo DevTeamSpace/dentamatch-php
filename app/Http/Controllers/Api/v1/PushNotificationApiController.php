@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Api\v1;
+use App\Enums\JobType;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\ApiResponse;
@@ -42,7 +43,7 @@ class PushNotificationApiController extends Controller {
                             if(!empty($data)){
                                 $notification['job_details'] = $data;
                                 $notification['currentAvailability'] = [];
-                                if($data['job_type']==RecruiterJobs::TEMPORARY){
+                                if($data['job_type']==JobType::TEMPORARY){
                                     $notification['currentAvailability'] = array_values(array_intersect($userAvailability,$data['job_type_dates']));
                                     if(count($notification['currentAvailability'])==0){
                                         $dateMsgString = [];

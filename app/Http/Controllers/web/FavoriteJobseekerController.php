@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\web;
 
+use App\Enums\JobAppliedStatus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
@@ -73,20 +74,20 @@ class FavoriteJobseekerController extends Controller {
         try {
             $jobList = JobLists::where('seeker_id', $request->seekerId)
                     ->where('recruiter_job_id',$request->selectJobSeeker)
-                    ->whereIn('applied_status',[JobLists::INVITED,JobLists::APPLIED,JobLists::SHORTLISTED,JobLists::HIRED])
+                    ->whereIn('applied_status',[JobAppliedStatus::INVITED,JobAppliedStatus::APPLIED,JobAppliedStatus::SHORTLISTED,JobAppliedStatus::HIRED])
                     ->orderBy('id', 'DESC')
                     ->first();
             
             if (isset($jobList) && !empty($jobList)) {
              
                 $message = "";
-                if($jobList->applied_status == JobLists::INVITED){
+                if($jobList->applied_status == JobAppliedStatus::INVITED){
                     $message = trans('messages.seeker_already_invited');
-                }else if($jobList->applied_status == JobLists::APPLIED){
+                }else if($jobList->applied_status == JobAppliedStatus::APPLIED){
                     $message = trans('messages.seeker_already_applied');
-                }else if($jobList->applied_status == JobLists::SHORTLISTED){
+                }else if($jobList->applied_status == JobAppliedStatus::SHORTLISTED){
                     $message = trans('messages.seeker_already_shortlisted');
-                }else if($jobList->applied_status == JobLists::HIRED){
+                }else if($jobList->applied_status == JobAppliedStatus::HIRED){
                     $message = trans('messages.seeker_already_hired');
                 }
                 Session::flash('message', $message);
@@ -94,9 +95,9 @@ class FavoriteJobseekerController extends Controller {
                 JobLists::create([
                     'recruiter_job_id' => $request->selectJobSeeker,
                     'seeker_id' => $request->seekerId,
-                    'applied_status' => JobLists::INVITED,
+                    'applied_status' => JobAppliedStatus::INVITED,
                 ]);
-                $this->sendPushUser(JobLists::INVITED, Auth::user()->id, $request->seekerId, $request->selectJobSeeker);
+                $this->sendPushUser(JobAppliedStatus::INVITED, Auth::user()->id, $request->seekerId, $request->selectJobSeeker);
                 Session::flash('message', trans('messages.invite_sent_success'));
             }
             return redirect('favorite-jobseeker');
@@ -140,7 +141,7 @@ class FavoriteJobseekerController extends Controller {
     public function sendPushUser($jobstatus, $sender, $receiverId, $jobId) {
               
         $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
-        if ($jobstatus == JobLists::INVITED) {
+        if ($jobstatus == JobAppliedStatus::INVITED) {
             $notificationData = array(
                 'notificationData' => $jobDetails['office_name'] . " has sent you a job invitation for " . $jobDetails['jobtitle_name'],
                 'notification_title' => 'User invited',
@@ -168,7 +169,7 @@ class FavoriteJobseekerController extends Controller {
      * @return json
      */
     public function postFavouriteJobList(Request $request){
-        $rejectedJobs = JobLists::where('seeker_id', '=', $request->userId)->whereIn('applied_status', [JobLists::HIRED, JobLists::INVITED])->get();
+        $rejectedJobs = JobLists::where('seeker_id', '=', $request->userId)->whereIn('applied_status', [JobAppliedStatus::HIRED, JobAppliedStatus::INVITED])->get();
         $rejectedJobsArray = array();      
         if($rejectedJobs){
                     $rejectedJobsData = $rejectedJobs->toArray();

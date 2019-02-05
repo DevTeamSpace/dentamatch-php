@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\UserGroup;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use \App\Models\User;
@@ -26,7 +27,7 @@ class Recruiter {
             Session::flash('message', trans("messages.deactivated_admin"));
             return redirect("login");
         }elseif (!empty($user) && isset($user)) {
-            if ($user->userGroup->group_id == \App\Models\UserGroup::ADMIN) {
+            if ($user->userGroup->group_id == UserGroup::ADMIN) {
                 return redirect('cms');
             }
             return $next($request);

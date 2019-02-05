@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Mail\PendingEmailVerification;
+use App\Models\UserGroup;
 use Illuminate\Console\Command;
 use App\Models\User;
 use Log;
@@ -54,7 +55,7 @@ class UnverifiedJobseekerCommand extends Command
                                 'users.is_verified','users.is_active',
                                 'users.created_at', 'users.verification_code'
                                 )
-                        ->where('user_groups.group_id', 3)
+                        ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                         ->where('users.is_verified', 0)
                         ->whereIn(DB::raw("DATEDIFF(now(), users.created_at)"), static::NOTIFICATION_INTERVAL)
                         ->orderBy('users.id', 'desc')

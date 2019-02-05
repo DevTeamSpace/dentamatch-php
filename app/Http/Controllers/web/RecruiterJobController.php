@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\web;
 
+use App\Enums\JobAppliedStatus;
+use App\Enums\JobType;
 use App\Mail\NewInvite;
 use Auth;
 use App\Http\Controllers\Controller;
@@ -173,7 +175,7 @@ class RecruiterJobController extends Controller {
             if ($request->action == "edit" && !empty($request->id)) {
                 $recruiterJobObj = RecruiterJobs::findById($request->id);
             }
-            if ($request->jobType == RecruiterJobs::TEMPORARY) {
+            if ($request->jobType == JobType::TEMPORARY) {
                 $tempPrevious = RecruiterJobs::chkTempJObRatingPending();
                 if($tempPrevious) {
                     $tempPreviousArray = $tempPrevious->toArray();
@@ -195,7 +197,7 @@ class RecruiterJobController extends Controller {
             $recruiterJobObj->no_of_jobs = ($request->noOfJobs != '') ? $request->noOfJobs : 0;
             $recruiterJobObj->preferred_job_location_id = $request->preferredJobLocationId;
 
-            if ($request->jobType == RecruiterJobs::PARTTIME) {
+            if ($request->jobType == JobType::PARTTIME) {
                 $recruiterJobObj->is_monday = in_array('1', $request->partTimeDays);
                 $recruiterJobObj->is_tuesday = in_array('2', $request->partTimeDays);
                 $recruiterJobObj->is_wednesday = in_array('3', $request->partTimeDays);
@@ -205,7 +207,7 @@ class RecruiterJobController extends Controller {
                 $recruiterJobObj->is_sunday = in_array('7', $request->partTimeDays);
             }
             $recruiterJobObj->save();
-            if ($request->jobType == RecruiterJobs::TEMPORARY) {
+            if ($request->jobType == JobType::TEMPORARY) {
                 $tempDates = explode(',', $request->tempDates);
                 if (count($tempDates) > 0) {
                     $tempDateArrObj = [];
@@ -279,10 +281,10 @@ class RecruiterJobController extends Controller {
             if(RecruiterJobs::where('id', $jobId)->first()){
                 $this->viewData['job'] = RecruiterJobs::getRecruiterJobDetails($jobId);
                 $this->viewData['skills'] = TemplateSkills::getTemplateSkills($this->viewData['job']['job_template_id']);
-                $this->viewData['seekerListHired'] = $this->getData($this->viewData['job'],JobLists::HIRED);
-                $this->viewData['seekerListInvited'] = $this->getData($this->viewData['job'],JobLists::INVITED);
-                $this->viewData['seekerListSortListed'] = $this->getData($this->viewData['job'],JobLists::SHORTLISTED);
-                $this->viewData['seekerListApplied'] = $this->getData($this->viewData['job'],JobLists::APPLIED);
+                $this->viewData['seekerListHired'] = $this->getData($this->viewData['job'],JobAppliedStatus::HIRED);
+                $this->viewData['seekerListInvited'] = $this->getData($this->viewData['job'],JobAppliedStatus::INVITED);
+                $this->viewData['seekerListSortListed'] = $this->getData($this->viewData['job'],JobAppliedStatus::SHORTLISTED);
+                $this->viewData['seekerListApplied'] = $this->getData($this->viewData['job'],JobAppliedStatus::APPLIED);
                 $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
                 return $this->returnView('view');
             }else{
@@ -301,13 +303,13 @@ class RecruiterJobController extends Controller {
     public function getJobSeekerDetails(Request $request,$jobId,$appliedStatus){
         $this->viewData['job'] = RecruiterJobs::getRecruiterJobDetails($jobId);
         $this->viewData['seekerList'] = $this->getData($this->viewData['job'],$appliedStatus);
-        if($appliedStatus == 1){
+        if($appliedStatus == JobAppliedStatus::INVITED){
             $this->viewData['status'] = 'Invited';
-        }else if($appliedStatus == 2){
+        }else if($appliedStatus == JobAppliedStatus::APPLIED){
             $this->viewData['status'] = 'Applied';
-        }else if($appliedStatus == 3){
+        }else if($appliedStatus == JobAppliedStatus::SHORTLISTED){
             $this->viewData['status'] = 'Shortlisted';
-        }else if($appliedStatus == 4){
+        }else if($appliedStatus == JobAppliedStatus::HIRED){
             $this->viewData['status'] = 'Hired';
         }
         
@@ -341,22 +343,22 @@ class RecruiterJobController extends Controller {
                 $jobData->applied_status = $requestData['appliedStatus'];
                 $jobData->save();
               
-                if ($requestData['appliedStatus'] == JobLists::SHORTLISTED || $requestData['appliedStatus'] == JobLists::HIRED) {
+                if ($requestData['appliedStatus'] == JobAppliedStatus::SHORTLISTED || $requestData['appliedStatus'] == JobAppliedStatus::HIRED) {
                     $userChat = new ChatUserLists();
                     $userChat->recruiter_id = Auth::id();
                     $userChat->seeker_id = $jobData->seeker_id;
                     $userChat->checkAndSaveUserToChatList();
                     $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $jobData->seeker_id, $requestData['jobId']);
-                }else if ($requestData['appliedStatus'] == JobLists::REJECTED){
+                }else if ($requestData['appliedStatus'] == JobAppliedStatus::REJECTED){
                     $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $jobData->seeker_id, $requestData['jobId']);
                 }
                 return redirect('job/details/'.$requestData['jobId']);
             }else{
-                $inviteJobs = array('seeker_id' => $requestData['seekerId'] , 'recruiter_job_id' => $requestData['jobId'] , 'applied_status' => JobLists::INVITED);
+                $inviteJobs = array('seeker_id' => $requestData['seekerId'] , 'recruiter_job_id' => $requestData['jobId'] , 'applied_status' => JobAppliedStatus::INVITED);
                 JobLists::insert($inviteJobs);
                 $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $requestData['seekerId'], $requestData['jobId']);
                 Session::flash('message', trans('messages.invited_success'));
-                if($requestData['jobType']==3){
+                if($requestData['jobType'] == JobType::TEMPORARY){
                     Session::flash('message', trans('messages.invited_success_temp'));
                 }
                 return redirect('job/search/'.$requestData['jobId']);
@@ -390,7 +392,7 @@ class RecruiterJobController extends Controller {
      */
     public function sendPushUser($jobstatus, $sender, $receiverId, $jobId) {
         $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
-        if ($jobstatus == JobLists::SHORTLISTED) {
+        if ($jobstatus == JobAppliedStatus::SHORTLISTED) {
             $notificationData = array(
                 'notificationData' => $jobDetails['office_name'] . " has accepted your job application for " . $jobDetails['jobtitle_name'],
                 'notification_title' => 'User shortlisted',
@@ -398,7 +400,7 @@ class RecruiterJobController extends Controller {
                 'type' => 1,
                 'notificationType' => Notification::ACCEPTJOB,
             );
-        }else if ($jobstatus == JobLists::REJECTED) {
+        }else if ($jobstatus == JobAppliedStatus::REJECTED) {
             $notificationData = array(
                 'notificationData' => $jobDetails['office_name'] . " has rejected your job application for " . $jobDetails['jobtitle_name'],
                 'notification_title' => 'User rejected',
@@ -406,7 +408,7 @@ class RecruiterJobController extends Controller {
                 'type' => 1,
                 'notificationType' => Notification::REJECTED,
             );
-        } else if ($jobstatus == JobLists::HIRED) {
+        } else if ($jobstatus == JobAppliedStatus::HIRED) {
             $notificationData = array(
                 'notificationData' => "You have been hired for  " . $jobDetails['jobtitle_name'],
                 'notification_title' => 'User hired',
@@ -414,7 +416,7 @@ class RecruiterJobController extends Controller {
                 'type' => 1,
                 'notificationType' => Notification::HIRED,
             );
-        } else if ($jobstatus == JobLists::INVITED) {
+        } else if ($jobstatus == JobAppliedStatus::INVITED) {
             $notificationData = array(
                 'notificationData' => $jobDetails['office_name'] . " has sent you a job invitation for " . $jobDetails['jobtitle_name'],
                 'notification_title' => 'User invited',
@@ -434,7 +436,7 @@ class RecruiterJobController extends Controller {
         $deviceModel = Device::getDeviceToken($receiverId);
         if ($deviceModel) {
             NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params,$receiverId);
-        }elseif(!$deviceModel && $jobstatus == JobLists::INVITED){
+        }elseif(!$deviceModel && $jobstatus == JobAppliedStatus::INVITED){
             $email = \App\Models\User::where('id',$receiverId)->first();
             $name = \App\Models\JobSeekerProfile::where('user_id',$receiverId)->first();
             $dataName = $name['first_name'];
@@ -762,7 +764,7 @@ class RecruiterJobController extends Controller {
                 }
                 if(!empty($pushList)) {
                     foreach($pushList as $value) {
-                        $message = "Delete job notification | ".$value['office_name']." has deleted the ".strtolower(RecruiterJobs::$jobTypeName[$value['job_type']])." job vacancy for ".$value['jobtitle_name'];
+                        $message = "Delete job notification | ".$value['office_name']." has deleted the ".strtolower(JobType::ToString($value['job_type']))." job vacancy for ".$value['jobtitle_name'];
                         $userId = $value['seeker_id'];
                         $senderId = $value['user_id'];
 

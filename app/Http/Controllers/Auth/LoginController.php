@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Models\UserGroup;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Auth;
 
@@ -54,7 +55,7 @@ class LoginController extends Controller
         $user = User::where($credentials)->first();
         
         $msg = trans('messages.not_admin_email');
-        if(isset($user) && ($user->userGroup->group_id==1)){
+        if(isset($user) && ($user->userGroup->group_id == UserGroup::ADMIN)){
             $credentials['password'] = $request->password;
             if (Auth::attempt($credentials,$request->remember)) {
                 // Authentication passed...

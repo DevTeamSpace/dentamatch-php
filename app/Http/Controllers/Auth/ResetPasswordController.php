@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserGroup;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 use DB;
@@ -85,10 +86,10 @@ use ResetsPasswords;
                 ->select('user_groups.group_id')
                 ->where('users.email', $request['email'])
                 ->first();
-        if ($users->group_id == 3) {
+        if ($users->group_id == UserGroup::JOBSEEKER) {
             Auth::logout();
             return redirect('/success-register');
-        }else if($users->group_id == 1){
+        }else if($users->group_id == UserGroup::ADMIN){
             Auth::logout();
             return redirect('/cms/login');
         }

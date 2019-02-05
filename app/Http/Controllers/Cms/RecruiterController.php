@@ -106,7 +106,7 @@ class RecruiterController extends Controller
 
                 $userId = User::insertGetId($user);
                 $userGroupModel = new UserGroup();
-                $userGroupModel->group_id = 2;
+                $userGroupModel->group_id = UserGroup::RECRUITER;
                 $userGroupModel->user_id = $userId;
                 $userGroupModel->save();
 
@@ -157,7 +157,7 @@ class RecruiterController extends Controller
                                 'users.email','users.id',
                                 'users.is_active'
                                 )
-                        ->where('user_groups.group_id', 2)
+                        ->where('user_groups.group_id', UserGroup::RECRUITER)
                         ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
                 ->make(true);
@@ -209,7 +209,7 @@ class RecruiterController extends Controller
             }
             Session::flash('message',$msg);
             $user = UserGroup::where('user_id', $userId)->first();
-            if($user->group_id == 2){
+            if($user->group_id == UserGroup::RECRUITER){
                 return redirect('cms/recruiter/index');
             }else{
                 return redirect('cms/jobseeker/index');

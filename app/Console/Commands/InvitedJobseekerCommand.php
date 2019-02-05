@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\JobAppliedStatus;
 use App\Mail\PendingAccept;
+use App\Models\UserGroup;
 use Illuminate\Console\Command;
 use App\Models\User;
 use App\Models\Notification;
@@ -62,9 +64,9 @@ class InvitedJobseekerCommand extends Command
                                 'jobseeker_profiles.last_name',
                                 'users.is_verified','users.is_active'
                                 )
-                        ->where('user_groups.group_id', 3)
-                        ->where('job_lists.applied_status',1)
-                        ->whereNotIn('job_lists.applied_status', [2,3,4,5])
+                        ->where('user_groups.group_id', UserGroup::JOBSEEKER)
+                        ->where('job_lists.applied_status',JobAppliedStatus::INVITED)
+//                        ->whereNotIn('job_lists.applied_status', [2,3,4,5])
                         ->whereIn(DB::raw("DATEDIFF(now(), job_lists.created_at)"), static::NOTIFICATION_INTERVAL)
                         ->groupBy('users.id')
                         ->orderBy('users.id', 'desc')

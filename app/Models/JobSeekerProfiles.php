@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\JobAppliedStatus;
+use App\Enums\JobType;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Auth;
@@ -92,10 +94,10 @@ class JobSeekerProfiles extends Model
         if(!empty($reqData['preferredLocationId'])) {
             $obj->where('jobseeker_profiles.preferred_job_location_id',$reqData['preferredLocationId']);
         }
-        if($job['job_type']==RecruiterJobs::FULLTIME){
+        if($job['job_type']==JobType::FULLTIME){
             $obj->where('jobseeker_profiles.is_fulltime',1);
         }
-        elseif($job['job_type']==RecruiterJobs::PARTTIME){
+        elseif($job['job_type']==JobType::PARTTIME){
             $obj->where(function($q) use ($job,$reqData) {
                 
                 if($reqData['avail_all'])
@@ -126,7 +128,7 @@ class JobSeekerProfiles extends Model
 
             });
         }
-        elseif($job['job_type']==RecruiterJobs::TEMPORARY){
+        elseif($job['job_type']==JobType::TEMPORARY){
             $obj->join('jobseeker_temp_availability',function($query) use ($job,$reqData){
                     $query->on('jobseeker_temp_availability.user_id', '=', 'jobseeker_profiles.user_id');
                     $query->whereIn('jobseeker_temp_availability.temp_job_date',explode(',',$job['temp_job_dates'])); 
@@ -149,7 +151,7 @@ class JobSeekerProfiles extends Model
 
         $obj->addSelect(DB::raw("count(distinct(skill_count.skill_id)) AS matched_skills")); 
         
-        if($job['job_type']==RecruiterJobs::TEMPORARY)
+        if($job['job_type']==JobType::TEMPORARY)
             $obj->addSelect(DB::raw("group_concat(distinct(jobseeker_temp_availability.temp_job_date)  ORDER BY jobseeker_temp_availability.temp_job_date ASC) AS temp_job_dates"));
     
         $obj->leftjoin('job_ratings',function($query){
@@ -180,7 +182,7 @@ class JobSeekerProfiles extends Model
             $allSkills = JobSeekerSkills::getAllJobSeekerSkills($allProfiles->toArray());                  
         }
         
-        return ['allSkills' => $allSkills, 'paginate' => $obj->paginate(RecruiterJobs::LIMIT)];     
+        return ['allSkills' => $allSkills, 'paginate' => $obj->paginate(RecruiterJobs::LIMIT)];
     } 
 
     public static function getJobSeekerDetails($seekerId, $job){
@@ -195,7 +197,7 @@ class JobSeekerProfiles extends Model
 
         $obj->leftjoin('job_lists',function($query) use ($job){
                 $query->on('jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
-                ->whereIn('job_lists.applied_status',[JobLists::INVITED,JobLists::APPLIED,JobLists::SHORTLISTED,JobLists::HIRED])
+                ->whereIn('job_lists.applied_status',[JobAppliedStatus::INVITED,JobAppliedStatus::APPLIED,JobAppliedStatus::SHORTLISTED,JobAppliedStatus::HIRED])
                 ->where('job_lists.recruiter_job_id',$job['id']);
         });
 
@@ -241,20 +243,20 @@ class JobSeekerProfiles extends Model
                 ->join('jobseeker_profiles','jobseeker_profiles.user_id','=','job_lists.seeker_id')
                 ->join('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id')
                 ->where('job_lists.recruiter_job_id',$job->id)
-                ->whereIn('job_lists.applied_status',[ JobLists::INVITED, JobLists::APPLIED,JobLists::SHORTLISTED,JobLists::HIRED])
+                ->whereIn('job_lists.applied_status',[ JobAppliedStatus::INVITED, JobAppliedStatus::APPLIED,JobAppliedStatus::SHORTLISTED,JobAppliedStatus::HIRED])
                 ->select('job_lists.applied_status','jobseeker_profiles.first_name','jobseeker_profiles.last_name',
             'jobseeker_profiles.profile_pic','job_lists.seeker_id','job_titles.jobtitle_name','recruiter_jobs.job_type');
         
-        if($job->job_type==RecruiterJobs::FULLTIME){
+        if($job->job_type==JobType::FULLTIME){
             $obj->addSelect('jobseeker_profiles.is_fulltime');
         }
-        elseif($job->job_type==RecruiterJobs::PARTTIME){
+        elseif($job->job_type==JobType::PARTTIME){
             $obj->addSelect('jobseeker_profiles.is_parttime_monday','jobseeker_profiles.is_parttime_tuesday',
                     'jobseeker_profiles.is_parttime_wednesday','jobseeker_profiles.is_parttime_thursday',
                     'jobseeker_profiles.is_parttime_friday','jobseeker_profiles.is_parttime_saturday',
                     'jobseeker_profiles.is_parttime_sunday');
         }
-        elseif($job->job_type==RecruiterJobs::TEMPORARY){
+        elseif($job->job_type==JobType::TEMPORARY){
             $obj->leftjoin('jobseeker_temp_availability',function($query) use ($job){
                 $query->on('jobseeker_temp_availability.user_id', '=', 'job_lists.seeker_id')
                 ->whereIn('jobseeker_temp_availability.temp_job_date',explode(',',$job->temp_job_dates));
