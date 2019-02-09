@@ -26,6 +26,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Configs extends Model
 {
+    const CERTIFICATE_EXPIRE_DAYS = 'constants.notification.certificate_expire';
+
     protected $table = 'configs';
     protected $primaryKey = 'id';
     

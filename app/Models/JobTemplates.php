@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read string|null $mapping_for
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateSkills[] $templateSkills
+ * @property JobTitles $jobTitle
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTemplates newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobTemplates newQuery()
@@ -58,10 +59,14 @@ class JobTemplates extends Model
     protected $dates = ['deleted_at'];
     
      /**
-     * Get the skiild for the blog post.
+     * Get the skills for the template
      */
     public function templateSkills(){
         return $this->hasMany(TemplateSkills::class,'job_template_id');
+    }
+
+    public function jobTitle() {
+        return $this->belongsTo(JobTitles::class);
     }
     
     /**

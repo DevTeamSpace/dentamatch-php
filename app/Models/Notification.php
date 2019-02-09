@@ -32,16 +32,17 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Notification extends Model {
+class Notification extends Model
+{
 
     protected $table = 'notification_logs';
     protected $primaryKey = 'id';
     protected $hidden = ['updated_at', 'deleted_at'];
-    
+
     protected $fillable = ['sender_id', 'receiver_id', 'job_list_id', 'notification_data', 'notification_type'];
-    
+
     const LIMIT = 10;
-    
+
     const ACCEPTJOB = 1;
     const HIRED = 2;
     const JOBCANCEL = 3;
@@ -57,10 +58,10 @@ class Notification extends Model {
     const JOBSEEKERCANCELLED = 13;
     const REJECTED = 14;
     const LICENSEACCEPTREJECT = 15;
-    
+
     public static function userNotificationList($reqData)
     {
-        $array = array("list" => [], "total" => 0);
+        $array = ["list" => [], "total" => 0];
         $query = Notification::where('receiver_id', '=', $reqData['userId'])->orderBy('id', 'DESC');
         $total = $query->count();
         $page = $reqData['page'];
@@ -72,32 +73,43 @@ class Notification extends Model {
         $list = $query->skip($skip)->take($limit)->get();
         $array['list'] = $list;
         $array['total'] = $total;
-        return $array;    
+        return $array;
     }
-    
+
     public static function createNotification($data)
     {
         static::insert($data);
     }
-    
-    public static function userTopNotification($userId) {
+
+    /**
+     * Return list of top 3 notifications
+     * @param  int userId
+     * @return array
+     */
+    public static function getUserTopNotifications($userId)
+    {
         $return = ['data' => [], 'total' => '0'];
         $query = static::where('receiver_id', $userId)
-                    ->where('seen',0)
-                    ->orderBy('created_at', 'DESC');
-        
+            ->where('seen', 0)
+            ->orderBy('created_at', 'DESC');
+
         $total = $query->count('receiver_id');
         $return['total'] = $total;
         $data = $query->take(3)->get();
-        if($data) {
+        if ($data) {
             $return['data'] = $data;
         }
         return $return;
     }
-    
-    public static function notificationAdmin($userId){
-       $adminNotification = Notification::where('sender_id',1)
-               ->where('receiver_id', $userId)->where('seen',0)->orderBy('id','desc')->first();
-       return $adminNotification;
+
+    /**
+     * Return last unread notification sent by admin
+     * @param  int userId
+     * @return Notification|Model|null
+     */
+    public static function getLastNotificationFromAdmin($userId)
+    {
+        return Notification::where('sender_id', 1)
+            ->where('receiver_id', $userId)->where('seen', 0)->orderBy('id', 'desc')->first();
     }
 }

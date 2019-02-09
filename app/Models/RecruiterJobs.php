@@ -35,6 +35,10 @@ use App\Models\TempJobDates;
  * @property \Illuminate\Support\Carbon $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property int $pay_rate
+ * @property JobTemplates $jobTemplate
+ * @property RecruiterOffice $recruiterOffice
+ * @property PreferredJobLocation $preferredLocation
+ * @property JobLists $jobLists
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TempJobDates[] $tempJobActiveDates
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TempJobDates[] $tempJobDates
  * @method static bool|null forceDelete()
@@ -70,8 +74,8 @@ class RecruiterJobs extends Model
     use SoftDeletes;
     const LIMIT = 10;
 
-    protected $table = 'recruiter_jobs';
-    protected $primaryKey = 'id';
+//    protected $table = 'recruiter_jobs';
+//    protected $primaryKey = 'id';
     
     protected $maps          = [
         'jobTemplateId' => 'job_template_id',
@@ -99,6 +103,22 @@ class RecruiterJobs extends Model
     
     public function tempJobActiveDates() {
         return $this->hasMany(TempJobDates::class,'recruiter_job_id')->select('job_date');
+    }
+
+    public function jobTemplate() {
+        return $this->belongsTo(JobTemplates::class);
+    }
+
+    public function recruiterOffice() {
+        return $this->belongsTo(RecruiterOffice::class);
+    }
+
+    public function preferredJobLocation() {
+        return $this->belongsTo(PreferredJobLocation::class);
+    }
+
+    public function jobLists() {
+        return $this->hasMany(JobLists::class, 'recruiter_job_id');
     }
     
     public static function searchJob($reqData){

@@ -38,7 +38,7 @@
 
 <body>
     <?php 
-        $notificationList = \App\Helpers\NotificationHelper::topNotificationList(Auth::user()->id);
+        $notificationList = \App\Models\Notification::getUserTopNotifications(Auth::user()->id);
         $chatCount = \App\Helpers\UserChatHelper::recruiterChatCount(Auth::user()->id); 
     ?>
     <nav class="customNav navbar navbar-default navbar-fixed-top">

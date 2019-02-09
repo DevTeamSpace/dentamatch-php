@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Cms;
 use App\Enums\JobAppliedStatus;
 use App\Enums\JobType;
 use App\Http\Controllers\Controller;
+use App\Utils\PushNotificationService;
 use Yajra\Datatables\Datatables;
 use App\Models\User;
 use App\Models\RecruiterJobs;
@@ -17,7 +18,6 @@ use Log;
 use App\Models\JobLists;
 use DB;
 use App\Models\SearchFilter;
-use App\Providers\NotificationServiceProvider;
 
 class ReportController extends Controller {
 
@@ -327,7 +327,7 @@ class ReportController extends Controller {
                                 "type"=>1,
                                 "sender_id"=>$senderId
                                 ];
-                           NotificationServiceProvider::sendPushNotification($deviceModel, $message,$params,$userId);
+                           PushNotificationService::send($deviceModel, $message,$params,$userId);
                         }
                     }
                     if(!empty($insertData)) {

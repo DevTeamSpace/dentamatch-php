@@ -2,11 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Utils\NotificationUtils;
 use Illuminate\Console\Command;
 use App\Models\SubscriptionPayments;
-use App\Models\User;
-use App\Models\Notification;
-use DB;
 
 class SubscriptionCommand extends Command
 {
@@ -25,13 +23,16 @@ class SubscriptionCommand extends Command
      */
     protected $description = 'Cron to send push notification for subscription';
 
+    private $utils;
+
     /**
      * Create a new command instance.
      *
-     * @return void
+     * @param NotificationUtils $utils
      */
-    public function __construct()
+    public function __construct(NotificationUtils $utils)
     {
+        $this->utils = $utils;
         parent::__construct();
     }
 
@@ -40,30 +41,16 @@ class SubscriptionCommand extends Command
      *
      * @return mixed
      */
-   public function handle()
+    public function handle()
     {
-        try {
-            $senderId = User::getAdminUserDetailsForNotification();
-            $recruiterModel = SubscriptionPayments::select('subscription_payments.payment_id', 'subscription_payments.subscription_expiry_date', 'recruiter_profiles.user_id')
-                                ->join('recruiter_profiles', 'recruiter_profiles.user_id','=','subscription_payments.recruiter_id')
-                                ->where(DB::raw("DATEDIFF(subscription_payments.subscription_expiry_date, now())"),'=', static::NOTIFICATION_INTERVAL)
-                                ->where('recruiter_profiles.is_subscribed',1)
-                                ->get();
-            $list = $recruiterModel->toArray();
-            if(!empty($list)) {
-                $insertData = [];
-                foreach($list as $listValue)
-                {
-                    $data = ['image' => url('web/images/dentaMatchLogo.png'),'message' => 'You subscription will expire on'.' '.$listValue['subscription_expiry_date']];
-                    $insertData[] = ['sender_id' => $senderId->id, 'receiver_id' => $listValue['user_id'], 'notification_data'=> json_encode($data)];
-                }
-                Notification::insert($insertData);
-                $this->info("Records added successfully");
-            } else {
-                $this->info("No records for insert");
-            }
-        } catch(\Exception $e) {
-            $this->info($e->getMessage());
-        }
+        $recruiterModel = SubscriptionPayments::select('subscription_payments.payment_id', 'subscription_payments.subscription_expiry_date', 'recruiter_profiles.user_id')
+            ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'subscription_payments.recruiter_id')
+            ->where(DB::raw("DATEDIFF(subscription_payments.subscription_expiry_date, now())"), '=', static::NOTIFICATION_INTERVAL)
+            ->where('recruiter_profiles.is_subscribed', 1)
+            ->get();
+        $list = $recruiterModel->toArray();
+
+        $this->utils->notifySubscriptionExpire($list);
+
     }
 }

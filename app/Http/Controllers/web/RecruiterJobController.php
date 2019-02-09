@@ -5,6 +5,7 @@ namespace App\Http\Controllers\web;
 use App\Enums\JobAppliedStatus;
 use App\Enums\JobType;
 use App\Mail\NewInvite;
+use App\Utils\PushNotificationService;
 use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -16,7 +17,6 @@ use App\Models\JobLists;
 use App\Models\RecruiterOffice;
 use App\Models\ChatUserLists;
 use App\Models\JobSeekerProfiles;
-use App\Providers\NotificationServiceProvider;
 use App\Models\Device;
 use App\Models\Notification;
 use App\Models\OfficeType;
@@ -30,7 +30,6 @@ use App\Models\SavedJobs;
 use App\Models\JobseekerTempHired;
 use App\Models\PreferredJobLocation;
 use App\Models\User;
-use App\Helpers\NotificationHelper;
 use Mail;
 use App\Models\Configs;
 use Illuminate\Support\Facades\Storage;
@@ -60,8 +59,8 @@ class RecruiterJobController extends Controller {
             $userDetails = User::getUser($userId);
             $hiredListByCurrentDate = JobseekerTempHired::getCurrentDayJobSeekerList();
             $latestMessage = ChatUserLists::getSeekerListForChatDashboard(Auth::id());
-            $latestNotifications = NotificationHelper::topNotificationList($userId);
-            $notificationAdminModel = NotificationHelper::notificationAdmin($userId);
+            $latestNotifications = Notification::getUserTopNotifications($userId);
+            $notificationAdminModel = Notification::getLastNotificationFromAdmin($userId);
             $notificationAdmin = [];
             if($notificationAdminModel) {
                 $notificationAdmin = json_decode($notificationAdminModel->notification_data); 
@@ -435,7 +434,7 @@ class RecruiterJobController extends Controller {
         $params['notification_details'] = $notificationDetails;
         $deviceModel = Device::getDeviceToken($receiverId);
         if ($deviceModel) {
-            NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params,$receiverId);
+            PushNotificationService::send($deviceModel, $notificationData['notificationData'], $params,$receiverId);
         }elseif(!$deviceModel && $jobstatus == JobAppliedStatus::INVITED){
             $email = \App\Models\User::where('id',$receiverId)->first();
             $name = \App\Models\JobSeekerProfile::where('user_id',$receiverId)->first();
@@ -782,7 +781,7 @@ class RecruiterJobController extends Controller {
                                 "type"=>1,
                                 "sender_id"=>$senderId
                                 ];
-                           NotificationServiceProvider::sendPushNotification($deviceModel, $message,$params,$userId);
+                           PushNotificationService::send($deviceModel, $message,$params,$userId);
                         }
                     }
                     if(!empty($insertData)) {

@@ -2,16 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Configs;
+use App\Utils\NotificationUtils;
 use Illuminate\Console\Command;
 use App\Models\JobseekerCertificates;
-use App\Models\Notification;
-use App\Models\User;
-use App\Models\Device;
-use App\Providers\NotificationServiceProvider;
 
 class CertificateExpiryCommand extends Command
 {
-    const NOTIFICATION_INTERVAL = 30;
     /**
      * The name and signature of the console command.
      *
@@ -26,13 +23,16 @@ class CertificateExpiryCommand extends Command
      */
     protected $description = 'Cron to send push notification on certificate expiry before 30 days';
 
+    private $utils;
+
     /**
      * Create a new command instance.
      *
-     * @return void
+     * @param NotificationUtils $utils
      */
-    public function __construct()
+    public function __construct(NotificationUtils $utils)
     {
+        $this->utils = $utils;
         parent::__construct();
     }
 
@@ -43,35 +43,12 @@ class CertificateExpiryCommand extends Command
      */
     public function handle()
     {
-        $todayDate = date('Y-m-d', strtotime("+". static::NOTIFICATION_INTERVAL." days"));
-        $adminModel = User::getAdminUserDetailsForNotification();
-        $certificateModel = JobseekerCertificates::select('jobseeker_certificates.certificate_id','jobseeker_certificates.user_id','certifications.certificate_name')
-                        ->join('certifications', 'certifications.id', '=', 'jobseeker_certificates.certificate_id')
-                        ->whereNull('jobseeker_certificates.deleted_at')
-                        ->where('jobseeker_certificates.validity_date',$todayDate)
-                        ->get();
-        
-        if(!empty($certificateModel)) {
-            foreach($certificateModel as $value) {
-                $userId = $value->user_id;
-                $notificationData['receiver_id'] = $userId;
-                $notificationData = array(
-                    'notificationData' => static::NOTIFICATION_INTERVAL." days remaining for the expiry of ".$value->certificate_name,
-                    'notification_title'=>'Certification Expiry Reminder',
-                    'sender_id' => $adminModel->id,
-                    "type" =>1,
-                    'notificationType' => Notification::OTHER
-                );
-                
-                $params['data'] = $notificationData;
-                
-                $deviceModel = Device::getDeviceToken($userId);
-                if($deviceModel) {
-                    NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params,$userId);
-                    $data = ['sender_id'=>$adminModel->id,'receiver_id'=>$userId, 'notification_data'=>$notificationData['notificationData'],'notification_type'=>Notification::OTHER];
-                    Notification::createNotification($data);
-                }
-            }
+        $daysLeft = config(Configs::CERTIFICATE_EXPIRE_DAYS);
+        $expiredOnDate = date('Y-m-d', strtotime("+ $daysLeft days"));
+        $certificates = JobseekerCertificates::with('certificate')->where('validity_date', $expiredOnDate)->get();
+
+        foreach ($certificates as $seekerCertificate) {
+            $this->utils->notifyCertificateExpire($seekerCertificate, $daysLeft);
         }
     }
 }

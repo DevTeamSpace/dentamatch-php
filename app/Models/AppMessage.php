@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\AppMessage onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage query()
  * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage toBeSent()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage whereCronMessageSent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage whereDeletedAt($value)
@@ -41,33 +42,44 @@ class AppMessage extends Model
 {
     use Eloquence, Mappable;
     use SoftDeletes;
-    protected $table        = 'app_messages';
-    protected $primaryKey   = 'id';
-   
-    protected $maps          = [
-        'appMessageId' => 'id',
-        'messageTo'=>'message_to',
-        'messageSent'=>'message_sent',
+    protected $table = 'app_messages';
+    protected $primaryKey = 'id';
+
+    protected $maps = [
+        'appMessageId'    => 'id',
+        'messageTo'       => 'message_to',
+        'messageSent'     => 'message_sent',
         'cronMessageSent' => 'cron_message_sent',
-        'createdAt'=>'created_at',
-        ];
-    protected $hidden       = ['message_to','message_sent', 'cron_message_sent','created_at','updated_at'];
-    protected $fillable     = [];
-    protected $appends      = ['messageTo','messageSent', 'cronMessageSent','createdAt'];
+        'createdAt'       => 'created_at',
+    ];
+    protected $hidden = ['message_to', 'message_sent', 'cron_message_sent', 'created_at', 'updated_at'];
+    protected $fillable = [];
+    protected $appends = ['messageTo', 'messageSent', 'cronMessageSent', 'createdAt'];
     protected $dates = ['deleted_at'];
-    
-    protected function updateData($data){
-        $appMessage = $this->findById($data->id); 
-        
+
+    protected function updateData($data)
+    {
+        $appMessage = $this->findById($data->id);
+
         $return = false;
-        if($appMessage->save()) {
+        if ($appMessage->save()) {
             $return = true;
         }
-        
+
         return $return;
     }
-    
-    protected function findById($id){
+
+    protected function findById($id)
+    {
         return static::find($id);
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeToBeSent($query)
+    {
+        return $query->where('cron_message_sent', 0)->where('message_sent', 1);
     }
 }

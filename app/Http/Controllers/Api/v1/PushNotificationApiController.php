@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Api\v1;
 use App\Enums\JobType;
 use App\Http\Controllers\Controller;
+use App\Utils\PushNotificationService;
 use Illuminate\Http\Request;
 use App\Helpers\ApiResponse;
 use App\Models\Notification;
@@ -9,7 +10,6 @@ use App\Models\RecruiterJobs;
 use App\Models\Device;
 use App\Models\UserChat;
 use App\Models\JobSeekerTempAvailability;
-use App\Providers\NotificationServiceProvider;
 use Log;
 
 class PushNotificationApiController extends Controller {
@@ -105,40 +105,38 @@ class PushNotificationApiController extends Controller {
         }
         return $response;
     }
-    
+
     /**
-     * Description : send chat push notification 
-     * Method : userChatNotification 
+     * Description : send chat push notification (from nodejs chat)
      * formMethod : POST
      * @param Request $request
-     * @return type
      */
-    public function userChatNotification(Request $request){
+    public function userChatNotification(Request $request)
+    {
         $this->success = 0;
-        try{
+        try {
             $requestData = $request->all();
-            $validateKeys = ['fromId' => 'required','toId' => 'required',
-            'fromName' => 'required','message' => 'required',
-            'sentTime' => 'required','messageId' => 'required'];
-            if(isset($request['recruiterId'])){
-                $validateKeys = ['name' => 'required','recruiterId' => 'required','message' => 'required',
-            'messageListId' => 'required','seekerId' => 'required','messageId' => 'required',
-            'timestamp' => 'required','recruiterBlock' => 'required','seekerBlock' => 'required'];
+            $validateKeys = ['fromId'   => 'required', 'toId' => 'required',
+                             'fromName' => 'required', 'message' => 'required',
+                             'sentTime' => 'required', 'messageId' => 'required'];
+            if (isset($request['recruiterId'])) {
+                $validateKeys = ['name'          => 'required', 'recruiterId' => 'required', 'message' => 'required',
+                                 'messageListId' => 'required', 'seekerId' => 'required', 'messageId' => 'required',
+                                 'timestamp'     => 'required', 'recruiterBlock' => 'required', 'seekerBlock' => 'required'];
                 $requestData['toId'] = $requestData['seekerId'];
             }
             $this->validate($request, $validateKeys);
             $deviceModel = Device::getDeviceToken($requestData['toId']);
-            if($deviceModel) {
-                NotificationServiceProvider::sendPushNotification($deviceModel, $requestData['message'], ["data" => $requestData],$requestData['toId']);
+            if ($deviceModel) {
+                PushNotificationService::send($deviceModel, $requestData['message'], ["data" => $requestData], $requestData['toId']);
             }
         } catch (ValidationException $e) {
             Log::error($e);
             $messages = json_decode($e->getResponse()->content(), true);
             return ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             Log::error($e);
-            $this->message = $e->getMessage();
-            return $this->message;
+            return $e->getMessage();
         }
     }
     

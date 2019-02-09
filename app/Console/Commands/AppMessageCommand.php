@@ -2,14 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Utils\NotificationUtils;
 use Illuminate\Console\Command;
-use App\Providers\NotificationServiceProvider;
 use App\Models\AppMessage;
 
 class AppMessageCommand extends Command
 {
-    const IS_COMPLETED = 0;
-    const NOTIFICATION_INTERVAL = 15;
     /**
      * The name and signature of the console command.
      *
@@ -22,15 +20,18 @@ class AppMessageCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Cron to send push notification to users by admin';
+    protected $description = 'Cron to send push notification to users from admin';
+
+    private $utils;
 
     /**
      * Create a new command instance.
      *
-     * @return void
+     * @param NotificationUtils $utils
      */
-    public function __construct()
+    public function __construct(NotificationUtils $utils)
     {
+        $this->utils = $utils;
         parent::__construct();
     }
 
@@ -41,16 +42,11 @@ class AppMessageCommand extends Command
      */
     public function handle()
     {
-        $appMessageModel = AppMessage::where('cron_message_sent', 0)->get();
-        if(!empty($appMessageModel)) {
-            foreach($appMessageModel as $appMessage) {
-                if($appMessage->messageSent) {
-                    NotificationServiceProvider::notificationFromAdmin($appMessage);
-                    $appMessage->cronMessageSent=1;
-                    $appMessage->save();
-                }
-            }
+        $appMessages = AppMessage::toBeSent()->get();
+        foreach ($appMessages as $appMessage) {
+            $this->utils->notifyFromAdmin($appMessage);
+            $appMessage->cron_message_sent = 1;
+            $appMessage->save();
         }
-        
     }
 }

@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Cms;
 
 use App\Enums\JobAppliedStatus;
 use App\Mail\ResetPassword;
+use App\Utils\PushNotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use Yajra\Datatables\Datatables;
-use App\Providers\NotificationServiceProvider;
 use App\Models\Device;
 use App\Models\Notification;
 use Session;
@@ -323,7 +323,7 @@ class JobSeekerController extends Controller
                     'notification_type' => Notification::OTHER,
                     ];
             }
-            NotificationServiceProvider::sendPushNotification($devices, $notificationData['notificationData'], $params);
+            PushNotificationService::send($devices, $notificationData['notificationData'], $params);
         }
             
         if(!empty($insertData)) {

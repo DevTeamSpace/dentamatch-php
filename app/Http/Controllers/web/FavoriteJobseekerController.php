@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\web;
 
 use App\Enums\JobAppliedStatus;
+use App\Utils\PushNotificationService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
@@ -12,7 +13,6 @@ use DB;
 use App\Models\JobTemplates;
 use App\Models\Favourite;
 use App\Models\Notification;
-use App\Providers\NotificationServiceProvider;
 use App\Models\JobLists;
 use App\Models\RecruiterJobs;
 use App\Models\Device;
@@ -160,7 +160,7 @@ class FavoriteJobseekerController extends Controller {
         $params['notification_details'] = $notificationDetails;
         $deviceModel = Device::getDeviceToken($receiverId);
         if ($deviceModel) {
-            NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params,$receiverId);
+            PushNotificationService::send($deviceModel, $notificationData['notificationData'], $params,$receiverId);
         }
     }
     
