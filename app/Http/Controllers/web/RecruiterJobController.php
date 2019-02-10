@@ -437,7 +437,7 @@ class RecruiterJobController extends Controller {
             PushNotificationService::send($deviceModel, $notificationData['notificationData'], $params,$receiverId);
         }elseif(!$deviceModel && $jobstatus == JobAppliedStatus::INVITED){
             $email = \App\Models\User::where('id',$receiverId)->first();
-            $name = \App\Models\JobSeekerProfile::where('user_id',$receiverId)->first();
+            $name = \App\Models\JobSeekerProfiles::where('user_id',$receiverId)->first();
             $dataName = $name['first_name'];
 
             Mail::to($email['email'])->queue(new NewInvite($dataName));
