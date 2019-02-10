@@ -11,23 +11,27 @@ use App\Helpers\ApiResponse;
 use App\Models\JobTitles;
 use App\Models\JobSeekerSchooling;
 
-class WorkExperienceApiController extends Controller {
-
-    public function __construct() {
+class WorkExperienceApiController extends Controller
+{
+    public function __construct()
+    {
         $this->middleware('ApiAuth');
     }
+
     /**
      * Description : Get joblisting
      * Method : getJobTitlelists
      * formMethod : Get
-     * @param 
+     * @param
      * @return type
      */
-    public function getJobTitlelists(){
-        $job_title = JobTitles::select('*')->where('is_active',1)->orderby('id','asc')->get()->toArray();
-        $response = ApiResponse::customJsonResponseObject(1, 200, "Jobtitle list",'joblists',ApiResponse::convertToCamelCase($job_title));
+    public function getJobTitlelists()
+    {
+        $job_title = JobTitles::select('*')->where('is_active', 1)->orderby('id', 'asc')->get()->toArray();
+        $response = ApiResponse::customJsonResponseObject(1, 200, "Jobtitle list", 'joblists', ApiResponse::convertToCamelCase($job_title));
         return $response;
     }
+
     /**
      * Description : To add work experience
      * Method : postWorkExperince
@@ -35,28 +39,29 @@ class WorkExperienceApiController extends Controller {
      * @param Request $request
      * @return type
      */
-    public function postWorkExperience(Request $request) {
+    public function postWorkExperience(Request $request)
+    {
         try {
             $this->validate($request, [
-                'jobTitleId' => 'required|integer',
+                'jobTitleId'         => 'required|integer',
                 'monthsOfExpereince' => 'required|integer',
-                'officeName' => 'required',
-                'officeAddress' => 'required',
-                'state' => 'required',
-                'city' => 'required',
-                'reference1Name'=>'sometimes',
-                'reference1Mobile'=>'sometimes',
-                'reference1Email' => 'sometimes|email',
-                'reference2Name'=>'sometimes',
-                'reference2Mobile'=>'sometimes',
-                'reference2Email' => 'sometimes|email',
-                'action' =>'required|in:add,edit',
-                'id'=>'integer|required_if:action,edit'
+                'officeName'         => 'required',
+                'officeAddress'      => 'required',
+                'state'              => 'required',
+                'city'               => 'required',
+                'reference1Name'     => 'sometimes',
+                'reference1Mobile'   => 'sometimes',
+                'reference1Email'    => 'sometimes|email',
+                'reference2Name'     => 'sometimes',
+                'reference2Mobile'   => 'sometimes',
+                'reference2Email'    => 'sometimes|email',
+                'action'             => 'required|in:add,edit',
+                'id'                 => 'integer|required_if:action,edit'
             ]);
             $userId = $request->userServerData->user_id;
-            if($userId>0) {
+            if ($userId > 0) {
                 $workExp = new WorkExperience();
-                if ($request->action=="edit" && !empty($request->id)) {
+                if ($request->action == "edit" && !empty($request->id)) {
                     $workExp = WorkExperience::find($request->id);
                 }
 
@@ -77,24 +82,24 @@ class WorkExperienceApiController extends Controller {
                 $workExp->save();
 
                 $data['list'][] = $workExp;
-                if($request->action=="edit"){
+                if ($request->action == "edit") {
                     $message = trans("messages.work_exp_updated");
-                }else{
+                } else {
                     $message = trans("messages.work_exp_added");
                 }
                 ApiResponse::chkProfileComplete($userId);
                 $returnResponse = ApiResponse::customJsonResponse(1, 200, $message, ApiResponse::convertToCamelCase($data));
             } else {
-                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
-            
+
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
             $returnResponse = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
             $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
-        
+
         return $returnResponse;
     }
 
@@ -105,18 +110,19 @@ class WorkExperienceApiController extends Controller {
      * @param Request $request
      * @return type
      */
-    public function deleteWorkExperience(Request $request) {
+    public function deleteWorkExperience(Request $request)
+    {
         try {
             $this->validate($request, [
-                'id'=>'required|integer'
+                'id' => 'required|integer'
             ]);
-            
+
             $userId = $request->userServerData->user_id;
-            if($userId>0) {
-                WorkExperience::where('id', $request->id)->where('user_id',$userId)->update(['deleted_at' => date('Y-m-d H:i:s')]);
+            if ($userId > 0) {
+                WorkExperience::where('id', $request->id)->where('user_id', $userId)->update(['deleted_at' => date('Y-m-d H:i:s')]);
                 $returnResponse = ApiResponse::customJsonResponse(1, 200, trans("messages.work_exp_removed"));
             } else {
-                    $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
@@ -124,10 +130,10 @@ class WorkExperienceApiController extends Controller {
         } catch (\Exception $e) {
             $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
-        
+
         return $returnResponse;
     }
-    
+
     /**
      * Description : To list work experience
      * Method : postListWorkExperience
@@ -139,19 +145,19 @@ class WorkExperienceApiController extends Controller {
     {
         try {
             // test
-            $start = (int) isset($request->start) ? $request->start : 0;
-            $limit = (int) isset($request->limit) ? $request->limit : config('app.defaul_product_per_page');
-            
+            $start = (int)isset($request->start) ? $request->start : 0;
+            $limit = (int)isset($request->limit) ? $request->limit : config('app.defaul_product_per_page');
+
             $userId = $request->userServerData->user_id;
-            
-            if($userId>0) {
+
+            if ($userId > 0) {
                 $query = WorkExperience::getWorkExperienceList($userId, $start, $limit);
                 $query['start'] = $start;
                 $query['limit'] = $limit;
 
                 $returnResponse = ApiResponse::customJsonResponse(1, 200, trans("messages.work_exp_list"), ApiResponse::convertToCamelCase($query));
             } else {
-                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
@@ -159,10 +165,10 @@ class WorkExperienceApiController extends Controller {
         } catch (\Exception $e) {
             $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
-        
+
         return $returnResponse;
     }
-    
+
     /**
      * Description : Get School List with JobSeeker Status for selected School
      * Method : getSchoolList
@@ -174,52 +180,52 @@ class WorkExperienceApiController extends Controller {
     {
         try {
             $data = [];
-            $jobSeekerData=[];
+            $jobSeekerData = [];
             $userId = $request->userServerData->user_id;
-            if($userId>0) {
+            if ($userId > 0) {
                 $schoolingList = Schooling::getScoolingList();
                 $jobseekerSchooling = JobSeekerSchooling::getUserSchoolingList($userId);
 
-                if(!empty($jobseekerSchooling)) {
-                    foreach($jobseekerSchooling as $key=>$value) {
-                        $jobSeekerData[$value['schooling_id']] = [ 'schoolingId' => $value['schooling_id'], 'otherSchooling' => $value['other_schooling'],'yearOfGraduation' => $value['year_of_graduation']];
+                if (!empty($jobseekerSchooling)) {
+                    foreach ($jobseekerSchooling as $key => $value) {
+                        $jobSeekerData[$value['schooling_id']] = ['schoolingId' => $value['schooling_id'], 'otherSchooling' => $value['other_schooling'], 'yearOfGraduation' => $value['year_of_graduation']];
                     }
                 }
-                if(!empty($schoolingList)) {
-                    foreach($schoolingList as $key=>$value) {
+                if (!empty($schoolingList)) {
+                    foreach ($schoolingList as $key => $value) {
                         $data[$value['parentId']]['schoolingId'] = $value['parentId'];
                         $data[$value['parentId']]['schoolName'] = $value['schoolName'];
-                        if(!empty($value['childId'])) {
-                            $data[$value['parentId']]['schoolCategory'][] = ['schoolingId' => $value['parentId'], 'schoolingChildId' => $value['childId'],
-                                        'schoolChildName' => $value['schoolChildName'], 'jobSeekerStatus' => !empty($jobSeekerData[$value['childId']]) ? 1 : 0,
-                                        'otherSchooling' => !empty($jobSeekerData[$value['childId']]) ? $jobSeekerData[$value['childId']]['otherSchooling'] : null,
-                                        'yearOfGraduation' => !empty($jobSeekerData[$value['childId']]) ? $jobSeekerData[$value['childId']]['yearOfGraduation'] : null
-                                    ];
+                        if (!empty($value['childId'])) {
+                            $data[$value['parentId']]['schoolCategory'][] = ['schoolingId'      => $value['parentId'], 'schoolingChildId' => $value['childId'],
+                                                                             'schoolChildName'  => $value['schoolChildName'], 'jobSeekerStatus' => !empty($jobSeekerData[$value['childId']]) ? 1 : 0,
+                                                                             'otherSchooling'   => !empty($jobSeekerData[$value['childId']]) ? $jobSeekerData[$value['childId']]['otherSchooling'] : null,
+                                                                             'yearOfGraduation' => !empty($jobSeekerData[$value['childId']]) ? $jobSeekerData[$value['childId']]['yearOfGraduation'] : null
+                            ];
                         } else {
                             $data[$value['parentId']]['schoolCategory'] = [];
                         }
                     }
                 }
-                
+
                 $jobseekerKeys = array_keys($jobSeekerData);
                 $schoolingKeys = array_keys($data);
                 $intersectData = array_intersect($jobseekerKeys, $schoolingKeys);
-                
-                
-                if(!empty($intersectData)) {
-                    foreach($intersectData as $value) {
-                        $data[$value]['other'][] = ['schoolingId' => $value, 'schoolingChildId' => $value,
-                                        'schoolChildName' => null, 'jobSeekerStatus' => 1,
-                                        'otherSchooling' => !empty($jobSeekerData[$value]) ? $jobSeekerData[$value]['otherSchooling'] : null,
-                                        'yearOfGraduation' => !empty($jobSeekerData[$value]) ? $jobSeekerData[$value]['yearOfGraduation'] : null
-                                    ];
+
+
+                if (!empty($intersectData)) {
+                    foreach ($intersectData as $value) {
+                        $data[$value]['other'][] = ['schoolingId'      => $value, 'schoolingChildId' => $value,
+                                                    'schoolChildName'  => null, 'jobSeekerStatus' => 1,
+                                                    'otherSchooling'   => !empty($jobSeekerData[$value]) ? $jobSeekerData[$value]['otherSchooling'] : null,
+                                                    'yearOfGraduation' => !empty($jobSeekerData[$value]) ? $jobSeekerData[$value]['yearOfGraduation'] : null
+                        ];
                     }
                 }
                 $return['list'] = array_values($data);
 
                 $returnResponse = ApiResponse::customJsonResponse(1, 200, trans("messages.school_list_success"), ApiResponse::convertToCamelCase($return));
             } else {
-                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
@@ -227,34 +233,35 @@ class WorkExperienceApiController extends Controller {
         } catch (\Exception $e) {
             $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
-        
+
         return $returnResponse;
     }
-    
+
     /**
-     * Description : Update JobSeeker Schooling 
+     * Description : Update JobSeeker Schooling
      * Method : postSchoolSaveUpdate
      * formMethod : POST
-     * @param Request $request, schoolDataArray as an array
+     * @param Request $request , schoolDataArray as an array
      * @return type
      */
-    public function postSchoolSaveUpdate(Request $request) {
+    public function postSchoolSaveUpdate(Request $request)
+    {
         try {
             $this->validate($request, [
                 'schoolDataArray' => 'required',
-                'other' => 'sometimes',
+                'other'           => 'sometimes',
             ]);
-            
+
             $reqData = $request->all();
             $userId = $request->userServerData->user_id;
             $jobSeekerData = [];
-            
-            if($userId > 0){
-                if(!empty($reqData['schoolDataArray']) && is_array($reqData['schoolDataArray'])){
+
+            if ($userId > 0) {
+                if (!empty($reqData['schoolDataArray']) && is_array($reqData['schoolDataArray'])) {
                     JobSeekerSchooling::where('user_id', '=', $userId)->forceDelete();
-                    
-                    foreach($reqData['schoolDataArray'] as $key=>$value) {
-                        if(!empty($value['schoolingChildId'])) {
+
+                    foreach ($reqData['schoolDataArray'] as $key => $value) {
+                        if (!empty($value['schoolingChildId'])) {
                             $jobSeekerData[$key]['schooling_id'] = $value['schoolingChildId'];
                             $jobSeekerData[$key]['other_schooling'] = $value['otherSchooling'];
                             $jobSeekerData[$key]['year_of_graduation'] = $value['yearOfGraduation'];
@@ -262,14 +269,14 @@ class WorkExperienceApiController extends Controller {
                         }
                     }
                 }
-                
-                if(!empty($jobSeekerData)) {
+
+                if (!empty($jobSeekerData)) {
                     JobSeekerSchooling::insert($jobSeekerData);
                 }
                 ApiResponse::chkProfileComplete($userId);
-                $returnResponse = ApiResponse::customJsonResponse(1, 200, trans("messages.school_add_success")); 
+                $returnResponse = ApiResponse::customJsonResponse(1, 200, trans("messages.school_add_success"));
             } else {
-                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
             $messages = json_decode($e->getResponse()->content(), true);
@@ -277,7 +284,7 @@ class WorkExperienceApiController extends Controller {
         } catch (\Exception $e) {
             $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
-        
+
         return $returnResponse;
     }
 

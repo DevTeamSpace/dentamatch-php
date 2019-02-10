@@ -58,23 +58,6 @@ class AppMessage extends Model
     protected $appends = ['messageTo', 'messageSent', 'cronMessageSent', 'createdAt'];
     protected $dates = ['deleted_at'];
 
-    protected function updateData($data)
-    {
-        $appMessage = $this->findById($data->id);
-
-        $return = false;
-        if ($appMessage->save()) {
-            $return = true;
-        }
-
-        return $return;
-    }
-
-    protected function findById($id)
-    {
-        return static::find($id);
-    }
-
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder

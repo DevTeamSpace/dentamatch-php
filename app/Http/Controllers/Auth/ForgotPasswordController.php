@@ -32,21 +32,21 @@ class ForgotPasswordController extends Controller
     {
         $this->middleware('guest');
     }
-    
+
     public function sendResetLinkEmail(Request $request)
     {
         $this->validate($request, ['email' => 'required|email']);
 
         $valid = User::validateRecuriterEmail($request->only('email'));
-        if($valid!=1){
+        if ($valid != 1) {
             $response = Password::INVALID_USER;
-        }else{
+        } else {
             $response = $this->broker()->sendResetLink(
                 $request->only('email')
             );
         }
         return $response == Password::RESET_LINK_SENT
-                    ? $this->sendResetLinkResponse($response)
-                    : $this->sendResetLinkFailedResponse($request, $response);
+            ? $this->sendResetLinkResponse($response)
+            : $this->sendResetLinkFailedResponse($request, $response);
     }
 }
