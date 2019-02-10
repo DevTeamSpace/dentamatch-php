@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Mail;
 
 class NotificationUtils
 {
-
     private $adminSenderId;
 
     public function notifyCertificateExpire(JobseekerCertificates $seekerCertificate, $daysLeft)
@@ -132,7 +131,7 @@ class NotificationUtils
         }
 
         if (in_array($appMessage->message_to, [AppMessageTarget::ALL, AppMessageTarget::SEEKERS])) {
-            $devices = Device::getAllDeviceToken(UserGroup::JOBSEEKER);
+            $devices = Device::getAllSeekersDeviceToken();
 
             foreach ($devices as $deviceData) {
                 $data = [

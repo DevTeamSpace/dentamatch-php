@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * App\Models\AppMessage
  *
  * @property int $id
+ * @property int
  * @property int $message_to 1=>All,2=>Recruiter,3=>Job Seeker
  * @property string $message
  * @property int|null $message_sent
@@ -20,22 +21,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read string|null $mapping_for
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage newQuery()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AppMessage onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AppMessage newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AppMessage newQuery()
+ * @method static \Illuminate\Database\Query\Builder|AppMessage onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|AppMessage query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage toBeSent()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage whereCronMessageSent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage whereMessage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage whereMessageSent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage whereMessageTo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\AppMessage whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AppMessage withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\AppMessage withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|AppMessage toBeSent()
+ * @method static \Illuminate\Database\Eloquent\Builder|AppMessage whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AppMessage whereCronMessageSent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AppMessage whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AppMessage whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AppMessage whereMessage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AppMessage whereMessageSent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AppMessage whereMessageTo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AppMessage whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|AppMessage withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|AppMessage withoutTrashed()
  * @mixin \Eloquent
  */
 class AppMessage extends Model

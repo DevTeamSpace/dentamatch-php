@@ -5,7 +5,6 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class UserActivation extends Mailable
 {
@@ -19,7 +18,9 @@ class UserActivation extends Mailable
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param string $name
+     * @param string $url
+     * @param string $view
      */
     public function __construct($name, $url, $view = 'email.user-activation')
     {

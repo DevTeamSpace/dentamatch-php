@@ -15,20 +15,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling newQuery()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Schooling onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Schooling newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Schooling newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Schooling onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Schooling query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling whereParentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling whereSchoolName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Schooling whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Schooling withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Schooling withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Schooling whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schooling whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schooling whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schooling whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schooling whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schooling whereSchoolName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Schooling whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Schooling withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Schooling withoutTrashed()
  * @mixin \Eloquent
  */
 class Schooling extends Model
@@ -59,6 +59,4 @@ class Schooling extends Model
         $list = $query->get()->toArray();
         return $list;
     }
-    
-
 }

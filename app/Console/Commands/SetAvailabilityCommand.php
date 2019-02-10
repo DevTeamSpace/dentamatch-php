@@ -7,7 +7,7 @@ use App\Utils\NotificationUtils;
 use Illuminate\Console\Command;
 use App\Models\JobSeekerTempAvailability;
 use App\Models\User;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class SetAvailabilityCommand extends Command
 {
@@ -41,8 +41,6 @@ class SetAvailabilityCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {

@@ -7,7 +7,7 @@ use App\Models\UserGroup;
 use App\Utils\NotificationUtils;
 use Illuminate\Console\Command;
 use App\Models\User;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class InvitedJobseekerCommand extends Command
 {
@@ -41,8 +41,6 @@ class InvitedJobseekerCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {

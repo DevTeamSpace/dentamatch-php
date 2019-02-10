@@ -7,7 +7,7 @@ use App\Models\SubscriptionPayments;
 use App\Models\User;
 use App\Models\Notification;
 use App\Models\RecruiterProfile;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class SubscriptionOneDayCommand extends Command
 {
@@ -39,8 +39,6 @@ class SubscriptionOneDayCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {
@@ -64,7 +62,7 @@ class SubscriptionOneDayCommand extends Command
                         if ($listValue['trial_end'] != $listValue['subscription_expiry_date']) {
                             $data = ['image' => url('web/images/dentaMatchLogo.png'), 'message' => 'You subscription has been renewed to' . ' ' . $listValue['subscription_expiry_date']];
                             $insertData = ['sender_id' => $senderId->id, 'receiver_id' => $listValue['user_id'], 'notification_data' => json_encode($data)];
-                            Notification::insert($insertData);
+                            Notification::createNotification($insertData);
                         }
                         $isSubscribed = 1;
                         SubscriptionPayments::where('recruiter_id', $listValue['user_id'])

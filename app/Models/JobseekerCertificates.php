@@ -19,17 +19,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $deleted_at
  * @property User $user
  * @property Certifications $certificate
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerCertificates newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerCertificates newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerCertificates query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerCertificates whereCertificateId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerCertificates whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerCertificates whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerCertificates whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerCertificates whereImagePath($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerCertificates whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerCertificates whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobseekerCertificates whereValidityDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JobseekerCertificates newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|JobseekerCertificates newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|JobseekerCertificates query()
+ * @method static \Illuminate\Database\Eloquent\Builder|JobseekerCertificates whereCertificateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JobseekerCertificates whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JobseekerCertificates whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JobseekerCertificates whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JobseekerCertificates whereImagePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JobseekerCertificates whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JobseekerCertificates whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JobseekerCertificates whereValidityDate($value)
  * @mixin \Eloquent
  */
 class JobseekerCertificates extends Model

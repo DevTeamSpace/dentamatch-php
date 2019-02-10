@@ -6,7 +6,7 @@ use App\Utils\NotificationUtils;
 use Illuminate\Console\Command;
 use App\Models\TempJobDates;
 use App\Models\Configs;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class TempJobExpiryCommand extends Command
 {
@@ -39,8 +39,6 @@ class TempJobExpiryCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {

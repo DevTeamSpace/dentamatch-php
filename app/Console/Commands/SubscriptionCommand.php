@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Utils\NotificationUtils;
 use Illuminate\Console\Command;
 use App\Models\SubscriptionPayments;
+use Illuminate\Support\Facades\DB;
 
 class SubscriptionCommand extends Command
 {
@@ -38,8 +39,6 @@ class SubscriptionCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {

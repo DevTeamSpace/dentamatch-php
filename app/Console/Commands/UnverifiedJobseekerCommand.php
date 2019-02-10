@@ -6,8 +6,8 @@ use App\Mail\PendingEmailVerification;
 use App\Models\UserGroup;
 use Illuminate\Console\Command;
 use App\Models\User;
-use DB;
-use Mail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class UnverifiedJobseekerCommand extends Command
 {
@@ -39,8 +39,6 @@ class UnverifiedJobseekerCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {

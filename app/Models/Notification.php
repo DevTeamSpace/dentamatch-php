@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App\Models\Notification
@@ -17,19 +18,19 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon $updated_at
  * @property string|null $deleted_at
  * @property int $notification_type
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereJobListId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereNotificationData($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereNotificationType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereReceiverId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereSeen($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereSenderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Notification whereUpdatedAt($value)
+ * @method static Builder|Notification newModelQuery()
+ * @method static Builder|Notification newQuery()
+ * @method static Builder|Notification query()
+ * @method static Builder|Notification whereCreatedAt($value)
+ * @method static Builder|Notification whereDeletedAt($value)
+ * @method static Builder|Notification whereId($value)
+ * @method static Builder|Notification whereJobListId($value)
+ * @method static Builder|Notification whereNotificationData($value)
+ * @method static Builder|Notification whereNotificationType($value)
+ * @method static Builder|Notification whereReceiverId($value)
+ * @method static Builder|Notification whereSeen($value)
+ * @method static Builder|Notification whereSenderId($value)
+ * @method static Builder|Notification whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class Notification extends Model

@@ -6,7 +6,7 @@ use App\Enums\JobType;
 use App\Utils\NotificationUtils;
 use Illuminate\Console\Command;
 use App\Models\RecruiterJobs;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class InactiveJobCommand extends Command
 {
@@ -41,8 +41,6 @@ class InactiveJobCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {

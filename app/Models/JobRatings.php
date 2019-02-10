@@ -40,6 +40,6 @@ class JobRatings extends Model
 {
     protected $table = 'job_ratings';
     protected $primaryKey = 'id';
-    
-    protected $hidden       = ['created_at','updated_at'];
+
+    protected $hidden = ['created_at', 'updated_at'];
 }

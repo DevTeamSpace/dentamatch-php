@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 
 class Inspire extends Command
 {
@@ -24,8 +24,6 @@ class Inspire extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {

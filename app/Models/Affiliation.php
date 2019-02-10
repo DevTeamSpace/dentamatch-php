@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
@@ -45,15 +46,9 @@ class Affiliation extends Model
 
     public static function getAffiliationList()
     {
-        $affiliationModel = static::select('affiliations.id as affiliationId', 'affiliation_name as affiliationName',
-                                        'affiliations.is_active as isActive', 'affiliations.created_at as createdAt')
-                                ->where('affiliations.is_active', 1)->orderBy('affiliations.id')->get();
-
-        if($affiliationModel) {
-            $list = $affiliationModel->toArray();
-        }
-
-        return $list;
+        return static::select('affiliations.id as affiliationId', 'affiliation_name as affiliationName',
+            'affiliations.is_active as isActive', 'affiliations.created_at as createdAt')
+            ->where('affiliations.is_active', 1)->orderBy('affiliations.id')->get()->toArray();
     }
 
 }

@@ -18,34 +18,34 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $deleted_at
  * @property-read string|null $mapping_for
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TempJobDates newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TempJobDates newQuery()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\TempJobDates onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TempJobDates query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TempJobDates newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TempJobDates newQuery()
+ * @method static \Illuminate\Database\Query\Builder|TempJobDates onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|TempJobDates query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TempJobDates whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TempJobDates whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TempJobDates whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TempJobDates whereJobDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TempJobDates whereRecruiterJobId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TempJobDates whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\TempJobDates withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\TempJobDates withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|TempJobDates whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TempJobDates whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TempJobDates whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TempJobDates whereJobDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TempJobDates whereRecruiterJobId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TempJobDates whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|TempJobDates withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|TempJobDates withoutTrashed()
  * @mixin \Eloquent
  */
 class TempJobDates extends Model
-{   
+{
     use Eloquence, Mappable, SoftDeletes;
-    
+
     protected $table = 'temp_job_dates';
     protected $primaryKey = 'id';
-    
+
     protected $guarded = ['id'];
-    protected $maps          = [
+    protected $maps = [
         'recruiterJobId' => 'recruiter_job_id',
-        'jobDate' => 'job_date',
-        ];
-    protected $hidden       = ['created_at','updated_at'];
-    protected $fillable     = ['recruiterJobId','jobDate'];
-    protected $appends      = ['recruiterJobId','jobDate'];
+        'jobDate'        => 'job_date',
+    ];
+    protected $hidden = ['created_at', 'updated_at'];
+    protected $fillable = ['recruiterJobId', 'jobDate'];
+    protected $appends = ['recruiterJobId', 'jobDate'];
 }
