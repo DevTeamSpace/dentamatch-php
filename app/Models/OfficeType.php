@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\OfficeType
@@ -11,8 +12,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int $id
  * @property string $officetype_name
  * @property int $is_active
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @method static Builder|OfficeType newModelQuery()
  * @method static Builder|OfficeType newQuery()
  * @method static Builder|OfficeType query()
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\Builder;
 class OfficeType extends Model
 {
     protected $table = 'office_types';
-    protected $primaryKey = 'id';
+
     protected $fillable = ['officetype_name', 'is_acitve'];
 
     public static function allOfficeTypes()

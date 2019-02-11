@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\PreferredJobLocation
@@ -11,8 +12,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int $id
  * @property string $preferred_location_name
  * @property int|null $is_active
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property string|null $deleted_at
  * @method static Builder|PreferredJobLocation newModelQuery()
  * @method static Builder|PreferredJobLocation newQuery()
@@ -43,7 +44,7 @@ class PreferredJobLocation extends Model
      * @var array
      */
     protected $hidden = [
-        'created_at', 'updated_at', 'deleted_at'
+        'created_at', 'updated_at', 'deleted_at' // todo soft delete?
     ];
 
     public static function getAllPreferrefJobLocation()

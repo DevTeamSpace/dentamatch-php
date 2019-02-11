@@ -1,8 +1,12 @@
 <?php
 
 namespace App\Models;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Schooling
@@ -11,24 +15,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int|null $parent_id
  * @property string $school_name
  * @property int $is_active
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
+ * @property Schooling $parent
+ * @property Schooling[]|Collection $children
+ *
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|Schooling newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Schooling newQuery()
- * @method static \Illuminate\Database\Query\Builder|Schooling onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Schooling query()
+ * @method static Builder|Schooling newModelQuery()
+ * @method static Builder|Schooling newQuery()
+ * @method static QueryBuilder|Schooling onlyTrashed()
+ * @method static Builder|Schooling query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|Schooling whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Schooling whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Schooling whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Schooling whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Schooling whereParentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Schooling whereSchoolName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Schooling whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|Schooling withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Schooling withoutTrashed()
+ * @method static Builder|Schooling whereCreatedAt($value)
+ * @method static Builder|Schooling whereDeletedAt($value)
+ * @method static Builder|Schooling whereId($value)
+ * @method static Builder|Schooling whereIsActive($value)
+ * @method static Builder|Schooling whereParentId($value)
+ * @method static Builder|Schooling whereSchoolName($value)
+ * @method static Builder|Schooling whereUpdatedAt($value)
+ * @method static QueryBuilder|Schooling withTrashed()
+ * @method static QueryBuilder|Schooling withoutTrashed()
  * @mixin \Eloquent
  */
 class Schooling extends Model
@@ -36,7 +43,7 @@ class Schooling extends Model
     use SoftDeletes;
   
     protected $table  = 'schoolings';
-    protected $primaryKey = 'id';
+
     protected $dates = ['deleted_at'];
     /**
     * The attributes that should be hidden for arrays.
@@ -46,6 +53,16 @@ class Schooling extends Model
     protected $hidden = [
        'updated_at', 'deleted_at'
     ];
+
+    public function parent()
+    {
+        return $this->belongsTo(Schooling::class);
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Schooling::class, 'parent_id');
+    }
     
     public static function getScoolingList()
     {

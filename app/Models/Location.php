@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,26 +17,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $description
  * @property int $free_trial_period
  * @property int $is_active
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
  * @property-read string|null $mapping_for
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|Location newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Location newQuery()
- * @method static \Illuminate\Database\Query\Builder|Location onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Location query()
+ * @method static Builder|Location newModelQuery()
+ * @method static Builder|Location newQuery()
+ * @method static QueryBuilder|Location onlyTrashed()
+ * @method static Builder|Location query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|Location whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Location whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Location whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Location whereFreeTrialPeriod($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Location whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Location whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Location whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Location whereZipcode($value)
- * @method static \Illuminate\Database\Query\Builder|Location withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Location withoutTrashed()
+ * @method static Builder|Location whereCreatedAt($value)
+ * @method static Builder|Location whereDeletedAt($value)
+ * @method static Builder|Location whereDescription($value)
+ * @method static Builder|Location whereFreeTrialPeriod($value)
+ * @method static Builder|Location whereId($value)
+ * @method static Builder|Location whereIsActive($value)
+ * @method static Builder|Location whereUpdatedAt($value)
+ * @method static Builder|Location whereZipcode($value)
+ * @method static QueryBuilder|Location withTrashed()
+ * @method static QueryBuilder|Location withoutTrashed()
  * @mixin \Eloquent
  */
 class Location extends \Eloquent

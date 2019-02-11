@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,10 +17,12 @@ use Illuminate\Database\Eloquent\Builder;
  * @property string $payment_id
  * @property string $subscription_expiry_date
  * @property string $payment_response
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property string|null $trial_end
  * @property-read string|null $mapping_for
+ * @property-read User $recruiter
+ *
  * @method static Builder|SubscriptionPayments newModelQuery()
  * @method static Builder|SubscriptionPayments newQuery()
  * @method static Builder|SubscriptionPayments query()
@@ -52,4 +55,9 @@ class SubscriptionPayments extends Model
     protected $hidden = ['created_at', 'updated_at'];
     protected $fillable = ['recruiterId', 'expiryDate', 'paymentId', 'paymentResponse', 'trialEnd'];
     protected $appends = ['recruiterId', 'expiryDate', 'paymentId', 'paymentResponse', 'trialEnd'];
+
+    public function recruiter()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\JobSeekerSchooling
@@ -13,25 +16,28 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $schooling_id
  * @property string $other_schooling
  * @property string $year_of_graduation
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read User $seeker
+ * @property-read Schooling $schooling
+ *
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerSchooling newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerSchooling newQuery()
- * @method static \Illuminate\Database\Query\Builder|JobSeekerSchooling onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerSchooling query()
+ * @method static Builder|JobSeekerSchooling newModelQuery()
+ * @method static Builder|JobSeekerSchooling newQuery()
+ * @method static QueryBuilder|JobSeekerSchooling onlyTrashed()
+ * @method static Builder|JobSeekerSchooling query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerSchooling whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerSchooling whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerSchooling whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerSchooling whereOtherSchooling($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerSchooling whereSchoolingId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerSchooling whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerSchooling whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerSchooling whereYearOfGraduation($value)
- * @method static \Illuminate\Database\Query\Builder|JobSeekerSchooling withTrashed()
- * @method static \Illuminate\Database\Query\Builder|JobSeekerSchooling withoutTrashed()
+ * @method static Builder|JobSeekerSchooling whereCreatedAt($value)
+ * @method static Builder|JobSeekerSchooling whereDeletedAt($value)
+ * @method static Builder|JobSeekerSchooling whereId($value)
+ * @method static Builder|JobSeekerSchooling whereOtherSchooling($value)
+ * @method static Builder|JobSeekerSchooling whereSchoolingId($value)
+ * @method static Builder|JobSeekerSchooling whereUpdatedAt($value)
+ * @method static Builder|JobSeekerSchooling whereUserId($value)
+ * @method static Builder|JobSeekerSchooling whereYearOfGraduation($value)
+ * @method static QueryBuilder|JobSeekerSchooling withTrashed()
+ * @method static QueryBuilder|JobSeekerSchooling withoutTrashed()
  * @mixin \Eloquent
  */
 class JobSeekerSchooling extends Model
@@ -39,7 +45,7 @@ class JobSeekerSchooling extends Model
     use SoftDeletes;
 
     protected $table = 'jobseeker_schoolings';
-    protected $primaryKey = 'id';
+
     protected $dates = ['deleted_at'];
     /**
      * The attributes that should be hidden for arrays.
@@ -49,6 +55,16 @@ class JobSeekerSchooling extends Model
     protected $hidden = [
         'updated_at', 'deleted_at'
     ];
+
+    public function seeker()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function schooling()
+    {
+        return $this->belongsTo(Schooling::class);
+    }
 
     public static function getUserSchoolingList($userId)
     {

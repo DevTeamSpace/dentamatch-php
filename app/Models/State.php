@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,24 +15,25 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property string $state_name
  * @property int $is_active
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
  * @property-read string|null $mapping_for
+ *
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|State newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|State newQuery()
- * @method static \Illuminate\Database\Query\Builder|State onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|State query()
+ * @method static Builder|State newModelQuery()
+ * @method static Builder|State newQuery()
+ * @method static QueryBuilder|State onlyTrashed()
+ * @method static Builder|State query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|State whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|State whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|State whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|State whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|State whereStateName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|State whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|State withTrashed()
- * @method static \Illuminate\Database\Query\Builder|State withoutTrashed()
+ * @method static Builder|State whereCreatedAt($value)
+ * @method static Builder|State whereDeletedAt($value)
+ * @method static Builder|State whereId($value)
+ * @method static Builder|State whereIsActive($value)
+ * @method static Builder|State whereStateName($value)
+ * @method static Builder|State whereUpdatedAt($value)
+ * @method static QueryBuilder|State withTrashed()
+ * @method static QueryBuilder|State withoutTrashed()
  * @mixin \Eloquent
  */
 class State extends \Eloquent

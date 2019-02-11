@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
@@ -14,9 +15,12 @@ use Sofa\Eloquence\Mappable;
  * @property int $id
  * @property int $job_template_id
  * @property int $skill_id
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property-read string|null $mapping_for
+ * @property-read JobTemplates $template
+ * @property-read Skills $skill
+ *
  * @method static Builder|TemplateSkills newModelQuery()
  * @method static Builder|TemplateSkills newQuery()
  * @method static Builder|TemplateSkills query()
@@ -32,7 +36,6 @@ class TemplateSkills extends Model
     use Eloquence, Mappable;
 
     protected $table = 'template_skills';
-    protected $primaryKey = 'id';
 
     protected $guarded = ['id'];
     protected $maps = [
@@ -42,6 +45,16 @@ class TemplateSkills extends Model
     protected $hidden = ['created_at', 'updated_at'];
     protected $fillable = ['jobTemplateId', 'skillId'];
     protected $appends = ['jobTemplateId', 'skillId'];
+
+    public function template()
+    {
+        return $this->belongsTo(JobTemplates::class, 'job_template_id');
+    }
+
+    public function skill()
+    {
+        return $this->belongsTo(Skills::class);
+    }
 
     public static function getTemplateSkills($templateId)
     {

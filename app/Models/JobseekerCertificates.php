@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $deleted_at
  * @property User $user
  * @property Certifications $certificate
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|JobseekerCertificates newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|JobseekerCertificates newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|JobseekerCertificates query()

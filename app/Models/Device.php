@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Device
@@ -17,8 +18,10 @@ use Illuminate\Database\Eloquent\Builder;
  * @property string $device_os
  * @property string $application_version
  * @property string $device_token
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property User $user
+ *
  * @method static Builder|Device newModelQuery()
  * @method static Builder|Device newQuery()
  * @method static Builder|Device query()
@@ -37,14 +40,14 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class Device extends Model
 {
-
     const DEVICE_TYPE_IOS = "ios";
     const DEVICE_TYPE_ANDROID = "android";
-    protected $table = 'devices';
-    protected $primaryKey = 'id';
 
     protected $fillable = ['id', 'device_id', 'user_id', 'device_token', 'device_type', 'device_os', 'application_version', 'user_token'];
 
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 
     public static function unRegisterSingle($request)
     {
@@ -102,7 +105,7 @@ class Device extends Model
 
         return $deviceObj->join('users', 'users.id', '=', 'devices.user_id')
             ->where('users.is_active', 1)
-            ->select('devices.user_id', 'device_token', 'device_type')->distinct('device_token')->get();
+            ->select(['devices.user_id', 'device_token', 'device_type'])->get();
     }
 
 }

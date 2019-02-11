@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -35,10 +37,12 @@ use Illuminate\Support\Facades\DB;
  * @property string|null $sunday_start
  * @property string|null $sunday_end
  * @property string|null $office_location
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property string|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|RecruiterOfficeType[] $officeTypes
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property string|null $deleted_at todo soft deleting?
+ * @property-read Collection|RecruiterOfficeType[] $officeTypes
+ * @property-read User $recruiter
+ *
  * @method static Builder|RecruiterOffice newModelQuery()
  * @method static Builder|RecruiterOffice newQuery()
  * @method static Builder|RecruiterOffice query()
@@ -75,11 +79,16 @@ use Illuminate\Support\Facades\DB;
 class RecruiterOffice extends Model {
 
     protected $table = 'recruiter_offices';
-    protected $primaryKey = 'id';
+
     protected $fillable = ['user_id', 'address', 'zipcode', 'latitude', 'longitude', 'phone_no', 'office_info', 'work_everyday_start', 'work_everyday_end', 'monday_start', 'monday_end', 'tuesday_start', 'tuesday_end', 'wednesday_start', 'wednesday_end', 'thursday_start', 'thursday_end', 'friday_start', 'friday_end', 'saturday_start', 'saturday_end', 'sunday_start', 'sunday_end', 'office_location'];
 
     public function officeTypes() {
         return $this->hasMany(RecruiterOfficeType::class, 'recruiter_office_id');
+    }
+
+    public function recruiter()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public static function getAllRecruiterOffices($userId) {

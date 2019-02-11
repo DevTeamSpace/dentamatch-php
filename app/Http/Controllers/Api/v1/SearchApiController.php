@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Enums\JobAppliedStatus;
 use App\Enums\JobType;
+use App\Enums\SeekerVerifiedStatus;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -133,7 +134,7 @@ class SearchApiController extends Controller
                 $profileComplete = UserProfile::select('is_completed', 'is_job_seeker_verified', 'is_fulltime', 'is_parttime_monday', 'is_parttime_tuesday', 'is_parttime_wednesday', 'is_parttime_thursday', 'is_parttime_friday', 'is_parttime_saturday', 'is_parttime_sunday')->where('user_id', $userId)->first();
 
                 if ($profileComplete->is_completed == 1) {
-                    if ($profileComplete->is_job_seeker_verified != UserProfile::JOBSEEKER_VERIFY_APPROVED) {
+                    if ($profileComplete->is_job_seeker_verified != SeekerVerifiedStatus::APPROVED) {
                         return ApiResponse::customJsonResponse(0, 200, trans("messages.jobseeker_not_verified"));
                     }
 

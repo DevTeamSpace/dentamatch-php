@@ -4,8 +4,12 @@ namespace App\Models;
 
 use App\Enums\JobAppliedStatus;
 use App\Enums\JobType;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -26,42 +30,43 @@ use Illuminate\Support\Facades\DB;
  * @property int|null $is_saturday
  * @property int|null $is_sunday
  * @property int|null $is_published
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
  * @property int $pay_rate
  * @property JobTemplates $jobTemplate
  * @property RecruiterOffice $recruiterOffice
  * @property PreferredJobLocation $preferredLocation
- * @property JobLists $jobLists
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TempJobDates[] $tempJobActiveDates
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TempJobDates[] $tempJobDates
+ * @property-read Collection|TempJobDates[] $tempJobActiveDates
+ * @property-read Collection|TempJobDates[] $tempJobDates
+ * @property-read Collection|JobLists[] $applications
+ *
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs newQuery()
- * @method static \Illuminate\Database\Query\Builder|RecruiterJobs onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs query()
+ * @method static Builder|RecruiterJobs newModelQuery()
+ * @method static Builder|RecruiterJobs newQuery()
+ * @method static QueryBuilder|RecruiterJobs onlyTrashed()
+ * @method static Builder|RecruiterJobs query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs whereIsFriday($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs whereIsMonday($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs whereIsPublished($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs whereIsSaturday($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs whereIsSunday($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs whereIsThursday($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs whereIsTuesday($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs whereIsWednesday($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs whereJobTemplateId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs whereJobType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs whereNoOfJobs($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs wherePayRate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs wherePreferredJobLocationId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs whereRecruiterOfficeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|RecruiterJobs whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|RecruiterJobs withTrashed()
- * @method static \Illuminate\Database\Query\Builder|RecruiterJobs withoutTrashed()
+ * @method static Builder|RecruiterJobs whereCreatedAt($value)
+ * @method static Builder|RecruiterJobs whereDeletedAt($value)
+ * @method static Builder|RecruiterJobs whereId($value)
+ * @method static Builder|RecruiterJobs whereIsFriday($value)
+ * @method static Builder|RecruiterJobs whereIsMonday($value)
+ * @method static Builder|RecruiterJobs whereIsPublished($value)
+ * @method static Builder|RecruiterJobs whereIsSaturday($value)
+ * @method static Builder|RecruiterJobs whereIsSunday($value)
+ * @method static Builder|RecruiterJobs whereIsThursday($value)
+ * @method static Builder|RecruiterJobs whereIsTuesday($value)
+ * @method static Builder|RecruiterJobs whereIsWednesday($value)
+ * @method static Builder|RecruiterJobs whereJobTemplateId($value)
+ * @method static Builder|RecruiterJobs whereJobType($value)
+ * @method static Builder|RecruiterJobs whereNoOfJobs($value)
+ * @method static Builder|RecruiterJobs wherePayRate($value)
+ * @method static Builder|RecruiterJobs wherePreferredJobLocationId($value)
+ * @method static Builder|RecruiterJobs whereRecruiterOfficeId($value)
+ * @method static Builder|RecruiterJobs whereUpdatedAt($value)
+ * @method static QueryBuilder|RecruiterJobs withTrashed()
+ * @method static QueryBuilder|RecruiterJobs withoutTrashed()
  * @mixin \Eloquent
  */
 class RecruiterJobs extends Model
@@ -96,7 +101,7 @@ class RecruiterJobs extends Model
 
     public function tempJobActiveDates()
     {
-        return $this->hasMany(TempJobDates::class, 'recruiter_job_id')->select('job_date');
+        return $this->hasMany(TempJobDates::class, 'recruiter_job_id')->select('job_date'); // todo replace with 🠙🠙🠙
     }
 
     public function jobTemplate()
@@ -114,7 +119,7 @@ class RecruiterJobs extends Model
         return $this->belongsTo(PreferredJobLocation::class);
     }
 
-    public function jobLists()
+    public function applications()
     {
         return $this->hasMany(JobLists::class, 'recruiter_job_id');
     }

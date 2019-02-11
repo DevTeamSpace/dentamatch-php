@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -13,24 +16,27 @@ use Illuminate\Support\Facades\DB;
  * @property int $recruiter_job_id
  * @property int|null $temp_job_id
  * @property int $seeker_id
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property string|null $deleted_at
+ * @property-read User $seeker
+ * @property-read RecruiterJobs $job
+ *
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|SavedJobs newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|SavedJobs newQuery()
- * @method static \Illuminate\Database\Query\Builder|SavedJobs onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|SavedJobs query()
+ * @method static Builder|SavedJobs newModelQuery()
+ * @method static Builder|SavedJobs newQuery()
+ * @method static QueryBuilder|SavedJobs onlyTrashed()
+ * @method static Builder|SavedJobs query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|SavedJobs whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SavedJobs whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SavedJobs whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SavedJobs whereRecruiterJobId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SavedJobs whereSeekerId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SavedJobs whereTempJobId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SavedJobs whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|SavedJobs withTrashed()
- * @method static \Illuminate\Database\Query\Builder|SavedJobs withoutTrashed()
+ * @method static Builder|SavedJobs whereCreatedAt($value)
+ * @method static Builder|SavedJobs whereDeletedAt($value)
+ * @method static Builder|SavedJobs whereId($value)
+ * @method static Builder|SavedJobs whereRecruiterJobId($value)
+ * @method static Builder|SavedJobs whereSeekerId($value)
+ * @method static Builder|SavedJobs whereTempJobId($value)
+ * @method static Builder|SavedJobs whereUpdatedAt($value)
+ * @method static QueryBuilder|SavedJobs withTrashed()
+ * @method static QueryBuilder|SavedJobs withoutTrashed()
  * @mixin \Eloquent
  */
 class SavedJobs extends Model
@@ -38,7 +44,6 @@ class SavedJobs extends Model
     use SoftDeletes;
 
     protected $table = 'saved_jobs';
-    protected $primaryKey = 'id';
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -49,6 +54,16 @@ class SavedJobs extends Model
     ];
 
     const LIMIT = 10;
+
+    public function job()
+    {
+        return $this->belongsTo(RecruiterJobs::class, 'recruiter_job_id');
+    }
+
+    public function seeker()
+    {
+        return $this->belongsTo(User::class, 'seeker_id');
+    }
 
     public static function listSavedJobs($reqData)
     {

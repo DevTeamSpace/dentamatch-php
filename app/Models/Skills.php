@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Skills
@@ -12,10 +14,11 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int|null $parent_id
  * @property string $skill_name
  * @property int $is_active
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|Skills[] $children
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Collection|Skills[] $children
  * @property-read Skills|null $parent
+ *
  * @method static Builder|Skills newModelQuery()
  * @method static Builder|Skills newQuery()
  * @method static Builder|Skills query()
@@ -43,12 +46,12 @@ class Skills extends Model
 
     public function parent()
     {
-        return $this->belongsTo(Skills::class, 'parent_id')->where('parent_id', null)->where('is_active', 1);
+        return $this->belongsTo(Skills::class, 'parent_id')->whereNull('parent_id')->where('is_active', 1);
     }
 
     public function children()
     {
-        return $this->hasMany(Skills::class, 'parent_id')->where('is_active', 1)->where('parent_id', '<>', null);
+        return $this->hasMany(Skills::class, 'parent_id')->where('is_active', 1)->whereNotNull('parent_id');
     }
 
     public static function getAllParentChildSkillList($templateId = '')

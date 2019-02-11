@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Enums\JobAppliedStatus;
 use App\Enums\JobType;
+use App\Enums\SeekerVerifiedStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -38,11 +40,15 @@ use Illuminate\Support\Facades\DB;
  * @property int $is_parttime_saturday
  * @property int $is_parttime_sunday
  * @property int $signup_source 1=>App, 2=>Web
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property string|null $preferred_city
  * @property string|null $preferred_state
  * @property string|null $preferred_country
+ * @property User $user
+ * @property PreferredJobLocation $preferredLocation
+ * @property JobTitles $jobTitle
+ *
  * @method static Builder|JobSeekerProfiles newModelQuery()
  * @method static Builder|JobSeekerProfiles newQuery()
  * @method static Builder|JobSeekerProfiles query()
@@ -81,12 +87,25 @@ use Illuminate\Support\Facades\DB;
  */
 class JobSeekerProfiles extends Model
 {
-    
     protected $table = 'jobseeker_profiles';
-    protected $primaryKey = 'id';
-    
+
     const LIMIT = 10;
     const DISTANCE = 10;
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function jobTitle()
+    {
+        return $this->belongsTo(JobTitles::class, 'job_titile_id');
+    }
+
+    public function preferredLocation()
+    {
+        return $this->belongsTo(PreferredJobLocation::class, 'preferred_job_location_id');
+    }
 
     public static function getJobSeekerProfiles($job,$reqData){
         $obj = JobSeekerProfiles::join('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id');
@@ -167,7 +186,7 @@ class JobSeekerProfiles extends Model
                 ->where('job_lists.recruiter_job_id',$job['id']);
         })
         ->whereNull('job_lists.applied_status')
-        ->where('jobseeker_profiles.is_job_seeker_verified',1)
+        ->where('jobseeker_profiles.is_job_seeker_verified', SeekerVerifiedStatus::APPROVED)
         ->addSelect('job_lists.applied_status as job_status')
         ->addSelect('favourites.seeker_id as is_favourite')
         ->addSelect(DB::raw("avg(punctuality) as punctuality"),DB::raw("avg(time_management) as time_management"),

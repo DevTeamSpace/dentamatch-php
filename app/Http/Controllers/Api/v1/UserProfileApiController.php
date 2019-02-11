@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Enums\SeekerVerifiedStatus;
 use App\Http\Controllers\Controller;
 use App\Mail\AdminVerifyJobseeker;
 use App\Mail\PendingEmailVerification;
@@ -367,7 +368,7 @@ class UserProfileApiController extends Controller
                     $isJobSeekerVerified = 0;
                 }
 
-                if ($userProfile->is_job_seeker_verified != 1 && $userProfile->job_titile_id != $jobTitleModel->id) {
+                if ($userProfile->is_job_seeker_verified != SeekerVerifiedStatus::APPROVED && $userProfile->job_titile_id != $jobTitleModel->id) {
                     $mappedSkillsArray = ($jobTitleModel->mapped_skills_id == '') ? [] : explode(",", $jobTitleModel->mapped_skills_id);
                     if (!empty($mappedSkillsArray)) {
                         JobSeekerSkills::where('user_id', $userId)->forceDelete();

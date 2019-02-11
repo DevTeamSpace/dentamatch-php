@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\SearchFilter
@@ -12,24 +15,25 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $user_id
  * @property string|null $search_filter
  * @property string|null $city
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
+ *
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|SearchFilter newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|SearchFilter newQuery()
- * @method static \Illuminate\Database\Query\Builder|SearchFilter onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|SearchFilter query()
+ * @method static Builder|SearchFilter newModelQuery()
+ * @method static Builder|SearchFilter newQuery()
+ * @method static QueryBuilder|SearchFilter onlyTrashed()
+ * @method static Builder|SearchFilter query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|SearchFilter whereCity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SearchFilter whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SearchFilter whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SearchFilter whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SearchFilter whereSearchFilter($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SearchFilter whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SearchFilter whereUserId($value)
- * @method static \Illuminate\Database\Query\Builder|SearchFilter withTrashed()
- * @method static \Illuminate\Database\Query\Builder|SearchFilter withoutTrashed()
+ * @method static Builder|SearchFilter whereCity($value)
+ * @method static Builder|SearchFilter whereCreatedAt($value)
+ * @method static Builder|SearchFilter whereDeletedAt($value)
+ * @method static Builder|SearchFilter whereId($value)
+ * @method static Builder|SearchFilter whereSearchFilter($value)
+ * @method static Builder|SearchFilter whereUpdatedAt($value)
+ * @method static Builder|SearchFilter whereUserId($value)
+ * @method static QueryBuilder|SearchFilter withTrashed()
+ * @method static QueryBuilder|SearchFilter withoutTrashed()
  * @mixin \Eloquent
  */
 class SearchFilter extends Model

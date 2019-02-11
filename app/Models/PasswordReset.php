@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\PasswordReset
@@ -10,10 +11,10 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int|null $user_id
  * @property string $email
  * @property string $token
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \App\Models\User $user
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read User $user
  * @method static Builder|PasswordReset newModelQuery()
  * @method static Builder|PasswordReset newQuery()
  * @method static Builder|PasswordReset query()
@@ -44,7 +45,7 @@ class PasswordReset extends \Eloquent
 
     public function user()
     {
-        return $this->hasOne('App\Models\User', 'id');
+        return $this->hasOne(User::class, 'id');
     }
 
     public static function getLatestUserTokenDetails($token)

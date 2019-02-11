@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Notification
@@ -11,13 +12,16 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int $id
  * @property int|null $sender_id
  * @property int $receiver_id
- * @property int|null $job_list_id
+ * @property int|null $job_list_id  todo which table?
  * @property string $notification_data
  * @property int $seen
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property string|null $deleted_at
  * @property int $notification_type
+ * @property-read User $sender
+ * @property-read User $receiver
+ *
  * @method static Builder|Notification newModelQuery()
  * @method static Builder|Notification newQuery()
  * @method static Builder|Notification query()
@@ -37,8 +41,8 @@ class Notification extends Model
 {
 
     protected $table = 'notification_logs';
-    protected $primaryKey = 'id';
-    protected $hidden = ['updated_at', 'deleted_at'];
+
+    protected $hidden = ['updated_at', 'deleted_at']; // todo soft delete?
 
     protected $fillable = ['sender_id', 'receiver_id', 'job_list_id', 'notification_data', 'notification_type'];
 
@@ -59,6 +63,16 @@ class Notification extends Model
     const JOBSEEKERCANCELLED = 13;
     const REJECTED = 14;
     const LICENSEACCEPTREJECT = 15;
+
+    public function sender()
+    {
+        return $this->belongsTo(User::class, 'sender_id');
+    }
+
+    public function receiver()
+    {
+        return $this->belongsTo(User::class, 'receiver_id');
+    }
 
     public static function userNotificationList($reqData)
     {

@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use App\Enums\JobAppliedStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Sofa\Eloquence\Eloquence;
@@ -17,25 +20,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $jobseeker_id
  * @property int $job_id
  * @property string $job_date
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property string|null $deleted_at
  * @property-read string|null $mapping_for
+ * @property-read User $seeker
+ *
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|JobseekerTempHired newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|JobseekerTempHired newQuery()
- * @method static \Illuminate\Database\Query\Builder|JobseekerTempHired onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|JobseekerTempHired query()
+ * @method static Builder|JobseekerTempHired newModelQuery()
+ * @method static Builder|JobseekerTempHired newQuery()
+ * @method static QueryBuilder|JobseekerTempHired onlyTrashed()
+ * @method static Builder|JobseekerTempHired query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|JobseekerTempHired whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobseekerTempHired whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobseekerTempHired whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobseekerTempHired whereJobDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobseekerTempHired whereJobId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobseekerTempHired whereJobseekerId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobseekerTempHired whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|JobseekerTempHired withTrashed()
- * @method static \Illuminate\Database\Query\Builder|JobseekerTempHired withoutTrashed()
+ * @method static Builder|JobseekerTempHired whereCreatedAt($value)
+ * @method static Builder|JobseekerTempHired whereDeletedAt($value)
+ * @method static Builder|JobseekerTempHired whereId($value)
+ * @method static Builder|JobseekerTempHired whereJobDate($value)
+ * @method static Builder|JobseekerTempHired whereJobId($value)
+ * @method static Builder|JobseekerTempHired whereJobseekerId($value)
+ * @method static Builder|JobseekerTempHired whereUpdatedAt($value)
+ * @method static QueryBuilder|JobseekerTempHired withTrashed()
+ * @method static QueryBuilder|JobseekerTempHired withoutTrashed()
  * @mixin \Eloquent
  */
 class JobseekerTempHired extends Model
@@ -44,8 +49,13 @@ class JobseekerTempHired extends Model
         Mappable;
 
     protected $table = 'jobseeker_temp_hired';
-    protected $primaryKey = 'id';
+
     protected $hidden = ['created_at', 'updated_at'];
+
+    public function seeker()
+    {
+        return $this->belongsTo(User::class, 'jobseeker_id');
+    }
 
     public static function getTempJobSeekerList($job, $forJobType = '')
     {

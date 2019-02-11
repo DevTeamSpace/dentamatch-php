@@ -3,8 +3,11 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon as IlluminateCarbon;
 use Log;
 
 /**
@@ -13,23 +16,25 @@ use Log;
  * @property int $id
  * @property int $user_id
  * @property string $temp_job_date
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property IlluminateCarbon $created_at
+ * @property IlluminateCarbon $updated_at
+ * @property IlluminateCarbon|null $deleted_at
+ * @property-read User $seeker
+ *
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerTempAvailability newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerTempAvailability newQuery()
- * @method static \Illuminate\Database\Query\Builder|JobSeekerTempAvailability onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerTempAvailability query()
+ * @method static Builder|JobSeekerTempAvailability newModelQuery()
+ * @method static Builder|JobSeekerTempAvailability newQuery()
+ * @method static QueryBuilder|JobSeekerTempAvailability onlyTrashed()
+ * @method static Builder|JobSeekerTempAvailability query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerTempAvailability whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerTempAvailability whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerTempAvailability whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerTempAvailability whereTempJobDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerTempAvailability whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobSeekerTempAvailability whereUserId($value)
- * @method static \Illuminate\Database\Query\Builder|JobSeekerTempAvailability withTrashed()
- * @method static \Illuminate\Database\Query\Builder|JobSeekerTempAvailability withoutTrashed()
+ * @method static Builder|JobSeekerTempAvailability whereCreatedAt($value)
+ * @method static Builder|JobSeekerTempAvailability whereDeletedAt($value)
+ * @method static Builder|JobSeekerTempAvailability whereId($value)
+ * @method static Builder|JobSeekerTempAvailability whereTempJobDate($value)
+ * @method static Builder|JobSeekerTempAvailability whereUpdatedAt($value)
+ * @method static Builder|JobSeekerTempAvailability whereUserId($value)
+ * @method static QueryBuilder|JobSeekerTempAvailability withTrashed()
+ * @method static QueryBuilder|JobSeekerTempAvailability withoutTrashed()
  * @mixin \Eloquent
  */
 class JobSeekerTempAvailability extends Model
@@ -37,7 +42,7 @@ class JobSeekerTempAvailability extends Model
     use SoftDeletes;
 
     protected $table = 'jobseeker_temp_availability';
-    protected $primaryKey = 'id';
+
     protected $dates = ['deleted_at'];
     /**
      * The attributes that should be hidden for arrays.
@@ -47,6 +52,11 @@ class JobSeekerTempAvailability extends Model
     protected $hidden = [
         'updated_at', 'deleted_at', 'created_at'
     ];
+
+    public function seeker()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public static function addTempDateAvailability($userId, $currentDate, $endDate)
     {

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\UserChat
@@ -13,8 +14,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $to_id
  * @property string $message
  * @property int $read_status
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read User $from
+ * @property-read User $to
  * @method static Builder|UserChat newModelQuery()
  * @method static Builder|UserChat newQuery()
  * @method static Builder|UserChat query()
@@ -42,6 +45,16 @@ class UserChat extends Model
         'createdAt'  => 'created_at',
         'updatedAt'  => 'updated_at',
     ];
+
+    public function from()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function to()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public static function getChatCountsForRecruiter($recruiterId)
     {

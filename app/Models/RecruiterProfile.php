@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -20,8 +21,10 @@ use Illuminate\Support\Facades\Auth;
  * @property string|null $validity
  * @property string|null $office_name
  * @property string|null $office_desc
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read User $recruiter
+ *
  * @method static Builder|RecruiterProfile newModelQuery()
  * @method static Builder|RecruiterProfile newQuery()
  * @method static Builder|RecruiterProfile query()
@@ -43,8 +46,13 @@ use Illuminate\Support\Facades\Auth;
 class RecruiterProfile extends Model
 {
     protected $table = 'recruiter_profiles';
-    protected $primaryKey = 'id';
+
     protected $fillable = ['user_id', 'is_subscribed', 'accept_term', 'free_period', 'auto_renewal', 'validity', 'office_name', 'office_desc'];
+
+    public function recruiter()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public static function updateOfficeDetail($request)
     {

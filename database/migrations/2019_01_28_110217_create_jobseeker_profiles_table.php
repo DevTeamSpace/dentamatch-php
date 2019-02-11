@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\SignupSource;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -39,7 +40,7 @@ class CreateJobseekerProfilesTable extends Migration {
 			$table->boolean('is_parttime_friday')->default(0);
 			$table->boolean('is_parttime_saturday')->default(0);
 			$table->boolean('is_parttime_sunday')->default(0);
-			$table->tinyInteger('signup_source')->default(1)->comment('1=>App, 2=>Web');
+			$table->tinyInteger('signup_source')->default(SignupSource::APP)->comment('1=>App, 2=>Web');
             $table->dateTime('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->dateTime('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
 			$table->string('preferred_city')->nullable();

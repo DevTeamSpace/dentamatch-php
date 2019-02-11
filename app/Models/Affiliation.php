@@ -46,8 +46,8 @@ class Affiliation extends Model
 
     public static function getAffiliationList()
     {
-        return static::select('affiliations.id as affiliationId', 'affiliation_name as affiliationName',
-            'affiliations.is_active as isActive', 'affiliations.created_at as createdAt')
+        return static::select(['affiliations.id as affiliationId', 'affiliation_name as affiliationName',
+                               'affiliations.is_active as isActive', 'affiliations.created_at as createdAt'])
             ->where('affiliations.is_active', 1)->orderBy('affiliations.id')->get()->toArray();
     }
 

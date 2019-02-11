@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -13,9 +14,12 @@ use Illuminate\Support\Facades\DB;
  * @property int $user_id
  * @property int $skill_id
  * @property string $other_skill
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property string|null $deleted_at
+ * @property-read User $seeker
+ * @property-read Skills $skill
+ *
  * @method static Builder|JobSeekerSkills newModelQuery()
  * @method static Builder|JobSeekerSkills newQuery()
  * @method static Builder|JobSeekerSkills query()
@@ -34,9 +38,18 @@ class JobSeekerSkills extends Model
     const INACTIVE = 0;
 
     protected $table = 'jobseeker_skills';
-    protected $primaryKey = 'id';
 
-    protected $hidden = ['deleted_at', 'created_at', 'updated_at'];
+    protected $hidden = ['deleted_at', 'created_at', 'updated_at']; // todo check deleting - soft or ... ?
+
+    public function seeker()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function skill()
+    {
+        return $this->belongsTo(Skills::class);
+    }
 
     public static function getJobSeekerSkills($userId)
     {

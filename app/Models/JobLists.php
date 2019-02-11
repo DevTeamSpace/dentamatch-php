@@ -4,8 +4,12 @@ namespace App\Models;
 
 use App\Enums\JobAppliedStatus;
 use App\Enums\JobType;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -18,27 +22,30 @@ use Illuminate\Support\Facades\DB;
  * @property int $seeker_id
  * @property int $applied_status '1'=>Invited,'2'=>Applied,'3'=>Shortlisted,'4'=>Hired,'5'=>Canceled
  * @property string|null $cancel_reason
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property string|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TempJobDates[] $tempJobDates
+ * @property-read RecruiterJobs $job
+ * @property-read User $seeker
+ * @property-read Collection|TempJobDates[] $tempJobDates
+ *
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|JobLists newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|JobLists newQuery()
- * @method static \Illuminate\Database\Query\Builder|JobLists onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|JobLists query()
+ * @method static Builder|JobLists newModelQuery()
+ * @method static Builder|JobLists newQuery()
+ * @method static QueryBuilder|JobLists onlyTrashed()
+ * @method static Builder|JobLists query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|JobLists whereAppliedStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobLists whereCancelReason($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobLists whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobLists whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobLists whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobLists whereRecruiterJobId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobLists whereSeekerId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobLists whereTempJobId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobLists whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|JobLists withTrashed()
- * @method static \Illuminate\Database\Query\Builder|JobLists withoutTrashed()
+ * @method static Builder|JobLists whereAppliedStatus($value)
+ * @method static Builder|JobLists whereCancelReason($value)
+ * @method static Builder|JobLists whereCreatedAt($value)
+ * @method static Builder|JobLists whereDeletedAt($value)
+ * @method static Builder|JobLists whereId($value)
+ * @method static Builder|JobLists whereRecruiterJobId($value)
+ * @method static Builder|JobLists whereSeekerId($value)
+ * @method static Builder|JobLists whereTempJobId($value)
+ * @method static Builder|JobLists whereUpdatedAt($value)
+ * @method static QueryBuilder|JobLists withTrashed()
+ * @method static QueryBuilder|JobLists withoutTrashed()
  * @mixin \Eloquent
  */
 class JobLists extends Model
@@ -48,8 +55,17 @@ class JobLists extends Model
     const LIMIT = 10;
 
     protected $table = 'job_lists';
-    protected $primaryKey = 'id';
     protected $fillable = ['recruiter_job_id', 'temp_job_id', 'seeker_id', 'applied_status', 'cancel_reason'];
+
+    public function job()
+    {
+        return $this->belongsTo(RecruiterJobs::class, 'recruiter_job_id');
+    }
+
+    public function seeker()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function tempJobDates()
     {

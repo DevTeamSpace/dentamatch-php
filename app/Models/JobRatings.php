@@ -20,6 +20,9 @@ use Illuminate\Support\Carbon;
  * @property int $onemore
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read RecruiterJobs $job
+ * @property-read User $seeker
+ *
  * @method static Builder|JobRatings newModelQuery()
  * @method static Builder|JobRatings newQuery()
  * @method static Builder|JobRatings query()
@@ -42,4 +45,14 @@ class JobRatings extends Model
     protected $primaryKey = 'id';
 
     protected $hidden = ['created_at', 'updated_at'];
+
+    public function job()
+    {
+        return $this->belongsTo(RecruiterJobs::class, 'recruiter_job_id');
+    }
+
+    public function seeker()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

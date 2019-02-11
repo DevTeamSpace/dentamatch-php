@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\ApiResponse;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\UserProfile
@@ -35,12 +36,12 @@ use App\Helpers\ApiResponse;
  * @property int $is_parttime_saturday
  * @property int $is_parttime_sunday
  * @property int $signup_source 1=>App, 2=>Web
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property string|null $preferred_city
  * @property string|null $preferred_state
  * @property string|null $preferred_country
- * @property-read \App\Models\User $user
+ * @property-read User $user
  * @method static Builder|UserProfile newModelQuery()
  * @method static Builder|UserProfile newQuery()
  * @method static Builder|UserProfile query()
@@ -76,14 +77,11 @@ use App\Helpers\ApiResponse;
  * @method static Builder|UserProfile whereUserId($value)
  * @method static Builder|UserProfile whereZipcode($value)
  * @mixin \Eloquent
+ * todo why this and JobSeeker profile?
  */
 class UserProfile extends Model
 {
     protected $table = 'jobseeker_profiles';
-    protected $primaryKey = 'id';
-    const JOBSEEKER_VERIFY_DEFAULT = 0;
-    const JOBSEEKER_VERIFY_APPROVED = 1;
-    const JOBSEEKER_VERIFY_REJECT = 2;
 
     protected $fillable = [
         'user_id', 'first_name', 'last_name', 'preferred_job_location_id', 'preferred_location_name',
@@ -99,7 +97,6 @@ class UserProfile extends Model
     public static function getUserProfile($userId)
     {
         $return = [];
-
 
         $userModel = static::select('jobseeker_profiles.id',
             'jobseeker_profiles.user_id',

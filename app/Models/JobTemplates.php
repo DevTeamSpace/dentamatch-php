@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,28 +19,30 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $job_title_id
  * @property string $template_name
  * @property string $template_desc
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
  * @property-read string|null $mapping_for
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateSkills[] $templateSkills
+ * @property-read Collection|TemplateSkills[] $templateSkills
  * @property JobTitles $jobTitle
+ * @property-read User $recruiter
+ *
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|JobTemplates newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|JobTemplates newQuery()
- * @method static \Illuminate\Database\Query\Builder|JobTemplates onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|JobTemplates query()
+ * @method static Builder|JobTemplates newModelQuery()
+ * @method static Builder|JobTemplates newQuery()
+ * @method static QueryBuilder|JobTemplates onlyTrashed()
+ * @method static Builder|JobTemplates query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|JobTemplates whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobTemplates whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobTemplates whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobTemplates whereJobTitleId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobTemplates whereTemplateDesc($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobTemplates whereTemplateName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobTemplates whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|JobTemplates whereUserId($value)
- * @method static \Illuminate\Database\Query\Builder|JobTemplates withTrashed()
- * @method static \Illuminate\Database\Query\Builder|JobTemplates withoutTrashed()
+ * @method static Builder|JobTemplates whereCreatedAt($value)
+ * @method static Builder|JobTemplates whereDeletedAt($value)
+ * @method static Builder|JobTemplates whereId($value)
+ * @method static Builder|JobTemplates whereJobTitleId($value)
+ * @method static Builder|JobTemplates whereTemplateDesc($value)
+ * @method static Builder|JobTemplates whereTemplateName($value)
+ * @method static Builder|JobTemplates whereUpdatedAt($value)
+ * @method static Builder|JobTemplates whereUserId($value)
+ * @method static QueryBuilder|JobTemplates withTrashed()
+ * @method static QueryBuilder|JobTemplates withoutTrashed()
  * @mixin \Eloquent
  */
 class JobTemplates extends Model
@@ -57,6 +63,11 @@ class JobTemplates extends Model
     protected $fillable = ['userId', 'templateName', 'templateDesc'];
 
     protected $dates = ['deleted_at'];
+
+    public function recruiter()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     /**
      * Get the skills for the template

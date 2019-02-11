@@ -163,7 +163,7 @@ class UserApiController extends Controller
                 if ($userData['group_id'] == UserGroup::JOBSEEKER) {
                     if ($userData['is_verified'] == 0) {
                         $response = ApiResponse::customJsonResponse(0, 202, trans("messages.user_registration_successful_old"));
-                    } else if ($userData['is_verified'] == UserProfile::JOBSEEKER_VERIFY_APPROVED && $userData['is_active'] == 1) {
+                    } else if ($userData['is_verified'] == 1 && $userData['is_active'] == 1) {
                         $device = Device::where('user_id', $userId)->orWhere('device_id', $reqData['deviceId'])->first();
                         $reqData['deviceOs'] = isset($reqData['deviceOs']) ? $reqData['deviceOs'] : '';
                         $reqData['appVersion'] = isset($reqData['appVersion']) ? $reqData['appVersion'] : '';
@@ -259,9 +259,9 @@ class UserApiController extends Controller
     {
         $is_verified = 0;
         $profile_details = UserProfile::where('verification_code', $confirmation_code)->first();
-        if (is_object($profile_details) && $profile_details->is_verified == UserProfile::JOBSEEKER_VERIFY_DEFAULT) {
+        if (is_object($profile_details) && $profile_details->is_verified == 0) {
             $update_profile = UserProfile::find($profile_details->id);
-            $update_profile->is_verified = UserProfile::JOBSEEKER_VERIFY_APPROVED;
+            $update_profile->is_verified = 1; // todo does it really work or used?
             $update_profile->save();
             $is_verified = 1;
         }
@@ -291,10 +291,10 @@ class UserApiController extends Controller
                     'users.is_verified'
                 )
                 ->where('users.email', $reqData['email'])
-                ->where('user_groups.group_id', 3)
+                ->where('user_groups.group_id', UserGroup::JOBSEEKER)
                 ->first();
             if ($user) {
-                if ($user->is_verified == UserProfile::JOBSEEKER_VERIFY_APPROVED) {
+                if ($user->is_verified == 1) {
                     PasswordReset::where('user_id', $user->id)->where('email', $user->email)->delete();
                     $token = \Illuminate\Support\Facades\Crypt::encrypt($user->email . time());
                     $passwordModel = PasswordReset::firstOrNew(['user_id' => $user->id, 'email' => $user->email]);

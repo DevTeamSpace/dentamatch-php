@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
 use Illuminate\Database\Eloquent\Model;
@@ -13,32 +16,33 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property int $recruiter_id
  * @property int $seeker_id
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
  * @property-read string|null $mapping_for
+ * @property-read User $recruiter
+ * @property-read User $seeker
+ *
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|Favourite newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Favourite newQuery()
- * @method static \Illuminate\Database\Query\Builder|Favourite onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Favourite query()
+ * @method static Builder|Favourite newModelQuery()
+ * @method static Builder|Favourite newQuery()
+ * @method static QueryBuilder|Favourite onlyTrashed()
+ * @method static Builder|Favourite query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|Favourite whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Favourite whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Favourite whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Favourite whereRecruiterId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Favourite whereSeekerId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Favourite whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|Favourite withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Favourite withoutTrashed()
+ * @method static Builder|Favourite whereCreatedAt($value)
+ * @method static Builder|Favourite whereDeletedAt($value)
+ * @method static Builder|Favourite whereId($value)
+ * @method static Builder|Favourite whereRecruiterId($value)
+ * @method static Builder|Favourite whereSeekerId($value)
+ * @method static Builder|Favourite whereUpdatedAt($value)
+ * @method static QueryBuilder|Favourite withTrashed()
+ * @method static QueryBuilder|Favourite withoutTrashed()
  * @mixin \Eloquent
  */
 class Favourite extends Model
 {
     use Eloquence, Mappable;
     use SoftDeletes;
-    protected $table = 'favourites';
-    protected $primaryKey = 'id';
 
     protected $maps = [
         'recruiterId'     => 'message_to',
@@ -49,5 +53,15 @@ class Favourite extends Model
     protected $fillable = [];
     protected $appends = ['recruiterId', 'seekerId'];
     protected $dates = ['deleted_at'];
+
+    public function recruiter()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function seeker()
+    {
+        return $this->belongsTo(User::class);
+    }
 
 }

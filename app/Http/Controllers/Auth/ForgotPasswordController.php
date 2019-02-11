@@ -37,7 +37,7 @@ class ForgotPasswordController extends Controller
     {
         $this->validate($request, ['email' => 'required|email']);
 
-        $valid = User::validateRecuriterEmail($request->only('email'));
+        $valid = User::validateRecruiterEmail($request->only('email'));
         if ($valid != 1) {
             $response = Password::INVALID_USER;
         } else {

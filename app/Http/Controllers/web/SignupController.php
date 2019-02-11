@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\web;
 
+use App\Enums\SignupSource;
 use App\Mail\AdminVerifyJobseeker;
 use App\Mail\UserActivation;
 use App\Models\User;
@@ -270,7 +271,7 @@ class SignupController extends Controller
                 $userProfileModel->profile_pic = config('constants.defaultProfileImage');
                 $userProfileModel->is_completed = $isComplete;
                 $userProfileModel->is_job_seeker_verified = $isComplete;
-                $userProfileModel->signup_source = 2;
+                $userProfileModel->signup_source = SignupSource::WEB;
 
                 $userProfileModel->save();
 
@@ -346,7 +347,7 @@ class SignupController extends Controller
                     $msg = "Hi " . $userProfileModel['first_name'] . " , <br />Your account is ready for you! Please login with the DentaMatch app.";
                     Session::flash('message', $msg);
                     $redirect = 'success-active';
-                    if ($userProfileModel['signup_source'] == 2) {
+                    if ($userProfileModel['signup_source'] == SignupSource::WEB) {
                         $token = \Illuminate\Support\Facades\Crypt::encrypt($user->email . time());
                         $passwordModel = PasswordReset::firstOrNew(['user_id' => $user->id, 'email' => $user->email]);
                         $passwordModel->fill(['token' => $token]);
