@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\UserGroup;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,7 +27,7 @@ class Authenticate
         }
         $user = Auth::user();
         
-        if(isset($user) && $user->userGroup->group_id==1){
+        if(isset($user) && $user->userGroup->group_id == UserGroup::ADMIN){
             return redirect("home");
         }else{
             return $next($request);

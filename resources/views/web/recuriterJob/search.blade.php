@@ -30,9 +30,9 @@
             <div class="col-sm-3 mr-b-5">
               <label class="fnt-16 nopadding">Job Type</label>
               <h4 class="textcolr-38 nopadding">
-                @if($jobDetails['job_type']==\App\Models\RecruiterJobs::FULLTIME)
+                @if($jobDetails['job_type']==\App\Enums\JobType::FULLTIME)
                 <strong>Full Time</strong>
-                @elseif($jobDetails['job_type']==\App\Models\RecruiterJobs::PARTTIME)
+                @elseif($jobDetails['job_type']==\App\Enums\JobType::PARTTIME)
                 <strong>Part Time</strong>
                 @else
                 <strong>Temporary</strong>

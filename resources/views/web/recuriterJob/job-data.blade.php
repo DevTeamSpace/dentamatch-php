@@ -20,9 +20,9 @@
         
         <div class="job-type-detail">
             <div class="job-type-info">
-                @if($job['job_type']==\App\Models\RecruiterJobs::FULLTIME)
+                @if($job['job_type']==\App\Enums\JobType::FULLTIME)
                 <span class="drk-green statusBtn mr-r-5">Full Time</span>
-                @elseif($job['job_type']==\App\Models\RecruiterJobs::PARTTIME)
+                @elseif($job['job_type']==\App\Enums\JobType::PARTTIME)
                 <span class="bg-ltgreen statusBtn mr-r-5">Part Time</span>
                 <span> | 
                     @php 
@@ -63,7 +63,7 @@
                         <strong>{{ $job['office_name'] }}</strong><br>
                         {{ $job['office_types_name'] }}<br>
                         {{ $job['address'].' '.$job['zipcode'] }}<br>
-                        @if($job['job_type']==\App\Models\RecruiterJobs::TEMPORARY)
+                        @if($job['job_type']==\App\Enums\JobType::TEMPORARY)
                         <span>Number of Candidates Needed: {{ $job['no_of_jobs'] }}</span>
                         @endif
                     </address> 

@@ -28,5 +28,9 @@ return [
         'Change' => 'change',
         'AutoAvailabilityFlag' => 1,
         'defaultProfileImage' => 'defaultImg.png',
-        'NonAvailabilityFlag' => 0
+        'NonAvailabilityFlag' => 0,
+
+        'notification' => [
+            'certificate_expire' => 30
+        ]
 ];

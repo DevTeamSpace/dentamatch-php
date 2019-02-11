@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App\Models\Configs
@@ -13,19 +14,21 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $config_data
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs whereConfigData($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs whereConfigDesc($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs whereConfigName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Configs whereUpdatedAt($value)
+ * @method static Builder|Configs newModelQuery()
+ * @method static Builder|Configs newQuery()
+ * @method static Builder|Configs query()
+ * @method static Builder|Configs whereConfigData($value)
+ * @method static Builder|Configs whereConfigDesc($value)
+ * @method static Builder|Configs whereConfigName($value)
+ * @method static Builder|Configs whereCreatedAt($value)
+ * @method static Builder|Configs whereId($value)
+ * @method static Builder|Configs whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class Configs extends Model
 {
+    const CERTIFICATE_EXPIRE_DAYS = 'constants.notification.certificate_expire';
+
     protected $table = 'configs';
     protected $primaryKey = 'id';
     

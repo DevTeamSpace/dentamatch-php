@@ -9,7 +9,7 @@
         <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse; max-width:640px;">
             <tr>
                 <td align="left" style="line-height:20px;"><div style="border-left:1px solid #f4f4f4; border-right:1px solid #f4f4f4; border-bottom:1px solid #f4f4f4; padding:30px 24px 19px;">
-                        <h3 style="margin:0 0 15px 0">Hello Admin,</h3>
+                        <h3 style="margin:0 0 15px 0">Hi Admin,</h3>
                         <div style="font-size:15px;">
                             <p style="line-height: 24px;">
                                 A candidate requires your approval.<br/><br/>

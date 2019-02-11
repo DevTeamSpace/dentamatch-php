@@ -14,7 +14,7 @@ $seekerDatesCount = count($datesTemp);
         <div class="media-left ">
             <div class="img-holder ">
                 <img class="media-object img-circle" src="{{ url("image/66/66/?src=" .$seeker['profile_pic']) }}" alt="...">
-                @if($jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+                @if($jobDetails['job_type']==\App\Enums\JobType::TEMPORARY)
                 <span id="fav_{{ $seeker['user_id'] }}" onclick="markFavourite({{ $seeker['user_id'] }});" class="star {{ ($seeker['is_favourite']==null)?'star-empty':'star-fill' }}"></span>
                 @endif
             </div>
@@ -24,7 +24,7 @@ $seekerDatesCount = count($datesTemp);
             <div class="template-job-information mr-t-15">
               <div class="template-job-information-left">
                 <h4 class="pull-left"><a href="{{ url('job/seekerdetails/'.$seeker['user_id'].'/'.$jobDetails['id']) }}">{{$seeker['first_name'].' '.$seeker['last_name']}}</a></h4>
-                @if($jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+                @if($jobDetails['job_type']==\App\Enums\JobType::TEMPORARY)
                 <span class="mr-l-5 dropdown date_drop">
                     @if(round($seeker['avg_rating'],0) > 3)
                     @php $avgrateClass = 'bg-green' @endphp
@@ -114,9 +114,9 @@ $seekerDatesCount = count($datesTemp);
     </div> 
     <div class="job-type-detail">
         <p class="nopadding">{{$seeker['jobtitle_name']}}</p>
-        @if($seeker['is_fulltime'] && $jobDetails['job_type']==App\Models\RecruiterJobs::FULLTIME)
+        @if($seeker['is_fulltime'] && $jobDetails['job_type']==\App\Enums\JobType::FULLTIME)
         <span class="drk-green statusBtn mr-r-5">Full Time</span>
-        @elseif(($seeker['is_parttime_monday'] || $seeker['is_parttime_tuesday'] || $seeker['is_parttime_wednesday'] || $seeker['is_parttime_thursday'] || $seeker['is_parttime_friday'] || $seeker['is_parttime_saturday'] || $seeker['is_parttime_sunday']) && $jobDetails['job_type']==App\Models\RecruiterJobs::PARTTIME)
+        @elseif(($seeker['is_parttime_monday'] || $seeker['is_parttime_tuesday'] || $seeker['is_parttime_wednesday'] || $seeker['is_parttime_thursday'] || $seeker['is_parttime_friday'] || $seeker['is_parttime_saturday'] || $seeker['is_parttime_sunday']) && $jobDetails['job_type']==\App\Enums\JobType::PARTTIME)
         <span class="bg-ltgreen statusBtn mr-r-5">Part Time</span>
         <span> | 
             @php 
@@ -131,7 +131,7 @@ $seekerDatesCount = count($datesTemp);
             @endphp
             {{ implode(', ',$dayArr) }}
         </span>
-        @elseif($jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+        @elseif($jobDetails['job_type']==\App\Enums\JobType::TEMPORARY)
         <span class="bg-ember statusBtn mr-r-5">Temporary</span>
         @if($seeker['temp_job_dates'])
         <span class="dropdown date-drop">
@@ -166,7 +166,7 @@ $seekerDatesCount = count($datesTemp);
                 @if(isset($seeker['job_status']) && $seeker['job_status'] == 1)
                 <button type="button" class="btn btn-primary-outline pull-right pd-l-30 pd-r-30">Invited</button>
                 @else 
-                <button type="submit"  name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pull-right pd-l-30 pd-r-30 ">Invite</button>
+                <button type="submit"  name="appliedStatus" value="{{ \App\Enums\JobAppliedStatus::INVITED }}" class="btn btn-primary pull-right pd-l-30 pd-r-30 ">Invite</button>
                 @endif
             </div>
         </div>

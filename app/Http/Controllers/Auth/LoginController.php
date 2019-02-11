@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Models\UserGroup;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Auth;
 
@@ -38,28 +39,29 @@ class LoginController extends Controller
     {
         $this->middleware('guest', ['except' => 'logout']);
     }
-    
+
     public function getLogin()
     {
         return $this->showLoginForm();
     }
-    
-    protected function login(\Illuminate\Http\Request $request) {
-        
+
+    protected function login(\Illuminate\Http\Request $request)
+    {
+
         $this->validate($request, [
             'email' => 'required', 'password' => 'required',
         ]);
-        
-        $credentials = ['email' => $request->email, 'is_active'=>1];
+
+        $credentials = ['email' => $request->email, 'is_active' => 1];
         $user = User::where($credentials)->first();
-        
+
         $msg = trans('messages.not_admin_email');
-        if(isset($user) && ($user->userGroup->group_id==1)){
+        if (isset($user) && ($user->userGroup->group_id == UserGroup::ADMIN)) {
             $credentials['password'] = $request->password;
-            if (Auth::attempt($credentials,$request->remember)) {
+            if (Auth::attempt($credentials, $request->remember)) {
                 // Authentication passed...
                 return redirect()->intended('/cms');
-            }else{
+            } else {
                 $msg = trans('messages.credentials_not_matched');
             }
         }
@@ -69,14 +71,15 @@ class LoginController extends Controller
                 $this->username() => $msg,
             ]);
     }
-    
+
     /**
      * Log the user out of the application.
      *
      * @return \Illuminate\Http\Response
      */
-    public function logout(){
-      
+    public function logout()
+    {
+
         Auth::guard()->logout();
         return redirect(property_exists($this, 'redirectTo') ? $this->redirectTo : '/');
     }

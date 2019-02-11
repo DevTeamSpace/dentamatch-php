@@ -2,9 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\JobAppliedStatus;
+use App\Enums\JobType;
+use App\Enums\SeekerVerifiedStatus;
 use Illuminate\Database\Eloquent\Model;
-use DB;
-use Auth;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * App\Models\JobSeekerProfiles
@@ -35,55 +40,72 @@ use Auth;
  * @property int $is_parttime_saturday
  * @property int $is_parttime_sunday
  * @property int $signup_source 1=>App, 2=>Web
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property string|null $preferred_city
  * @property string|null $preferred_state
  * @property string|null $preferred_country
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereAboutMe($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereDentalStateBoard($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereFirstName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsCompleted($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsFulltime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsJobSeekerVerified($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsParttimeFriday($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsParttimeMonday($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsParttimeSaturday($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsParttimeSunday($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsParttimeThursday($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsParttimeTuesday($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereIsParttimeWednesday($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereJobTitileId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereLastName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereLatitude($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereLicenseNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereLongitude($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles wherePreferredCity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles wherePreferredCountry($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles wherePreferredJobLocation($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles wherePreferredJobLocationId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles wherePreferredState($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereProfilePic($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereSignupSource($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereState($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JobSeekerProfiles whereZipcode($value)
+ * @property User $user
+ * @property PreferredJobLocation $preferredLocation
+ * @property JobTitles $jobTitle
+ *
+ * @method static Builder|JobSeekerProfiles newModelQuery()
+ * @method static Builder|JobSeekerProfiles newQuery()
+ * @method static Builder|JobSeekerProfiles query()
+ * @method static Builder|JobSeekerProfiles whereAboutMe($value)
+ * @method static Builder|JobSeekerProfiles whereCreatedAt($value)
+ * @method static Builder|JobSeekerProfiles whereDentalStateBoard($value)
+ * @method static Builder|JobSeekerProfiles whereFirstName($value)
+ * @method static Builder|JobSeekerProfiles whereId($value)
+ * @method static Builder|JobSeekerProfiles whereIsCompleted($value)
+ * @method static Builder|JobSeekerProfiles whereIsFulltime($value)
+ * @method static Builder|JobSeekerProfiles whereIsJobSeekerVerified($value)
+ * @method static Builder|JobSeekerProfiles whereIsParttimeFriday($value)
+ * @method static Builder|JobSeekerProfiles whereIsParttimeMonday($value)
+ * @method static Builder|JobSeekerProfiles whereIsParttimeSaturday($value)
+ * @method static Builder|JobSeekerProfiles whereIsParttimeSunday($value)
+ * @method static Builder|JobSeekerProfiles whereIsParttimeThursday($value)
+ * @method static Builder|JobSeekerProfiles whereIsParttimeTuesday($value)
+ * @method static Builder|JobSeekerProfiles whereIsParttimeWednesday($value)
+ * @method static Builder|JobSeekerProfiles whereJobTitileId($value)
+ * @method static Builder|JobSeekerProfiles whereLastName($value)
+ * @method static Builder|JobSeekerProfiles whereLatitude($value)
+ * @method static Builder|JobSeekerProfiles whereLicenseNumber($value)
+ * @method static Builder|JobSeekerProfiles whereLongitude($value)
+ * @method static Builder|JobSeekerProfiles wherePreferredCity($value)
+ * @method static Builder|JobSeekerProfiles wherePreferredCountry($value)
+ * @method static Builder|JobSeekerProfiles wherePreferredJobLocation($value)
+ * @method static Builder|JobSeekerProfiles wherePreferredJobLocationId($value)
+ * @method static Builder|JobSeekerProfiles wherePreferredState($value)
+ * @method static Builder|JobSeekerProfiles whereProfilePic($value)
+ * @method static Builder|JobSeekerProfiles whereSignupSource($value)
+ * @method static Builder|JobSeekerProfiles whereState($value)
+ * @method static Builder|JobSeekerProfiles whereUpdatedAt($value)
+ * @method static Builder|JobSeekerProfiles whereUserId($value)
+ * @method static Builder|JobSeekerProfiles whereZipcode($value)
  * @mixin \Eloquent
  */
 class JobSeekerProfiles extends Model
 {
-    
     protected $table = 'jobseeker_profiles';
-    protected $primaryKey = 'id';
-    
+
     const LIMIT = 10;
     const DISTANCE = 10;
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function jobTitle()
+    {
+        return $this->belongsTo(JobTitles::class, 'job_titile_id');
+    }
+
+    public function preferredLocation()
+    {
+        return $this->belongsTo(PreferredJobLocation::class, 'preferred_job_location_id');
+    }
 
     public static function getJobSeekerProfiles($job,$reqData){
         $obj = JobSeekerProfiles::join('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id');
@@ -92,10 +114,10 @@ class JobSeekerProfiles extends Model
         if(!empty($reqData['preferredLocationId'])) {
             $obj->where('jobseeker_profiles.preferred_job_location_id',$reqData['preferredLocationId']);
         }
-        if($job['job_type']==RecruiterJobs::FULLTIME){
+        if($job['job_type']==JobType::FULLTIME){
             $obj->where('jobseeker_profiles.is_fulltime',1);
         }
-        elseif($job['job_type']==RecruiterJobs::PARTTIME){
+        elseif($job['job_type']==JobType::PARTTIME){
             $obj->where(function($q) use ($job,$reqData) {
                 
                 if($reqData['avail_all'])
@@ -126,7 +148,7 @@ class JobSeekerProfiles extends Model
 
             });
         }
-        elseif($job['job_type']==RecruiterJobs::TEMPORARY){
+        elseif($job['job_type']==JobType::TEMPORARY){
             $obj->join('jobseeker_temp_availability',function($query) use ($job,$reqData){
                     $query->on('jobseeker_temp_availability.user_id', '=', 'jobseeker_profiles.user_id');
                     $query->whereIn('jobseeker_temp_availability.temp_job_date',explode(',',$job['temp_job_dates'])); 
@@ -149,7 +171,7 @@ class JobSeekerProfiles extends Model
 
         $obj->addSelect(DB::raw("count(distinct(skill_count.skill_id)) AS matched_skills")); 
         
-        if($job['job_type']==RecruiterJobs::TEMPORARY)
+        if($job['job_type']==JobType::TEMPORARY)
             $obj->addSelect(DB::raw("group_concat(distinct(jobseeker_temp_availability.temp_job_date)  ORDER BY jobseeker_temp_availability.temp_job_date ASC) AS temp_job_dates"));
     
         $obj->leftjoin('job_ratings',function($query){
@@ -164,7 +186,7 @@ class JobSeekerProfiles extends Model
                 ->where('job_lists.recruiter_job_id',$job['id']);
         })
         ->whereNull('job_lists.applied_status')
-        ->where('jobseeker_profiles.is_job_seeker_verified',1)
+        ->where('jobseeker_profiles.is_job_seeker_verified', SeekerVerifiedStatus::APPROVED)
         ->addSelect('job_lists.applied_status as job_status')
         ->addSelect('favourites.seeker_id as is_favourite')
         ->addSelect(DB::raw("avg(punctuality) as punctuality"),DB::raw("avg(time_management) as time_management"),
@@ -180,7 +202,7 @@ class JobSeekerProfiles extends Model
             $allSkills = JobSeekerSkills::getAllJobSeekerSkills($allProfiles->toArray());                  
         }
         
-        return ['allSkills' => $allSkills, 'paginate' => $obj->paginate(RecruiterJobs::LIMIT)];     
+        return ['allSkills' => $allSkills, 'paginate' => $obj->paginate(RecruiterJobs::LIMIT)];
     } 
 
     public static function getJobSeekerDetails($seekerId, $job){
@@ -195,7 +217,7 @@ class JobSeekerProfiles extends Model
 
         $obj->leftjoin('job_lists',function($query) use ($job){
                 $query->on('jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
-                ->whereIn('job_lists.applied_status',[JobLists::INVITED,JobLists::APPLIED,JobLists::SHORTLISTED,JobLists::HIRED])
+                ->whereIn('job_lists.applied_status',[JobAppliedStatus::INVITED,JobAppliedStatus::APPLIED,JobAppliedStatus::SHORTLISTED,JobAppliedStatus::HIRED])
                 ->where('job_lists.recruiter_job_id',$job['id']);
         });
 
@@ -241,20 +263,20 @@ class JobSeekerProfiles extends Model
                 ->join('jobseeker_profiles','jobseeker_profiles.user_id','=','job_lists.seeker_id')
                 ->join('job_titles','jobseeker_profiles.job_titile_id','=','job_titles.id')
                 ->where('job_lists.recruiter_job_id',$job->id)
-                ->whereIn('job_lists.applied_status',[ JobLists::INVITED, JobLists::APPLIED,JobLists::SHORTLISTED,JobLists::HIRED])
+                ->whereIn('job_lists.applied_status',[ JobAppliedStatus::INVITED, JobAppliedStatus::APPLIED,JobAppliedStatus::SHORTLISTED,JobAppliedStatus::HIRED])
                 ->select('job_lists.applied_status','jobseeker_profiles.first_name','jobseeker_profiles.last_name',
             'jobseeker_profiles.profile_pic','job_lists.seeker_id','job_titles.jobtitle_name','recruiter_jobs.job_type');
         
-        if($job->job_type==RecruiterJobs::FULLTIME){
+        if($job->job_type==JobType::FULLTIME){
             $obj->addSelect('jobseeker_profiles.is_fulltime');
         }
-        elseif($job->job_type==RecruiterJobs::PARTTIME){
+        elseif($job->job_type==JobType::PARTTIME){
             $obj->addSelect('jobseeker_profiles.is_parttime_monday','jobseeker_profiles.is_parttime_tuesday',
                     'jobseeker_profiles.is_parttime_wednesday','jobseeker_profiles.is_parttime_thursday',
                     'jobseeker_profiles.is_parttime_friday','jobseeker_profiles.is_parttime_saturday',
                     'jobseeker_profiles.is_parttime_sunday');
         }
-        elseif($job->job_type==RecruiterJobs::TEMPORARY){
+        elseif($job->job_type==JobType::TEMPORARY){
             $obj->leftjoin('jobseeker_temp_availability',function($query) use ($job){
                 $query->on('jobseeker_temp_availability.user_id', '=', 'job_lists.seeker_id')
                 ->whereIn('jobseeker_temp_availability.temp_job_date',explode(',',$job->temp_job_dates));
