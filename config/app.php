@@ -210,7 +210,6 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'ApiResponse' => App\Helpers\rapidConnect::class,
-        'NotificationService' => \App\Providers\NotificationServiceProvider::class,
     ],
     
     'defaul_product_per_page' => 20,

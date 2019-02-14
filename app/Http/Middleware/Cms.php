@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\UserGroup;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Session\Store;
@@ -36,7 +37,7 @@ class Cms
     public function handleSessionTimeout($request, $next){
         $user = Auth::user();
         
-        if(isset($user) && $user->userGroup->group_id==1){
+        if(isset($user) && $user->userGroup->group_id==UserGroup::ADMIN){
             $isLoggedIn = $request->path() != 'logout';
             if(! session('lastActivityTime')) {
                 $this->session->put('lastActivityTime', time());

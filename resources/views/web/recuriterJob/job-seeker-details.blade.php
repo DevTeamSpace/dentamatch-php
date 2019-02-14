@@ -1,13 +1,13 @@
 <label class="fnt-16 textcolr-38">Candidates {{ $status }} ({{ $totalCount }})</label>
 @foreach($seekerList as $seeker)
-        @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+        @if($seeker['job_type']==\App\Enums\JobType::TEMPORARY)
         @include('web.recuriterJob.rating-modal')
         @endif
         <div class="media jobCatbox">
             <div class="media-left ">
                 <div class="img-holder ">
                     <img class="media-object img-circle" src="{{ url("image/66/66/?src=" .$seeker['profile_pic']) }}" alt="...">
-                    @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+                    @if($seeker['job_type']==\App\Enums\JobType::TEMPORARY)
                     <span id="fav_{{ $seeker['seeker_id'] }}" onclick="markFavourite({{ $seeker['seeker_id'] }});" class="star {{ ($seeker['is_favourite']==null)?'star-empty':'star-fill' }}"></span>
                     @endif
                 </div>
@@ -17,7 +17,7 @@
                     <div >
                         <a href="{{ url('job/seekerdetails/'.$seeker['seeker_id'].'/'.$job['id']) }}" class="algn-rel media-heading">{{ $seeker['first_name'].' '.$seeker['last_name'] }}</a>
                          <strong>({{ number_format($seeker['percentaSkillsMatch'],2) }}%)</strong>
-                        @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+                        @if($seeker['job_type']==\App\Enums\JobType::TEMPORARY)
                         <span class="mr-l-15 dropdown date_drop">
                             @if(!empty($seeker['avg_rating']))
                             <span class=" dropdown-toggle label label-success" data-toggle="dropdown">{{ number_format($seeker['avg_rating'], 1, '.', '') }}</span>
@@ -81,7 +81,7 @@
                         echo $date;
                         ?>
                     </p>
-                    @if($seeker['job_type']==\App\Models\RecruiterJobs::PARTTIME)
+                    @if($seeker['job_type']==\App\Enums\JobType::PARTTIME)
                     <p  class="nopadding">
                         <!--<span class="bg-ember statusBtn mr-r-5">Part time</span>-->
                         @php 
@@ -97,7 +97,7 @@
                         {{ implode(', ',$seekerDayArr) }}
                     </p>
                     @endif
-                    @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY && $seeker['temp_job_dates']!=null)
+                    @if($seeker['job_type']==\App\Enums\JobType::TEMPORARY && $seeker['temp_job_dates']!=null)
                     <p  class="nopadding">
                         <!--<span class="bg-ember statusBtn mr-r-5">Temporary</span>-->
                         <span class="dropdown date-drop">
@@ -125,28 +125,28 @@
                             <input type="hidden" name="jobId" value="{{ $job['id'] }}">
                             <input type="hidden" name="seekerId" value="{{ $seeker['seeker_id'] }}">
                             <input type="hidden" name="jobType" value="{{ $seeker['job_type'] }}">
-                            @if($key==\App\Models\JobLists::HIRED)
+                            @if($key==\App\Enums\JobAppliedStatus::HIRED)
                             @if($seeker['seeker_block']==0 && $seeker['recruiter_block']==0)
                             <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-r-5" data-toggle="modal" 
                             data-target="#ShortListMessageBox" data-seekerId="{{ $seeker['seeker_id'] }}">Message</button>
                             @endif
-                            @if($seeker['job_type']==App\Models\RecruiterJobs::TEMPORARY && ($seeker['ratingId']!=$seeker['seeker_id']))
+                            @if($seeker['job_type']==\App\Enums\JobType::TEMPORARY && ($seeker['ratingId']!=$seeker['seeker_id']))
                             @if(!empty($dates) && date("Y-m-d")>$dates[$seekerDatesCount-1])
                             <button type="button" class="btn  btn-primary-outline active pd-l-30 pd-r-30 " data-toggle="modal" data-target="#ratesekeerPopup_{{ $seeker['seeker_id'] }}">Leave a Rating</button>
                             @else
                             <button type="button" class="btn btn-primary-outline pd-l-30 pd-r-30">Leave a Rating</button>
                             @endif
                             @endif
-                            @elseif($key==\App\Models\JobLists::SHORTLISTED)
+                            @elseif($key==\App\Enums\JobAppliedStatus::SHORTLISTED)
                             @if($seeker['seeker_block']==0 && $seeker['recruiter_block']==0)
                             <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30" data-toggle="modal" 
                             data-target="#ShortListMessageBox" data-seekerId="{{ $seeker['seeker_id'] }}">Message</button>
                             @endif
-                            <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::HIRED }}" class="btn btn-primary pd-l-30 pd-r-30 ">Hire</button>
-                            @elseif($key==\App\Models\JobLists::APPLIED)
-                            <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::REJECTED }}" class="btn btn-link  mr-r-5">Reject</button>
-                            <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::SHORTLISTED }}" class="btn btn-primary pd-l-30 pd-r-30 ">Interviewing</button>
-                            @elseif($key==\App\Models\JobLists::INVITED)
+                            <button type="submit" name="appliedStatus" value="{{ \App\Enums\JobAppliedStatus::HIRED }}" class="btn btn-primary pd-l-30 pd-r-30 ">Hire</button>
+                            @elseif($key==\App\Enums\JobAppliedStatus::APPLIED)
+                            <button type="submit" name="appliedStatus" value="{{ \App\Enums\JobAppliedStatus::REJECTED }}" class="btn btn-link  mr-r-5">Reject</button>
+                            <button type="submit" name="appliedStatus" value="{{ \App\Enums\JobAppliedStatus::SHORTLISTED }}" class="btn btn-primary pd-l-30 pd-r-30 ">Interviewing</button>
+                            @elseif($key == \App\Enums\JobAppliedStatus::INVITED)
                             <button type="button" class="btn btn-primary-outline pd-l-30 pd-r-30 ">Invited</button>
                             @endif
                         </form>

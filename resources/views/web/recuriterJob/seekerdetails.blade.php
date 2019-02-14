@@ -159,25 +159,25 @@ $seekerDatesCount = count($datesTemp);
                 <input type="hidden" name="jobId" value="{{ $jobId }}">
                 <input type="hidden" name="seekerId" value="{{ $seekerDetails['user_id'] }}">
                 <input type="hidden" name="jobType" value="{{ $jobDetails['job_type'] }}">
-                @if($seekerDetails['applied_status'] == \App\Models\JobLists::INVITED)
+                @if($seekerDetails['applied_status'] == \App\Enums\JobAppliedStatus::INVITED)
                 <h6>INVITED</h6>
-                @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::APPLIED)
+                @elseif($seekerDetails['applied_status'] == \App\Enums\JobAppliedStatus::APPLIED)
                 <h6></h6>
-                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::REJECTED }}" class="btn btn-primary pd-l-20 pd-r-20">Reject</button>
-                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::SHORTLISTED }}" class="btn btn-primary pd-l-20 pd-r-20">Accept</button>
-                @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::SHORTLISTED)
+                <button type="submit" name="appliedStatus" value="{{ \App\Enums\JobAppliedStatus::REJECTED }}" class="btn btn-primary pd-l-20 pd-r-20">Reject</button>
+                <button type="submit" name="appliedStatus" value="{{ \App\Enums\JobAppliedStatus::SHORTLISTED }}" class="btn btn-primary pd-l-20 pd-r-20">Accept</button>
+                @elseif($seekerDetails['applied_status'] == \App\Enums\JobAppliedStatus::SHORTLISTED)
                 <h6>INTERVIEWING</h6>
                 <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 " data-toggle="modal" 
                 data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
-                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::HIRED }}" class="btn btn-primary pd-l-20 pd-r-20">Hire</button>
-                @elseif($seekerDetails['applied_status'] == \App\Models\JobLists::HIRED)
+                <button type="submit" name="appliedStatus" value="{{ \App\Enums\JobAppliedStatus::HIRED }}" class="btn btn-primary pd-l-20 pd-r-20">Hire</button>
+                @elseif($seekerDetails['applied_status'] == \App\Enums\JobAppliedStatus::HIRED)
                 <h6>HIRED</h6>
                 <button type="button" class="modalClick btn btn-primary pd-l-30 pd-r-30 mr-t-30 " data-toggle="modal" 
                 data-target="#ShortListMessageBox" data-seekerId="{{ $seekerDetails['user_id'] }}">Message</button>
-                @elseif (!empty($datesTemp) && date("Y-m-d")>$datesTemp[$seekerDatesCount-1] && $jobDetails['job_type']==App\Models\RecruiterJobs::TEMPORARY)
+                @elseif (!empty($datesTemp) && date("Y-m-d")>$datesTemp[$seekerDatesCount-1] && $jobDetails['job_type']==\App\Enums\JobType::TEMPORARY)
                 <h6>TEMP JOB EXPIRED</h6>
                 @else 
-                <button type="submit" name="appliedStatus" value="{{ \App\Models\JobLists::INVITED }}" class="btn btn-primary pd-l-30 pd-r-30">Invite</button>    
+                <button type="submit" name="appliedStatus" value="{{ \App\Enums\JobAppliedStatus::INVITED }}" class="btn btn-primary pd-l-30 pd-r-30">Invite</button>
                 @endif    
             </div>
         </form>
@@ -324,7 +324,7 @@ $seekerDatesCount = count($datesTemp);
                 </ul>
             </div>
             <?php } ?>
-            @if($seekerDetails['applied_status'] == \App\Models\JobLists::HIRED)
+            @if($seekerDetails['applied_status'] == \App\Enums\JobAppliedStatus::HIRED)
             @if(!empty($seekerDetails['certificate']))
             @foreach($seekerDetails['certificate'] as $certificate)
             <div class="searchResultHeading pd-t-20 smallSquare">

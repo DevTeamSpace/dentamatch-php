@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Auth;
-use DB;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * App\Models\RecruiterOffice
@@ -34,51 +37,58 @@ use DB;
  * @property string|null $sunday_start
  * @property string|null $sunday_end
  * @property string|null $office_location
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property string|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RecruiterOfficeType[] $officeTypes
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereFridayEnd($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereFridayStart($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereLatitude($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereLongitude($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereMondayEnd($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereMondayStart($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereOfficeInfo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereOfficeLocation($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice wherePhoneNo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereSaturdayEnd($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereSaturdayStart($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereSundayEnd($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereSundayStart($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereThursdayEnd($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereThursdayStart($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereTuesdayEnd($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereTuesdayStart($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereWednesdayEnd($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereWednesdayStart($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereWorkEverydayEnd($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereWorkEverydayStart($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\RecruiterOffice whereZipcode($value)
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property string|null $deleted_at todo soft deleting?
+ * @property-read Collection|RecruiterOfficeType[] $officeTypes
+ * @property-read User $recruiter
+ *
+ * @method static Builder|RecruiterOffice newModelQuery()
+ * @method static Builder|RecruiterOffice newQuery()
+ * @method static Builder|RecruiterOffice query()
+ * @method static Builder|RecruiterOffice whereAddress($value)
+ * @method static Builder|RecruiterOffice whereCreatedAt($value)
+ * @method static Builder|RecruiterOffice whereDeletedAt($value)
+ * @method static Builder|RecruiterOffice whereFridayEnd($value)
+ * @method static Builder|RecruiterOffice whereFridayStart($value)
+ * @method static Builder|RecruiterOffice whereId($value)
+ * @method static Builder|RecruiterOffice whereLatitude($value)
+ * @method static Builder|RecruiterOffice whereLongitude($value)
+ * @method static Builder|RecruiterOffice whereMondayEnd($value)
+ * @method static Builder|RecruiterOffice whereMondayStart($value)
+ * @method static Builder|RecruiterOffice whereOfficeInfo($value)
+ * @method static Builder|RecruiterOffice whereOfficeLocation($value)
+ * @method static Builder|RecruiterOffice wherePhoneNo($value)
+ * @method static Builder|RecruiterOffice whereSaturdayEnd($value)
+ * @method static Builder|RecruiterOffice whereSaturdayStart($value)
+ * @method static Builder|RecruiterOffice whereSundayEnd($value)
+ * @method static Builder|RecruiterOffice whereSundayStart($value)
+ * @method static Builder|RecruiterOffice whereThursdayEnd($value)
+ * @method static Builder|RecruiterOffice whereThursdayStart($value)
+ * @method static Builder|RecruiterOffice whereTuesdayEnd($value)
+ * @method static Builder|RecruiterOffice whereTuesdayStart($value)
+ * @method static Builder|RecruiterOffice whereUpdatedAt($value)
+ * @method static Builder|RecruiterOffice whereUserId($value)
+ * @method static Builder|RecruiterOffice whereWednesdayEnd($value)
+ * @method static Builder|RecruiterOffice whereWednesdayStart($value)
+ * @method static Builder|RecruiterOffice whereWorkEverydayEnd($value)
+ * @method static Builder|RecruiterOffice whereWorkEverydayStart($value)
+ * @method static Builder|RecruiterOffice whereZipcode($value)
  * @mixin \Eloquent
  */
 class RecruiterOffice extends Model {
 
     protected $table = 'recruiter_offices';
-    protected $primaryKey = 'id';
+
     protected $fillable = ['user_id', 'address', 'zipcode', 'latitude', 'longitude', 'phone_no', 'office_info', 'work_everyday_start', 'work_everyday_end', 'monday_start', 'monday_end', 'tuesday_start', 'tuesday_end', 'wednesday_start', 'wednesday_end', 'thursday_start', 'thursday_end', 'friday_start', 'friday_end', 'saturday_start', 'saturday_end', 'sunday_start', 'sunday_end', 'office_location'];
 
     public function officeTypes() {
         return $this->hasMany(RecruiterOfficeType::class, 'recruiter_office_id');
+    }
+
+    public function recruiter()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public static function getAllRecruiterOffices($userId) {

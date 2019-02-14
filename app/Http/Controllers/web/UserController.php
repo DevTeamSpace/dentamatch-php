@@ -9,14 +9,15 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     protected $user;
-    
-    public function __construct() {
+
+    public function __construct()
+    {
         $this->middleware('auth');
         $this->user = Auth::user();
     }
-    
+
     public function login(Request $request)
     {
-        
+
     }
 }

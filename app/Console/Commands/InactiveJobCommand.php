@@ -2,15 +2,18 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\JobType;
+use App\Utils\NotificationUtils;
 use Illuminate\Console\Command;
 use App\Models\RecruiterJobs;
-use App\Models\User;
-use App\Models\Notification;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class InactiveJobCommand extends Command
 {
     const NOTIFICATION_INTERVAL = 30;
+
+    private $utils;
+
     /**
      * The name and signature of the console command.
      *
@@ -28,53 +31,26 @@ class InactiveJobCommand extends Command
     /**
      * Create a new command instance.
      *
-     * @return void
+     * @param NotificationUtils $utils
      */
-    public function __construct()
+    public function __construct(NotificationUtils $utils)
     {
+        $this->utils = $utils;
         parent::__construct();
     }
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {
-        try {
-            $pushList = [];
-            $senderId = User::getAdminUserDetailsForNotification();
-            $recruiterModel = RecruiterJobs::select('recruiter_jobs.id', 'job_templates.user_id', 'job_titles.jobtitle_name', DB::raw('count(seeker_id) as numberOfJobs'))
-                                ->join('job_templates', 'job_templates.id','=','recruiter_jobs.job_template_id')
-                                ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
-                                ->leftjoin('job_lists', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
-                                ->where(DB::raw("DATEDIFF(now(), recruiter_jobs.created_at)"),'=', static::NOTIFICATION_INTERVAL)
-                                ->whereIn('recruiter_jobs.job_type', [1,2])
-                                ->groupBy('recruiter_jobs.id')
-                                ->get();
-            $list = $recruiterModel->toArray();
-            if(!empty($list)) {
-                $pushList = array_map(function ($value) {
-                                if($value['numberOfJobs']==0) {
-                                    return  $value;
-                                }
-                            }, $list);
-            }
-            if(!empty($pushList)) {
-                $insertData = [];
-                foreach($pushList as $listValue)
-                {
-                    $data = ['image' => url('web/images/dentaMatchLogo.png'),'message' => 'No job has been applied for last 30 days on <a href="/job/details/'.$listValue['id'].'"><b>'.$listValue['jobtitle_name'].'</b></a>'];
-                    $insertData[] = ['sender_id' => $senderId->id, 'receiver_id' => $listValue['user_id'], 'notification_data'=> json_encode($data)];
-                }
-                Notification::insert($insertData);
-                $this->info("Records added successfully");
-            } else {
-                $this->info("No records for insert");
-            }
-        } catch(\Exception $e) {
-            $this->info($e->getMessage());
-        }
+        $jobs = RecruiterJobs::with(['jobTemplate.jobTitle'])
+            ->where(DB::raw("DATEDIFF(now(), created_at)"), '=', static::NOTIFICATION_INTERVAL)
+            ->whereIn('job_type', [JobType::FULLTIME, JobType::PARTTIME])
+            ->whereDoesntHave('jobLists')
+            ->get();
+
+        $this->utils->notifyJobsInactive($jobs);
+
     }
 }

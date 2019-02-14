@@ -12,11 +12,12 @@ use App\Models\Certifications;
 use App\Repositories\File\FileRepositoryS3;
 use App\Models\JobseekerCertificates;
 
-class SkillApiController extends Controller {
-
+class SkillApiController extends Controller
+{
     use FileRepositoryS3;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('ApiAuth');
     }
 
@@ -27,34 +28,35 @@ class SkillApiController extends Controller {
      * @param Request $request
      * @return type
      */
-    public function getSkilllists(Request $request) {
+    public function getSkilllists(Request $request)
+    {
         try {
             $userId = $request->userServerData->user_id;
             if ($userId > 0) {
-                $skillArray = array();
+                $skillArray = [];
                 $jobseekerSkills = JobSeekerSkills::where('user_id', $userId)->get();
-                $UpdatedJobseekerSkills = array();
+                $UpdatedJobseekerSkills = [];
                 if ($jobseekerSkills) {
                     $skillArray = $jobseekerSkills->toArray();
                     $userSkills = array_map(function ($value) {
                         return $value['skill_id'];
                     }, $skillArray);
                     foreach ($skillArray as $skill) {
-                        $UpdatedJobseekerSkills[$skill['skill_id']] = array('skill_id' => $skill['skill_id'], 'other_skill' => $skill['other_skill']);
+                        $UpdatedJobseekerSkills[$skill['skill_id']] = ['skill_id' => $skill['skill_id'], 'other_skill' => $skill['other_skill']];
                     }
                 }
                 $skillLists = Skills::where('parent_id', 0)
-                                ->where('is_active', 1)
-                                ->with(['children' => function ($query) {
-                                $query->orderBy('id', 'asc');
-                                }])
-                                ->get()
-                                ->toArray();
-                $update_skills = array();
+                    ->where('is_active', 1)
+                    ->with(['children' => function ($query) {
+                        $query->orderBy('id', 'asc');
+                    }])
+                    ->get()
+                    ->toArray();
+                $update_skills = [];
                 foreach ($skillLists as $key => $skill) {
                     if ($skill['skill_name'] != 'Other') {
-                        $subskills = array();
-                        $child_skill = array();
+                        $subskills = [];
+                        $child_skill = [];
                         if (is_array($skill['children']) && count($skill['children']) > 0) {
                             foreach ($skill['children'] as $subskills) {
                                 if (in_array($subskills['id'], $userSkills)) {
@@ -62,12 +64,12 @@ class SkillApiController extends Controller {
                                 } else {
                                     $userSkill = 0;
                                 }
-                                $subSkills = array(
-                                    'id' => $subskills['id'],
-                                    'parent_id' => $subskills['parent_id'],
+                                $subSkills = [
+                                    'id'         => $subskills['id'],
+                                    'parent_id'  => $subskills['parent_id'],
                                     'skill_name' => $subskills['skill_name'],
                                     'user_skill' => $userSkill,
-                                );
+                                ];
                                 if (trim($subskills['skill_name']) == 'Other' || trim($subskills['skill_name']) == 'other') {
                                     $subSkills['other_skill'] = '';
                                     if ($userSkill == 1 && !empty($UpdatedJobseekerSkills[$subskills['id']])) {
@@ -77,22 +79,19 @@ class SkillApiController extends Controller {
                                 $child_skill[] = $subSkills;
                             }
                         }
-                        $update_skills[$key] = array('id' => $skill['id'], 'parent_id' => $skill['parent_id'], 'skill_name' => $skill['skill_name'], 'children' => $child_skill);
+                        $update_skills[$key] = ['id' => $skill['id'], 'parent_id' => $skill['parent_id'], 'skill_name' => $skill['skill_name'], 'children' => $child_skill];
                     } else {
                         $otherSkill = "";
                         if (!empty($UpdatedJobseekerSkills[$skill['id']])) {
                             $otherSkill = $UpdatedJobseekerSkills[$skill['id']]['other_skill'];
                         }
-                        $update_skills[$key] = array('id' => $skill['id'], 'parent_id' => $skill['parent_id'], 'skill_name' => $skill['skill_name'], 'other_skill' => $otherSkill, 'children' => array());
+                        $update_skills[$key] = ['id' => $skill['id'], 'parent_id' => $skill['parent_id'], 'skill_name' => $skill['skill_name'], 'other_skill' => $otherSkill, 'children' => []];
                     }
                 }
                 $response = ApiResponse::customJsonResponseObject(1, 200, "Skill list", 'list', ApiResponse::convertToCamelCase($update_skills));
             } else {
                 $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
-        } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
         } catch (\Exception $e) {
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
@@ -106,27 +105,28 @@ class SkillApiController extends Controller {
      * @param Request $request
      * @return type
      */
-    public function postUpdateSkills(Request $request) {
+    public function postUpdateSkills(Request $request)
+    {
         try {
             $this->validate($request, [
                 'skills' => 'sometimes',
-                'other' => 'sometimes',
+                'other'  => 'sometimes',
             ]);
             $reqData = $request->all();
             $userId = $request->userServerData->user_id;
             if ($userId > 0) {
                 JobSeekerSkills::where('user_id', '=', $userId)->forceDelete();
-                $jobseekerSkills = array();
-                $jobseekerOtherSkills = array();
+                $jobseekerSkills = [];
+                $jobseekerOtherSkills = [];
                 if (is_array($reqData['skills']) && count($reqData['skills']) > 0) {
                     foreach ($reqData['skills'] as $skill) {
-                        $jobseekerSkills[] = array('user_id' => $userId, 'skill_id' => $skill, 'other_skill' => '');
+                        $jobseekerSkills[] = ['user_id' => $userId, 'skill_id' => $skill, 'other_skill' => ''];
                     }
                     JobSeekerSkills::insert($jobseekerSkills);
                 }
                 if (is_array($reqData['other']) && count($reqData['other']) > 0) {
                     foreach ($reqData['other'] as $otherSkill) {
-                        $jobseekerOtherSkills[] = array('user_id' => $userId, 'skill_id' => $otherSkill['id'], 'other_skill' => $otherSkill['value']);
+                        $jobseekerOtherSkills[] = ['user_id' => $userId, 'skill_id' => $otherSkill['id'], 'other_skill' => $otherSkill['value']];
                     }
                     JobSeekerSkills::insert($jobseekerOtherSkills);
                 }
@@ -136,8 +136,7 @@ class SkillApiController extends Controller {
                 $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
@@ -148,10 +147,11 @@ class SkillApiController extends Controller {
      * Description : Get Certification Listing
      * Method : postUpdateUserSkills
      * formMethod : GET
-     * @param 
+     * @param
      * @return type
      */
-    public function getCertificationListing(Request $request) {
+    public function getCertificationListing(Request $request)
+    {
         try {
             $userId = $request->userServerData->user_id;
             if ($userId > 0) {
@@ -165,9 +165,9 @@ class SkillApiController extends Controller {
                         $userCertificationData[$value['certificate_id']] = ['certificate_id' => $value['certificate_id'], 'validity_date' => $value['validity_date'], 'image_path' => $value['image_path']];
                     }
                 }
-                $certificationArray = array();
+                $certificationArray = [];
                 foreach ($certificationList as $key => $certificate) {
-                    $array = array('id' => $certificate['id'], 'certificateName' => $certificate['certificate_name'], 'validityDate' => '', 'imagePath' => '');
+                    $array = ['id' => $certificate['id'], 'certificateName' => $certificate['certificate_name'], 'validityDate' => '', 'imagePath' => ''];
                     if (!empty($userCertificationData[$certificate['id']])) {
                         $array['validityDate'] = $userCertificationData[$certificate['id']]['validity_date'];
                         $array['imagePath'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $userCertificationData[$certificate['id']]['image_path'];
@@ -180,8 +180,7 @@ class SkillApiController extends Controller {
                 $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
@@ -192,22 +191,23 @@ class SkillApiController extends Controller {
      * Description : Update certifications
      * Method : postUpdateCertifications
      * formMethod : POST
-     * @param 
+     * @param
      * @return type
      */
-    public function postUpdateCertifications(Request $request) {
+    public function postUpdateCertifications(Request $request)
+    {
         try {
             $this->validate($request, [
                 'certificateId' => 'required|integer',
-                'image' => 'required|mimes:jpeg,jpg,png|max:102400',
+                'image'         => 'required|mimes:jpeg,jpg,png|max:102400',
             ]);
             $userId = $request->userServerData->user_id;
             if ($userId > 0) {
                 $filename = $this->generateFilename('certificate');
-                $response = $this->uploadFileToAWS($request, $filename,'image');
+                $response = $this->uploadFileToAWS($request, $filename, 'image');
                 if ($response['res']) {
                     JobseekerCertificates::updateOrCreate(
-                            ['user_id' => $userId, 'certificate_id' => $request->certificateId], ['image_path' => $response['file']]
+                        ['user_id' => $userId, 'certificate_id' => $request->certificateId], ['image_path' => $response['file']]
                     );
                     $url['imgUrl'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $response['file'];
                     ApiResponse::chkProfileComplete($userId);
@@ -219,8 +219,7 @@ class SkillApiController extends Controller {
                 $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
@@ -231,10 +230,11 @@ class SkillApiController extends Controller {
      * Description : Update certifications validity date
      * Method : postUpdateCertificationsValidity
      * formMethod : POST
-     * @param 
+     * @param
      * @return type
      */
-    public function postUpdateCertificationsValidity(Request $request) {
+    public function postUpdateCertificationsValidity(Request $request)
+    {
         try {
             $this->validate($request, [
                 'certificateValidition.*.value' => 'required_unless:certificateValidition.*.id,7|date',

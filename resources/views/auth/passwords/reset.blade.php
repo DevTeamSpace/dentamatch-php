@@ -16,7 +16,7 @@
                     <form id="reset_pswd_frm" autocomplete="off" data-parsley-validate="" method="POST" action="{{ url('/password/reset') }}">
                         {{ csrf_field() }}
                         <input type="hidden" name="token" value="{{ $token }}">
-                        <input type="hidden" class="form-control" name="email" value="{{ count($email)>0 ? $email[0] : '' }}">
+                        <input type="hidden" class="form-control" name="email" value="{{ $email }}">
                         <div class="floating-label">
                             <div class="frm-title mr-b-25">Reset Password</div>
                             @if ($errors->has('email'))
