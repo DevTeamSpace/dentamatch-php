@@ -66,8 +66,7 @@ class UserProfileApiController extends Controller
             }
 
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            return ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            return ApiResponse::responseError("Request validation failed.", ["data" => $e->errors()]);
         } catch (\Exception $ex) {
             $message = $ex->getMessage();
             $response = ApiResponse::responseError("Some error occoured", ["data" => $message]);
@@ -105,8 +104,7 @@ class UserProfileApiController extends Controller
                 $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            $response = ApiResponse::responseError("Request validation failed.", ["data" => $e->errors()]);
         } catch (\Exception $ex) {
             $message = $ex->getMessage();
             $response = ApiResponse::responseError("Some error occoured", ["data" => $message]);
@@ -180,8 +178,7 @@ class UserProfileApiController extends Controller
             }
             return $response;
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            return ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            return ApiResponse::responseError("Request validation failed.", ["data" => $e->errors()]);
         } catch (\Exception $e) {
             return ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
@@ -208,8 +205,7 @@ class UserProfileApiController extends Controller
                 $response = ApiResponse::customJsonResponse(0, 204, "invalid user token");
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            $response = ApiResponse::responseError("Request validation failed.", ["data" => $e->errors()]);
         } catch (\Exception $e) {
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
@@ -238,8 +234,7 @@ class UserProfileApiController extends Controller
                 $response = ApiResponse::customJsonResponse(0, 204, "invalid user token");
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            $response = ApiResponse::responseError("Request validation failed.", ["data" => $e->errors()]);
         } catch (\Exception $e) {
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
@@ -307,8 +302,7 @@ class UserProfileApiController extends Controller
                 $response = ApiResponse::customJsonResponse(0, 204, "invalid user token");
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            $response = ApiResponse::responseError("Request validation failed.", ["data" => $e->errors()]);
         } catch (\Exception $e) {
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
@@ -393,8 +387,7 @@ class UserProfileApiController extends Controller
             }
 
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $returnResponse = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
             Log::error($e);
             $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
@@ -437,8 +430,7 @@ class UserProfileApiController extends Controller
             }
             return $returnResponse;
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            return ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            return ApiResponse::responseError("Request validation failed.", ["data" => $e->errors()]);
         } catch (\Exception $e) {
             return ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
@@ -473,8 +465,7 @@ class UserProfileApiController extends Controller
             }
 
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            return ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
+            return ApiResponse::responseError("Request validation failed.", ["data" => $e->errors()]);
         } catch (\Exception $ex) {
             $message = $ex->getMessage();
             $response = ApiResponse::responseError("Some error occoured", ["data" => $message]);

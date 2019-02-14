@@ -13,6 +13,7 @@ use App\Models\Device;
 use App\Models\UserChat;
 use App\Models\JobSeekerTempAvailability;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class PushNotificationApiController extends Controller
 {
@@ -69,9 +70,7 @@ class PushNotificationApiController extends Controller
                 $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            Log::error($e);
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
             Log::error($e);
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
@@ -102,9 +101,7 @@ class PushNotificationApiController extends Controller
                 $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            Log::error($e);
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
             Log::error($e);
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
@@ -137,9 +134,7 @@ class PushNotificationApiController extends Controller
                 PushNotificationService::send($deviceModel, $requestData['message'], ["data" => $requestData], $requestData['toId']);
             }
         } catch (ValidationException $e) {
-            Log::error($e);
-            $messages = json_decode($e->getResponse()->content(), true);
-            return ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            return ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
             Log::error($e);
             return $e->getMessage();
@@ -168,8 +163,7 @@ class PushNotificationApiController extends Controller
                 $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
@@ -198,8 +192,7 @@ class PushNotificationApiController extends Controller
                 $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }

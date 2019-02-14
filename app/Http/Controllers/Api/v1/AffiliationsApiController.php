@@ -55,10 +55,6 @@ class AffiliationsApiController extends Controller
             } else {
                 $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
-        } catch (ValidationException $e) {
-            Log::error($e);
-            $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $e) {
             Log::error($e);
             $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
@@ -121,11 +117,8 @@ class AffiliationsApiController extends Controller
                 $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            Log::error($e);
-            $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $returnResponse = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
-            Log::error($e);
             $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
 

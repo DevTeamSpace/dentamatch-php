@@ -63,9 +63,7 @@ class SearchApiController extends Controller
                 $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            Log::error($messages);
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
             Log::error($e);;
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
@@ -107,8 +105,7 @@ class SearchApiController extends Controller
                 $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
@@ -172,8 +169,7 @@ class SearchApiController extends Controller
                 $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
@@ -214,8 +210,7 @@ class SearchApiController extends Controller
                 $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
@@ -261,8 +256,7 @@ class SearchApiController extends Controller
                 $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
@@ -299,8 +293,7 @@ class SearchApiController extends Controller
                 $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $returnResponse = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
             $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
@@ -439,8 +432,7 @@ class SearchApiController extends Controller
                 $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
             Log::error($e);
             $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getTraceAsString()]);
