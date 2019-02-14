@@ -35,7 +35,7 @@ Route::get('/success-active', function () { return view('auth.passwords.successf
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
-Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
+Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 
 
 Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
@@ -140,7 +140,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
     Route::get('/', 'Cms\JobSeekerController@verificationLicense');
     Route::get('/home', 'cms\LocationController@index');
     Route::group(['prefix' => 'user/'], function () {
-        Route::get('listPhotographer', 'Cms\UserController@getPhotographerList');
+        Route::get('listPhotographer', 'Cms\UserController@getPhotographerList');  // todo no such methods!
         Route::get('listConsumer', 'Cms\UserController@getConsumerList');
         Route::get('listDesigner', 'Cms\UserController@getDesignerList');
         Route::get('searchDesignerList', 'Cms\UserController@searchDesignerList');
@@ -293,6 +293,6 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('download/{type}', 'Cms\ReportController@downloadCsv');
     });
 
-    Route::get('push-notification', 'Cms\JobSeekerController@sendPushAndroid');
+    Route::get('push-notification', 'Cms\JobSeekerController@sendPushAndroid'); // todo no such method
 });
 

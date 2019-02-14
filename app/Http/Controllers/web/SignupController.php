@@ -302,8 +302,7 @@ class SignupController extends Controller
 
 
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            Log::info($messages);
+            Log::info(json_encode($e->errors()));
             return redirect('jobseeker/signup');
         } catch (\Exception $e) {
             Log::error($e);

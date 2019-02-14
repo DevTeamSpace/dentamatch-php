@@ -38,7 +38,14 @@ class ResetPasswordController extends Controller
 
     public function showResetForm(Request $request, $token = null)
     {
-        $email = DB::table('password_resets')->where('token', $token)->pluck('email');
+        $dbTokens = \DB::table('password_resets')->get();
+        $email = '';
+        foreach($dbTokens as $dbToken) {
+            if(\Hash::check($token, $dbToken->token)) {
+                $email = $dbToken->email;
+                break;
+            }
+        }
         return view('auth.passwords.reset')->with(
             ['token' => $token, 'email' => $email]
         );
@@ -58,6 +65,7 @@ class ResetPasswordController extends Controller
         );
 
         if ($response == 'passwords.user') {
+            dd($response);
             $response = 'Sorry, that link expired. Please try again.';
         }
         // If the password was successfully reset, we will redirect the user back to
