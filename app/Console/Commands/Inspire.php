@@ -131,7 +131,7 @@ class Inspire extends Command
     
     public function testEmails(){
         $name='Jasvinder Singh';
-        $email ='jasvinder.singh@appster.in';
+        $email = env('ADMIN_EMAIL');
         $url = url("/verification-code/klfjdlkfsdkf34234234");
         
         Mail::send('email.pending-accept', ['name' => $name, 'email' => $email], function($message) use($email,$name) {
