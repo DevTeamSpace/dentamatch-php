@@ -9,6 +9,12 @@ use App\Helpers\ApiResponse;
 
 class ApiAuth {
 
+    public $attributes;
+
+    public function __construct() {
+
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -16,13 +22,6 @@ class ApiAuth {
      * @param  \Closure  $next
      * @return mixed
      */
-    public $attributes;
-
-    public function __construct() {
-
-    }
-    
-    
     public function handle($request, Closure $next) {
         try {
             $user = Device::select('user_id')->where('user_token',$request->header('accessToken'))->first();

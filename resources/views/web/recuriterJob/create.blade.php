@@ -84,7 +84,7 @@
                 <div class="row">
                     <div class="col-md-4 col-lg-4 ">
                         <div class="full-time-box">
-                            <input class="magic-radio" type="radio" name="jobType" id="temporary" value="{{ \App\Models\RecruiterJobs::TEMPORARY }}">
+                            <input class="magic-radio" type="radio" name="jobType" id="temporary" value="{{ \App\Enums\JobType::TEMPORARY }}">
 
                             <label for="Temporary">
                                 Temporary Job / Service Technician
@@ -94,7 +94,7 @@
                     </div>
                     <div class="col-md-4  col-lg-4 ">
                         <div class="full-time-box">
-                            <input class="magic-radio" type="radio" name="jobType" id="parttime" value="{{ \App\Models\RecruiterJobs::PARTTIME }}">
+                            <input class="magic-radio" type="radio" name="jobType" id="parttime" value="{{ \App\Enums\JobType::PARTTIME }}">
                             <label for="Part Time">
                                 Part Time
                             </label>
@@ -112,7 +112,7 @@
                     </div>
                     <div class="col-md-4 col-lg-4">
                         <div class="full-time-box">
-                            <input data-parsley-required data-parsley-required-message= "job type required" class="magic-radio" type="radio" name="jobType" id="fulltime" value="{{ \App\Models\RecruiterJobs::FULLTIME }}">
+                            <input data-parsley-required data-parsley-required-message= "job type required" class="magic-radio" type="radio" name="jobType" id="fulltime" value="{{ \App\Enums\JobType::FULLTIME }}">
                             <label for="Full Time">
                                 Full Time
                             </label>

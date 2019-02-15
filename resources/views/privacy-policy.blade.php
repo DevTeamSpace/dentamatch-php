@@ -9,20 +9,21 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link href="//fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
     <link rel="shortcut icon" href="img/favicon.ico" sizes="16x16" type="image/x-icon">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    
+    <link href="{{ asset('bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
 
     <title>DentaMatch</title>
     <style>
-        body{background-color:rgb(240,240,240);padding:0 10px;}
-        p{color:#686868; margin-top:30px;}
+        body{padding:0 10px;}
+        p{color:#686868;}
+        h1{margin-top: 50px; margin-bottom: 30px}
+        h4{margin-top: 35px; margin-bottom: 15px; font-weight: 500;}
     </style>
 
 </head>
 
 <body>
     <div class="container doc-cont terms">
-       <h3 class="pg-heading mr-b-30">Privacy Policy</h3> 
+       <h1 class="pg-heading">Privacy Policy</h1>
         <p class="mr-t-30">
             This Privacy Policy governs the manner in which Health Match Inc. collects, uses, maintains and discloses
             information collected from users (each, a "User") of the http://www.dentamatch.co website ("Site"). This privacy

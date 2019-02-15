@@ -73,7 +73,7 @@ return [
     'already_register_as_seeker'=>'You are already registered as a candidate',
     'email_already_regisered' => 'Email already registered',
     'confirmation_link'=>'Activate your DentaMatch account',
-    'new_job_invite'=>'You’ve got a work invite pending that matches your skills',
+    'new_job_invite'=>'We’ve got work that matches your skills',
     'verify_seeker'=>'New License Verification',
     'reset_pw_email_sub'=>'Forgot Your Password?',
     'incomplete_profile_mail'=>'Let’s get to work',

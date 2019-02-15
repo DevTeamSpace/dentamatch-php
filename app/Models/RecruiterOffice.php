@@ -2,18 +2,93 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Auth;
-use DB;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
+/**
+ * App\Models\RecruiterOffice
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string|null $address
+ * @property int|null $zipcode
+ * @property float|null $latitude
+ * @property float|null $longitude
+ * @property string $phone_no
+ * @property string|null $office_info
+ * @property string|null $work_everyday_start
+ * @property string|null $work_everyday_end
+ * @property string|null $monday_start
+ * @property string|null $monday_end
+ * @property string|null $tuesday_start
+ * @property string|null $tuesday_end
+ * @property string|null $wednesday_start
+ * @property string|null $wednesday_end
+ * @property string|null $thursday_start
+ * @property string|null $thursday_end
+ * @property string|null $friday_start
+ * @property string|null $friday_end
+ * @property string|null $saturday_start
+ * @property string|null $saturday_end
+ * @property string|null $sunday_start
+ * @property string|null $sunday_end
+ * @property string|null $office_location
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property string|null $deleted_at todo soft deleting?
+ * @property-read Collection|RecruiterOfficeType[] $officeTypes
+ * @property-read User $recruiter
+ *
+ * @method static Builder|RecruiterOffice newModelQuery()
+ * @method static Builder|RecruiterOffice newQuery()
+ * @method static Builder|RecruiterOffice query()
+ * @method static Builder|RecruiterOffice whereAddress($value)
+ * @method static Builder|RecruiterOffice whereCreatedAt($value)
+ * @method static Builder|RecruiterOffice whereDeletedAt($value)
+ * @method static Builder|RecruiterOffice whereFridayEnd($value)
+ * @method static Builder|RecruiterOffice whereFridayStart($value)
+ * @method static Builder|RecruiterOffice whereId($value)
+ * @method static Builder|RecruiterOffice whereLatitude($value)
+ * @method static Builder|RecruiterOffice whereLongitude($value)
+ * @method static Builder|RecruiterOffice whereMondayEnd($value)
+ * @method static Builder|RecruiterOffice whereMondayStart($value)
+ * @method static Builder|RecruiterOffice whereOfficeInfo($value)
+ * @method static Builder|RecruiterOffice whereOfficeLocation($value)
+ * @method static Builder|RecruiterOffice wherePhoneNo($value)
+ * @method static Builder|RecruiterOffice whereSaturdayEnd($value)
+ * @method static Builder|RecruiterOffice whereSaturdayStart($value)
+ * @method static Builder|RecruiterOffice whereSundayEnd($value)
+ * @method static Builder|RecruiterOffice whereSundayStart($value)
+ * @method static Builder|RecruiterOffice whereThursdayEnd($value)
+ * @method static Builder|RecruiterOffice whereThursdayStart($value)
+ * @method static Builder|RecruiterOffice whereTuesdayEnd($value)
+ * @method static Builder|RecruiterOffice whereTuesdayStart($value)
+ * @method static Builder|RecruiterOffice whereUpdatedAt($value)
+ * @method static Builder|RecruiterOffice whereUserId($value)
+ * @method static Builder|RecruiterOffice whereWednesdayEnd($value)
+ * @method static Builder|RecruiterOffice whereWednesdayStart($value)
+ * @method static Builder|RecruiterOffice whereWorkEverydayEnd($value)
+ * @method static Builder|RecruiterOffice whereWorkEverydayStart($value)
+ * @method static Builder|RecruiterOffice whereZipcode($value)
+ * @mixin \Eloquent
+ */
 class RecruiterOffice extends Model {
 
     protected $table = 'recruiter_offices';
-    protected $primaryKey = 'id';
+
     protected $fillable = ['user_id', 'address', 'zipcode', 'latitude', 'longitude', 'phone_no', 'office_info', 'work_everyday_start', 'work_everyday_end', 'monday_start', 'monday_end', 'tuesday_start', 'tuesday_end', 'wednesday_start', 'wednesday_end', 'thursday_start', 'thursday_end', 'friday_start', 'friday_end', 'saturday_start', 'saturday_end', 'sunday_start', 'sunday_end', 'office_location'];
 
     public function officeTypes() {
         return $this->hasMany(RecruiterOfficeType::class, 'recruiter_office_id');
+    }
+
+    public function recruiter()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public static function getAllRecruiterOffices($userId) {

@@ -1,49 +1,82 @@
 <?php
 
 namespace App\Models;
+
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\Models\JobSeekerAffiliation
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $affiliation_id
+ * @property string|null $other_affiliation
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read User $seeker
+ * @property-read Affiliation $affiliation
+ *
+ * @method static bool|null forceDelete()
+ * @method static Builder|JobSeekerAffiliation newModelQuery()
+ * @method static Builder|JobSeekerAffiliation newQuery()
+ * @method static QueryBuilder|JobSeekerAffiliation onlyTrashed()
+ * @method static Builder|JobSeekerAffiliation query()
+ * @method static bool|null restore()
+ * @method static Builder|JobSeekerAffiliation whereAffiliationId($value)
+ * @method static Builder|JobSeekerAffiliation whereCreatedAt($value)
+ * @method static Builder|JobSeekerAffiliation whereDeletedAt($value)
+ * @method static Builder|JobSeekerAffiliation whereId($value)
+ * @method static Builder|JobSeekerAffiliation whereOtherAffiliation($value)
+ * @method static Builder|JobSeekerAffiliation whereUpdatedAt($value)
+ * @method static Builder|JobSeekerAffiliation whereUserId($value)
+ * @method static QueryBuilder|JobSeekerAffiliation withTrashed()
+ * @method static QueryBuilder|JobSeekerAffiliation withoutTrashed()
+ * @mixin \Eloquent
+ */
 class JobSeekerAffiliation extends Model
 {
     use SoftDeletes;
-  
-    protected $table  = 'jobseeker_affiliations';
-    protected $primaryKey = 'id';
+
+    protected $table = 'jobseeker_affiliations';
+
     protected $dates = ['deleted_at'];
     /**
-    * The attributes that should be hidden for arrays.
-    *
-    * @var array
-    */
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
     protected $hidden = [
-       'updated_at', 'deleted_at'
+        'updated_at', 'deleted_at'
     ];
-    
-    public static function getUserAffiliationList($userId)
-    {   
-        $list = [];
-        $query = static::select('affiliation_id as affiliationId', 'other_affiliation as otherAffiliation')
-                    ->where('user_id',$userId)->orderBy('affiliation_id')->get();
-        
-        if($query) {
-            $list = $query->toArray();
-        }
-        
-        return $list;
-    }
-    
-    public static function getJobSeekerAffiliation($userId)
-    {   
-         $query = static::select('affiliation_id as affiliationId', 'affiliations.affiliation_name as affiliationName', 'other_affiliation as otherAffiliation')
-                            ->join('affiliations', 'affiliations.id', '=', 'jobseeker_affiliations.affiliation_id')
-                            ->where('user_id',$userId)
-                            ->where('affiliations.is_active',1)
-                            ->orderBy('affiliation_id');
-        
-        $list = $query->get()->toArray();
 
-        return $list;
+    public function seeker()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
-    
+
+    public function affiliation()
+    {
+        return $this->belongsTo(Affiliation::class);
+    }
+
+    public static function getUserAffiliationList($userId)
+    {
+        return static::select(['affiliation_id as affiliationId', 'other_affiliation as otherAffiliation'])
+            ->where('user_id', $userId)->orderBy('affiliation_id')->get()->toArray();
+    }
+
+    public static function getJobSeekerAffiliation($userId)
+    {
+        return static::select(['affiliation_id as affiliationId', 'affiliations.affiliation_name as affiliationName', 'other_affiliation as otherAffiliation'])
+            ->join('affiliations', 'affiliations.id', '=', 'jobseeker_affiliations.affiliation_id')
+            ->where('user_id', $userId)
+            ->where('affiliations.is_active', 1)
+            ->orderBy('affiliation_id')->get()->toArray();
+    }
+
 }

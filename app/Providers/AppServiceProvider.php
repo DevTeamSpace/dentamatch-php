@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -38,7 +41,17 @@ class AppServiceProvider extends ServiceProvider
                 'cache_path_prefix'=>'',
             ]);
         });
-        
+
+
+        if (App::environment('local')) {
+            DB::listen(function($query) {
+                Log::debug(
+                    $query->sql,
+                    $query->bindings,
+                    $query->time
+                );
+            });
+        }
     }
     
     

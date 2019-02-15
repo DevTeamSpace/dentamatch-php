@@ -2,17 +2,16 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\JobAppliedStatus;
+use App\Models\UserGroup;
+use App\Utils\NotificationUtils;
 use Illuminate\Console\Command;
 use App\Models\User;
-use App\Models\Notification;
-use App\Models\Device;
-use DB;
-use App\Providers\NotificationServiceProvider;
-use Mail;
+use Illuminate\Support\Facades\DB;
 
 class InvitedJobseekerCommand extends Command
 {
-    const NOTIFICATION_INTERVAL = [1,2,3];
+    const NOTIFICATION_INTERVAL = [1, 2, 3];
     /**
      * The name and signature of the console command.
      *
@@ -25,70 +24,45 @@ class InvitedJobseekerCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Cron to send push notification or email to set availability';
+    protected $description = 'Cron to send push notification or email about inactive job invite';
+
+    private $utils;
 
     /**
      * Create a new command instance.
      *
-     * @return void
+     * @param NotificationUtils $utils
      */
-    public function __construct()
+    public function __construct(NotificationUtils $utils)
     {
+        $this->utils = $utils;
         parent::__construct();
     }
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {
-        $notificationData = array(
-                    'notificationData' => "You have pending jobs to accept/reject",
-                    'notification_title'=>'Pending Invites',
-                    'sender_id' => "",
-                    "type" =>1,
-                    'notificationType'=>Notification::OTHER
-                );
-                
         $userModel = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
-                        ->join('jobseeker_profiles','jobseeker_profiles.user_id' , '=','users.id')
-                        ->join('job_lists','job_lists.seeker_id' , '=','users.id')
-                        ->select(
-                                'users.email','users.id',
-                                'jobseeker_profiles.first_name',
-                                'jobseeker_profiles.last_name',
-                                'users.is_verified','users.is_active'
-                                )
-                        ->where('user_groups.group_id', 3)
-                        ->where('job_lists.applied_status',1)
-                        ->whereNotIn('job_lists.applied_status', [2,3,4,5])
-                        ->whereIn(DB::raw("DATEDIFF(now(), job_lists.created_at)"), static::NOTIFICATION_INTERVAL)
-                        ->groupBy('users.id')
-                        ->orderBy('users.id', 'desc')
-                        ->get();
-        
-        if(!empty($userModel)) {
-            foreach($userModel as $value) {
-                $userId = $value->id;
-                
-                $notificationData['receiver_id'] = $userId;
-                $params['data'] = $notificationData;
-                
-                $deviceModel = Device::getDeviceToken($userId);
-                if($deviceModel) {
-                    NotificationServiceProvider::sendPushNotification($deviceModel, $notificationData['notificationData'], $params,$userId);
-                    $data = ['receiver_id'=>$userId, 'notification_data'=>$notificationData['notificationData'],'notification_type'=>Notification::OTHER];
-                    Notification::createNotification($data);
-                } else {
-                    $name = $value->first_name;
-                    $email = $value->email;
-                    Mail::queue('email.pending-accept', ['name' => $name, 'email' => $email], function($message) use($email,$name) {
-                        $message->to($email, $name)->subject(trans("messages.pending_invite_email"));
-                    });
-                }
-            }
+            ->join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'users.id')
+            ->join('job_lists', 'job_lists.seeker_id', '=', 'users.id')
+            ->select(
+                'users.email', 'users.id',
+                'jobseeker_profiles.first_name',
+                'jobseeker_profiles.last_name',
+                'users.is_verified', 'users.is_active'
+            )
+            ->where('user_groups.group_id', UserGroup::JOBSEEKER)
+            ->where('job_lists.applied_status', JobAppliedStatus::INVITED)
+//                        ->whereNotIn('job_lists.applied_status', [2,3,4,5]) // todo why?
+            ->whereIn(DB::raw("DATEDIFF(now(), job_lists.created_at)"), static::NOTIFICATION_INTERVAL)
+            ->groupBy('users.id')
+            ->orderBy('users.id', 'desc')
+            ->get();
+
+        foreach ($userModel as $value) {
+            $this->utils->notifyInviteInactive($value);
         }
     }
 }

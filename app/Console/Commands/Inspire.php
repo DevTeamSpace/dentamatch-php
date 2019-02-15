@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 
 class Inspire extends Command
 {
@@ -24,8 +24,6 @@ class Inspire extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
     public function handle()
     {
@@ -133,7 +131,7 @@ class Inspire extends Command
     
     public function testEmails(){
         $name='Jasvinder Singh';
-        $email ='jasvinder.singh@appster.in';
+        $email = env('ADMIN_EMAIL');
         $url = url("/verification-code/klfjdlkfsdkf34234234");
         
         Mail::send('email.pending-accept', ['name' => $name, 'email' => $email], function($message) use($email,$name) {

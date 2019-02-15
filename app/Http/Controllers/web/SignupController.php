@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\web;
 
+use App\Enums\SignupSource;
+use App\Mail\AdminVerifyJobseeker;
+use App\Mail\UserActivation;
 use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\RecruiterProfile;
@@ -23,7 +26,8 @@ use App\Models\JobSeekerTempAvailability;
 use App\Models\PasswordReset;
 use Hash;
 
-class SignupController extends Controller {
+class SignupController extends Controller
+{
 
     use AuthenticatesUsers;
 
@@ -38,56 +42,59 @@ class SignupController extends Controller {
      * Create a new authentication controller instance.
      * @return void
      */
-    public function __construct() {
-        $this->middleware('auth', ['except' => ['postJobseekerSignUp', 'getJobseekerSignUp','postSignUp', 'postLogin', 'getLogin', 'logout', 'resetPassword', 'getTermsAndCondition', 'dashboard', 'getVerificationCode']]);
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['postJobseekerSignUp', 'getJobseekerSignUp', 'postSignUp', 'postLogin', 'getLogin', 'logout', 'resetPassword', 'getTermsAndCondition', 'dashboard', 'getVerificationCode']]);
     }
 
-     /**
+    /**
      * Method to view login page
      * @return view
      */
-    public function getLogin(Request $request) {
-        if(Auth::check()){
+    public function getLogin(Request $request)
+    {
+        if (Auth::check()) {
             return redirect('users/dashboard');
         }
         return view('web.login');
     }
 
-     /**
-     * Method to check user login 
+    /**
+     * Method to check user login
      * @return view
      */
-    protected function postLogin(\Illuminate\Http\Request $request) {
-        $validation_rules = array('email' => 'required|email', 'password' => 'required');
+    protected function postLogin(Request $request)
+    {
+        $validation_rules = ['email' => 'required|email', 'password' => 'required'];
         $validator = Validator::make($request->all(), $validation_rules);
         if ($validator->fails()) {
             Session::flash('message', "Validation Failure");
         }
-        $users = User::where('email',$request->email)->first();
+        $users = User::where('email', $request->email)->first();
         $credentials = ['email' => $request->email, 'password' => $request->password, 'is_verified' => 1, 'is_active' => 1];
         $message = trans("messages.invalid_cred_or_not_active");
         $redirect = 'login';
-        if (Auth::validate($credentials)){
+        if (Auth::validate($credentials)) {
             $user = User::where('email', $credentials['email'])->first();
             if ($user->userGroup->group_id == UserGroup::RECRUITER && Auth::attempt($credentials)) {
                 $redirect = 'terms-conditions';
                 $term = RecruiterProfile::where('user_id', Auth::user()->id)->first();
-                $request->session()->put('userData', ['basic'=>$user->toArray(),'profile'=>$term->toArray()]);
-                if (!empty($term) && isset($term) && $term->accept_term==1) {
-                  if(empty($term->office_name)){
-                      $redirect = 'home';
-                   }else{
-                      $redirect = 'users/dashboard';  
-                   } 
-                   
+                $request->session()->put('userData', ['basic' => $user->toArray(), 'profile' => $term->toArray()]);
+                if (!empty($term) && isset($term) && $term->accept_term == 1) {
+                    if (empty($term->office_name)) {
+                        $redirect = 'home';
+                    } else {
+                        $redirect = 'users/dashboard';
+                    }
+
                 }
             }
-        }elseif(!empty($users) && $users['is_active'] == 0){
-           $message = trans("messages.deactivated_admin");
-        }elseif(empty($users)){
-           $message = trans("messages.user_not_registered");
-        }else{
-           $message = trans("messages.invalid_credentials");
+        } else if (!empty($users) && $users['is_active'] == 0) {
+            $message = trans("messages.deactivated_admin");
+        } else if (empty($users)) {
+            $message = trans("messages.user_not_registered");
+        } else {
+            $message = trans("messages.invalid_credentials");
         }
         Session::flash('message', $message);
         return redirect($redirect);
@@ -97,39 +104,43 @@ class SignupController extends Controller {
      * Log the user out of the application.
      * @return \Illuminate\Http\Response
      */
-    public function logout() {
+    public function logout()
+    {
         Auth::logout();
         Session::flush();
         return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
     }
 
-     /**
-     * Method to get Terms And Condition 
+    /**
+     * Method to get Terms And Condition
      * @return view
      */
-    public function getTermsAndCondition(Request $request) {
-        $request->session()->set('tutorial', 1);
+    public function getTermsAndCondition(Request $request)
+    {
+        $request->session()->put('tutorial', 1);
         return view('web.terms-conditions');
     }
 
-     /**
-     * Method to home page 
+    /**
+     * Method to home page
      * @return view
      */
-    public function dashboard() {
-        $officeType = \App\Models\OfficeType::where('is_active',1)->orderBy('officetype_name', 'ASC')->get();
+    public function dashboard()
+    {
+        $officeType = \App\Models\OfficeType::where('is_active', 1)->orderBy('officetype_name', 'ASC')->get();
         return view('web.dashboard')->with('officeType', $officeType);
     }
 
-     /**
+    /**
      * Method to get user registered
      * @return view
      */
-    public function postSignUp(Request $request) {
+    public function postSignUp(Request $request)
+    {
         $redirect = 'login';
         try {
             DB::beginTransaction();
-            $validation_rules = array('email' => 'required|email', 'password' => 'required');
+            $validation_rules = ['email' => 'required|email', 'password' => 'required'];
             $validator = Validator::make($request->all(), $validation_rules);
             if ($validator->fails()) {
                 Session::flash('message', trans("messages.validation_failure"));
@@ -150,11 +161,11 @@ class SignupController extends Controller {
                 Session::flash('message', trans("messages.password_not_match_confirm"));
             } else {
                 $uniqueCode = uniqid();
-                $user = array(
-                    'email' => $reqData['email'],
-                    'password' => bcrypt($reqData['password']),
+                $user = [
+                    'email'             => $reqData['email'],
+                    'password'          => bcrypt($reqData['password']),
                     'verification_code' => $uniqueCode,
-                );
+                ];
                 $user_details = User::create($user);
                 RecruiterProfile::create(['user_id' => $user_details->id]);
                 $userGroupModel = new UserGroup();
@@ -162,10 +173,9 @@ class SignupController extends Controller {
                 $userGroupModel->user_id = $user_details->id;
                 $userGroupModel->save();
 
-                Mail::queue('auth.emails.user-activation', ['url' => url("/verification-code/$uniqueCode")], function ($message) use ($reqData) {
-                    $message->to($reqData['email'])
-                            ->subject(trans("messages.confirmation_link"));
-                });
+                $url = url("/verification-code/$uniqueCode");
+                Mail::to($reqData['email'])->queue(new UserActivation(null, $url, 'auth.emails.user-activation'));
+
                 DB::commit();
                 Session::flash('success', trans("messages.successfully_register"));
             }
@@ -176,64 +186,64 @@ class SignupController extends Controller {
         }
         return redirect()->intended($redirect);
     }
-    
-     /**
+
+    /**
      * Method to get seeker  registered
      * @return view
      */
-    public function postJobseekerSignUp(Request $request) {
+    public function postJobseekerSignUp(Request $request)
+    {
 
         try {
             $this->validate($request, [
-                'firstName' => 'required',
-                'lastName' => 'required',
-                'email' => 'required',
+                'firstName'              => 'required',
+                'lastName'               => 'required',
+                'email'                  => 'required',
                 'preferredJobLocationId' => 'required',
-                'jobTitleId' => 'required',
-                'aboutMe' => 'required',
+                'jobTitleId'             => 'required',
+                'aboutMe'                => 'required',
             ]);
             $mappedSkillsArray = [];
             $validateKeys = [];
             $isComplete = 1;
-            $jobTitleModel = JobTitles::where('id',$request->jobTitleId)->first();
-            if($jobTitleModel) {
-              if($jobTitleModel->mapped_skills_id == ""){
-                 $mappedSkillsArray = [];
-              }else{  
-                $mappedSkills = $jobTitleModel->mapped_skills_id; 
-                $mappedSkillsArray = explode(",",$mappedSkills);
-              }  
-                if($jobTitleModel->is_license_required) {
+            $jobTitleModel = JobTitles::where('id', $request->jobTitleId)->first();
+            if ($jobTitleModel) {
+                if ($jobTitleModel->mapped_skills_id == "") {
+                    $mappedSkillsArray = [];
+                } else {
+                    $mappedSkills = $jobTitleModel->mapped_skills_id;
+                    $mappedSkillsArray = explode(",", $mappedSkills);
+                }
+                if ($jobTitleModel->is_license_required) {
                     $isComplete = 0;
-                    $validateKeys['license']= 'required';
+                    $validateKeys['license'] = 'required';
                     $validateKeys['state'] = 'required';
                 }
             }
-            
-            if(!empty($validateKeys)) {
+
+            if (!empty($validateKeys)) {
                 $this->validate($request, $validateKeys);
             }
-            
-            $redirect = 'login';
+
             $reqData = $request->all();
             DB::beginTransaction();
-            
+
             $userExists = User::with('userGroup')->where('email', $reqData['email'])->first();
-            if($userExists){
+            if ($userExists) {
                 if (isset($userExists->userGroup) && !empty($userExists->userGroup)) {
                     if ($userExists->userGroup->group_id == UserGroup::RECRUITER) {
                         Session::flash('message', trans("messages.already_register_as_recruiter"));
                     } else {
                         Session::flash('message', trans("messages.user_exist_same_email"));
                     }
-                }     
+                }
             } else {
                 $uniqueCode = uniqid();
-                $user =  array(
-                    'email' => $reqData['email'],
-                    'password' => isset($reqData['password']) ? Hash::make($reqData['password']) : null,
+                $user = [
+                    'email'             => $reqData['email'],
+                    'password'          => isset($reqData['password']) ? Hash::make($reqData['password']) : null,
                     'verification_code' => $uniqueCode,
-                );
+                ];
                 $userDetails = User::create($user);
                 $userGroupModel = new UserGroup();
                 $userGroupModel->group_id = UserGroup::JOBSEEKER;
@@ -261,43 +271,38 @@ class SignupController extends Controller {
                 $userProfileModel->profile_pic = config('constants.defaultProfileImage');
                 $userProfileModel->is_completed = $isComplete;
                 $userProfileModel->is_job_seeker_verified = $isComplete;
-                $userProfileModel->signup_source = 2;
+                $userProfileModel->signup_source = SignupSource::WEB;
 
                 $userProfileModel->save();
-                
-                if(!empty($mappedSkillsArray)) {
+
+                if (!empty($mappedSkillsArray)) {
                     JobSeekerSkills::addJobSeekerSkills($userDetails->id, $mappedSkillsArray);
                 }
-                
+
                 $current = strtotime(date('Y-m-d'));
-                $last = strtotime(date('Y-m-d')." +60 days");
+                $last = strtotime(date('Y-m-d') . " +60 days");
                 JobSeekerTempAvailability::addTempDateAvailability($userDetails->id, $current, $last);
 
                 $url = url("/verification-code/$uniqueCode");
-                $name = $reqData['firstName'].' '.$reqData['lastName'];
+                $name = $reqData['firstName'] . ' ' . $reqData['lastName'];
                 $email = $reqData['email'];
-                $fname = $reqData['firstName'];
-                Mail::queue('email.user-activation', ['name' => $name, 'url' => $url, 'email' => $reqData['email']], function($message ) use($email,$fname) {
-                        $message->to($email, $fname)->subject(trans("messages.confirmation_link"));
-                    });
-                    
-                if(!empty($reqData['license']) && !empty($reqData['state'])) {
+
+                Mail::to($email)->queue(new UserActivation($name, $url));
+
+                if (!empty($reqData['license']) && !empty($reqData['state'])) {
                     $adminEmail = env('ADMIN_EMAIL');
-                    Mail::queue('email.admin-verify-jobseeker', ['name' => $name, 'email' => $email], function($message ) use($adminEmail) {
-                            $message->to($adminEmail, "Dentamatch Admin")->subject(trans("messages.verify_seeker"));
-                        });
+                    Mail::to($adminEmail)->queue(new AdminVerifyJobseeker($name, $email));
                 }
-                    
-                Session::flash('message', trans("messages.user_registration_successful")); 
+
+                Session::flash('message', trans("messages.user_registration_successful"));
             }
             DB::commit();
-            
+
             Session::flash('success', trans("messages.successfully_register"));
-            
-            
+
+
         } catch (ValidationException $e) {
-            $messages = json_decode($e->getResponse()->content(), true);
-            Log::info($messages);
+            Log::info(json_encode($e->errors()));
             return redirect('jobseeker/signup');
         } catch (\Exception $e) {
             Log::error($e);
@@ -306,27 +311,29 @@ class SignupController extends Controller {
         }
         return redirect('jobseeker/signup');
     }
-    
-     /**
+
+    /**
      * Method to get seeker signup page
      * @return view
      */
-    public function getJobseekerSignUp() {
+    public function getJobseekerSignUp()
+    {
         $jobTitleData = JobTitles::getAll(JobTitles::ACTIVE);
         $preferredLocationId = PreferredJobLocation::getAllPreferrefJobLocation();
-        return view('web.jobseekerSignup', ['jobTitleData'=> $jobTitleData, 'preferredLocationId'=> $preferredLocationId]);
+        return view('web.jobseekerSignup', ['jobTitleData' => $jobTitleData, 'preferredLocationId' => $preferredLocationId]);
     }
 
-     /**
+    /**
      * Method to check verification code
      * @return view
      */
-    public function getVerificationCode($code) {
+    public function getVerificationCode($code)
+    {
         $user = DB::table('users')
-                ->join('user_groups', 'users.id', '=', 'user_groups.user_id')
-                ->select('user_groups.group_id','users.id', 'email')
-                ->where('users.verification_code', $code)
-                ->first();
+            ->join('user_groups', 'users.id', '=', 'user_groups.user_id')
+            ->select('user_groups.group_id', 'users.id', 'email')
+            ->where('users.verification_code', $code)
+            ->first();
         Auth::logout();
         Session::flush();
         $redirect = 'login';
@@ -336,40 +343,40 @@ class SignupController extends Controller {
                 Session::flash('success', trans("messages.verified_user"));
                 if ($user->group_id == UserGroup::JOBSEEKER) {
                     $userProfileModel = UserProfile::getUserProfile($user->id);
-                    $msg = "Hi ".$userProfileModel['first_name']." , <br />Your account is ready for you! Please login with the DentaMatch app.";
+                    $msg = "Hi " . $userProfileModel['first_name'] . " , <br />Your account is ready for you! Please login with the DentaMatch app.";
                     Session::flash('message', $msg);
                     $redirect = 'success-active';
-                    if($userProfileModel['signup_source'] == 2) {
+                    if ($userProfileModel['signup_source'] == SignupSource::WEB) {
                         $token = \Illuminate\Support\Facades\Crypt::encrypt($user->email . time());
-                        $passwordModel = PasswordReset::firstOrNew(array('user_id' => $user->id, 'email' => $user->email));
+                        $passwordModel = PasswordReset::firstOrNew(['user_id' => $user->id, 'email' => $user->email]);
                         $passwordModel->fill(['token' => $token]);
                         $passwordModel->save();
-                        $msg = "Hi ".$userProfileModel['first_name']." , <br />Your account is ready for you! Please set your password to login in DentaMatch app";
-                        $redirect = 'password/reset/'.$token;
+                        $redirect = 'password/reset/' . $token;
                     }
                 }
             } else {
                 Session::flash('message', trans("messages.verified_problem"));
             }
-       } catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error($e);
             Session::flash('message', trans("messages.verified_problem"));
         }
         return redirect($redirect);
     }
 
-     /**
+    /**
      * Method to view tutorials
      * @return view
      */
-    public function getTutorial(Request $request) {
+    public function getTutorial(Request $request)
+    {
         try {
             $tutorial = $request->session()->pull('tutorial', 0);
-            if($tutorial == 1){
-                $officeType = \App\Models\OfficeType::where('is_active',1)->get();
-                RecruiterProfile::where('user_id',Auth::user()->id)->update(['accept_term' => 1]);
+            if ($tutorial == 1) {
+                $officeType = \App\Models\OfficeType::where('is_active', 1)->get();
+                RecruiterProfile::where('user_id', Auth::user()->id)->update(['accept_term' => 1]);
                 return view('web.dashboard')->with('modal', 1)->with('officeType', $officeType);
-            }else{
+            } else {
                 return redirect('home');
             }
         } catch (\Exception $e) {

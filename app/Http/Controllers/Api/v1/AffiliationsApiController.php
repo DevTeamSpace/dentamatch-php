@@ -4,18 +4,19 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use App\Models\Affiliation;
 use App\Helpers\ApiResponse;
 use App\Models\JobSeekerAffiliation;
-use Log;
 
-class AffiliationsApiController extends Controller {
-
-    public function __construct() {
+class AffiliationsApiController extends Controller
+{
+    public function __construct()
+    {
         $this->middleware('ApiAuth');
     }
-    
+
     /**
      * Description : Show affiliation lists with jobseeker affiliations
      * Method : getAffiliationList
@@ -23,48 +24,45 @@ class AffiliationsApiController extends Controller {
      * @param Request $request
      * @return type
      */
-    public function getAffiliationList(Request $request){
+    public function getAffiliationList(Request $request)
+    {
         try {
             $data = [];
-            $jobSeekerAffiliationData=[];
+            $jobSeekerAffiliationData = [];
             $userId = $request->userServerData->user_id;
-            if($userId>0) {
+            if ($userId > 0) {
                 $affiliationList = Affiliation::getAffiliationList();
                 $jobseekerAffiliation = JobSeekerAffiliation::getUserAffiliationList($userId);
 
-                if(!empty($jobseekerAffiliation)) {
-                    foreach($jobseekerAffiliation as $key=>$value) {
+                if (!empty($jobseekerAffiliation)) {
+                    foreach ($jobseekerAffiliation as $key => $value) {
                         $jobSeekerAffiliationData[$value['affiliationId']] = ['affiliationId' => $value['affiliationId'], 'otherAffiliation' => $value['otherAffiliation']];
                     }
                 }
 
-                if(!empty($affiliationList)) {
-                    foreach($affiliationList as $key=>$value) {
-                        $data[$key]['affiliationId']= $value['affiliationId'];
+                if (!empty($affiliationList)) {
+                    foreach ($affiliationList as $key => $value) {
+                        $data[$key]['affiliationId'] = $value['affiliationId'];
                         $data[$key]['affiliationName'] = $value['affiliationName'];
                         $data[$key]['otherAffiliation'] = !empty($jobSeekerAffiliationData[$value['affiliationId']]['otherAffiliation']) ? $jobSeekerAffiliationData[$value['affiliationId']]['otherAffiliation'] : null;
-                        $data[$key]['jobSeekerAffiliationStatus'] = !empty($jobSeekerAffiliationData[$value['affiliationId']]) ? 1 : 0; 
+                        $data[$key]['jobSeekerAffiliationStatus'] = !empty($jobSeekerAffiliationData[$value['affiliationId']]) ? 1 : 0;
                     }
                 }
 
                 $return['list'] = array_values($data);
 
-                $returnResponse =  ApiResponse::customJsonResponse(1, 200, trans("messages.affiliation_list_success"), ApiResponse::convertToCamelCase($return));
+                $returnResponse = ApiResponse::customJsonResponse(1, 200, trans("messages.affiliation_list_success"), ApiResponse::convertToCamelCase($return));
             } else {
-                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
-        } catch (ValidationException $e) {
-            Log::error($e);
-            $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = ApiResponse::responseError("Request validation failed.", ["data" => $messages]);
         } catch (\Exception $e) {
             Log::error($e);
             $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
-        
+
         return $returnResponse;
     }
-    
+
     /**
      * Description : Update user affiliations
      * Method : postUpdateUserSkills
@@ -72,60 +70,58 @@ class AffiliationsApiController extends Controller {
      * @param Request $request
      * @return type
      */
-    public function postAffiliationSaveUpdate(Request $request) {
+    public function postAffiliationSaveUpdate(Request $request)
+    {
         try {
             $this->validate($request, [
                 'affiliationDataArray' => 'sometimes',
-                'other' => 'sometimes',
+                'other'                => 'sometimes',
             ]);
-            
+
             $reqData = $request->all();
             $userId = $request->userServerData->user_id;
             $jobSeekerData = [];
             $keyCount = 0;
-            
-            if($userId > 0){
-                if((!empty($reqData['affiliationDataArray']) && is_array($reqData['affiliationDataArray'])) || (!empty($reqData['other']) && is_array($reqData['other']))){
+
+            if ($userId > 0) {
+                if ((!empty($reqData['affiliationDataArray']) && is_array($reqData['affiliationDataArray'])) || (!empty($reqData['other']) && is_array($reqData['other']))) {
                     JobSeekerAffiliation::where('user_id', '=', $userId)->forceDelete();
                 }
-                
-                if(!empty($reqData['affiliationDataArray']) && is_array($reqData['affiliationDataArray'])){
-                    foreach($reqData['affiliationDataArray'] as $key=>$value) {
-                        if(!empty($value)) {
+
+                if (!empty($reqData['affiliationDataArray']) && is_array($reqData['affiliationDataArray'])) {
+                    foreach ($reqData['affiliationDataArray'] as $key => $value) {
+                        if (!empty($value)) {
                             $jobSeekerData[$key]['affiliation_id'] = $value;
                             $jobSeekerData[$key]['user_id'] = $userId;
                             $jobSeekerData[$key]['other_affiliation'] = null;
                         }
-                        $keyCount=$key+1;
+                        $keyCount = $key + 1;
                     }
                 }
-                
-                if(!empty($reqData['other']) && is_array($reqData['other'])){
-                    foreach($reqData['other'] as $otherAffiliation) {
-                        if(!empty($otherAffiliation['affiliationId'])) {
+
+                if (!empty($reqData['other']) && is_array($reqData['other'])) {
+                    foreach ($reqData['other'] as $otherAffiliation) {
+                        if (!empty($otherAffiliation['affiliationId'])) {
                             $jobSeekerData[$keyCount]['affiliation_id'] = $otherAffiliation['affiliationId'];
                             $jobSeekerData[$keyCount]['user_id'] = $userId;
                             $jobSeekerData[$keyCount]['other_affiliation'] = $otherAffiliation['otherAffiliation'];
                         }
                     }
                 }
-                if(!empty($jobSeekerData)) {
+                if (!empty($jobSeekerData)) {
                     JobSeekerAffiliation::insert($jobSeekerData);
                 }
                 ApiResponse::chkProfileComplete($userId);
-                $returnResponse = ApiResponse::customJsonResponse(1, 200, trans("messages.affiliation_add_success")); 
+                $returnResponse = ApiResponse::customJsonResponse(1, 200, trans("messages.affiliation_add_success"));
             } else {
-                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token")); 
+                $returnResponse = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
         } catch (ValidationException $e) {
-            Log::error($e);
-            $messages = json_decode($e->getResponse()->content(), true);
-            $returnResponse = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $messages]);
+            $returnResponse = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
         } catch (\Exception $e) {
-            Log::error($e);
             $returnResponse = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
         }
-        
+
         return $returnResponse;
     }
 }
