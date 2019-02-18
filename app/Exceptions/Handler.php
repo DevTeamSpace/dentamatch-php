@@ -2,9 +2,15 @@
 
 namespace App\Exceptions;
 
+use App\Helpers\ApiResponse;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -17,7 +23,7 @@ class Handler extends ExceptionHandler
         \Illuminate\Auth\AuthenticationException::class,
         \Illuminate\Auth\Access\AuthorizationException::class,
         \Symfony\Component\HttpKernel\Exception\HttpException::class,
-        \Illuminate\Database\Eloquent\ModelNotFoundException::class,
+        ModelNotFoundException::class,
         \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
     ];
@@ -27,7 +33,7 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $exception
+     * @param  \Exception $exception
      * @return void
      */
     public function report(Exception $exception)
@@ -38,35 +44,45 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @param  \Exception $exception
+     * @return Response
      */
     public function render($request, Exception $exception)
     {
-        if($this->isHttpException($exception)){
+        if ($request->route() && $request->route()->getPrefix() === 'api/v1') {
+
+            if ($exception instanceof ValidationException) {
+                return ApiResponse::errorResponse(trans("messages.validation_failure"), ["data" => $exception->errors()]);
+            }
+
+            return ApiResponse::errorResponse(trans("messages.something_wrong"), ["data" => $exception->getMessage()]);
+        }
+
+        if ($this->isHttpException($exception)) {
             switch ($exception->getStatusCode()) {
                 case 404:
                 case 500:
                     return redirect()->guest('/');
                 default:
-                    if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+                    if ($exception instanceof ModelNotFoundException) {
                         $message = $exception->getMessage();
-                    }elseif($exception instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException){
+                    } else if ($exception instanceof MethodNotAllowedHttpException) {
                         $message = 'The page you are looking for is not available';
                     }
-                    return response()->view('errors.404', array('message'=>$message), 404);
+                    return response()->view('errors.404', ['message' => $message], 404);
             }
         }
+
         return parent::render($request, $exception);
     }
 
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Auth\AuthenticationException  $exception
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @param  \Illuminate\Auth\AuthenticationException $exception
+     * @return Response
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {

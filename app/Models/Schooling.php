@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -41,17 +42,17 @@ use Illuminate\Support\Carbon;
 class Schooling extends Model
 {
     use SoftDeletes;
-  
-    protected $table  = 'schoolings';
+
+    protected $table = 'schoolings';
 
     protected $dates = ['deleted_at'];
     /**
-    * The attributes that should be hidden for arrays.
-    *
-    * @var array
-    */
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
     protected $hidden = [
-       'updated_at', 'deleted_at'
+        'updated_at', 'deleted_at'
     ];
 
     public function parent()
@@ -63,17 +64,16 @@ class Schooling extends Model
     {
         return $this->hasMany(Schooling::class, 'parent_id');
     }
-    
-    public static function getScoolingList()
+
+    public static function getSchoolingList()
     {
-        $query = static::select('schoolings.id as parentId', 'schoolingsChild.id as childId', 'schoolings.school_name as schoolName', 'schoolingsChild.school_name as schoolChildName')
-                ->leftjoin('schoolings AS schoolingsChild','schoolingsChild.parent_id','=','schoolings.id')
-                ->where('schoolingsChild.is_active', 1)
-                ->whereNull('schoolings.parent_id')
-                ->orderBy('schoolings.id')
-                ->orderBy('schoolingsChild.id');
-        
-        $list = $query->get()->toArray();
-        return $list;
+        return static::select(['schoolings.id as parentId', 'schoolingsChild.id as childId', 'schoolings.school_name as schoolName', 'schoolingsChild.school_name as schoolChildName'])
+            ->leftjoin('schoolings AS schoolingsChild', 'schoolingsChild.parent_id', '=', 'schoolings.id')
+            ->where('schoolingsChild.is_active', 1)
+            ->whereNull('schoolings.parent_id')
+            ->orderBy('schoolings.id')
+            ->orderBy('schoolingsChild.id')
+            ->get()
+            ->toArray();
     }
 }
