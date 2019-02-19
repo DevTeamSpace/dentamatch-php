@@ -12,7 +12,7 @@ use App\Models\RecruiterJobs;
 use App\Models\Device;
 use App\Models\UserChat;
 use App\Models\JobSeekerTempAvailability;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
 class PushNotificationApiController extends Controller
@@ -23,59 +23,48 @@ class PushNotificationApiController extends Controller
     }
 
     /**
-     * Description : Get notification list
-     * Method : getNotificationListing
+     * Description : Get notifications
+     * Method : getNotifications
      * formMethod : GET
      * @param Request $request
-     * @return type
+     * @return Response
+     * @throws ValidationException
      */
-    public function getNotificationlists(Request $request)
+    public function getNotifications(Request $request)
     {
-        try {
-            $this->validate($request, [
-                'page' => 'required',
-            ]);
-            $userId = $request->userServerData->user_id;
-            if ($userId > 0) {
-                $reqData = $request->all();
-                $reqData['userId'] = $userId;
-                $userAvailability = JobSeekerTempAvailability::where('user_id', $userId)->pluck('temp_job_date')->toArray();
-                $notificationList = Notification::userNotificationList($reqData);
-                if (count($notificationList['list']) > 0) {
-                    foreach ($notificationList['list'] as $key => $notification) {
-                        if ($notification['job_list_id'] && $notification['job_list_id'] > 0) {
-                            $data = RecruiterJobs::getJobDetail($notification['job_list_id'], $userId);
-                            if (!empty($data)) {
-                                $notification['job_details'] = $data;
-                                $notification['currentAvailability'] = [];
-                                if ($data['job_type'] == JobType::TEMPORARY) {
-                                    $notification['currentAvailability'] = array_values(array_intersect($userAvailability, $data['job_type_dates']));
-                                    if (count($notification['currentAvailability']) == 0) {
-                                        $dateMsgString = [];
-                                        foreach ($data['job_type_dates'] as $jobDate) {
-                                            $dateMsgString[] = date('d M', strtotime($jobDate));
-                                        }
-                                        $message = str_replace('##DATES##', implode($dateMsgString, ','), trans("messages.seeker_set_availabilty"));
-                                        $notificationList['list'][$key]['notification_data'] .= $message;
-                                    }
+        $this->validate($request, [
+            'page' => 'required',
+        ]);
+        $userId = $request->apiUserId;
+        $reqData = $request->all();
+        $reqData['userId'] = $userId;
+        $userAvailability = JobSeekerTempAvailability::where('user_id', $userId)->pluck('temp_job_date')->toArray();
+        $notificationList = Notification::userNotificationList($reqData);
+        if (count($notificationList['list']) > 0) {
+            foreach ($notificationList['list'] as $key => $notification) {
+                if ($notification['job_list_id'] && $notification['job_list_id'] > 0) {
+                    $data = RecruiterJobs::getJobDetail($notification['job_list_id'], $userId);
+                    if (!empty($data)) {
+                        $notification['job_details'] = $data;
+                        $notification['currentAvailability'] = [];
+                        if ($data['job_type'] == JobType::TEMPORARY) {
+                            $notification['currentAvailability'] = array_values(array_intersect($userAvailability, $data['job_type_dates']));
+                            if (count($notification['currentAvailability']) == 0) {
+                                $dateMsgString = [];
+                                foreach ($data['job_type_dates'] as $jobDate) {
+                                    $dateMsgString[] = date('d M', strtotime($jobDate));
                                 }
+                                $message = str_replace('##DATES##', implode($dateMsgString, ','), trans("messages.seeker_set_availabilty"));
+                                $notificationList['list'][$key]['notification_data'] .= $message;
                             }
                         }
                     }
-                    $response = ApiResponse::customJsonResponse(1, 200, trans("messages.notification_list"), ApiResponse::convertToCamelCase($notificationList));
-                } else {
-                    $response = ApiResponse::customJsonResponse(0, 201, trans("messages.no_data_found"));
                 }
-            } else {
-                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
             }
-        } catch (ValidationException $e) {
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
-        } catch (\Exception $e) {
-            Log::error($e);
-            $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
+            return ApiResponse::successResponse(trans("messages.notification_list"), $notificationList);
         }
-        return $response;
+
+        return ApiResponse::noDataResponse();
     }
 
     /**
@@ -83,61 +72,44 @@ class PushNotificationApiController extends Controller
      * Method : Read unread notification
      * formMethod : POST
      * @param Request $request
-     * @return type
+     * @return Response
+     * todo anyone can 'read' any notification
+     * @throws ValidationException
      */
 
-    public function PostUpdateNotification(Request $request)
+    public function updateNotification(Request $request)
     {
-        try {
-            $this->validate($request, [
-                'notificationId' => 'required',
-            ]);
-            $userId = $request->userServerData->user_id;
-            if ($userId > 0) {
-                $reqData = $request->all();
-                Notification::where('id', $reqData['notificationId'])->update(['seen' => 1]);
-                $response = ApiResponse::customJsonResponse(1, 200, trans("messages.data_saved_success"));
-            } else {
-                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
-            }
-        } catch (ValidationException $e) {
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
-        } catch (\Exception $e) {
-            Log::error($e);
-            $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
-        }
-        return $response;
+        $this->validate($request, [
+            'notificationId' => 'required',
+        ]);
+        Notification::where('id', $request->input('notificationId'))->update(['seen' => 1]);
+        return ApiResponse::successResponse(trans("messages.data_saved_success"));
     }
 
     /**
      * Description : send chat push notification (from nodejs chat)
      * formMethod : POST
      * @param Request $request
+     * @return array|string
+     * @throws ValidationException
      */
     public function userChatNotification(Request $request)
     {
         $this->success = 0;
-        try {
-            $requestData = $request->all();
-            $validateKeys = ['fromId'   => 'required', 'toId' => 'required',
-                             'fromName' => 'required', 'message' => 'required',
-                             'sentTime' => 'required', 'messageId' => 'required'];
-            if (isset($request['recruiterId'])) {
-                $validateKeys = ['name'          => 'required', 'recruiterId' => 'required', 'message' => 'required',
-                                 'messageListId' => 'required', 'seekerId' => 'required', 'messageId' => 'required',
-                                 'timestamp'     => 'required', 'recruiterBlock' => 'required', 'seekerBlock' => 'required'];
-                $requestData['toId'] = $requestData['seekerId'];
-            }
-            $this->validate($request, $validateKeys);
-            $deviceModel = Device::getDeviceToken($requestData['toId']);
-            if ($deviceModel) {
-                PushNotificationService::send($deviceModel, $requestData['message'], ["data" => $requestData], $requestData['toId']);
-            }
-        } catch (ValidationException $e) {
-            return ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
-        } catch (\Exception $e) {
-            Log::error($e);
-            return $e->getMessage();
+        $requestData = $request->all();
+        $validateKeys = ['fromId'   => 'required', 'toId' => 'required',
+                         'fromName' => 'required', 'message' => 'required',
+                         'sentTime' => 'required', 'messageId' => 'required'];
+        if (isset($request['recruiterId'])) {
+            $validateKeys = ['name'          => 'required', 'recruiterId' => 'required', 'message' => 'required',
+                             'messageListId' => 'required', 'seekerId' => 'required', 'messageId' => 'required',
+                             'timestamp'     => 'required', 'recruiterBlock' => 'required', 'seekerBlock' => 'required'];
+            $requestData['toId'] = $requestData['seekerId'];
+        }
+        $this->validate($request, $validateKeys);
+        $deviceModel = Device::getDeviceToken($requestData['toId']);
+        if ($deviceModel) {
+            PushNotificationService::send($deviceModel, $requestData['message'], ["data" => $requestData], $requestData['toId']);
         }
     }
 
@@ -146,28 +118,16 @@ class PushNotificationApiController extends Controller
      * Method : Update device token
      * formMethod : POST
      * @param Request $request
-     * @return type
+     * @return Response
+     * @throws ValidationException
      */
     public function PostUpdateDeviceToken(Request $request)
     {
-        try {
-            $this->validate($request, [
-                'updateDeviceToken' => 'required',
-            ]);
-            $userId = $request->userServerData->user_id;
-            $reqData = $request->all();
-            if ($userId > 0) {
-                Device::where('user_id', $userId)->update(['device_token' => $reqData['updateDeviceToken']]);
-                $response = ApiResponse::customJsonResponse(1, 200, trans("messages.update_device_token"));
-            } else {
-                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
-            }
-        } catch (ValidationException $e) {
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
-        } catch (\Exception $e) {
-            $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
-        }
-        return $response;
+        $this->validate($request, [
+            'updateDeviceToken' => 'required',
+        ]);
+        Device::where('user_id', $request->apiUserId)->update(['device_token' => $request->input('updateDeviceToken')]);
+        return ApiResponse::successResponse(trans("messages.update_device_token"));
     }
 
     /**
@@ -175,28 +135,18 @@ class PushNotificationApiController extends Controller
      * Method : Delete notification
      * formMethod : POST
      * @param Request $request
-     * @return type
+     * @return Response
+     * @throws ValidationException|\Exception
+     * todo anyone can delete any notification
+     * todo delete without finding
      */
     public function PostDeleteNotification(Request $request)
     {
-        try {
-            $this->validate($request, [
-                'notificationId' => 'required',
-            ]);
-            $userId = $request->userServerData->user_id;
-            $reqData = $request->all();
-            if ($userId > 0) {
-                Notification::findOrFail($reqData['notificationId'])->delete();
-                $response = ApiResponse::customJsonResponse(1, 200, trans("messages.notification_delete"));
-            } else {
-                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
-            }
-        } catch (ValidationException $e) {
-            $response = ApiResponse::responseError(trans("messages.validation_failure"), ["data" => $e->errors()]);
-        } catch (\Exception $e) {
-            $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
-        }
-        return $response;
+        $this->validate($request, [
+            'notificationId' => 'required',
+        ]);
+        Notification::findOrFail($request->input('notificationId'))->delete();
+        return ApiResponse::successResponse(trans("messages.notification_delete"));
     }
 
     /**
@@ -204,47 +154,35 @@ class PushNotificationApiController extends Controller
      * Method : get unread notification
      * formMethod : GET
      * @param Request $request
-     * @return type
+     * @return Response
      */
-    public function GetunreadNotification(Request $request)
+    public function getUnreadCount(Request $request)
     {
-        try {
-            $userId = $request->userServerData->user_id;
-            if ($userId > 0) {
-                $query = Notification::where('receiver_id', '=', $userId)->where('seen', '=', 0);
-                $total = $query->count();
-                $unread['notificationCount'] = $total;
-                $response = ApiResponse::customJsonResponse(1, 200, "", $unread);
-            } else {
-                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
-            }
-        } catch (\Exception $e) {
-            $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
-        }
-        return $response;
+        $userId = $request->apiUserId;
+        $total = Notification::where('receiver_id', $userId)->where('seen', 0)->count();
+        return ApiResponse::successResponse("", ['notificationCount' => $total]);
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws ValidationException
+     */
     public function userChatDelete(Request $request)
     {
-        try {
-            $userId = $request->userServerData->user_id;
-            $this->validate($request, [
-                'recruiterId' => 'required',
-            ]);
-            if ($userId > 0) {
-                UserChat::where(function ($query) use ($userId, $request) {
-                    $query->where('from_id', $userId)->where('to_id', $request->recruiterId);
-                })->orwhere(function ($query) use ($userId, $request) {
-                    $query->where('to_id', $userId)->where('from_id', $request->recruiterId);
-                })->delete();
-                $response = ApiResponse::customJsonResponse(1, 200);
-            } else {
-                $response = ApiResponse::customJsonResponse(0, 204, trans("messages.invalid_token"));
-            }
-        } catch (\Exception $e) {
-            $response = ApiResponse::responseError(trans("messages.something_wrong"), ["data" => $e->getMessage()]);
-        }
-        return $response;
+        $userId = $request->apiUserId;
+        $this->validate($request, [
+            'recruiterId' => 'required',
+        ]);
+        $recruiterId = $request->input('recruiterId');
+
+        UserChat::where(function ($query) use ($userId, $recruiterId) {
+            $query->where('from_id', $userId)->where('to_id', $recruiterId);
+        })->orwhere(function ($query) use ($userId, $recruiterId) {
+            $query->where('to_id', $userId)->where('from_id', $recruiterId);
+        })->delete();
+
+        return ApiResponse::successResponse();
     }
 
 }

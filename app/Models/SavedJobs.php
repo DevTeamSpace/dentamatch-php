@@ -41,7 +41,7 @@ use Illuminate\Support\Facades\DB;
  */
 class SavedJobs extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes;   // todo why using this and forceDelete at the same time?
 
     protected $table = 'saved_jobs';
     /**

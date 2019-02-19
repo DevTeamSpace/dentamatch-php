@@ -47,7 +47,7 @@ class PreferredJobLocation extends Model
         'created_at', 'updated_at', 'deleted_at' // todo soft delete?
     ];
 
-    public static function getAllPreferrefJobLocation()
+    public static function getAllPreferredJobLocation()
     {
         return static::where('is_active', 1)->get()->toArray();
     }

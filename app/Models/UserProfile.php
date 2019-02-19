@@ -143,8 +143,8 @@ class UserProfile extends Model
     public static function getAvailability($userId, $calendarStartDate, $calendarEndDate)
     {
         $list = ['calendarAvailability' => [], 'tempDatesAvailability' => []];
-        $jobSeekerModel = static::select('is_fulltime', 'is_parttime_monday', 'is_parttime_tuesday', 'is_parttime_wednesday',
-            'is_parttime_thursday', 'is_parttime_friday', 'is_parttime_saturday', 'is_parttime_sunday')
+        $jobSeekerModel = static::select(['is_fulltime', 'is_parttime_monday', 'is_parttime_tuesday', 'is_parttime_wednesday',
+                                          'is_parttime_thursday', 'is_parttime_friday', 'is_parttime_saturday', 'is_parttime_sunday'])
             ->where('user_id', $userId)->first();
 
         if ($jobSeekerModel) {
