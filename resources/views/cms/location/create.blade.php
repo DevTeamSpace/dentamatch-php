@@ -1,37 +1,39 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+  <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Add Location</div>
-                <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('cms/location/store') }}">
-                        {!! csrf_field() !!}
+      <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-default">
+          <div class="panel-heading">Add Location</div>
+          <div class="panel-body">
+            <form class="form-horizontal" role="form" method="POST" action="{{ url('cms/location/store') }}">
+              {!! csrf_field() !!}
 
-                        <div class="form-group{{ $errors->has('zipcode') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Zipcode</label>
+              <div class="form-group{{ $errors->has('zipcode') ? ' has-error' : '' }}">
+                <label class="col-md-4 control-label">Zipcode</label>
 
-                            <div class="col-md-6">
-                                <input type="number" minlength="5" maxlength="8" class="form-control" name="zipcode" value="{{ old('zipcode') }}">
+                <div class="col-md-6">
+                  <input type="number" minlength="5" maxlength="8" class="form-control" name="zipcode"
+                         value="{{ old('zipcode') }}">
 
-                                @if ($errors->has('zipcode'))
-                                    <span class="help-block">
+                  @if ($errors->has('zipcode'))
+                    <span class="help-block">
                                         <strong>{{ $errors->first('zipcode') }}</strong>
                                     </span>
-                                @endif
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Description</label>
-                            <div class="col-md-6">
-                                <input type="text" maxlength="255" class="form-control" name="description" value="{{ old('description') }}">
-                            </div>
-                        </div>
-                        
-<!--                        <div class="form-group">
+                  @endif
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label">Description</label>
+                <div class="col-md-6">
+                  <input type="text" maxlength="255" class="form-control" name="description"
+                         value="{{ old('description') }}">
+                </div>
+              </div>
+
+            <!--                        <div class="form-group">
                             <label class="col-md-4 control-label">Free Trial Period</label>
                             <div class="col-md-6">
                                 <select class="form-control" name="free_trial_period" >
@@ -46,25 +48,25 @@
                             </div>
                         </div>-->
 
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Is active</label>
+              <div class="form-group">
+                <label class="col-md-4 control-label">Is active</label>
 
-                            <div class="col-md-6" style="margin-top: 7px;">
-                                <input type="checkbox" name="is_active">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-save"></i>Save
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                <div class="col-md-6" style="margin-top: 7px;">
+                  <input type="checkbox" name="is_active">
                 </div>
-            </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-md-6 col-md-offset-4">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-btn fa-save"></i>Save
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 @endsection

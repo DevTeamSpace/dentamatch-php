@@ -171,3 +171,19 @@ $(window).load(function() {
 
 
 });
+
+$(document).ready(function() {
+    $(document).on('click', '.js-work-days-calendar', function() {
+      var $this = $(this);
+      var tempDates = $this.find('.js-dates').val().split(/[|,]+/);
+
+      $this.datepicker({
+        format: 'yyyy/mm/dd',
+        autoclose: true,
+        daysOfWeekDisabled: [0, 1, 2, 3, 4, 5, 6],
+      }).on('show', function(e) {
+        $this.datepicker('setDates', tempDates);
+      }).datepicker('show');
+    });
+
+});
