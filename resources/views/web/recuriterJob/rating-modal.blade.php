@@ -200,13 +200,13 @@
 </div>
 <!--Fav Modal -->
 <script type="text/javascript">
-  $(document).ready(function () {
-    $('#favsekeerPopup_22').modal('show');
-    var spanClassFav = $('#favsekeerPopup_{{ old("tab") }}').find('span.star').hasClass('star-empty');
-    if (spanClassFav == true) {
-      $('#favsekeerPopup_{{ old("tab") }}').modal('show');
-    }
-  });
+  {{--$(document).ready(function () {--}}
+    {{--$('#favsekeerPopup_22').modal('show');--}}
+    {{--var spanClassFav = $('#favsekeerPopup_{{ old("tab") }}').find('span.star').hasClass('star-empty');--}}
+    {{--if (spanClassFav == true) {--}}
+      {{--$('#favsekeerPopup_{{ old("tab") }}').modal('show');--}}
+    {{--}--}}
+  {{--});--}} // todo why?
   $('#punctuality_{{ $seeker["seeker_id"] }}').rating({
     icon: '',
     color: '#fff',

@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="{{asset('web/css/bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{asset('web/css/bootstrap-select.css')}}">
   <link rel="stylesheet" href="{{asset('web/css/bootstrap-custom-theme.css')}}">
-
+  <link rel="stylesheet" href="{{asset('web/css/bootstrap-datepicker.css')}}">
   <link rel="stylesheet" href="{{asset('web/plugins/parsley/css/parsley.css')}}">
   <link rel="stylesheet" href="{{asset('web/css/dentaIcon.css')}}">
   <link rel="stylesheet" href="{{asset('web/css/dashboard.css')}}">

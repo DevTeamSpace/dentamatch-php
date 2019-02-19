@@ -39,45 +39,10 @@
             @endif
           </div>
         </div>
-        <div class="job-type-detail">
-          <p class="nopadding">{{$seeker['jobtitle_name']}}</p>
-          @if($seeker['is_fulltime'] && $jobDetails['job_type']==\App\Enums\JobType::FULLTIME)
-            <span class="drk-green statusBtn mr-r-5">Full Time</span>
-          @elseif(($seeker['is_parttime_monday'] || $seeker['is_parttime_tuesday'] || $seeker['is_parttime_wednesday'] || $seeker['is_parttime_thursday'] || $seeker['is_parttime_friday'] || $seeker['is_parttime_saturday'] || $seeker['is_parttime_sunday']) && $jobDetails['job_type']==\App\Enums\JobType::PARTTIME)
-            <span class="bg-ltgreen statusBtn mr-r-5">Part Time</span>
-            <span> |
-              @php
-                $dayArr = [];
-                ($seeker['is_parttime_monday']==1)?array_push($dayArr,'Monday'):'';
-                ($seeker['is_parttime_tuesday']==1)?array_push($dayArr,'Tuesday'):'';
-                ($seeker['is_parttime_wednesday']==1)?array_push($dayArr,'Wednesday'):'';
-                ($seeker['is_parttime_thursday']==1)?array_push($dayArr,'Thursday'):'';
-                ($seeker['is_parttime_friday']==1)?array_push($dayArr,'Friday'):'';
-                ($seeker['is_parttime_saturday']==1)?array_push($dayArr,'Saturday'):'';
-                ($seeker['is_parttime_sunday']==1)?array_push($dayArr,'Sunday'):'';
-              @endphp
-              {{ implode(', ',$dayArr) }}
-        </span>
-          @elseif($jobDetails['job_type']==\App\Enums\JobType::TEMPORARY)
-            <span class="bg-ember statusBtn mr-r-5">Temporary</span>
-            @if($seeker['temp_job_dates'])
-              <span class="dropdown date-drop">
-            @php
-              $dates = explode(',',$seeker['temp_job_dates']);
-            @endphp
-                <input type="hidden" class="tempDates" value="{{ $seeker['temp_job_dates'] }}">
-            <a href="javascript:void(0);" class=" dropdown-toggle showCalendarProfile">
-                <span class="day-drop">{{ date('l, M d, Y',strtotime($dates[0])) }}</span>
-                <span class="fa fa-calendar"></span> View All Dates</a>
-              <!--                <ul class="dropdown-menu">
-                    @foreach ($dates as $date)
-                <li>{{ date('l, M d, Y',strtotime($date)) }}</li>
-                    @endforeach
-                      </ul>-->
-            </span>
-            @endif
-          @endif
-        </div>
+        <p class="nopadding">{{$seeker['jobtitle_name']}}</p>
+
+        @include('web.recuriterJob.partial.seeker-timetable', ['seekerDetails' => $seeker, 'jobType' => $jobDetails['job_type']])
+
         <dl class="dl-horizontal text-left mr-t-30">
           @if(isset($seekersList['allSkills'][$seeker['user_id']]))
             @foreach($seekersList['allSkills'][$seeker['user_id']] as $skills)

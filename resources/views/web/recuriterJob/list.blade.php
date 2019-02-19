@@ -1,14 +1,10 @@
 @extends('web.layouts.dashboard')
 
-@section('css')
-  <link rel="stylesheet" href="{{asset('web/css/style.css')}}">
-  <link rel="stylesheet" href="{{asset('web/css/bootstrap-datepicker.css')}}">
-@endsection
 @section('content')
   <div id="ajaxData" class="container mr-t-30 padding-container-template">
     @include('shared.alert')
     @if(count($jobList)>0)
-      @include('web.recuriterJob.job-data')
+      @include('web.recuriterJob.list-jobs')
     @else
       <div class="jobCatbox mr-b-20">
         <div class="template-job-information ">

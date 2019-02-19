@@ -1,9 +1,5 @@
 @extends('web.layouts.dashboard')
 
-@section('css')
-  <link rel="stylesheet" href="{{asset('web/css/style.css')}}">
-  <link rel="stylesheet" href="{{asset('web/css/bootstrap-datepicker.css')}}">
-@endsection
 @section('content')
   @php
     $datesTemp = explode(',',$jobDetails['temp_job_dates']);
@@ -40,47 +36,9 @@
 
           </span>
           <h6>{{$seekerDetails['jobtitle_name']}}</h6>
-          <div class="job-type-detail seeker-detail-temp">
 
-            @if($seekerDetails['is_fulltime'])
-              <span class="statusBtn drk-green text-center statusBtnMargin mr-b-5">Full Time</span>
-            @endif
-            @if($seekerDetails['is_parttime_monday'] || $seekerDetails['is_parttime_tuesday'] || $seekerDetails['is_parttime_wednesday'] || $seekerDetails['is_parttime_thursday'] || $seekerDetails['is_parttime_friday'] || $seekerDetails['is_parttime_saturday'] || $seekerDetails['is_parttime_sunday'])
-              <span class="statusBtn bg-ltgreen text-center statusBtnMargin mr-b-5">Part Time</span>
-              <span> |
-                @php
-                  $dayArr = [];
-                  ($seekerDetails['is_parttime_monday']==1)?array_push($dayArr,'Monday'):'';
-                  ($seekerDetails['is_parttime_tuesday']==1)?array_push($dayArr,'Tuesday'):'';
-                  ($seekerDetails['is_parttime_wednesday']==1)?array_push($dayArr,'Wednesday'):'';
-                  ($seekerDetails['is_parttime_thursday']==1)?array_push($dayArr,'Thursday'):'';
-                  ($seekerDetails['is_parttime_friday']==1)?array_push($dayArr,'Friday'):'';
-                  ($seekerDetails['is_parttime_saturday']==1)?array_push($dayArr,'Saturday'):'';
-                  ($seekerDetails['is_parttime_sunday']==1)?array_push($dayArr,'Sunday'):'';
-                @endphp
-                {{ implode(', ',$dayArr) }}
-                    </span>
-            @endif
-            @if($seekerDetails['temp_job_dates'])
-              <label>
-                <span class="bg-ember statusBtn mr-r-5">Temporary</span>
-                <span class="dropdown date-drop">
-                            @php
-                              $dates = explode(' | ',$seekerDetails['temp_job_dates']);
-                            @endphp
-                  <input type="hidden" id="tempDates" value="{{ $seekerDetails['temp_job_dates'] }}">
-                            <a href="#" class=" dropdown-toggle" id="showCalendarProfile">
-                                <span class="day-drop">{{ date('l, M d, Y',strtotime($dates[0])) }}</span>
-                                <span class="fa fa-calendar"></span> View All Dates</a>
-                <!--                            <ul class="dropdown-menu">
-                              @foreach ($dates as $date)
-                  <li>{{ date('l, M d, Y',strtotime($date)) }}</li>
-                              @endforeach
-                        </ul>-->
-                      </span>
-              </label>
-            @endif
-          </div>
+          @include('web.recuriterJob.partial.seeker-timetable')
+
         </div>
         <form action="{{ url('job/updateStatus') }}" method="post">
           <div class="col-md-3 text-right">
@@ -314,24 +272,7 @@
 @endsection
 
 @section('js')
-  <script src="{{asset('web/scripts/moment.min.js')}}"></script>
-  <script src="{{asset('web/scripts/bootstrap-datepicker.js')}}"></script>
   <script type="text/javascript">
-    $(document).ready(function () {
-      $('#showCalendarProfile').datepicker({
-        format: 'yyyy/mm/dd',
-        autoclose: true,
-        daysOfWeekDisabled: [0, 1, 2, 3, 4, 5, 6],
-      });
-      $('#showCalendarProfile').click(function () {
-        console.log('ssss');
-        var tempDates = $('#tempDates').val().split('|');
-        console.log(tempDates);
-
-        $(this).datepicker('setDates', tempDates);
-        //['06-05-2018','06-06-2018','06-07-2018']
-      });
-    })
     $('.thumb-certificate').click(function () {
       var imgUrl = "{{ url('image/550/500/?src=') }}";
       $('#certificateModal').modal({show: true});

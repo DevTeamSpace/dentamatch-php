@@ -1,7 +1,5 @@
 @extends('web.layouts.dashboard')
-@section('css')
-  <link rel="stylesheet" href="{{asset('web/css/bootstrap-datepicker.css')}}">
-@endsection
+
 @section('content')
   <div class="container padding-container-template">
     <!--breadcrumb-->
@@ -27,43 +25,9 @@
                    </span>
         </div>
       </div>
-      <div class="job-type-detail">
-        @if($job['job_type']==\App\Enums\JobType::FULLTIME)
-          <span class="drk-green statusBtn mr-r-5">Full Time</span>
-        @elseif($job['job_type']==\App\Enums\JobType::PARTTIME)
-          <span class="bg-ltgreen statusBtn mr-r-5">Part Time</span>
-          <span> |
-            @php
-              $dayArr = [];
-              ($job['is_monday']==1)?array_push($dayArr,'Monday'):'';
-              ($job['is_tuesday']==1)?array_push($dayArr,'Tuesday'):'';
-              ($job['is_wednesday']==1)?array_push($dayArr,'Wednesday'):'';
-              ($job['is_thursday']==1)?array_push($dayArr,'Thursday'):'';
-              ($job['is_friday']==1)?array_push($dayArr,'Friday'):'';
-              ($job['is_saturday']==1)?array_push($dayArr,'Saturday'):'';
-              ($job['is_sunday']==1)?array_push($dayArr,'Sunday'):'';
-            @endphp
-            {{ implode(', ',$dayArr) }}
-            </span>
-        @else
-          <span class="bg-ember statusBtn mr-r-5">Temporary</span>
-          <span class="dropdown date-drop">
-                @php
-                  $dates = explode(',',$job['temp_job_dates']);
-                  $seekerDatesCount = count($dates);
-                @endphp
-            <input type="hidden" id="tempDates" value="{{ $job['temp_job_dates'] }}">
-                <a href="#" class=" dropdown-toggle" id="showCalendarProfile"><span
-                          class="day-drop">{{ date('l, d M Y',strtotime($dates[0])) }}</span>
-                <span class="fa fa-calendar"></span> View All Dates</a>
-          <!--                    <ul class="dropdown-menu">
-                        @foreach ($dates as $date)
-            <li>{{ date('l, d M Y',strtotime($date)) }}</li>
-                        @endforeach
-                  </ul>-->
-                </span>
-        @endif
-      </div>
+
+      @include('web.recuriterJob.partial.job-type')
+
       <div class="template-job-information mr-t-30">
         <div class="template-job-information-left j-i-m-l">
           <address>
@@ -192,24 +156,8 @@
       @endsection
 
       @section('js')
-        <script src="{{asset('web/scripts/moment.min.js')}}"></script>
-        <script src="{{asset('web/scripts/bootstrap-datepicker.js')}}"></script>
         <script type="text/javascript">
-          $(document).ready(function () {
-            $('#showCalendarProfile').datepicker({
-              format: 'yyyy/mm/dd',
-              autoclose: true,
-              daysOfWeekDisabled: [0, 1, 2, 3, 4, 5, 6],
-            });
-            $('#showCalendarProfile').click(function () {
-              console.log('ssss');
-              var tempDates = $('#tempDates').val().split(',');
-              console.log(tempDates);
 
-              $(this).datepicker('setDates', tempDates);
-              //['06-05-2018','06-06-2018','06-07-2018']
-            });
-          })
           var urlFav = "{{ url('recruiter/markFavourite') }}";
 
 

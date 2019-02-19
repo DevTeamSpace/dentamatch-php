@@ -244,7 +244,7 @@ class RecruiterJobController extends Controller
             $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
 
             if ($request->ajax()) {
-                return view('web.recuriterJob.job-data', ['jobList' => $this->viewData['jobList'], 'jobTemplateModalData' => $this->viewData['jobTemplateModalData']])->render();
+                return view('web.recuriterJob.list-jobs', ['jobList' => $this->viewData['jobList'], 'jobTemplateModalData' => $this->viewData['jobTemplateModalData']])->render();
             }
 
             return $this->returnView('list');
@@ -267,7 +267,7 @@ class RecruiterJobController extends Controller
             $this->viewData['navActive'] = 'pending-rating';
 
             if ($request->ajax()) {
-                return view('web.recuriterJob.job-data', ['jobList' => $this->viewData['jobList'], 'jobTemplateModalData' => $this->viewData['jobTemplateModalData']])->render();
+                return view('web.recuriterJob.list-jobs', ['jobList' => $this->viewData['jobList'], 'jobTemplateModalData' => $this->viewData['jobTemplateModalData']])->render();
             }
 
             return $this->returnView('list');
@@ -279,27 +279,24 @@ class RecruiterJobController extends Controller
 
     /**
      * Method to view job details
-     * @return view
+     * @param Request $request
+     * @param $jobId
+     * @return Response
      */
     public function jobDetails(Request $request, $jobId)
     {
-        try {
-            $userId = Auth::user()->id;
-            if (RecruiterJobs::where('id', $jobId)->first()) {
-                $this->viewData['job'] = RecruiterJobs::getRecruiterJobDetails($jobId);
-                $this->viewData['skills'] = TemplateSkills::getTemplateSkills($this->viewData['job']['job_template_id']);
-                $this->viewData['seekerListHired'] = $this->getData($this->viewData['job'], JobAppliedStatus::HIRED);
-                $this->viewData['seekerListInvited'] = $this->getData($this->viewData['job'], JobAppliedStatus::INVITED);
-                $this->viewData['seekerListSortListed'] = $this->getData($this->viewData['job'], JobAppliedStatus::SHORTLISTED);
-                $this->viewData['seekerListApplied'] = $this->getData($this->viewData['job'], JobAppliedStatus::APPLIED);
-                $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
-                return $this->returnView('view');
-            } else {
-                return redirect('job/lists');
-            }
-        } catch (\Exception $e) {
-            Log::error($e);
-            return view('web.error.', ["message" => $e->getMessage()]);
+        $userId = Auth::user()->id;
+        if (RecruiterJobs::where('id', $jobId)->first()) {
+            $this->viewData['job'] = RecruiterJobs::getRecruiterJobDetails($jobId);
+            $this->viewData['skills'] = TemplateSkills::getTemplateSkills($this->viewData['job']['job_template_id']);
+            $this->viewData['seekerListHired'] = $this->getData($this->viewData['job'], JobAppliedStatus::HIRED);
+            $this->viewData['seekerListInvited'] = $this->getData($this->viewData['job'], JobAppliedStatus::INVITED);
+            $this->viewData['seekerListSortListed'] = $this->getData($this->viewData['job'], JobAppliedStatus::SHORTLISTED);
+            $this->viewData['seekerListApplied'] = $this->getData($this->viewData['job'], JobAppliedStatus::APPLIED);
+            $this->viewData['jobTemplateModalData'] = JobTemplates::getAllUserTemplates($userId);
+            return $this->returnView('view');
+        } else {
+            return redirect('job/lists');
         }
     }
 
