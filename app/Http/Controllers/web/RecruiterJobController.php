@@ -22,6 +22,7 @@ use App\Models\Notification;
 use App\Models\OfficeType;
 use App\Models\RecruiterOfficeType;
 use DB;
+use Illuminate\Http\Response;
 use Log;
 use App\Http\Requests\CheckJobAppliedOrNotRequest;
 use Session;
@@ -110,7 +111,7 @@ class RecruiterJobController extends Controller
             $this->viewData['offices'] = RecruiterOffice::getAllRecruiterOffices(Auth::user()->id);
             $this->viewData['templateId'] = $templateId;
             $this->viewData['jobTemplates'] = JobTemplates::findById($templateId);
-            $this->viewData['preferredLocationId'] = PreferredJobLocation::getAllPreferrefJobLocation();
+            $this->viewData['preferredLocationId'] = PreferredJobLocation::getAllPreferredJobLocation();
             $payrate = Configs::select('config_data')->where('config_name', '=', 'PAYRATE')->first();
             $this->viewData['payrateUrl'] = '';
             if ($payrate->config_data != null) {
@@ -126,35 +127,32 @@ class RecruiterJobController extends Controller
 
     /**
      * Method to search job seekers
-     * @return view
+     * @param Request $request
+     * @param $jobId
+     * @return Response
      */
     public function searchSeekers(Request $request, $jobId)
     {
-        try {
-            $userId = Auth::user()->id;
-            $searchData = $request->all();
-            $preferredLocationId = $request->get('preferredLocationId');
-            $availAll = $request->get('avail_all');
-            if (empty($availAll)) {
-                $availAll = 0;
-            }
-            if (empty($preferredLocationId)) {
-                $preferredLocationId = "";
-            }
-            $searchData['avail_all'] = $availAll;
-            $searchData['preferredLocationId'] = $preferredLocationId;
-            $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
-            $seekersList = JobSeekerProfiles::getJobSeekerProfiles($jobDetails, $searchData);
-            $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
-            $preferredLocations = PreferredJobLocation::getAllPreferrefJobLocation();
-            if ($request->ajax()) {
-                return view('web.recuriterJob.seekers-data', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId' => $jobId, 'jobTemplateModalData' => $jobTemplateModalData, 'preferredLocations' => $preferredLocations, 'preferredLocationId' => $preferredLocationId])->render();
-            }
-            return view('web.recuriterJob.search', compact('seekersList', 'jobDetails', 'searchData', 'jobId', 'jobTemplateModalData', 'preferredLocations', 'preferredLocationId'));
-        } catch (\Exception $e) {
-            Log::error($e);
-            return view('web.error.', ["message" => $e->getMessage()]);
+        $userId = Auth::user()->id;
+        $searchData = $request->all();
+        $preferredLocationId = $request->get('preferredLocationId');
+        $availAll = $request->get('avail_all');
+        if (empty($availAll)) {
+            $availAll = 0;
         }
+        if (empty($preferredLocationId)) {
+            $preferredLocationId = "";
+        }
+        $searchData['avail_all'] = $availAll;
+        $searchData['preferredLocationId'] = $preferredLocationId;
+        $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
+        $seekersList = JobSeekerProfiles::getJobSeekerProfiles($jobDetails, $searchData);
+        $jobTemplateModalData = JobTemplates::getAllUserTemplates($userId);
+        $preferredLocations = PreferredJobLocation::getAllPreferredJobLocation();
+        if ($request->ajax()) {
+            return view('web.recuriterJob.search-seekers-list', ['seekersList' => $seekersList, 'jobDetails' => $jobDetails, 'searchData' => $searchData, 'jobId' => $jobId, 'jobTemplateModalData' => $jobTemplateModalData, 'preferredLocations' => $preferredLocations, 'preferredLocationId' => $preferredLocationId])->render();
+        }
+        return view('web.recuriterJob.search', compact('seekersList', 'jobDetails', 'searchData', 'jobId', 'jobTemplateModalData', 'preferredLocations', 'preferredLocationId'));
     }
 
     /**
@@ -348,55 +346,47 @@ class RecruiterJobController extends Controller
             'appliedStatus' => 'required|integer',
             'jobType'       => 'required|integer',
         ]);
-        try {
-            $requestData = $request->all();
-            $jobData = JobLists::getJobInfo($requestData['seekerId'], $requestData['jobId']);
-            if ($jobData) {
-                $jobData->applied_status = $requestData['appliedStatus'];
-                $jobData->save();
+        $requestData = $request->all();
+        $jobData = JobLists::getJobInfo($requestData['seekerId'], $requestData['jobId']);
+        if ($jobData) {
+            $jobData->applied_status = $requestData['appliedStatus'];
+            $jobData->save();
 
-                if ($requestData['appliedStatus'] == JobAppliedStatus::SHORTLISTED || $requestData['appliedStatus'] == JobAppliedStatus::HIRED) {
-                    $userChat = new ChatUserLists();
-                    $userChat->recruiter_id = Auth::id();
-                    $userChat->seeker_id = $jobData->seeker_id;
-                    $userChat->checkAndSaveUserToChatList();
-                    $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $jobData->seeker_id, $requestData['jobId']);
-                } else if ($requestData['appliedStatus'] == JobAppliedStatus::REJECTED) {
-                    $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $jobData->seeker_id, $requestData['jobId']);
-                }
-                return redirect('job/details/' . $requestData['jobId']);
-            } else {
-                $inviteJobs = ['seeker_id' => $requestData['seekerId'], 'recruiter_job_id' => $requestData['jobId'], 'applied_status' => JobAppliedStatus::INVITED];
-                JobLists::insert($inviteJobs);
-                $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $requestData['seekerId'], $requestData['jobId']);
-                Session::flash('message', trans('messages.invited_success'));
-                if ($requestData['jobType'] == JobType::TEMPORARY) {
-                    Session::flash('message', trans('messages.invited_success_temp'));
-                }
-                return redirect('job/search/' . $requestData['jobId']);
+            if ($requestData['appliedStatus'] == JobAppliedStatus::SHORTLISTED || $requestData['appliedStatus'] == JobAppliedStatus::HIRED) {
+                $userChat = new ChatUserLists();
+                $userChat->recruiter_id = Auth::id();
+                $userChat->seeker_id = $jobData->seeker_id;
+                $userChat->checkAndSaveUserToChatList();
+                $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $jobData->seeker_id, $requestData['jobId']);
+            } else if ($requestData['appliedStatus'] == JobAppliedStatus::REJECTED) {
+                $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $jobData->seeker_id, $requestData['jobId']);
             }
-        } catch (\Exception $e) {
-            Log::error($e);
-            return view('web.error.', ["message" => $e->getMessage()]);
+            return redirect('job/details/' . $requestData['jobId']);
+        } else {
+            $inviteJobs = ['seeker_id' => $requestData['seekerId'], 'recruiter_job_id' => $requestData['jobId'], 'applied_status' => JobAppliedStatus::INVITED];
+            JobLists::insert($inviteJobs);
+            $this->sendPushUser($requestData['appliedStatus'], Auth::user()->id, $requestData['seekerId'], $requestData['jobId']);
+            Session::flash('message', trans('messages.invited_success'));
+            if ($requestData['jobType'] == JobType::TEMPORARY) {
+                Session::flash('message', trans('messages.invited_success_temp'));
+            }
+            return redirect('job/search/' . $requestData['jobId']);
         }
+
     }
 
     /**
-     * Method to get seeker details
-     * @return view
+     * Get Seeker details with skills mapped to Job
+     * @param $seekerId
+     * @param $jobId
+     * @return Response
      */
     public function jobSeekerDetails($seekerId, $jobId)
     {
-        try {
-            $matchedSkills = RecruiterJobs::getMatchingSkills($jobId, $seekerId);
-            $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
-            $seekerDetails = JobSeekerProfiles::getJobSeekerDetails($seekerId, $jobDetails);
-            return view('web.recuriterJob.seekerdetails', compact('seekerDetails', 'jobId', 'jobDetails', 'matchedSkills'));
-
-        } catch (\Exception $e) {
-            Log::error($e);
-            return view('web.error.', ["message" => $e->getMessage()]);
-        }
+        $matchedSkills = RecruiterJobs::getMatchingSkills($jobId, $seekerId);
+        $jobDetails = RecruiterJobs::getRecruiterJobDetails($jobId);
+        $seekerDetails = JobSeekerProfiles::getJobSeekerDetails($seekerId, $jobDetails);
+        return view('web.recuriterJob.seeker-profile-for-job', compact('seekerDetails', 'jobId', 'jobDetails', 'matchedSkills'));
     }
 
     /**
@@ -495,7 +485,7 @@ class RecruiterJobController extends Controller
             $allData['officeStatus'] = $locationActive;
             $allData['recruiterOffices'] = $recruiterOffices;
             $allData['allOfficeTypes'] = $allOfficeTypes;
-            $allData['preferredJobLocations'] = PreferredJobLocation::getAllPreferrefJobLocation();
+            $allData['preferredJobLocations'] = PreferredJobLocation::getAllPreferredJobLocation();
             $response = $allData;
         } catch (\Exception $e) {
             Log::error($e);
@@ -858,19 +848,12 @@ class RecruiterJobController extends Controller
     }
 
     /**
-     * Method to view seeker profile
-     * @return view
+     * View seeker profile by Id
+     * @return Response
      */
     public function jobSeekerProfile($seekerId)
     {
-        try {
-            $seekerDetails = JobSeekerProfiles::getJobSeekerProfile($seekerId);
-            return view('web.recuriterJob.seeker-profile', compact('seekerDetails'));
-
-        } catch (\Exception $e) {
-            Log::error($e);
-            return view('web.error.', ["message" => $e->getMessage()]);
-        }
+        $seekerDetails = JobSeekerProfiles::getJobSeekerProfile($seekerId);
+        return view('web.recuriterJob.seeker-profile', compact('seekerDetails'));
     }
-
 }
