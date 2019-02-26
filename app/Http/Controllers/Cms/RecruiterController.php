@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Cms;
 
-use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
-
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Yajra\Datatables\Datatables;
-use Session;
 use App\Models\User;
 use App\Models\UserGroup;
-use App\Models\PasswordReset;
-use Illuminate\Support\Facades\Validator;
 use App\Models\RecruiterProfile;
-use Mail;
-use Log;
 
 class RecruiterController extends Controller
 {
@@ -41,8 +39,7 @@ class RecruiterController extends Controller
     /**
      * List all recruiter.
      *
-     * @param  array $data
-     * @return User
+     * @return Response
      */
     public function index()
     {
@@ -52,14 +49,13 @@ class RecruiterController extends Controller
     /**
      * Show the form to update an existing recruiter.
      *
+     * @param $id
      * @return Response
      */
     public function edit($id)
     {
         $user = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
-            ->select(
-                'users.email', 'users.id', 'users.is_active'
-            )
+            ->select(['users.email', 'users.id', 'users.is_active'])
             ->where('users.id', $id)->first();
         return view('cms.recruiter.update', ['userProfile' => $user]);
     }
@@ -68,178 +64,120 @@ class RecruiterController extends Controller
      * Store a new/update recruiter.
      *
      * @param  Request $request
-     * @return return to lisitng page
+     * @return Response
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
-        try {
-            $reqData = $request->all();
-            if (isset($request->id)) {
-                $rules['email'] = "email|required|Unique:users,email," . $request->id;
+        $rules = [
+            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($request->id)],
+        ];
 
-                $validator = Validator::make($reqData, $rules);
-                if ($validator->fails()) {
-                    return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-                }
-                $activationStatus = isset($request->is_active) ? 1 : 0;
+        $this->validate($request, $rules);
 
-                User::where('id', $request->id)->update(['email' => $request->email, 'is_active' => $activationStatus]);
-                $msg = trans('messages.recruiter_updated_success');
-            } else {
-                $rules['email'] = "email|required|unique:users";
-                $validator = Validator::make($reqData, $rules);
+        if (isset($request->id)) {
+            $activationStatus = isset($request->is_active) ? 1 : 0;
+            User::where('id', $request->id)->update(['email' => $request->email, 'is_active' => $activationStatus]);
+            $msg = trans('messages.recruiter_updated_success');
+        } else {
+            $user = ['email' => $request->email, 'password' => '', 'is_verified' => 1, 'is_active' => 1];
 
-                if ($validator->fails()) {
-                    return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-                }
+            $userId = User::insertGetId($user);
+            $userGroupModel = new UserGroup();
+            $userGroupModel->group_id = UserGroup::RECRUITER;
+            $userGroupModel->user_id = $userId;
+            $userGroupModel->save();
 
-                $user = ['email'       => $reqData['email'], 'password' => '',
-                         'is_verified' => 1, 'is_active' => 1];
+            RecruiterProfile::create(['user_id' => $userId]);
 
-                $userId = User::insertGetId($user);
-                $userGroupModel = new UserGroup();
-                $userGroupModel->group_id = UserGroup::RECRUITER;
-                $userGroupModel->user_id = $userId;
-                $userGroupModel->save();
+            Password::broker()->sendResetLink(['email' => $request->email]);
 
-                $token = \Illuminate\Support\Facades\Crypt::encrypt($reqData['email'] . time());
-                $passwordModel = PasswordReset::firstOrNew(['user_id' => $userId, 'email' => $reqData['email']]);
-                $passwordModel->fill(['token' => $token]);
-                $passwordModel->save();
-
-                RecruiterProfile::create(['user_id' => $userId]);
-
-                $url = url('password/reset', ['token' => $token]);
-                Mail::to($reqData['email'])->queue(new ResetPassword('Recruiter', $url));
-
-                $msg = trans('messages.recruiter_added_success');
-            }
-
-            Session::flash('message', $msg);
-            return redirect('cms/recruiter/index');
-        } catch (\Exception $e) {
-            Log::error($e);
+            $msg = trans('messages.recruiter_added_success');
         }
-    }
 
-    /**
-     * Soft delete a recruiter.
-     *
-     * @param  recruiter $id
-     * @return return to lisitng page
-     */
-    public function delete($id)
-    {
-        User::where('id', $id)->update(['is_active' => 0]);
-
-        Session::flash('message', trans('messages.recruiter_deleted'));
+        Session::flash('message', $msg);
         return redirect('cms/recruiter/index');
-
     }
 
     /**
      * Method to get list of recruiter
-     * @return json
+     * @return Response
      */
     public function recruiterList()
     {
-        try {
-            $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
-                ->leftjoin('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'users.id')
-                ->select(
-                    'recruiter_profiles.office_name',
-                    'users.email', 'users.id',
-                    'users.is_active'
-                )
-                ->where('user_groups.group_id', UserGroup::RECRUITER)
-                ->orderBy('users.id', 'desc');
-            return Datatables::of($userData)
-                ->make(true);
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
-
+        $userData = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+            ->leftjoin('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'users.id')
+            ->select(
+                'recruiter_profiles.office_name',
+                'users.email', 'users.id',
+                'users.is_active'
+            )
+            ->where('user_groups.group_id', UserGroup::RECRUITER)
+            ->orderBy('users.id', 'desc');
+        return Datatables::of($userData)->make(true);
     }
 
     /**
      * Method to view page for reset password
-     * @return view
+     * @param $id
+     * @return Response
      */
     public function adminResetPassword($id)
     {
         $user = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
-            ->select(
-                'users.email', 'users.id', 'users.is_active'
-            )
+            ->select(['users.email', 'users.id', 'users.is_active'])
             ->where('users.id', $id)->first();
         return view('cms.recruiter.admin-reset-password', ['userProfile' => $user]);
     }
 
     /**
      * Method to send email for reset password
-     * @return view
+     * @param Request $request
+     * @return Response
+     * @throws ValidationException
      */
     public function storeAdminResetPassword(Request $request)
     {
-        try {
-            if (isset($request->id)) {
-                $rules['email'] = "email|required";
-                $this->validate($request, $rules);
-                $reqData = $request->all();
-                $userId = $reqData['id'];
-                $email = $reqData['email'];
-                User::where('id', $userId)->update(['password' => '']);
+        $rules = [
+            'id'    => ['required'],
+            'email' => ['required', 'email'],
+        ];
 
-                PasswordReset::where('user_id', $userId)->where('email', $email)->delete();
-                $token = \Illuminate\Support\Facades\Crypt::encrypt($email . time());
-                $passwordModel = PasswordReset::firstOrNew(['user_id' => $userId, 'email' => $email]);
-                $passwordModel->fill(['token' => $token]);
-                if ($passwordModel->save()) {
-                    $url = url('password/reset', ['token' => $token]);
-                    Mail::to($email)->queue(new ResetPassword('Recruiter', $url));
-                }
+        $this->validate($request, $rules);
 
-                $msg = trans('messages.admin_recruiter_password_success');
-            }
-            Session::flash('message', $msg);
-            $user = UserGroup::where('user_id', $userId)->first();
-            if ($user->group_id == UserGroup::RECRUITER) {
-                return redirect('cms/recruiter/index');
-            } else {
-                return redirect('cms/jobseeker/index');
-            }
-        } catch (\Exception $e) {
-            Log::error($e);
-            Session::flash('message', $e->getMessage());
+        $userId = $request->id;
+        $email = $request->email;
+        User::where('id', $userId)->update(['password' => '']);
+
+        Password::broker()->sendResetLink(['email' => $email]);
+
+        Session::flash('message', trans('messages.admin_recruiter_password_success'));
+        $user = UserGroup::where('user_id', $userId)->first();
+        if ($user->group_id == UserGroup::RECRUITER) {
+            return redirect('cms/recruiter/index');
+        } else {
+            return redirect('cms/jobseeker/index');
         }
-
     }
 
     /**
      * Method to view recruiter detail view
-     * @return view
+     * @param $id
+     * @return Response
      */
     public function recruiterView($id)
     {
-        try {
-            $userProfile = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
-                ->leftjoin('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'users.id')
-                ->select(
-                    'recruiter_profiles.office_name',
-                    'recruiter_profiles.office_desc',
-                    'users.email', 'users.id',
-                    'users.is_active'
-                )
-                ->where('users.id', $id)->first();
+        $userProfile = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+            ->leftjoin('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'users.id')
+            ->select(
+                'recruiter_profiles.office_name',
+                'recruiter_profiles.office_desc',
+                'users.email', 'users.id',
+                'users.is_active'
+            )
+            ->where('users.id', $id)->first();
 
-            return view('cms.recruiter.view', ['userProfile' => $userProfile]);
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
+        return view('cms.recruiter.view', ['userProfile' => $userProfile]);
     }
 
 }

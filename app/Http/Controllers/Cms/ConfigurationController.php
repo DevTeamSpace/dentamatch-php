@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Cms;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Controller;
-use Session;
 use App\Models\Configs;
-use Log;
 use Illuminate\Support\Facades\Storage;
 use App\Repositories\File\FileRepositoryS3;
+use Illuminate\Validation\ValidationException;
 
 class ConfigurationController extends Controller
 {
@@ -26,7 +26,7 @@ class ConfigurationController extends Controller
     }
 
     /**
-     * Show the form to create a new location.
+     * Show the form to view a search radius
      *
      * @return Response
      */
@@ -37,7 +37,7 @@ class ConfigurationController extends Controller
     }
 
     /**
-     * Show the form to create a new location.
+     * Show the form to view a pay rate file
      *
      * @return Response
      */
@@ -52,55 +52,43 @@ class ConfigurationController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws ValidationException
+     */
     public function updatePayrate(Request $request)
     {
-        try {
-            $reqData = $request->all();
-            $rules = [
-                'payrate' => 'required|max:2048|mimes:jpeg,bmp,png,jpg,pdf',
-            ];
-            $validator = Validator::make($reqData, $rules);
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
+        $rules = [
+            'payrate' => 'required|max:2048|mimes:jpeg,bmp,png,jpg,pdf',
+        ];
 
-            $filename = $this->generateFilename('payrate');
-            $this->uploadFileToAWS($request, $filename, 'payrate');
-            Configs::where('config_name', 'PAYRATE')->update(['config_data' => $filename]);
-            Session::flash('message', trans('messages.payrate_update'));
-            return redirect('cms/config/pay-rate');
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
+        $this->validate($request, $rules);
+
+        $filename = $this->generateFilename('payrate');
+        $this->uploadFileToAWS($request, $filename, 'payrate');
+        Configs::where('config_name', 'PAYRATE')->update(['config_data' => $filename]);
+        Session::flash('message', trans('messages.payrate_update'));
+        return redirect('cms/config/pay-rate');
     }
 
     /**
-     * Store a new/update location.
+     * Store a search radius
      *
      * @param  Request $request
-     * @return return to lisitng page
+     * @return Response
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
-        try {
-            $reqData = $request->all();
-            $rules = [
-                'radius' => ['required'],
-            ];
-            $validator = Validator::make($reqData, $rules);
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
-            Configs::where('config_name', 'SEARCHRADIUS')->update(['config_data' => $request->radius]);
-            $msg = trans('messages.radius_update');
-            Session::flash('message', $msg);
-            return redirect('cms/config/create-radius');
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
+        $rules = [
+            'radius' => ['required'],
+        ];
+        $this->validate($request, $rules);
+
+        Configs::where('config_name', 'SEARCHRADIUS')->update(['config_data' => $request->radius]);
+        $msg = trans('messages.radius_update');
+        Session::flash('message', $msg);
+        return redirect('cms/config/create-radius');
     }
 }

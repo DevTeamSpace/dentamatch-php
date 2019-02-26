@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Cms;
 use App\Enums\JobAppliedStatus;
 use App\Enums\JobType;
 use App\Http\Controllers\Controller;
+use App\Models\JobseekerTempHired;
 use App\Utils\PushNotificationService;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Yajra\Datatables\Datatables;
 use App\Models\User;
 use App\Models\RecruiterJobs;
@@ -14,9 +18,7 @@ use App\Models\Notification;
 use App\Models\JobRatings;
 use App\Models\TempJobDates;
 use App\Models\SavedJobs;
-use Log;
 use App\Models\JobLists;
-use DB;
 use App\Models\SearchFilter;
 
 class ReportController extends Controller
@@ -32,10 +34,9 @@ class ReportController extends Controller
     }
 
     /**
-     * List all locations.
+     * List all jobs.
      *
-     * @param  array $data
-     * @return User
+     * @return Response
      */
     public function index()
     {
@@ -43,14 +44,15 @@ class ReportController extends Controller
     }
 
     /**
-     * Method to view applied job seeker list
-     * @return json
+     * Method to view job details info
+     * @param $id
+     * @return Response
      */
     public function appliedSeekers($id)
     {
         $jobDetail = RecruiterJobs::join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
             ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
-            ->select('recruiter_jobs.id', 'recruiter_jobs.job_type', 'recruiter_jobs.no_of_jobs', 'job_titles.jobtitle_name')
+            ->select(['recruiter_jobs.id', 'recruiter_jobs.job_type', 'recruiter_jobs.no_of_jobs', 'job_titles.jobtitle_name'])
             ->where('recruiter_jobs.id', '=', $id)
             ->first();
         return view('cms.report.seeker-list', ['jobDetail' => $jobDetail]);
@@ -58,7 +60,7 @@ class ReportController extends Controller
 
     /**
      * Method to view cancel job seeker list
-     * @return view
+     * @return Response
      */
     public function cancelLists()
     {
@@ -67,7 +69,7 @@ class ReportController extends Controller
 
     /**
      * Method to view details job response
-     * @return view
+     * @return Response
      */
     public function jobResponse()
     {
@@ -76,106 +78,92 @@ class ReportController extends Controller
 
     /**
      * Method to get list of jobs with status
-     * @return json
+     * @return Response
      */
     public function jobResponseList()
     {
-        try {
-            $jobLists = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
-                ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
-                ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
-                ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'recruiter_offices.user_id')
-                ->leftjoin('job_lists', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
-                ->select('recruiter_jobs.id', 'recruiter_jobs.pay_rate', 'recruiter_jobs.job_type', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name')
-                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 1, 1,0)) AS invited"))
-                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 2, 1,0)) AS applied"))
-                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 3, 1,0)) AS sortlisted"))
-                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 4, 1,0)) AS hired"))
-                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 5, 1,0)) AS rejected"))
-                ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 6, 1,0)) AS cancelled"))
-                ->groupby('recruiter_jobs.id')
-                ->orderBy('recruiter_jobs.id', 'desc')->get();
-            return Datatables::of($jobLists)
-                ->removeColumn('id')
-                ->make(true);
-        } catch (\Exception $ex) {
-            Log::error($ex);
-        }
+        $jobLists = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+            ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
+            ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
+            ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'recruiter_offices.user_id')
+            ->leftjoin('job_lists', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
+            ->select('recruiter_jobs.id', 'recruiter_jobs.pay_rate', 'recruiter_jobs.job_type', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name')
+            ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 1, 1,0)) AS invited"))
+            ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 2, 1,0)) AS applied"))
+            ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 3, 1,0)) AS sortlisted"))
+            ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 4, 1,0)) AS hired"))
+            ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 5, 1,0)) AS rejected"))
+            ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 6, 1,0)) AS cancelled"))
+            ->groupby('recruiter_jobs.id')
+            ->orderBy('recruiter_jobs.id', 'desc')->get();
+        return Datatables::of($jobLists)
+            ->removeColumn('id')
+            ->make(true);
+
     }
 
     /**
      * Method to get list of cancel jobs
-     * @return json
+     * @return Response
      */
     public function listCancel()
     {
-        try {
-            $seekerList = JobLists::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
-                ->join('users', 'jobseeker_profiles.user_id', '=', 'users.id')
-                ->where('job_lists.applied_status', JobAppliedStatus::CANCELLED)
-                ->select('jobseeker_profiles.user_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'users.email')
-                ->addSelect(DB::raw("count(job_lists.id) as cancelno"))
-                ->groupby('jobseeker_profiles.user_id')
-                ->orderBy('jobseeker_profiles.first_name', 'asc');
+        $seekerList = JobLists::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
+            ->join('users', 'jobseeker_profiles.user_id', '=', 'users.id')
+            ->where('job_lists.applied_status', JobAppliedStatus::CANCELLED)
+            ->select(['jobseeker_profiles.user_id', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name', 'users.email'])
+            ->addSelect(DB::raw("count(job_lists.id) as cancelno"))
+            ->groupby('jobseeker_profiles.user_id')
+            ->orderBy('jobseeker_profiles.first_name', 'asc');
 
-            return Datatables::of($seekerList)
-                ->removeColumn('user_id')
-                ->make(true);
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
+        return Datatables::of($seekerList)
+            ->removeColumn('user_id')
+            ->make(true);
     }
 
     /**
      * Method to get list of jobs
-     * @return json
+     * @return Response
      */
     public function jobLists()
     {
-        try {
-            $jobLists = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
-                ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
-                ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
-                ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'recruiter_offices.user_id')
-                ->select('recruiter_jobs.id', 'recruiter_jobs.pay_rate', 'recruiter_jobs.job_type', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name', 'recruiter_offices.address')
-                ->orderBy('recruiter_jobs.id', 'desc');
+        $jobLists = RecruiterJobs::join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+            ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
+            ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
+            ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'recruiter_offices.user_id')
+            ->select(['recruiter_jobs.id', 'recruiter_jobs.pay_rate', 'recruiter_jobs.job_type', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name', 'recruiter_offices.address'])
+            ->orderBy('recruiter_jobs.id', 'desc');
 
 
-            return Datatables::of($jobLists)
-                ->filterColumn('office_name', function ($query, $keyword) {
-                    $query->whereRaw("office_name like ?", ["%$keyword%"]);
-                })
-                ->filterColumn('jobtitle_name', function ($query, $keyword) {
-                    $query->whereRaw("jobtitle_name like ?", ["%$keyword%"]);
-                })
-                ->make(true);
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
+        return Datatables::of($jobLists)
+            ->filterColumn('office_name', function ($query, $keyword) {
+                $query->whereRaw("office_name like ?", ["%$keyword%"]);
+            })
+            ->filterColumn('jobtitle_name', function ($query, $keyword) {
+                $query->whereRaw("jobtitle_name like ?", ["%$keyword%"]);
+            })
+            ->make(true);
+
     }
 
     /**
      * Method to get list seekers for a job
-     * @return json
+     * @return Response
      */
     public function seekerList($id)
     {
-        try {
-            $seekerList = JobLists::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
-                ->where('job_lists.recruiter_job_id', $id)
-                ->select('jobseeker_profiles.user_id', 'job_lists.applied_status', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name')
-                ->orderBy('jobseeker_profiles.first_name', 'asc');
-            return Datatables::of($seekerList)
-                ->removeColumn('user_id')
-                ->make(true);
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
+        $seekerList = JobLists::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
+            ->where('job_lists.recruiter_job_id', $id)
+            ->select(['jobseeker_profiles.user_id', 'job_lists.applied_status', 'jobseeker_profiles.first_name', 'jobseeker_profiles.last_name'])
+            ->orderBy('jobseeker_profiles.first_name', 'asc');
+        return Datatables::of($seekerList)
+            ->removeColumn('user_id')
+            ->make(true);
     }
 
     /**
      * Method to view job location list
-     * @return view
+     * @return Response
      */
     public function searchJobByLocation()
     {
@@ -184,26 +172,22 @@ class ReportController extends Controller
 
     /**
      * Method to get list location with search count
-     * @return json
+     * @return Response
      */
     public function searchCountbyLocation()
     {
-        try {
-            $searchList = SearchFilter::select('city')
-                ->addSelect(DB::raw("count(id) as searchcount"))
-                ->where('city', '!=', "")
-                ->groupby('city')
-                ->orderBy('city', 'asc')->get();
-            return Datatables::of($searchList)
-                ->make(true);
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
+        $searchList = SearchFilter::select('city')
+            ->addSelect(DB::raw("count(id) as searchcount"))
+            ->where('city', '!=', "")
+            ->groupby('city')
+            ->orderBy('city', 'asc')->get();
+        return Datatables::of($searchList)
+            ->make(true);
     }
 
     /**
      * Method to download list as csv
-     * @return file
+     * @return Response
      */
     public function downloadCsv($type)
     {
@@ -211,7 +195,7 @@ class ReportController extends Controller
         if ($type == 'cancellist') {
             $data = JobLists::join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'job_lists.seeker_id')
                 ->where('job_lists.applied_status', JobAppliedStatus::CANCELLED)
-                ->select('jobseeker_profiles.first_name', 'jobseeker_profiles.last_name')
+                ->select(['jobseeker_profiles.first_name', 'jobseeker_profiles.last_name'])
                 ->addSelect(DB::raw("count(job_lists.id) as cancelno"))
                 ->groupby('jobseeker_profiles.user_id')
                 ->orderBy('jobseeker_profiles.first_name', 'asc')->get();
@@ -286,9 +270,10 @@ class ReportController extends Controller
 
     /**
      * Method to delete job
-     * @return view
+     * @param $request
+     * @return Response
      */
-    public function getDeleteJob()
+    public function getDeleteJob($request)
     {
         try {
             $insertData = [];
@@ -296,10 +281,10 @@ class ReportController extends Controller
             $jobObj = RecruiterJobs::where('recruiter_jobs.id', $jobId)
                 ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
-                ->select('job_templates.user_id', 'recruiter_jobs.job_type', 'job_titles.jobtitle_name')->first()->toArray();
+                ->select(['job_templates.user_id', 'recruiter_jobs.job_type', 'job_titles.jobtitle_name'])->first()->toArray();
             if ($jobObj) {
                 $jobData = RecruiterJobs::where('recruiter_jobs.id', $jobId)
-                    ->select('job_lists.seeker_id', 'job_type', 'job_templates.user_id', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name')
+                    ->select(['job_lists.seeker_id', 'job_type', 'job_templates.user_id', 'job_titles.jobtitle_name', 'recruiter_profiles.office_name'])
                     ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                     ->join('job_lists', 'job_lists.recruiter_job_id', 'recruiter_jobs.id')
                     ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
@@ -363,7 +348,6 @@ class ReportController extends Controller
             $result['success'] = true;
             $result['message'] = trans('messages.job_deleted');
         } catch (\Exception $e) {
-            Log::error($e);
             $result['success'] = false;
             $result['message'] = $e->getMessage();
         }

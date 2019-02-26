@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Cms;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Controller;
-use App\Models\Location;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Yajra\Datatables\Datatables;
-use Session;
 use App\Models\Affiliation;
-use Log;
 
 class AffiliationController extends Controller
 {
@@ -36,8 +36,7 @@ class AffiliationController extends Controller
     /**
      * List all Affiliation.
      *
-     * @param  array $data
-     * @return Affiliation ciew
+     * @return Response
      */
     protected function index()
     {
@@ -47,12 +46,12 @@ class AffiliationController extends Controller
     /**
      * Show the form to update an existing Affiliation.
      *
+     * @param int $id
      * @return Response
      */
     public function edit($id)
     {
-        $affiliation = Affiliation::find($id);
-
+        $affiliation = Affiliation::findOrFail($id);
         return view('cms.affiliation.update', ['affiliation' => $affiliation]);
     }
 
@@ -60,70 +59,35 @@ class AffiliationController extends Controller
      * Store a new/update Affiliation.
      *
      * @param  Request $request
-     * @return return to lisitng page
+     * @return Response
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
-        try {
-            $reqData = $request->all();
-            $rules = [
-                'affiliation' => ['required', 'unique:affiliations,affiliation_name'],
-            ];
+        $rules = [
+            'affiliation' => ['required', Rule::unique('affiliations', 'affiliation_name')->ignore($request->id)],
+        ];
 
-            if (isset($request->id)) {
-                $rules['affiliation'] = "Required|Unique:affiliations,affiliation_name," . $request->id;
-                $affiliation = Affiliation::find($request->id);
-                $msg = trans('messages.affiliation_updated');
-            } else {
-                $affiliation = new Affiliation;
-                $msg = trans('messages.affiliation_added');
-            }
+        $this->validate($request, $rules);
 
-            $validator = Validator::make($reqData, $rules);
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
+        $affiliation = $request->id ? Affiliation::find($request->id) : new Affiliation;
+        $msg = $request->id ? trans('messages.affiliation_updated') : trans('messages.affiliation_added');
 
-            $affiliation->affiliation_name = trim($request->affiliation);
-            $affiliation->is_active = ($request->is_active) ? 1 : 0;
-            $affiliation->save();
-            Session::flash('message', $msg);
-            return redirect('cms/affiliation/index');
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
-    }
-
-    /**
-     * Soft delete a Affiliation.
-     *
-     * @param  Location $id
-     * @return return to lisitng page
-     */
-    public function delete($id)
-    {
-        Affiliation::findOrFail($id)->delete();
-        Session::flash('message', trans('messages.location_deleted'));
-
+        $affiliation->affiliation_name = trim($request->affiliation);
+        $affiliation->is_active = ($request->is_active) ? 1 : 0;
+        $affiliation->save();
+        Session::flash('message', $msg);
+        return redirect('cms/affiliation/index');
     }
 
     /**
      * List all Affiliations.
      *
-     * @param  array $data
-     * @return Affiliation view
+     * @return Response
      */
     public function affiliationsList()
     {
-        try {
-            $affiliations = Affiliation::select('affiliation_name', 'is_active', 'id')->orderBy('id', 'desc');
-            return Datatables::of($affiliations)
-                ->make(true);
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
-
+        $affiliations = Affiliation::select(['affiliation_name', 'is_active', 'id'])->orderBy('id', 'desc');
+        return Datatables::of($affiliations)->make(true);
     }
 }

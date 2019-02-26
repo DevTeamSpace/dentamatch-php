@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Cms;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Controller;
-use App\Models\Location;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Yajra\Datatables\Datatables;
-use Session;
 use App\Models\OfficeType;
-use Log;
 
 class OfficeTypeController extends Controller
 {
@@ -36,8 +36,7 @@ class OfficeTypeController extends Controller
     /**
      * List all officetype.
      *
-     * @param  array $data
-     * @return User
+     * @return Response
      */
     protected function index()
     {
@@ -47,12 +46,12 @@ class OfficeTypeController extends Controller
     /**
      * Show the form to update an existing officetype.
      *
+     * @param $id
      * @return Response
      */
     public function edit($id)
     {
-        $officeType = OfficeType::find($id);
-
+        $officeType = OfficeType::findOrFail($id);
         return view('cms.officetype.update', ['officetype' => $officeType]);
     }
 
@@ -60,69 +59,34 @@ class OfficeTypeController extends Controller
      * Store a new/update officetype.
      *
      * @param  Request $request
-     * @return return to lisitng page
+     * @return Response
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
-        // Validate and store the location...
-        try {
-            $reqData = $request->all();
-            $rules = [
-                'officetype' => ['required', 'unique:office_types,officetype_name'],
-            ];
+        $rules = [
+            'officetype' => ['required', Rule::unique('office_types', 'officetype_name')->ignore($request->id)],
+        ];
 
-            if (isset($request->id)) {
-                $rules['officetype'] = "Required|Unique:office_types,officetype_name," . $request->id;
-                $officeType = OfficeType::find($request->id);
-                $msg = trans('messages.officetype_updated');
-            } else {
-                $officeType = new OfficeType;
-                $msg = trans('messages.officetype_added');
-            }
+        $this->validate($request, $rules);
 
-            $validator = Validator::make($reqData, $rules);
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
+        $officeType = $request->id ? OfficeType::find($request->id) : new OfficeType;
+        $msg = $request->id ? trans('messages.officetype_updated') : trans('messages.officetype_added');
 
-            $officeType->officetype_name = trim($request->officetype);
-            $officeType->is_active = ($request->is_active) ? 1 : 0;
-            $officeType->save();
-            Session::flash('message', $msg);
-            return redirect('cms/officetype/index');
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
-    }
-
-    /**
-     * Soft delete a office type.
-     *
-     * @param  Location $id
-     * @return return to lisitng page
-     */
-    public function delete($id)
-    {
-        Affiliation::findOrFail($id)->delete();
-        Session::flash('message', trans('messages.location_deleted'));
-
+        $officeType->officetype_name = trim($request->officetype);
+        $officeType->is_active = ($request->is_active) ? 1 : 0;
+        $officeType->save();
+        Session::flash('message', $msg);
+        return redirect('cms/officetype/index');
     }
 
     /**
      * Method to get list of officetype
-     * @return json
+     * @return Response
      */
     public function officeTypeList()
     {
-        try {
-            $officeTypes = OfficeType::SELECT('officetype_name', 'is_active', 'id')->orderBy('id', 'desc');
-            return Datatables::of($officeTypes)
-                ->make(true);
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
-
+        $officeTypes = OfficeType::select(['officetype_name', 'is_active', 'id'])->orderBy('id', 'desc');
+        return Datatables::of($officeTypes)->make(true);
     }
 }

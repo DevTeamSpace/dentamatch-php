@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Cms;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Controller;
-use App\Models\Location;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Yajra\Datatables\Datatables;
-use Session;
 use App\Models\Certifications;
-use Log;
 
 class CertificateController extends Controller
 {
@@ -24,7 +24,7 @@ class CertificateController extends Controller
     }
 
     /**
-     * Show the form to create a new location.
+     * Show the form to create a new certificate.
      *
      * @return Response
      */
@@ -34,10 +34,9 @@ class CertificateController extends Controller
     }
 
     /**
-     * List all locations.
+     * List all certificates.
      *
-     * @param  array $data
-     * @return User
+     * @return Response
      */
     protected function index()
     {
@@ -45,83 +44,50 @@ class CertificateController extends Controller
     }
 
     /**
-     * Show the form to update an existing location.
+     * Show the form to update an existing certificate.
      *
+     * @param int $id
      * @return Response
      */
     public function edit($id)
     {
-        $certification = Certifications::find($id);
-
+        $certification = Certifications::findOrFail($id);
         return view('cms.certificate.update', ['certificate' => $certification]);
     }
 
     /**
-     * Store a new/update location.
+     * Store a new/update certificate.
      *
      * @param  Request $request
-     * @return return to lisitng page
+     * @return Response
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
-        // Validate and store the location...
-        try {
-            $reqData = $request->all();
-            $rules = [
-                'certificate' => ['required', 'unique:certifications,certificate_name'],
-            ];
+        $rules = [
+            'certificate' => ['required', Rule::unique('certifications', 'certificate_name')->ignore($request->id)],
+        ];
 
-            if (isset($request->id)) {
-                $rules['certificate'] = "Required|Unique:certifications,certificate_name," . $request->id;
-                $certification = Certifications::find($request->id);
-                $msg = trans('messages.certification_updated');
-            } else {
-                $certification = new Certifications;
-                $msg = trans('messages.certification_added');
-            }
+        $this->validate($request, $rules);
 
-            $validator = Validator::make($reqData, $rules);
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
+        $certification = $request->id ? Certifications::find($request->id) : new Certifications;
+        $msg = $request->id ? trans('messages.certification_updated') : trans('messages.certification_added');
 
-            $certification->certificate_name = trim($request->certificate);
-            $certification->is_active = ($request->is_active) ? 1 : 0;
-            $certification->save();
-            Session::flash('message', $msg);
-            return redirect('cms/certificate/index');
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
-    }
-
-    /**
-     * Soft delete a location.
-     *
-     * @param  Location $id
-     * @return return to lisitng page
-     */
-    public function delete($id)
-    {
-        Affiliation::findOrFail($id)->delete();
-        Session::flash('message', trans('messages.location_deleted'));
+        $certification->certificate_name = trim($request->certificate);
+        $certification->is_active = ($request->is_active) ? 1 : 0;
+        $certification->save();
+        Session::flash('message', $msg);
+        return redirect('cms/certificate/index');
 
     }
 
     /**
      * Method to get list of certification
-     * @return type
+     * @return Response
      */
     public function certificationList()
     {
-        try {
-            $certificates = Certifications::SELECT('certificate_name', 'is_active', 'id')->orderBy('id', 'desc');
-            return Datatables::of($certificates)
-                ->make(true);
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
+        $certificates = Certifications::select(['certificate_name', 'is_active', 'id'])->orderBy('id', 'desc');
+        return Datatables::of($certificates)->make(true);
     }
 }
