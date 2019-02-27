@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\cms;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Models\AppMessage;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\ValidationException;
 use Yajra\Datatables\Datatables;
-use Session;
-use Log;
 use App\Jobs\AppMessageJob;
 
 class AppMessageController extends Controller
@@ -36,8 +36,7 @@ class AppMessageController extends Controller
     /**
      * List all app-messages.
      *
-     * @param  array $data
-     * @return User
+     * @return Response
      */
     protected function index()
     {
@@ -47,12 +46,12 @@ class AppMessageController extends Controller
     /**
      * Show the form to update an existing appMessage.
      *
+     * @param $id
      * @return Response
      */
     public function edit($id)
     {
-        $appMessage = AppMessage::find($id);
-
+        $appMessage = AppMessage::findOrFail($id);
         return view('cms.appMessage.update', ['appMessage' => $appMessage]);
     }
 
@@ -60,55 +59,42 @@ class AppMessageController extends Controller
      * Store a new/update appMessage.
      *
      * @param  Request $request
-     * @return return to lisitng page
+     * @return Response
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
-        try {
-            $reqData = $request->all();
-            $rules = [
-                'message' => ['required', 'min:2', 'max:150'],
-            ];
+        $rules = [
+            'message' => ['required', 'min:2', 'max:150'],
+        ];
 
-            $validator = Validator::make($reqData, $rules);
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
-            if (isset($request->id)) {
-                $appMessage = AppMessage::find($request->id);
-                $appMessage->messageSent = isset($request->message_sent) ? 1 : 0;
-                $msg = trans('messages.app_message_updated');
-            } else {
-                $appMessage = new AppMessage;
-                $msg = trans('messages.app_message_added');
-            }
+        $this->validate($request, $rules);
 
-            $appMessage->message = $request->message;
-            $appMessage->messageTo = $request->message_to;
-            $appMessage->save();
+        $appMessage = $request->id ? AppMessage::find($request->id) : new AppMessage;
+        $msg = $request->id ? trans('messages.app_message_updated') : trans('messages.app_message_added');
 
-            Session::flash('message', $msg);
-            return redirect('cms/notify/index');
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
+        $appMessage->message = $request->message;
+        $appMessage->message_to = $request->message_to;
+        $appMessage->message_sent = isset($request->message_sent) ? 1 : 0;
+        $appMessage->save();
+
+        Session::flash('message', $msg);
+        return redirect('cms/notify/index');
     }
 
     /**
      * Send notification to users.
      *
-     * @param  AppMessage $id
-     * @return return message
+     * @param  int $id
+     * @return Response
      */
     public function sendNotification($id)
     {
-        $appMessage = AppMessage::find($id);
+        $appMessage = AppMessage::findOrFail($id);
 
-        if (!$appMessage->messageSent) {
-            $appMessage->messageSent = 1;
-            $appMessage->cronMessageSent = 0;
+        if (!$appMessage->message_sent) {
+            $appMessage->message_sent = 1;
+            $appMessage->cron_message_sent = 0;
             $appMessage->save();
             $this->dispatch(new AppMessageJob($appMessage));
         } else {
@@ -121,8 +107,10 @@ class AppMessageController extends Controller
     /**
      * Soft delete a appMessage.
      *
-     * @param  AppMessage $id
-     * @return return to lisitng page
+     * @param  int $id
+     * @return Response
+     *
+     * @throws \Exception
      */
     public function delete($id)
     {
@@ -132,16 +120,11 @@ class AppMessageController extends Controller
 
     /**
      * Method to get list of admin scheduled messages
-     * @return json
+     * @return Response
      */
     public function messageList()
     {
-        try {
-            $appMessages = AppMessage::SELECT(['message', 'message_to', 'message_sent', 'created_at', 'id'])->orderBy('created_at', 'desc');
-            return Datatables::of($appMessages)
-                ->make(true);
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
+        $appMessages = AppMessage::SELECT(['message', 'message_to', 'message_sent', 'created_at', 'id'])->orderBy('created_at', 'desc');
+        return Datatables::of($appMessages)->make(true);
     }
 }

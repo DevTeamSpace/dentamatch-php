@@ -3,30 +3,25 @@
 namespace App\Http\Controllers\Cms;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Auth;
-use Session;
-use Log;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('cms')->except([]);
-    }
-
-    public function index()
-    {
-        dd('after login');
+        $this->middleware('cms');
     }
 
     /**
      * Change password.
      *
-     * @return User
+     * @return Response
      */
     public function changePassword()
     {
@@ -37,48 +32,34 @@ class UserController extends Controller
      * Update user password.
      *
      * @param  Request $request
-     * @return return to lisitng page
+     * @return Response
+     * @throws ValidationException
      */
     public function updatePassword(Request $request)
     {
-        try {
-            $id = Auth::id();
-            $credentials = [
-                'id'       => $id,
-                'password' => $request->get('old_password'),
-            ];
+        $id = Auth::id();
+        $credentials = [
+            'id'       => $id,
+            'password' => $request->get('old_password'),
+        ];
 
-            $validator = Validator::make($request->all(), [
-                'old_password'          => 'required|min:6',
-                'password'              => 'required|min:6|confirmed',
-                'password_confirmation' => 'required|min:6'
-            ]);
-
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            } else if (Auth::validate($credentials)) {
-                $user = User::findOrFail($id);
-                $user->password = bcrypt($request->password);
-                $user->save();
-                Session::flash('message', trans('messages.password_updated'));
-                return redirect('/cms');
-            } else {
-                $validator->after(function ($validator) {
-                    $validator->errors()->add('incorrect', trans('messages.incorrect_pass'));
-                });
-                if ($validator->fails()) {
-                    return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
+        $rules = [
+            'old_password'          => ['required', 'min:6', function ($attribute, $value, $fail) use ($credentials) {
+                if (!Auth::validate($credentials)) {
+                    $fail(trans('messages.incorrect_pass'));
                 }
-            }
+            }],
+            'password'              => ['required', 'min:6', 'confirmed'],
+            'password_confirmation' => 'required|min:6'
+        ];
 
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
+        $this->validate($request, $rules);
+
+        $user = User::findOrFail($id);
+        $user->password = bcrypt($request->password);
+        $user->save();
+        Session::flash('message', trans('messages.password_updated'));
+        return redirect('/cms');
+
     }
-
-
 }

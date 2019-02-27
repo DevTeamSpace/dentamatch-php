@@ -30,8 +30,6 @@ class PasswordReset extends \Eloquent
 {
     protected $table = 'password_resets';
 
-    protected $maps = ['id' => 'user_id'];
-
     protected $hidden = ['user_id'];
     protected $fillable = ['email', 'token', 'user_id'];
     protected $appends = [];
@@ -46,11 +44,6 @@ class PasswordReset extends \Eloquent
     public function user()
     {
         return $this->hasOne(User::class, 'id');
-    }
-
-    public static function getLatestUserTokenDetails($token)
-    {
-        return static::where(['token' => $token])->orderBy('created_at', 'desc')->first();
     }
 
 }

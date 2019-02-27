@@ -11,6 +11,7 @@ use App\Models\RecruiterProfile;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Auth;
@@ -347,11 +348,9 @@ class SignupController extends Controller
                     Session::flash('message', $msg);
                     $redirect = 'success-active';
                     if ($userProfileModel['signup_source'] == SignupSource::WEB) {
-                        $token = \Illuminate\Support\Facades\Crypt::encrypt($user->email . time());
-                        $passwordModel = PasswordReset::firstOrNew(['user_id' => $user->id, 'email' => $user->email]);
-                        $passwordModel->fill(['token' => $token]);
-                        $passwordModel->save();
-                        $redirect = 'password/reset/' . $token;
+                        $realUser = User::findOrFail($user->id);
+                        $token = Password::broker()->createToken($realUser);
+                        $redirect = url('password/reset', ['token' => $token]);
                     }
                 }
             } else {

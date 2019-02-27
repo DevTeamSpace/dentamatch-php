@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Cms;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Yajra\Datatables\Datatables;
-use Session;
-use Log;
 
 class LocationController extends Controller
 {
@@ -35,8 +36,7 @@ class LocationController extends Controller
     /**
      * List all locations.
      *
-     * @param  array $data
-     * @return User
+     * @return Response
      */
     protected function index()
     {
@@ -46,12 +46,12 @@ class LocationController extends Controller
     /**
      * Show the form to update an existing location.
      *
+     * @param $id
      * @return Response
      */
     public function edit($id)
     {
-        $location = Location::find($id);
-
+        $location = Location::findOrFail($id);
         return view('cms.location.update', ['location' => $location]);
     }
 
@@ -59,72 +59,36 @@ class LocationController extends Controller
      * Store a new/update location.
      *
      * @param  Request $request
-     * @return return to lisitng page
+     * @return Response
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
-        // Validate and store the location...
-        try {
-            $reqData = $request->all();
-            $rules = [
-                'zipcode' => ['required', 'digits_between:5,8', 'regex:/[0-9]/', 'unique:locations,zipcode,NULL,id,deleted_at,NULL'],
-            ];
+        $rules = [
+            'zipcode' => ['required', 'digits_between:5,8', 'regex:/[0-9]/',
+                          Rule::unique('locations', 'zipcode')->ignore($request->id)],
+        ];
 
-            if (isset($request->id)) {
-                $rules['zipcode'] = "Required|Between:5,8|regex:/[0-9]/|Unique:locations,zipcode," . $request->id;
-                $location = Location::find($request->id);
-                $msg = trans('messages.location_updated');
-            } else {
-                $location = new Location;
-                $msg = trans('messages.location_added');
-            }
+        $this->validate($request, $rules);
 
-            $validator = Validator::make($reqData, $rules);
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
+        $location = $request->id ? Location::find($request->id) : new Location;
+        $msg = $request->id ? trans('messages.location_updated') : trans('messages.location_added');
 
-            $location->zipcode = trim($request->zipcode);
-            $location->description = trim($request->description);
-            //$location->free_trial_period = $request->free_trial_period;
-            $location->is_active = ($request->is_active) ? 1 : 0;
-            $location->save();
-            Session::flash('message', $msg);
-            return redirect('cms/location/index');
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
-    }
-
-    /**
-     * Soft delete a location.
-     *
-     * @param  Location $id
-     * @return return to lisitng page
-     */
-    public function delete($id)
-    {
-        Location::findOrFail($id)->delete();
-        Session::flash('message', trans('messages.location_deleted'));
-
+        $location->zipcode = trim($request->zipcode);
+        $location->description = trim($request->description);
+        $location->is_active = ($request->is_active) ? 1 : 0;
+        $location->save();
+        Session::flash('message', $msg);
+        return redirect('cms/location/index');
     }
 
     /**
      * Method to get list of locations
-     * @return json
+     * @return Response
      */
     public function locationsList()
     {
-        try {
-            $locations = Location::SELECT(['zipcode', 'free_trial_period', 'is_active', 'id'])->orderBy('id', 'desc');
-
-            return Datatables::of($locations)
-                ->make(true);
-        } catch (\Exception $e) {
-            Log::error($e);
-        }
-
+        $locations = Location::select(['zipcode', 'free_trial_period', 'is_active', 'id'])->orderBy('id', 'desc');
+        return Datatables::of($locations)->make(true);
     }
 }
