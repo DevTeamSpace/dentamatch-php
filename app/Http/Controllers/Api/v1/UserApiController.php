@@ -8,15 +8,14 @@ use App\Mail\UserActivation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\Device;
 use App\Models\UserProfile;
 use App\Models\SearchFilter;
-use App\Models\PasswordReset;
 use App\Models\ChatUserLists;
 use App\Models\JobSeekerTempAvailability;
 use App\Helpers\ApiResponse;
@@ -262,15 +261,9 @@ class UserApiController extends Controller
             ->first();
         if ($user) {
             if ($user->is_verified == 1) {
-                PasswordReset::where('user_id', $user->id)->where('email', $user->email)->delete();
-                $token = Crypt::encrypt($user->email . time());
-                $passwordModel = PasswordReset::firstOrNew(['user_id' => $user->id, 'email' => $user->email]);
-                $passwordModel->fill(['token' => $token]);
-                $passwordModel->save();
-
+                $token = Password::broker()->createToken($user);
                 $url = url('password/reset', ['token' => $token]);
                 Mail::to($user->email)->queue(new ResetPassword($user->first_name, $url));
-
                 $response = ApiResponse::successResponse(trans("messages.reset_pw_email_sent"));
             } else {
                 $response = ApiResponse::errorResponse(trans("messages.user_account_not_active"));
@@ -343,12 +336,7 @@ class UserApiController extends Controller
             ->first();
 
         if ($user) {
-            PasswordReset::where('user_id', $user->id)->where('email', $user->email)->delete();
-            $token = Crypt::encrypt($user->email . time());
-            $passwordModel = PasswordReset::firstOrNew(['user_id' => $user->id, 'email' => $user->email]);
-            $passwordModel->fill(['token' => $token]);
-            $passwordModel->save();
-
+            $token = Password::broker()->createToken($user);
             $url = url('password/reset', ['token' => $token]);
             Mail::to($user->email)->queue(new ResetPassword('Admin', $url));
 
