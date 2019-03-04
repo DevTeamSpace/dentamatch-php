@@ -38,6 +38,8 @@ class ChatUserLists extends Model
     protected $table = 'chat_user_list';
     protected $primaryKey = 'id';
 
+    protected $fillable = ['recruiter_id', 'seeker_id'];
+
     protected $maps = [
         'recruiterId'    => 'recruiter_id',
         'seekerId'       => 'seeker_id',

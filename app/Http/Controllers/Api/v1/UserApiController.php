@@ -16,7 +16,6 @@ use App\Models\UserGroup;
 use App\Models\Device;
 use App\Models\UserProfile;
 use App\Models\SearchFilter;
-use App\Models\ChatUserLists;
 use App\Models\JobSeekerTempAvailability;
 use App\Helpers\ApiResponse;
 
@@ -24,7 +23,7 @@ class UserApiController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('ApiAuth', ['only' => ['deleteSignOut', 'chatRecruiterList', 'chatBlockUnblockRecruiter']]);
+        $this->middleware('ApiAuth', ['only' => ['deleteSignOut']]);
     }
 
     /**
@@ -283,33 +282,6 @@ class UserApiController extends Controller
     {
         Device::unRegisterAll($request->apiUserId);
         return ApiResponse::successResponse(trans("messages.user_signout"));
-    }
-
-    /**
-     * Method to get chat Recruiter List
-     * @param Request $request
-     * @return Response
-     */
-    public function chatRecruiterList(Request $request)
-    {
-        $recruiterList = ChatUserLists::getRecruiterListForChat($request->apiUserId);
-        return ApiResponse::successResponse('', ['list' => $recruiterList]);
-    }
-
-    /**
-     * Method to Block Unblock Recruiter chat
-     * @param Request $request
-     * @return Response
-     * @throws ValidationException
-     */
-    public function chatBlockUnblockRecruiter(Request $request)
-    {
-        $this->validate($request, [
-            'recruiterId' => 'required',
-            'blockStatus' => 'required|in:0,1,',
-        ]);
-        $blockStatus = ChatUserLists::blockUnblockSeekerOrRecruiter($request->apiUserId, $request->recruiterId, $request->blockStatus);
-        return ApiResponse::successResponse(trans("messages.recruiter_blocked"), ['recruiterId' => $request->recruiterId, 'blockStatus' => $blockStatus]);
     }
 
     /**

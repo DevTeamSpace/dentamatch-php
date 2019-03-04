@@ -106,8 +106,8 @@
           <div class="form-group">
             <input type="checkbox" name="privacy" id="checkbox"
                    style="-webkit-appearance:checkbox; -moz-appearance:checkbox; margin-right:5px;" required=""
-                   value=""><strong>I agree to the <a href="{{ url('api/v1/term-condition') }}">Terms and Conditions</a>
-              and <a href="{{ url('api/v1/privacy-policy') }}">Privacy policy</a></strong>
+                   value=""><strong>I agree to the <a href="{{ url('/terms-and-conditions') }}" target="_blank">Terms and Conditions</a>
+              and <a href="{{ url('/privacy-policy') }}" target="_blank">Privacy policy</a></strong>
           </div>
 
         </div>

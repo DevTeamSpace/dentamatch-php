@@ -2,6 +2,10 @@
 @foreach($seekerList as $seeker)
   @if($seeker['job_type']==\App\Enums\JobType::TEMPORARY)
     @include('web.recuriterJob.rating-modal')
+    @php
+      $dates = explode(',',$job['temp_job_dates']);
+      $seekerDatesCount = count($dates);
+    @endphp
   @endif
   <div class="media jobCatbox">
     <div class="media-left ">

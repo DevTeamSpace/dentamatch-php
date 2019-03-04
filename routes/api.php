@@ -112,9 +112,10 @@ Route::group(['prefix'=>'v1/','middleware' => ['xss']], function () {
     /**
      * JobSeeker's Chat
      */
-    Route::get('users/chat-user-list', 'Api\v1\UserApiController@chatRecruiterList');
+    Route::get('users/chat-user-list', 'Api\v1\ChatController@getChatsWithRecruiters');
+    Route::post('chat/init-chat', 'Api\v1\ChatController@postInitChatWithRecruiter');
     Route::post('chat/delete', 'Api\v1\PushNotificationApiController@userChatDelete');
-    Route::post('users/chat-user-block-unblock', 'Api\v1\UserApiController@chatBlockUnblockRecruiter');
+    Route::post('users/chat-user-block-unblock', 'Api\v1\ChatController@chatBlockUnblockRecruiter');
 
     /**
      * Forgot password for Admin User
