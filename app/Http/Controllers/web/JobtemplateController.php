@@ -71,7 +71,7 @@ class JobtemplateController extends Controller
         try {
             $this->viewData['templateData'] = JobTemplates::findById($templateId, Auth::user()->id);
             $this->viewData['skillsData'] = Skills::getAllParentChildSkillList($templateId);
-            $this->viewData['jobTitleData'] = JobTitles::getAll(JobTitles::ACTIVE, 1);
+            $this->viewData['jobTitleData'] = JobTitles::getAll();
 
             return $this->returnView('create');
         } catch (\Exception $e) {
@@ -89,7 +89,7 @@ class JobtemplateController extends Controller
         try {
             $this->viewData['skillsData'] = Skills::getAllParentChildSkillList();
 
-            $this->viewData['jobTitleData'] = JobTitles::getAll(JobTitles::ACTIVE, 1);
+            $this->viewData['jobTitleData'] = JobTitles::getAll();
 
             return $this->returnView('create');
         } catch (\Exception $e) {

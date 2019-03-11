@@ -127,28 +127,20 @@ class RecruiterJobs extends Model
     public static function searchJob($reqData)
     {
         $jobseekerSkills = JobSeekerSkills::fetchJobseekerSkills($reqData['userId']);
-        $savedJobsResult = SavedJobs::select('recruiter_job_id')->where('seeker_id', $reqData['userId'])->get();
-        $userSavedJobs = [];
-        if ($savedJobsResult) {
-            $savedJobsArray = $savedJobsResult->toArray();
-            $userSavedJobs = array_map(function ($value) {
-                return $value['recruiter_job_id'];
-            }, $savedJobsArray);
-        }
-        $rejectedJobs = JobLists::where('seeker_id', '=', $reqData['userId'])->whereIn('applied_status', [JobAppliedStatus::REJECTED, JobAppliedStatus::HIRED, JobAppliedStatus::APPLIED, JobAppliedStatus::SHORTLISTED])->get();
-        $rejectedJobsArray = [];
-        if ($rejectedJobs) {
-            $rejectedJobsData = $rejectedJobs->toArray();
-            $rejectedJobsArray = array_map(function ($value) {
-                return $value['recruiter_job_id'];
-            }, $rejectedJobsData);
-        }
+
+        $userSavedJobs = SavedJobs::select('recruiter_job_id')
+            ->where('seeker_id', $reqData['userId'])->get()->pluck('recruiter_job_id')->toArray();
+
+
+        $rejectedJobsArray = JobLists::where('seeker_id', $reqData['userId'])
+            ->whereIn('applied_status', [JobAppliedStatus::REJECTED, JobAppliedStatus::HIRED, JobAppliedStatus::APPLIED, JobAppliedStatus::SHORTLISTED])
+            ->get()->pluck('recruiter_job_id')->toArray();
 
         if (empty($reqData['jobTitle'])) {
-            $jobTitlesModel = JobTitles::getAll(1);
-            $reqData['jobTitle'] = array_map(function ($value) {
-                return $value['id'];
-            }, $jobTitlesModel);
+            $reqData['jobTitle'] = array_pluck(JobTitles::getAll(), 'id');
+        } else {
+            $parentIds = JobTitles::active()->whereIn('id', $reqData['jobTitle'])->whereNotNull('parent_id')->distinct()->pluck('parent_id')->toArray();
+            $reqData['jobTitle'] = array_merge($reqData['jobTitle'], $parentIds);
         }
 
         $searchQueryObj = RecruiterJobs::leftJoin('job_lists', function ($query) use ($reqData) {
@@ -178,10 +170,8 @@ class RecruiterJobs extends Model
 
         $blockedRecruiterModel = ChatUserLists::getBlockedRecruiters($reqData['userId']);
         if (!empty($blockedRecruiterModel)) {
-            $blockedRecruiter = array_map(function ($value) {
-                return $value['recruiter_id'];
-            }, $blockedRecruiterModel);
-            $searchQueryObj->whereNotIn('recruiter_profiles.user_id', $blockedRecruiter);
+            $blockedRecruiterIds = array_pluck($blockedRecruiterModel, 'recruiter_id');
+            $searchQueryObj->whereNotIn('recruiter_profiles.user_id', $blockedRecruiterIds);
         }
         if (isset($reqData['isFulltime']) || isset($reqData['isParttime'])) {
             if ($reqData['isFulltime'] == 1 && $reqData['isParttime'] == 0) {
@@ -240,23 +230,20 @@ class RecruiterJobs extends Model
         if ($page > 1) {
             $skip = ($page - 1) * $limit;
         }
-        $searchResult = $searchQueryObj->groupby('recruiter_jobs.id')->distinct('recruiter_jobs.id')->skip($skip)->take($limit)->orderBy('percentaSkillsMatch', 'desc')->get();
+        $foundJobs = $searchQueryObj->groupby('recruiter_jobs.id')->distinct('recruiter_jobs.id')->skip($skip)->take($limit)->orderBy('percentaSkillsMatch', 'desc')->get()->toArray();
         $result = [];
-        $updatedResult = [];
-        if ($searchResult) {
-            $resultArray = $searchResult->toArray();
-            foreach ($resultArray as $value) {
-                $isSaved = 0;
-                if ((count($userSavedJobs) > 0) && (in_array($value['id'], $userSavedJobs))) {
-                    $isSaved = 1;
-                }
-                $value['isSaved'] = $isSaved;
-                $updatedResult[] = $value;
+        $jobsList = [];
+        foreach ($foundJobs as $value) {
+            $isSaved = 0;
+            if ((count($userSavedJobs) > 0) && (in_array($value['id'], $userSavedJobs))) {
+                $isSaved = 1;
             }
-            $result['list'] = $updatedResult;
-
-            $result['total'] = $total;
+            $value['isSaved'] = $isSaved;
+            $jobsList[] = $value;
         }
+        $result['list'] = $jobsList;
+
+        $result['total'] = $total;
         return $result;
     }
 

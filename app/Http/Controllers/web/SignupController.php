@@ -319,7 +319,7 @@ class SignupController extends Controller
      */
     public function getJobseekerSignUp()
     {
-        $jobTitleData = JobTitles::getAll(JobTitles::ACTIVE);
+        $jobTitleData = JobTitles::getAll();
         $preferredLocationId = PreferredJobLocation::getAllPreferredJobLocation();
         return view('web.jobseekerSignup', ['jobTitleData' => $jobTitleData, 'preferredLocationId' => $preferredLocationId]);
     }
