@@ -30,6 +30,7 @@ Route::get('users/notification/seen/{id}', 'web\NotificationController@seenNotif
 Route::get('/aboutus', function () { return view('about'); });
 Route::get('/privacy-policy', function () { return view('privacy-policy');});
 Route::get('/terms-and-conditions', function () { return view('terms-and-condition');});
+Route::get('/apps', function () { return view('mobile-apps');})->name('apps');
 Route::get('/success-register', function () { return view('auth.passwords.successfully_reg'); });
 Route::get('/success-active', function () { return view('auth.passwords.successfully_active'); });
 
