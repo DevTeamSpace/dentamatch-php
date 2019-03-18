@@ -19,7 +19,7 @@ class PushNotificationApiController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('ApiAuth', ['except' => ['userChatNotification']]);
+         $this->middleware(['ApiAuth', 'ApiLog'], ['except' => ['userChatNotification']]);
     }
 
     /**

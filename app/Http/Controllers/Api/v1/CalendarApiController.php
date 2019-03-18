@@ -16,7 +16,7 @@ class CalendarApiController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('ApiAuth');
+        $this->middleware(['ApiAuth', 'ApiLog']);
     }
 
     /**
@@ -36,7 +36,9 @@ class CalendarApiController extends Controller
         $requestTempDates = $reqData['tempdDates'];
         $tempDate = [];
         if (count($requestTempDates) > 0) {
-            $tempAvailability = JobseekerTempHired::where('jobseeker_id', $userId)->where('job_date', '>=', date('Y-m-d'))->select('job_date')->get();
+            $tempAvailability = JobseekerTempHired::where('jobseeker_id', $userId)
+                ->where('job_date', '>=', date('Y-m-d'))
+                ->select('job_date')->get();
             if ($tempAvailability) {
                 $tempDateArray = $tempAvailability->toArray();
                 foreach ($tempDateArray as $value) {

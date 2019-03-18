@@ -23,7 +23,7 @@ class UserApiController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('ApiAuth', ['only' => ['deleteSignOut']]);
+        $this->middleware(['ApiAuth', 'ApiLog'], ['only' => ['deleteSignOut']]);
     }
 
     /**
