@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $request
  * @property string $response
  * @property int|null $user_id
- * @property int $duration
+ * @property string $duration
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @mixin \Eloquent

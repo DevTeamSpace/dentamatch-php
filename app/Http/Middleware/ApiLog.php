@@ -18,14 +18,18 @@ class ApiLog
      */
     public function handle($request, Closure $next)
     {
-        $request->startLogTime = microtime(true);
+        $request->merge(['startLogTime' => microtime(true)]);
         return $next($request);
     }
 
+    /**
+     * @param Request$request
+     * @param Response $response
+     */
 
     public function terminate($request, $response)
     {
-        $request->endLogTime = microtime(true);
+        $request->merge(['endLogTime' => microtime(true)]);
         $this->log($request,$response);
     }
 
@@ -40,7 +44,7 @@ class ApiLog
         $entry->user_id = $request->apiUserId;
         $entry->path = $request->getMethod() . " " . $request->fullUrl();
         $entry->ip = $request->getClientIp();
-        $entry->duration = $request->startLogTime - $request->endLogTime;
+        $entry->duration = number_format($request->endLogTime - $request->startLogTime, 5);
         $entry->request = json_encode($request->all());
         $entry->response = $response->getContent();
         $entry->save();

@@ -18,7 +18,7 @@ class CreateRequestLogTable extends Migration
             $table->string('path', 2000);
             $table->string('ip', 100);
             $table->integer('user_id')->unsigned()->nullable();
-            $table->integer('duration')->unsigned()->nullable();
+            $table->string('duration')->nullable();
             $table->text('request')->nullable();
             $table->text('response')->nullable();
             $table->timestamps();
