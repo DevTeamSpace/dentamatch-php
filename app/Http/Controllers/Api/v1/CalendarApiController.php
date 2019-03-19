@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Enums\PartTime;
 use App\Http\Controllers\Controller;
+use App\Models\JobSeekerProfiles;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
@@ -10,7 +12,6 @@ use App\Helpers\ApiResponse;
 use App\Models\UserProfile;
 use App\Models\JobSeekerTempAvailability;
 use App\Models\JobLists;
-use App\Models\JobseekerTempHired;
 
 class CalendarApiController extends Controller
 {
@@ -20,70 +21,60 @@ class CalendarApiController extends Controller
     }
 
     /**
-     * Description : Post availability for job
-     * Method : postJobAvailability
-     * formMethod : POST
+     * Description : Post availability dates for jobseeker
      * @param Request $request
      * @return Response
+     * @throws ValidationException
      */
     public function postAvailabilityDates(Request $request)
     {
+        $this->validate($request, [
+            'tempdDates'   => 'present|array',
+            'tempdDates.*' => 'date|date_format:Y-m-d',
+            'partTimeDays' => 'present|array'
+        ]);
+
         $userId = $request->apiUserId;
-        $reqData = $request->all();
-        $userProfileModel = UserProfile::where('user_id', $userId)->first();
-        $countExistingjob = 0;
+        $jobSeeker = JobSeekerProfiles::where('user_id', $userId)->first();
         // check if job seeker is already hired for any temp job for these dates
-        $requestTempDates = $reqData['tempdDates'];
-        $tempDate = [];
-        if (count($requestTempDates) > 0) {
-            $tempAvailability = JobseekerTempHired::where('jobseeker_id', $userId)
+        $requestTempDates = $request->input('tempdDates');
+        $futureJobTempDates = [];
+        if ($requestTempDates) {
+            $futureJobTempDates = $jobSeeker->tempJobsHired()
                 ->where('job_date', '>=', date('Y-m-d'))
-                ->select('job_date')->get();
-            if ($tempAvailability) {
-                $tempDateArray = $tempAvailability->toArray();
-                foreach ($tempDateArray as $value) {
-                    $tempDate[] = $value['job_date'];
-                }
-            }
+                ->select('job_date')->get()->pluck('job_date')->toArray();
         }
 
-        if ($countExistingjob == 0) {
-            $userProfileModel->is_fulltime = $reqData['isFulltime'];
-            $userProfileModel->is_parttime_monday = 0;
-            $userProfileModel->is_parttime_tuesday = 0;
-            $userProfileModel->is_parttime_wednesday = 0;
-            $userProfileModel->is_parttime_thursday = 0;
-            $userProfileModel->is_parttime_friday = 0;
-            $userProfileModel->is_parttime_saturday = 0;
-            $userProfileModel->is_parttime_sunday = 0;
-            $userProfileModel->save();
-            if (is_array($reqData['partTimeDays']) && (count($reqData['partTimeDays']) > 0)) {
-                foreach ($reqData['partTimeDays'] as $value) {
-                    $field = 'is_parttime_' . $value;
-                    $userProfileModel->$field = 1;
-                }
-            }
-            $userProfileModel->save();
-            $deleteAllAvailabilitySet = JobSeekerTempAvailability::where('user_id', '=', $userId);
-            if (!empty($tempDate)) {
-                $deleteAllAvailabilitySet = $deleteAllAvailabilitySet->whereNotIn('temp_job_date', $tempDate);
-            }
-            $deleteAllAvailabilitySet->where('temp_job_date', '>=', date('Y-m-d'))->forceDelete();
+        $jobSeeker->is_fulltime = $request->input('isFulltime', 0);
 
-            if (is_array($requestTempDates) && count($requestTempDates) > 0) {
-                $tempDateArray = [];
-
-                $insertTempDateArray = array_diff($requestTempDates, $tempDate);
-                if (!empty($insertTempDateArray)) {
-                    foreach ($insertTempDateArray as $newTempDate) {
-                        $tempDateArray[] = ['user_id' => $userId, 'temp_job_date' => $newTempDate];
-                    }
-                    JobSeekerTempAvailability::insert($tempDateArray);
-                }
-            }
-            ApiResponse::chkProfileComplete($userId);
-            return ApiResponse::successResponse(trans("messages.availability_add_success"));
+        $partTimeDays = $request->input('partTimeDays', []);
+        foreach (PartTime::days() as $day) {
+            $field = "is_parttime_$day";
+            $jobSeeker->$field = in_array($day, $partTimeDays) ? 1 : 0;
         }
+
+        $jobSeeker->save();
+
+        $jobSeeker->tempDates()
+            ->whereNotIn('temp_job_date', $futureJobTempDates)
+            ->where('temp_job_date', '>=', date('Y-m-d'))
+            ->forceDelete();
+
+        if ($requestTempDates) {
+            $tempDateArray = [];
+
+            $insertTempDates = array_diff($requestTempDates, $futureJobTempDates);
+            $insertTempDates = array_filter($insertTempDates, function ($item) {
+                return $item >= date('Y-m-d');
+            });
+
+            foreach ($insertTempDates as $newTempDate) {
+                $tempDateArray[] = ['user_id' => $userId, 'temp_job_date' => $newTempDate];
+            }
+            JobSeekerTempAvailability::insert($tempDateArray);
+        }
+        ApiResponse::chkProfileComplete($userId);
+        return ApiResponse::successResponse(trans("messages.availability_add_success"));
 
     }
 
