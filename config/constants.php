@@ -12,7 +12,6 @@ return [
         'user_width' => '300',
         'user_height' => '300',
         'ImageType' => 'jpg',
-        'LocationActive' => 1,
         'ZeroValue' => 0,
         'OneValue' => 1,
         'PartTimeJob' => 2,

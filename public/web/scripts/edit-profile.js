@@ -4,6 +4,7 @@ var OfficeModel = function (data) {
     var me = this;
     me.officeId = ko.observable();
     me.officeAddress = ko.observable('');
+    me.officeAddressSecondLine = ko.observable('');
     me.officePhone = ko.observable();
     me.officeInfo = ko.observable('');
     me.officeWorkingHours = ko.observable();
@@ -34,6 +35,7 @@ var OfficeModel = function (data) {
         if (typeof d == "undefined") {
             me.officeId = ko.observable(Math.floor((Math.random() * 100) + 1));
             me.officeAddress = ko.observable('');
+            me.officeAddressSecondLine = ko.observable('');
             me.officePhone = ko.observable();
             me.officeInfo = ko.observable('');
             me.officeWorkingHours = ko.observable();
@@ -64,6 +66,7 @@ var OfficeModel = function (data) {
                 me.officeType.push(splitOfficeType[i]);
             }
             me.officeAddress(d.address);
+            me.officeAddressSecondLine(d.address_second_line);
             d.phone_no = d.phone_no.replace(/\(/g , "")
             d.phone_no = d.phone_no.replace(/\)/g , "")
             d.phone_no = d.phone_no.replace(/\ /g , "");
@@ -282,6 +285,7 @@ var EditProfileVM = function () {
 
     me.prevOfficeId = ko.observable();
     me.prevOfficeAddress = ko.observable('');
+    me.prevOfficeAddressSecondLine = ko.observable('');
     me.prevOfficePhone = ko.observable();
     me.prevOfficeInfo = ko.observable('');
     me.prevOfficeZipcode = ko.observable();
@@ -401,6 +405,7 @@ var EditProfileVM = function () {
         $(".phoneNumberInput").inputmask('(999)999 9999');
         me.prevOfficeId();
         me.prevOfficeAddress('');
+        me.prevOfficeAddressSecondLine('');
         me.prevOfficePhone();
         me.prevOfficeInfo('');
         me.prevOfficeZipcode();
@@ -441,6 +446,7 @@ var EditProfileVM = function () {
 
                 me.prevOfficeId(d.officeId());
                 me.prevOfficeAddress(d.officeAddress());
+                me.prevOfficeAddressSecondLine(d.officeAddressSecondLine());
                 me.prevOfficePhone(d.officePhone());
                 me.prevOfficeInfo(d.officeInfo());
                 me.prevOfficeZipcode(d.officeZipcode());
@@ -719,6 +725,7 @@ var EditProfileVM = function () {
         if (d.alreadyAdded() == true) {
             d.officeId(me.prevOfficeId());
             d.officeAddress(me.prevOfficeAddress());
+            d.officeAddressSecondLine(me.prevOfficeAddressSecondLine());
             d.officePhone(me.prevOfficePhone());
             d.officeInfo(me.prevOfficeInfo());
             d.officeZipcode(me.prevOfficeZipcode());

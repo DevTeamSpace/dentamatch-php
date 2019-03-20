@@ -72,8 +72,10 @@
                          data-parsley-required data-parsley-required-message="Required">
                   <div id="location-msg"></div>
                 </div>
+                <input  name="officeAddressSecondLine" value="{{ old('officeAddressSecondLine') }}" type="text"
+                        data-parsley-maxlength="300"
+                        class="form-control" placeholder="Apartment, suite, unit, building, floor, etc.">
               </div>
-
 
               <div class="form-group">
                 <label>Office Phone Number</label>

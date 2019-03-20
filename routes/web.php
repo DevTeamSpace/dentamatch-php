@@ -101,9 +101,9 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
                 Route::get('checknotratedjobs', 'web\RatingController@getRating');
                 Route::get('users/dashboard', 'web\RecruiterJobController@dashboard');
             });
-            Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails');
-            Route::get('/get-location/{zip}', 'web\UserProfileController@checkValidLocation');
-            Route::post('create-profile', 'web\UserProfileController@createProfile');
+//            Route::get('home', 'web\SignupController@dashboard')->middleware('officeDetails'); // todo why duplicates and more the same routes?
+//            Route::get('/get-location/{zip}', 'web\UserProfileController@checkValidLocation');
+//            Route::post('create-profile', 'web\UserProfileController@createProfile');
             Route::get('subscription-detail', 'web\SubscriptionController@getSubscription');
             Route::get('get-subscription-list', 'web\SubscriptionController@getSubscriptionList');
             Route::post('create-subscription', 'web\SubscriptionController@postCreateSubscription');

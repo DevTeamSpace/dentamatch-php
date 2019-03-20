@@ -15,10 +15,13 @@ use Illuminate\Support\Facades\DB;
  * @property int $id
  * @property int $user_id
  * @property string|null $address
+ * @property string|null $address_second_line
  * @property int|null $zipcode
  * @property float|null $latitude
  * @property float|null $longitude
  * @property string $phone_no
+ * @property string|null $office_name
+ * @property string|null $office_desc
  * @property string|null $office_info
  * @property string|null $work_everyday_start
  * @property string|null $work_everyday_end
@@ -80,7 +83,7 @@ class RecruiterOffice extends Model {
 
     protected $table = 'recruiter_offices';
 
-    protected $fillable = ['user_id', 'address', 'zipcode', 'latitude', 'longitude', 'phone_no', 'office_info', 'work_everyday_start', 'work_everyday_end', 'monday_start', 'monday_end', 'tuesday_start', 'tuesday_end', 'wednesday_start', 'wednesday_end', 'thursday_start', 'thursday_end', 'friday_start', 'friday_end', 'saturday_start', 'saturday_end', 'sunday_start', 'sunday_end', 'office_location'];
+    protected $fillable = ['user_id', 'address', 'address_second_line', 'zipcode', 'latitude', 'longitude', 'phone_no', 'office_info', 'work_everyday_start', 'work_everyday_end', 'monday_start', 'monday_end', 'tuesday_start', 'tuesday_end', 'wednesday_start', 'wednesday_end', 'thursday_start', 'thursday_end', 'friday_start', 'friday_end', 'saturday_start', 'saturday_end', 'sunday_start', 'sunday_end', 'office_location'];
 
     public function officeTypes() {
         return $this->hasMany(RecruiterOfficeType::class, 'recruiter_office_id');
@@ -91,10 +94,15 @@ class RecruiterOffice extends Model {
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * Populate select when creating a new job
+     * @param $userId
+     * @return array
+     */
     public static function getAllRecruiterOffices($userId) {
         return RecruiterOffice::leftJoin('locations', 'locations.zipcode', '=', 'recruiter_offices.zipcode')
                         ->where('user_id', $userId)
-                        ->where('locations.is_active' , config('constants.LocationActive'))
+                        ->where('locations.is_active' , 1)
                         ->select('recruiter_offices.id', 'recruiter_offices.address', 'locations.zipcode')
                         ->get()->toArray();
     }
@@ -175,7 +183,7 @@ class RecruiterOffice extends Model {
     }
     
     public static function getAllOffices(){
-        return RecruiterOffice::where(['user_id' => Auth::user()->id, 'locations.is_active' => config('constants.LocationActive')])
+        return RecruiterOffice::where(['user_id' => Auth::user()->id, 'locations.is_active' => 1])
                 ->join('locations', 'recruiter_offices.zipcode', '=', 'locations.zipcode')
                 ->join('recruiter_office_types','recruiter_office_types.recruiter_office_id', '=' , 'recruiter_offices.id')
                 ->leftjoin('office_types', 'recruiter_office_types.office_type_id', '=' , 'office_types.id')

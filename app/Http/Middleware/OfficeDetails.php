@@ -2,13 +2,15 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\RecruiterOffice;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
 class OfficeDetails {
 
     /**
-     * Handle an incoming request.
+     * If at least one office added - check the subscription status
+     * Otherwise show /home url with form to create an office
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -16,7 +18,7 @@ class OfficeDetails {
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null) {
-        $office = \App\Models\RecruiterOffice::where('user_id', Auth::user()->id)->first();
+        $office = RecruiterOffice::where('user_id', Auth::user()->id)->first();
         if (!empty($office) && isset($office)) {
             return redirect('subscription-detail');
         }
