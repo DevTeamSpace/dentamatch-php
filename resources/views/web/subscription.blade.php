@@ -11,61 +11,48 @@
         <!--ko foreach: subscriptionDetails-->
         <div class="subscription-inr-box ">
           <div class="subscription-type">
-            <p class="mr-b-25">Quarterly</p>
+            <p class="mr-b-10">Monthly</p>
             <div class="subcription-price pos-rel">
               <span class="price-symbol ">$</span>
-              <span class="price" data-bind="text: quarterlyPrice">387</span>
-              <!--<span class="price-duration">Quarterly</span>-->
-              <!--<p>with no free trial</p>-->
+              <span class="price" data-bind="text: quarterlyPrice">129</span>
               <input type="hidden" id="stype" value="1">
             </div>
           </div>
-          <!--                <div class="subscription-desc">
-                              <p>Unlimited template creation,
-                                  job posting, searching jobseeker, message & reports</p>
-                          </div>-->
-
-          <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Next
+          <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-10 mr-b-20">Next
             Step</a>
         </div>
         <div class="subscription-inr-box ">
           <div class="subscription-type">
-            <p class="mr-b-25">Semi-Annual</p>
+            <p class="mr-b-10">Semi-Annual</p>
             <div class="subcription-price pos-rel">
               <span class="price-symbol ">$</span>
-              <span class="price" data-bind="text: halfYearPrice">594</span>
-              <!--<span class="price-duration">Semi-Annual</span>-->
+              <span class="price" data-bind="text: halfYearPrice">99</span>
               <p data-bind="text: free_trial_period">plus a 1 month free trial</p>
               <input type="hidden" id="stype" value="2">
             </div>
+            <div class="subscription-desc mr-t-15">
+              Introductory Special $59 <br> per month with a 6 month commitment
+            </div>
           </div>
-          <!--                <div class="subscription-desc">
-                              <p>Unlimited template creation,
-                                  job posting, searching jobseeker, message & reports</p>
-                          </div>-->
-
-          <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Next
+          <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-10 mr-b-20">Next
             Step</a>
         </div>
 
         <div class="subscription-inr-box ">
           <div class="subscription-type">
-            <p class="mr-b-25">Annual</p>
+            <p class="mr-b-10">Annual</p>
             <div class="subcription-price pos-rel">
               <span class="price-symbol ">$</span>
-              <span class="price" data-bind="text: fullYearPrice">948</span>
+              <span class="price" data-bind="text: fullYearPrice">79</span>
               <p data-bind="text: free_trial_period">plus a 1 month free trial</p>
-              <div class="price-duration">Best Value</div>
+              <p class="text-uppercase">Best Value</p>
               <input type="hidden" id="stype" value="3">
             </div>
+            <div class="subscription-desc">
+              Introductory Special $39 <br> per month with a 12 month commitment
+            </div>
           </div>
-          <!--                <div class="subscription-desc">
-                              <p>Unlimited template creation,
-                                  job posting, searching jobseeker, message & reports</p>
-                          </div>-->
-
-          <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-20 mr-b-20">Next
-            Step</a>
+          <a id="stripe" data-bind="click: $root.addCard" class="btn btn-primary pd-l-10 pd-r-10 mr-t-10 mr-b-20">Next Step</a>
         </div>
 
         <!--/ko-->
@@ -74,6 +61,13 @@
       <div class="frm-cred-access-box subscription-box" data-bind="visible: noSubscription">
         <h3 class="no-subscription-heading text-center" data-bind="text: noSubscriptionDetails"></h3>
       </div>
+
+      <div class="subscription-terms mr-t-30">
+        <p><span>NO</span> Daily Temp Fees</p>
+        <p><span>NO</span> Finders Fees</p>
+        <p>Use DentaMatch as much as you need for a low subscription price</p>
+      </div>
+
     </div>
     <div id="addCardModal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog custom-modal modal-sm" role="document">
