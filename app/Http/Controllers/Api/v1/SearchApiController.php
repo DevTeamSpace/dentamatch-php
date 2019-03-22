@@ -218,8 +218,7 @@ class SearchApiController extends Controller
 
     /**
      * Description : get details of job
-     * Method : postJobDetail
-     * formMethod : POST
+     * POST jobs/job-detail
      * @param Request $request
      * @return Response
      * @throws ValidationException
