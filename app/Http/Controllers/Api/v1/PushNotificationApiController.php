@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Enums\JobType;
 use App\Http\Controllers\Controller;
 use App\Utils\PushNotificationService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Helpers\ApiResponse;
 use App\Models\Notification;
@@ -133,19 +134,24 @@ class PushNotificationApiController extends Controller
     /**
      * Description : Delete notification
      * Method : Delete notification
-     * formMethod : POST
+     * POST users/delete-notification
      * @param Request $request
      * @return Response
      * @throws ValidationException|\Exception
-     * todo anyone can delete any notification
-     * todo delete without finding
      */
     public function PostDeleteNotification(Request $request)
     {
         $this->validate($request, [
-            'notificationId' => 'required',
+            'notificationId'  => 'sometimes|integer',
+            'notificationIds' => 'sometimes|array',
+            'notificationIds.*' => 'integer',
         ]);
-        Notification::findOrFail($request->input('notificationId'))->delete();
+        Notification::whereReceiverId($request->apiUserId)
+            ->where(function (Builder $query) use ($request) {
+                $query->where('id', $request->input('notificationId', 0))
+                    ->orWhereIn('id', $request->input('notificationIds', []));
+            })->delete();
+//            ->whereIn('id', $request->input('notificationIds'))->delete();
         return ApiResponse::successResponse(trans("messages.notification_delete"));
     }
 
