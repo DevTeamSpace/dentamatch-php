@@ -5,12 +5,14 @@ namespace App\Http\Controllers\web;
 use App\Enums\SignupSource;
 use App\Mail\AdminVerifyJobseeker;
 use App\Mail\UserActivation;
+use App\Models\OfficeType;
 use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\RecruiterProfile;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -24,7 +26,6 @@ use App\Models\JobTitles;
 use App\Models\PreferredJobLocation;
 use App\Models\JobSeekerSkills;
 use App\Models\JobSeekerTempAvailability;
-use App\Models\PasswordReset;
 use Hash;
 
 class SignupController extends Controller
@@ -123,12 +124,12 @@ class SignupController extends Controller
     }
 
     /**
-     * Method to home page
-     * @return view
+     * Show form for creating first office
+     * @return Response
      */
     public function dashboard()
     {
-        $officeType = \App\Models\OfficeType::where('is_active', 1)->orderBy('officetype_name', 'ASC')->get();
+        $officeType = OfficeType::where('is_active', 1)->orderBy('officetype_name', 'ASC')->get();
         return view('web.dashboard')->with('officeType', $officeType);
     }
 
@@ -319,7 +320,7 @@ class SignupController extends Controller
      */
     public function getJobseekerSignUp()
     {
-        $jobTitleData = JobTitles::getAll(JobTitles::ACTIVE);
+        $jobTitleData = JobTitles::getAll();
         $preferredLocationId = PreferredJobLocation::getAllPreferredJobLocation();
         return view('web.jobseekerSignup', ['jobTitleData' => $jobTitleData, 'preferredLocationId' => $preferredLocationId]);
     }
@@ -372,7 +373,7 @@ class SignupController extends Controller
         try {
             $tutorial = $request->session()->pull('tutorial', 0);
             if ($tutorial == 1) {
-                $officeType = \App\Models\OfficeType::where('is_active', 1)->get();
+                $officeType = OfficeType::where('is_active', 1)->get();
                 RecruiterProfile::where('user_id', Auth::user()->id)->update(['accept_term' => 1]);
                 return view('web.dashboard')->with('modal', 1)->with('officeType', $officeType);
             } else {

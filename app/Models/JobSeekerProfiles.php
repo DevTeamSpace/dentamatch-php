@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\JobAppliedStatus;
 use App\Enums\JobType;
 use App\Enums\SeekerVerifiedStatus;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
@@ -48,6 +49,8 @@ use Illuminate\Support\Facades\DB;
  * @property User $user
  * @property PreferredJobLocation $preferredLocation
  * @property JobTitles $jobTitle
+ * @property JobseekerTempHired[]|Collection $tempJobsHired
+ * @property-read JobSeekerTempAvailability[]|Collection $tempDates
  *
  * @method static Builder|JobSeekerProfiles newModelQuery()
  * @method static Builder|JobSeekerProfiles newQuery()
@@ -105,6 +108,16 @@ class JobSeekerProfiles extends Model
     public function preferredLocation()
     {
         return $this->belongsTo(PreferredJobLocation::class, 'preferred_job_location_id');
+    }
+
+    public function tempJobsHired()
+    {
+        return $this->hasMany(JobseekerTempHired::class, 'jobseeker_id', 'user_id');
+    }
+
+    public function tempDates()
+    {
+        return $this->hasMany(JobSeekerTempAvailability::class, 'user_id', 'user_id');
     }
 
     public static function getJobSeekerProfiles($job, $reqData)

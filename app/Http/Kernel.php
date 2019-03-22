@@ -62,5 +62,6 @@ class Kernel extends HttpKernel
         'officeDetails'=> \App\Http\Middleware\OfficeDetails::class,
         'nocache' => \App\Http\Middleware\NocacheMiddleware::class,
         'subscription' => \App\Http\Middleware\Subscription::class,
+        'ApiLog' => \App\Http\Middleware\ApiLog::class,
     ];
 }

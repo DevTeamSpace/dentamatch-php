@@ -93,6 +93,7 @@
                 <div class="viewProfileRightCard pd-b-25">
                   <h6>Office Address</h6>
                   <p data-bind="text: officeAddress"></p>
+                  <p data-bind="text: officeAddressSecondLine"></p>
                 </div>
                 <div class="viewProfileRightCard pd-b-25">
                   <h6>Phone Number</h6>
@@ -179,6 +180,10 @@
                  data-parsley-required-message="Required"
                  data-bind="value: officeAddress, event: {focus: $root.getOfficeName}">
           <p class="error-div" data-bind="text: locationError"></p>
+          <input type="text" value="" name="officeAddressSecondLine"
+                 data-parsley-maxlength="300"
+                 class="form-control" placeholder="Apartment, suite, unit, building, floor, etc."
+                 data-bind="value: officeAddressSecondLine">
         </div>
         <div class="form-group">
           <label>Office Phone Number</label>

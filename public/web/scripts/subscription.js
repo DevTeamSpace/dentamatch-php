@@ -34,9 +34,9 @@ var FirstSubscriptionVM = function () {
                     d.data['trailPeriod'] = 1;
                     d.data['free_trial_period'] = 'plus a 1 month free trial';
                 }
-                d.data['quarterlyPrice'] = 387;
-                d.data['halfYearPrice'] = 594;
-                d.data['fullYearPrice'] = 948;
+                d.data['monthlyPrice'] = 129;
+                d.data['halfYearPrice'] = 99;
+                d.data['fullYearPrice'] = 79;
                 me.visibleSubcription(true);
                 me.subscriptionDetails.push(d.data);
                 if(d.customer.length != 0){

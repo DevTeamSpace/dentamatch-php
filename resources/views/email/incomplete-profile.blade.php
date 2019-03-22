@@ -13,7 +13,7 @@
                         <div style="font-size:15px;">
                             <p style="line-height: 24px;">
                                 We can’t wait to match your skills to dental offices near you, but we need your help.<br/><br/>
-                                Please <a href="#">visit the DentaMatch app</a> to complete your profile. All you have to do is select your skills and list some basic information and we’ll take it from there. <br/>
+                                Please <a href="<?= url('apps') ?>" target="_blank">visit the DentaMatch app</a> to complete your profile. All you have to do is select your skills and list some basic information and we’ll take it from there. <br/>
                             </p>
                             <br/>
                             <p style="margin:20px 0 0 0; padding: 0;">See you soon, </p>

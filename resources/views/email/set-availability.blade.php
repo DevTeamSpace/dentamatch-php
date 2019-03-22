@@ -12,8 +12,8 @@
                         <h3 style="margin:0 0 15px 0">Hi {{ $name }},</h3>
                         <div style="font-size:15px;">
                             <p style="line-height: 24px;">
-                                We just need one more thing before we match your skills to dental offices near you–your schedule.<br/><br/>
-                                Please <a href="#">visit your DentaMatch account</a> and select the days you’d like to pick up work. <br/><br/>
+                                We just need one more thing before we match your skills to dental offices near you – your schedule.<br/><br/>
+                                Please <a href="<?= url('apps') ?>">visit your DentaMatch account</a> and select the days you’d like to pick up work. <br/><br/>
                                 And don’t worry if you’re not 100% sure, you can always update your calendar if things change.<br/>
                             </p>
                             <p style="margin:20px 0 0 0; padding: 0;">Thank you! </p>
