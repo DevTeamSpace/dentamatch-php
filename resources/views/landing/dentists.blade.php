@@ -209,7 +209,7 @@
       
         <div class="intrinsic" style="max-width:801.0px;">
           
-            <a href="/homepage" >
+            <a href="/" >
           
             <div style="padding-bottom:27.45098114013672%;" class="image-block-wrapper   has-aspect-ratio" data-description="" >
               <noscript><img src="https://static1.squarespace.com/static/58b8aa9cbebafbe4541da618/t/58e052b303596ea5848c5f15/1528507587226/" alt="" /></noscript><img class="thumb-image" data-src="https://static1.squarespace.com/static/58b8aa9cbebafbe4541da618/t/58e052b303596ea5848c5f15/1528507587226/" data-image="https://static1.squarespace.com/static/58b8aa9cbebafbe4541da618/t/58e052b303596ea5848c5f15/1528507587226/" data-image-dimensions="801x464" data-image-focal-point="0.5,0.5" alt="" data-load="false" data-image-id="58e052b303596ea5848c5f15" data-type="image" />
