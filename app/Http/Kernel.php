@@ -63,5 +63,6 @@ class Kernel extends HttpKernel
         'nocache' => \App\Http\Middleware\NocacheMiddleware::class,
         'subscription' => \App\Http\Middleware\Subscription::class,
         'ApiLog' => \App\Http\Middleware\ApiLog::class,
+        'csp' => \App\Http\Middleware\ContentSecurityPolicy::class,
     ];
 }
