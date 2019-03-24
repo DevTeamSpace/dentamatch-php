@@ -15,6 +15,8 @@ Route::get('image/{w}/{h}/', function (League\Glide\Server $server, $w, $h) {
     $server->outputImage($_GET['src'], ['w' => $w, 'h' => $h, 'fit' => 'crop']);
 });
 Route::get('/', function () { return view('landing.main'); })->middleware('csp');
+Route::get('/dentists', function () { return view('landing.dentists'); })->middleware('csp');
+Route::get('/jobs', function () { return view('landing.jobs'); })->middleware('csp');
 //Route::get('/', 'web\SignupController@getLogin');
 
 Route::get('signup', 'web\SignupController@getLogin');
