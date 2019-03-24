@@ -14,7 +14,8 @@ Route::post('stripe-test', 'web\SubscriptionController@getStripeTest');
 Route::get('image/{w}/{h}/', function (League\Glide\Server $server, $w, $h) {
     $server->outputImage($_GET['src'], ['w' => $w, 'h' => $h, 'fit' => 'crop']);
 });
-Route::get('/', 'web\SignupController@getLogin');
+Route::get('/', function () { return view('landing.main'); });
+//Route::get('/', 'web\SignupController@getLogin');
 
 Route::get('signup', 'web\SignupController@getLogin');
 Route::post('signup', 'web\SignupController@postSignUp');
