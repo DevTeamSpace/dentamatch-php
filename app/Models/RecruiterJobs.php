@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\DB;
  * @property PreferredJobLocation $preferredLocation
  * @property-read Collection|TempJobDates[] $tempJobActiveDates
  * @property-read Collection|TempJobDates[] $tempJobDates
+ * @property-read Collection|JobseekerTempHired[] $hiredDates
  * @property-read Collection|JobLists[] $applications
  *
  * @method static bool|null forceDelete()
@@ -102,6 +103,11 @@ class RecruiterJobs extends Model
     public function tempJobActiveDates()
     {
         return $this->hasMany(TempJobDates::class, 'recruiter_job_id')->select('job_date'); // todo replace with 🠙🠙🠙
+    }
+
+    public function hiredDates()
+    {
+        return $this->hasMany(JobseekerTempHired::class, 'job_id');
     }
 
     public function jobTemplate()
@@ -288,7 +294,7 @@ class RecruiterJobs extends Model
             'recruiter_offices.saturday_start', 'recruiter_offices.saturday_end',
             'recruiter_offices.sunday_start', 'recruiter_offices.sunday_end',
             'job_titles.jobtitle_name', 'recruiter_profiles.office_name', 'recruiter_profiles.office_desc',
-            'recruiter_offices.zipcode',
+            'recruiter_offices.zipcode', 'recruiter_offices.user_id as recruiter_id',
             'recruiter_offices.latitude', 'recruiter_offices.longitude', 'recruiter_jobs.created_at',
             DB::raw("IFNULL(TRIM(LEADING ', ' FROM CONCAT(address_second_line, ', ', address)), address) as address"),
             DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS job_posted_time_gap"),

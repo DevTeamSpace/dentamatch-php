@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Helpers\ApiResponse;
+use App\Helpers\WebResponse;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -64,6 +65,10 @@ class Handler extends ExceptionHandler
             }
 
             return ApiResponse::errorResponse(trans("messages.something_wrong"), ["data" => $exception->getMessage()]);
+        }
+
+        if ($request->expectsJson()) {
+            return WebResponse::errorResponse($exception->getMessage());
         }
 
         if ($this->isHttpException($exception)) {
