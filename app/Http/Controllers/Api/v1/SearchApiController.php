@@ -6,9 +6,9 @@ use App\Enums\JobAppliedStatus;
 use App\Enums\JobType;
 use App\Enums\SeekerVerifiedStatus;
 use App\Http\Controllers\Controller;
+use App\Models\JobSeekerProfiles;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use App\Helpers\ApiResponse;
 use App\Models\RecruiterJobs;
@@ -18,8 +18,6 @@ use App\Models\UserProfile;
 use App\Models\SearchFilter;
 use App\Models\Notification;
 use App\Models\ChatUserLists;
-use App\Models\JobSeekerTempAvailability;
-use App\Models\TempJobDates;
 use App\Models\JobseekerTempHired;
 use App\Models\User;
 
@@ -243,9 +241,8 @@ class SearchApiController extends Controller
     }
 
     /**
-     * Description : Update job status
-     * Method : postAcceptRejectInvitedJob
-     * formMethod : POST
+     * Description : Accept or reject job of any type
+     * POST users/acceptreject-job
      * @param Request $request
      * @return Response
      * @throws ValidationException
@@ -253,118 +250,60 @@ class SearchApiController extends Controller
     public function postAcceptRejectInvitedJob(Request $request)
     {
         $this->validate($request, [
-            'notificationId' => 'required',
-            'acceptStatus'   => 'required',
+            'notificationId' => 'required|integer',
+            'acceptStatus'   => 'required|integer',
+            'jobDates'       => 'sometimes|array',
+            'jobDates.*'     => 'date|date_format:Y-m-d',
         ]);
         $userId = $request->apiUserId;
         $reqData = $request->all();
-        $notificationDetails = Notification::where('id', $reqData['notificationId'])->first();
-        $jobDetails = RecruiterJobs::where('recruiter_jobs.id', $notificationDetails->job_list_id)->first();
+        $notificationDetails = Notification::findOrFail($reqData['notificationId']);
+        $jobDetails = RecruiterJobs::findOrFail($notificationDetails->job_list_id);
+        $jobSeeker = JobSeekerProfiles::whereUserId($userId)->firstOrFail();
 
         if ($jobDetails->job_type == JobType::FULLTIME || $jobDetails->job_type == JobType::PARTTIME) {
-            $seekerDetails = UserProfile::where('user_id', $userId)->first();
             if ($reqData['acceptStatus'] == 0 ||
-                ($jobDetails->job_type == JobType::FULLTIME && $seekerDetails->is_fulltime == 1) ||
+                ($jobDetails->job_type == JobType::FULLTIME && $jobSeeker->is_fulltime == 1) ||
                 ($jobDetails->job_type == JobType::PARTTIME &&
-                    (($jobDetails->is_monday == 1 && $seekerDetails->is_parttime_monday == 1) ||
-                        ($jobDetails->is_tuesday == 1 && $seekerDetails->is_parttime_tuesday == 1) ||
-                        ($jobDetails->is_wednesday == 1 && $seekerDetails->is_parttime_wednesday == 1) ||
-                        ($jobDetails->is_thursday == 1 && $seekerDetails->is_parttime_thursday == 1) ||
-                        ($jobDetails->is_friday == 1 && $seekerDetails->is_parttime_friday == 1) ||
-                        ($jobDetails->is_saturday == 1 && $seekerDetails->is_parttime_saturday == 1) ||
-                        ($jobDetails->is_sunday == 1 && $seekerDetails->is_parttime_sunday == 1)))) {
+                    (($jobDetails->is_monday == 1 && $jobSeeker->is_parttime_monday == 1) ||
+                        ($jobDetails->is_tuesday == 1 && $jobSeeker->is_parttime_tuesday == 1) ||
+                        ($jobDetails->is_wednesday == 1 && $jobSeeker->is_parttime_wednesday == 1) ||
+                        ($jobDetails->is_thursday == 1 && $jobSeeker->is_parttime_thursday == 1) ||
+                        ($jobDetails->is_friday == 1 && $jobSeeker->is_parttime_friday == 1) ||
+                        ($jobDetails->is_saturday == 1 && $jobSeeker->is_parttime_saturday == 1) ||
+                        ($jobDetails->is_sunday == 1 && $jobSeeker->is_parttime_sunday == 1)))) {
                 $response = $this->acceptRejectJob($userId, $notificationDetails->job_list_id, $reqData['acceptStatus'], $notificationDetails->sender_id, $reqData['notificationId'], 0);
             } else {
                 return ApiResponse::errorResponse(trans("messages.set_availability"));
             }
         } else {
             if ($reqData['acceptStatus'] == 1) {
-                // job seeker availability for temp job
-                $tempAvailability = JobSeekerTempAvailability::select('temp_job_date')->where('user_id', '=', $userId)->get();
-                $tempJobDates = [];
-                if ($tempAvailability) {
-                    $tempAvailabilityArray = $tempAvailability->toArray();
-                    foreach ($tempAvailabilityArray as $value) {
-                        $tempJobDates[] = $value['temp_job_date'];
-                    }
+                $wantedDates = $request->input('jobDates', []);
+
+                $seekerCanWorkOnDates = $jobSeeker->tempDates()
+                    ->whereIn('temp_job_date', $wantedDates)
+                    ->whereNotIn('temp_job_date', $jobSeeker->tempJobsHired()->select('job_date')->getQuery())
+                    ->pluck('temp_job_date')->toArray();
+
+                $jobAvailableDatesForSeeker = $jobDetails->tempJobDates()
+                    ->whereIn('job_date', $seekerCanWorkOnDates)
+                    ->whereNotIn('job_date',
+                        $jobDetails->hiredDates()->groupBy('job_date')
+                            ->havingRaw('count(id) = ?', [$jobDetails->no_of_jobs])
+                            ->select('job_date')->getQuery())
+                    ->pluck('job_date');
+
+                $hiringDates = $jobAvailableDatesForSeeker->map(function ($date) use ($userId, $notificationDetails) {
+                    return ['jobseeker_id' => $userId, 'job_id' => $notificationDetails->job_list_id, 'job_date' => $date];
+                })->toArray();
+
+                if (!$hiringDates) {
+                    return ApiResponse::errorResponse(trans("messages.mismatch_availability"));
                 }
 
-                $tempDates = TempJobDates::where('recruiter_job_id', $notificationDetails->job_list_id)->get()->toArray();
-                $insertDates = [];
-                if ($tempDates) {
-                    foreach ($tempDates as $tempDate) {
-                        if (in_array($tempDate['job_date'], $tempJobDates)) {
-                            $insertDates[] = $tempDate['job_date'];
-                        }
-                    }
-                }
-                if (empty($insertDates)) {
-                    return ApiResponse::errorResponse(trans("messages.set_availability"));
-                }
-                // no of dates user is available wrt to the temp job dates
-                $userAvail = count($insertDates);
-                // check if job seeker is already hired for any temp job for these dates
-                $tempAvailability = JobseekerTempHired::where('jobseeker_id', $userId)->select('job_date')->get();
+                JobseekerTempHired::insert($hiringDates);
+                return $this->acceptRejectJob($userId, $notificationDetails->job_list_id, $reqData['acceptStatus'], $notificationDetails->sender_id, $reqData['notificationId'], 1, $jobAvailableDatesForSeeker);
 
-                if ($tempAvailability) {
-                    $tempDate = $tempAvailability->toArray();
-                    if (!empty($insertDates) && !empty($tempDate)) {
-                        foreach ($tempDate as $value) {
-                            if (in_array($value['job_date'], $insertDates)) {
-                                $insertDates = array_diff($insertDates, [$value['job_date']]);
-                            }
-                        }
-                    }
-                }
-
-                //no of dates user is available wrt to the temp job dates except the hired dates
-                $hiredAval = count($insertDates);
-
-                if (!empty($insertDates)) {
-                    $countHiredJobs = JobseekerTempHired::where('job_id', $notificationDetails->job_list_id)
-                        ->whereIn('job_date', $insertDates)
-                        ->select(['job_date', DB::raw("count(id) as job_count")])
-                        ->groupby('job_date')->get();
-                    $countJobArray = $countHiredJobs->toArray();
-
-                    if (!empty($countJobArray)) {
-                        $hiredJobDates = [];
-                        $hiredJobDateAfterCount = [];
-                        foreach ($countJobArray as $value) {
-                            $hiredJobDateAfterCount[] = $value['job_date'];
-                            if ($value['job_count'] < $jobDetails->no_of_jobs) {
-                                $hiredJobDates[] = ['jobseeker_id' => $userId, 'job_id' => $notificationDetails->job_list_id, 'job_date' => $value['job_date']];
-                            }
-                        }
-
-                        $remainingHiredDate = array_diff($insertDates, $hiredJobDateAfterCount);
-
-                        if (!empty($remainingHiredDate)) {
-                            foreach ($remainingHiredDate as $value) {
-                                $hiredJobDates[] = ['jobseeker_id' => $userId, 'job_id' => $notificationDetails->job_list_id, 'job_date' => $value];
-                            }
-                        }
-
-                        if (!empty($hiredJobDates)) {
-                            JobseekerTempHired::insert($hiredJobDates);
-                            $response = $this->acceptRejectJob($userId, $notificationDetails->job_list_id, $reqData['acceptStatus'], $notificationDetails->sender_id, $reqData['notificationId']);
-                        } else {
-                            $response = ApiResponse::errorResponse(trans("messages.not_job_exists"));
-                        }
-                    } else {
-                        foreach ($insertDates as $insertDate) {
-                            $hiredJobDates[] = ['jobseeker_id' => $userId, 'job_id' => $notificationDetails->job_list_id, 'job_date' => $insertDate];
-                        }
-                        JobseekerTempHired::insert($hiredJobDates);
-                        $response = $this->acceptRejectJob($userId, $notificationDetails->job_list_id, $reqData['acceptStatus'], $notificationDetails->sender_id, $reqData['notificationId']);
-                    }
-                } else {
-                    if ($userAvail == $hiredAval) {
-                        $response = ApiResponse::errorResponse(trans("messages.set_availability"));
-                    } else {
-                        $response = ApiResponse::errorResponse(trans("messages.mismatch_availability"));
-                    }
-                }
             } else {
                 $response = $this->acceptRejectJob($userId, $notificationDetails->job_list_id, $reqData['acceptStatus'], $notificationDetails->sender_id, $reqData['notificationId']);
             }
@@ -384,7 +323,7 @@ class SearchApiController extends Controller
      * @param int $hired
      * @return Response
      */
-    protected function acceptRejectJob($userId, $jobId, $acceptstatus, $recruiterId, $notificationId, $hired = 1)
+    protected function acceptRejectJob($userId, $jobId, $acceptstatus, $recruiterId, $notificationId, $hired = 1, $dates = [])
     {
         $jobExists = JobLists::where('seeker_id', '=', $userId)
             ->where('recruiter_job_id', '=', $jobId)
@@ -414,7 +353,7 @@ class SearchApiController extends Controller
                 } else {
                     $this->notifyAdmin($jobId, $userId, Notification::JOBSEEKERACCEPTED);
                 }
-                $response = ApiResponse::successResponse($msg);
+                $response = ApiResponse::successResponse($msg, $dates);
             } else {
                 if ($jobExists->applied_status == JobAppliedStatus::HIRED) {
                     $msg = trans("messages.seeker_already_hired");

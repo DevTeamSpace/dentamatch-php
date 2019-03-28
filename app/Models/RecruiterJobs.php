@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\DB;
  * @property PreferredJobLocation $preferredLocation
  * @property-read Collection|TempJobDates[] $tempJobActiveDates
  * @property-read Collection|TempJobDates[] $tempJobDates
+ * @property-read Collection|JobseekerTempHired[] $hiredDates
  * @property-read Collection|JobLists[] $applications
  *
  * @method static bool|null forceDelete()
@@ -102,6 +103,11 @@ class RecruiterJobs extends Model
     public function tempJobActiveDates()
     {
         return $this->hasMany(TempJobDates::class, 'recruiter_job_id')->select('job_date'); // todo replace with 🠙🠙🠙
+    }
+
+    public function hiredDates()
+    {
+        return $this->hasMany(JobseekerTempHired::class, 'job_id');
     }
 
     public function jobTemplate()
