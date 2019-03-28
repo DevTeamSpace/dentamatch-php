@@ -44,7 +44,7 @@ class Notification extends Model
 
     protected $hidden = ['updated_at', 'deleted_at']; // todo soft delete?
 
-    protected $fillable = ['sender_id', 'receiver_id', 'job_list_id', 'notification_data', 'notification_type'];
+    protected $fillable = ['sender_id', 'receiver_id', 'job_list_id', 'notification_data', 'notification_type', 'seen'];
 
     const LIMIT = 10;
 

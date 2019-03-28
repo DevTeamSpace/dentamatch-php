@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Enums\JobAppliedStatus;
 use App\Enums\JobType;
 use App\Enums\SeekerVerifiedStatus;
+use App\Helpers\JobsHelper;
 use App\Http\Controllers\Controller;
 use App\Models\JobSeekerProfiles;
 use Illuminate\Http\Request;
@@ -256,28 +257,42 @@ class SearchApiController extends Controller
             'jobDates.*'     => 'date|date_format:Y-m-d',
         ]);
         $userId = $request->apiUserId;
-        $reqData = $request->all();
-        $notificationDetails = Notification::findOrFail($reqData['notificationId']);
+
+        $notificationDetails = Notification::whereId($request->input('notificationId'))->where('receiver_id', $userId)->firstOrFail();
         $jobDetails = RecruiterJobs::findOrFail($notificationDetails->job_list_id);
+
+        /** @var JobLists $jobInvitation */
+        $jobInvitation = $jobDetails->applications()->where('seeker_id', $userId)
+            ->orderBy('id', SORT_DESC)->first();
+
+        if (!$jobInvitation)
+            return ApiResponse::errorResponse(trans("messages.not_invited_job"));
+
+        if ($jobInvitation->applied_status != JobAppliedStatus::INVITED) {
+            switch ($jobInvitation->applied_status) {
+                case JobAppliedStatus::HIRED:
+                    $msg = trans("messages.seeker_already_hired");
+                    break;
+                default:
+                    $msg = trans("messages.seeker_already_cancelled");
+            }
+            return ApiResponse::errorResponse($msg);
+        }
+
         $jobSeeker = JobSeekerProfiles::whereUserId($userId)->firstOrFail();
 
-        if ($jobDetails->job_type == JobType::FULLTIME || $jobDetails->job_type == JobType::PARTTIME) {
-            if ($reqData['acceptStatus'] == 0 ||
-                ($jobDetails->job_type == JobType::FULLTIME && $jobSeeker->is_fulltime == 1) ||
-                ($jobDetails->job_type == JobType::PARTTIME &&
-                    (($jobDetails->is_monday == 1 && $jobSeeker->is_parttime_monday == 1) ||
-                        ($jobDetails->is_tuesday == 1 && $jobSeeker->is_parttime_tuesday == 1) ||
-                        ($jobDetails->is_wednesday == 1 && $jobSeeker->is_parttime_wednesday == 1) ||
-                        ($jobDetails->is_thursday == 1 && $jobSeeker->is_parttime_thursday == 1) ||
-                        ($jobDetails->is_friday == 1 && $jobSeeker->is_parttime_friday == 1) ||
-                        ($jobDetails->is_saturday == 1 && $jobSeeker->is_parttime_saturday == 1) ||
-                        ($jobDetails->is_sunday == 1 && $jobSeeker->is_parttime_sunday == 1)))) {
-                $response = $this->acceptRejectJob($userId, $notificationDetails->job_list_id, $reqData['acceptStatus'], $notificationDetails->sender_id, $reqData['notificationId'], 0);
-            } else {
-                return ApiResponse::errorResponse(trans("messages.set_availability"));
-            }
+        $acceptStatus = $request->input('acceptStatus');
+
+        if ($acceptStatus == 0) {
+            $response = $this->acceptRejectJob($acceptStatus, $notificationDetails, $jobInvitation);
         } else {
-            if ($reqData['acceptStatus'] == 1) {
+            if ($jobDetails->job_type == JobType::FULLTIME || $jobDetails->job_type == JobType::PARTTIME) {
+                if (JobsHelper::seekerFitsJob($jobSeeker, $jobDetails)) {
+                    $response = $this->acceptRejectJob($acceptStatus, $notificationDetails, $jobInvitation);
+                } else {
+                    return ApiResponse::errorResponse(trans("messages.set_availability"));
+                }
+            } else {
                 $wantedDates = $request->input('jobDates', []);
 
                 $seekerCanWorkOnDates = $jobSeeker->tempDates()
@@ -302,10 +317,7 @@ class SearchApiController extends Controller
                 }
 
                 JobseekerTempHired::insert($hiringDates);
-                return $this->acceptRejectJob($userId, $notificationDetails->job_list_id, $reqData['acceptStatus'], $notificationDetails->sender_id, $reqData['notificationId'], 1, $jobAvailableDatesForSeeker);
-
-            } else {
-                $response = $this->acceptRejectJob($userId, $notificationDetails->job_list_id, $reqData['acceptStatus'], $notificationDetails->sender_id, $reqData['notificationId']);
+                $response = $this->acceptRejectJob($acceptStatus, $notificationDetails, $jobInvitation, 1, $jobAvailableDatesForSeeker);
             }
         }
 
@@ -314,57 +326,32 @@ class SearchApiController extends Controller
 
     /**
      * Description : update job status
-     * Method : acceptRejectJob
-     * @param int $userId
-     * @param int $jobId
-     * @param int $acceptstatus
-     * @param int $recruiterId
-     * @param int $notificationId
+     * @param $acceptStatus
+     * @param Notification $notification
+     * @param JobLists $jobInvitation
      * @param int $hired
+     * @param array $dates
      * @return Response
      */
-    protected function acceptRejectJob($userId, $jobId, $acceptstatus, $recruiterId, $notificationId, $hired = 1, $dates = [])
+    protected function acceptRejectJob($acceptStatus, $notification, $jobInvitation, $hired = 0, $dates = [])
     {
-        $jobExists = JobLists::where('seeker_id', '=', $userId)
-            ->where('recruiter_job_id', '=', $jobId)
-            ->orderBy('id', 'desc')
-            ->first();
-
-        if ($jobExists) {
-            if ($jobExists->applied_status == JobAppliedStatus::INVITED) {
-                if ($acceptstatus == 0) {
-                    $jobExists->applied_status = JobAppliedStatus::CANCELLED;
-                    $msg = trans("messages.job_cancelled_success");
-                } else if ($hired == 1) {
-                    $jobExists->applied_status = JobAppliedStatus::HIRED;
-                    $userChat = new ChatUserLists();
-                    $userChat->recruiter_id = $recruiterId;
-                    $userChat->seeker_id = $userId;
-                    $userChat->checkAndSaveUserToChatList();
-                    $msg = trans("messages.job_hired_success");
-                } else {
-                    $jobExists->applied_status = JobAppliedStatus::APPLIED;
-                    $msg = trans("messages.job_hired_success");
-                }
-                $jobExists->save();
-                Notification::where('id', $notificationId)->update(['seen' => 1]);
-                if ($acceptstatus == 0) {
-                    $this->notifyAdmin($jobId, $userId, Notification::JOBSEEKERREJECTED);
-                } else {
-                    $this->notifyAdmin($jobId, $userId, Notification::JOBSEEKERACCEPTED);
-                }
-                $response = ApiResponse::successResponse($msg, $dates);
-            } else {
-                if ($jobExists->applied_status == JobAppliedStatus::HIRED) {
-                    $msg = trans("messages.seeker_already_hired");
-                } else {
-                    $msg = trans("messages.seeker_already_cancelled");
-                }
-                $response = ApiResponse::errorResponse($msg);
-            }
+        if ($acceptStatus == 0) {
+            $jobInvitation->applied_status = JobAppliedStatus::CANCELLED;
+            $msg = trans("messages.job_cancelled_success");
+        } else if ($hired == 1) {
+            $jobInvitation->applied_status = JobAppliedStatus::HIRED;
+            ChatUserLists::firstOrCreate(['recruiter_id' => $notification->sender_id, 'seeker_id' => $notification->receiver_id]);
+            $msg = trans("messages.job_hired_success");
         } else {
-            $response = ApiResponse::errorResponse(trans("messages.not_invited_job"));
+            $jobInvitation->applied_status = JobAppliedStatus::APPLIED;
+            $msg = trans("messages.job_hired_success");
         }
+        $jobInvitation->save();
+        $notification->update(['seen' => 1]);
+        $this->notifyAdmin($notification->job_list_id, $notification->receiver_id,
+            $acceptStatus ? Notification::JOBSEEKERACCEPTED : Notification::JOBSEEKERREJECTED);
+
+        $response = ApiResponse::successResponse($msg, $dates);
         return $response;
     }
 
