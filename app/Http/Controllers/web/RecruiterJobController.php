@@ -103,26 +103,21 @@ class RecruiterJobController extends Controller
 
     /**
      * Method to create a job
-     * @return view
+     * @return Response
      */
     public function createJob($templateId)
     {
-        try {
-            $this->viewData['offices'] = RecruiterOffice::getAllRecruiterOffices(Auth::user()->id);
-            $this->viewData['templateId'] = $templateId;
-            $this->viewData['jobTemplates'] = JobTemplates::findById($templateId);
-            $this->viewData['preferredLocationId'] = PreferredJobLocation::getAllPreferredJobLocation();
-            $payrate = Configs::select('config_data')->where('config_name', '=', 'PAYRATE')->first();
-            $this->viewData['payrateUrl'] = '';
-            if ($payrate->config_data != null) {
-                $this->viewData['payrateUrl'] = Storage::url($payrate->config_data);
-            }
-
-            return $this->returnView('create');
-        } catch (\Exception $e) {
-            Log::error($e);
-            return view('web.error.', ["message" => $e->getMessage()]);
+        $this->viewData['offices'] = RecruiterOffice::getAllRecruiterOffices(Auth::user()->id);
+        $this->viewData['templateId'] = $templateId;
+        $this->viewData['jobTemplates'] = JobTemplates::findById($templateId);
+        $this->viewData['preferredLocationId'] = PreferredJobLocation::getAllPreferredJobLocation();
+        $payrate = Configs::select('config_data')->where('config_name', '=', 'PAYRATE')->first();
+        $this->viewData['payrateUrl'] = '';
+        if ($payrate->config_data != null) {
+            $this->viewData['payrateUrl'] = Storage::url($payrate->config_data);
         }
+
+        return $this->returnView('create');
     }
 
     /**
@@ -468,7 +463,7 @@ class RecruiterJobController extends Controller
             $allData = [];
             $jobDetails = RecruiterJobs::getRecruiterJobDetails($request->jobId);
             $jobSeekerStatus = JobLists::getJobSeekerStatus($request->jobId);
-            $recruiterOffices = RecruiterOffice::getAllOffices();
+            $recruiterOffices = RecruiterOffice::getActiveOffices();
             $locationActive = 0;
             foreach ($recruiterOffices as $recruiterOffice) {
                 if ($recruiterOffice->id == $jobDetails['recruiter_office_id']) {

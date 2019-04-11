@@ -2,283 +2,83 @@
 
 namespace App\Http\Controllers\web;
 
+use App\Helpers\WebResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RecruiterProfile;
 use App\Models\RecruiterOffice;
-use App\Models\SubscriptionPayments;
+use App\Models\Subscription;
 use App\Http\Requests\CreateSubscriptionRequest;
 use App\Http\Requests\AddCardRequest;
 use App\Http\Requests\DeleteCardRequest;
 use App\Http\Requests\UnsubscribeRequest;
 use App\Http\Requests\EditCardRequest;
 use App\Http\Requests\ChangeSubscriptionPlanRequest;
-use Log;
-use DB;
+use Stripe\Error\InvalidRequest;
+use App\Utils\StripeUtils;
 
 class SubscriptionController extends Controller
 {
-    private $response = [];
+    private $stripeUtils;
 
-    public function __construct()
+    /**
+     * SubscriptionController constructor.
+     * @param StripeUtils $stripe
+     */
+    public function __construct(StripeUtils $stripe)
     {
         $this->middleware('auth');
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        $this->stripeUtils = $stripe;
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
     }
 
     /**
-     * Method to view subscription page
-     * @return view
+     * Method to view subscription plans to crete first subscription
+     * GET /subscription-detail
+     * @return Response
      */
     public function getSubscription()
     {
-        $recruiter = RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
-        if ($recruiter['is_subscribed'] == config('constants.ZeroValue')) {
-            $result = view('web.subscription', ['activeTab' => '4']);
-        } else {
-            $result = redirect('jobtemplates');
+        $recruiter = RecruiterProfile::current();
+        if ($recruiter->is_subscribed) {
+            return redirect('jobtemplates');
         }
-        return $result;
+        if ($recruiter->offices()->count() === 0) {
+            return redirect('home');
+        }
+        return view('web.subscription');
     }
 
     /**
-     * Method to get subscription list
-     * @return view
+     * Method to get subscription plans
+     * GET AJAX /get-subscription-list from subscriptions.js
+     * @return array
      */
     public function getSubscriptionList()
     {
-        $recruiterOffice = RecruiterOffice::getAllOffices();
-        $subscription['data'] = [];
-        $customerId = RecruiterProfile::where(['user_id' => Auth::user()->id])->pluck('customer_id');
-        if ($customerId[0] == null) {
-            $subscription['customer'] = [];
-        } else {
-            $customer = \Stripe\Customer::retrieve($customerId[0]);
-            $subscription['customer'] = [$customer];
-        }
-        foreach ($recruiterOffice as $office) {
-            if ($office['free_trial_period'] != config('constants.ZeroValue')) {
-                $subscription['data'] = $office;
-                break;
-            }
+        $recruiter = RecruiterProfile::current();
+        $offices = RecruiterOffice::getActiveOffices();
+        $subscription = [
+            'cardExist' => false,
+            'isNewCustomer' => $recruiter->subscriptions->isEmpty(),
+            'supported' => $offices->isNotEmpty()
+        ];
+
+        if ($recruiter->customer_id) {
+            try {
+                $customer = \Stripe\Customer::retrieve($recruiter->customer_id);
+                $subscription['cardExist'] = $customer->sources->total_count;
+            } catch (InvalidRequest $e) {}
         }
         return $subscription;
     }
 
     /**
-     * Method to create subscription
-     * @return json
-     */
-    public function postCreateSubscription(CreateSubscriptionRequest $request)
-    {
-        try {
-            DB::beginTransaction();
-            $recruiter = RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
-            if ($request->cardExist === "true") {
-                $this->addUserTOSubscription($recruiter['customer_id'], $request->subscriptionType, $request->trailPeriod);
-                RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => config('constants.OneValue'), 'free_period' => $request->trailPeriod]);
-                $this->response['success'] = true;
-                $this->response['message'] = trans('messages.user_subscribed');
-            } else {
-                if ($recruiter['customer_id'] == null) {
-                    $createCustomer = $this->createCustomer();
-                    if ($createCustomer['success'] == true) {
-                        $customer = $createCustomer['data']['id'];
-                    } else {
-                        $customer = null;
-                        $this->response['success'] = false;
-                        $this->response['message'] = $createCustomer['message'];
-                        $this->response['data'] = null;
-                    }
-                } else {
-                    $customer = $recruiter['customer_id'];
-                }
-                if ($customer != null) {
-                    $addCard = $this->addCardForSubscription($request->all(), $customer);
-                    if ($addCard['success'] == true) {
-                        $this->addUserTOSubscription($customer, $request->subscriptionType, $request->trailPeriod);
-                        RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => config('constants.OneValue'), 'free_period' => $request->trailPeriod]);
-                        $this->response['success'] = true;
-                        $this->response['message'] = trans('messages.user_subscribed');
-                    } else {
-                        $this->response['success'] = false;
-                        $this->response['data'] = null;
-                        $this->response['message'] = $addCard['message'];
-                    }
-                } else {
-                    $this->response['success'] = false;
-                    $this->response['data'] = null;
-                    $this->response['message'] = trans('messages.cannot_subscribe');
-                }
-            }
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-            Log::error($e->getMessage());
-            $this->response['success'] = false;
-            $this->response['data'] = null;
-            $this->response['message'] = $e->getMessage();
-        }
-        return $this->response;
-    }
-
-    /**
-     * Method to add user to subscription
-     * @return json
-     */
-    private function addUserTOSubscription($customerId, $subscriptionType, $trailPeriod)
-    {
-        try {
-            $now = \Carbon\Carbon::now();
-            $fotDiff = \Carbon\Carbon::now();
-            $addMonths = $now->addMonths($trailPeriod);
-            $trailPeriodDays = $addMonths->diff($fotDiff)->days;
-
-            if ($subscriptionType == 1) {
-                $planId = config('constants.ThreeMonths');
-            } else if ($subscriptionType == 2) {
-                $planId = config('constants.SixMonths');
-            } else {
-                $planId = config('constants.OneYear');
-            }
-            $subscription = \Stripe\Subscription::create([
-                "customer"          => $customerId,
-                "plan"              => $planId,
-                "trial_period_days" => $trailPeriodDays
-            ]);
-            $this->saveSubscription($subscription);
-            $this->response['success'] = true;
-            $this->response['message'] = trans('messages.user_added_to_subscription');
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            $this->response['success'] = false;
-            $this->response['message'] = $e->getMessage();
-        }
-        return $this->response;
-    }
-
-    /**
-     * Method to save subscription
-     * @return view
-     */
-    public function saveSubscription($subscription)
-    {
-        $payments = new SubscriptionPayments;
-        $payments->recruiter_id = Auth::user()->id;
-        $payments->expiryDate = date('Y-m-d H:i:s', $subscription['current_period_end']);
-        $payments->trialEnd = $payments->expiryDate;
-        if ($subscription['trial_end'] != null) {
-            $payments->trialEnd = date('Y-m-d H:i:s', $subscription['trial_end']);
-        }
-        $payments->paymentId = $subscription['id'];
-        $payments->paymentResponse = json_encode($subscription);
-        $payments->save();
-    }
-
-    /**
-     * Method to add card
-     * @return json
-     */
-    public function postAddCard(AddCardRequest $request)
-    {
-        try {
-            $customerId = RecruiterProfile::where(['user_id' => Auth::user()->id])->pluck('customer_id');
-            $expiry = explode('/', $request->expiry);
-            $month = $expiry[0];
-            $year = $expiry[1];
-            $cardToken = \Stripe\Token::create([
-                "card" => [
-                    "number"    => $request->cardNumber,
-                    "exp_month" => $month,
-                    "exp_year"  => $year,
-                    "cvc"       => $request->cvv
-                ]
-            ]);
-            if (isset($cardToken['id'])) {
-                $customer = \Stripe\Customer::retrieve($customerId[0]);
-                $customer->sources->create([
-                    "source" => $cardToken['id']
-                ]);
-                $this->response['success'] = true;
-                $this->response['message'] = trans('messages.card_added');
-            } else {
-                $this->response['success'] = false;
-                $this->response['data'] = null;
-                $this->response['message'] = trans('messages.cannot_add_card');
-            }
-        } catch (\Exception $e) {
-            Log::error($e);
-            $this->response['success'] = false;
-            $this->response['message'] = $e->getMessage();
-        }
-        return $this->response;
-    }
-
-    /**
-     * Method to add card for subscription
-     * @return json
-     */
-    private function addCardForSubscription($cardDetails, $customerId)
-    {
-        try {
-            $expiry = explode('/', $cardDetails['expiry']);
-            $month = $expiry[0];
-            $year = $expiry[1];
-            $cardToken = \Stripe\Token::create([
-                "card" => [
-                    "number"    => $cardDetails['cardNumber'],
-                    "exp_month" => $month,
-                    "exp_year"  => $year,
-                    "cvc"       => $cardDetails['cvv']
-                ]
-            ]);
-            if (isset($cardToken['id'])) {
-                $customer = \Stripe\Customer::retrieve($customerId);
-                $customer->sources->create([
-                    "source" => $cardToken['id']
-                ]);
-                $this->response['success'] = true;
-                $this->response['message'] = trans('messages.card_added');
-            } else {
-                $this->response['success'] = false;
-                $this->response['data'] = null;
-                $this->response['message'] = trans('messages.cannot_add_card');
-            }
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            $this->response['success'] = false;
-            $this->response['data'] = null;
-            $this->response['message'] = $e->getMessage();
-        }
-        return $this->response;
-    }
-
-    /**
-     * Method to create customer on stripe
-     * @return json
-     */
-    private function createCustomer()
-    {
-        try {
-            $createCustomer = \Stripe\Customer::create([
-                "description" => "Customer for" . Auth::user()->email,
-                "email"       => Auth::user()->email
-            ]);
-            RecruiterProfile::updateCustomerId($createCustomer['id']);
-            $this->response['success'] = true;
-            $this->response['data'] = $createCustomer;
-            $this->response['message'] = trans('messages.customer_created');
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            $this->response['success'] = false;
-            $this->response['message'] = $e->getMessage();
-        }
-        return $this->response;
-    }
-
-    /**
      * Method to view subscription page in settings
-     * @return view
+     * GET /setting-subscription
+     * @return Response
      */
     public function getSettingSubscription()
     {
@@ -287,183 +87,195 @@ class SubscriptionController extends Controller
 
     /**
      * Method to get subscription details
-     * @return json
+     * GET AJAX /get-subscription-details from setting-subscription.js
+     * @return JsonResponse
      */
     public function getSubscriptionDetails()
     {
         try {
-            $subscriptions = $this->fetchSubscription(Auth::user()->id);
-            $this->response['success'] = true;
-            $this->response['data'] = $subscriptions;
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            $this->response['success'] = false;
-            $this->response['message'] = $e->getMessage();
+            $customer = \Stripe\Customer::retrieve(RecruiterProfile::current()->customer_id);
+        } catch (InvalidRequest $e) {
+            return WebResponse::successResponse();
         }
-        return $this->response;
+
+        foreach ($customer->subscriptions['data'] as $subscription) {
+            if ($subscription['trial_end'] != null && $subscription['current_period_end'] == $subscription['trial_end']) {
+                $trialEnd = date('Y-m-d', $subscription['trial_end']);
+                $subscription['current_period_end'] = strtotime($trialEnd . '+ ' . $subscription['plan']['interval_count'] . ' ' . $subscription['plan']['interval']);
+            }
+        }
+        return WebResponse::dataResponse($customer);
     }
 
     /**
-     * Method to fetch subscription
-     * @return json
+     * Method to create subscription
+     * POST AJAX /create-subscription from subscriptions.js
+     * @param CreateSubscriptionRequest $request
+     * @return JsonResponse
      */
-    private function fetchSubscription($userId)
+    public function postCreateSubscription(CreateSubscriptionRequest $request)
     {
-        try {
-            $customerId = RecruiterProfile::where(['user_id' => $userId])->pluck('customer_id');
-            $customerWithSubscription = $this->fetchUser($customerId[0]);
-            if ($customerWithSubscription['success'] == false) {
-                $this->response['success'] = false;
-                $this->response['data'] = null;
-                $this->response['message'] = trans('messages.no_customer');
-            } else {
-                $this->response['success'] = true;
-                $this->response['data'] = $customerWithSubscription;
-                $this->response['message'] = trans('messages.customer_fetched');
-            }
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            $this->response['success'] = false;
-            $this->response['message'] = $e->getMessage();
+        $recruiter = RecruiterProfile::current();
+        if (!$recruiter->customer_id) {
+            $stripeCustomer = \Stripe\Customer::create([
+                "description" => "Customer for " . Auth::user()->email,
+                "email"       => Auth::user()->email
+            ]);
+            $recruiter->customer_id = $stripeCustomer->id;
+            $recruiter->save();
+        } else {
+            $stripeCustomer = \Stripe\Customer::retrieve($recruiter->customer_id);
         }
-        return $this->response;
+
+        if ($stripeCustomer->sources->total_count === 0) {
+            $expiry = explode('/', $request->input('expiry', ''));
+            $month = array_get($expiry, '0');
+            $year = array_get($expiry, '1');
+            $cardToken = \Stripe\Token::create([
+                "card" => [
+                    "number"    => $request->input('cardNumber', ''),
+                    "exp_month" => $month,
+                    "exp_year"  => $year,
+                    "cvc"       => $request->input('cvv', '')
+                ]
+            ]);
+            $stripeCustomer->sources->create([
+                "source" => $cardToken['id']
+            ]);
+        }
+
+        $isNewCustomer = $recruiter->subscriptions->isEmpty();
+        $subId = $this->addUserToSubscription($recruiter->customer_id, $request->subscriptionType, $isNewCustomer);
+        $recruiter->is_subscribed = 1;
+        $recruiter->save();
+        return WebResponse::dataResponse($subId);
     }
 
+
+
+
     /**
-     * Method to fetch user from stripe
-     * @return json
+     * Method to add card
+     * POST AJAX /add-card from setting-subscription.js
+     * @return JsonResponse
      */
-    private function fetchUser($customerId)
+    public function postAddCard(AddCardRequest $request)
     {
-        try {
-            $customer = \Stripe\Customer::retrieve($customerId);
-            foreach ($customer->subscriptions['data'] as $subscription) {
-                $subscription['created'] = date('Y-m-d', $subscription['created']);
-                $subscription['current_period_start'] = date('Y-m-d', $subscription['current_period_start']);
-                if ($subscription['trial_end'] != null && $subscription['current_period_end'] == $subscription['trial_end']) {
-                    $trailEnd = date('Y-m-d', $subscription['trial_end']);
-                    $subscription['current_period_end'] = date('Y-m-d', strtotime($trailEnd . '+ ' . $subscription['plan']['interval_count'] . ' ' . $subscription['plan']['interval']));
-                } else {
-                    $subscription['current_period_end'] = date('Y-m-d', $subscription['current_period_end']);
-                }
-            }
-            $this->response['success'] = true;
-            $this->response['data'] = $customer;
-            $this->response['message'] = trans('messages.customer_fetched');
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            $this->response['success'] = false;
-            $this->response['message'] = $e->getMessage();
-        }
-        return $this->response;
+        $recruiter = RecruiterProfile::current();
+        $expiry = explode('/', $request->input('expiry', ''));
+        $cardToken = \Stripe\Token::create([
+            "card" => [
+                "number"    => $request->input('cardNumber', ''),
+                "exp_month" => array_get($expiry, '0'),
+                "exp_year"  => array_get($expiry, '1'),
+                "cvc"       => $request->input('cvv', '')
+            ]
+        ]);
+        $customer = \Stripe\Customer::retrieve($recruiter->customer_id);
+        $customer->sources->create([
+            "source" => $cardToken['id']
+        ]);
+
+        return WebResponse::successResponse(trans('messages.card_added'));
     }
+
 
     /**
      * Method to delete card from stripe
-     * @return json
+     * POST AJAX /delete-card from subscription-setting.js
+     * @param DeleteCardRequest $request
+     * @return JsonResponse
      */
     public function postDeleteCard(DeleteCardRequest $request)
     {
-        try {
-            $customerId = RecruiterProfile::where(['user_id' => Auth::user()->id])->pluck('customer_id');
-            $customer = \Stripe\Customer::retrieve($customerId[0]);
-            if (count($customer->sources['data']) > 1) {
-                if ($customer->sources->retrieve($request->cardId)->delete()) {
-                    $this->response['success'] = true;
-                    $this->response['message'] = trans('messages.card_deleted');
-                } else {
-                    $this->response['success'] = false;
-                    $this->response['message'] = trans('messages.no_card');
-                }
-            } else {
-                $this->response['success'] = false;
-                $this->response['message'] = trans('messages.cannot_delete_card');
-            }
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            $this->response['success'] = false;
-            $this->response['message'] = $e->getMessage();
+        $recruiter = RecruiterProfile::current();
+        $customer = \Stripe\Customer::retrieve($recruiter->customer_id);
+        if (count($customer->sources['data']) > 1) {
+            $customer->sources->retrieve($request->cardId)->delete();
+            return WebResponse::successResponse(trans('messages.card_deleted'));
+        } else {
+            return WebResponse::errorResponse(trans('messages.cannot_delete_card'));
         }
-        return $this->response;
     }
 
     /**
-     * Method to get unsubscribed
-     * @return json
+     * Method to unsubscribe
+     * POST AJAX /unsubscribe from subscription-setting.js
+     * @param UnsubscribeRequest $request
+     * @return JsonResponse
      */
     public function postUnsubscribe(UnsubscribeRequest $request)
     {
-        try {
-            $sub = \Stripe\Subscription::retrieve($request->subscriptionId);
-            if ($sub->cancel(["at_period_end" => true])) {
-                RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => config('constants.OneValue'), 'free_period' => null, 'auto_renewal' => null]);
-                $this->response['success'] = true;
-                $this->response['message'] = trans('messages.unsubscribed');
-            } else {
-                $this->response['success'] = false;
-                $this->response['message'] = trans('messages.no_subscription');
-            }
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            $this->response['success'] = false;
-            $this->response['message'] = trans('messages.no_subscription');
-        }
-        return $this->response;
+        $subscription = RecruiterProfile::current()->subscriptions()->where('subscription_id', $request->subscriptionId)->firstOrFail();
+        $sub = \Stripe\Subscription::retrieve($subscription->subscription_id);
+        $sub->cancel(['at_period_end' => true]);
+        $subscription->update(['cancel_at_period_end' => true]);
+        return WebResponse::successResponse();
     }
 
     /**
-     * Method to edit card
-     * @return json
+     * Method to edit card's expiry date
+     * POST AJAX /edit-card from setting-subscription.js
+     * @param EditCardRequest $request
+     * @return JsonResponse
      */
     public function postEditCard(EditCardRequest $request)
     {
-        try {
-            $expiry = explode('/', $request->expiry);
-            $month = $expiry[0];
-            $year = $expiry[1];
-            $customerId = RecruiterProfile::where(['user_id' => Auth::user()->id])->pluck('customer_id');
-            $customer = \Stripe\Customer::retrieve($customerId[0]);
-            $card = $customer->sources->retrieve($request->cardId);
-            $card->exp_month = $month;
-            $card->exp_year = $year;
-            $card->save();
-            $this->response['success'] = true;
-            $this->response['message'] = trans('messages.card_edidted');
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            $this->response['success'] = false;
-            $this->response['message'] = $e->getMessage();
-        }
-        return $this->response;
+        $expiry = explode('/', $request->input('expiry', ''));
+        $recruiter = RecruiterProfile::current();
+        $customer = \Stripe\Customer::retrieve($recruiter->customer_id);
+        $card = $customer->sources->retrieve($request->cardId);
+        $card->exp_month = array_get($expiry, '0');
+        $card->exp_year = array_get($expiry, '1');
+        $card->save();
+        return WebResponse::successResponse(trans('messages.card_edidted'));
     }
 
     /**
-     * Method to change subscription plan
-     * @return json
+     * Method to change subscription plan or resubscribe
+     * POST AJAX /change-subscription-plan from setting-subscription.js
+     * @param ChangeSubscriptionPlanRequest $request
+     * @return JsonResponse
      */
     public function postChangeSubscriptionPlan(ChangeSubscriptionPlanRequest $request)
     {
-        try {
-            if ($request->plan == 1) {
-                $plan = config('constants.ThreeMonths');
-            } else if ($request->plan == 2) {
-                $plan = config('constants.SixMonths');
-            } else {
-                $plan = config('constants.OneYear');
-            }
-            $subscription = \Stripe\Subscription::retrieve($request->subscriptionId);
-            $subscription->plan = $plan;
-            $subscription->save();
-            if ($request->type == config('constants.Resubscribe') || $request->type == config('constants.Change')) {
-                RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['is_subscribed' => config('constants.OneValue')]);
-            }
-            $this->response['success'] = true;
-            $this->response['message'] = trans('messages.subscription_plan_changed');
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-            $this->response['success'] = true;
-            $this->response['message'] = $e->getMessage();
+        /** @var Subscription $recruiterSubscription */
+        $recruiterSubscription = RecruiterProfile::current()->subscriptions()->where('subscription_id', $request->subscriptionId)->firstOrFail();
+        $plan = $this->stripeUtils->getPlanIdByNickname($request->plan);
+        $subscription = \Stripe\Subscription::retrieve($recruiterSubscription->subscription_id);
+        $subscription->plan = $plan;
+        $subscription->trial_end = "now";
+        $subscription->save();
+        RecruiterProfile::whereUserId($recruiterSubscription->recruiter_id)->update(['is_subscribed' => 1]);
+        $recruiterSubscription->update(['cancel_at_period_end' => false]);
+        return WebResponse::successResponse(trans('messages.subscription_plan_changed'));
+    }
+
+    /**
+     * Method to add user to subscription
+     * @param $customerId
+     * @param $subscriptionType
+     * @param $useTrialAndDiscount
+     * @return string
+     */
+    private function addUserToSubscription($customerId, $subscriptionType, $useTrialAndDiscount)
+    {
+        $planId = $this->stripeUtils->getPlanId($subscriptionType);
+        $subscription = \Stripe\Subscription::create([
+            "customer"        => $customerId,
+            "plan"            => $planId,
+            "trial_from_plan" => $useTrialAndDiscount
+        ]);
+        $payments = new Subscription();
+        $payments->recruiter_id = Auth::user()->id;
+        $payments->subscription_expiry_date = date('Y-m-d H:i:s', $subscription['current_period_end']);
+        $payments->trial_end = $payments->subscription_expiry_date;
+        if ($subscription['trial_end'] != null) {
+            $payments->trial_end = date('Y-m-d H:i:s', $subscription['trial_end']);
         }
-        return $this->response;
+        $payments->subscription_id = $subscription['id'];
+        $payments->subscription_response = json_encode($subscription);
+        $payments->save();
+        return $subscription->id;
     }
 }

@@ -4,6 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class ChangeSubscriptionPlanRequest
+ * @package App\Http\Requests
+ * @property string $plan
+ * @property string $subscriptionId
+ */
 class ChangeSubscriptionPlanRequest extends FormRequest
 {
     /**
@@ -15,8 +21,7 @@ class ChangeSubscriptionPlanRequest extends FormRequest
     {
         return [
             'subscriptionId' => 'required',
-            'plan' => 'required',
-            'type' => 'required'
+            'plan' => 'required'
         ];
     }
     /**

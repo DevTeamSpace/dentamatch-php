@@ -83,6 +83,10 @@ class NotificationUtils
         $this->notifyRecruitersFromAdmin($data);
     }
 
+    /**
+     * TODO remove
+     * @param $subscriptions
+     */
     public function notifySubscriptionExpire($subscriptions)
     {
         $data = array_map(function ($subscription) {

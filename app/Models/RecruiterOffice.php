@@ -182,7 +182,7 @@ class RecruiterOffice extends Model {
         return $recOfficeArrObj;
     }
     
-    public static function getAllOffices(){
+    public static function getActiveOffices(){
         return RecruiterOffice::where(['user_id' => Auth::user()->id, 'locations.is_active' => 1])
                 ->join('locations', 'recruiter_offices.zipcode', '=', 'locations.zipcode')
                 ->join('recruiter_office_types','recruiter_office_types.recruiter_office_id', '=' , 'recruiter_offices.id')

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
@@ -13,17 +14,19 @@ use Illuminate\Support\Facades\Auth;
  * @property int $id
  * @property int $user_id
  * @property int|null $is_subscribed
- * @property string|null $stripe_token
+ * @property string|null $stripe_token   UNUSED
  * @property string|null $customer_id
  * @property int $accept_term
- * @property int|null $free_period
- * @property int|null $auto_renewal
+ * @property int|null $free_period       OBSOLETE
+ * @property int|null $auto_renewal      UNUSED
  * @property string|null $validity
  * @property string|null $office_name
  * @property string|null $office_desc
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property-read User $recruiter
+ * @property Subscription[]|Collection $subscriptions
+ * @property RecruiterOffice[]|Collection $offices
  *
  * @method static Builder|RecruiterProfile newModelQuery()
  * @method static Builder|RecruiterProfile newQuery()
@@ -47,11 +50,21 @@ class RecruiterProfile extends Model
 {
     protected $table = 'recruiter_profiles';
 
-    protected $fillable = ['user_id', 'is_subscribed', 'accept_term', 'free_period', 'auto_renewal', 'validity', 'office_name', 'office_desc'];
+    protected $fillable = ['user_id', 'is_subscribed', 'accept_term', 'validity', 'office_name', 'office_desc'];
 
     public function recruiter()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class, 'recruiter_id', 'user_id');
+    }
+
+    public function offices()
+    {
+        return $this->hasMany(RecruiterOffice::class, 'user_id', 'user_id');
     }
 
     public static function updateOfficeDetail($request)
@@ -62,14 +75,9 @@ class RecruiterProfile extends Model
         ]);
     }
 
-    public static function updateStripeToken($token)
+    public static function current()
     {
-        return RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['stripe_token' => $token]);
-    }
-
-    public static function updateCustomerId($customerId)
-    {
-        return RecruiterProfile::where(['user_id' => Auth::user()->id])->update(['customer_id' => $customerId]);
+        return self::where(['user_id' => Auth::user()->id])->first();
     }
 
 }

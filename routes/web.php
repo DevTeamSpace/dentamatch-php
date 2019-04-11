@@ -50,7 +50,15 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::post('create-profile', 'web\UserProfileController@createProfile');
             Route::post('office-details', 'web\UserProfileController@officeDetails');
             Route::get('get-location/{zip}', 'web\UserProfileController@checkValidLocation');
+            /** Recruiter profile editing */
             Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
+            Route::get('recruiter-profile-details', 'web\UserProfileController@getRecruiterProfileDetails');
+            Route::post('update-recruiter-info', 'web\UserProfileController@postUpdateRecruiterProfile');
+            Route::get('job-applied-or-not', 'web\RecruiterJobController@appliedOrNot');
+            Route::post('edit-recruiter-office', 'web\UserProfileController@postEditRecruiterOffice');
+            Route::post('delete-office', 'web\UserProfileController@postDeleteOffice');
+            /**---------------------------*/
+
             Route::get('setting-terms-conditions', 'web\UserProfileController@getTermsConditions');
             Route::get('setting-privacy-policy', 'web\UserProfileController@getPrivacyPolicy');
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
@@ -77,13 +85,9 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
                 Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
                 Route::get('/jobseeker/{seekerId}', 'web\RecruiterJobController@jobSeekerProfile');
                 Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
-
                 Route::get('favorite-jobseeker', 'web\FavoriteJobseekerController@getFavJobseeker');
                 Route::get('get-favorite-job-lists', 'web\FavoriteJobseekerController@postFavouriteJobList');
                 Route::post('invite-jobseeker', 'web\FavoriteJobseekerController@postInviteJobseeker');
-                Route::get('edit-profile', 'web\UserProfileController@getEditProfile');
-                Route::get('recruiter-profile-details', 'web\UserProfileController@getRecruiterProfileDetails');
-                Route::post('update-recruiter-info', 'web\UserProfileController@postUpdateRecruiterProfile');
 
                 Route::get('setting-terms-conditions', 'web\UserProfileController@getTermsConditions');
                 Route::get('change-password', 'web\UserProfileController@getChangePassword');
@@ -96,9 +100,6 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
                 Route::get('reports/reports-temp-jobs', 'web\ReportsController@getReportsTempJobs');
                 Route::get('reports/{history}', 'web\ReportsController@getReportsPage');
                 Route::get('report-seekers', 'web\ReportsController@getReportSeekers');
-                Route::get('job-applied-or-not', 'web\RecruiterJobController@appliedOrNot');
-                Route::post('edit-recruiter-office', 'web\UserProfileController@postEditRecruiterOffice');
-                Route::post('delete-office', 'web\UserProfileController@postDeleteOffice');
                 Route::get('notification-lists', 'web\NotificationController@getNotificationList');
                 Route::get('{id}/delete-notification', 'web\NotificationController@deleteNotification');
                 Route::get('checknotratedjobs', 'web\RatingController@getRating');

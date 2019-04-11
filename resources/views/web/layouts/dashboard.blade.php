@@ -180,7 +180,7 @@ $chatCount = \App\Helpers\UserChatHelper::recruiterChatCount(Auth::user()->id);
 <!-- <script src ="{{asset('web/scripts/tabScript1.js')}}"></script>
 -->
 
-<script type="text/javascript" src="{{asset('web/scripts/knockout-3.4.1.js')}}"></script>
+<script type="text/javascript" src="{{asset('web/scripts/knockout-3.5.0.js')}}"></script>
 <script src="{{asset('web/plugins/custom-scroller/js/mCustomScrollbar.js')}}"></script>
 <script src="{{asset('web/plugins/calender/js/fullcalendar.js')}}"></script>
 <script src="{{asset('web/plugins/inputmask/dist/jquery.inputmask.bundle.js')}}"></script>

@@ -4,6 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class UnsubscribeRequest
+ * @package App\Http\Requests
+ *
+ * @property $subscriptionId string
+ */
 class UnsubscribeRequest extends FormRequest
 {
     /**

@@ -1,435 +1,224 @@
 var SubscriptionModel = function (data) {
-    var me = this;
-    me.subscriptionAmount = ko.observable();
-    me.subscriptionPlan = ko.observable('');
-    me.subscriptionActivation = ko.observable();
-    me.subscriptionAutoRenewal = ko.observable();
-    me.subscriptionId = ko.observable('');
-    me.leftDays = ko.observable('');
+  var me = this;
+  me.subscriptionAmount = ko.observable();
+  me.subscriptionPlan = ko.observable('');
+  me.subscriptionActivation = ko.observable();
+  me.subscriptionAutoRenewal = ko.observable();
+  me.subscriptionId = ko.observable('');
 
-    me._init = function (d) {
-        if (typeof d == "undefined") {
-            return false;
-        }
-        me.subscriptionId(d.id);
-        var planCost = d.plan.amount/100;
-        me.subscriptionAmount("$" + planCost);
-        me.subscriptionActivation(moment(d.created).format('LL'));
-        me.subscriptionAutoRenewal(moment(d.current_period_end).format('LL'));
-        me.leftDays(moment(d.current_period_end).diff(moment(d.current_period_start), 'days'));
-        console.log(d.plan.interval_count);
-        if (d.plan.id == 'three-months') {
-            me.subscriptionPlan('Quarterly');
-        }
-        else if (d.plan.id == 'six-months') {
-            me.subscriptionPlan('Semi Annual');
-        } else {
-            me.subscriptionPlan('Yearly');
-        }
-    }
-    me._init(data);
-    return me;
+  me._init = function (d) {
+    me.subscriptionId(d.id);
+    var planCost = d.plan.amount / 100;
+    me.subscriptionAmount("$" + planCost);
+    me.subscriptionActivation(moment.unix(d.created).utc().format('LL'));
+    me.subscriptionAutoRenewal(moment.unix(d.current_period_end).utc().format('LL'));
+    me.subscriptionPlan(d.plan.nickname);
+  }
+  me._init(data);
+  return me;
 };
 
 var SubscriptionVM = function () {
-    var me = this;
-    me.isLoading = ko.observable(false);
-    me.loadingSubscription = ko.observable('');
-    me.isLoadingSubscription = ko.observable(true);
-    me.visibleSubcription = ko.observable(false);
-    me.subscriptionDetails = ko.observableArray([]);
-    me.noSubscription = ko.observable(false);
-    me.noSubscriptionDetails = ko.observable('');
-    me.cancelButton = ko.observable(true);
-    me.cardNumber = ko.observable();
-    me.expiry = ko.observable('');
-    me.cvv = ko.observable();
-    me.errorMessage = ko.observable('');
-    me.successMessage = ko.observable('');
-    me.creatingMessage = ko.observable('');
-    me.disableInput = ko.observable(false);
-    me.subscription = ko.observableArray([]);
-    me.cards = ko.observableArray([]);
-    me.allData = ko.observableArray([]);
-    me.prompt = ko.observable('');
-    me.cancelButtonDelete = ko.observable(false);
-    me.headMessage = ko.observable('');
-    me.showModalFooter = ko.observable(true);
-    me.actionButtonText = ko.observable('');
-    me.addCardVisible = ko.observable(true);
-    me.cancelButtonEdit = ko.observable(true);
-    me.editCvv = ko.observable();
-    me.editExpiry = ko.observable('');
-    me.editCardNumber = ko.observable('');
-    me.editCardId = ko.observable('');
-    me.unsubscribeButton = ko.observable(true);
-    me.resubscribeButton = ko.observable(false);
-    me.subscriptionType = ko.observable();
-    me.switchVisible = ko.observable(false);
-    me.switchToText = ko.observable('');
-    me.switchToText1 = ko.observable('');
+  var me = this;
+  me.isInRequest = ko.observable(false);
+  me.isLoadingSubscriptions = ko.observable(false);
+  me.visibleSubscription = ko.observable(false);
+  me.subscriptionDetails = ko.observableArray([]);
+  me.noSubscription = ko.observable(false);
+  me.noSubscriptionDetails = ko.observable('');
+  me.cardNumber = ko.observable('');
+  me.expiry = ko.observable('');
+  me.cvv = ko.observable('');
+  me.errorMessage = ko.observable('');
+  me.successMessage = ko.observable('');
+  me.creatingMessage = ko.observable('');
+  me.subscription = ko.observableArray([]);
+  me.currentPlanNickname = ko.observable('');
+  me.cards = ko.observableArray([]);
+  me.prompt = ko.observable('');
+  me.headMessage = ko.observable('');
+  me.showModalFooter = ko.observable(true);
+  me.actionButtonText = ko.observable('');
+  me.addCardVisible = ko.observable(true);
+  me.editExpiry = ko.observable('');
+  me.editCardId = ko.observable('');
+  me.isSubscribed = ko.observable(true);
 
-    me.getSubscription = function () {
-        me.isLoadingSubscription(true);
-        me.loadingSubscription('Loading subscription please wait.');
-        if (me.isLoading()) {
-            return false;
+  me.submitModalHandler = null;
+  me.onModalSubmit = function (d, e) {
+    me.submitModalHandler(d, e);
+  };
+
+  me.getSubscription = function () {
+    if (me.isLoadingSubscriptions()) {
+      return false;
+    }
+    me.isLoadingSubscriptions(true);
+    $.get('get-subscription-details', {}, function (d) {
+      me.isLoadingSubscriptions(false);
+      var customer = d.data;
+      if (d.success && (!customer || !d.data.subscriptions.total_count)) {
+        me.noSubscription(true);
+        me.noSubscriptionDetails('No subscription availed.');
+        location.href = 'subscription-detail';
+      } else {
+        me.visibleSubscription(true);
+        if (d.data.sources.data.length >= 2) {
+          me.addCardVisible(false);
         }
-        me.isLoading(true);
-        $.get('get-subscription-details', {}, function (d) {
-            me.isLoadingSubscription(false);
-            if (d.success == true && d.data.success == false && d.data.data==null && d.data.message=='No customer found.') {
-                console.log(d);
-                location.href='subscription-detail';
-            } else if (d.success == false || d.data.data.data.subscriptions.data.length == 0) {
-                me.noSubscription(true);
-                me.visibleSubcription(false);
-                me.noSubscriptionDetails('No subscription availed.');
-                location.href='subscription-detail';
-            } else {
-                for (i in d.data.data.data.subscriptions.data) {
-                    if (d.data.data.data.subscriptions.data[i].cancel_at_period_end === false) {
-                        me.noSubscription(false);
-                        me.visibleSubcription(true);
-                        if (d.data.data.data.sources.data.length >= 2) {
-                            me.addCardVisible(false);
-                        }
-                        me.subscription.push(new SubscriptionModel(d.data.data.data.subscriptions.data[i]));
-                        me.unsubscribeButton(true);
-                        me.resubscribeButton(false);
-                        me.switchVisible(true);
-                        console.log(d.data.data.data.subscriptions.data[i].plan.id);
-                        if (d.data.data.data.subscriptions.data[i].plan.id === "one-year") {
-                            me.switchToText('Switch to Quarterly');
-                            me.switchToText1('Switch to Semi Annual');
-                        } else if (d.data.data.data.subscriptions.data[i].plan.id === "six-months") {
-                            me.switchToText('Switch to Quarterly');
-                            me.switchToText1('Switch to Yearly');
-                        } else {
-                            me.switchToText('Switch to Semi Annual');
-                            me.switchToText1('Switch to Yearly');
-                        }
-                        break;
-                    } else {
-                        me.noSubscription(false);
-                        me.visibleSubcription(true);
-                        if (d.data.data.data.sources.data.length >= 2) {
-                            me.addCardVisible(false);
-                        }
-                        me.subscription.push(new SubscriptionModel(d.data.data.data.subscriptions.data[i]));
-                        me.resubscribeButton(true);
-                        me.unsubscribeButton(false);
-                        me.switchVisible(false);
-                        break;
-                    }
-                }
-                for (i in d.data.data.data.sources.data) {
-                    if(d.data.data.data.sources.data[i].exp_month <= 9){
-                        d.data.data.data.sources.data[i].exp_month = '0'+d.data.data.data.sources.data[i].exp_month;
-                    }
-                    me.cards.push(d.data.data.data.sources.data[i]);
-                }
-                me.allData.push(me.subscription(), me.cards()[0]);
-            }
-        }).error(function (xhr, e) {
-            me.isLoading(false);
-        });
-    };
 
-    me.addCard = function (d, e) {
-        me.cardNumber();
-        me.expiry();
-        me.expiryWithSlash = ko.computed(function () {
-            if (me.expiry().length == 2) {
-                me.expiry(me.expiry() + '/');
-            } else {
-                me.expiry();
-            }
-            return me.expiry();
+        for (i in d.data.subscriptions.data) {
+          var subscription = d.data.subscriptions.data[i];
+          me.subscription.push(new SubscriptionModel(subscription));
+          if (subscription.cancel_at_period_end === false) {
+            me.isSubscribed(true);
+            me.currentPlanNickname(subscription.plan.nickname);
+          } else {
+            me.isSubscribed(false);
+          }
+          break;
+        }
+        customer.sources.data.forEach(function (source) {
+          source.exp_month = ("0" + source.exp_month).slice(-2);
+          me.cards.push(source);
         });
-        me.cvv();
-        me.creatingMessage('');
-        me.disableInput(false);
-        me.errorMessage('');
-        me.successMessage('');
-        $('#addCardModal').modal('show');
-    };
-
-    $(".modal").on("hidden.bs.modal", function () {
-        //        me.errorMessage('');
-        //        me.successMessage('');
-        //        me.cardNumber('');
-        //        me.expiry('');
-        //        me.cvv('');
-        //        me.disableInput(false);
-        //        me.prompt('');
-        //        me.headMessage('');
-        //        me.actionButtonText('');
-        //        me.showModalFooter(false);
-        //        me.cancelButtonDelete(false);
-        //        me.editCvv();
-        //        me.editCardNumber('');
-        //        me.editExpiry('');
+      }
+    }).error(function (xhr, e) {
+      me.isLoadingSubscriptions(false);
     });
+  };
 
-    me.addCardFunction = function (d, e) {
-        me.cardNumber(me.cardNumber().replace(/\_/g , ""));
-        me.expiry(me.expiry().replace(/\_/g , ""));
-        me.errorMessage('');
-        me.successMessage('');
+  me.showAddCardPopup = function () {
+    $('#addCardModal').modal('show');
+  };
 
-        if (me.expiry() != null && (me.expiry().indexOf('/') >= 0 || me.expiry().indexOf('/') < 0)) {
-            var expirySplit = me.expiry().split('/');
-            if (expirySplit[1] == null || expirySplit[1] == "") {
-                me.errorMessage('Invalid expiry date.');
-                return false;
-            }
-            if (expirySplit[0] == null || expirySplit[0] == "") {
-                me.errorMessage('Invalid expiry date.');
-                return false;
-            }
-        }
-        if (me.cardNumber() != null && me.expiry() != null && me.cvv() != null) {
-            me.cancelButton(false);
-            me.disableInput(true);
-            $('#addCardButton').attr('disabled', 'disabled');
-            me.creatingMessage('Adding card please wait...');
-            $('#addCardModal').modal({
-                backdrop: 'static',
-                keyboard: false
-            });
-            $.post('add-card', {cardNumber: me.cardNumber(), expiry: me.expiry(), cvv: me.cvv()}, function (d) {
-                me.creatingMessage('');
-                if (d.success == false) {
-                    me.errorMessage(d.message);
-                    me.successMessage('');
-                    me.cancelButton(true);
-                    $('#addCardButton').removeAttr('disabled');
-                    me.disableInput(false);
-                } else {
-                    me.errorMessage('');
-                    me.successMessage(d.message);
-                    setTimeout(
-                            function () {
-                                location.reload();
-                            }, 700);
-                }
-            });
-        } else {
-            me.errorMessage('Please fill all the details');
-            me.creatingMessage('');
-            me.cancelButton(true);
-            me.disableInput(false);
-            $('#addCardModal').modal({
-                backdrop: true,
-                keyboard: true
-            });
-        }
-    };
+  me.showEditCardPopup = function (d) {
+    me.editExpiry(d.exp_month + '/' + d.exp_year);
+    me.editCardId(d.id);
+    $('#editCardModal').modal('show');
+  };
 
-    me.deleteCard = function (d, e) {
-        if (me.cards().length <= 1) {
-            me.prompt('Cannot delete card, you should have atleast one card added to continue the subscription.');
-            me.headMessage('Delete Card');
-            me.showModalFooter(false);
-            me.cancelButtonDelete(true);
-            $('#actionModal').modal('show');
-            return false;
-        } else {
-            me.prompt('Do you want to delete card.');
-            me.headMessage('Delete Card');
-            me.actionButtonText('Delete');
-            me.showModalFooter(true);
-            me.cancelButtonDelete(true);
-            $('#actionModal').modal('show');
-            $('#actionButton').on('click', function () {
-                me.prompt('Deleting card please wait.');
-                me.headMessage('Delete Card');
-                me.cancelButtonDelete(false);
-                me.showModalFooter(false);
-                $.post('delete-card', {cardId: d.id}, function (d) {
-                    if (d.success == false) {
-                        me.prompt('Cannot delete card, please contact admin.');
-                        me.headMessage('Delete Card');
-                        me.cancelButtonDelete(true);
-                        me.showModalFooter(true);
-                    } else {
-                        me.prompt('Card deleted successfully.');
-                        setTimeout(
-                                function () {
-                                    location.reload();
-                                }, 400);
-                    }
-                });
-            });
-        }
-    };
+  me.showDeleteCardPopup = function (d) {
+    if (me.cards().length <= 1) {
+      me.showModalFooter(false);
+      me.showActionModal('Delete Card', 'Cannot delete card, you should have at least one card added to continue the subscription.', 'Delete')
+      return false;
+    }
+    me.submitModalHandler = me.deleteCardFunction.bind(d);
+    me.showActionModal('Delete Card', 'Do you want to delete card?', 'Delete')
+  };
 
-    me.unsubscribePlan = function (d, e) {
-        me.prompt('Do you want to unsubscribe ?');
-        me.headMessage('Unsubscribe');
-        me.showModalFooter(true);
-        me.cancelButtonDelete(true);
-        me.actionButtonText('Unsubscribe');
-        $('#actionModal').modal('show');
-        $('#actionButton').on('click', function () {
-            me.prompt('Unsubscribing please wait.');
-            me.cancelButtonDelete(false);
-            me.showModalFooter(false);
-            subscriptionId = d.subscription()[0].subscriptionId;
-            $.post('unsubscribe', {subscriptionId: subscriptionId}, function (d) {
-                if (d.success == true) {
-                    me.prompt('Unsubscribed successfully.');
-                } else {
-                    me.prompt(d.message);
-                }
-                setTimeout(function () {
-                    location.reload();
-                }, 700);
-            });
-        });
-    };
+  me.showUnsubscribePopup = function () {
+    me.submitModalHandler = me.unsubscribeFunction;
+    me.showActionModal('Unsubscribe', 'Do you want to unsubscribe?', 'Unsubscribe')
+  };
 
-    me.subscribeAgain = function (d, e) {
-        me.subscriptionType();
-        me.prompt('Do you want to subscribe again ?');
-        me.headMessage('Subscribe Again');
-        me.showModalFooter(true);
-        me.cancelButtonDelete(true);
-        me.actionButtonText('Subscribe');
+  me.showSubscribePopup = function () {
+    me.submitModalHandler = me.subscribeFunction;
+    me.showActionModal('Subscribe Again', 'Do you want to subscribe again?', 'Subscribe');
+  };
 
-        if (d.subscription()[0].subscriptionPlan() === 'Yearly') {
-            me.subscriptionType(3);
-        } else if (d.subscription()[0].subscriptionPlan() === 'Semi Annual') {
-            me.subscriptionType(2);
-        }else {
-            me.subscriptionType(1);
-        }
-        $('#actionModal').modal('show');
-        $('#actionButton').on('click', function () {
-            me.prompt('Subscribing please wait.');
-            me.cancelButtonDelete(false);
-            me.showModalFooter(false);
-            $.post('change-subscription-plan', {plan: me.subscriptionType(), subscriptionId: d.subscription()[0].subscriptionId, type: "resubscribe"}, function (d) {
-                if (d.success == true) {
-                    me.prompt('Subscribed successfully.');
-                } else {
-                    me.prompt(d.message);
-                }
-                setTimeout(function () {
-                    location.reload();
-                }, 700);
-            });
-        });
-    };
+  me.showSwitchToPopup = function (d, e) {
+    var switchToPlan = e.target.dataset.plan;
+    var price = e.target.dataset.price;
+    var message = 'Do you want to change plan to <br>' + switchToPlan + '?';
+    message += '<br><br><strong>$' + price + ' per month billed up front</strong>'
 
-    me.switchTo = function (d, e) {
-        me.headMessage('Change Plan');
-        me.showModalFooter(true);
-        me.cancelButtonDelete(true);
-        me.actionButtonText('Change');
-        console.log(e.target.innerHTML);
-        var planId=1;
-        if (e.target.innerHTML === "Switch to Quarterly") {
-            planId=1;
-            me.prompt('Do you want to change plan to quarterly?');
-        } else if (e.target.innerHTML === "Switch to Semi Annual") {
-            planId=2;
-            me.prompt('Do you want to change plan to semi annual?');
-        } else {
-            planId=3;
-            me.prompt('Do you want to change plan to annually?');
-        }
-        $('#actionModal').modal('show');
-        $('#actionButton').on('click', function () {
-            me.prompt('Changing please wait.');
-            me.cancelButtonDelete(false);
-            me.showModalFooter(false);
-//            if (d.subscription()[0].subscriptionPlan() == "Yearly") {
-//                plan = 1;
-//            } else {
-//                plan = 2;
-//            }
-            $.post('change-subscription-plan', {subscriptionId: d.subscription()[0].subscriptionId, plan: planId, type: "change"}, function (d) {
-                if (d.success == true) {
-                    me.prompt('Plan changed successfully.');
-                } else {
-                    me.prompt(d.message);
-                }
-                setTimeout(function () {
-                    location.reload();
-                }, 700);
-            });
-        });
+    me.submitModalHandler = me.switchToFunction.bind(this, switchToPlan);
+    me.showActionModal('Change Plan', message, 'Change')
+  }
+
+  me.showActionModal = function (title, message, btnText) {
+    me.headMessage(title);
+    me.prompt(message);
+    me.actionButtonText(btnText);
+    $('#actionModal').modal('show');
+  }
+
+  me.addCardFunction = function () {
+    me.cardNumber(me.cardNumber().replace(/\_/g, ""));
+    me.expiry(me.expiry().replace(/\_/g, ""));
+    me.errorMessage('');
+
+    if (!(me.cardNumber() && me.expiry() && me.cvv())) {
+      me.errorMessage('Please fill all the details');
+      return;
+    }
+    me.callApi('add-card', {cardNumber: me.cardNumber(), expiry: me.expiry(), cvv: me.cvv()},
+      'Adding card please wait...', 'Card deleted successfully.', '');
+  };
+
+  me.editCardFunction = function (d, e) {
+    me.editExpiry(me.editExpiry().replace(/\_/g, ""));
+    me.errorMessage('');
+
+    if (!me.editExpiry()) {
+      me.errorMessage('Please fill the details');
+      return;
     }
 
-    me.editCard = function (d, e) {
-        me.editCvv();
-        me.editCardNumber('XXXX-XXXX-XXXX-' + d.last4);
-        me.editExpiry(d.exp_month + '/' + d.exp_year);
-        me.editCardId(d.id);
-        me.errorMessage('');
-        me.successMessage('');
+    me.callApi('edit-card', {expiry: me.editExpiry(), cardId: me.editCardId()}, 'Updating card please wait...', '');
+  };
+
+  me.deleteCardFunction = function () {
+    me.callApi('delete-card', {cardId: this.id}, 'Deleting card please wait...', 'Card deleted successfully.');
+  };
+
+  me.unsubscribeFunction = function () {
+    var subscriptionId = me.subscription()[0].subscriptionId;
+    me.callApi('unsubscribe', {subscriptionId: subscriptionId}, 'Unsubscribing please wait...', 'Unsubscribed successfully.');
+  };
+
+  me.subscribeFunction = function () {
+    me.callApi('change-subscription-plan', {
+      plan: me.subscription()[0].subscriptionPlan(),
+      subscriptionId: me.subscription()[0].subscriptionId
+    }, 'Subscribing please wait...', 'Subscribed successfully.');
+  };
+
+  me.switchToFunction = function (nickname) {
+    me.callApi('change-subscription-plan', {
+      subscriptionId: me.subscription()[0].subscriptionId(),
+      plan: nickname
+    }, 'Changing please wait...', 'Plan changed successfully.');
+  }
+
+  me.callApi = function (url, data, creatingMessage, successMessage) {
+    me.isInRequest(true);
+    me.creatingMessage(creatingMessage);
+
+    $.post(url, data).then(function (response) {
+      if (response.success) {
+        me.prompt(successMessage);
         me.creatingMessage('');
-        $('#editCardModal').modal('show');
-    };
+        me.successMessage(successMessage || response.message);
+        setTimeout( function () { location.reload(); }, 700);
+      } else {
+        me.isInRequest(false);
+        me.prompt(response.message);
+        me.errorMessage(response.message);
+      }
+    });
+  }
 
-    me.editCardFunction = function (d, e) {
-        me.editExpiry(me.editExpiry().replace(/\_/g , ""));
-        me.errorMessage('');
-        me.successMessage('');
-        if (me.editExpiry() !== null && me.editExpiry().indexOf('/') >= 0) {
-            var editExpirySplit = me.editExpiry().split('/');
-            if (editExpirySplit[1] === null || editExpirySplit[1] === "" || editExpirySplit[0] === null || editExpirySplit[0] === "") {
-                me.errorMessage('Invalid expiry details.');
-                return false;
-            }
-        }
-        if (me.editExpiry() !== null || me.editExpiry() !== '') {
-            me.cancelButtonEdit(false);
-            $('#editCardButton').attr('disabled', 'disabled');
-            me.creatingMessage('Updating card please wait...');
-            $('#editCardModal').modal({
-                backdrop: 'static',
-                keyboard: false
-            });
-            $.post('edit-card', {expiry: me.editExpiry(), cardId: me.editCardId()}, function (data) {
-                me.creatingMessage('');
-                if (data.success == false) {
-                    me.errorMessage(data.message);
-                    me.successMessage('');
-                    me.cancelButtonEdit(true);
-                    $('#editCardButton').removeAttr('disabled');
-                } else {
-                    me.errorMessage('');
-                    me.successMessage(data.message);
-                    setTimeout(
-                            function () {
-                                location.reload();
-                            }, 700);
-                }
-            });
-        } else {
-            me.errorMessage('Please fill the details');
-            me.creatingMessage('');
-            me.cancelButtonEdit(true);
-            $('#editCardModal').modal({
-                backdrop: true,
-                keyboard: true
-            });
-        }
-    };
+  me._init = function () {
+    $('body').find('#ChildVerticalTab_1').find('li').removeClass('resp-tab-active');
+    $('body').find('#ChildVerticalTab_1').find('li:nth-child(4)').addClass('resp-tab-active')
+    me.getSubscription();
+    $('#card-number').inputmask("9999 9999 9999 9999");  //static mask
+    $('#expiry, #editExpiry').inputmask("99/9999");  //static mask
 
-    me._init = function () {
-        $('body').find('#ChildVerticalTab_1').find('li').removeClass('resp-tab-active');
-        $('body').find('#ChildVerticalTab_1').find('li:nth-child(4)').addClass('resp-tab-active')
-        me.getSubscription();
-        $(document).ready(function () {
-            $('#card-number').inputmask("9999 9999 9999 9999");  //static mask
-            $('#expiry, #editExpiry').inputmask("99/9999");  //static mask
-        });
-    };
-    me._init();
+    $(".modal").on("hidden.bs.modal", function () {
+      me.submitModalHandler = null;
+      me.errorMessage('');
+      me.successMessage('');
+      me.showModalFooter(true);
+    });
+  };
+  me._init();
 };
-var ssObj = new SubscriptionVM();
-ko.applyBindings(ssObj, $('#subscription')[0]);
+
+$(function () {
+  ko.applyBindings(new SubscriptionVM(), document.getElementById('subscription'));
+});
+

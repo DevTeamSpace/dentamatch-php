@@ -14,9 +14,7 @@ class CreateSubscriptionRequest extends FormRequest
     public function rules()
     {
         return [
-            'cardExist' => 'required',
-            'subscriptionType' => 'required',
-            'trailPeriod' => 'required',
+            'subscriptionType' => 'required|integer',
             'cardNumber' => 'sometimes',
             'expiry' => 'sometimes',
             'cvv' => 'sometimes'

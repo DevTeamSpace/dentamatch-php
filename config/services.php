@@ -20,7 +20,7 @@ return [
     ],
 
     'ses' => [
-        'key' => env('SES_KEY'),
+        'key'    => env('SES_KEY'),
         'secret' => env('SES_SECRET'),
         'region' => 'us-east-1',
     ],
@@ -30,9 +30,20 @@ return [
     ],
 
     'stripe' => [
-        'model' => App\User::class,
-        'key' => env('STRIPE_KEY'),
-        'secret' => env('STRIPE_SECRET'),
+        'model'  => App\User::class,
+        'key'    => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET_KEY'),
     ],
+
+    'stripePlans' => [
+        'monthly'    => env('STRIPE_PLAN_MONTHLY'),
+        'semiAnnual' => env('STRIPE_PLAN_SEMI_ANNUAL'),
+        'annual'     => env('STRIPE_PLAN_ANNUAL'),
+    ],
+
+    'stripeCoupons' => [
+        'semiAnnual' => env('STRIPE_COUPON_SEMI_ANNUAL'),
+        'annual'     => env('STRIPE_COUPON_ANNUAL'),
+    ]
 
 ];

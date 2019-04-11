@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\SubscriptionPayments;
+use App\Models\Subscription;
 use App\Models\User;
 use App\Models\Notification;
 use App\Models\RecruiterProfile;
@@ -17,14 +17,14 @@ class SubscriptionOneDayCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'user:onedaysubscription';
+    protected $signature = 'user:check-subscription';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Cron to send push notification for subscription one day left';
+    protected $description = 'Manual check for subscription renewal';
 
     /**
      * Create a new command instance.
@@ -33,7 +33,7 @@ class SubscriptionOneDayCommand extends Command
      */
     public function __construct()
     {
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
         parent::__construct();
     }
 
@@ -44,32 +44,33 @@ class SubscriptionOneDayCommand extends Command
     {
         try {
             $senderId = User::getAdminUserDetailsForNotification();
-            $recruiterModel = SubscriptionPayments::select('subscription_payments.payment_id', 'subscription_payments.subscription_expiry_date', 'subscription_payments.trial_end', 'recruiter_profiles.user_id', 'recruiter_profiles.customer_id')
-                ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'subscription_payments.recruiter_id')
-                ->where(DB::raw("TIMESTAMPDIFF(SECOND, subscription_payments.subscription_expiry_date, now())"), '<=', static::NOTIFICATION_INTERVAL)
-                ->where("TIMESTAMPDIFF(SECOND, subscription_payments.subscription_expiry_date, now())>0")
-                //->where('recruiter_profiles.is_subscribed',1) // todo old
-                ->get();
-            $list = $recruiterModel->toArray();
-            foreach ($list as $listValue) {
-                $customer = \Stripe\Customer::retrieve($listValue['customer_id']);
+            $subscriptions = Subscription::select(['subscriptions.subscription_id', 'subscriptions.subscription_expiry_date', 'subscriptions.trial_end',
+                'recruiter_profiles.user_id', 'recruiter_profiles.customer_id'])
+                ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'subscriptions.recruiter_id')
+                ->where('subscriptions.cancel_at_period_end', 0)
+//                ->where(DB::raw("TIMESTAMPDIFF(SECOND, subscriptions.subscription_expiry_date, now())"), '<=', static::NOTIFICATION_INTERVAL)
+                ->where(DB::raw("TIMESTAMPDIFF(SECOND, subscriptions.subscription_expiry_date, now())"), '>', 0)
+                ->get()->toArray();
+
+            foreach ($subscriptions as $subscription) {
+                $customer = \Stripe\Customer::retrieve($subscription['customer_id']);
                 $isSubscribed = 0;
-                if (!empty($customer->subscriptions['data'])) {
-                    foreach ($customer->subscriptions['data'] as $subscription) {
-                        $current_period_end = date('Y-m-d H:i:s', strtotime($subscription['current_period_end']));
+                if ($customer->subscriptions['data']) {
+                    foreach ($customer->subscriptions['data'] as $s) {
+                        $current_period_end = date('Y-m-d H:i:s', strtotime($s['current_period_end']));
                     }
-                    if ($current_period_end > $listValue['subscription_expiry_date']) {
-                        if ($listValue['trial_end'] != $listValue['subscription_expiry_date']) {
-                            $data = ['image' => url('web/images/dentaMatchLogo.png'), 'message' => 'You subscription has been renewed to' . ' ' . $listValue['subscription_expiry_date']];
-                            $insertData = ['sender_id' => $senderId->id, 'receiver_id' => $listValue['user_id'], 'notification_data' => json_encode($data)];
+                    if ($current_period_end > $subscription['subscription_expiry_date']) {
+                        if ($subscription['trial_end'] != $subscription['subscription_expiry_date']) {
+                            $data = ['image' => url('web/images/dentaMatchLogo.png'), 'message' => 'You subscription has been renewed to' . ' ' . $subscription['subscription_expiry_date']];
+                            $insertData = ['sender_id' => $senderId->id, 'receiver_id' => $subscription['user_id'], 'notification_data' => json_encode($data)];
                             Notification::createNotification($insertData);
                         }
                         $isSubscribed = 1;
-                        SubscriptionPayments::where('recruiter_id', $listValue['user_id'])
-                            ->update(['subscription_expiry_date' => date('Y-m-d  H:i:s', $current_period_end), 'payment_response' => json_encode($customer)]);
+                        Subscription::where('recruiter_id', $subscription['user_id'])
+                            ->update(['subscription_expiry_date' => date('Y-m-d  H:i:s', $current_period_end)]);
                     }
                 }
-                RecruiterProfile::where(['user_id' => $listValue['user_id']])
+                RecruiterProfile::where(['user_id' => $subscription['user_id']])
                     ->update(['is_subscribed' => $isSubscribed]);
             }
 
