@@ -4,6 +4,7 @@ var SubscriptionModel = function (data) {
   me.subscriptionPlan = ko.observable('');
   me.subscriptionActivation = ko.observable();
   me.subscriptionAutoRenewal = ko.observable();
+  me.subscriptionTrialEnd = ko.observable();
   me.subscriptionId = ko.observable('');
 
   me._init = function (d) {
@@ -11,6 +12,7 @@ var SubscriptionModel = function (data) {
     var planCost = d.plan.amount / 100;
     me.subscriptionAmount("$" + planCost);
     me.subscriptionActivation(moment.unix(d.created).utc().format('LL'));
+    me.subscriptionAutoRenewal(moment.unix(d.current_period_end).utc().format('LL'));
     me.subscriptionAutoRenewal(moment.unix(d.current_period_end).utc().format('LL'));
     me.subscriptionPlan(d.plan.nickname);
   }
@@ -145,7 +147,7 @@ var SubscriptionVM = function () {
       return;
     }
     me.callApi('add-card', {cardNumber: me.cardNumber(), expiry: me.expiry(), cvv: me.cvv()},
-      'Adding card please wait...', 'Card deleted successfully.', '');
+      'Adding card please wait...', 'Card added successfully.', '');
   };
 
   me.editCardFunction = function (d, e) {

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Cashier\Billable;
+use Laravel\Cashier\Subscription;
 
 /**
  * App\Models\RecruiterProfile
@@ -14,12 +16,11 @@ use Illuminate\Support\Facades\Auth;
  * @property int $id
  * @property int $user_id
  * @property int|null $is_subscribed
- * @property string|null $stripe_token   UNUSED
- * @property string|null $customer_id
+ * @property string|null $stripe_id
+ * @property string|null $card_brand
+ * @property string|null $card_last_four
+ * @property int|null $trial_ends_at
  * @property int $accept_term
- * @property int|null $free_period       OBSOLETE
- * @property int|null $auto_renewal      UNUSED
- * @property string|null $validity
  * @property string|null $office_name
  * @property string|null $office_desc
  * @property Carbon $created_at
@@ -32,34 +33,27 @@ use Illuminate\Support\Facades\Auth;
  * @method static Builder|RecruiterProfile newQuery()
  * @method static Builder|RecruiterProfile query()
  * @method static Builder|RecruiterProfile whereAcceptTerm($value)
- * @method static Builder|RecruiterProfile whereAutoRenewal($value)
  * @method static Builder|RecruiterProfile whereCreatedAt($value)
- * @method static Builder|RecruiterProfile whereCustomerId($value)
- * @method static Builder|RecruiterProfile whereFreePeriod($value)
+ * @method static Builder|RecruiterProfile whereStripeId($value)
  * @method static Builder|RecruiterProfile whereId($value)
  * @method static Builder|RecruiterProfile whereIsSubscribed($value)
  * @method static Builder|RecruiterProfile whereOfficeDesc($value)
  * @method static Builder|RecruiterProfile whereOfficeName($value)
- * @method static Builder|RecruiterProfile whereStripeToken($value)
  * @method static Builder|RecruiterProfile whereUpdatedAt($value)
  * @method static Builder|RecruiterProfile whereUserId($value)
- * @method static Builder|RecruiterProfile whereValidity($value)
  * @mixin \Eloquent
  */
 class RecruiterProfile extends Model
 {
+    use Billable;
+
     protected $table = 'recruiter_profiles';
 
-    protected $fillable = ['user_id', 'is_subscribed', 'accept_term', 'validity', 'office_name', 'office_desc'];
+    protected $fillable = ['user_id', 'is_subscribed', 'accept_term', 'office_name', 'office_desc'];
 
     public function recruiter()
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    public function subscriptions()
-    {
-        return $this->hasMany(Subscription::class, 'recruiter_id', 'user_id');
     }
 
     public function offices()
@@ -75,6 +69,9 @@ class RecruiterProfile extends Model
         ]);
     }
 
+    /**
+     * @return RecruiterProfile
+     */
     public static function current()
     {
         return self::where(['user_id' => Auth::user()->id])->first();
