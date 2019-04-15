@@ -84,12 +84,12 @@ class CalenderController extends Controller
     public function getCalenderSeekers(CalenderSeekerRequest $request)
     {
         try {
-            $history = request()->get('historyLoad');
+//            $history = request()->get('historyLoad');
 
             $jobObj = RecruiterJobs::where('id', $request->jobId);
-            if ($history == true) {
-                $jobObj->withTrashed();
-            }
+//            if ($history == true) {
+//                $jobObj->withTrashed();
+//            }
             $job = $jobObj->first();
             $jobDetails['id'] = $job['id'];
             $jobDetails['job_type'] = $job['job_type'];

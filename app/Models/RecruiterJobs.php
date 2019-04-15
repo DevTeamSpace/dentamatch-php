@@ -409,7 +409,7 @@ class RecruiterJobs extends Model
                 DB::raw("group_concat(distinct(office_types.officetype_name)) AS officetype_name"),
                 DB::raw("group_concat(distinct(temp_job_dates.job_date) ORDER BY temp_job_dates.job_date ASC) AS temp_job_dates"),
                 DB::raw("group_concat(distinct(template_skills.skill_id)) AS required_skills"),
-                DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"))->withTrashed();
+                DB::raw("DATEDIFF(now(), recruiter_jobs.created_at) AS days"));
 
         return $jobObj->first()->toArray();
     }
@@ -615,9 +615,7 @@ class RecruiterJobs extends Model
             ->groupBy('recruiter_jobs.id');
         $jobs->select('recruiter_jobs.id as job_title_id', 'job_titles.jobtitle_name', 'recruiter_jobs.pay_rate',
             DB::raw("recruiter_jobs.no_of_jobs as jobs_count"));
-        if ($history == 'true') {
-            $jobs->withTrashed();
-        }
+
         return $jobs->get();
     }
 
@@ -630,9 +628,7 @@ class RecruiterJobs extends Model
             ->join('temp_job_dates', 'temp_job_dates.recruiter_job_id', '=', 'recruiter_jobs.id')
             ->orderBy('temp_job_dates.job_date', 'desc');
         $jobs->select('temp_job_dates.job_date as job_created_at', 'recruiter_jobs.id as recruiter_job_id', 'recruiter_jobs.job_type');
-        if ($history == true) {
-            $jobs->withTrashed();
-        }
+
         return $jobs->get();
     }
 
