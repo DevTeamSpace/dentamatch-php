@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Cms;
 
+use App\Helpers\WebResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
@@ -86,8 +87,23 @@ class SkillController extends Controller
     }
 
     /**
+     * Delete skill
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \Exception
+     */
+    public function delete($id)
+    {
+        Skills::findOrFail($id)->delete();
+        return WebResponse::successResponse(trans('messages.record_was_deleted'));
+    }
+
+    /**
      * Method to get list of all skills
      * @return Response
+     * @throws \Exception
      */
     public function skillList()
     {

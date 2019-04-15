@@ -156,6 +156,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('{id}/edit', 'Cms\LocationController@edit');
         Route::get('create', 'Cms\LocationController@create');
         Route::post('store', 'Cms\LocationController@store');
+        Route::get('{id}/delete', 'Cms\LocationController@delete');
     });
 
     Route::group(['prefix' => 'affiliation/'], function () {
@@ -164,6 +165,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('{id}/edit', 'Cms\AffiliationController@edit');
         Route::get('create', 'Cms\AffiliationController@create');
         Route::post('store', 'Cms\AffiliationController@store');
+        Route::get('{id}/delete', 'Cms\AffiliationController@delete');
     });
 
     Route::group(['prefix' => 'jobtitle/'], function () {
@@ -172,6 +174,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('{id}/edit', 'Cms\JobTitleController@edit');
         Route::get('create', 'Cms\JobTitleController@create');
         Route::post('store', 'Cms\JobTitleController@store');
+        Route::get('{id}/delete', 'Cms\JobTitleController@delete');
     });
 
     Route::group(['prefix' => 'officetype/'], function () {
@@ -180,6 +183,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('{id}/edit', 'Cms\OfficeTypeController@edit');
         Route::get('create', 'Cms\OfficeTypeController@create');
         Route::post('store', 'Cms\OfficeTypeController@store');
+        Route::get('{id}/delete', 'Cms\OfficeTypeController@delete');
     });
 
     Route::group(['prefix' => 'certificate/'], function () {
@@ -188,6 +192,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('{id}/edit', 'Cms\CertificateController@edit');
         Route::get('create', 'Cms\CertificateController@create');
         Route::post('store', 'Cms\CertificateController@store');
+        Route::get('{id}/delete', 'Cms\CertificateController@delete');
     });
 
     Route::group(['prefix' => 'config/'], function () {
@@ -203,6 +208,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('{id}/edit', 'Cms\SkillController@edit');
         Route::get('create', 'Cms\SkillController@create');
         Route::post('store', 'Cms\SkillController@store');
+        Route::get('{id}/delete', 'Cms\SkillController@delete');
     });
 
     Route::group(['prefix' => 'school/'], function () {
@@ -211,6 +217,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('{id}/edit', 'Cms\SchoolController@edit');
         Route::get('create', 'Cms\SchoolController@create');
         Route::post('store', 'Cms\SchoolController@store');
+        Route::get('{id}/delete', 'Cms\SchoolController@delete');
     });
 
     Route::group(['prefix' => 'jobseeker/'], function () {
@@ -221,6 +228,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('{id}/viewdetails', 'Cms\JobSeekerController@jobSeekerDetailView');
         Route::get('create', 'Cms\JobSeekerController@create');
         Route::post('store', 'Cms\JobSeekerController@store');
+        Route::get('{id}/delete', 'Cms\JobSeekerController@delete');
         Route::get('verification-list', 'Cms\JobSeekerController@jobSeekerVerificationList');
         Route::get('{id}/verification', 'Cms\JobSeekerController@jobSeekerVerificationView');
         Route::post('storeVerification', 'Cms\JobSeekerController@storeVerification');
@@ -248,6 +256,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('{id}/edit', 'Cms\RecruiterController@edit');
         Route::get('create', 'Cms\RecruiterController@create');
         Route::post('store', 'Cms\RecruiterController@store');
+        Route::get('{id}/delete', 'Cms\RecruiterController@delete');
         Route::post('storeAdminResetPassword', 'Cms\RecruiterController@storeAdminResetPassword');
         Route::get('{id}/adminResetPassword', 'Cms\RecruiterController@adminResetPassword');
         Route::get('{id}/view', 'Cms\RecruiterController@recruiterView');

@@ -39,7 +39,6 @@ use Illuminate\Support\Carbon;
  */
 class Notification extends Model
 {
-
     protected $table = 'notification_logs';
 
     protected $hidden = ['updated_at', 'deleted_at']; // todo soft delete?

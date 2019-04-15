@@ -5,8 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 
 /**
@@ -18,16 +16,13 @@ use Illuminate\Support\Carbon;
  * @property int $is_active
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at                    SOFT DELETE WAS REMOVED DUE TO LACK OF USING IT IN JOINs
  * @property Schooling $parent
  * @property Schooling[]|Collection $children
  *
- * @method static bool|null forceDelete()
  * @method static Builder|Schooling newModelQuery()
  * @method static Builder|Schooling newQuery()
- * @method static QueryBuilder|Schooling onlyTrashed()
  * @method static Builder|Schooling query()
- * @method static bool|null restore()
  * @method static Builder|Schooling whereCreatedAt($value)
  * @method static Builder|Schooling whereDeletedAt($value)
  * @method static Builder|Schooling whereId($value)
@@ -35,14 +30,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Schooling whereParentId($value)
  * @method static Builder|Schooling whereSchoolName($value)
  * @method static Builder|Schooling whereUpdatedAt($value)
- * @method static QueryBuilder|Schooling withTrashed()
- * @method static QueryBuilder|Schooling withoutTrashed()
  * @mixin \Eloquent
  */
 class Schooling extends Model
 {
-    use SoftDeletes;
-
     protected $table = 'schoolings';
 
     protected $dates = ['deleted_at'];

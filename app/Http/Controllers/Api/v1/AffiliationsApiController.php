@@ -62,7 +62,7 @@ class AffiliationsApiController extends Controller
         $keyCount = 0;
 
         if ((!empty($reqData['affiliationDataArray']) && is_array($reqData['affiliationDataArray'])) || (!empty($reqData['other']) && is_array($reqData['other']))) {
-            JobSeekerAffiliation::where('user_id', '=', $userId)->forceDelete();
+            JobSeekerAffiliation::where('user_id', '=', $userId)->delete();
         }
 
         if (!empty($reqData['affiliationDataArray']) && is_array($reqData['affiliationDataArray'])) {

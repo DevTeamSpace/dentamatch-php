@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -18,16 +16,13 @@ use Illuminate\Support\Facades\DB;
  * @property int $seeker_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property string|null $deleted_at
+ * @property string|null $deleted_at             SOFT DELETE WAS REMOVED DUE TO LACK OF USING IT IN JOINs
  * @property-read User $seeker
  * @property-read RecruiterJobs $job
  *
- * @method static bool|null forceDelete()
  * @method static Builder|SavedJobs newModelQuery()
  * @method static Builder|SavedJobs newQuery()
- * @method static QueryBuilder|SavedJobs onlyTrashed()
  * @method static Builder|SavedJobs query()
- * @method static bool|null restore()
  * @method static Builder|SavedJobs whereCreatedAt($value)
  * @method static Builder|SavedJobs whereDeletedAt($value)
  * @method static Builder|SavedJobs whereId($value)
@@ -35,14 +30,10 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder|SavedJobs whereSeekerId($value)
  * @method static Builder|SavedJobs whereTempJobId($value)
  * @method static Builder|SavedJobs whereUpdatedAt($value)
- * @method static QueryBuilder|SavedJobs withTrashed()
- * @method static QueryBuilder|SavedJobs withoutTrashed()
  * @mixin \Eloquent
  */
 class SavedJobs extends Model
 {
-    use SoftDeletes;   // todo why using this and forceDelete at the same time?
-
     protected $table = 'saved_jobs';
     /**
      * The attributes that should be hidden for arrays.

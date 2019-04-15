@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+ use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
 use Illuminate\Database\Eloquent\Model;
@@ -16,27 +19,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $message
  * @property int|null $message_sent
  * @property int|null $cron_message_sent
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
  * @property-read string|null $mapping_for
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|AppMessage newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|AppMessage newQuery()
- * @method static \Illuminate\Database\Query\Builder|AppMessage onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|AppMessage query()
+ * @method static Builder|AppMessage newModelQuery()
+ * @method static Builder|AppMessage newQuery()
+ * @method static QueryBuilder|AppMessage onlyTrashed()
+ * @method static Builder|AppMessage query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|AppMessage toBeSent()
- * @method static \Illuminate\Database\Eloquent\Builder|AppMessage whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AppMessage whereCronMessageSent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AppMessage whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AppMessage whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AppMessage whereMessage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AppMessage whereMessageSent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AppMessage whereMessageTo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AppMessage whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|AppMessage withTrashed()
- * @method static \Illuminate\Database\Query\Builder|AppMessage withoutTrashed()
+ * @method static Builder|AppMessage toBeSent()
+ * @method static Builder|AppMessage whereCreatedAt($value)
+ * @method static Builder|AppMessage whereCronMessageSent($value)
+ * @method static Builder|AppMessage whereDeletedAt($value)
+ * @method static Builder|AppMessage whereId($value)
+ * @method static Builder|AppMessage whereMessage($value)
+ * @method static Builder|AppMessage whereMessageSent($value)
+ * @method static Builder|AppMessage whereMessageTo($value)
+ * @method static Builder|AppMessage whereUpdatedAt($value)
+ * @method static QueryBuilder|AppMessage withTrashed()
+ * @method static QueryBuilder|AppMessage withoutTrashed()
  * @mixin \Eloquent
  */
 class AppMessage extends Model
@@ -59,8 +62,8 @@ class AppMessage extends Model
     protected $dates = ['deleted_at'];
 
     /**
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     * @return Builder
      */
     public function scopeToBeSent($query)
     {

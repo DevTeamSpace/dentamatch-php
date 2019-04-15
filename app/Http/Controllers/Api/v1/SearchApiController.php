@@ -84,7 +84,7 @@ class SearchApiController extends Controller
                 $message = trans("messages.save_job_success");
             }
         } else {
-            SavedJobs::where('seeker_id', '=', $userId)->where('recruiter_job_id', '=', $reqData['jobId'])->forceDelete();
+            SavedJobs::where('seeker_id', '=', $userId)->where('recruiter_job_id', '=', $reqData['jobId'])->delete();
             $message = trans("messages.unsave_job_success");
         }
 
@@ -170,7 +170,7 @@ class SearchApiController extends Controller
             $jobExists->cancel_reason = $reqData['cancelReason'];
             $jobExists->save();
             //delete from temp hired jobs
-            JobseekerTempHired::where('jobseeker_id', $userId)->where('job_id', $reqData['jobId'])->forceDelete();
+            JobseekerTempHired::where('jobseeker_id', $userId)->where('job_id', $reqData['jobId'])->delete();
             $this->notifyAdminForCancelJob($reqData['jobId'], $userId, $reqData['cancelReason']);
             $response = ApiResponse::successResponse(trans("messages.job_cancelled_success"));
         } else {

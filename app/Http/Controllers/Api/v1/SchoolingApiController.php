@@ -90,7 +90,7 @@ class SchoolingApiController extends Controller
         $jobSeekerData = [];
 
         if (!empty($reqData['schoolDataArray']) && is_array($reqData['schoolDataArray'])) {
-            JobSeekerSchooling::where('user_id', $userId)->forceDelete();
+            JobSeekerSchooling::where('user_id', $userId)->delete();
 
             foreach ($reqData['schoolDataArray'] as $key => $value) {
                 if (!empty($value['schoolingChildId'])) {

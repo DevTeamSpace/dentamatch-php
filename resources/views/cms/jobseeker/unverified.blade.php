@@ -24,6 +24,7 @@
                 <th>License</th>
                 <th>State</th>
                 <th>Registered On</th>
+                <th>Action</th>
               </tr>
               </thead>
             </table>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\cms;
 
+use App\Helpers\WebResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
@@ -108,23 +110,24 @@ class AppMessageController extends Controller
      * Soft delete a appMessage.
      *
      * @param  int $id
-     * @return Response
+     * @return JsonResponse
      *
      * @throws \Exception
      */
     public function delete($id)
     {
         AppMessage::findOrFail($id)->delete();
-        Session::flash('message', trans('messages.app_message_deleted'));
+        return WebResponse::successResponse(trans('messages.app_message_deleted'));
     }
 
     /**
      * Method to get list of admin scheduled messages
      * @return Response
+     * @throws \Exception
      */
     public function messageList()
     {
-        $appMessages = AppMessage::SELECT(['message', 'message_to', 'message_sent', 'created_at', 'id'])->orderBy('created_at', 'desc');
+        $appMessages = AppMessage::SELECT(['message', 'message_to', 'message_sent', 'created_at', 'id'])->orderBy('created_at', SORT_DESC);
         return Datatables::of($appMessages)->make(true);
     }
 }

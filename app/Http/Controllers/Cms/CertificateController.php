@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Cms;
 
+use App\Helpers\WebResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
@@ -82,12 +83,27 @@ class CertificateController extends Controller
     }
 
     /**
+     * Delete certificate
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \Exception
+     */
+    public function delete($id)
+    {
+        Certifications::findOrFail($id)->delete();
+        return WebResponse::successResponse(trans('messages.record_was_deleted'));
+    }
+
+    /**
      * Method to get list of certification
      * @return Response
+     * @throws \Exception
      */
     public function certificationList()
     {
-        $certificates = Certifications::select(['certificate_name', 'is_active', 'id'])->orderBy('id', 'desc');
+        $certificates = Certifications::select(['certificate_name', 'is_active', 'id'])->orderBy('id', SORT_DESC);
         return Datatables::of($certificates)->make(true);
     }
 }

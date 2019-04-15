@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Cms;
 
+use App\Helpers\WebResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
@@ -97,6 +99,20 @@ class RecruiterController extends Controller
 
         Session::flash('message', $msg);
         return redirect('cms/recruiter/index');
+    }
+
+    /**
+     * Delete a recruiter.
+     *
+     * @param  int $id
+     * @return JsonResponse
+     *
+     * @throws \Exception
+     */
+    public function delete($id)
+    {
+        User::findOrFail($id)->delete();
+        return WebResponse::successResponse(trans('messages.record_was_deleted'));
     }
 
     /**

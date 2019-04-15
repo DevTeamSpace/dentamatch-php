@@ -42,7 +42,7 @@ use Illuminate\Support\Facades\DB;
  * @property string|null $office_location
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property string|null $deleted_at todo soft deleting?
+ * @property string|null $deleted_at                 SOFT DELETE WAS REMOVED DUE TO LACK OF USING IT IN JOINs
  * @property-read Collection|RecruiterOfficeType[] $officeTypes
  * @property-read User $recruiter
  *

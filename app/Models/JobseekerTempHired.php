@@ -5,13 +5,11 @@ namespace App\Models;
 use App\Enums\JobAppliedStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\JobseekerTempHired
@@ -22,16 +20,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $job_date
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property string|null $deleted_at
+ * @property string|null $deleted_at       SOFT DELETE WAS REMOVED DUE TO LACK OF USING IT IN JOINs
  * @property-read string|null $mapping_for
  * @property-read User $seeker
  *
- * @method static bool|null forceDelete()
  * @method static Builder|JobseekerTempHired newModelQuery()
  * @method static Builder|JobseekerTempHired newQuery()
- * @method static QueryBuilder|JobseekerTempHired onlyTrashed()
  * @method static Builder|JobseekerTempHired query()
- * @method static bool|null restore()
  * @method static Builder|JobseekerTempHired whereCreatedAt($value)
  * @method static Builder|JobseekerTempHired whereDeletedAt($value)
  * @method static Builder|JobseekerTempHired whereId($value)
@@ -39,14 +34,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static Builder|JobseekerTempHired whereJobId($value)
  * @method static Builder|JobseekerTempHired whereJobseekerId($value)
  * @method static Builder|JobseekerTempHired whereUpdatedAt($value)
- * @method static QueryBuilder|JobseekerTempHired withTrashed()
- * @method static QueryBuilder|JobseekerTempHired withoutTrashed()
  * @mixin \Eloquent
  */
 class JobseekerTempHired extends Model
 {
-    use Eloquence, SoftDeletes,
-        Mappable;
+    use Eloquence, Mappable;
 
     protected $table = 'jobseeker_temp_hired';
 

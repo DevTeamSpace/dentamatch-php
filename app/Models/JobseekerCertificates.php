@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\ApiResponse;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\JobseekerCertificates
@@ -35,8 +34,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class JobseekerCertificates extends Model
 {
-    use SoftDeletes;
-
     protected $guarded = ['id'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 

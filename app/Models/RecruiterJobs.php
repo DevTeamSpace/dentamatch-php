@@ -7,8 +7,6 @@ use App\Enums\JobType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -32,7 +30,7 @@ use Illuminate\Support\Facades\DB;
  * @property int|null $is_published
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at                SOFT DELETE WAS REMOVED DUE TO LACK OF USING IT IN JOINs
  * @property int $pay_rate
  * @property JobTemplates $jobTemplate
  * @property RecruiterOffice $recruiterOffice
@@ -42,12 +40,9 @@ use Illuminate\Support\Facades\DB;
  * @property-read Collection|JobseekerTempHired[] $hiredDates
  * @property-read Collection|JobLists[] $applications
  *
- * @method static bool|null forceDelete()
  * @method static Builder|RecruiterJobs newModelQuery()
  * @method static Builder|RecruiterJobs newQuery()
- * @method static QueryBuilder|RecruiterJobs onlyTrashed()
  * @method static Builder|RecruiterJobs query()
- * @method static bool|null restore()
  * @method static Builder|RecruiterJobs whereCreatedAt($value)
  * @method static Builder|RecruiterJobs whereDeletedAt($value)
  * @method static Builder|RecruiterJobs whereId($value)
@@ -66,13 +61,10 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder|RecruiterJobs wherePreferredJobLocationId($value)
  * @method static Builder|RecruiterJobs whereRecruiterOfficeId($value)
  * @method static Builder|RecruiterJobs whereUpdatedAt($value)
- * @method static QueryBuilder|RecruiterJobs withTrashed()
- * @method static QueryBuilder|RecruiterJobs withoutTrashed()
  * @mixin \Eloquent
  */
 class RecruiterJobs extends Model
 {
-    use SoftDeletes;
     const LIMIT = 10;
 
     protected $maps = [

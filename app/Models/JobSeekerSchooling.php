@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 
 /**
@@ -18,16 +16,13 @@ use Illuminate\Support\Carbon;
  * @property string $year_of_graduation
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at         SOFT DELETE WAS REMOVED DUE TO LACK OF USING IT IN JOINs
  * @property-read User $seeker
  * @property-read Schooling $schooling
  *
- * @method static bool|null forceDelete()
  * @method static Builder|JobSeekerSchooling newModelQuery()
  * @method static Builder|JobSeekerSchooling newQuery()
- * @method static QueryBuilder|JobSeekerSchooling onlyTrashed()
  * @method static Builder|JobSeekerSchooling query()
- * @method static bool|null restore()
  * @method static Builder|JobSeekerSchooling whereCreatedAt($value)
  * @method static Builder|JobSeekerSchooling whereDeletedAt($value)
  * @method static Builder|JobSeekerSchooling whereId($value)
@@ -36,14 +31,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|JobSeekerSchooling whereUpdatedAt($value)
  * @method static Builder|JobSeekerSchooling whereUserId($value)
  * @method static Builder|JobSeekerSchooling whereYearOfGraduation($value)
- * @method static QueryBuilder|JobSeekerSchooling withTrashed()
- * @method static QueryBuilder|JobSeekerSchooling withoutTrashed()
  * @mixin \Eloquent
  */
 class JobSeekerSchooling extends Model
 {
-    use SoftDeletes;
-
     protected $table = 'jobseeker_schoolings';
 
     protected $dates = ['deleted_at'];

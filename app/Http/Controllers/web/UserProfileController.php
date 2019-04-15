@@ -212,8 +212,8 @@ class UserProfileController extends Controller
             $return = 0;
             if (isset($request->zip) && !empty($request->zip)) {
                 $return = 2;
-                $location = Location::getList($request->zip);
-                if ($location) {
+                $isActive = Location::isActive($request->zip);
+                if ($isActive) {
                     $return = 1;
                 }
             }

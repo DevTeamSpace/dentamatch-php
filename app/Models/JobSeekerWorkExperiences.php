@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 
 /**
@@ -27,16 +25,13 @@ use Illuminate\Support\Carbon;
  * @property string|null $reference2_email
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at               SOFT DELETE WAS REMOVED DUE TO LACK OF USING IT IN JOINs
  * @property-read User $seeker
  * @property-read JobTitles $jobTitle
  *
- * @method static bool|null forceDelete()
  * @method static Builder|JobSeekerWorkExperiences newModelQuery()
  * @method static Builder|JobSeekerWorkExperiences newQuery()
- * @method static QueryBuilder|JobSeekerWorkExperiences onlyTrashed()
  * @method static Builder|JobSeekerWorkExperiences query()
- * @method static bool|null restore()
  * @method static Builder|JobSeekerWorkExperiences whereCity($value)
  * @method static Builder|JobSeekerWorkExperiences whereCreatedAt($value)
  * @method static Builder|JobSeekerWorkExperiences whereDeletedAt($value)
@@ -54,14 +49,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|JobSeekerWorkExperiences whereState($value)
  * @method static Builder|JobSeekerWorkExperiences whereUpdatedAt($value)
  * @method static Builder|JobSeekerWorkExperiences whereUserId($value)
- * @method static QueryBuilder|JobSeekerWorkExperiences withTrashed()
- * @method static QueryBuilder|JobSeekerWorkExperiences withoutTrashed()
  * @mixin \Eloquent
  */
 class JobSeekerWorkExperiences extends Model
 {
-    use SoftDeletes;
-
     protected $table = 'jobseeker_work_experiences';
     protected $primaryKey = 'id';
     protected $dates = ['deleted_at'];

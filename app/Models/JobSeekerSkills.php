@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
  * @property string $other_skill
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property string|null $deleted_at
+ * @property string|null $deleted_at        SOFT DELETE WAS REMOVED DUE TO LACK OF USING IT IN JOINs
  * @property-read User $seeker
  * @property-read Skills $skill
  *
@@ -39,7 +39,7 @@ class JobSeekerSkills extends Model
 
     protected $table = 'jobseeker_skills';
 
-    protected $hidden = ['deleted_at', 'created_at', 'updated_at']; // todo check deleting - soft or ... ?
+    protected $hidden = ['deleted_at', 'created_at', 'updated_at'];
 
     public function seeker()
     {

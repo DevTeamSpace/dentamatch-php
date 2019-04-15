@@ -136,7 +136,6 @@ return [
     'incorrect_pass' => 'Incorrect password. Please try again',
     'already_job_availability' => 'You already have pending jobs for current availability',
     'subscription_plan_changed' => 'Subscription plan changed successfully.',
-    'subscription_plan_changed' => 'Subscription plan changed successfully.',
     'jobseeker_verification_approved' => 'Candidate successfully verified',
     'jobseeker_verification_reject' => 'Candidate verification request rejected',
     'recruiter_updated_success' => 'Recruiter updated successfully',
@@ -147,7 +146,7 @@ return [
     'calender_details_failed' => 'Cannot fetch calender details.',
     'app_message_updated'=>'Successfully updated appMessage!',
     'app_message_added'=>'Successfully added appMessage!',
-    'app_message_deleted'=>'Successfully deleted appMessage!',
+    'app_message_deleted'=>'The notification message was deleted!',
     'already_sent_message' => 'appMessage already sent',
     'admin_recruiter_password_success' => 'Password reset request sent successfully',
     'update_device_token' => 'Device token updated successfully',
@@ -193,4 +192,6 @@ return [
     'seeker_already_hired'=>'This seeker is already hired for this job',
     'seeker_set_availabilty'=>". Please set your availability for ##DATES## to accept this job",
     'payrate_update'=>'Pay-rate file updated',
+
+    'record_was_deleted'=>'The record was deleted!'
 ];

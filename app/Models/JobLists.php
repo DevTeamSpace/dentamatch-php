@@ -7,8 +7,6 @@ use App\Enums\JobType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,17 +22,14 @@ use Illuminate\Support\Facades\DB;
  * @property string|null $cancel_reason
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property string|null $deleted_at
+ * @property string|null $deleted_at            SOFT DELETE WAS REMOVED DUE TO LACK OF USING IT IN JOINs
  * @property-read RecruiterJobs $job
  * @property-read User $seeker
  * @property-read Collection|TempJobDates[] $tempJobDates
  *
- * @method static bool|null forceDelete()
  * @method static Builder|JobLists newModelQuery()
  * @method static Builder|JobLists newQuery()
- * @method static QueryBuilder|JobLists onlyTrashed()
  * @method static Builder|JobLists query()
- * @method static bool|null restore()
  * @method static Builder|JobLists whereAppliedStatus($value)
  * @method static Builder|JobLists whereCancelReason($value)
  * @method static Builder|JobLists whereCreatedAt($value)
@@ -44,14 +39,10 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder|JobLists whereSeekerId($value)
  * @method static Builder|JobLists whereTempJobId($value)
  * @method static Builder|JobLists whereUpdatedAt($value)
- * @method static QueryBuilder|JobLists withTrashed()
- * @method static QueryBuilder|JobLists withoutTrashed()
  * @mixin \Eloquent
  */
 class JobLists extends Model
 {
-    use SoftDeletes;
-
     const LIMIT = 10;
 
     protected $table = 'job_lists';

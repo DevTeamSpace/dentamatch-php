@@ -270,14 +270,14 @@ class ReportController extends Controller
 
     /**
      * Method to delete job
-     * @param $request
+     * AJAX GET report/delete-job
      * @return Response
      */
-    public function getDeleteJob($request)
+    public function getDeleteJob()
     {
         try {
             $insertData = [];
-            $jobId = request()->get('jobId');
+            $jobId = request('jobId');
             $jobObj = RecruiterJobs::where('recruiter_jobs.id', $jobId)
                 ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
                 ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
@@ -341,7 +341,7 @@ class ReportController extends Controller
                 SavedJobs::where('recruiter_job_id', $jobId)->delete();
                 Notification::where('job_list_id', $jobId)->delete();
             }
-            if (!empty($request->requestOrigin)) {  // todo missing $request
+            if (!empty(request('requestOrigin'))) {
                 Session::flash('message', trans('messages.job_deleted'));
                 return redirect('job/lists');
             }

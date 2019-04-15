@@ -4,11 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\TempJobDates
@@ -18,29 +16,24 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $job_date
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property string|null $deleted_at
+ * @property string|null $deleted_at            SOFT DELETE WAS REMOVED DUE TO LACK OF USING IT IN JOINs
  * @property-read string|null $mapping_for
  * @property-read RecruiterJobs $job
  *
- * @method static bool|null forceDelete()
  * @method static Builder|TempJobDates newModelQuery()
  * @method static Builder|TempJobDates newQuery()
- * @method static QueryBuilder|TempJobDates onlyTrashed()
  * @method static Builder|TempJobDates query()
- * @method static bool|null restore()
  * @method static Builder|TempJobDates whereCreatedAt($value)
  * @method static Builder|TempJobDates whereDeletedAt($value)
  * @method static Builder|TempJobDates whereId($value)
  * @method static Builder|TempJobDates whereJobDate($value)
  * @method static Builder|TempJobDates whereRecruiterJobId($value)
  * @method static Builder|TempJobDates whereUpdatedAt($value)
- * @method static QueryBuilder|TempJobDates withTrashed()
- * @method static QueryBuilder|TempJobDates withoutTrashed()
  * @mixin \Eloquent
  */
 class TempJobDates extends Model
 {
-    use Eloquence, Mappable, SoftDeletes;
+    use Eloquence, Mappable;
 
     protected $table = 'temp_job_dates';
     protected $primaryKey = 'id';

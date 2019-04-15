@@ -99,7 +99,7 @@ class SkillApiController extends Controller
         ]);
         $reqData = $request->all();
         $userId = $request->apiUserId;
-        JobSeekerSkills::where('user_id', '=', $userId)->forceDelete();
+        JobSeekerSkills::where('user_id', '=', $userId)->delete();
 
         if (is_array($reqData['skills']) && count($reqData['skills']) > 0) {
             $jobseekerSkills = [];

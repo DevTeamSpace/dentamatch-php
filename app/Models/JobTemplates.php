@@ -5,11 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\JobTemplates
@@ -21,18 +19,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $template_desc
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at               SOFT DELETE WAS REMOVED DUE TO LACK OF USING IT IN JOINs
  * @property-read string|null $mapping_for
  * @property-read Collection|TemplateSkills[] $templateSkills
  * @property JobTitles $jobTitle
  * @property-read User $recruiter
  *
- * @method static bool|null forceDelete()
  * @method static Builder|JobTemplates newModelQuery()
  * @method static Builder|JobTemplates newQuery()
- * @method static QueryBuilder|JobTemplates onlyTrashed()
  * @method static Builder|JobTemplates query()
- * @method static bool|null restore()
  * @method static Builder|JobTemplates whereCreatedAt($value)
  * @method static Builder|JobTemplates whereDeletedAt($value)
  * @method static Builder|JobTemplates whereId($value)
@@ -41,14 +36,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static Builder|JobTemplates whereTemplateName($value)
  * @method static Builder|JobTemplates whereUpdatedAt($value)
  * @method static Builder|JobTemplates whereUserId($value)
- * @method static QueryBuilder|JobTemplates withTrashed()
- * @method static QueryBuilder|JobTemplates withoutTrashed()
  * @mixin \Eloquent
  */
 class JobTemplates extends Model
 {
     use Eloquence, Mappable;
-    use SoftDeletes;
 
     protected $table = 'job_templates';
     protected $primaryKey = 'id';

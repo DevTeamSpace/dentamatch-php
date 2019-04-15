@@ -25,7 +25,6 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class Certifications extends Model
 {
-    //
     protected $table = 'certifications';
     protected $primaryKey = 'id';
 

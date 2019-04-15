@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 
 /**
@@ -17,14 +15,11 @@ use Illuminate\Support\Carbon;
  * @property string|null $city
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at         SOFT DELETE WAS REMOVED DUE TO LACK OF USING IT IN JOINs
  *
- * @method static bool|null forceDelete()
  * @method static Builder|SearchFilter newModelQuery()
  * @method static Builder|SearchFilter newQuery()
- * @method static QueryBuilder|SearchFilter onlyTrashed()
  * @method static Builder|SearchFilter query()
- * @method static bool|null restore()
  * @method static Builder|SearchFilter whereCity($value)
  * @method static Builder|SearchFilter whereCreatedAt($value)
  * @method static Builder|SearchFilter whereDeletedAt($value)
@@ -32,14 +27,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|SearchFilter whereSearchFilter($value)
  * @method static Builder|SearchFilter whereUpdatedAt($value)
  * @method static Builder|SearchFilter whereUserId($value)
- * @method static QueryBuilder|SearchFilter withTrashed()
- * @method static QueryBuilder|SearchFilter withoutTrashed()
  * @mixin \Eloquent
  */
 class SearchFilter extends Model
 {
-    use SoftDeletes;
-
     protected $table = 'search_filters';
     protected $primaryKey = 'id';
     protected $dates = ['deleted_at'];

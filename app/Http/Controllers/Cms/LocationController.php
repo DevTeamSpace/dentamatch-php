@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Cms;
 
+use App\Helpers\WebResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
@@ -83,12 +84,27 @@ class LocationController extends Controller
     }
 
     /**
+     * Delete location
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \Exception
+     */
+    public function delete($id)
+    {
+        Location::findOrFail($id)->delete();
+        return WebResponse::successResponse(trans('messages.record_was_deleted'));
+    }
+
+    /**
      * Method to get list of locations
      * @return Response
+     * @throws \Exception
      */
     public function locationsList()
     {
-        $locations = Location::select(['zipcode', 'free_trial_period', 'is_active', 'id'])->orderBy('id', 'desc');
+        $locations = Location::select(['zipcode', 'free_trial_period', 'is_active', 'id'])->orderBy('id', SORT_DESC);
         return Datatables::of($locations)->make(true);
     }
 }

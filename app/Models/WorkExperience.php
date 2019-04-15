@@ -25,7 +25,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
  * @property string|null $deleted_at
- * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|WorkExperience newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|WorkExperience newQuery()
  * @method static \Illuminate\Database\Query\Builder|WorkExperience onlyTrashed()
@@ -55,8 +54,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class WorkExperience extends Model
 {
-    use SoftDeletes;
-
     protected $table = 'jobseeker_work_experiences';
 
     protected $fillable = ['user_id', 'job_title_id', 'months_of_expereince', 'office_name', 'office_address', 'city', 'reference1_name', 'reference1_mobile', 'reference1_email', 'reference2_name', 'reference2_mobile', 'reference2_email'];

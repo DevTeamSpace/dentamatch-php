@@ -58,7 +58,7 @@ class CalendarApiController extends Controller
         $jobSeeker->tempDates()
             ->whereNotIn('temp_job_date', $futureJobTempDates)
             ->where('temp_job_date', '>=', date('Y-m-d'))
-            ->forceDelete();
+            ->delete();
 
         if ($requestTempDates) {
             $tempDateArray = [];

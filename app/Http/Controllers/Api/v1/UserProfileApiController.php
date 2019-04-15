@@ -297,7 +297,7 @@ class UserProfileApiController extends Controller
         if ($userProfile->is_job_seeker_verified != SeekerVerifiedStatus::APPROVED && $userProfile->job_titile_id != $jobTitleModel->id) {
             $mappedSkillsArray = ($jobTitleModel->mapped_skills_id == '') ? [] : explode(",", $jobTitleModel->mapped_skills_id);
             if (!empty($mappedSkillsArray)) {
-                JobSeekerSkills::where('user_id', $userId)->forceDelete();
+                JobSeekerSkills::where('user_id', $userId)->delete();
                 JobSeekerSkills::addJobSeekerSkills($userId, $mappedSkillsArray);
             }
         }

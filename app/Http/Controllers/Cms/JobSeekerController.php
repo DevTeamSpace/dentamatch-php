@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Cms;
 
 use App\Enums\JobAppliedStatus;
+use App\Helpers\WebResponse;
 use App\Mail\ResetPassword;
 use App\Utils\PushNotificationService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
@@ -149,6 +151,20 @@ class JobSeekerController extends Controller
     }
 
     /**
+     * Delete a job seeker.
+     *
+     * @param  int $id
+     * @return JsonResponse
+     *
+     * @throws \Exception
+     */
+    public function delete($id)
+    {
+        User::findOrFail($id)->delete();
+        return WebResponse::successResponse(trans('messages.record_was_deleted'));
+    }
+
+    /**
      * Method to get list of job seekers
      * @return Response
      */
@@ -186,6 +202,7 @@ class JobSeekerController extends Controller
     /**
      * Method to get list of verified jobseekers
      * @return Response
+     * @throws \Exception
      */
     public function jobSeekerVerificationList()
     {
@@ -204,9 +221,8 @@ class JobSeekerController extends Controller
             )
             ->where('user_groups.group_id', UserGroup::JOBSEEKER)
             ->where('job_titles.is_license_required', 1)
-            ->orderBy('users.id', 'desc');
-        return Datatables::of($userData)
-            ->make(true);
+            ->orderBy('users.id', SORT_DESC);
+        return Datatables::of($userData)->make(true);
 
     }
 
@@ -344,7 +360,6 @@ class JobSeekerController extends Controller
             ->where('users.is_verified', 0)
             ->orderBy('users.id', 'desc');
         return Datatables::of($userData)
-            ->removeColumn('id')
             ->make(true);
     }
 
@@ -367,7 +382,6 @@ class JobSeekerController extends Controller
             ->orderBy('users.id', 'desc');
 
         return Datatables::of($userData)
-            ->removeColumn('id')
             ->make(true);
     }
 

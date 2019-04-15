@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Cms;
 
+use App\Helpers\WebResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
@@ -81,12 +82,27 @@ class OfficeTypeController extends Controller
     }
 
     /**
+     * Delete office type
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \Exception
+     */
+    public function delete($id)
+    {
+        OfficeType::findOrFail($id)->delete();
+        return WebResponse::successResponse(trans('messages.record_was_deleted'));
+    }
+
+    /**
      * Method to get list of officetype
      * @return Response
+     * @throws \Exception
      */
     public function officeTypeList()
     {
-        $officeTypes = OfficeType::select(['officetype_name', 'is_active', 'id'])->orderBy('id', 'desc');
+        $officeTypes = OfficeType::select(['officetype_name', 'is_active', 'id'])->orderBy('id', SORT_DESC);
         return Datatables::of($officeTypes)->make(true);
     }
 }

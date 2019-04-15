@@ -9,152 +9,83 @@ $(document).ajaxError(function (e, request, settings, exception) {
         }
     });
 $(function () {
-    
-    $('#location_list').DataTable({
-        processing: true,
-        serverSide: true,
-        //responsive: true,
-        //autoWidth: false,
-        ajax: public_path+'location/list',
-        ordering:false,
-        //bFilter: false,
-        columns: [
-            {data: 'zipcode', name: 'zipcode',searchable:true},
-            //{data: 'freeTrialPeriod', name: 'free_trial_period',searchable:true},
-            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
-                return (row.isActive == 1) ?'Yes':'No';
-            }},
-            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
-                return '<a href="'+public_path+'location/'+row.locationId+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-            }}
-        ]
+
+  function makeDataTable(selector, entityUrl, columns, active ) {
+    if (active) {
+      columns.push( {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
+          return row.is_active? 'Yes' : 'No';
+        }});
+    }
+
+    columns.push({data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+        return '<a href="' + public_path + entityUrl + '/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;\n\
+                <a href="#" data-href="'+  public_path + entityUrl + '/'+row.id+'/delete" data-toggle="modal" data-target="#confirm-delete" class="delete btn btn-xs btn-default"><i class="fa fa-remove"></i> Delete</a>';
+      }});
+
+    $(selector).DataTable({
+      processing: true,
+      serverSide: true,
+      //responsive: true,
+      //autoWidth: false,
+      ajax: public_path + entityUrl + '/list',
+      ordering:false,
+      columns: columns
     });
-    
-    $('#affiliation_list').DataTable({
-        processing: true,
-        serverSide: true,
-        //responsive: true,
-        //autoWidth: false,
-        ajax: public_path+'affiliation/list',
-        ordering:false,
-        //bFilter: false,
-        columns: [
-            {data: 'affiliation_name', name: 'affiliation_name',searchable:true},
-            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
-                return (row.is_active == 1) ?'Yes':'No';
-            }},
-            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
-                return '<a href="'+public_path+'affiliation/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-            }}
-        ]
-    });
-    
-    $('#jobtitle_list').DataTable({
-        processing: true,
-        serverSide: true,
-        //responsive: true,
-        //autoWidth: false,
-        ajax: public_path+'jobtitle/list',
-        ordering:false,
-        //bFilter: false,
-        columns: [
-            {data: 'jobtitle_name', name: 'jobtitle_name',searchable:true},
-            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
-                return (row.is_active == 1) ?'Yes':'No';
-            }},
-            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
-                return '<a href="'+public_path+'jobtitle/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-            }}
-        ]
-    });
-    
-    $('#officetype_list').DataTable({
-        processing: true,
-        serverSide: true,
-        //responsive: true,
-        //autoWidth: false,
-        ajax: public_path+'officetype/list',
-        ordering:false,
-        //bFilter: false,
-        columns: [
-            {data: 'officetype_name', name: 'officetype_name',searchable:true},
-            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
-                return (row.is_active == 1) ?'Yes':'No';
-            }},
-            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
-                return '<a href="'+public_path+'officetype/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-            }}
-        ]
-    });
-    
-    $('#certificate_list').DataTable({
-        processing: true,
-        serverSide: true,
-        //responsive: true,
-        //autoWidth: false,
-        ajax: public_path+'certificate/list',
-        ordering:false,
-        //bFilter: false,
-        columns: [
-            {data: 'certificate_name', name: 'certificate_name',searchable:true},
-            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
-                return (row.is_active == 1) ?'Yes':'No';
-            }},
-            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
-                return '<a href="'+public_path+'certificate/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-            }}
-        ]
-    });
-    
-    $('#skill_list').DataTable({
-        processing: true,
-        serverSide: true,
-        //responsive: true,
-        //autoWidth: false,
-        ajax: public_path+'skill/list',
-        ordering:false,
-        //bFilter: false,
-        columns: [
-            {data: 'skill_name', name: 'skill_name',searchable:true},
-            {data: 'parent_skill_name', name: 'parent_skill',searchable:false},
-            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
-                return (row.is_active == 1) ?'Yes':'No';
-            }},
-            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
-                return '<a href="'+public_path+'skill/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-            }}
-        ]
-    });
-    
-    $('#school_list').DataTable({
-        processing: true,
-        serverSide: true,
-        //responsive: true,
-        //autoWidth: false,
-        ajax: public_path+'school/list',
-        ordering:false,
-        //bFilter: false,
-        columns: [
-            {data: 'school_name', name: 'school_name',searchable:true},
-            {data: 'parent_school_name', name: 'parent_school',searchable:false},
-            {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
-                return (row.is_active == 1) ?'Yes':'No';
-            }},
-            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
-                return '<a href="'+public_path+'school/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;';
-            }}
-        ]
-    });
-    
+  }
+
+  makeDataTable('#appMessage_list', 'notify', [
+    {data: 'messageTo', name: 'messageTo',searchable:true,render: function (data, type, row) {
+      switch (+row.messageTo) {
+        case 1: return 'All';
+        case 2: return 'Recruiter';
+        case 3: return 'Jobseeker';
+      }
+    }},
+    {data: 'message', name: 'message',searchable:false},
+    {data: 'messageSent', name: 'messageSent',searchable:false,render: function (data, type, row) {
+        return (row.messageSent)?'Notification Sent':'<a href="'+public_path+'notify/'+row.id+'/send"  class="btn btn-xs btn-primary"><i class="fa fa-send"></i> Send Notification</a>&nbsp;'
+      }},
+    {data: 'createdAt', name: 'createdAt',searchable:false,render: function (data, type, row) {
+        var time = row.createdAt.date.split('.')
+        return time[0];
+      }}]
+  );
+
+  makeDataTable('#affiliation_list', 'affiliation', [
+    {data: 'affiliation_name', name: 'affiliation_name',searchable:true},
+  ], true);
+
+  makeDataTable('#location_list', 'location', [
+    {data: 'zipcode', name: 'zipcode',searchable:true},
+  ], true);
+
+  makeDataTable('#jobtitle_list', 'jobtitle', [
+    {data: 'jobtitle_name', name: 'jobtitle_name',searchable:true},
+  ], true);
+
+  makeDataTable('#officetype_list', 'officetype', [
+    {data: 'officetype_name', name: 'officetype_name',searchable:true},
+  ], true);
+
+  makeDataTable('#certificate_list', 'certificate', [
+    {data: 'certificate_name', name: 'certificate_name',searchable:true},
+  ], true);
+
+  makeDataTable('#skill_list', 'skill', [
+    {data: 'skill_name', name: 'skill_name',searchable:true},
+    {data: 'parent_skill_name', name: 'parent_skill',searchable:false},
+  ], true);
+
+  makeDataTable('#school_list', 'school', [
+    {data: 'school_name', name: 'school_name',searchable:true},
+    {data: 'parent_school_name', name: 'parent_school',searchable:false},
+  ], true);
+
     var jobseekerList = $('#jobseeker_list').DataTable({
         processing: true,
         serverSide: true,
-        //responsive: true,
-        //autoWidth: false,
         ajax: public_path+'jobseeker/list',
-        //ordering:true,
         order: [[ 5, "desc" ]],
-        //bFilter: false,
         columns: [
             {data: 'email', name: 'email',searchable:true,sortable:false},
             {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true,sortable:false},
@@ -168,11 +99,12 @@ $(function () {
             {data: 'action', name: 'action',searchable:false,sortable:false,render: function (data, type, row) {
                 return '<a href="'+public_path+'jobseeker/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;\n\
                         <a href="'+public_path+'recruiter/'+row.id+'/adminResetPassword"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;\n\
-                        <a href="'+public_path+'jobseeker/'+row.id+'/viewdetails"  class="btn btn-xs btn-primary">View Details</a>&nbsp;';
+                        <a href="'+public_path+'jobseeker/'+row.id+'/viewdetails"  class="btn btn-xs btn-primary">View Details</a>&nbsp; \n\
+                        <a href="#" data-href="'+  public_path + 'jobseeker/'+row.id+'/delete" data-toggle="modal" data-target="#confirm-delete" class="delete btn btn-xs btn-default"><i class="fa fa-remove"></i> Delete</a>';
             }}
         ]
     });
-    
+
     var ajaxUrl = jobseekerList.ajax.url();
     function getDataTableUrl(){
         var startDate=$('#startDate').val();
@@ -183,17 +115,15 @@ $(function () {
     $('#search').click( function() {
         console.log(jobseekerList.ajax.url());
         jobseekerList.ajax.url(getDataTableUrl())
-        jobseekerList.load(); 
+        jobseekerList.load();
     } );
-    
+
     $('#jobseeker_unverified_list').DataTable({
         processing: true,
         serverSide: true,
         responsive: true,
-        //autoWidth: false,
         ajax: public_path+'jobseeker/listUnverifiedJobseeker',
         ordering:false,
-        //bFilter: false,
         columns: [
             {data: 'email', name: 'email',searchable:true},
             {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
@@ -203,9 +133,12 @@ $(function () {
             {data: 'license_number', name: 'jobseeker_profiles.license_number',searchable:true},
             {data: 'state', name: 'jobseeker_profiles.state',searchable:true},
             {data: 'created_at', name: 'created_at',searchable:false},
+            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+                          return '<a href="#" data-href="'+  public_path + 'jobseeker/'+row.id+'/delete" data-toggle="modal" data-target="#confirm-delete" class="delete btn btn-xs btn-default"><i class="fa fa-remove"></i> Delete</a>';
+            }}
         ]
     });
-    
+
     $('#jobseeker_incomplete_list').DataTable({
         processing: true,
         serverSide: true,
@@ -223,9 +156,12 @@ $(function () {
             {data: 'license_number', name: 'jobseeker_profiles.license_number',searchable:true},
             {data: 'state', name: 'jobseeker_profiles.state',searchable:true},
             {data: 'created_at', name: 'created_at',searchable:false},
+          {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+              return '<a href="#" data-href="'+  public_path + 'jobseeker/'+row.id+'/delete" data-toggle="modal" data-target="#confirm-delete" class="delete btn btn-xs btn-default"><i class="fa fa-remove"></i> Delete</a>';
+            }}
         ]
     });
-    
+
     $('#jobseeker_nonavailable_users_list').DataTable({
         processing: true,
         serverSide: true,
@@ -245,7 +181,7 @@ $(function () {
             {data: 'created_at', name: 'created_at',searchable:false},
         ]
     });
-    
+
     $('#jobseeker_invited_users_list').DataTable({
         processing: true,
         serverSide: true,
@@ -265,7 +201,7 @@ $(function () {
             {data: 'created_at', name: 'created_at',searchable:false},
         ]
     });
-    
+
     $('#recruiter_list').DataTable({
         processing: true,
         serverSide: true,
@@ -283,11 +219,12 @@ $(function () {
             {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
                 return '<a href="'+public_path+'recruiter/'+row.id+'/view"  class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> View</a>&nbsp;\n\
                         <a href="'+public_path+'recruiter/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;\n\
-                        <a href="'+public_path+'recruiter/'+row.id+'/adminResetPassword"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;';
+                        <a href="'+public_path+'recruiter/'+row.id+'/adminResetPassword"  class="btn btn-xs btn-primary">Reset Password</a>&nbsp;\n\
+                        <a href="#" data-href="'+  public_path + 'recruiter/'+row.id+'/delete" data-toggle="modal" data-target="#confirm-delete" class="delete btn btn-xs btn-default"><i class="fa fa-remove"></i> Delete</a>';
             }}
         ]
     });
-    
+
     $('#job_list').DataTable({
         processing: true,
         serverSide: true,
@@ -315,11 +252,11 @@ $(function () {
             {data: 'pay_rate', name: 'pay_rate',searchable:false},
             {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
                 return '<a href="'+public_path+'report/'+row.id+'/view"  class="btn btn-xs btn-primary"><i class="fa fa-view"></i> View Details</a>&nbsp;'
-                +'<a href="javascript:deleteJob('+row.id+');"  class="btn btn-xs btn-primary"><i class="fa fa-delete"></i> Delete</a>&nbsp;';
+                +'<a href="#" data-href="'+  public_path + 'report/delete-job?jobId='+row.id + '" data-toggle="modal" data-target="#confirm-delete" class="delete btn btn-xs btn-default"><i class="fa fa-remove"></i> Delete</a>';
             }}
         ]
     });
-    
+
     $('#seeker_list').DataTable({
         processing: true,
         serverSide: true,
@@ -350,7 +287,7 @@ $(function () {
             }},
         ]
     });
-    
+
     $('#cancel_list').DataTable({
         processing: true,
         serverSide: true,
@@ -366,7 +303,7 @@ $(function () {
             {data: 'cancelno', name: 'cancelno',searchable:false},
         ]
     });
-    
+
     $('#response_list').DataTable({
         processing: true,
         serverSide: true,
@@ -396,7 +333,7 @@ $(function () {
             {data: 'cancelled', name: 'cancelled',searchable:false},
         ]
     });
-    
+
     $('#jobbylocation_list').DataTable({
         processing: true,
         serverSide: true,
@@ -405,21 +342,18 @@ $(function () {
         ajax: public_path+'report/location',
         ordering:false,
         //bFilter: false,
-        
+
         columns: [
             {data: 'city', name: 'city',searchable:true},
             {data: 'searchcount', name: 'searchcount',searchable:false},
         ]
     });
-    
+
     $('#jobseeker_verification').DataTable({
         processing: true,
         serverSide: true,
-        //responsive: true,
-        //autoWidth: false,
         ajax: public_path+'jobseeker/verification-list',
         ordering:false,
-        //bFilter: false,
         columns: [
             {data: 'first_name', name: 'jobseeker_profiles.first_name',searchable:true},
             {data: 'last_name', name: 'jobseeker_profiles.last_name',searchable:true},
@@ -446,7 +380,7 @@ $(function () {
             }}
         ]
     });
-    
+
     function searchInit() {
         this.api().columns().every(function () {
             var column = this;
@@ -457,45 +391,13 @@ $(function () {
             });
         });
     }
-    
-    $('#appMessage_list').DataTable({
-        processing: true,
-        serverSide: true,
-        responsive: true,
-        autoWidth: false,
-        ajax: public_path+'notify/list',
-        ordering:false,
-        //paging:false,
-        //bFilter: false,
-        columns: [
-            {data: 'messageTo', name: 'messageTo',searchable:true,render: function (data, type, row) {
-                if(row.messageTo==1){
-                    return 'All';
-                }else if(row.messageTo==2){
-                    return 'Recruiter';
-                }else if(row.messageTo==3){
-                    return 'Jobseeker';
-                }
-            }},
-            {data: 'message', name: 'message',searchable:false},
-            {data: 'messageSent', name: 'messageSent',searchable:false,render: function (data, type, row) {
-                return (row.messageSent)?'Notification Sent':'<a href="'+public_path+'notify/'+row.id+'/send"  class="btn btn-xs btn-primary"><i class="fa fa-send"></i> Send Notification</a>&nbsp;'
-            }},
-            {data: 'createdAt', name: 'createdAt',searchable:false,render: function (data, type, row) {
-                var time = row.createdAt.date.split('.')
-                return time[0];
-            }},
-            {data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
-                return '<a href="'+public_path+'notify/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;\n\
-                        <a href="'+public_path+'notify/'+row.id+'/delete" onclick="deleteRecord(this);return false;"  class="delete btn btn-xs btn-primary"><i class="fa fa-remove"></i> Delete</a>';
-            }}
-        ]
-    });
+
+
     $('#listType').change(function(){
         var listType = $('#listType').val();
         tlist.ajax.url(public_path+'payments/transactionList/'+listType).load();
     });
-    
+
     //$.fn.datepicker.defaults.format = "yyyy-mm-dd";
     var nowTemp = new Date();
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
@@ -558,7 +460,7 @@ $(function () {
 //    }).on('changeDate', function(ev) {
 //      endDate.hide();
 //    }).data('datepicker');
-    
+
     $('#forgotLink, #loginLink').click(function(){
         $('#ForgetError').html('').addClass('hidden');
         $('#loginDiv').toggle();
@@ -618,16 +520,16 @@ $(function () {
         console.log(transactionIds.length);
         if(transactionIds=='')
             transactionIds=[];
-        
+
         console.log(transactionIds);
-        
+
         if(chk==false)
             transactionIds.splice( $.inArray(itemVal, transactionIds), 1 );
         else
             transactionIds.push(itemVal);
         $('#transactionIds').val(transactionIds);
         console.log(transactionIds);
-        
+
     });
     $('#reject_reason').click(function(){
         $('#msgSpan').removeClass('red').html('');
@@ -686,20 +588,41 @@ $(function () {
         $('#msgSpan').removeClass('red').html('');
         //$(".modal-body1").html("Where did he go?!?!?!");
     });
+
+  $('#confirm-delete').on('show.bs.modal', function(e) {
+    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+  });
+
+  $('#confirm-delete .btn-ok').click(function(ev) {
+    ev.preventDefault();
+    $('#confirm-delete').modal('hide');
+    $('.alert').alert('close')
+
+    $.get(this.href).then(function (response) {
+      showAlert(response.message, response.success);
+      $('.dataTable').DataTable().ajax.reload(null, false);
+    });
+  });
 });
 
+$(function () {
+  var $loadingOverlay = $('.loadingOverlay');
 
-function deleteRecord(obj) {
-        console.log(obj);
-        data = {
-        "_token": "{{ csrf_token() }}",
-        };
-        $.get(obj.href, function(data) {
-            //do refresh
-            window.location.reload();
-        });
-        return false;
-}
+  if ($loadingOverlay.length) {
+    $loadingOverlay
+      .css("display", "flex")
+      .hide();
+
+    $(document)
+      .ajaxSend(function () {
+        $loadingOverlay.fadeIn();
+      })
+      .ajaxComplete(function () {
+        $loadingOverlay.fadeOut();
+      })
+  }
+
+});
 
 function deleteJob(jobId){
     console.log(public_path+'report/delete-job');
@@ -707,4 +630,11 @@ function deleteJob(jobId){
             //do refresh
             window.location.reload();
         });
+}
+
+function showAlert(msg, success) {
+  $('<div class="alert alert-' + (success? 'success' : 'danger' )+ ' alert-dismissible fade in" role="alert">\n' +
+    '      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>\n' +
+    msg +
+    '    </div>').prependTo($('.row > div').eq(0));
 }

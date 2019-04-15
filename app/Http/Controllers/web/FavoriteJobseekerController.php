@@ -123,7 +123,7 @@ class FavoriteJobseekerController extends Controller
             $return['isFavourite'] = "No";
             $return['seekerId'] = $seekerId;
             $return['success'] = 1;
-            $favModel->forceDelete();
+            $favModel->delete();
         } else {
             $favModel = new Favourite();
             $favModel->recruiter_id = $recruiterId;

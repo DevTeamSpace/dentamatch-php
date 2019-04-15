@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Cms;
 
+use App\Helpers\WebResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
@@ -81,13 +82,28 @@ class AffiliationController extends Controller
     }
 
     /**
+     * Delete affiliation
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \Exception
+     */
+    public function delete($id)
+    {
+        Affiliation::findOrFail($id)->delete();
+        return WebResponse::successResponse(trans('messages.record_was_deleted'));
+    }
+
+    /**
      * List all Affiliations.
      *
      * @return Response
+     * @throws \Exception
      */
     public function affiliationsList()
     {
-        $affiliations = Affiliation::select(['affiliation_name', 'is_active', 'id'])->orderBy('id', 'desc');
+        $affiliations = Affiliation::select(['affiliation_name', 'is_active', 'id'])->orderBy('id', SORT_DESC);
         return Datatables::of($affiliations)->make(true);
     }
 }

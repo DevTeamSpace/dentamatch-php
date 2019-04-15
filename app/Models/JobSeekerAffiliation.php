@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 
 /**
@@ -17,16 +15,13 @@ use Illuminate\Support\Carbon;
  * @property string|null $other_affiliation
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at   SOFT DELETE WAS REMOVED DUE TO LACK OF USING IT IN JOINs
  * @property-read User $seeker
  * @property-read Affiliation $affiliation
  *
- * @method static bool|null forceDelete()
  * @method static Builder|JobSeekerAffiliation newModelQuery()
  * @method static Builder|JobSeekerAffiliation newQuery()
- * @method static QueryBuilder|JobSeekerAffiliation onlyTrashed()
  * @method static Builder|JobSeekerAffiliation query()
- * @method static bool|null restore()
  * @method static Builder|JobSeekerAffiliation whereAffiliationId($value)
  * @method static Builder|JobSeekerAffiliation whereCreatedAt($value)
  * @method static Builder|JobSeekerAffiliation whereDeletedAt($value)
@@ -34,14 +29,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|JobSeekerAffiliation whereOtherAffiliation($value)
  * @method static Builder|JobSeekerAffiliation whereUpdatedAt($value)
  * @method static Builder|JobSeekerAffiliation whereUserId($value)
- * @method static QueryBuilder|JobSeekerAffiliation withTrashed()
- * @method static QueryBuilder|JobSeekerAffiliation withoutTrashed()
  * @mixin \Eloquent
  */
 class JobSeekerAffiliation extends Model
 {
-    use SoftDeletes;
-
     protected $table = 'jobseeker_affiliations';
 
     protected $dates = ['deleted_at'];

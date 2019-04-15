@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Cms;
 
+use App\Helpers\WebResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
@@ -81,12 +82,27 @@ class JobTitleController extends Controller
     }
 
     /**
+     * Delete job title
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \Exception
+     */
+    public function delete($id)
+    {
+        JobTitles::findOrFail($id)->delete();
+        return WebResponse::successResponse(trans('messages.record_was_deleted'));
+    }
+
+    /**
      * Method to get list of job titles
      * @return Response
+     * @throws \Exception
      */
     public function jobTitleList()
     {
-        $jobtitles = JobTitles::select(['jobtitle_name', 'is_active', 'id'])->orderBy('id', 'asc');
+        $jobtitles = JobTitles::select(['jobtitle_name', 'is_active', 'id'])->orderBy('id', SORT_ASC);
         return Datatables::of($jobtitles)->make(true);
     }
 }
