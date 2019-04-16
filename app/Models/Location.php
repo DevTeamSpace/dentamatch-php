@@ -13,8 +13,15 @@ use Sofa\Eloquence\Mappable;
  * @property int $id
  * @property int $zipcode
  * @property string $description
- * @property int $free_trial_period
+ * @property string $city
+ * @property string $state
+ * @property string $county
  * @property int $is_active
+ * @property float $latitude
+ * @property float $longitude
+ * @property float $distance
+ * @property int $area_id
+ * @property PreferredJobLocation $area
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at              SOFT DELETE WAS REMOVED DUE TO LACK OF USING IT IN JOINs
@@ -25,7 +32,6 @@ use Sofa\Eloquence\Mappable;
  * @method static Builder|Location whereCreatedAt($value)
  * @method static Builder|Location whereDeletedAt($value)
  * @method static Builder|Location whereDescription($value)
- * @method static Builder|Location whereFreeTrialPeriod($value)
  * @method static Builder|Location whereId($value)
  * @method static Builder|Location whereIsActive($value)
  * @method static Builder|Location whereUpdatedAt($value)
@@ -40,16 +46,19 @@ class Location extends \Eloquent
     protected $primaryKey = 'id';
 
     protected $maps = [
-        'locationId'      => 'id',
-        'freeTrialPeriod' => 'free_trial_period',
-        'isActive'        => 'is_active',
+        'locationId' => 'id',
+        'isActive'   => 'is_active',
     ];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
-    protected $fillable = ['locationId', 'freeTrialPeriod', 'isActive'];
-    protected $appends = ['locationId', 'freeTrialPeriod', 'isActive'];
+    protected $fillable = ['locationId', 'isActive', 'is_active'];
+    protected $appends = ['locationId', 'isActive'];
 
     protected $dates = ['deleted_at'];
 
+    public function area()
+    {
+        return $this->belongsTo(PreferredJobLocation::class, 'area_id');
+    }
 
     /**
      * @param $zipcode

@@ -44,6 +44,10 @@ return [
     'stripeCoupons' => [
         'semiAnnual' => env('STRIPE_COUPON_SEMI_ANNUAL'),
         'annual'     => env('STRIPE_COUPON_ANNUAL'),
-    ]
+    ],
+
+    'zipcode' => [
+        'key'    => env('ZIPCODE_KEY'),
+    ],
 
 ];

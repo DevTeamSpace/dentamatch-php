@@ -10,17 +10,19 @@ $(document).ajaxError(function (e, request, settings, exception) {
     });
 $(function () {
 
-  function makeDataTable(selector, entityUrl, columns, active ) {
+  function makeDataTable(selector, entityUrl, columns, active, noAction ) {
     if (active) {
       columns.push( {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
           return row.is_active? 'Yes' : 'No';
         }});
     }
 
-    columns.push({data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
-        return '<a href="' + public_path + entityUrl + '/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;\n\
+    if (!noAction) {
+      columns.push({data: 'action', name: 'action',searchable:false,render: function (data, type, row) {
+          return '<a href="' + public_path + entityUrl + '/'+row.id+'/edit"  class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> Edit</a>&nbsp;\n\
                 <a href="#" data-href="'+  public_path + entityUrl + '/'+row.id+'/delete" data-toggle="modal" data-target="#confirm-delete" class="delete btn btn-xs btn-default"><i class="fa fa-remove"></i> Delete</a>';
-      }});
+        }});
+    }
 
     $(selector).DataTable({
       processing: true,
@@ -55,8 +57,20 @@ $(function () {
     {data: 'affiliation_name', name: 'affiliation_name',searchable:true},
   ], true);
 
-  makeDataTable('#location_list', 'location', [
-    {data: 'zipcode', name: 'zipcode',searchable:true},
+  makeDataTable('#location_list', 'location/' + $('#location_list').data('areaId'), [
+    {data: 'zipcode', name: 'zipcode', searchable:true},
+    {data: 'city', name: 'city', searchable:true},
+    {data: 'county', name: 'county', searchable:true},
+    {data: 'state', name: 'state', searchable:true},
+  ], true, true);
+
+  makeDataTable('#area_list', 'area', [
+    {data: 'preferred_location_name', name: 'preferred_location_name', searchable:true},
+    {data: 'anchor_zipcode', name: 'zipcode', searchable:false},
+    {data: 'radius', name: 'radius', searchable:false},
+    {data: 'locations_count', name: 'locations_count',searchable:false,render: function (data, type, row) {
+        return '<a href="/cms/location/'+ row.id +'" target="_blank">Count: '+ data + '</a>';
+      }},
   ], true);
 
   makeDataTable('#jobtitle_list', 'jobtitle', [
@@ -590,6 +604,10 @@ $(function () {
     });
 
   $('#confirm-delete').on('show.bs.modal', function(e) {
+    var $helper = $('#delete-record-message');
+    if ($helper.length) {
+      $(this).find('.modal-body').html($helper.html());
+    }
     $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
   });
 

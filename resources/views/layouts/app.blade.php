@@ -19,6 +19,7 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('styles/dataTables.responsive.css')}}" >
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ asset('styles/cms.css')}}" >
 @yield('css')
 @yield('innerViewCss')
     <style>
@@ -74,7 +75,7 @@
                                 </a>
 
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('cms/location/index') }}">Location</a></li>
+                                <li><a href="{{ url('cms/area/index') }}">Areas</a></li>
                                 <li><a href="{{ url('cms/affiliation/index') }}">Affiliations</a></li>
                                 <li><a href="{{ url('cms/jobtitle/index') }}">Job Title</a></li>
                                 <li><a href="{{ url('cms/officetype/index') }}">Office Type</a></li>

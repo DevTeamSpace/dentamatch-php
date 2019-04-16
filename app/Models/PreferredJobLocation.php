@@ -12,9 +12,12 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property string $preferred_location_name
  * @property int|null $is_active
+ * @property int $anchor_zipcode
+ * @property int $radius
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property string|null $deleted_at
+ * @property Location[] $locations
  * @method static Builder|PreferredJobLocation newModelQuery()
  * @method static Builder|PreferredJobLocation newQuery()
  * @method static Builder|PreferredJobLocation query()
@@ -46,6 +49,11 @@ class PreferredJobLocation extends Model
     protected $hidden = [
         'created_at', 'updated_at', 'deleted_at' // todo soft delete?
     ];
+
+    public function locations()
+    {
+        return $this->hasMany(Location::class, 'area_id');
+    }
 
     public static function getAllPreferredJobLocation()
     {

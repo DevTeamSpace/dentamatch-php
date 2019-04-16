@@ -7,19 +7,17 @@
       <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-default">
           <div class="panel-heading">Location List
-            <div class="span6 pull-right" style="text-align:right">
-              <a href="{{ URL::to("cms/location/create") }}">Add Location</a>
-            </div>
           </div>
 
           <div class="panel-body">
-            <table id="location_list" class="display responsive nowrap" cellspacing="0" width="100%">
+            <table id="location_list" class="display responsive nowrap" cellspacing="0" width="100%" data-area-id="{{ $areaId }}">
               <thead>
               <tr>
                 <th>Zipcode</th>
-                <!--<th>Free Trail Period</th>-->
+                <th>City</th>
+                <th>County</th>
+                <th>State</th>
                 <th>Active</th>
-                <th>Action</th>
               </tr>
               </thead>
             </table>

@@ -150,13 +150,18 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::post('updatePassword', 'Cms\UserController@updatePassword');
     });
 
-    Route::group(['prefix' => 'location/'], function () {
+    Route::group(['prefix' => 'area/'], function () {
         Route::get('index', 'Cms\LocationController@index');
-        Route::get('list', 'Cms\LocationController@locationsList');
+        Route::get('list', 'Cms\LocationController@areaList');
         Route::get('{id}/edit', 'Cms\LocationController@edit');
         Route::get('create', 'Cms\LocationController@create');
         Route::post('store', 'Cms\LocationController@store');
         Route::get('{id}/delete', 'Cms\LocationController@delete');
+    });
+
+    Route::group(['prefix' => 'location'], function () {
+        Route::get('{id}', 'Cms\LocationController@locationIndex');
+        Route::get('{id}/list', 'Cms\LocationController@locationList');
     });
 
     Route::group(['prefix' => 'affiliation/'], function () {
