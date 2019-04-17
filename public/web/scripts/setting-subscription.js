@@ -5,6 +5,7 @@ var SubscriptionModel = function (data) {
   me.subscriptionActivation = ko.observable();
   me.subscriptionAutoRenewal = ko.observable();
   me.subscriptionTrialEnd = ko.observable();
+  me.subscriptionCancelAt = ko.observable();
   me.subscriptionId = ko.observable('');
 
   me._init = function (d) {
@@ -13,7 +14,8 @@ var SubscriptionModel = function (data) {
     me.subscriptionAmount("$" + planCost);
     me.subscriptionActivation(moment.unix(d.created).utc().format('LL'));
     me.subscriptionAutoRenewal(moment.unix(d.current_period_end).utc().format('LL'));
-    me.subscriptionAutoRenewal(moment.unix(d.current_period_end).utc().format('LL'));
+    me.subscriptionCancelAt(moment.unix(d.cancel_at).utc().format('LL'));
+    me.subscriptionTrialEnd(moment.unix(d.trial_end).utc().format('LL'));
     me.subscriptionPlan(d.plan.nickname);
   }
   me._init(data);
@@ -45,6 +47,7 @@ var SubscriptionVM = function () {
   me.editExpiry = ko.observable('');
   me.editCardId = ko.observable('');
   me.isSubscribed = ko.observable(true);
+  me.isOnTrial = ko.observable(false);
 
   me.submitModalHandler = null;
   me.onModalSubmit = function (d, e) {
@@ -72,6 +75,11 @@ var SubscriptionVM = function () {
         for (i in d.data.subscriptions.data) {
           var subscription = d.data.subscriptions.data[i];
           me.subscription.push(new SubscriptionModel(subscription));
+
+          if (subscription.trial_end > moment.utc().unix()) {
+            me.isOnTrial(true);
+          }
+
           if (subscription.cancel_at_period_end === false) {
             me.isSubscribed(true);
             me.currentPlanNickname(subscription.plan.nickname);

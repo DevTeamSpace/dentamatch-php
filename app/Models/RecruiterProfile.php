@@ -49,7 +49,7 @@ class RecruiterProfile extends Model
 
     protected $table = 'recruiter_profiles';
 
-    protected $fillable = ['user_id', 'is_subscribed', 'accept_term', 'office_name', 'office_desc'];
+    protected $fillable = ['user_id', 'accept_term', 'office_name', 'office_desc'];
 
     public function recruiter()
     {

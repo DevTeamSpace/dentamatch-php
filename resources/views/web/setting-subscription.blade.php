@@ -39,6 +39,14 @@
                       <td>Auto Renewal Date</td>
                       <th data-bind="text: subscriptionAutoRenewal"></th>
                     </tr>
+                    <tr data-bind="hidden: $root.isSubscribed">
+                      <td>Will expire on</td>
+                      <th data-bind="text: subscriptionCancelAt"></th>
+                    </tr>
+                    <tr data-bind="visible: $root.isOnTrial">
+                      <td>Trial ends on</td>
+                      <th data-bind="text: subscriptionTrialEnd"></th>
+                    </tr>
                     </tbody>
                   </table>
                   <p data-bind="visible: $root.isSubscribed">Your next charge of <span

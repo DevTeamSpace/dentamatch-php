@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\RecruiterProfile;
 use Closure;
-use Illuminate\Support\Facades\Auth;
 
 class Subscription
 {
@@ -16,8 +16,8 @@ class Subscription
      */
     public function handle($request, Closure $next)
     {
-        $subscribe = \App\Models\RecruiterProfile::where(['user_id' => Auth::user()->id])->first();
-        if($subscribe && $subscribe['is_subscribed'] == 1){
+        $recruiter = RecruiterProfile::current();
+        if($recruiter && ($recruiter->is_subscribed || $recruiter->subscribed())){
             $result = $next($request);
         }else{
             $result = redirect('setting-subscription');

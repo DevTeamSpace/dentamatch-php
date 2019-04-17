@@ -42,6 +42,11 @@ Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm'
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 
+Route::post(
+    config('services.stripe.webhook.url'),
+    '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook'
+);
+
 
 Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
     Route::group(['middleware' => 'recruiter'], function () {

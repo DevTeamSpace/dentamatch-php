@@ -27,7 +27,7 @@
             <p class="mr-b-10">Semi-Annual</p>
             <div class="subcription-price pos-rel">
               <span class="price-symbol ">$</span>
-              <span class="price" data-bind="text: halfYearPrice"></span>
+              <span class="price" data-bind="text: halfYearPrice"></span>/month
               <p data-bind="visible: $root.isNewCustomer">plus a 1 month free trial</p>
               <input type="hidden" id="stype" value="2">
             </div>
@@ -42,7 +42,7 @@
             <p class="mr-b-10">Annual</p>
             <div class="subcription-price pos-rel">
               <span class="price-symbol ">$</span>
-              <span class="price" data-bind="text: fullYearPrice"></span>
+              <span class="price" data-bind="text: fullYearPrice"></span>/month
               <p data-bind="visible: $root.isNewCustomer">plus a 1 month free trial</p>
               <p class="text-uppercase">Best Value</p>
               <input type="hidden" id="stype" value="3">

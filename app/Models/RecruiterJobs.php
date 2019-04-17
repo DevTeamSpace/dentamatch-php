@@ -150,7 +150,28 @@ class RecruiterJobs extends Model
             ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
             ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
             ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'recruiter_offices.user_id')
-            ->where('recruiter_profiles.is_subscribed', '=', 1)
+//            ->where(
+//                function ($query) {
+//                $query->where('recruiter_profiles.is_subscribed', '=', 1)->orWhereRaw(Db::raw("
+//                EXISTS(SELECT id FROM subscriptions WHERE subscriptions.recruiter_profile_id = recruiter_profiles.id AND (
+//                 subscriptions.ends_at is null OR subscriptions.ends_at > '" .\Carbon\Carbon::now()."' OR (subscriptions.trial_ends_at IS NOT NULL and subscriptions.trial_ends_at > '" . \Carbon\Carbon::today() ."')))
+//                "));
+//            })
+            ->where(
+                function ($query) {
+                $query->where('recruiter_profiles.is_subscribed', '=', 1)->orWhereExists(function($subscription) {
+                    $subscription->select(DB::raw(1))
+                        ->from('subscriptions')
+                        ->whereRaw('subscriptions.recruiter_profile_id = recruiter_profiles.id')
+                        ->where(function($subQuery){
+                            $subQuery->whereNull('ends_at')
+                                ->orWhere('ends_at', '>', Carbon::now())
+                                ->orWhereNotNull('trial_ends_at')
+                                ->where('trial_ends_at', '>', Carbon::today());
+                        });
+
+                });
+            })
             ->whereIn('job_templates.job_title_id', $reqData['jobTitle']);
 
         $searchQueryObj->join('template_skills', function ($query) use ($jobseekerSkills) {
@@ -221,6 +242,7 @@ class RecruiterJobs extends Model
         $searchQueryObj->addSelect(DB::raw("count(distinct(tmp_skills.skill_id)) AS template_skills_count"));
         $searchQueryObj->addSelect(DB::raw("IF(count(distinct(template_skills.skill_id))>0, (count(distinct(template_skills.skill_id))/count(distinct(tmp_skills.skill_id)))*100,0) AS percentaSkillsMatch"));
 
+//        dd($searchQueryObj->toSql());
         $total = $searchQueryObj->distinct('recruiter_jobs.id')->count('recruiter_jobs.id');
         $page = $reqData['page'];
         $limit = RecruiterJobs::LIMIT;

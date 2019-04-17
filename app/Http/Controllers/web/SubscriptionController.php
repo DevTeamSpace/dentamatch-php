@@ -43,7 +43,7 @@ class SubscriptionController extends Controller
     public function getSubscription()
     {
         $recruiter = RecruiterProfile::current();
-        if ($recruiter->is_subscribed) {
+        if ($recruiter->subscribed()) {
             return redirect('jobtemplates');
         }
         if ($recruiter->offices()->count() === 0) {
@@ -153,17 +153,10 @@ class SubscriptionController extends Controller
     {
         try {
             $customer = RecruiterProfile::current()->asStripeCustomer();
-//            $customer->s
         } catch (InvalidRequest $e) {
             return WebResponse::successResponse();
         }
 
-//        foreach ($customer->subscriptions['data'] as $subscription) {
-//            if ($subscription['trial_end'] != null && $subscription['current_period_end'] == $subscription['trial_end']) {
-//                $trialEnd = date('Y-m-d', $subscription['trial_end']);
-//                $subscription['current_period_end'] = strtotime($trialEnd . '+ ' . $subscription['plan']['interval_count'] . ' ' . $subscription['plan']['interval']);
-//            }
-//        }
         return WebResponse::dataResponse($customer);
     }
 
@@ -255,14 +248,7 @@ class SubscriptionController extends Controller
         /** @var Subscription $recruiterSubscription */
         $recruiterSubscription = RecruiterProfile::current()->subscriptions()->where('stripe_id', $request->subscriptionId)->firstOrFail();
         $plan = $this->stripeUtils->getPlanIdByNickname($request->plan);
-        $recruiterSubscription->skipTrial()->swap($plan);
-
-//        $subscription = \Stripe\Subscription::retrieve($recruiterSubscription->subscription_id);
-//        $subscription->plan = $plan;
-//        $subscription->trial_end = "now";
-//        $subscription->save();
-//        RecruiterProfile::whereUserId($recruiterSubscription->recruiter_id)->update(['is_subscribed' => 1]);
-//        $recruiterSubscription->update(['cancel_at_period_end' => false]);
+        $recruiterSubscription->swap($plan);
         return WebResponse::successResponse(trans('messages.subscription_plan_changed'));
     }
 
