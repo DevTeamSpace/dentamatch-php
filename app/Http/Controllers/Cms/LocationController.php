@@ -100,7 +100,7 @@ class LocationController extends Controller
                 $zipLocation->county = array_get($zipData, 'County');
                 $zipLocation->latitude = array_get($zipData, 'Latitude');
                 $zipLocation->longitude = array_get($zipData, 'Longitude');
-                $zipLocation->distance = array_get($zipData, 'Distance');
+                $zipLocation->distance = array_get($zipData, 'Distance', 0);
                 $zipLocation->description = join(', ', [$zipLocation->city, $zipLocation->state]);
                 $zipLocation->area_id = $location->id;
                 $zipLocation->save();

@@ -29,9 +29,15 @@ class LocationUtils
         ];
 
         $url = "$this->apiUrl?" .  http_build_query($params);
-        $response= preg_replace('/[\x00-\x1F\x80-\xFF]/', '', file_get_contents($url));
-        $data = json_decode($response, true);
+        $data = json_decode($this->removeBOM(file_get_contents($url)), true);
         return array_get($data, 'DataList', []);
+    }
+
+    private function removeBOM($data) {
+        if (0 === strpos(bin2hex($data), 'efbbbf')) {
+            return substr($data, 3);
+        }
+        return $data;
     }
 
 }

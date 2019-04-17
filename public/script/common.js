@@ -59,6 +59,7 @@ $(function () {
 
   makeDataTable('#location_list', 'location/' + $('#location_list').data('areaId'), [
     {data: 'zipcode', name: 'zipcode', searchable:true},
+    {data: 'distance', name: 'distance', searchable:false},
     {data: 'city', name: 'city', searchable:true},
     {data: 'county', name: 'county', searchable:true},
     {data: 'state', name: 'state', searchable:true},

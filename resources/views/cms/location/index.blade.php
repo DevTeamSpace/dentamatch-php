@@ -14,6 +14,7 @@
               <thead>
               <tr>
                 <th>Zipcode</th>
+                <th>Distance</th>
                 <th>City</th>
                 <th>County</th>
                 <th>State</th>
