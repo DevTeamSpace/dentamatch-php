@@ -35,7 +35,9 @@ class JobtemplateController extends Controller
     public function listJobTemplates()
     {
         try {
+            $showHelp = session()->pull('newUser', false);
             $this->viewData['jobTemplates'] = JobTemplates::getAllUserTemplates(Auth::user()->id);
+            $this->viewData['showHelp'] = $showHelp;
 
             return $this->returnView('list');
         } catch (\Exception $e) {

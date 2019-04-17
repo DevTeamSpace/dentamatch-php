@@ -4,6 +4,10 @@
 
 
   <div class="container pd-t-30">
+    <button type="button" class="deleteTemplate btn btn-link-noline" data-toggle="modal" data-target="#show-help">
+      <span class="fa fa-question-circle"></span>
+      About this page
+    </button>
     <div class="equalheight">
       <div class="col-sm-12  container-color border-block offset30">
         <div class="box text-center center-block">
@@ -91,14 +95,32 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="show-help" tabindex="-1" role="dialog" aria-labelledby="Show Help" aria-hidden="true">
+    <div class="modal-dialog custom-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">About position templates</h4>
+        </div>
+        <div class="modal-body text-center">
+         <ul class="text-center" style="list-style: disc; display: inline-block">
+           <li class="text-left">Create a profile for each of the job positions you have in your office.</li>
+           <li class="text-left">When you need to fill a position simply grab from your position profiles.</li>
+           <li class="text-left">Indicate whether it's for full-time, part-time or temp and post. <br> It's that simple!</li>
+         </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
 @endsection
 
 @section('js')
   <script>
     $('.deleteTemplate').click(function () {
-      var templateId = $(this).data('templateid');
-      $('#templateId').val(templateId);
-      console.log(templateId);
+      $('#templateId').val($(this).data('templateid'));
     });
     $('.info-block img').on("mouseenter", function () {
       $(this).closest('div.mainTemplateBlock').children('div.defaultBlock').addClass('hide');
@@ -109,5 +131,9 @@
       $(this).closest('div.mainTemplateBlock').children('div.hoverBlock').addClass('hide');
 
     });
+
+    @if($showHelp)
+      $('#show-help').modal('show');
+    @endif
   </script>
 @endsection

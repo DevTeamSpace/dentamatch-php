@@ -120,6 +120,7 @@ class SignupController extends Controller
     public function getTermsAndCondition(Request $request)
     {
         $request->session()->put('tutorial', 1);
+        $request->session()->put('newUser', 1);
         return view('web.terms-conditions');
     }
 
