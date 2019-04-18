@@ -80,7 +80,7 @@
               <div class="form-group">
                 <label>Office Phone Number</label>
                 <input id="phoneNumber" name="phoneNumber" value="{{ old('phoneNumber') }}" type="text"
-                       autocomplete="off"
+                       autocomplete="new-password"
                        class="form-control phone-number" placeholder="Office Phone Number" data-parsley-required
                        data-parsley-required-message="Please, Provide a valid Phone number of 10 digits"
                        data-parsley-minlength-message="Please, Provide a valid Phone number of 10 digits"
