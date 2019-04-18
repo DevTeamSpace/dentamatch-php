@@ -73,9 +73,9 @@
       setTimeout(function () {
         var os = getMobileOperatingSystem();
         if (os === 'iOS')
-          window.location = 'https://itunes.apple.com/us/app/id1377024736';
+          window.location = 'https://itunes.apple.com/us/app/dentamatch/id1185779291';
         if (os === 'Android')
-          window.location = 'https://play.google.com/store/apps/details?id=ru.doubletapp.umn';
+          window.location = 'https://play.google.com/store/apps/details?id=com.appster.dentamatch';
       }, 1000);
     };
 
@@ -88,8 +88,8 @@
   <h1 class="pg-heading">DentaMatch mobile app</h1>
 
   <div class="download-buttons">
-    <a href="https://itunes.apple.com/us/app/id1377024736"><img src="{{ asset('web/images/app-store.png') }}" alt=""></a>
-    <a href="https://play.google.com/store/apps/details?id=ru.doubletapp.umn"><img src="{{ asset('web/images/google-play.png') }}" alt=""></a>
+    <a href="https://itunes.apple.com/us/app/dentamatch/id1185779291" target="_blank"><img src="{{ asset('web/images/app-store.png') }}" alt=""></a>
+    <a href="https://play.google.com/store/apps/details?id=com.appster.dentamatch" target="_blank"><img src="{{ asset('web/images/google-play.png') }}" alt=""></a>
   </div>
 
 </section>
