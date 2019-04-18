@@ -45,7 +45,7 @@ class CertificateApiController extends Controller
             $array = ['id' => $certificate['id'], 'certificateName' => $certificate['certificate_name'], 'validityDate' => '', 'imagePath' => ''];
             if (!empty($userCertificationData[$certificate['id']])) {
                 $array['validityDate'] = $userCertificationData[$certificate['id']]['validity_date'];
-                $array['imagePath'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $userCertificationData[$certificate['id']]['image_path'];
+                $array['imagePath'] = config('services.aws.url') . '/' . config('services.aws.bucket') . '/' . $userCertificationData[$certificate['id']]['image_path'];
             }
 
             $certificationArray[] = $array;
@@ -74,7 +74,7 @@ class CertificateApiController extends Controller
             JobseekerCertificates::updateOrCreate(
                 ['user_id' => $userId, 'certificate_id' => $request->certificateId], ['image_path' => $response['file']]
             );
-            $url['imgUrl'] = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $response['file'];
+            $url['imgUrl'] = config('services.aws.url') . '/' . config('services.aws.bucket') . '/' . $response['file'];
             ApiResponse::chkProfileComplete($userId);
             $response = ApiResponse::successResponse(trans("messages.certificate_successful_update"), $url);
         } else {

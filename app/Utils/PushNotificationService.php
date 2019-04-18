@@ -54,7 +54,7 @@ class PushNotificationService
             if (strlen($device_identifier) < 22)
                 return false;
 
-            if (env('APP_ENV') == 'local') {
+            if (config('app.env') == 'local') {
                 $config = config('pushnotification.apple.sandbox');
                 $certFile = $config['pem_file'];
                 $url = $config['url'];

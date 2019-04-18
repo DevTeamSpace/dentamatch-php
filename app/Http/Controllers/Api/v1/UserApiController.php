@@ -172,7 +172,7 @@ class UserApiController extends Controller
                     }
                     $imgUrl = "";
                     if ($userData['profile_pic']) {
-                        $imgUrl = env('AWS_URL') . '/' . env('AWS_BUCKET') . '/' . $userData['profile_pic'];
+                        $imgUrl = config('services.aws.url') . '/' . config('services.aws.bucket') . '/' . $userData['profile_pic'];
                     }
                     $userArray['userDetails'] = [
                         'id'                     => $userData['id'],

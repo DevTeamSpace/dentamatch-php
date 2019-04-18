@@ -72,14 +72,14 @@ trait FileRepositoryS3 {
 
             $path = $this->getPath($type, $id);
 
-            $this->s3->putObjectFile($image->getRealPath(), env('AWS_BUCKET_NAME'), $path . $filename);
+            $this->s3->putObjectFile($image->getRealPath(), config('services.aws.bucket_name'), $path . $filename);
 
             if ($thumb == 1) {
                 $f = explode(".", $filename);
 
                 $thumnail_name = $f[0] . "_thumb.png";
                 exec('ffmpeg -i ' . $image->getRealPath() . ' -f image2 -vframes 1 ' . public_path('thumbnails/' . $thumnail_name) . ' > storage/logs/ffmpeglog.log');
-                $this->s3->putObjectFile(public_path('thumbnails/' . $thumnail_name), env('AWS_BUCKET_NAME'), $path . $thumnail_name);
+                $this->s3->putObjectFile(public_path('thumbnails/' . $thumnail_name), config('services.aws.bucket_name'), $path . $thumnail_name);
                 unlink(public_path('thumbnails/' . $thumnail_name));
             }
         }

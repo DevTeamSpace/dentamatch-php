@@ -293,7 +293,7 @@ class SignupController extends Controller
                 Mail::to($email)->queue(new UserActivation($name, $url));
 
                 if (!empty($reqData['license']) && !empty($reqData['state'])) {
-                    $adminEmail = env('ADMIN_EMAIL');
+                    $adminEmail = config('app.admin_email');
                     Mail::to($adminEmail)->queue(new AdminVerifyJobseeker($name, $email));
                 }
 

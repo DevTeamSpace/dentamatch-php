@@ -125,7 +125,7 @@ class UserProfileApiController extends Controller
                 $userLicenData = User::getUser($userId);
                 $userName = $userLicenData['first_name'] . ' ' . $userLicenData['last_name'];
                 $userEmail = $userLicenData['email'];
-                $adminEmail = env('ADMIN_EMAIL');
+                $adminEmail = config('app.admin_email');
                 Mail::to($adminEmail)->queue(new AdminVerifyJobseeker($userName, $userEmail));
             }
             $isJobSeekerVerified = 0;
@@ -278,7 +278,7 @@ class UserProfileApiController extends Controller
                     $userLicenData = User::getUser($userId);
                     $userName = $userLicenData['first_name'] . ' ' . $userLicenData['last_name'];
                     $userEmail = $userLicenData['email'];
-                    $adminEmail = env('ADMIN_EMAIL');
+                    $adminEmail = config('app.admin_email');
                     Mail::to($adminEmail)->queue(new AdminVerifyJobseeker($userName, $userEmail));
                 }
                 $isJobSeekerVerified = 0;
@@ -288,7 +288,7 @@ class UserProfileApiController extends Controller
                 $userLicenData = User::getUser($userId);
                 $userName = $userLicenData['first_name'] . ' ' . $userLicenData['last_name'];
                 $userEmail = $userLicenData['email'];
-                $adminEmail = env('ADMIN_EMAIL');
+                $adminEmail = config('app.admin_email');
                 Mail::to($adminEmail)->queue(new AdminVerifyJobseeker($userName, $userEmail));
             }
             $isJobSeekerVerified = 0;

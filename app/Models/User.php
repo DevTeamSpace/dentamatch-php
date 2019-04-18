@@ -229,7 +229,7 @@ class User extends Authenticatable
             $return = $userModel->toArray();
 
             if ($return['profile_pic'] && $return['profile_pic'] != "") {
-                $profilePic = env('AWS_URL') . DIRECTORY_SEPARATOR . env('AWS_BUCKET') . DIRECTORY_SEPARATOR . $return['profile_pic'];
+                $profilePic = config('services.aws.url') . DIRECTORY_SEPARATOR . config('services.aws.bucket') . DIRECTORY_SEPARATOR . $return['profile_pic'];
             }
 
             if (($return['dental_state_board']) && $return['dental_state_board'] != "") {

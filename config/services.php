@@ -55,4 +55,12 @@ return [
         'key'    => env('ZIPCODE_KEY'),
     ],
 
+    'aws' => [
+        'region' => env('AWS_REGION'),
+        'bucket' => env('AWS_BUCKET'),
+        'access_key_id' => env('AWS_ACCESS_KEY_ID'),
+        'secret_access_key' => env('AWS_SECRET_ACCESS_KEY'),
+        'url' => env('AWS_URL'),
+    ]
+
 ];

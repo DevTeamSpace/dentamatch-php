@@ -214,4 +214,6 @@ return [
     
     'defaul_product_per_page' => 20,
     'socketUrl' => env('SOCKET_URL', 'http://localhost:3000'),
+
+    'admin_email' => env('ADMIN_EMAIL'),
 ];

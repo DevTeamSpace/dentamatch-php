@@ -228,8 +228,8 @@ class JobSeekerController extends Controller
 
     public function jobSeekerVerificationView($id)
     {
-        $s3Path = env('AWS_URL');
-        $s3Bucket = env('AWS_BUCKET');
+        $s3Path = config('services.aws.url');
+        $s3Bucket = config('services.aws.bucket');
         $s3Url = $s3Path . DIRECTORY_SEPARATOR . $s3Bucket . DIRECTORY_SEPARATOR;
         $userProfile = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
             ->join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'users.id')
