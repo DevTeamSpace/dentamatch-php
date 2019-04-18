@@ -380,7 +380,7 @@
               <div class="carousel-inner">
                 <div class="active item">
 
-                  <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
+                  <div class="onboard-img"><img src="{{asset('web/images/tutorial/icon-01.svg')}}" alt=""></div>
                   <h3 class="onboard-title">Step 1: Let’s make this easy</h3>
                   <blockquote>
                     <p>Welcome to DentaMatch! Follow these steps to build your profile and get started.
@@ -391,7 +391,7 @@
                 </div>
                 <div class="item">
 
-                  <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
+                  <div class="onboard-img"><img src="{{asset('web/images/tutorial/icon-02.svg')}}" alt=""></div>
                   <h3 class="onboard-title">Step 2: Create a Template for each Position in your practice</h3>
                   <blockquote>
                     <p>We’re all about working smarter, so we offer Position Templates you can edit and repost as
@@ -403,7 +403,7 @@
                 </div>
                 <div class=" item">
 
-                  <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
+                  <div class="onboard-img"><img src="{{asset('web/images/tutorial/icon-03.svg')}}" alt=""></div>
                   <h3 class="onboard-title">Step 3: Post Jobs</h3>
                   <blockquote>
                     <p>When you need a temp or a new hire, just select from the list of positions you created and post
@@ -415,7 +415,7 @@
                 </div>
                 <div class=" item">
 
-                  <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
+                  <div class="onboard-img"><img src="{{asset('web/images/tutorial/icon-04.svg')}}" alt=""></div>
                   <h3 class="onboard-title">Step 4: Skip the Middleman</h3>
                   <blockquote>
                     <p>Invite candidates to accept a temp job with a just a click, and save your favorites for recall
@@ -426,7 +426,7 @@
                 </div>
                 <div class="item">
 
-                  <div class="onboard-img"><img src="{{asset('web/images/create_profile.png')}}" alt=""></div>
+                  <div class="onboard-img"><img src="{{asset('web/images/tutorial/icon-05.svg')}}" alt=""></div>
                   <h3 class="onboard-title">Step 5: Know What to Expect</h3>
                   <blockquote>
                     <p>Your Dashboard view keeps key actions and activities at-a-glance.
