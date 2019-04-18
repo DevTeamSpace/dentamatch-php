@@ -61,7 +61,8 @@
         <p class="text-center mr-t-35">Or you can update <a href="/edit-profile">your offices</a> information</p>
       </div>
 
-      <div class="subscription-terms mr-t-30">
+      <div class="subscription-terms mr-t-20">
+        <div class="mr-b-10"><a href="/edit-profile"><span class="fa fa-arrow-left"></span> Back to profile</a></div>
         <p><span>NO</span> Daily Temp Fees</p>
         <p><span>NO</span> Finders Fees</p>
         <p>Use DentaMatch as much as you need for a low subscription price</p>

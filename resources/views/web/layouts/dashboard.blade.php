@@ -23,7 +23,7 @@
   <link rel="stylesheet" href="{{asset('web/css/bootstrap-datetimepicker.css')}}">
   <link rel="stylesheet" href="{{asset('web/plugins/calender/css/fullcalendar.css')}}">
   <link rel="stylesheet" href="{{asset('web/plugins/custom-scroller/css/mCustomScrollbar.min.css')}}">
-  <link rel="stylesheet" href="{{asset('web/css/custom.css')}}">
+  <link rel="stylesheet" href="{{asset('web/css/custom.css?v=1.1')}}">
   <link rel="stylesheet" href="{{asset('web/css/style.css')}}">
   <link rel="stylesheet" href="{{asset('web/css/editor.css')}}">
   <link rel="stylesheet" href="{{asset('web/plugins/rating/tipi.css')}}">
