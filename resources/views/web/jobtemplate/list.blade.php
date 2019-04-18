@@ -6,7 +6,7 @@
   <div class="container pd-t-30">
     <button type="button" class="deleteTemplate btn btn-link-noline" data-toggle="modal" data-target="#show-help">
       <span class="fa fa-question-circle"></span>
-      About this page
+      About position templates
     </button>
     <div class="equalheight">
       <div class="col-sm-12  container-color border-block offset30">
@@ -17,7 +17,7 @@
             </div>
           </a>
           <div class="info-block"><!-- BODY BOX-->
-            <span class="info-block-text">Create New Job Listing Template</span>
+            <span class="info-block-text">Create New Position Template</span>
           </div>
 
         </div>
@@ -103,10 +103,11 @@
           <h4 class="modal-title">About position templates</h4>
         </div>
         <div class="modal-body text-center">
-         <ul class="text-center" style="list-style: disc; display: inline-block">
-           <li class="text-left">Create a profile for each of the job positions you have in your office.</li>
-           <li class="text-left">When you need to fill a position simply grab from your position profiles.</li>
-           <li class="text-left">Indicate whether it's for full-time, part-time or temp and post. <br> It's that simple!</li>
+         <ul class="text-center" style="display: inline-block">
+           <li class="text-left mr-b-10">Create a profile for each of the job positions you have in your office.</li>
+           <li class="text-left mr-b-10">When you need to fill a position simply grab from your position templates.</li>
+           <li class="text-left mr-b-10">Indicate whether it's for full-time, part-time or temp and post.</li>
+           <li class="text-left">It's that simple!</li>
          </ul>
         </div>
         <div class="modal-footer">

@@ -7,7 +7,7 @@
   <form data-parsley-validate method="post" action="{{ url('jobtemplates/saveOrUpdate') }}">
     <div class="customContainer center-block containerBottom">
       <div class="profieBox">
-        <h3>Create New Job Listing Template</h3>
+        <h3>Create New Position Template</h3>
         <div class="commonBox cboxbottom">
 
           <div class="form-group">
