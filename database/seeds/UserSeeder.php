@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
 
         $uniqueCode = uniqid();
         $user =  [
-            'email' => env('ADMIN_EMAIL'),
+            'email' => config('app.admin_email'),
             'password' => bcrypt('password'),
             'verification_code' => $uniqueCode,
             'is_verified' => 1
