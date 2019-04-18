@@ -64,5 +64,6 @@ class Kernel extends HttpKernel
         'subscription' => \App\Http\Middleware\Subscription::class,
         'ApiLog' => \App\Http\Middleware\ApiLog::class,
         'csp' => \App\Http\Middleware\ContentSecurityPolicy::class,
+        'redirect-recruiter' => \App\Http\Middleware\RedirectRecruiter::class,
     ];
 }
