@@ -6,7 +6,7 @@
   <div class="container" id="subscription">
     <div class="frm-cred-access-box subscription-box" style="display: none" data-bind="visible: subscriptionAvailable() || noSubscription()">
       <h4 class="frm-title">Our Subscription Plan</h4>
-      <p>Unlock unlimited template creation, job postings, candidate searches, messaging, and reports.</p>
+      <p>Unlock unlimited template creation, job postings, candidate searches, messaging and reports.</p>
       <div class="subs-holder text-center ">
         <!--ko foreach: subscriptionDetails-->
         <div class="subscription-inr-box ">

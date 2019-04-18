@@ -64,7 +64,7 @@ var SubscriptionVM = function () {
       var customer = d.data;
       if (d.success && (!customer || !d.data.subscriptions.total_count)) {
         me.noSubscription(true);
-        me.noSubscriptionDetails('No subscription availed.');
+        me.noSubscriptionDetails('No available subscriptions found.');
         location.href = 'subscription-detail';
       } else {
         me.visibleSubscription(true);
