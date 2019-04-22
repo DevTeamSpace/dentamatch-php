@@ -296,7 +296,9 @@ class SearchApiController extends Controller
                 $wantedDates = $request->input('jobDates', []);
 
                 $seekerCanWorkOnDates = $jobSeeker->tempDates()
-                    ->whereIn('temp_job_date', $wantedDates)
+                    ->when(!empty($wantedDates), function ($subquery) use ($wantedDates) {
+                        $subquery->whereIn('temp_job_date', $wantedDates);
+                    })
                     ->whereNotIn('temp_job_date', $jobSeeker->tempJobsHired()->select('job_date')->getQuery())
                     ->pluck('temp_job_date')->toArray();
 
