@@ -170,8 +170,7 @@ class NotificationUtils
             Notification::createNotification($data);
         } else if ($notification['email']) {
             $name = $notification['name'];
-            Mail::to('catthr.grr@gmail.com')->queue(new $notification['mail']($name));
-//            Mail::to($notification['email'])->queue(new $notification['mail']($name));
+            Mail::to($notification['email'])->queue(new $notification['mail']($name));
         }
     }
 
