@@ -249,16 +249,10 @@
                              /assets/img/team/photo-1-copy@3x.jpg 3x"
                          alt="Jeffrey Mortensen"
                          class="team-item__photo">
-                    <p class="team-item__text"><strong>Jeffrey Mortensen</strong> was born and raised in Ogden Utah. After graduating from the
-                        University Of Washington School Of Dentistry in 1998 he moved to Palo Alto, CA to do a residency
-                        program at the Veterans Hospital. Dr. Brown started his own private practice nearly 20 years ago
-                        in the Financial District of San Francisco. His professional career was profoundly influenced by
-                        his 10 year commitment to the Marin County Public Dental Clinic. Private practice and public
-                        health have taught him how to manage, inspire, and lead. One of the most important lessons he
-                        has learned in the past 20 years and which he carries into all aspects of his patient care is
-                        this- all efforts, roads, journeys, should lead to the improved health of the patient. It’s his
-                        belief that DentaMatch will create a space where everyone is more prepared, educated, informed
-                        about their work choices so that in the end, the patient receives the best care possible.</p>
+                    <p class="team-item__text"><strong>Jeffrey Mortensen</strong> has had successful tenures at multiple healthcare product companies.  Most recently he was with Patterson Dental for 11+ years providing consulting services and solutions to dental practices.
+                      <br> Jeff is an industry expert with experience in optimizing workflow systems and the creation of successful go-to-market strategies.
+                      The development of DentaMatch is in response to the overwhelming demand for an easier, faster more economic solution for sourcing talent specific to the needs of the dental practice.
+                      <br> Jeff currently resides in Los Angeles.</p>
                     <span class="btn-read-more">Read more</span>
                     <span class="btn-read-more btn-read-more--up">Roll Up</span>
                 </li>
@@ -269,16 +263,9 @@
                              /assets/img/team/photo-1-copy-2@3x.jpg 3x"
                          alt="Matt Belitsky"
                          class="team-item__photo">
-                    <p class="team-item__text"><strong>Matt Belitsky</strong> was born and raised in Ogden Utah. After graduating from the
-                        University Of Washington School Of Dentistry in 1998 he moved to Palo Alto, CA to do a residency
-                        program at the Veterans Hospital. Dr. Brown started his own private practice nearly 20 years ago
-                        in the Financial District of San Francisco. His professional career was profoundly influenced by
-                        his 10 year commitment to the Marin County Public Dental Clinic. Private practice and public
-                        health have taught him how to manage, inspire, and lead. One of the most important lessons he
-                        has learned in the past 20 years and which he carries into all aspects of his patient care is
-                        this- all efforts, roads, journeys, should lead to the improved health of the patient. It’s his
-                        belief that DentaMatch will create a space where everyone is more prepared, educated, informed
-                        about their work choices so that in the end, the patient receives the best care possible.</p>
+                    <p class="team-item__text"><strong>Matt Belitsky</strong> worked as a Salesforce consultant for 10+ years helping rapidly growing startups scale to prove a repeatable revenue model.
+                      <br> Recently, he’s tackled the post-Sales side of the business as a thought leader and executive focused on retention and expansion. He joins DentaMatch as a growth expert to quickly activate hot markets, building marketplace inventory- both talent and offices.
+                      <br>He’s based in San Francisco.</p>
                     <span class="btn-read-more">Read more</span>
                     <span class="btn-read-more btn-read-more--up">Roll Up</span>
                 </li>
@@ -297,9 +284,7 @@
 <footer class="main-footer">
     <div class="d-container">
         <ul class="social-links">
-            <li class="social-link social-link--facebook"><a href="" target="_blank">Facebook</a></li>
-            <li class="social-link social-link--twitter"><a href="" target="_blank">Twitter</a></li>
-            <li class="social-link social-link--dribble"><a href="" target="_blank">Dribble</a></li>
+            <li class="social-link social-link--facebook"><a href="https://www.facebook.com/pg/dentalpositions/posts/" target="_blank">Facebook</a></li>
         </ul>
 
         <p class="copyright">

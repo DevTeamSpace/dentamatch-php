@@ -43,9 +43,7 @@
 <footer class="main-footer">
   <div class="d-container">
     <ul class="social-links">
-      <li class="social-link social-link--facebook"><a href="" target="_blank">Facebook</a></li>
-      <li class="social-link social-link--twitter"><a href="" target="_blank">Twitter</a></li>
-      <li class="social-link social-link--dribble"><a href="" target="_blank">Dribble</a></li>
+      <li class="social-link social-link--facebook"><a href="https://www.facebook.com/pg/dentalpositions/posts/" target="_blank">Facebook</a></li>
     </ul>
 
     <p class="copyright">
