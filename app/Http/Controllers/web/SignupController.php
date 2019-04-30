@@ -46,7 +46,9 @@ class SignupController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['postJobseekerSignUp', 'getJobseekerSignUp', 'postSignUp', 'postLogin', 'getLogin', 'logout', 'resetPassword', 'getTermsAndCondition', 'dashboard', 'getVerificationCode']]);
+        $this->middleware('auth', ['except' => ['postJobseekerSignUp', 'getJobseekerSignUp', 'postSignUp', 'postLogin',
+                                                'getLogin', 'getSignup',
+                                                'logout', 'resetPassword', 'getTermsAndCondition', 'dashboard', 'getVerificationCode']]);
     }
 
     /**
@@ -59,6 +61,18 @@ class SignupController extends Controller
             return redirect('users/dashboard');
         }
         return view('web.login');
+    }
+
+    /**
+     * Method to view signup page
+     * @return view
+     */
+    public function getSignup(Request $request)
+    {
+        if (Auth::check()) {
+            return redirect('users/dashboard');
+        }
+        return view('web.signup');
     }
 
     /**
@@ -140,7 +154,7 @@ class SignupController extends Controller
      */
     public function postSignUp(Request $request)
     {
-        $redirect = 'login';
+        $redirect = 'signup';
         try {
             DB::beginTransaction();
             $validation_rules = ['email' => 'required|email', 'password' => 'required'];

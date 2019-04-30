@@ -1,20 +1,18 @@
-@extends('web.layouts.signup')
+@extends('web.layouts.page')
 
 @section('content')
-<div class="container">
-    <div class="frm-cred-access-box">
-        <div class="row nopadding flex-block">
-            <div class="col-sm-6 nopadding denta-logo-box col">
-                <div class=" text-center ">
-                        <img src="{{asset('web/images/dentamatch-logo.png')}}">
-                </div>
-            </div>
-            <div class="col-sm-6 nopadding col">
-                <div class="frm-inr-credbox bg-white ">
-                    Your password is updated successfully.
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+  <main class="page-container page--candidate">
+    <section class="page-content">
+      <h1 class="page-title"></h1>
+
+      <p class="page-text">
+        Your password is updated successfully.
+      </p>
+
+    </section>
+
+    <section class="page-picture page-picture--remember">
+    </section>
+
+  </main>
 @endsection

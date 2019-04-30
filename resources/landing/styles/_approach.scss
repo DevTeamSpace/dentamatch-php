@@ -1,0 +1,131 @@
+.approach {
+  text-align: center;
+  //padding-bottom: 46px;
+  margin-bottom: 116px;
+  //border-bottom:  solid 1px #e7eaee;
+
+  &::after {
+    content: '';
+    display: block;
+    height: 1px;
+    margin-top: 46px;
+    background-color: #e7eaee;
+  }
+}
+
+.approach-title {
+  margin-bottom: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #7e8085;
+}
+
+.approach-list {
+  display: flex;
+  flex-direction: column;
+
+  margin: 0;
+  margin-top: 68px;
+  padding: 0;
+
+  list-style: none;
+}
+
+.approach-item {
+  img {
+    margin-bottom: 22px;
+    //display: block;
+  }
+
+  b {
+    margin-bottom: 8px;
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  span {
+    line-height: 1.57;
+  }
+
+  &+& {
+    margin-top: 50px;
+  }
+
+}
+
+@media (min-width: $break-split-page) {
+
+  .approach {
+    padding-top: 109px;
+    padding-bottom: 180px;
+    margin-bottom: 143px;
+    color: white;
+    background-image: linear-gradient(to bottom, #223371, #2f5bea);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("/assets/img/combined-shape-grad.svg");
+
+    .lead-text {
+      font-size: 34px;
+      font-weight: 600;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.35;
+      letter-spacing: normal;
+      text-align: center;
+      color: #f6f8f9;
+    }
+
+    &::after {
+      display: none;
+    }
+  }
+
+  .approach-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #f6f8f9;
+    margin-bottom: 10px;
+  }
+
+  .approach-list {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 89px;
+  }
+
+  .approach-item {
+    flex-basis: 30%;
+    max-width: 365px;
+    img {
+      margin-bottom: 35px;
+    }
+    b {
+      margin-bottom: 18px;
+      font-size: 28px;
+      font-weight: 600;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      text-align: center;
+      color: #f6f8f9;
+    }
+    span {
+      font-size: 20px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.6;
+      letter-spacing: normal;
+      text-align: center;
+      color: #f6f8f9;
+    }
+    &+& {
+      margin-top: 0;
+    }
+  }
+
+}

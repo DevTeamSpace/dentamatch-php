@@ -1,56 +1,49 @@
-@extends('web.layouts.signup')
+@extends('web.layouts.page')
 
 @section('content')
 
-<div class="container">
-    <div class="frm-cred-access-box">
+  <main class="page-container page--forgot">
+    <section class="page-content">
+      <h1 class="page-title">Forgot Password</h1>
 
-        <div class="row nopadding flex-block">
-            <div class="col-sm-6 nopadding denta-logo-box col">
-                <div class=" text-center">
-                    <img src="{{asset('web/images/dentamatch-logo.png')}}">
-                </div>
-            </div>
-            <div class="col-sm-6 nopadding col">
-                <div class="frm-inr-credbox bg-white">
+      <p class="page-text">
+        Enter your email address so we can email you a link to reset your password.
+      </p>
 
-                    <form id="forgot-frm" autocomplete="off" data-parsley-validate="" method="POST" action="{{ url('/password/email') }}" >
-                        {!! csrf_field() !!}
-                        <div class="floating-label">
-                            <div class="frm-title mr-b-25">Forgot Password</div>
-                            @if (session('status'))
-                            <div class="alert alert-success">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                {{ session('status') }}
-                            </div>
-                            @endif
-                            @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            <p >Enter your email address so we can email you a link to reset your password.</p>
-                            <div class="form-group {{ $errors->has('email') ? ' has-error' : '' }}">
+      <form class="page-form" method="POST" action="{{ url('/password/email') }}">
+        {!! csrf_field() !!}
 
-                                <label class=" control-label" for="email">Email </label>
-                                <input type="email" class="form-control " id="email" name="email"
-                                       data-parsley-changed="keyup" data-parsley-pattern="/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/" data-parsley-pattern-message="Enter valid Email Id" data-parsley-required-message="Email required" required>
-                            </div>
-                            
-                        </div>
+        @if (session('status'))
+          <div class="alert alert-success">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            {{ session('status') }}
+          </div>
+        @endif
+        @if ($errors->has('email'))
+          <span class="help-block">
+              <strong>{{ $errors->first('email') }}</strong>
+          </span>
+        @endif
 
-                        <button type="submit" class="btn btn-denta-sm btn-primary btn-block mr-t-20">Send</button>
-                        <a href="{{url('login')}}"  class="btn-link btn center-block mr-t-15">Cancel</a>
-                    </form>
-
-
-
-                </div>
-            </div>
+        <div class="page-form__fields">
+          <div class="d-form-group {{ $errors->has('email') ? ' has-error' : '' }}">
+            <label for="email">Email Address</label>
+            <input type="email" placeholder="Enter email" name="email" id="email" class="d-form-control" tabindex="1" required>
+          </div>
         </div>
 
-    </div>
+        <div class="page-form__submit-btn">
+          <a class="d-btn btn--outline-grey btn--mini" tabindex="3" href="{{url('login')}}">Cancel</a>
+          <button class="d-btn btn--solid btn--mini" type="submit" tabindex="2">Send</button>
+        </div>
 
-</div>
+      </form>
+    </section>
+
+    <section class="page-picture page-picture--remember">
+      <a href="/jobseeker/signup" class="d-btn btn--blank">I'm a Dental Professional</a>
+    </section>
+
+  </main>
 
 @endsection

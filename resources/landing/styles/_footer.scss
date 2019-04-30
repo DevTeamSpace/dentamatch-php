@@ -1,0 +1,133 @@
+.cta {
+  position: relative;
+  padding-top: 56px;
+  padding-bottom: 80px;
+  text-align: center;
+
+  background-color: white;
+  background-image: url("/assets/img/Oval2.svg");
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: cover;
+
+  b {
+    display: block;
+    margin-bottom: 40px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.56;
+    color: #c9cdd5;
+  }
+
+  &::before {
+    //content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top:0;
+    width: 100%;
+    height: 20px;
+    margin-top: -14px;
+    background: #000e3c;
+    border-top-left-radius: 50% 60%;
+    border-top-right-radius: 50% 60%;
+  }
+}
+
+.main-footer {
+  padding-top: 34px;
+  padding-bottom: 28px;
+
+  background-color: $darkGrey;
+
+  .d-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.social-links {
+  margin: 0;
+  margin-bottom: 18px;
+  padding: 0;
+  list-style: none;
+}
+
+.social-link {
+  display: inline-block;
+  vertical-align: top;
+  background-color: #51545e;
+  border-radius: 50%;
+
+  a {
+    display: block;
+    width: 24px;
+    height: 24px;
+    background-size: 10px 10px;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-size: 0;
+    transition: all 0.5s ease;
+
+    &:hover {
+      transform: scale(1.3);
+    }
+  }
+
+  &+& {
+    margin-left: 5px;
+  }
+}
+
+.social-link--facebook a {
+  background-image: url("/assets/img/social/facebook-logo.svg");
+}
+
+.social-link--twitter a {
+  background-image: url("/assets/img/social/twitter.svg");
+}
+
+.social-link--dribble a {
+  background-image: url("/assets/img/social/dribble-logo.svg");
+}
+
+.copyright {
+  margin: 0;
+  font-weight: 600;
+  color: #c9cdd5;
+}
+
+@media (min-width: $break-split-page) {
+  .cta {
+    padding-top: 102px;
+    padding-bottom: 56px;
+
+    background-color: #e7eaee;
+    background-image: url("/assets/img/Oval2.svg");
+    background-size: 100% 100%;
+
+    &::before {
+      display: none;
+    }
+
+    b {
+      margin-bottom: 35px;
+    }
+  }
+
+  .main-footer {
+    padding-top: 25px;
+    padding-bottom: 25px;
+
+    .d-container {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  .social-links {
+    margin: 0;
+    order: 1;
+  }
+}

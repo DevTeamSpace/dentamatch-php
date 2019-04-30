@@ -1,0 +1,198 @@
+.page-layout {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content {
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.page-title {
+  margin-bottom: 17px;
+}
+
+.page-text {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.page-form {
+  margin: 39px 0;
+}
+
+.page-form__fields {
+ margin-bottom: 22px;
+}
+
+.page-form__submit-btn {
+  margin-bottom: 28px;
+  justify-content: center;
+  display: flex;
+
+  .d-btn + .d-btn {
+    margin-left: 5px;
+  }
+}
+
+.forgot-link {
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.sign-up-link {
+  text-align: center;
+}
+
+.page-link {
+  font-size: 18px;
+  font-weight: 600;
+  font-style: normal;
+  color: #4897d8;
+}
+
+.page-link--faded {
+  font-weight: normal;
+  color: #41515c;
+}
+
+.page-picture {
+  flex: 1;
+  padding-bottom: 38px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 420px;
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: cover;
+}
+
+.page-picture--login {
+  background-image: url("/assets/img/login/group@3x.jpg");
+}
+
+.page-picture--remember {
+  background-position: center;
+  background-image: url("/assets/img/bg/remember.jpg");
+}
+
+.page-picture--signup {
+  background-image: url("/assets/img/bg/signup.jpg");
+}
+
+.page-picture--candidate {
+  background-image: url("/assets/img/bg/candidate.png");
+}
+
+@media (min-width: $break-split-page) {
+
+  .page-container {
+    flex-direction: row;
+  }
+
+  .page-content,
+  .page-picture {
+    flex-basis: 50%;
+  }
+
+  .page-picture {
+    max-width: 720px;
+    padding-bottom: 38px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .page-content {
+    position: relative;
+    margin: 0;
+    padding-left: 60px;
+    padding-top: 135px;
+    padding-bottom: 77px;
+    order: 2;
+  }
+
+  .page-title {
+    margin-bottom: 5px;
+
+  }
+
+  .page-text {
+    max-width: 300px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.75;
+    color: #54565a;
+  }
+
+  .page-form {
+    max-width: 400px;
+  }
+
+  .page-form__fields {
+    margin-bottom: 59px
+  }
+
+  .page-form__submit-btn {
+    margin: 0;
+    justify-content: start;
+
+    .d-btn + .d-btn {
+      margin-left: 20px;
+    }
+  }
+
+  .sign-up-link {
+    position: absolute;
+    bottom: 53px;
+  }
+
+  .forgot-link {
+    margin: 0;
+    position: absolute;
+    right: 35px;
+    bottom: 53px;
+  }
+
+  .page--forgot {
+    .page-content {
+      padding-top: 159px;
+    }
+
+    .page-text {
+      max-width: 320px;
+    }
+
+    .page-form {
+      margin: 44px 0;
+    }
+
+    .page-form__fields {
+      margin-bottom: 39px;
+    }
+  }
+
+  .page--candidate {
+    .page-content {
+      padding-top: 60px;
+    }
+
+    .page-form {
+      margin: 27px 0;
+    }
+
+    .page-form__fields {
+      margin-bottom: 44px;
+    }
+  }
+}
+

@@ -1,0 +1,216 @@
+html {
+  height: 100%;
+}
+
+body {
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-size: 14px;
+  line-height: normal;
+  font-weight: 400;
+  color: #2c2e30;
+}
+
+a {
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+button {
+  padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.d-container {
+  max-width: 1110px;
+  margin: 0 auto;
+}
+
+.visually-hidden {
+  margin: 0;
+  font-size: 0;
+}
+
+.lead-text,
+.page-title{
+  display: block;
+  line-height: normal;
+  font-size: 24px;
+  font-weight: 600;
+  color: $darkGrey;
+}
+
+.lead-text--invert {
+  line-height: 1.33;
+  color: #f6f8f9;
+}
+
+.d-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  //width: 290px;
+  width: 100%;
+  max-width: 290px;
+  height: 55px;
+
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  border-radius: 27.5px;
+
+  transition: all 0.5s;
+
+  &:active {
+    transform: translateY(1px);
+    filter: saturate(150%);
+  }
+
+  &:hover {
+  }
+}
+
+.btn--gradient {
+  color: white;
+  background-image: linear-gradient(335deg, #003ea5, $accentColor);
+
+  &:hover {
+    color: white;
+    background-image: linear-gradient(65deg, #003ea5, $accentColor);
+  }
+}
+
+.btn--solid {
+  color: white;
+  background: #2f5bea;
+
+  &:hover {
+    color: white;
+    background: #003ea5;
+  }
+}
+
+.btn--blank {
+  background: white;
+  color: #2f5bea;
+}
+
+.btn--outline {
+  font-weight: normal;
+  color: #2f5bea;
+
+  border: solid 2px transparent;
+  background-image: linear-gradient(white, white), linear-gradient(284deg, #003ea5, $accentColor);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+
+  &:hover {
+    color: #003ea5;
+    background-image: linear-gradient(white, white), linear-gradient(76deg, #003ea5, $accentColor);
+  }
+}
+
+.btn--outline-grey {
+  color: #4897d8;
+  border: solid 2px #c9cdd5;
+  background: white;
+}
+
+label {
+  margin-bottom: 0.5em;
+  font-size: 12px;
+  font-weight: normal;
+  color: #333333;
+}
+
+.d-form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.d-form-control {
+  display: block;
+  width: 100%;
+  padding: 11px 14px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+
+  &::placeholder {
+    color: #999999;
+  }
+
+
+}
+
+.d-form-group {
+  &+& {
+    margin-top: 32px;
+  }
+}
+
+.main-header,
+.center,
+.approach,
+.team,
+.main-footer,
+.practice-info,
+.practice-features,
+.professional-info,
+.professional-features,
+.cta,
+.page-content
+{
+  padding: 0 15px;
+}
+
+.show-lg {
+  display: none;
+}
+
+@media (min-width: $break-split-page) {
+  .hide-lg {
+    display: none;
+  }
+
+  .show-lg {
+    display: block;
+    display: initial;
+  }
+
+  .page-title {
+    font-size: 48px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.67;
+    color: #41515c;
+  }
+
+  .d-btn {
+    max-width: 255px;
+  }
+
+  .btn--mini {
+    width: 156px;
+  }
+
+  .btn--medium {
+    width: 211px;
+  }
+
+}

@@ -3,7 +3,7 @@
 @section('content')
   <main class="page-container">
     <section class="page-content">
-      <h1 class="page-title">Login</h1>
+      <h1 class="page-title">Sign Up</h1>
 
       <p class="page-text">
         Please sign up or login to access our dental office portal.
@@ -20,39 +20,40 @@
           {{ Session::get('success') }}</h6>
       @endif
 
-      <form method="post" action="{{ url('login') }}" class="page-form page-form--login">
+      <form class="page-form page-form--signup" method="post" action="{{ url('signup') }}">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
         <div class="page-form__fields">
           <div class="d-form-group">
             <label for="email">Email Address</label>
-            <input type="email" placeholder="Enter email" name="email" id="email" class="d-form-control" tabindex="1"
-                   data-parsley-required-message="Email required" required>
+            <input type="email" placeholder="Enter email" name="email" id="email" class="d-form-control" required autocomplete="new-password">
           </div>
 
           <div class="d-form-group">
             <label for="password">Password</label>
-            <input type="password" placeholder="Enter password" name="password" id="password" tabindex="2"
-                   required
+            <input type="password" placeholder="Enter password" name="password" id="password" autocomplete="new-password"
+                   class="d-form-control" required>
+          </div>
+
+          <div class="d-form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" placeholder="Repeat password" name="confirmPassword" id="confirm-password" required
                    class="d-form-control">
           </div>
         </div>
 
-        <div class="forgot-link">
-          <a href="{{url('password/reset')}}" class="page-link page-link--faded">Forgot password?</a>
-        </div>
-
         <div class="page-form__submit-btn">
-          <button class="d-btn btn--solid btn--mini" type="submit" tabindex="3">Login</button>
+          <button class="d-btn btn--solid btn--medium" type="submit">Create account</button>
         </div>
 
         <div class="sign-up-link">
-          <a href="/signup" class="page-link">Sign Up</a>
+          <a href="/login" class="page-link">Login</a>
         </div>
 
       </form>
     </section>
 
-    <section class="page-picture page-picture--login">
+    <section class="page-picture page-picture--signup">
       <a href="/jobseeker/signup" class="d-btn btn--blank">I'm a Dental Professional</a>
     </section>
 

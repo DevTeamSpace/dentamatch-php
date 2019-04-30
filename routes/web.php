@@ -15,17 +15,16 @@ Route::get('image/{w}/{h}/', function (League\Glide\Server $server, $w, $h) {
     $server->outputImage($_GET['src'], ['w' => $w, 'h' => $h, 'fit' => 'crop']);
 });
 Route::get('/', function () { return view('landing.main'); })->middleware('csp', 'redirect-recruiter');
-Route::get('/dentists', function () { return view('landing.dentists'); })->middleware('csp');
-Route::get('/jobs', function () { return view('landing.jobs'); })->middleware('csp');
-//Route::get('/', 'web\SignupController@getLogin');
+//Route::get('/dentists', function () { return view('landing.dentists'); })->middleware('csp');
+//Route::get('/jobs', function () { return view('landing.jobs'); })->middleware('csp');
 
-Route::get('signup', 'web\SignupController@getLogin');
+Route::get('signup', 'web\SignupController@getSignup');
 Route::post('signup', 'web\SignupController@postSignUp');
+Route::post('login', 'web\SignupController@postLogin');
+Route::get('login', 'web\SignupController@getLogin');
 Route::post('jobseeker/storeSignup', 'web\SignupController@postJobseekerSignUp');
 Route::get('jobseeker/signup', 'web\SignupController@getJobseekerSignUp');
 
-Route::post('login', 'web\SignupController@postLogin');
-Route::get('login', 'web\SignupController@getLogin');
 Route::get('verification-code/{code}', 'web\SignupController@getVerificationCode');
 Route::get('user-activation/{code}', 'Api\v1\UserApiController@getActivateJobseeker');
 Route::get('logout', 'web\SignupController@logout');

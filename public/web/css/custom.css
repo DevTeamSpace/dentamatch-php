@@ -1575,6 +1575,12 @@ a.cir-blue:hover {
     font-size: 14px;
 }
 
+.bootstrap-select .dropdown-menu {
+    height: 170px !important;
+}
+
+.licenseId {display:none;}
+
 @media only screen and (min-width: 768px) {
     .report-filter label {
         margin-top: 8px;
