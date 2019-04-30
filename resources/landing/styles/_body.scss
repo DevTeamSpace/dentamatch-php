@@ -82,7 +82,7 @@ button {
 
   &:hover {
     color: white;
-    background-image: linear-gradient(65deg, #003ea5, $accentColor);
+    //background-image: linear-gradient(65deg, #003ea5, $accentColor);
   }
 }
 
@@ -112,7 +112,7 @@ button {
 
   &:hover {
     color: #003ea5;
-    background-image: linear-gradient(white, white), linear-gradient(76deg, #003ea5, $accentColor);
+    //background-image: linear-gradient(white, white), linear-gradient(76deg, #003ea5, $accentColor);
   }
 }
 
