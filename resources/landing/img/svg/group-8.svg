@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="198" height="198" viewBox="0 0 198 198">
+    <defs>
+        <filter id="a" width="143.2%" height="167.5%" x="-21.6%" y="-33.8%" filterUnits="objectBoundingBox">
+            <feOffset dy="2" in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="27"/>
+            <feColorMatrix in="shadowBlurOuter1" result="shadowMatrixOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.145323427 0"/>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+        <linearGradient id="b" x1="50%" x2="50%" y1="0%" y2="100%">
+            <stop offset="0%" stop-color="#003EA5"/>
+            <stop offset="100%" stop-color="#00D2E9"/>
+        </linearGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd" filter="url(#a)" transform="translate(52 50)">
+        <circle cx="47" cy="47" r="47" fill="#FFF" stroke="url(#b)"/>
+        <path fill="#00D2E9" d="M40.094 31.134a.685.685 0 0 0-.717-.06.696.696 0 0 0-.377.621v30.61c0 .262.146.502.377.62a.682.682 0 0 0 .717-.06L60.72 47.562a.7.7 0 0 0 0-1.123L40.094 31.134z"/>
+    </g>
+</svg>
