@@ -1,6 +1,6 @@
 .practice-info {
   text-align: center;
-  margin-bottom: 130px;
+  //padding-bottom: 130px;
 
   .lead-text {
     margin-bottom: 21px;
@@ -11,6 +11,10 @@
     margin-bottom: 28px;
     line-height: 1.57;
   }
+}
+
+.practice-info__container {
+  padding-bottom: 50px;
 }
 
 .practice-title {
@@ -183,6 +187,8 @@
 @media (min-width: $break-split-page) {
   .practice-info {
     text-align: left;
+    background-color: #f6f8f9;
+    padding-top: 95px;
 
     .lead-text {
       margin-bottom: 24px;
@@ -210,6 +216,8 @@
 
   .practice-info__container {
     position: relative;
+    padding-bottom: 129px;
+    border-bottom: solid 1px #d0d7e1;
   }
   .practice-title {
     margin-bottom: 16px;
@@ -223,7 +231,7 @@
   }
 
   .practice-features {
-    padding-top: 101px;
+    padding-top: 77px;
     padding-bottom: 70px;
     background: #f6f8f9;
 

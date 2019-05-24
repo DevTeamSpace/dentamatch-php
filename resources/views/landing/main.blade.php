@@ -20,6 +20,8 @@
          class="main-logo" width="162" height="30" alt="DentaMatch logo">
 
     <img src="/assets/img/logo/group-10@3x.png" class="main-logo--big" width="323" height="60" alt="DentaMatch logo">
+
+    <a href="/login" class="main-header__link">Dental practices login here </a>
 </header>
 <main>
     <section class="center">
@@ -28,8 +30,16 @@
             <b class="lead-text">You work hard enough. <br> We make it easier. </b>
             <span class="center-sub-title">Matching dental professionals with temp, part-time, and full-time work </span>
 
-            <a href="/signup" class="d-btn btn--gradient">I'm a Dental Practice</a>
-            <a href="/jobseeker/signup" class="d-btn btn--outline">I'm a Dental Professional</a>
+            <div class="full-width">
+              <img src="/assets/img/center/bg-mini.jpg" alt="" class="main-img--mobile">
+            </div>
+
+          <div class="center__links">
+            <a href="/signup" class="d-btn btn--gradient">Dental practices sign up here </a>
+              <span class="delimeter"></span>
+            <a href="/jobseeker/signup" class="d-btn btn--outline">Job seekers sign up here</a>
+          </div>
+
         </div>
     </section>
 
@@ -39,20 +49,17 @@
             <b class="lead-text">A simple way to boost your team performance.</b>
             <ul class="approach-list">
                 <li class="approach-item">
-                    <img class="hide-lg" src="/assets/img/svg/search.svg" alt="">
-                    <img class="show-lg" src="/assets/img/approach/search.svg" alt="">
+                    <img src="/assets/img/approach/search.svg" alt="">
                     <b>Skill-based matches</b>
                     <span>Find a good fit without <br> resumes or middlemen</span>
                 </li>
                 <li class="approach-item">
-                    <img class="hide-lg" src="/assets/img/svg/menu-2.svg" alt="">
-                    <img class="show-lg" src="/assets/img/approach/menu-2.svg" alt="">
+                    <img src="/assets/img/approach/menu-2.svg" alt="">
                     <b>Simplified schedule</b>
                     <span>Track every who, what, and when from one central calendar</span>
                 </li>
                 <li class="approach-item">
-                    <img class="hide-lg" src="/assets/img/svg/like.svg" alt="">
-                    <img class="show-lg" src="/assets/img/approach/like.svg" alt="">
+                    <img src="/assets/img/approach/like.svg" alt="">
                     <b>Ready when you are</b>
                     <span>Great work and great workers <br> are always a few clicks away</span>
                 </li>
@@ -70,7 +77,7 @@
                     <iframe frameborder="0" src="https://player.vimeo.com/video/207225121" width="640" height="360" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
                 </div>
             </div>
-            <a href="/signup" class="practice-link">Sign Up Now</a>
+            <a href="/signup" class="practice-link">Dental practices sign up here </a>
         </div>
     </section>
 
@@ -147,7 +154,7 @@
                     <iframe frameborder="0" src="https://player.vimeo.com/video/207224967" width="640" height="360" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
                 </div>
             </div>
-            <a href="/jobseeker/signup" class="professional-link">Free Registration</a>
+            <a href="/jobseeker/signup" class="professional-link">Job seekers sign up here</a>
         </div>
     </section>
 
@@ -206,8 +213,17 @@
                     <span class="professional-slider__btn professional-slider__btn-prev"></span>
                     <span class="professional-slider__btn professional-slider__btn-next"></span>
                 </div>
+
+                <div class="professional-features__link">
+                    <a href="/jobseeker/signup" class="professional-link ">Learn more</a>
+                </div>
             </div>
         </div>
+    </section>
+
+    <section class="main-app-links">
+         <a class="d-btn btn--gradient app-link app-link--apple" href="https://itunes.apple.com/us/app/dentamatch/id1185779291" target="_blank">App Store</a>
+         <a class="d-btn btn--gradient app-link app-link--google" href="https://play.google.com/store/apps/details?id=com.appster.dentamatch" target="_blank">Google Play</a>
     </section>
 
     <section class="team">
@@ -220,16 +236,12 @@
                              /assets/img/team/photo-1@3x.jpg 3x"
                          alt="Dr. Preston Brown"
                          class="team-item__photo">
-                    <p class="team-item__text"><strong>Dr. Preston Brown</strong> was born and raised in Ogden Utah. After graduating from the
-                        University Of Washington School Of Dentistry in 1998 he moved to Palo Alto, CA to do a residency
-                        program at the Veterans Hospital. <br> Dr. Brown started his own private practice nearly 20 years ago
-                        in the Financial District of San Francisco. His professional career was profoundly influenced by
-                        his 10 year commitment to the Marin County Public Dental Clinic. Private practice and public
-                        health have taught him how to manage, inspire, and lead. <br>One of the most important lessons he
-                        has learned in the past 20 years and which he carries into all aspects of his patient care is
-                        this- all efforts, roads, journeys, should lead to the improved health of the patient. <br> It’s his
-                        belief that DentaMatch will create a space where everyone is more prepared, educated, informed
-                        about their work choices so that in the end, the patient receives the best care possible.</p>
+                    <p class="team-item__text"><strong>Dr. Preston Brown</strong> was born and raised in Ogden Utah.
+                        After graduating from the University Of Washington School Of Dentistry in 1998 he moved to Palo Alto,
+                        CA to do a residency program at the Veterans Hospital. <br>
+                        Dr. Brown started his own private practice 20 years ago in the Financial District of San Francisco.
+                        His professional career was profoundly influenced by his 10 year commitment to the Marin County Public Dental <Clinic class="br"></Clinic>
+                        It's his belief that DentaMatch will streamline inefficiencies, save money, and create a space where everyone is more prepared, educated and informed about their work choices so that in the end, the patient receives the best care possible.</p>
                     <span class="btn-read-more">Read more</span>
                     <span class="btn-read-more btn-read-more--up">Roll Up</span>
                 </li>
@@ -266,7 +278,10 @@
 
     <section class="cta">
         <b>Like what you see? Start saving time and money!</b>
-        <a href="/signup" class="d-btn btn--gradient">Let's get started</a>
+        <div class="cta__links">
+            <a href="/signup" class="d-btn btn--gradient">Dental practices sign up here </a>
+            <a href="/jobseeker/signup" class="d-btn btn--outline">Job seekers sign up here</a>
+        </div>
     </section>
 
 

@@ -104,6 +104,12 @@
   text-align: center;
 }
 
+.professional-features__link {
+  text-align: center;
+  margin-top: 30px;
+  padding-left: 20px;
+}
+
 .professional-slider {
   max-width: 400px;
   margin: 0 auto;
@@ -175,6 +181,22 @@
   background-image: url("/assets/img/pro-slider/right.svg");
 }
 
+.main-app-links {
+  padding: 55px 15px;
+  background-color: #0a112e;
+  text-align: center;
+
+  & .app-link--apple::before {
+    background-image: url("/assets/img/apple-w.svg");
+  }
+
+  & .app-link--google::before {
+    background-image: url("/assets/img/google-play-w.svg");
+  }
+}
+
+
+
 @media (min-width: $break-split-page) {
   .professional-info {
     padding-bottom: 136px;
@@ -223,7 +245,7 @@
 
   .professional-features {
     padding-top: 128px;
-    padding-bottom: 133px;
+    padding-bottom: 75px;
   }
 
   .professional-features__title {
@@ -284,6 +306,14 @@
     position: absolute;
     left: 615px;
     bottom: 87px;
+  }
+
+  .professional-features__link {
+    text-align: left;
+    padding-left: 0;
+    position: absolute;
+    left: 615px;
+    margin-top: -50px;
   }
 
 }

@@ -1,8 +1,17 @@
 .approach {
   text-align: center;
-  //padding-bottom: 46px;
   margin-bottom: 116px;
-  //border-bottom:  solid 1px #e7eaee;
+  padding-top: 150px;
+
+  color: white;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url("/assets/img/combined-shape-grad.svg");
+
+
+  .lead-text {
+    color: #f6f8f9;
+  }
 
   &::after {
     content: '';
@@ -19,6 +28,7 @@
   font-weight: 600;
   text-transform: uppercase;
   color: #7e8085;
+  color: #f6f8f9;
 }
 
 .approach-list {
@@ -59,13 +69,13 @@
 
   .approach {
     padding-top: 109px;
-    padding-bottom: 180px;
-    margin-bottom: 143px;
-    color: white;
-    background-image: linear-gradient(to bottom, #223371, #2f5bea);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-image: url("/assets/img/combined-shape-grad.svg");
+    padding-bottom: 109px;
+    margin-bottom: 0;
+    //color: white;
+    //background-image: linear-gradient(to bottom, #223371, #2f5bea);
+    //background-repeat: no-repeat;
+    //background-size: cover;
+    //background-image: url("/assets/img/combined-shape-grad.svg");
 
     .lead-text {
       font-size: 34px;
@@ -75,7 +85,7 @@
       line-height: 1.35;
       letter-spacing: normal;
       text-align: center;
-      color: #f6f8f9;
+      //color: #f6f8f9;
     }
 
     &::after {
@@ -86,7 +96,7 @@
   .approach-title {
     font-size: 18px;
     font-weight: 600;
-    color: #f6f8f9;
+    //color: #f6f8f9;
     margin-bottom: 10px;
   }
 
