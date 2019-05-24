@@ -1,174 +1,114 @@
-@extends('web.layouts.page')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-@section('css')
-  <link rel="stylesheet" href="{{asset('web/css/optionDropDown.css')}}">
-@endsection
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  <link rel="stylesheet" href="{{asset('/css/landing.css')}}">
 
-@section('content')
-  <main class="page-container page--candidate">
-    <section class="page-content">
-      <h1 class="page-title">Candidate Signup</h1>
+  <title>Dental Professional Sign Up | DentaMatch</title>
+</head>
+<body>
 
-      @if (count($errors) > 0)
-        <div class="alert {{ Session::get('alert-class', 'alert-info') }}">
-          <ul>
-            @foreach($errors->all() as $error)
-              <li>{{$error}}</li>
-            @endforeach
-          </ul>
+<header class="d-container main-header">
+  <a href="/">
+    <img src="/assets/img/logo/group.png"
+         srcset="/assets/img/logo/group@2x.png 2x,
+             /assets/img/logo/group@3x.png 3x"
+         class="main-logo" width="162" height="30" alt="DentaMatch logo">
+
+    <img src="/assets/img/logo/group-10@3x.png" class="main-logo--big" width="323" height="60" alt="DentaMatch logo">
+  </a>
+
+  <a href="/signup" class="main-header__link">Dental practices sign up here </a>
+</header>
+<main>
+  <section class="center-second">
+    <div class="d-container">
+      <h1 class="visually-hidden">DentaMatch for Dental Professional</h1>
+      <b class="lead-text">Find dental jobs near&nbsp;you</b>
+      <span class="center-sub-title center-sub-title--extra">Whether you’re looking to pick up a day here and there or find new full time job,
+        DentaMatch is the easy way for dental professionals to find work fast.</span>
+
+      <img src="/assets/img/svg/dude-behind-desk.svg" class="center-img">
+
+      <div class="full-width">
+        <img src="/assets/img/dude-behind-desk-mob.png" class="center-img--mobile">
+      </div>
+
+      <div class="app-links">
+        <a class="d-btn btn--outline app-link app-link--apple" href="https://itunes.apple.com/us/app/dentamatch/id1185779291" target="_blank">App Store</a>
+        <a class="d-btn btn--outline app-link app-link--google" href="https://play.google.com/store/apps/details?id=com.appster.dentamatch" target="_blank">Google Play</a>
+      </div>
+
+      <a href="/signup" class="center-second__link">Dental practices sign up here </a>
+    </div>
+  </section>
+
+  <section class="extra-features">
+    <div class="d-container">
+      <h2 class="extra-features__title">Features</h2>
+      <b class="lead-text">Think of us as a hassle-free temp agency you can fit in your pocket.</b>
+      <img src="/assets/img/svg/girl-with-phone.svg" alt="" class="extra-features__img">
+      <div class="features-list">
+        <div class="features-list__item">
+          <span>1</span>
+          <p>Set Your Own Schedule: Fill in your profile calendar with the days you want to work, or look for a full-time position</p>
         </div>
-      @endif
-      @if(Session::has('message'))
-        <p class="alert {{ Session::get('alert-class', 'alert-info') }}">
-          {{ Session::get('message') }}
-          <span class="close" data-dismiss="alert">&times;</span>
-        </p>
-      @endif
-      
-      <form class="page-form" data-parsley-validate
-            method="post" action="{{ url('jobseeker/storeSignup') }}">
-        {!! csrf_field() !!}
-        <input type="hidden" name="jobtitles" id="jsonVal" value="{{ json_encode($jobTitleData) }}">
-
-        <div class="page-form__fields">
-          <div class="d-form-group">
-            <label for="first-name">First Name</label>
-            <input type="text" placeholder="First Name" name="firstName"
-                   value="{{ app('request')->input('firstName') }}" required
-                   id="first-name" class="d-form-control">
-          </div>
-          <div class="d-form-group">
-            <label for="last-name">Last Name</label>
-            <input type="text" placeholder="Last Name" name="lastName"
-                   value="{{ app('request')->input('lastName') }}" required
-                   id="last-name" class="d-form-control">
-          </div>
-
-          <div class="d-form-group">
-            <label for="email">Email</label>
-            <input type="email" placeholder="Email" name="email"
-                   value="{{ app('request')->input('email') }}" required
-                   id="email" class="d-form-control">
-          </div>
-
-          <div class="d-form-group">
-            <label for="email">Job Title</label>
-            <div class="slt custom-select">
-              <select id="jobTitleId" name="jobTitleId" class="selectpicker mr-b-5" data-parsley-required
-                      data-parsley-required-message="Job title is required" required>
-                <option value="">Select job title</option>
-                @foreach ($jobTitleData as $key=>$jobTitle)
-                  @if($key==0)
-                    <option data-divider="true"></option>
-                  @endif
-                  @if($jobTitle['id'] == app('request')->input('jobTitleId'))
-                    <option selected='true' value="{{ $jobTitle['id'] }}">{{ $jobTitle['jobtitle_name'] }}</option>
-                  @else
-                    <option value="{{ $jobTitle['id'] }}">{{ $jobTitle['jobtitle_name'] }}</option>
-                  @endif
-                  <option data-divider="true"></option>
-                @endforeach
-              </select>
-            </div>
-          </div>
-
-          <div class="d-form-group licenceGroup licenseId">
-            <label>License</label>
-            <input placeholder="License No" value="{{ app('request')->input('license') }}"
-                   name="license" type="text" class="d-form-control">
-          </div>
-
-          <div class="d-form-group licenceGroup licenseId">
-            <label>License State</label>
-            <input placeholder="State" value="{{ app('request')->input('state') }}" name="state"
-                   type="text" class="d-form-control">
-          </div>
-
-          <div class="d-form-group">
-            <label>Preferred Job Locations</label>
-            <div class="slt custom-select">
-              <select data-parsley-required data-parsley-required-message="Select preferred location"
-                      name="preferredJobLocationId" id="preferredJobLocationId"
-                      class="selectpicker mr-b-5">
-                <option value="">Select preferred job locations</option>
-                @foreach ($preferredLocationId as $key=>$prefLocation)
-                  @if($key==0)
-                    <option data-divider="true"></option>
-                  @endif
-                  @if($prefLocation['id'] == app('request')->input('preferredJobLocationId'))
-                    <option selected='true'
-                            value="{{ $prefLocation['id'] }}">{{ $prefLocation['preferred_location_name'] }}</option>
-                  @else
-                    <option value="{{ $prefLocation['id'] }}">{{ $prefLocation['preferred_location_name'] }}</option>
-                  @endif
-                  <option data-divider="true"></option>
-                @endforeach
-              </select>
-            </div>
-          </div>
-
-          <div class="d-form-group">
-            <label>About Me</label>
-            <textarea data-parsley-required data-parsley-required-message="About me is required"
-                      class="d-form-control"
-                      name="aboutMe">{{ app('request')->input('aboutMe') }}</textarea>
-          </div>
-
-          <div class="d-form-group">
-            <input type="checkbox" name="privacy" id="checkbox"
-                   style="-webkit-appearance:checkbox; -moz-appearance:checkbox; margin-right:5px;" required=""
-                   value=""><strong>I agree to the <a href="{{ url('/terms-and-conditions') }}" target="_blank">Terms and Conditions</a>
-              and <a href="{{ url('/privacy-policy') }}" target="_blank">Privacy policy</a></strong>
-          </div>
+        <div class="features-list__item">
+          <span>2</span>
+          <p>Select Your Skills: Update your skills and experience in your personal profile and we’ll match them to dental offices where they’re most in demand</p>
         </div>
-
-        <div class="page-form__submit-btn">
-          <button id="Save" class="d-btn btn--solid btn--mini" type="submit">Save</button>
+        <div class="features-list__item">
+          <span>3</span>
+          <p>In-App Messaging: Chat directly with dental office employers and avoid guessing games on where to park or put your lunch.</p>
         </div>
+        <div class="features-list__item">
+          <span>4</span>
+          <p>Build Your Profile: Keep track of past and future bookings and earn kudos from past employers that boost your ranking in the app</p>
+        </div>
+      </div>
 
-      </form>
-    </section>
+    </div>
 
-    <section class="page-picture page-picture--candidate">
-      <a href="/login" class="d-btn btn--blank">I'm a Dental Practice</a>
-    </section>
+  </section>
 
-  </main>
-@endsection
+  <section class="extra-promo">
+    <div class="d-container">
+      <div class="extra-promo__title">Download, Play, Enjoy.</div>
+      <p class="extra-promo__text">
+        White Gold began gaining popularity in the early 1900’s as an alternative to platinum. Platinum was steadily becoming more fashionable, but because of its rarity many could not afford it. Then, during World War II the government put a ban on the use of Platinum for any non-military functions and the demand for White Gold skyrocketed.
+      </p>
+      <img src="/assets/img/promo-img-c.png" alt="" class="extra-promo__img" width="516" height="889">
+    </div>
 
-@section('js')
-  <script src="{{asset('web/scripts/optionDropDown.js')}}"></script>
-  <script src="{{asset('web/scripts/custom.js')}}"></script>
-  <script>
-    $('form').submit(function (e) {
-      var form = $(this);
-      form.parsley().validate();
-      if (form.parsley().isValid()) {
-        $('#Save').attr('disabled', true);
-      }
-    });
+    <div class="cta">
+      <b>Download our app</b>
+      <a class="d-btn btn--gradient app-link app-link--apple" href="https://itunes.apple.com/us/app/dentamatch/id1185779291" target="_blank">App Store</a>
+      <a class="d-btn btn--gradient app-link app-link--google" href="https://play.google.com/store/apps/details?id=com.appster.dentamatch" target="_blank">Google Play</a>
+    </div>
+  </section>
 
-    $('#jobTitleId > option').each(function (index) {
-      $(this).attr("customIndex", index);
-    });
 
-    $('#jobTitleId').change(function () {
-      var listID, jsonValue;
-      listID = $(this).val();
-      jsonValue = JSON.parse($(jsonVal).val());
-      for (var i = 0; i < jsonValue.length; i++) {
-        if (jsonValue[i].id == listID) {
-          if (jsonValue[i].is_license_required == 1) {
-            $('.licenceGroup').removeClass("licenseId");
-          }
+</main>
 
-          else {
-            $('.licenceGroup').addClass("licenseId");
-          }
-          break;
-        }
-      }
-    });
-    $('#jobTitleId').change();
-  </script>
-@endsection
+<footer class="main-footer">
+  <div class="d-container">
+    <ul class="social-links">
+      <li class="social-link social-link--facebook"><a href="https://www.facebook.com/pg/dentalpositions/posts/" target="_blank">Facebook</a></li>
+    </ul>
+
+    <p class="copyright">
+      © DentaMatch 2019
+    </p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+</body>
+</html>

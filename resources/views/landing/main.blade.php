@@ -27,18 +27,9 @@
             <h1 class="visually-hidden">DentaMatch</h1>
             <b class="lead-text">You work hard enough. <br> We make it easier. </b>
             <span class="center-sub-title">Matching dental professionals with temp, part-time, and full-time work </span>
-            <img src="/assets/img/center/bg-01.jpg"
-                 srcset="/assets/img/center/bg-01@2x.jpg 2x,
-             /assets/img/center/bg-01@3x.jpg 3x" alt="" class="center-img">
 
             <a href="/signup" class="d-btn btn--gradient">I'm a Dental Practice</a>
             <a href="/jobseeker/signup" class="d-btn btn--outline">I'm a Dental Professional</a>
-
-            <div class="app-links">
-                <span>Download our app</span>
-                <a class="app-link app-link--apple" href="https://itunes.apple.com/us/app/dentamatch/id1185779291" target="_blank">Apple store</a>
-                <a class="app-link app-link--google" href="https://play.google.com/store/apps/details?id=com.appster.dentamatch" target="_blank">Google Play</a>
-            </div>
         </div>
     </section>
 

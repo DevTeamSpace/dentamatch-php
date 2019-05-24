@@ -2,6 +2,7 @@
   position: relative;
   padding-top: 56px;
   padding-bottom: 80px;
+
   text-align: center;
 
   background-color: white;
@@ -19,19 +20,6 @@
     color: #c9cdd5;
   }
 
-  &::before {
-    //content: '';
-    display: block;
-    position: absolute;
-    left: 0;
-    top:0;
-    width: 100%;
-    height: 20px;
-    margin-top: -14px;
-    background: #000e3c;
-    border-top-left-radius: 50% 60%;
-    border-top-right-radius: 50% 60%;
-  }
 }
 
 .main-footer {
@@ -104,12 +92,7 @@
     padding-bottom: 56px;
 
     background-color: #e7eaee;
-    background-image: url("/assets/img/Oval2.svg");
     background-size: 100% 100%;
-
-    &::before {
-      display: none;
-    }
 
     b {
       margin-bottom: 35px;

@@ -10,10 +10,15 @@
   display: none;
 }
 
+.main-header__link {
+  display: none;
+}
+
 @media (min-width: $break-split-page) {
   .main-header {
     padding-top: 56px;
-    margin-bottom: 83px;
+    padding-left: 10px;
+    margin-bottom: 74px;
     text-align: left;
   }
 
@@ -31,7 +36,15 @@
 
   .main-logo--big,
   .main-logo--img-only {
+    display: inline-block;
+  }
+
+  .main-header__link {
     display: block;
+    margin-top: 33px;
+    float: right;
+    color: #2f5bea;
+    text-transform: uppercase;
   }
 }
 

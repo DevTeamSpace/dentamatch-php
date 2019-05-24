@@ -28,58 +28,6 @@
 
 }
 
-.center-img {
-  display: none;
-}
-
-.app-links {
-  max-width: 350px;
-  display: flex;
-  padding: 0 45px;
-  margin: 0 auto;
-  margin-top: 12px;
-  justify-content: space-between;
-  //align-items: flex-end;
-
-  span {
-    max-width: 73px;
-    font-weight: 600;
-    line-height: normal;
-    text-align: left;
-    color: #7e8085;
-  }
-}
-
-.app-link {
-  font-size: 0;
-  transition: all 0.5s ease;
-
-  &::before {
-    content: '';
-    display: block;
-    width: 30px;
-    height: 38px;
-    background-repeat: no-repeat;
-    background-position: bottom;
-  }
-
-  &:hover {
-    transform: scale(1.1);
-  }
-}
-
-.app-link--apple {
-  margin-left: auto;
-  margin-right: 22px;
-  &::before {
-    background-image: url("/assets/img/svg/apple.svg");
-  }
-}
-
-.app-link--google::before {
-  background-image: url("/assets/img/svg/clip-2.svg ");
-}
-
 @media (min-width: 610px) {
   .center-sub-title {
     padding-bottom: 300px;
@@ -122,12 +70,6 @@
     background: none;
   }
 
-  .app-links {
-    margin: 0;
-    margin-top: 102px;
-    padding: 0;
-    max-width: 200px;
-  }
 }
 
 

@@ -1,0 +1,364 @@
+.full-width {
+  margin: 0 -15px;
+}
+
+.center-second {
+  position: relative;
+  margin-bottom: 61px;
+
+  .lead-text {
+    max-width: 80%;
+    margin: 0 auto;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+}
+
+.center-sub-title {
+  &--extra {
+    margin: 0 auto;
+    padding: 0;
+    max-width: 600px;
+    background: none;
+    text-align: center;
+  }
+}
+
+.center-img {
+  display: none;
+}
+
+.center-img--mobile {
+  width: 100%;
+  margin-bottom: -20px;
+}
+
+.app-links {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  align-items: center;
+
+}
+
+.app-link {
+  max-width: 450px;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 22px;
+    height: 25px;
+    background-repeat: no-repeat;
+    background-position: bottom;
+  }
+
+}
+
+.app-link--apple {
+  margin-bottom: 20px;
+  &::before {
+    background-image: url("/assets/img/apple.svg");
+    margin-right: 11px;
+  }
+}
+
+.app-link--google::before {
+  background-image: url("/assets/img/google-play.svg");
+  margin-right: 6px;
+}
+
+.center-second__link {
+  display: block;
+  margin-top: 31px;
+  font-size: 16px;
+  text-align: center;
+  color: #2f5bea;
+  text-transform: uppercase;
+}
+
+.extra-features {
+  margin-bottom: 38px;
+
+  .d-container {
+    position: relative;
+  }
+
+  .lead-text {
+    padding-left: 88px;
+    padding-bottom: 120px;
+    //margin: 0 auto;
+    //margin-bottom: 120px;
+    //max-width: 700px;
+    font-size: 18px;
+    //line-height: 1.35;
+    //color: #2c2e30;
+  }
+
+}
+
+.extra-features__title {
+  margin-bottom: 6px;
+  padding-left: 88px;
+  font-size: 8px;
+  font-weight: 600;
+  text-align: left;
+  color: #0f183e;
+  text-transform: uppercase;
+}
+
+.extra-features__img {
+  position: absolute;
+  left: 3px;
+  top: 0;
+  max-width: 80px;
+}
+
+.features-list {
+  padding-left: 5px;
+}
+
+.features-list__item {
+  display: flex;
+  align-items: stretch;
+
+  span {
+    flex-basis: 52px;
+    flex-shrink: 0;
+    font-size: 56px;
+    line-height: normal;
+    text-align: center;
+    color: #e0e070;
+  }
+
+  p {
+    margin-left: 31px;
+    margin-bottom: 0;
+    max-width: 490px;
+
+    font-size: 14px;
+    line-height: 1.57;
+  }
+
+  &:nth-child(even) {
+    span {
+      color: #00d2e9;
+    }
+  }
+
+  &+& {
+    margin-top: 30px;
+  }
+}
+
+.extra-promo {
+  padding-top: 56px;
+  background-color: #f6f8f9;
+  overflow: hidden;
+  text-align: center;
+
+  .d-container {
+    position: relative;
+  }
+
+  .cta {
+    margin: 0 -15px;
+    padding-bottom: 45px;
+    background-color: initial;
+  }
+
+  .app-link--apple::before {
+    background-image: url("/assets/img/apple-w.svg");
+  }
+  .app-link--google::before {
+    background-image: url("/assets/img/google-play-w.svg");
+  }
+}
+
+.extra-promo__title {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.33;
+  text-align: center;
+
+  margin-bottom: 21px;
+}
+
+.extra-promo__text {
+  margin-bottom: 33px;
+  //max-width: 562px;
+  line-height: 1.57;
+  text-align: center;
+}
+
+.extra-promo__img {
+  max-width: 230px;
+  height: auto;
+  margin-bottom: -117px;
+  border-radius: 26px;
+  box-shadow: 0 2px 82px 0 rgba(9, 75, 128, 0.11);
+}
+
+@media (min-width: 610px) {
+  .center-sub-title {
+  }
+
+}
+
+@media (min-width: $break-split-page) {
+  .center-second {
+    padding-bottom: 314px;
+    margin-bottom: 98px;
+    text-align: left;
+    background-repeat: no-repeat;
+    background-image:  url("/assets/img/svg/gradient-curve.svg");
+    background-size: contain;
+    background-position-y: bottom;
+
+    .lead-text {
+      text-align: left;
+      max-width: initial;
+      font-size: 48px;
+      font-weight: 600;
+      height: 83px;
+      margin-top: 49px;
+      margin-bottom: 13px;
+      color: #151c32;
+    }
+
+  }
+
+  .center-img {
+    position: absolute;
+    display: block;
+    top: -90px;
+    left: calc(45vw + 15px);
+    max-width: 50vw;
+    height: auto;
+  }
+
+  .center-img--mobile {
+    display: none;
+  }
+
+  .center-sub-title {
+    &--extra {
+      margin: 0;
+      margin-bottom: 50px;
+      text-align: left;
+    }
+  }
+
+  .app-links {
+    margin: 0;
+    padding: 0;
+    flex-direction: row;
+  }
+
+  .app-link {
+    max-width: 200px;
+  }
+
+  .app-link--apple {
+    margin-right: 10px;
+    margin-bottom: 0;
+  }
+
+  .center-second__link {
+    display: none;
+  }
+
+  .extra-features {
+    margin-bottom: 170px;
+    .lead-text {
+      margin: 0 auto;
+      margin-bottom: 120px;
+      padding: 0;
+      max-width: 700px;
+      font-size: 34px;
+      line-height: 1.35;
+      text-align: center;
+    }
+  }
+
+  .features-list {
+    padding-left: 445px;
+  }
+
+  .features-list__item {
+    span {
+      font-size: 90px;
+      line-height: 96px;
+    }
+
+    p {
+      margin-left: 46px;
+      max-width: 490px;
+
+      font-size: 20px;
+      line-height: 1.6;
+    }
+
+    &+& {
+      margin-top: 70px;
+    }
+  }
+
+  .extra-features__title {
+    padding: 0;
+    margin-bottom: 25px;
+    font-size: 18px;
+    text-align: center;
+    text-transform: none;
+  }
+
+  .extra-features__img {
+    left: 65px;
+    top: auto;
+    max-width: initial;
+  }
+
+  .extra-promo {
+    padding-top: 104px;
+
+    .d-container {
+      position: relative;
+    }
+
+    .cta {
+      padding-bottom: 79px;
+      background-color: initial;
+    }
+
+    .app-link--apple::before {
+      background-image: url("/assets/img/apple-w.svg");
+    }
+    .app-link--google::before {
+      background-image: url("/assets/img/google-play-w.svg");
+    }
+  }
+
+  .extra-promo__title {
+    margin-top: 136px;
+    margin-bottom: 21px;
+    font-size: 34px;
+    line-height: 1.35;
+    text-align: left;
+  }
+
+  .extra-promo__text {
+    margin-bottom: 140px;
+    max-width: 562px;
+    font-size: 20px;
+    line-height: 1.6;
+    text-align: left;
+  }
+
+  .extra-promo__img {
+    position: absolute;
+    max-width: 354px;
+    border-radius: 41px;
+    right: -81px;
+    top: -136px;
+  }
+}
