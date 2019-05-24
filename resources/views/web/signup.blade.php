@@ -1,12 +1,14 @@
 @extends('web.layouts.page')
 
 @section('content')
-  <main class="page-container">
+  <main class="page-container page--signup">
     <section class="page-content">
-      <h1 class="page-title">Sign Up</h1>
+      <h1 class="page-title">Dental Practices <br>
+        Sign Up Here</h1>
 
       <p class="page-text">
-        Please sign up or login to access our dental office portal.
+        Please sign up to access
+        our dental office portal.
       </p>
 
       @if(Session::has('message'))
@@ -43,18 +45,18 @@
         </div>
 
         <div class="page-form__submit-btn">
-          <button class="d-btn btn--solid btn--medium" type="submit">Create account</button>
+          <button class="d-btn btn--gradient btn--medium" type="submit">Create account</button>
         </div>
 
         <div class="sign-up-link">
-          <a href="/login" class="page-link">Login</a>
+          <a href="/login" class="d-btn btn--outline">Login now</a>
         </div>
 
       </form>
     </section>
 
     <section class="page-picture page-picture--signup">
-      <a href="/jobseeker/signup" class="d-btn btn--blank">I'm a Dental Professional</a>
+      <a href="/jobseeker/signup" class="d-btn btn--outline btn--large">Job Seekers Sign Up Here</a>
     </section>
 
   </main>

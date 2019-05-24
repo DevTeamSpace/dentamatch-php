@@ -59,6 +59,7 @@
   color: #4897d8;
 }
 
+//remove
 .page-link--faded {
   font-weight: normal;
   color: #41515c;
@@ -77,7 +78,7 @@
 }
 
 .page-picture--login {
-  background-image: url("/assets/img/login/group@3x.jpg");
+  background-image: url("/assets/img/bg/login.jpg");
 }
 
 .page-picture--remember {
@@ -153,14 +154,19 @@
 
   .sign-up-link {
     position: absolute;
-    bottom: 53px;
+    bottom: 38px;
+    margin-left: -11px;
+
+    .d-btn {
+      max-width: 335px;
+      width: 335px;
+    }
   }
 
   .forgot-link {
     margin: 0;
-    position: absolute;
-    right: 35px;
-    bottom: 53px;
+    margin-top: 44px;
+    text-align: left;
   }
 
   .page--forgot {
@@ -192,6 +198,27 @@
 
     .page-form__fields {
       margin-bottom: 44px;
+    }
+  }
+
+  .page--login, .page--signup {
+    .page-content {
+      padding-top: 70px;
+    }
+    .page-text {
+      margin-top: 24px;
+      margin-bottom: 44px;
+    }
+  }
+
+  .page--signup {
+    .page-form__fields {
+      margin-bottom: 45px;
+    }
+
+    .sign-up-link .d-btn {
+      max-width: 222px;
+      width: 222px;
     }
   }
 }

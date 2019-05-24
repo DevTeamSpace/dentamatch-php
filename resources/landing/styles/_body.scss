@@ -54,7 +54,6 @@ button {
   justify-content: center;
   align-items: center;
 
-  //width: 290px;
   width: 100%;
   max-width: 290px;
   height: 55px;
@@ -100,6 +99,8 @@ button {
   background: white;
   color: #2f5bea;
 }
+
+
 
 .btn--outline {
   font-weight: normal;
@@ -199,7 +200,7 @@ label {
     font-weight: bold;
     font-style: normal;
     font-stretch: normal;
-    line-height: 1.67;
+    line-height: 1.31;
     color: #41515c;
   }
 
@@ -213,6 +214,10 @@ label {
 
   .btn--medium {
     width: 211px;
+  }
+
+  .btn--large {
+    max-width: 290px;
   }
 
 }

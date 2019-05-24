@@ -1,9 +1,10 @@
 @extends('web.layouts.page')
 
 @section('content')
-  <main class="page-container">
+  <main class="page-container page--login">
     <section class="page-content">
-      <h1 class="page-title">Login</h1>
+      <h1 class="page-title">Dental Practice <br>
+        Login Here</h1>
 
       <p class="page-text">
         Please sign up or login to access our dental office portal.
@@ -37,23 +38,23 @@
           </div>
         </div>
 
-        <div class="forgot-link">
-          <a href="{{url('password/reset')}}" class="page-link page-link--faded">Forgot password?</a>
+        <div class="page-form__submit-btn">
+          <button class="d-btn btn--gradient btn--mini" type="submit" tabindex="3">Login</button>
         </div>
 
-        <div class="page-form__submit-btn">
-          <button class="d-btn btn--solid btn--mini" type="submit" tabindex="3">Login</button>
+        <div class="forgot-link">
+          <a href="{{url('password/reset')}}" class="page-link">Forgot password?</a>
         </div>
 
         <div class="sign-up-link">
-          <a href="/signup" class="page-link">Sign Up</a>
+          <a href="/signup" class="d-btn btn--outline">Create a Dental Office Account</a>
         </div>
 
       </form>
     </section>
 
     <section class="page-picture page-picture--login">
-      <a href="/jobseeker/signup" class="d-btn btn--blank">I'm a Dental Professional</a>
+      <a href="/jobseeker/signup" class="d-btn btn--outline btn--large">Job Seekers Sign Up Here</a>
     </section>
 
   </main>

@@ -34,14 +34,14 @@
 
         <div class="page-form__submit-btn">
           <a class="d-btn btn--outline-grey btn--mini" tabindex="3" href="{{url('login')}}">Cancel</a>
-          <button class="d-btn btn--solid btn--mini" type="submit" tabindex="2">Send</button>
+          <button class="d-btn btn--gradient btn--mini" type="submit" tabindex="2">Send</button>
         </div>
 
       </form>
     </section>
 
     <section class="page-picture page-picture--remember">
-      <a href="/jobseeker/signup" class="d-btn btn--blank">I'm a Dental Professional</a>
+      <a href="/jobseeker/signup" class="d-btn btn--outline btn--large">Job Seekers Sign Up Here</a>
     </section>
 
   </main>
