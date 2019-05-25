@@ -125,22 +125,25 @@
                 <ul class="dashboadPostBlock">
                   @if(!empty($jobTemplateModalData))
                     <li>
-                      <div class="list-image"><a class="modalClick btn btn-link mr-r-20" data-toggle="modal"
+                      <div class="list-image"><a class="modalClick" data-toggle="modal"
                                                  data-target="#jobTemplate"><img
-                                  src="{{asset('web/images/dentamatch-folder.png')}}"></a></div>
-                      <p>Post New Job</p>
+                                  src="{{asset('web/images/dentamatch-folder.png')}}"><p>Post New Job</p></a></div>
                     </li>
                   @endif
                   <li>
-                    <div class="list-image"><a href="/jobtemplates/create"><img
-                                src="{{asset('web/images/dentamatch-plussign.png')}}"></a></div>
-                    <p>Create New Position Template</p>
+                    <div class="list-image"><a href="/jobtemplates/create" class=""><img
+                                src="{{asset('web/images/dentamatch-plussign.png')}}"><p>Create New Position Template</p></a></div>
                   </li>
                   <li>
-                    <div class="list-image"><a href="/job/lists"><img
-                                src="{{asset('web/images/dentamatch-foldercurrentJob.png')}}"></a></div>
-                    <p>View Active Job Posts</p>
+                    <div class="list-image"><a href="/job/lists" class=""><img
+                                src="{{asset('web/images/dentamatch-foldercurrentJob.png')}}"><p>View Active Job Posts</p></a></div>
                   </li>
+                  @if(\App\Models\RecruiterJobs::checkHasPendingRating())
+                      <li>
+                        <div class="list-image"><a href="/job/pending-rating" class=""><img
+                                    src="{{asset('web/images/create_profile.png')}}"><p>Leave a rating</p></a></div>
+                      </li>
+                  @endif
                 </ul>
               </div>
             </div>

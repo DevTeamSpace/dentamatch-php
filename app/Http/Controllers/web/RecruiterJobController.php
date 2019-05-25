@@ -174,21 +174,6 @@ class RecruiterJobController extends Controller
             if ($request->action == "edit" && !empty($request->id)) {
                 $recruiterJobObj = RecruiterJobs::find($request->id);
             }
-            if ($request->jobType == JobType::TEMPORARY) {
-                $tempPrevious = RecruiterJobs::chkTempJObRatingPending();
-                if ($tempPrevious) {
-                    $tempPreviousArray = $tempPrevious->toArray();
-                    foreach ($tempPreviousArray as $previousTempJob) {
-                        $tempJobLastDate = date("Y-m-d", strtotime($previousTempJob['job_date'] . " +1 days"));
-                        if (($previousTempJob['total_hired'] != $previousTempJob['total_rating']) && ($tempJobLastDate <= date("Y-m-d"))) {
-                            //$message = str_replace('###LINK###', url('job/details/'.$tempJobLastDate['id']), trans('messages.rate_previous_jobseeker'));
-                            $message = str_replace('###LINK###', url('job/pending-rating'), trans('messages.rate_previous_jobseeker'));
-                            Session::flash('message', $message);
-                            return redirect('createJob/' . $request->templateId);
-                        }
-                    }
-                }
-            }
             $recruiterJobObj->job_template_id = $request->templateId;
             $recruiterJobObj->recruiter_office_id = $request->dentalOfficeId;
             $recruiterJobObj->job_type = $request->jobType;

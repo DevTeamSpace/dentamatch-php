@@ -694,5 +694,16 @@ class RecruiterJobs extends Model
             ->orderBy('recruiter_jobs.id', 'desc');
         return $jobObj->get();
     }
+
+    public static function checkHasPendingRating()
+    {
+        foreach (RecruiterJobs::chkTempJObRatingPending()->toArray() as $previousTempJob) {
+            $tempJobLastDate = date("Y-m-d", strtotime($previousTempJob['job_date'] . " +1 days"));
+            if (($previousTempJob['total_hired'] != $previousTempJob['total_rating']) && ($tempJobLastDate <= date("Y-m-d"))) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
     
