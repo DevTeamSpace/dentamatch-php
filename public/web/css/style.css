@@ -213,7 +213,7 @@ and open the template in the editor.
     .dashboadPostBlock>li{display: inline-block; text-align: center; padding: 6px;cursor: pointer;}
 .dashboadPostBlock a{display:block !important;}
 .dashboadPostBlock img{margin-bottom:11px;}
-.dashboadPostBlock {font-weight:500;	color: #0470c0;     margin-left: 17px; margin-right: 17px;display: flex; justify-content: space-between;}
+.dashboadPostBlock {font-weight:500;	color: #0470c0;     margin-left: 17px; margin-right: 17px;display: flex; justify-content: space-around;}
 .dashboadPostBlock {    margin-top: 35px;  margin-bottom: 15px;}
 /*.dashboadPostBlock li{margin-right:7%; margin-bottom:10px;}*/
 .dashboadPostBlock li:last-child{margin-right:0px;}
