@@ -13,7 +13,7 @@
    viewBox="0 0 1920 363.07031"
    version="1.1"
    id="svg5112"
-   sodipodi:docname="combined-shape-top.svg"
+   sodipodi:docname="combined-shape-top2.svg"
    inkscape:version="0.92.1 r15371">
   <metadata
      id="metadata5116">
@@ -41,9 +41,9 @@
      id="namedview5114"
      showgrid="false"
      inkscape:zoom="0.59166667"
-     inkscape:cx="1006.097"
-     inkscape:cy="0.8237736"
-     inkscape:window-x="1912"
+     inkscape:cx="628.00336"
+     inkscape:cy="-264.51023"
+     inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg5112" />
@@ -69,19 +69,9 @@
     <linearGradient
        inkscape:collect="always"
        xlink:href="#a"
-       id="linearGradient5731"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.041836,0,0,0.95984401,0,-494)"
-       x1="921.45026"
-       y1="471.30426"
-       x2="921.45026"
-       y2="1512.7458" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#a"
        id="linearGradient5733"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.041836,0,0,0.95984401,0,-494)"
+       gradientTransform="matrix(1.051007,0,0,0.95984401,-5.0704223,-494)"
        x1="921.45026"
        y1="471.30426"
        x2="921.45026"
@@ -98,15 +88,9 @@
        y2="1512.7458" />
   </defs>
   <path
-     style="fill:url(#linearGradient5731)"
+     style="fill:url(#linearGradient5733);stroke-width:1.00439179"
      clip-path="none"
-     d="M 1920,363.07031 H 0 V 958 h 1920 z"
-     id="path5725"
-     inkscape:connector-curvature="0" />
-  <path
-     style="fill:url(#linearGradient5733)"
-     clip-path="none"
-     d="M 1913.6523,0 635.94727,341.41797 C 370.98427,412.21997 99.272,271.59586 0,23.005859 V 363.07031 H 1920 V 0 Z"
+     d="M 1925.4274,0 636.47498,341.41797 C 369.17955,412.21997 95.07545,271.59586 -5.0704225,23.005859 V 363.07031 H 1931.831 V 0 Z"
      id="path5723"
      inkscape:connector-curvature="0" />
   <path
