@@ -78,15 +78,25 @@
 
   <section class="extra-promo">
     <div class="d-container">
-      <div class="extra-promo__title">Download, Play, Enjoy.</div>
-      <p class="extra-promo__text">
-        White Gold began gaining popularity in the early 1900’s as an alternative to platinum. Platinum was steadily becoming more fashionable, but because of its rarity many could not afford it. Then, during World War II the government put a ban on the use of Platinum for any non-military functions and the demand for White Gold skyrocketed.
-      </p>
+      <div class="extra-promo__title">Need extra cash? <br>
+        Pick up extra work when you decide.
+      </div>
+      <ul class="extra-promo__list">
+        <li class="extra-promo__item">
+          On days when your office is normally closed.
+        </li>
+        <li class="extra-promo__item">
+          Keep yourself booked with extra work even when your boss is on vacation.
+        </li>
+        <li class="extra-promo__item">
+          Pick up extra days when you are in between jobs.
+        </li>
+      </ul>
       <img src="/assets/img/promo-img-c.png" alt="" class="extra-promo__img" width="516" height="889">
     </div>
 
     <div class="cta">
-      <b>Download our app</b>
+      <b>DentaMatch helps you keep your work life flexible. <br> Work when you want, on your schedule.</b>
       <a class="d-btn btn--gradient app-link app-link--apple" href="https://itunes.apple.com/us/app/dentamatch/id1185779291" target="_blank">App Store</a>
       <a class="d-btn btn--gradient app-link app-link--google" href="https://play.google.com/store/apps/details?id=com.appster.dentamatch" target="_blank">Google Play</a>
     </div>
