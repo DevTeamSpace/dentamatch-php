@@ -247,6 +247,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('downloadUnverifiedJobseeker', 'Cms\JobSeekerController@downloadUnverifiedJobseekerCsv');
 
         Route::get('incomplete', 'Cms\JobSeekerController@incomplete');
+        Route::get('csvJobseeker', 'Cms\JobSeekerController@csvJobseeker');
         Route::get('listIncompleteJobseeker', 'Cms\JobSeekerController@incompleteJobseekerList');
         Route::get('downloadIncompleteJobseeker', 'Cms\JobSeekerController@downloadIncompleteJobseekerCsv');
 
@@ -269,6 +270,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::post('storeAdminResetPassword', 'Cms\RecruiterController@storeAdminResetPassword');
         Route::get('{id}/adminResetPassword', 'Cms\RecruiterController@adminResetPassword');
         Route::get('{id}/view', 'Cms\RecruiterController@recruiterView');
+        Route::get('csvRecruiter', 'Cms\RecruiterController@csvRecruiter');
     });
 
     Route::group(['prefix' => 'notify/'], function () {
@@ -295,6 +297,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('search-location', 'Cms\ReportController@searchJobByLocation');
         Route::get('location', 'Cms\ReportController@searchCountbyLocation');
         Route::get('download/{type}', 'Cms\ReportController@downloadCsv');
+        Route::get('csvJobs', 'Cms\ReportController@csvJobs');
     });
 
 });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Cms;
 
 use App\Enums\JobAppliedStatus;
 use App\Enums\JobType;
+use App\Helpers\WebResponse;
 use App\Http\Controllers\Controller;
 use App\Models\JobseekerTempHired;
 use App\Utils\PushNotificationService;
@@ -20,6 +21,7 @@ use App\Models\TempJobDates;
 use App\Models\SavedJobs;
 use App\Models\JobLists;
 use App\Models\SearchFilter;
+use Facades\App\Transformers\JobTransformer;
 
 class ReportController extends Controller
 {
@@ -68,7 +70,8 @@ class ReportController extends Controller
     }
 
     /**
-     * Method to view details job response
+     * Method to view jobs list with statistics page
+     * GET /cms/report/responselist
      * @return Response
      */
     public function jobResponse()
@@ -77,8 +80,10 @@ class ReportController extends Controller
     }
 
     /**
-     * Method to get list of jobs with status
+     * Method to get jobs list with statistics
+     * GET AJAX /cms/report/response
      * @return Response
+     * @throws \Exception
      */
     public function jobResponseList()
     {
@@ -123,7 +128,9 @@ class ReportController extends Controller
 
     /**
      * Method to get list of jobs
+     * GET AJAX /report/list
      * @return Response
+     * @throws \Exception
      */
     public function jobLists()
     {
@@ -352,6 +359,34 @@ class ReportController extends Controller
             $result['message'] = $e->getMessage();
         }
         return $result;
+    }
+
+    /**
+     * GET /cms/report/csvJobs
+     */
+    public function csvJobs(){
+        $list = RecruiterJobs::query()->join('recruiter_offices', 'recruiter_jobs.recruiter_office_id', '=', 'recruiter_offices.id')
+            ->join('job_templates', 'job_templates.id', '=', 'recruiter_jobs.job_template_id')
+            ->join('job_titles', 'job_titles.id', '=', 'job_templates.job_title_id')
+            ->join('recruiter_profiles', 'recruiter_profiles.user_id', '=', 'recruiter_offices.user_id')
+            ->leftjoin('job_lists', 'job_lists.recruiter_job_id', '=', 'recruiter_jobs.id')
+            ->select('recruiter_profiles.office_name', 'job_titles.jobtitle_name', 'recruiter_jobs.*')
+            ->withCount(['tempJobDates as future_temp_dates_count' => function($q){ $q->whereRaw('curdate() <= job_date'); }])
+            ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 1, 1,0)) AS invited"))
+            ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 2, 1,0)) AS applied"))
+            ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 3, 1,0)) AS sortlisted"))
+            ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 4, 1,0)) AS hired"))
+            ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 5, 1,0)) AS rejected"))
+            ->addSelect(DB::raw("SUM(IF(job_lists.applied_status = 6, 1,0)) AS cancelled"))
+            ->groupby('recruiter_jobs.id')
+            ->orderBy('recruiter_jobs.id', 'desc')->get();
+
+        $fields = ['office_name', 'job_title', 'job_type', 'pay_rate', 'invited', 'applied', 'sortlisted', 'hired',
+                   'rejected', 'cancelled', 'status', 'published_on'];
+
+        $data = JobTransformer::transformAll($list, $fields);
+
+        return WebResponse::csvResponse($data, $fields, 'jobs');
     }
 
 }

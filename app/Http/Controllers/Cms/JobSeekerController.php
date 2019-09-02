@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Cms;
 
 use App\Enums\JobAppliedStatus;
+use App\Enums\SeekerVerifiedStatus;
 use App\Helpers\WebResponse;
 use App\Mail\ResetPassword;
 use App\Utils\PushNotificationService;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use Facades\App\Transformers\JobSeekerTransformer;
 use Yajra\Datatables\Datatables;
 use App\Models\Device;
 use App\Models\Notification;
@@ -255,15 +257,15 @@ class JobSeekerController extends Controller
         if (!empty($request->verify)) {
             switch ($request->verify) {
                 case "Approve" :
-                    $statusCode = 1;
+                    $statusCode = SeekerVerifiedStatus::APPROVED;
                     $msg = trans('messages.jobseeker_verification_approved');
                     break;
                 case "Reject" :
-                    $statusCode = 2;
+                    $statusCode = SeekerVerifiedStatus::REJECT;
                     $msg = trans('messages.jobseeker_verification_reject');
                     break;
                 default :
-                    $statusCode = 0;
+                    $statusCode = SeekerVerifiedStatus::NOT_VERIFIED;
                     $msg = trans('messages.jobseeker_updated_success');
                     break;
             }
@@ -387,8 +389,8 @@ class JobSeekerController extends Controller
 
     public function downloadIncompleteJobseekerCsv()
     {
-        $arr = [];
-        $data = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+        $headers = ["Email", "First Name", "Last Name"];
+        $list = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
             ->join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'users.id')
             ->select(
                 ['users.email',
@@ -397,37 +399,15 @@ class JobSeekerController extends Controller
             )
             ->where('user_groups.group_id', UserGroup::JOBSEEKER)
             ->where('jobseeker_profiles.is_completed', 0)
-            ->orderBy('users.id', 'desc')->get();
+            ->orderBy('users.id', 'desc')->get()->toArray();
 
-
-        $arr['email'] = "Email Id";
-        $arr['first_name'] = "First Name";
-        $arr['last_name'] = 'Last Name';
-        $list = $data->toArray();
-
-        header("Content-type: application/octet-stream");
-        header("Content-Disposition: attachment; filename=incompleteJobseeker_" . time() . ".csv");
-        header("Pragma: no-cache");
-        header("Expires: 0");
-
-        $outstream = fopen("php://output", 'r+');
-
-        fputcsv($outstream, $arr, ',', '"');
-
-        if (!empty($list)) {
-            foreach ($list as $value) {
-                fputcsv($outstream, $value, ',', '"');
-            }
-        }
-
-        fgets($outstream);
-        fclose($outstream);
+        return WebResponse::csvResponse($list, $headers, 'incompleteJobseeker');
     }
 
     public function downloadUnverifiedJobseekerCsv()
     {
-        $arr = [];
-        $data = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+        $headers = ["Email", "First Name", "Last Name"];
+        $list = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
             ->join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'users.id')
             ->select(
                 'users.email',
@@ -436,31 +416,9 @@ class JobSeekerController extends Controller
             )
             ->where('user_groups.group_id', UserGroup::JOBSEEKER)
             ->where('users.is_verified', 0)
-            ->orderBy('users.id', 'desc')->get();
+            ->orderBy('users.id', 'desc')->get()->toArray();
 
-
-        $arr['email'] = "Email Id";
-        $arr['first_name'] = "First Name";
-        $arr['last_name'] = 'Last Name';
-        $list = $data->toArray();
-
-        header("Content-type: application/octet-stream");
-        header("Content-Disposition: attachment; filename=unverifiedJobseeker_" . time() . ".csv");
-        header("Pragma: no-cache");
-        header("Expires: 0");
-
-        $outstream = fopen("php://output", 'r+');
-
-        fputcsv($outstream, $arr, ',', '"');
-
-        if (!empty($list)) {
-            foreach ($list as $value) {
-                fputcsv($outstream, $value, ',', '"');
-            }
-        }
-
-        fgets($outstream);
-        fclose($outstream);
+        return WebResponse::csvResponse($list, $headers, 'unverifiedJobseeker');
     }
 
     public function nonAvailableUsers()
@@ -532,7 +490,8 @@ class JobSeekerController extends Controller
 
     public function downloadNonAvailableUsersCsv()
     {
-        $arr = [];
+        $headers = ["Email", "First Name", "Last Name"];
+
         $availableUsers = JobSeekerTempAvailability::select('user_id')
             ->groupBy('user_id')
             ->get('user_id')
@@ -540,7 +499,7 @@ class JobSeekerController extends Controller
                 return $query['user_id'];
             })->toArray();
 
-        $data = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+        $list = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
             ->join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'users.id')
             ->select(
                 'users.email',
@@ -559,37 +518,16 @@ class JobSeekerController extends Controller
             ->where('is_parttime_saturday', 0)
             ->where('is_parttime_sunday', 0)
             ->orderBy('users.id', 'desc')
-            ->get();
+            ->get()->toArray();
 
-
-        $arr['email'] = "Email Id";
-        $arr['first_name'] = "First Name";
-        $arr['last_name'] = 'Last Name';
-        $list = $data->toArray();
-
-        header("Content-type: application/octet-stream");
-        header("Content-Disposition: attachment; filename=unavailable_jobseeker_" . time() . ".csv");
-        header("Pragma: no-cache");
-        header("Expires: 0");
-
-        $outstream = fopen("php://output", 'r+');
-
-        fputcsv($outstream, $arr, ',', '"');
-
-        if (!empty($list)) {
-            foreach ($list as $value) {
-                fputcsv($outstream, $value, ',', '"');
-            }
-        }
-
-        fgets($outstream);
-        fclose($outstream);
+        return WebResponse::csvResponse($list, $headers, 'unavailable_jobseeker');
     }
 
     public function downloadInvitedUsersCsv()
     {
-        $arr = [];
-        $data = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
+        $headers = ["Email", "First Name", "Last Name"];
+
+        $list = User::join('user_groups', 'user_groups.user_id', '=', 'users.id')
             ->join('jobseeker_profiles', 'jobseeker_profiles.user_id', '=', 'users.id')
             ->join('job_lists', 'job_lists.seeker_id', '=', 'users.id')
             ->select(
@@ -601,30 +539,31 @@ class JobSeekerController extends Controller
             ->where('job_lists.applied_status', JobAppliedStatus::INVITED)
             ->groupBy('users.id')
             ->orderBy('users.id', 'desc')
-            ->get();
+            ->get()
+            ->toArray();
 
+        return WebResponse::csvResponse($list, $headers, 'invited_jobseeker');
+    }
 
-        $arr['email'] = "Email Id";
-        $arr['first_name'] = "First Name";
-        $arr['last_name'] = 'Last Name';
-        $list = $data->toArray();
+    /**
+     * GET /cms/jobseeker/csvJobseeker
+     */
+    public function csvJobseeker(){
+        $list = JobSeekerProfiles::query()
+            ->with(['user:id,email,created_at',
+                    'user.skills:skill_name',
+                    'user.schooling',
+                    'preferredLocation:id,preferred_location_name',
+                    'jobTitle:id,jobtitle_name'])
+            ->get(['id', 'first_name', 'last_name', 'user_id', 'job_titile_id',
+                   'preferred_job_location_id', 'is_job_seeker_verified', 'license_number',
+                'state']);
 
-        header("Content-type: application/octet-stream");
-        header("Content-Disposition: attachment; filename=invited_jobseeker_" . time() . ".csv");
-        header("Pragma: no-cache");
-        header("Expires: 0");
+        $fields = ['first_name', 'last_name', 'email', 'phone', 'license_number', 'license_state', 'job_title',
+            'skills', 'preferred_location', 'school_name', 'registration_date', 'verification_status'];
 
-        $outstream = fopen("php://output", 'r+');
+        $data = JobSeekerTransformer::transformAll($list, $fields);
 
-        fputcsv($outstream, $arr, ',', '"');
-
-        if (!empty($list)) {
-            foreach ($list as $value) {
-                fputcsv($outstream, $value, ',', '"');
-            }
-        }
-
-        fgets($outstream);
-        fclose($outstream);
+        return WebResponse::csvResponse($data, $fields, 'jobSeekers');
     }
 }

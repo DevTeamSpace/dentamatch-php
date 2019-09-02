@@ -15,6 +15,7 @@ use Yajra\Datatables\Datatables;
 use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\RecruiterProfile;
+use Facades\App\Transformers\RecruiterTransformer;
 
 class RecruiterController extends Controller
 {
@@ -194,6 +195,21 @@ class RecruiterController extends Controller
             ->where('users.id', $id)->first();
 
         return view('cms.recruiter.view', ['userProfile' => $userProfile]);
+    }
+
+    /**
+     * GET /cms/recruiter/csvRecruiter
+     */
+    public function csvRecruiter(){
+        $list = RecruiterProfile::query()
+            ->with(['recruiter:id,email,created_at'])
+            ->get(['id', 'user_id', 'office_name']);
+
+        $fields = ['email', 'phone', 'office_name', 'registration_date'];
+
+        $data = RecruiterTransformer::transformAll($list, $fields);
+
+        return WebResponse::csvResponse($data, $fields, 'recruiters');
     }
 
 }

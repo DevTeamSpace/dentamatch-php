@@ -26,9 +26,9 @@
       <div class="col-md-12 col-md-offset-0">
         <div class="panel panel-default">
           <div class="panel-heading">JobSeeker List
-          <!--                    <div class="span6 pull-right" style="text-align:right">
-                        <a href="{{ URL::to("cms/jobseeker/create") }}">Add JobSeeker</a>
-                    </div>-->
+            <div class="span6 pull-right" style="text-align:right">
+              <a href="{{ url('cms/jobseeker/csvJobseeker') }}">Download CSV</a>
+            </div>
           </div>
 
           <div class="panel-body">

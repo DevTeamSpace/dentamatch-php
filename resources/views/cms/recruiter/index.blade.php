@@ -10,6 +10,9 @@
             <div class="span6 pull-right" style="text-align:right">
               <a href="{{ URL::to("cms/recruiter/create") }}">Add Recruiter</a>
             </div>
+            <div class="span6 pull-right" style="text-align:right; margin-right: 15px;">
+              <a href="{{ url('cms/recruiter/csvRecruiter') }}">Download CSV</a>
+            </div>
           </div>
 
           <div class="panel-body">
