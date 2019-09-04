@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Cms;
 
 use App\Enums\ActionCategory;
 use App\Enums\ActionType;
+use App\Helpers\WebResponse;
 use App\Models\ActionLog;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\HtmlString;
 use Yajra\Datatables\Datatables;
+use Facades\App\Transformers\ActivityTransformer;
 
 class ActivityController extends Controller
 {
@@ -63,6 +65,22 @@ class ActivityController extends Controller
                 return new HtmlString("<pre>$dataStr</pre>");
             })
             ->make(true);
+    }
+
+    /**
+     * GET /cms/jobseeker/csvJobseeker
+     */
+    public function csvActivities(){
+        $list = ActionLog::query()
+            ->with(['user:id,email'])
+            ->with(['job.jobTemplate.jobTitle:id,jobtitle_name'])
+            ->latest()->get();
+
+        $fields = ['category', 'type', 'user', 'job_title', 'date'];
+
+        $data = ActivityTransformer::transformAll($list, $fields);
+
+        return WebResponse::csvResponse($data, $fields, 'activities');
     }
 
 }

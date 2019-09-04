@@ -157,6 +157,7 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
     Route::group(['prefix' => 'activity/'], function () {
         Route::get('index', 'Cms\ActivityController@index');
         Route::get('list', 'Cms\ActivityController@activitiesList');
+        Route::get('csv', 'Cms\ActivityController@csvActivities');
     });
 
     Route::group(['prefix' => 'area/'], function () {

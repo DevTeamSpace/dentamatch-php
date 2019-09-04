@@ -75,6 +75,7 @@ $(function () {
   ], true);
 
   makeDataTable('#activities_list', 'activity', [
+    {data: 'created_at', name: 'created_at', searchable:false},
     {data: 'category', name: 'category', searchable:false},
     {data: 'type', name: 'type', searchable:true},
     {data: 'user', name: 'user.email', searchable:true},
