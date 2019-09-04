@@ -26,17 +26,17 @@
         body {
             font-family: 'Lato';
         }
-        
+
         .fa-btn {
             margin-right: 6px;
         }
-        
+
         .navbar-brand {
             padding: 7px 15px;
         }
         .mr-t13{margin-top:13px !important;}
-        
-        table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child, 
+
+        table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child,
         table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child{white-space: normal;}
     </style>
 </head>
@@ -68,7 +68,7 @@
                         <li><a href="{{ url('cms/login') }}">Login</a></li>
                     @else
                         @if (Auth::user()->userGroup->group_id==1)
-                        
+
                             <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     Menu <span class="caret"></span>
@@ -88,11 +88,11 @@
                                 <li><a href="{{ url('cms/recruiter/index') }}">Recruiter</a></li>
                                 <li><a href="{{ url('cms/notify/index') }}">Notify Users</a></li>
                                 <li><a href="{{ url('cms/config/pay-rate') }}">Pay-rate</a></li>
-                               
+
 <!--                                <li><a href="{{ url('cms/report/search-location') }}">Search Location</a></li>-->
                             </ul>
                         </li>
-                        
+
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     Job Seeker Report<span class="caret"></span>
@@ -106,9 +106,10 @@
                                  <li><a href="{{ url('cms/report/index') }}">Job Lists</a></li>
                                 <li><a href="{{ url('cms/report/cancellist') }}">Cancel Lists</a></li>
                                 <li><a href="{{ url('cms/report/responselist') }}">Response Rate</a></li>
+                                <li><a href="{{ url('cms/activity/index') }}">Activity Log</a></li>
                             </ul>
                         </li>
-                        
+
                         @endif
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

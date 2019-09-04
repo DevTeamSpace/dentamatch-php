@@ -24,6 +24,7 @@ class UserApiController extends Controller
     public function __construct()
     {
         $this->middleware(['ApiAuth', 'ApiLog'], ['only' => ['deleteSignOut']]);
+        $this->middleware('ApiActionLog');
     }
 
     /**

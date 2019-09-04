@@ -74,6 +74,14 @@ $(function () {
       }},
   ], true);
 
+  makeDataTable('#activities_list', 'activity', [
+    {data: 'category', name: 'category', searchable:false},
+    {data: 'type', name: 'type', searchable:true},
+    {data: 'user', name: 'user.email', searchable:true},
+    {data: 'jobTitle', name: 'jobTitle', searchable:false},
+    {data: 'request_data', name: 'request_data', searchable:false},
+  ], false, true);
+
   makeDataTable('#jobtitle_list', 'jobtitle', [
     {data: 'jobtitle_name', name: 'jobtitle_name',searchable:true},
   ], true);
@@ -445,7 +453,7 @@ $(function () {
 //    }).on('changeDate', function(ev) {
 //      end_date.hide();
 //    }).data('datepicker');
-//    
+//
 //    var startDate = $('#startDate').datepicker({
 //        format:"yyyy-mm-dd",
 //        onRender: function(date) {
@@ -467,7 +475,7 @@ $(function () {
 //    var endDate = $('#endDate').datepicker({
 //        format:"yyyy-mm-dd",
 //        onRender: function(date) {
-//            return (date.valueOf() < startDate.date.valueOf() || 
+//            return (date.valueOf() < startDate.date.valueOf() ||
 //                    date.valueOf() > now.valueOf())?'disabled':'';
 //        }
 //    }).on('click', function(ev) {

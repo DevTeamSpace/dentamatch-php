@@ -8,6 +8,7 @@ use App\Enums\SeekerVerifiedStatus;
 use App\Helpers\JobsHelper;
 use App\Http\Controllers\Controller;
 use App\Models\JobSeekerProfiles;
+use App\Utils\ActionLogUtils;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
@@ -49,6 +50,8 @@ class SearchApiController extends Controller
 
         $reqData['userId'] = $userId;
         $searchResult = RecruiterJobs::searchJob($reqData);
+        ActionLogUtils::logSeekerSearch($request);
+
         if (count($searchResult['list']) > 0) {
             $userData = User::getUser($userId);
             $searchResult['isJobSeekerVerified'] = isset($userData['is_job_seeker_verified']) ? $userData['is_job_seeker_verified'] : null;
@@ -92,7 +95,7 @@ class SearchApiController extends Controller
     }
 
     /**
-     * Description : Apply for a Job
+     * Description : Apply for a Job (Fulltime or Parttime) from search or Invite
      * Method : postApplyJob
      * formMethod : POST
      * @param Request $request
@@ -122,6 +125,7 @@ class SearchApiController extends Controller
             if (!empty($jobExists) && $jobExists->applied_status == JobAppliedStatus::INVITED) {
                 JobLists::where('id', $jobExists->id)->update(['applied_status' => JobAppliedStatus::APPLIED]);
                 $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
+                ActionLogUtils::logApplyForAJob($reqData['jobId'], $userId, true);
                 $response = ApiResponse::successResponse(trans("messages.apply_job_success"));
             } else if (!empty($jobExists) && $jobExists->applied_status == JobAppliedStatus::APPLIED) {
                 $response = ApiResponse::successResponse(trans("messages.job_already_applied"));
@@ -136,6 +140,7 @@ class SearchApiController extends Controller
                 $applyJobs = ['seeker_id' => $userId, 'recruiter_job_id' => $reqData['jobId'], 'applied_status' => JobAppliedStatus::APPLIED];
                 JobLists::insert($applyJobs);
                 $this->notifyAdmin($reqData['jobId'], $userId, Notification::JOBSEEKERAPPLIED);
+                ActionLogUtils::logApplyForAJob($reqData['jobId'], $userId);
                 $response = ApiResponse::successResponse(trans("messages.apply_job_success"));
             } else {
                 $response = ApiResponse::errorResponse(trans("messages.set_availability"));
@@ -148,7 +153,7 @@ class SearchApiController extends Controller
     }
 
     /**
-     * Description : Cancel a job
+     * Description : Cancel a job (any job - full, part or temp)
      * Method : postCancelJob
      * formMethod : POST
      * @param Request $request
@@ -163,7 +168,7 @@ class SearchApiController extends Controller
         ]);
         $userId = $request->apiUserId;
         $reqData = $request->all();
-        $jobExists = JobLists::select('id')->where('seeker_id', '=', $userId)->where('recruiter_job_id', '=', $reqData['jobId'])
+        $jobExists = JobLists::select('id')->where('seeker_id', $userId)->where('recruiter_job_id',  $reqData['jobId'])
             ->whereIn('applied_status', [JobAppliedStatus::SHORTLISTED, JobAppliedStatus::APPLIED, JobAppliedStatus::HIRED])->first();
         if ($jobExists) {
             $jobExists->applied_status = JobAppliedStatus::CANCELLED;
@@ -172,6 +177,7 @@ class SearchApiController extends Controller
             //delete from temp hired jobs
             JobseekerTempHired::where('jobseeker_id', $userId)->where('job_id', $reqData['jobId'])->delete();
             $this->notifyAdminForCancelJob($reqData['jobId'], $userId, $reqData['cancelReason']);
+            ActionLogUtils::logCancelJob($reqData['jobId'], $userId, $reqData['cancelReason']);
             $response = ApiResponse::successResponse(trans("messages.job_cancelled_success"));
         } else {
             $response = ApiResponse::errorResponse(trans("messages.job_not_applied_by_you"));

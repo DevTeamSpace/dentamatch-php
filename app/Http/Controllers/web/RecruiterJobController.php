@@ -5,6 +5,7 @@ namespace App\Http\Controllers\web;
 use App\Enums\JobAppliedStatus;
 use App\Enums\JobType;
 use App\Mail\NewInvite;
+use App\Utils\ActionLogUtils;
 use App\Utils\PushNotificationService;
 use Auth;
 use App\Http\Controllers\Controller;
@@ -152,7 +153,10 @@ class RecruiterJobController extends Controller
 
     /**
      * Method to save/update a job
+     * POST /createJob/saveOrUpdate
+     *
      * @return view
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function saveOrUpdate(Request $request)
     {
@@ -167,12 +171,13 @@ class RecruiterJobController extends Controller
             'id'                     => 'integer|required_if:action,edit',
             'preferredJobLocationId' => 'integer|required'
         ]);
+
         try {
 
             DB::beginTransaction();
             $recruiterJobObj = new RecruiterJobs();
             if ($request->action == "edit" && !empty($request->id)) {
-                $recruiterJobObj = RecruiterJobs::find($request->id);
+                $recruiterJobObj = RecruiterJobs::find($request->id); // todo missing current user validation
             }
             $recruiterJobObj->job_template_id = $request->templateId;
             $recruiterJobObj->recruiter_office_id = $request->dentalOfficeId;
@@ -203,6 +208,9 @@ class RecruiterJobController extends Controller
                 }
             }
             DB::commit();
+            if ($request->action == 'add')
+                ActionLogUtils::logRecruiterPostJob($recruiterJobObj->id);
+
             unset($recruiterJobObj);
             return redirect('job/lists');
         } catch (\Exception $e) {
@@ -313,7 +321,10 @@ class RecruiterJobController extends Controller
 
     /**
      * Method to update job status
+     * Invite, hire or Reject Seeker
+     * @param Request $request
      * @return view
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function updateStatus(Request $request)
     {
@@ -328,6 +339,7 @@ class RecruiterJobController extends Controller
         if ($jobData) {
             $jobData->applied_status = $requestData['appliedStatus'];
             $jobData->save();
+            ActionLogUtils::logJobListStatus($jobData);
 
             if ($requestData['appliedStatus'] == JobAppliedStatus::SHORTLISTED || $requestData['appliedStatus'] == JobAppliedStatus::HIRED) {
                 $userChat = new ChatUserLists();

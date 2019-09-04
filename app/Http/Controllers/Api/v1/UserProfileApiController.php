@@ -6,6 +6,7 @@ use App\Enums\SeekerVerifiedStatus;
 use App\Http\Controllers\Controller;
 use App\Mail\AdminVerifyJobseeker;
 use App\Mail\PendingEmailVerification;
+use App\Utils\ActionLogUtils;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -310,6 +311,8 @@ class UserProfileApiController extends Controller
         $userProfile->state = isset($reqData['state']) ? $reqData['state'] : null;
         $userProfile->is_job_seeker_verified = $isJobSeekerVerified;
         $userProfile->save();
+
+        ActionLogUtils::logSeekerProfileUpdated($userId, $userProfile->getChanges());
 
         ApiResponse::chkProfileComplete($userId);
         $message = trans("messages.user_profile_updated");

@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\RecruiterProfile;
 use App\Http\Controllers\Controller;
+use App\Utils\ActionLogUtils;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -53,6 +54,7 @@ class SignupController extends Controller
 
     /**
      * Method to view login page
+     * GET /login
      * @return view
      */
     public function getLogin(Request $request)
@@ -76,16 +78,12 @@ class SignupController extends Controller
     }
 
     /**
-     * Method to check user login
-     * @return view
+     * Login dental practice
+     * POST /login
+     * @return Response
      */
     protected function postLogin(Request $request)
     {
-        $validation_rules = ['email' => 'required|email', 'password' => 'required'];
-        $validator = Validator::make($request->all(), $validation_rules);
-        if ($validator->fails()) {
-            Session::flash('message', "Validation Failure");
-        }
         $users = User::where('email', $request->email)->first();
         $credentials = ['email' => $request->email, 'password' => $request->password, 'is_verified' => 1, 'is_active' => 1];
         $message = trans("messages.invalid_cred_or_not_active");
@@ -93,6 +91,7 @@ class SignupController extends Controller
         if (Auth::validate($credentials)) {
             $user = User::where('email', $credentials['email'])->first();
             if ($user->userGroup->group_id == UserGroup::RECRUITER && Auth::attempt($credentials)) {
+                ActionLogUtils::logRecruiterLogin($user->id);
                 $redirect = 'terms-conditions';
                 $term = RecruiterProfile::where('user_id', Auth::user()->id)->first();
                 $request->session()->put('userData', ['basic' => $user->toArray(), 'profile' => $term->toArray()]);
@@ -195,6 +194,8 @@ class SignupController extends Controller
 
                 DB::commit();
                 Session::flash('success', trans("messages.successfully_register"));
+
+                ActionLogUtils::logRecruiterSignup($user_details->id);
             }
         } catch (\Exception $e) {
             Log::error($e);
@@ -341,7 +342,8 @@ class SignupController extends Controller
     }
 
     /**
-     * Method to check verification code
+     * Validate user email by verification code
+     * Both for Recruiters & Job Seekers
      * @return view
      */
     public function getVerificationCode($code)
@@ -358,6 +360,7 @@ class SignupController extends Controller
             if (isset($user) && !empty($user)) {
                 User::where('verification_code', $code)->update(['is_verified' => 1, 'is_active' => 1]);
                 Session::flash('success', trans("messages.verified_user"));
+                ActionLogUtils::logEmailVerification($user->group_id, $user->id);
                 if ($user->group_id == UserGroup::JOBSEEKER) {
                     $userProfileModel = UserProfile::getUserProfile($user->id);
                     $msg = "Hi " . $userProfileModel['first_name'] . " , <br />Your account is ready for you! Please login with the DentaMatch app.";

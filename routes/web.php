@@ -26,7 +26,7 @@ Route::post('jobseeker/storeSignup', 'web\SignupController@postJobseekerSignUp')
 Route::get('jobseeker/signup', 'web\SignupController@getJobseekerSignUp');
 
 Route::get('verification-code/{code}', 'web\SignupController@getVerificationCode');
-Route::get('user-activation/{code}', 'Api\v1\UserApiController@getActivateJobseeker');
+Route::get('user-activation/{code}', 'Api\v1\UserApiController@getActivateJobseeker'); // todo useless
 Route::get('logout', 'web\SignupController@logout');
 Route::get('users/notification/seen/{id}', 'web\NotificationController@seenNotification');
 Route::get('/aboutus', function () { return view('about'); });
@@ -85,7 +85,7 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
                 Route::get('job/edit-details', 'web\RecruiterJobController@jobEditDetails');
                 Route::post('edit-job', 'web\RecruiterJobController@postEditJob');
                 Route::post('delete-job', 'web\RecruiterJobController@postDeleteJob');
-                Route::post('job/updateStatus', 'web\RecruiterJobController@updateStatus');
+                Route::post('job/updateStatus', 'web\RecruiterJobController@updateStatus'); // invite, hire or reject
                 Route::get('job/seekerdetails/{seekerId}/{jobId}', 'web\RecruiterJobController@jobSeekerDetails');
                 Route::get('/jobseeker/{seekerId}', 'web\RecruiterJobController@jobSeekerProfile');
                 Route::post('createJob/saveOrUpdate', 'web\RecruiterJobController@saveOrUpdate');
@@ -152,6 +152,11 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
     Route::group(['prefix' => 'user/'], function () {
         Route::get('changePassword', 'Cms\UserController@changePassword');
         Route::post('updatePassword', 'Cms\UserController@updatePassword');
+    });
+
+    Route::group(['prefix' => 'activity/'], function () {
+        Route::get('index', 'Cms\ActivityController@index');
+        Route::get('list', 'Cms\ActivityController@activitiesList');
     });
 
     Route::group(['prefix' => 'area/'], function () {
