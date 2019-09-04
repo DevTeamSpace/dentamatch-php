@@ -86,13 +86,13 @@ class ActionLogUtils
         if($request->input('jobTitle')) {
             $requestData['jobTitle'] =
                 JobTitles::findMany($request->input('jobTitle'), ['jobtitle_name'])
-                    ->implode('jobtitle_name', ',');
+                    ->implode('jobtitle_name', ', ');
         }
 
         if($request->input('preferredJobLocationId')) {
             $requestData['preferredJobLocation'] =
                 PreferredJobLocation::findMany($request->input('preferredJobLocationId'),
-                    ['preferred_location_name'])->toArray();
+                    ['preferred_location_name'])->implode('preferred_location_name', ', ');
         }
 
         if($request->input('isFulltime')) {
