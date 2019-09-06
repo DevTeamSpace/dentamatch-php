@@ -22,6 +22,19 @@ class ActivityTransformer
         $result['user'] = $item->user->email;
         $result['job_title'] = object_get($item, 'job.jobTemplate.jobTitle.jobtitle_name');
         $result['date'] = $item->created_at->toDateTimeString();
+        $result['data'] = '';
+        if ($item->request_data) {
+            $parsed = json_decode($item->request_data, true);
+            if ($parsed) {
+                $data = [];
+                foreach ($parsed as $name => $value) {
+                    $data[] = "$name: " . (is_array($value)? implode(', ', $value) : $value);
+                }
+                $result['data'] = implode("\r\n", $data);
+            }
+        }
+
+
 
         return $result;
     }

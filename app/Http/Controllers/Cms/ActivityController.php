@@ -76,7 +76,7 @@ class ActivityController extends Controller
             ->with(['job.jobTemplate.jobTitle:id,jobtitle_name'])
             ->latest()->get();
 
-        $fields = ['category', 'type', 'user', 'job_title', 'date'];
+        $fields = ['category', 'type', 'user', 'job_title', 'date', 'data'];
 
         $data = ActivityTransformer::transformAll($list, $fields);
 
