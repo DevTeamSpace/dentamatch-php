@@ -59,7 +59,7 @@ class ActivityController extends Controller
                 if (!$parsed) return '';
                 $data = [];
                 foreach ($parsed as $name => $value) {
-                    $data[] = "$name: $value";
+                    $data[] = "$name: " . (is_array($value)? implode(', ', $value) : $value);
                 }
                 $dataStr = implode("\r\n", $data);
                 return new HtmlString("<pre>$dataStr</pre>");
