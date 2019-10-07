@@ -125,9 +125,10 @@ class SubscriptionController extends Controller
         $trialDays = object_get($codeModel, 'free_days', 0);
 
         $stripeSubscription = $stripeCustomer->subscriptions->create([
-            'plan'            => $planId,
+            'plan'              => $planId,
             'trial_period_days' => $trialDays,
-            'metadata' => ['promo' => object_get($codeModel, 'code', '')]
+            'trial_from_plan'   => false,
+            'metadata'          => ['promo' => object_get($codeModel, 'code', '')]
         ]);
 
         $subscription = $recruiter->subscriptions()->create([
@@ -283,13 +284,13 @@ class SubscriptionController extends Controller
 
         if ($codeModel->valid_days_from_sign_up &&
             Auth::user()->created_at->addDays($codeModel->valid_days_from_sign_up) < Carbon::today()->toDateString())
-                return WebResponse::errorResponse("Code '$request->promoCode' has expired");
+            return WebResponse::errorResponse("Code '$request->promoCode' has expired");
 
         return WebResponse::dataResponse([
-            'code' => $codeModel->code,
+            'code'         => $codeModel->code,
             'subscription' => $codeModel->subscription,
-            'text' => $codeModel->name,
-            'noPayment' => $codeModel->free_days > 0
+            'text'         => $codeModel->name,
+            'noPayment'    => $codeModel->free_days > 0
         ]);
 
     }
