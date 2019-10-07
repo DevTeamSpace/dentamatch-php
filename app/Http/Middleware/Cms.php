@@ -9,7 +9,7 @@ use Illuminate\Session\Store;
 class Cms
 {
     protected $session;
-    protected $timeout = 900;
+    protected $timeout = 90000;
 
     public function __construct(Store $session){
         $this->session = $session;
@@ -33,10 +33,10 @@ class Cms
         }
         return $this->handleSessionTimeout($request, $next);
     }
-    
+
     public function handleSessionTimeout($request, $next){
         $user = Auth::user();
-        
+
         if(isset($user) && $user->userGroup->group_id==UserGroup::ADMIN){
             $isLoggedIn = $request->path() != 'logout';
             if(! session('lastActivityTime')) {
@@ -57,6 +57,6 @@ class Cms
         }else{
             return redirect("/")->withMyerror("You are not authorized for this action");
         }
-        
+
     }
 }
