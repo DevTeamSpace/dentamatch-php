@@ -5,50 +5,62 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <div class="container" id="subscription">
     <div class="frm-cred-access-box subscription-box" style="display: none" data-bind="visible: subscriptionAvailable() || noSubscription()">
-      <h4 class="frm-title">Our Subscription Plan</h4>
+      <h4 class="frm-title">Our Subscription Plans</h4>
       <p>Unlock unlimited template creation, job postings, candidate searches, messaging and reports.</p>
+      <form class="form-inline mr-t-20" id="promo-code-form" data-bind="submit: checkPromoCode">
+        <div class="form-group mx-sm-3 mb-2 mr-r-10">
+          <label for="promo-code-input" class="sr-only">Promo Code</label>
+          <input type="text" class="form-control" id="promo-code-input" name="promo-code"
+                 data-bind="value: promoCode, disable: codeSubmitting, valueUpdate: 'input'"
+                 placeholder="Enter Promo Code">
+        </div>
+        <button type="submit" class="btn btn-primary" data-bind="disable: codeSubmitting() || !promoCode(), hidden: selectedSubscription()">Apply</button>
+        <button type="button" class="btn btn-link" data-bind="visible: selectedSubscription(), click: clearCode">Remove</button>
+        <div class="text-danger mr-t-5" style="position: absolute" data-bind="text: codeMessage"></div>
+      </form>
+
       <div class="subs-holder text-center ">
         <!--ko foreach: subscriptionDetails-->
-        <div class="subscription-inr-box ">
+        <div class="subscription-inr-box" data-bind="class: $root.monthlyClass()">
           <div class="subscription-type">
             <p class="mr-b-10">Monthly</p>
             <div class="subcription-price pos-rel">
               <span class="price-symbol ">$</span>
               <span class="price" data-bind="text: monthlyPrice"></span>
+              <p class="mr-t-15" data-bind="text: $root.couponText, visible: $root.selectedSubscription() == 'Monthly'"></p>
               <input type="hidden" id="stype" value="1">
             </div>
           </div>
-          <a id="stripe" data-bind="click: $root.showAddCardPopup"
+          <a id="stripe" data-bind="click: $root.showAddCardPopup, hidden: $root.selectedSubscription() && $root.selectedSubscription() != 'Monthly'"
              class="btn btn-primary pd-l-10 pd-r-10 mr-t-10 mr-b-20">Next
             Step</a>
         </div>
-        <div class="subscription-inr-box ">
+        <div class="subscription-inr-box" data-bind="class: $root.semiAnnualClass()">
           <div class="subscription-type">
             <p class="mr-b-10">Semi-Annual</p>
             <div class="subcription-price pos-rel">
               <span class="price-symbol ">$</span>
               <span class="price" data-bind="text: halfYearPrice"></span>/month
-              <p data-bind="visible: $root.isNewCustomer">plus a 1 month free trial</p>
+              <p class="mr-t-15" data-bind="text: $root.couponText, visible: $root.selectedSubscription() == 'Semi-Annual'"></p>
               <input type="hidden" id="stype" value="2">
             </div>
           </div>
-          <a id="stripe" data-bind="click: $root.showAddCardPopup"
-             class="btn btn-primary pd-l-10 pd-r-10 mr-t-10 mr-b-20">Next
-            Step</a>
+          <a id="stripe" data-bind="click: $root.showAddCardPopup, hidden: $root.selectedSubscription() && $root.selectedSubscription() != 'Semi-Annual'"
+             class="btn btn-primary pd-l-10 pd-r-10 mr-t-10 mr-b-20">Next Step</a>
         </div>
 
-        <div class="subscription-inr-box ">
+        <div class="subscription-inr-box" data-bind="class: $root.annualClass()">
           <div class="subscription-type">
             <p class="mr-b-10">Annual</p>
             <div class="subcription-price pos-rel">
               <span class="price-symbol ">$</span>
               <span class="price" data-bind="text: fullYearPrice"></span>/month
-              <p data-bind="visible: $root.isNewCustomer">plus a 1 month free trial</p>
-              <p class="text-uppercase">Best Value</p>
+              <p class="text-uppercase mr-t-15">Best Value</p>
+              <p class="mr-t-15" data-bind="text: $root.couponText, visible: $root.selectedSubscription() == 'Annual'"></p>
               <input type="hidden" id="stype" value="3">
             </div>
           </div>
-          <a id="stripe" data-bind="click: $root.showAddCardPopup"
+          <a id="stripe" data-bind="click: $root.showAddCardPopup, hidden: $root.selectedSubscription() && $root.selectedSubscription() != 'Annual'"
              class="btn btn-primary pd-l-10 pd-r-10 mr-t-10 mr-b-20">Next Step</a>
         </div>
 
@@ -124,8 +136,9 @@
             <p class="text-center" style="color: blue" data-bind="text: creatingMessage"></p>
             <p class="text-center" style="color: red" data-bind="text: errorMessage"></p>
             <p class="text-center" style="color: green;" data-bind="text: successMessage"></p>
-            <p class="text-center">You have already added card please continue to subscribe.</p>
-            <p class="text-center">* You can manage your cards once you login.</p>
+            <p class="text-center" data-bind="hidden: noPayment">You have already added card please continue to subscribe.</p>
+            <p class="text-center" data-bind="hidden: noPayment">* You can manage your cards once you login.</p>
+            <p class="text-center" data-bind="visible: noPayment">You are about to subscribe</p>
             <div class="mr-t-20 mr-b-30 dev-pd-l-13p">
               <button type="button" class="btn btn-link mr-r-5" data-dismiss="modal" data-bind="disable: disableInput">
                 Close
@@ -146,16 +159,18 @@
             <h4 class="modal-title">Thank you</h4>
           </div>
           <div class="modal-body">
-            <p class="text-center js-trial">Thank you for your subscription! <br>
+            <p class="text-center js-long">Thank you for your subscription! <br>
               You have successfully signed up for DentaMatch. <br>
-              <span data-bind="visible: isNewCustomer"><br>Your free trial begins today.</span></p>
+              <span data-bind="visible: noPayment" ><br>Your free trial begins today.</span>
+            </p>
 
-            <p class="text-center js-no-trial">Thank you for your subscription! <br>
-              Enjoy all the benefits of DentaMatch for one month! <br><br>
-              <span data-bind="hidden: subscriptionIsCancelled">Your monthly subscription will automatically renew after the first month OR you can <br>
-              <button type="button" class="btn-link"
-                      data-bind="click: cancelSubscriptionFunction, disable: disableInput">click here</button> for a one-time only charge.
-            </span>
+            <p class="text-center js-month">Thank you for your subscription! <br>
+              <span data-bind="hidden: noPayment">Enjoy all the benefits of DentaMatch for one month! <br><br></span>
+              <span data-bind="visible: noPayment" ><br>Your free trial begins today.</span>
+              <span data-bind="hidden: subscriptionIsCancelled() || noPayment()">Your monthly subscription will automatically renew after the first month OR you can <br>
+                <button type="button" class="btn-link"
+                        data-bind="click: cancelSubscriptionFunction, disable: disableInput">click here</button> for a one-time only charge.
+              </span>
             </p>
 
             <p class="text-center" style="color: blue" data-bind="text: creatingMessage"></p>

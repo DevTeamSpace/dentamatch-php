@@ -88,6 +88,7 @@
                                 <li><a href="{{ url('cms/recruiter/index') }}">Recruiter</a></li>
                                 <li><a href="{{ url('cms/notify/index') }}">Notify Users</a></li>
                                 <li><a href="{{ url('cms/config/pay-rate') }}">Pay-rate</a></li>
+                                <li><a href="{{ url('cms/promocode/index') }}">Promo codes</a></li>
 
 <!--                                <li><a href="{{ url('cms/report/search-location') }}">Search Location</a></li>-->
                             </ul>

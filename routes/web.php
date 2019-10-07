@@ -127,6 +127,7 @@ Route::group(['middleware' => ['auth', 'xss', 'nocache']], function () {
             Route::get('change-password', 'web\UserProfileController@getChangePassword');
             Route::post('change-password', 'web\UserProfileController@postChangePassword');
             Route::get('get-plans', 'web\SubscriptionController@getPlans');
+            Route::post('check-promo-code', 'web\SubscriptionController@postCheckPromoCode');
 
             //Route::get('chat', 'web\ChatController@getChatSeekerList');
             Route::get('calender', 'web\CalenderController@getCalender');
@@ -304,6 +305,11 @@ Route::group(['middleware' => ['web', 'xss', 'nocache'], 'prefix' => 'cms/'], fu
         Route::get('location', 'Cms\ReportController@searchCountbyLocation');
         Route::get('download/{type}', 'Cms\ReportController@downloadCsv');
         Route::get('csvJobs', 'Cms\ReportController@csvJobs');
+    });
+
+    Route::group(['prefix' => 'promocode/'], function () {
+        Route::get('index', 'Cms\PromoCodeController@index');
+        Route::get('list', 'Cms\PromoCodeController@promocodeList');
     });
 
 });

@@ -16,6 +16,7 @@ abstract class ActionType  {
     const RecruiterInvite = 51;
     const RecruiterCancel = 52;
     const RecruiterHire = 53;
+    const RecruiterCheckPromoCode = 54;
 
     static function ToString($type){
         switch($type){
@@ -31,6 +32,7 @@ abstract class ActionType  {
             case self::RecruiterInvite: return 'Invite sent';
             case self::RecruiterCancel: return 'Application cancelled';
             case self::RecruiterHire: return 'Hired';
+            case self::RecruiterCheckPromoCode: return 'Promo Code tried';
         }
         return '';
     }

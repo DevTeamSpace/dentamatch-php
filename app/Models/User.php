@@ -159,6 +159,13 @@ class User extends Authenticatable
             ->withPivot(['other_skill']);
     }
 
+    public function codes()
+    {
+        return $this->belongsToMany(PromoCode::class, 'user_promo_codes')
+            ->withTimestamps()
+            ->withPivot('subscription_id');
+    }
+
     /**
      * @param Builder $query
      * @return Builder

@@ -5,11 +5,11 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class CreateSubscriptionRequest
+ * Class CheckPromoCodeRequest
  * @package App\Http\Requests
- * @property string promoCode
+ * @property string $promoCode
  */
-class CreateSubscriptionRequest extends FormRequest
+class CheckPromoCodeRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -19,11 +19,7 @@ class CreateSubscriptionRequest extends FormRequest
     public function rules()
     {
         return [
-            'subscriptionType' => 'required|integer',
-            'cardNumber' => 'sometimes',
-            'expiry' => 'sometimes',
-            'cvv' => 'sometimes',
-            'promoCode' => 'sometimes'
+            'promoCode' => 'required',
         ];
     }
     /**

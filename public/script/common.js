@@ -13,7 +13,7 @@ $(function () {
   function makeDataTable(selector, entityUrl, columns, active, noAction ) {
     if (active) {
       columns.push( {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
-          return row.is_active? 'Yes' : 'No';
+          return row.is_active || row.active? 'Yes' : 'No';
         }});
     }
 
@@ -104,6 +104,16 @@ $(function () {
     {data: 'school_name', name: 'school_name',searchable:true},
     {data: 'parent_school_name', name: 'parent_school',searchable:false},
   ], true);
+
+  makeDataTable('#promocodes_list', 'promocode', [
+    {data: 'code', name: 'code', searchable:true},
+    {data: 'name', name: 'name', searchable:false},
+    {data: 'valid_until', name: 'valid_until', searchable:true},
+    {data: 'valid_days_from_sign_up', name: 'valid_days_from_sign_up', searchable:true},
+    {data: 'free_days', name: 'free_days', searchable:false},
+    {data: 'discount_on_subscription', name: 'discount_on_subscription', searchable:false},
+    {data: 'subscription', name: 'subscription', searchable:false},
+  ], true, true);
 
     var jobseekerList = $('#jobseeker_list').DataTable({
         processing: true,

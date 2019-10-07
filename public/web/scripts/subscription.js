@@ -14,7 +14,14 @@ var FirstSubscriptionVM = function () {
   me.cardExist = ko.observable(false);
   me.subscriptionIsCancelled = ko.observable(false);
   me.subscriptionId = ko.observable('');
-  me.isNewCustomer = ko.observable(true);
+  me.isNewCustomer = ko.observable(true); // abandoned logic
+  me.selectedSubscription = ko.observable('');
+  me.promoCode = ko.observable('');
+  me.codeSubmitting = ko.observable(false);
+  me.codeMessage = ko.observable('');
+  me.couponText = ko.observable('');
+  me.noPayment = ko.observable(false);
+
 
   me.getSubscriptionList = function () {
     $.get('get-subscription-list').then(function (d) {
@@ -32,7 +39,7 @@ var FirstSubscriptionVM = function () {
   me.showAddCardPopup = function (d, e) {
     var subType = $(e.currentTarget).parent().find('#stype').val();
     me.subscriptionType(subType);
-    if (me.cardExist()) {
+    if (me.cardExist() || me.noPayment()) {
       $('#subscribeModal').modal('show');
     } else {
       $('#addCardModal').modal('show');
@@ -53,12 +60,13 @@ var FirstSubscriptionVM = function () {
       cardNumber: me.cardNumber(),
       expiry: me.expiry(),
       cvv: me.cvv(),
-      subscriptionType: me.subscriptionType()
+      subscriptionType: me.subscriptionType(),
+      promoCode: me.promoCode()
     });
   };
 
   me.subscribeFunction = function () {
-    me.callApi('create-subscription', {subscriptionType: me.subscriptionType()});
+    me.callApi('create-subscription', {subscriptionType: me.subscriptionType(), promoCode: me.promoCode()});
   };
 
   me.cancelSubscriptionFunction = function () {
@@ -79,8 +87,8 @@ var FirstSubscriptionVM = function () {
         if (response.data) {
           me.subscriptionId(response.data);
           $('.modal').modal('hide');
-          $('.js-trial').toggle(data.subscriptionType != 1);
-          $('.js-no-trial').toggle(data.subscriptionType == 1);
+          $('.js-long').toggle(data.subscriptionType != 1);
+          $('.js-month').toggle(data.subscriptionType == 1);
           $('#successModal').modal();
         } else {
           me.subscriptionIsCancelled(true);
@@ -88,6 +96,47 @@ var FirstSubscriptionVM = function () {
       } else {
         me.errorMessage(response.message);
       }
+    });
+  }
+
+  me.getBoxClass = function (name) {
+    if (!me.selectedSubscription())
+      return null;
+    return me.selectedSubscription() === name? 'box--selected' : 'box--disabled';
+  }
+  me.monthlyClass = ko.pureComputed(function() {
+    return me.getBoxClass('Monthly');
+  }, me);
+
+  me.semiAnnualClass = ko.pureComputed(function() {
+    return me.getBoxClass('Semi-Annual');
+  }, me);
+
+  me.annualClass = ko.pureComputed(function() {
+    return me.getBoxClass('Annual');
+  }, me);
+
+  me.clearCode = function () {
+    me.selectedSubscription('');
+    me.promoCode('');
+    me.couponText('')
+    me.codeMessage('');
+    me.noPayment(false);
+  }
+
+  me.checkPromoCode = function () {
+    me.codeSubmitting(true);
+    $.post('/check-promo-code', {promoCode: me.promoCode()}).then(function(response){
+      me.codeSubmitting(false);
+      if (response.success) {
+        me.promoCode(response.data.code);
+        me.selectedSubscription(response.data.subscription)
+        me.couponText(response.data.text)
+        me.noPayment(response.data.noPayment)
+      } else {
+        me.clearCode();
+      }
+      me.codeMessage(response.message);
     });
   }
 

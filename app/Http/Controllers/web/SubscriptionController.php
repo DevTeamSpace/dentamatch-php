@@ -4,6 +4,9 @@ namespace App\Http\Controllers\web;
 
 use App\Helpers\WebResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CheckPromoCodeRequest;
+use App\Models\PromoCode;
+use App\Utils\ActionLogUtils;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -36,7 +39,7 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * Method to view subscription plans to crete first subscription
+     * Method to view subscription plans to create new subscription
      * GET /subscription-detail
      * @return Response
      */
@@ -54,7 +57,7 @@ class SubscriptionController extends Controller
 
     /**
      * Method to get subscription plans
-     * GET AJAX /get-subscription-list from subscriptions.js
+     * GET AJAX /get-subscription-list from subscription.js
      * @return array
      */
     public function getSubscriptionList()
@@ -78,17 +81,19 @@ class SubscriptionController extends Controller
 
     /**
      * Method to create subscription
-     * POST AJAX /create-subscription from subscriptions.js
+     * POST AJAX /create-subscription from subscription.js
      * @param CreateSubscriptionRequest $request
      * @return JsonResponse
      */
     public function postCreateSubscription(CreateSubscriptionRequest $request)
     {
-        $recruiter = RecruiterProfile::current();
+        $user = Auth::user();
+        $recruiter = $user->recruiterProfile;
+
         if (!$recruiter->stripe_id) {
             $stripeCustomer = \Stripe\Customer::create([
-                "description" => "Customer for " . Auth::user()->email,
-                "email"       => Auth::user()->email
+                "description" => "Customer for " . $user->email,
+                "email"       => $user->email
             ]);
             $recruiter->stripe_id = $stripeCustomer->id;
             $recruiter->save();
@@ -96,7 +101,10 @@ class SubscriptionController extends Controller
             $stripeCustomer = \Stripe\Customer::retrieve($recruiter->stripe_id);
         }
 
-        if ($stripeCustomer->sources->total_count === 0) {
+        $codeModel = PromoCode::query()->where('active', 1)->where('code', $request->promoCode)->first();
+        $paymentNeeded = !($codeModel && $codeModel->free_days);
+
+        if ($paymentNeeded && $stripeCustomer->sources->total_count === 0) {
             $expiry = explode('/', $request->input('expiry', ''));
             $month = array_get($expiry, '0');
             $year = array_get($expiry, '1');
@@ -113,25 +121,29 @@ class SubscriptionController extends Controller
             ]);
         }
 
-        $isNewCustomer = $recruiter->subscriptions->isEmpty();
         $planId = $this->stripeUtils->getPlanId($request->subscriptionType);
+        $trialDays = object_get($codeModel, 'free_days', 0);
 
-        $subscription = $stripeCustomer->subscriptions->create([
+        $stripeSubscription = $stripeCustomer->subscriptions->create([
             'plan'            => $planId,
-            'trial_from_plan' => $isNewCustomer
+            'trial_period_days' => $trialDays,
+            'metadata' => ['promo' => object_get($codeModel, 'code', '')]
         ]);
 
-        $recruiter->subscriptions()->create([
+        $subscription = $recruiter->subscriptions()->create([
             'name'          => 'default',
-            'stripe_id'     => $subscription->id,
+            'stripe_id'     => $stripeSubscription->id,
             'stripe_plan'   => $planId,
             'quantity'      => 1,
-            'trial_ends_at' => $subscription->trial_end ? Carbon::createFromTimestampUTC($subscription->trial_end)
+            'trial_ends_at' => $stripeSubscription->trial_end ? Carbon::createFromTimestampUTC($stripeSubscription->trial_end)
                 ->toDateTimeString() : null,
             'ends_at'       => null,
         ]);
 
-        return WebResponse::dataResponse($subscription->id);
+        if ($codeModel)
+            $user->codes()->attach($codeModel->id, ['subscription_id' => $subscription->id]);
+
+        return WebResponse::dataResponse($stripeSubscription->id);
     }
 
     /**
@@ -250,6 +262,36 @@ class SubscriptionController extends Controller
         $plan = $this->stripeUtils->getPlanIdByNickname($request->plan);
         $recruiterSubscription->swap($plan);
         return WebResponse::successResponse(trans('messages.subscription_plan_changed'));
+    }
+
+    /**
+     * Get promo code data
+     * POST AJAX /check-promo-code from subscription.js
+     * @param CheckPromoCodeRequest $request
+     * @return JsonResponse
+     */
+    public function postCheckPromoCode(CheckPromoCodeRequest $request)
+    {
+        ActionLogUtils::logRecruiterCheckPromoCode($request->promoCode);
+
+        $codeModel = PromoCode::query()->where('active', 1)->where('code', $request->promoCode)->first();
+        if (!$codeModel)
+            return WebResponse::errorResponse("Code '$request->promoCode' not found");
+
+        if ($codeModel->valid_until && $codeModel->valid_until < Carbon::today()->toDateString())
+            return WebResponse::errorResponse("Code '$request->promoCode' has expired");
+
+        if ($codeModel->valid_days_from_sign_up &&
+            Auth::user()->created_at->addDays($codeModel->valid_days_from_sign_up) < Carbon::today()->toDateString())
+                return WebResponse::errorResponse("Code '$request->promoCode' has expired");
+
+        return WebResponse::dataResponse([
+            'code' => $codeModel->code,
+            'subscription' => $codeModel->subscription,
+            'text' => $codeModel->name,
+            'noPayment' => $codeModel->free_days > 0
+        ]);
+
     }
 
 }

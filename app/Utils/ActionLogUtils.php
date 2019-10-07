@@ -142,6 +142,11 @@ class ActionLogUtils
             null, null, $jobId);
     }
 
+    public static function logRecruiterCheckPromoCode($code) {
+        self::logAction(ActionType::RecruiterCheckPromoCode, ActionCategory::Recruiter, Auth::user()->id,
+            ['code' => $code]);
+    }
+
     public static function logJobListStatus(JobLists $jobList) {
         $type = self::getActionTypeByStatus($jobList->applied_status);
         die($type);
