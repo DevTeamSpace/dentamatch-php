@@ -626,6 +626,7 @@ border-top-width: 0;
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
     line-height: 1.75;
+    top: 50% !important;
 }
 
 .subscription-box > .frm-title {
