@@ -603,88 +603,273 @@ border-top-width: 0;
 
 /*----------Subscription section-------------*/
 
+.back-to-profile {
+    position: relative;
+    display: inline-block;
+    left: -10px;
+    color: #2F5BEA;
+    /*font-family: "Open Sans";*/
+    /*font-size: 16px;*/
+    /*line-height: 28px;*/
+}
+
+.back-to-profile:hover {
+    color: #2F5BEA;
+}
+
+
 .subscription-box {
     background: #fff;
-    height: auto;
-    padding: 30px;
+    padding: 20px 45px;
+    border-radius: 12px;
+    box-shadow: 0 2px 34px 0 rgba(0,0,0,0.25);
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
 }
 
 .subscription-box > .frm-title {
-    margin: 0;
-    letter-spacing: -0.1px;
+    margin: 37px 0;
+    color: #41515C;
+    /*font-family: "Open Sans";*/
+    font-size: 48px;
+    font-weight: bold;
+    line-height: 63px;
+    text-align: center;
 }
 
 .subs-holder {
-    margin-top: 35px;
     display: flex;
+    justify-content: space-between;
 }
 
 .subscription-type {
-    padding: 15px 15px 0px;
-    min-height: 220px;
+    /*padding: 15px 15px 0px;*/
+    min-height: 160px;
+}
+
+.subscription-type > p {
+    margin-bottom: 3px;
+    font-weight: 600;
+    color: #54565A;
+}
+
+.subscription-inr-box a {
+    color: #2F5BEA
+}
+
+.subscription-inr-box a:hover {
+    color: #2F5BEA
 }
 
 .subscription-inr-box {
-    border-radius: 8px;
-    background-color: #ffffff;
-    border: solid 1px #888;
-    width: 214px;
+    min-height: 257px;
+    width: calc(33% - 16px);
+    padding: 45px 10px 25px;
+    border-radius: 12px;
+    border: solid 1px #D8DCE2;
+    background-color: #fff;
     text-align: center;
-    display: inline-block;
-    transition: .2s;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.subscription-inr-box:hover {
+     border: 1px solid #FFFFFF;
+     box-shadow: 0 2px 34px 0 rgba(0,0,0,0.25);
+ }
+
+.subscription-inr-box.box--user-selected {
+    cursor: default;
+    border: 1px solid #FFFFFF;
+    box-shadow: 0 2px 34px 0 rgba(0,0,0,0.25);
 }
 
 .subscription-inr-box.box--selected {
-    box-shadow: 0 2px 40px 0 rgba(111, 111, 111, 0.32);
-    border: none;
-    transform: scale(1.07);
+    cursor: default;
+    box-shadow: 0 2px 34px 0 rgba(0,0,0,0.25);
+    border: 1px solid #FFFFFF;
+    width: 50%;
+    margin: auto;
+}
+
+.subscription-inr-box.box--selected > a {
+    display: none !important;
+}
+
+.subscription-inr-box.box--selected > span {
+    display: block !important;
 }
 
 .subscription-inr-box.box--disabled {
-    opacity: 0.4;
+    display: none;
 }
 
-.subscription-inr-box + .subscription-inr-box {
-    margin: 0 0 0 20px;
+.subscription-inr-box > span {
+    color: #D8DCE2;
 }
 
-.subscription-desc {
-    color: #111;
+.subscription-price {
+    text-align: center;
+    color: #2C2E30;
+    font-size: 20px;
+    line-height: 32px;
+}
+
+.discount-price {
+    display: none;
+}
+
+.discount-price .old-price {
+    color: #C5D0E6;
+    font-size: 48px;
+    line-height: 63px;
+    text-decoration: line-through;
+}
+
+.subscription-inr-box.box--selected .discount-price {
+    display: block;
+}
+.subscription-inr-box.box--selected .normal-price {
+    display: none;
+}
+
+.subscription-inr-box.box--selected .best {
+    display: none;
 }
 
 .price-symbol {
-    position: absolute;
-    content: '';
-    top: 0;
-    left: 25px;
-    font-size: 13px;
-    color: #111;
+    color: #C5D0E6;
+    font-size: 48px;
+    font-weight: bold;
+    line-height: 63px;
 }
 
 .price {
-    font-size: 64px;
-    font-weight: 500;
-    letter-spacing: -0.4px;
-    line-height: 64px;
-    color: #0063bb;
+    color: #41515C;
+    font-size: 48px;
+    font-weight: bold;
+    line-height: 63px;
 }
 
-.subcription-price > p {
+.subscription-price > p {
     margin-bottom: 5px;
-    color: #0063bb;
-
+    color: #2C2E30;
+    font-size: 14px;
+    line-height: 32px;
+}
+.subscription-price > p > strong {
+    color: #003EA5;
+    font-weight: 600;
 }
 
 .subscription-terms {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 40px;
     text-align: center;
+    font-size: 16px;
+    line-height: 1.75;
+    color: #54565A;
+    font-weight: 600;
 }
 
 .subscription-terms span {
-    color: #0063bb;
+    color: #2F5BEA;
 }
 
 .subscription-terms p {
     margin-bottom: 0;
+}
+
+.promo-code-form {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 48px 15px 43px;
+    border-radius: 11px;
+    background-color: rgba(216,220,226,0.24);
+}
+
+.promo-code-form label {
+    margin: 0;
+    margin-right: 5%;
+    color: #2C2E30;
+    /*font-family: "Open Sans";*/
+    /*font-size: 16px;*/
+    /*line-height: 28px;*/
+}
+
+.promo-code-form .form-control {
+    flex-grow: 1;
+    height: auto;
+    padding: 14px 11px;
+    border: 1px solid #E5E5E5;
+    color: #999999;
+    color: #0F183E;
+    font-size: 16px;
+    line-height: 1.375;
+    width: auto;
+    margin-right: 2.5%;
+}
+
+.subscription-box .btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    max-width: 290px;
+    height: 50px;
+    padding: 0;
+
+    font-size: 16px;
+    /*font-weight: 600;*/
+    text-transform: uppercase;
+
+    border-radius: 27.5px;
+
+    transition: all 0.5s;
+
+}
+
+.subscription-box .btn:active {
+    transform: translateY(1px);
+    filter: saturate(150%);
+}
+
+.subscription-box .btn--outline {
+    width: 130px;
+    font-weight: normal;
+    color: #2f5bea;
+
+    border: solid 2px transparent;
+    background-image: linear-gradient(white, white), linear-gradient(284deg, #003ea5, #00d2e9);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+}
+
+.subscription-box .btn--outline:hover {
+     color: #003ea5;
+ }
+
+.subscription-box .btn--gradient {
+    display: block;
+    height: 55px;
+    width: 211px;
+    margin: 0 auto;
+    margin-bottom: 65px;
+    border: none;
+    color: white;
+    background-image: linear-gradient(335deg, #003ea5, #00d2e9);
+}
+
+.promo-code-error {
+    position: absolute;
+    bottom: -25px;
+    left: 5px;
 }
 
 /*-----------calendar part-------------*/
@@ -1648,8 +1833,8 @@ a.cir-blue:hover {
     }
 
     .subscription-box {
-        /*height: 520px;*/
-        width: 750px;
+        max-width: 948px;
+        width: 80%;
     }
 
     .popup-wd522 {

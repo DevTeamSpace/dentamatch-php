@@ -9,6 +9,7 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="shortcut icon" href="{{asset('web/images/favicon.png')}}" type="image/x-png"/>
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
   <link rel="stylesheet" href="{{asset('web/plugins/font-awesome-4.6.2/css/font-awesome.min.css')}}">
   <link rel="stylesheet" href="{{asset('web/css/bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{asset('web/css/bootstrap-custom-theme.css')}}">

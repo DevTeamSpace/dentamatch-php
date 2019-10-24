@@ -50,7 +50,7 @@ class CodesCommand extends Command
         ]);
 
         PromoCode::updateOrInsert(['code' => '2_FREE'], [
-            'name' => 'free trial for two months',
+            'name' => '<strong>Free trial</strong> for two months',
             'valid_days_from_sign_up' => null,
             'valid_until' => Carbon::today()->addMonth(1),
             'free_days' => 60,

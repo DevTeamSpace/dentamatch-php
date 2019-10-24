@@ -16,6 +16,7 @@ var FirstSubscriptionVM = function () {
   me.subscriptionId = ko.observable('');
   me.isNewCustomer = ko.observable(true); // abandoned logic
   me.selectedSubscription = ko.observable('');
+  me.userSelectedSubscription = ko.observable('');
   me.promoCode = ko.observable('');
   me.codeSubmitting = ko.observable(false);
   me.codeMessage = ko.observable('');
@@ -37,10 +38,9 @@ var FirstSubscriptionVM = function () {
   };
 
   me.showAddCardPopup = function (d, e) {
-    var subType = $(e.currentTarget).parent().find('#stype').val();
-    me.subscriptionType(subType);
     if (me.cardExist() || me.noPayment()) {
-      $('#subscribeModal').modal('show');
+      // $('#subscribeModal').modal('show');
+      me.subscribeFunction();
     } else {
       $('#addCardModal').modal('show');
     }
@@ -99,7 +99,17 @@ var FirstSubscriptionVM = function () {
     });
   }
 
+  me.userSelectSubscription = function (name, d, ev) {
+    me.userSelectedSubscription(name);
+    var subType = $(ev.currentTarget).parent().find('#stype').val();
+    me.subscriptionType(subType);
+    // console.log(subType);
+  }
+
   me.getBoxClass = function (name) {
+    if (me.userSelectedSubscription() === name)
+      return 'box--user-selected';
+
     if (!me.selectedSubscription())
       return null;
     return me.selectedSubscription() === name? 'box--selected' : 'box--disabled';
@@ -129,10 +139,19 @@ var FirstSubscriptionVM = function () {
     $.post('/check-promo-code', {promoCode: me.promoCode()}).then(function(response){
       me.codeSubmitting(false);
       if (response.success) {
+        var st = {
+          'Monthly': 1,
+          'Semi-Annual': 2,
+          'Annual': 3
+        };
         me.promoCode(response.data.code);
         me.selectedSubscription(response.data.subscription)
+        me.userSelectedSubscription(null);
+        me.subscriptionType(st[response.data.subscription]);
         me.couponText(response.data.text)
         me.noPayment(response.data.noPayment)
+
+        console.log(st[response.data.subscription]);
       } else {
         me.clearCode();
       }

@@ -5,80 +5,101 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <div class="container" id="subscription">
     <div class="frm-cred-access-box subscription-box" style="display: none" data-bind="visible: subscriptionAvailable() || noSubscription()">
-      <h4 class="frm-title">Our Subscription Plans</h4>
-      <p>Unlock unlimited template creation, job postings, candidate searches, messaging and reports.</p>
-      <form class="form-inline mr-t-20" id="promo-code-form" data-bind="submit: checkPromoCode">
-        <div class="form-group mx-sm-3 mb-2 mr-r-10">
-          <label for="promo-code-input" class="sr-only">Promo Code</label>
-          <input type="text" class="form-control" id="promo-code-input" name="promo-code"
-                 data-bind="value: promoCode, disable: codeSubmitting, valueUpdate: 'input'"
-                 placeholder="Enter Promo Code">
-        </div>
-        <button type="submit" class="btn btn-primary" data-bind="disable: codeSubmitting() || !promoCode(), hidden: selectedSubscription()">Apply</button>
-        <button type="button" class="btn btn-link" data-bind="visible: selectedSubscription(), click: clearCode">Remove</button>
-        <div class="text-danger mr-t-5" style="position: absolute" data-bind="text: codeMessage"></div>
+      <a class="back-to-profile" href="/edit-profile"><span class="fa fa-arrow-left"></span> Back to profile</a>
+      <h1 class="frm-title">Our Subscription Plans</h1>
+      <div class="subscription-terms">
+        <p><span>NO</span> Daily Temp Fees.&nbsp;&nbsp;</p>
+        <p><span>NO</span> Finders Fees.&nbsp;&nbsp;</p>
+        <p>Use DentaMatch as much as you need for a low subscription price</p>
+      </div>
+      <form class="form-inline11111 promo-code-form mr-b-40" id="promo-code-form" data-bind="submit: checkPromoCode">
+        <label for="promo-code-input">Promo Code</label>
+        <input type="text" class="form-control" id="promo-code-input" name="promo-code"
+               data-bind="value: promoCode, disable: codeSubmitting, valueUpdate: 'input'"
+               placeholder="Enter Code">
+        <button type="submit" class="btn btn--outline" data-bind="disable: codeSubmitting() || !promoCode(), hidden: selectedSubscription()">Apply</button>
+        <button type="button" class="btn btn--outline" data-bind="visible: selectedSubscription(), click: clearCode">Remove</button>
+        <div class="text-danger promo-code-error" data-bind="text: codeMessage"></div>
       </form>
 
-      <div class="subs-holder text-center ">
+      <div class="subs-holder mr-b-35">
         <!--ko foreach: subscriptionDetails-->
         <div class="subscription-inr-box" data-bind="class: $root.monthlyClass()">
           <div class="subscription-type">
-            <p class="mr-b-10">Monthly</p>
-            <div class="subcription-price pos-rel">
-              <span class="price-symbol ">$</span>
-              <span class="price" data-bind="text: monthlyPrice"></span>
-              <p class="mr-t-15" data-bind="text: $root.couponText, visible: $root.selectedSubscription() == 'Monthly'"></p>
+            <p>Monthly</p>
+            <div class="subscription-price">
+              <div class="discount-price">
+                <span class="old-price">$129</span>
+                <span class="price-symbol">$</span>
+                <span class="price">0</span>/month
+              </div>
+              <div class="normal-price">
+                <span class="price-symbol">$</span>
+                <span class="price" data-bind="text: monthlyPrice"></span>/month
+              </div>
+
+              <p class="mr-t-15" data-bind="html: $root.couponText, visible: $root.selectedSubscription() == 'Monthly'"></p>
               <input type="hidden" id="stype" value="1">
             </div>
           </div>
-          <a id="stripe" data-bind="click: $root.showAddCardPopup, hidden: $root.selectedSubscription() && $root.selectedSubscription() != 'Monthly'"
-             class="btn btn-primary pd-l-10 pd-r-10 mr-t-10 mr-b-20">Next
-            Step</a>
+          <a data-bind="click: $root.userSelectSubscription.bind($data, 'Monthly'), hidden: $root.userSelectedSubscription() && $root.userSelectedSubscription() == 'Monthly'">Select</a>
+          <span data-bind="visible: $root.userSelectedSubscription() && $root.userSelectedSubscription() == 'Monthly'">Selected</span>
         </div>
         <div class="subscription-inr-box" data-bind="class: $root.semiAnnualClass()">
           <div class="subscription-type">
-            <p class="mr-b-10">Semi-Annual</p>
-            <div class="subcription-price pos-rel">
-              <span class="price-symbol ">$</span>
-              <span class="price" data-bind="text: halfYearPrice"></span>/month
-              <p class="mr-t-15" data-bind="text: $root.couponText, visible: $root.selectedSubscription() == 'Semi-Annual'"></p>
+            <p>Semi-Annual</p>
+            <div class="subscription-price">
+              <div class="discount-price">
+                <span class="old-price">$99</span>
+                <span class="price-symbol">$</span>
+                <span class="price">0</span>/month
+              </div>
+              <div class="normal-price">
+                <span class="price-symbol">$</span>
+                <span class="price" data-bind="text: halfYearPrice"></span>/month
+              </div>
+
+              <p class="mr-t-15" data-bind="html: $root.couponText, visible: $root.selectedSubscription() == 'Semi-Annual'"></p>
               <input type="hidden" id="stype" value="2">
             </div>
           </div>
-          <a id="stripe" data-bind="click: $root.showAddCardPopup, hidden: $root.selectedSubscription() && $root.selectedSubscription() != 'Semi-Annual'"
-             class="btn btn-primary pd-l-10 pd-r-10 mr-t-10 mr-b-20">Next Step</a>
+          <a data-bind="click: $root.userSelectSubscription.bind($data, 'Semi-Annual'), hidden: $root.userSelectedSubscription() && $root.userSelectedSubscription() == 'Semi-Annual'">Select</a>
+          <span data-bind="visible: $root.userSelectedSubscription() && $root.userSelectedSubscription() == 'Semi-Annual'">Selected</span>
         </div>
 
         <div class="subscription-inr-box" data-bind="class: $root.annualClass()">
           <div class="subscription-type">
-            <p class="mr-b-10">Annual</p>
-            <div class="subcription-price pos-rel">
-              <span class="price-symbol ">$</span>
-              <span class="price" data-bind="text: fullYearPrice"></span>/month
-              <p class="text-uppercase mr-t-15">Best Value</p>
-              <p class="mr-t-15" data-bind="text: $root.couponText, visible: $root.selectedSubscription() == 'Annual'"></p>
+            <p>Annual</p>
+            <div class="subscription-price">
+              <div class="discount-price">
+                <span class="old-price">$79</span>
+                <span class="price-symbol">$</span>
+                <span class="price">0</span>/month
+              </div>
+              <div class="normal-price">
+                <span class="price-symbol">$</span>
+                <span class="price" data-bind="text: fullYearPrice"></span>/month
+              </div>
+              <p class="mr-t-10 best"><strong>Best Value</strong></p>
+              <p class="mr-t-10" data-bind="text: $root.couponText, visible: $root.selectedSubscription() == 'Annual'"></p>
               <input type="hidden" id="stype" value="3">
             </div>
           </div>
-          <a id="stripe" data-bind="click: $root.showAddCardPopup, hidden: $root.selectedSubscription() && $root.selectedSubscription() != 'Annual'"
-             class="btn btn-primary pd-l-10 pd-r-10 mr-t-10 mr-b-20">Next Step</a>
+          <a data-bind="click: $root.userSelectSubscription.bind($data, 'Annual'), hidden: $root.userSelectedSubscription() && $root.userSelectedSubscription() == 'Annual'">Select</a>
+          <span data-bind="visible: $root.userSelectedSubscription() && $root.userSelectedSubscription() == 'Annual'">Selected</span>
         </div>
 
         <!--/ko-->
 
       </div>
+      <button type="button" class="btn btn--gradient mr-b-65" data-bind="click: $root.showAddCardPopup, disable: !$root.userSelectedSubscription() && !$root.selectedSubscription()">Next step</button>
+
       <div class="frm-cred-access-box subscription-box" style="display: none" data-bind="visible: noSubscription">
         <h3 class="no-subscription-heading text-center">We are not providing service in your area, we will notify you
           whenever we will start our services in your area.</h3>
         <p class="text-center mr-t-35">Or you can update <a href="/edit-profile">your offices</a> information</p>
       </div>
 
-      <div class="subscription-terms mr-t-20">
-        <div class="mr-b-10"><a href="/edit-profile"><span class="fa fa-arrow-left"></span> Back to profile</a></div>
-        <p><span>NO</span> Daily Temp Fees</p>
-        <p><span>NO</span> Finders Fees</p>
-        <p>Use DentaMatch as much as you need for a low subscription price</p>
-      </div>
 
     </div>
     <div id="addCardModal" class="modal fade" tabindex="-1" role="dialog">
