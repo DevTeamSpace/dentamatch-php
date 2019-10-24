@@ -726,6 +726,7 @@ border-top-width: 0;
     font-size: 48px;
     line-height: 63px;
     text-decoration: line-through;
+    margin-right: 15px;
 }
 
 .subscription-inr-box.box--selected .discount-price {
