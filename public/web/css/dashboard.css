@@ -673,6 +673,13 @@ p {
     color: #f00
 }
 
+#location-msg,
+#location-msg1,
+#location-msg2 {
+    margin-bottom: 20px;
+    margin-top: -5px;
+}
+
 .customsel .input-group-addon {
     visibility: hidden;
     display: block;
