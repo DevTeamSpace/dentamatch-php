@@ -194,6 +194,7 @@ class SignupController extends Controller
 
                 DB::commit();
                 Session::flash('success', trans("messages.successfully_register"));
+                $redirect = 'login';
 
                 ActionLogUtils::logRecruiterSignup($user_details->id);
             }
