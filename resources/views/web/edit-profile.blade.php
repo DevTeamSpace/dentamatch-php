@@ -179,7 +179,7 @@
                  class="form-control txtBtnDisable officeAddressMap" data-parsley-required
                  data-parsley-required-message="Required"
                  data-bind="value: officeAddress, event: {focus: $root.getOfficeName}">
-          <p class="error-div" data-bind="text: locationError"></p>
+          <p class="error-div" data-bind="text: locationError" style="margin-top: -10px; margin-bottom: 20px;"></p>
           <input type="text" value="" name="officeAddressSecondLine"
                  data-parsley-maxlength="300"
                  class="form-control" placeholder="Apartment, suite, unit, building, floor, etc."
