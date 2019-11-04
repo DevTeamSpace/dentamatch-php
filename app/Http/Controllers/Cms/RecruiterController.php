@@ -202,10 +202,19 @@ class RecruiterController extends Controller
      */
     public function csvRecruiter(){
         $list = RecruiterProfile::query()
-            ->with(['recruiter:id,email,created_at'])
-            ->get(['id', 'user_id', 'office_name']);
+            ->with(['recruiter:id,email,is_verified,is_active,created_at', 'offices', 'offices.officeTypes', 'offices.officeTypes.officeTypes'])
+            ->get(['id', 'user_id', 'office_name', 'office_desc', 'accept_term']);
 
-        $fields = ['email', 'phone', 'office_name', 'registration_date'];
+        $fields = ['email', 'phone', 'office_name', 'office_description', 'accept_term', 'email_verified', 'is_active', 'registration_date'];
+        for ($i=1; $i<4; $i++) {
+            $office = "office_$i";
+            $fields[] = "{$office}_type";
+            $fields[] = "{$office}_address";
+            $fields[] = "{$office}_address_second_line";
+            $fields[] = "{$office}_phone";
+            $fields[] = "{$office}_working_hours";
+            $fields[] = "{$office}_office_info";
+        }
 
         $data = RecruiterTransformer::transformAll($list, $fields);
 
