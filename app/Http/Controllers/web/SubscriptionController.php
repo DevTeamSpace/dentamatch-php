@@ -101,8 +101,9 @@ class SubscriptionController extends Controller
             $stripeCustomer = \Stripe\Customer::retrieve($recruiter->stripe_id);
         }
 
+        // todo check code here
         $codeModel = PromoCode::query()->where('active', 1)->where('code', $request->promoCode)->first();
-        $paymentNeeded = !($codeModel && $codeModel->free_days);
+        $paymentNeeded = !$codeModel || !($codeModel->free_days || $codeModel->access_until);
 
         if ($paymentNeeded && $stripeCustomer->sources->total_count === 0) {
             $expiry = explode('/', $request->input('expiry', ''));
@@ -122,14 +123,21 @@ class SubscriptionController extends Controller
         }
 
         $planId = $this->stripeUtils->getPlanId($request->subscriptionType);
-        $trialDays = object_get($codeModel, 'free_days', 0);
-
-        $stripeSubscription = $stripeCustomer->subscriptions->create([
+        $createData = [
             'plan'              => $planId,
-            'trial_period_days' => $trialDays,
             'trial_from_plan'   => false,
             'metadata'          => ['promo' => object_get($codeModel, 'code', '')]
-        ]);
+        ];
+
+        if ($trialDays = object_get($codeModel, 'free_days', 0))
+            $createData['trial_period_days'] = $trialDays;
+
+        if ($trialEnds = object_get($codeModel, 'access_until')) {
+            $trialEnds = (new Carbon($trialEnds))->addDay(1);
+            $createData['trial_end'] = $trialEnds->timestamp;
+        }
+
+        $stripeSubscription = $stripeCustomer->subscriptions->create($createData);
 
         $subscription = $recruiter->subscriptions()->create([
             'name'          => 'default',
@@ -290,7 +298,7 @@ class SubscriptionController extends Controller
             'code'         => $codeModel->code,
             'subscription' => $codeModel->subscription,
             'text'         => $codeModel->name,
-            'noPayment'    => $codeModel->free_days > 0
+            'noPayment'    => $codeModel->free_days > 0 || $codeModel->access_until
         ]);
 
     }

@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property string $valid_days_from_sign_up
  * @property string $valid_until
+ * @property string $access_until
  * @property int $free_days
  * @property int $discount_on_subscription
  * @property int $active

@@ -150,8 +150,6 @@ var FirstSubscriptionVM = function () {
         me.subscriptionType(st[response.data.subscription]);
         me.couponText(response.data.text)
         me.noPayment(response.data.noPayment)
-
-        console.log(st[response.data.subscription]);
       } else {
         me.clearCode();
       }

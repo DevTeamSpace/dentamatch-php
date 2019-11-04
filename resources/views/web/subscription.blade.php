@@ -15,7 +15,7 @@
       <form class="form-inline11111 promo-code-form mr-b-40" id="promo-code-form" data-bind="submit: checkPromoCode">
         <label for="promo-code-input">Promo Code</label>
         <input type="text" class="form-control" id="promo-code-input" name="promo-code"
-               data-bind="value: promoCode, disable: codeSubmitting, valueUpdate: 'input'"
+               data-bind="value: promoCode, disable: codeSubmitting() || selectedSubscription(), valueUpdate: 'input'"
                placeholder="Enter Code">
         <button type="submit" class="btn btn--outline" data-bind="disable: codeSubmitting() || !promoCode(), hidden: selectedSubscription()">Apply</button>
         <button type="button" class="btn btn--outline" data-bind="visible: selectedSubscription(), click: clearCode">Remove</button>
