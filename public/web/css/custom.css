@@ -656,11 +656,12 @@ border-top-width: 0;
 }
 
 .subscription-inr-box a {
-    color: #2F5BEA
+    color: #2F5BEA;
+    cursor: pointer;
 }
 
 .subscription-inr-box a:hover {
-    color: #2F5BEA
+    color: #2F5BEA;
 }
 
 .subscription-inr-box {
@@ -671,7 +672,6 @@ border-top-width: 0;
     border: solid 1px #D8DCE2;
     background-color: #fff;
     text-align: center;
-    cursor: pointer;
     transition: .3s;
 }
 
