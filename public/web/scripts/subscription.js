@@ -31,6 +31,10 @@ var FirstSubscriptionVM = function () {
         me.subscriptionDetails.push({monthlyPrice: 129, halfYearPrice: 99, fullYearPrice: 79});
         me.cardExist(d.cardExist);
         me.isNewCustomer(d.isNewCustomer);
+        if (localStorage.getItem('code')) {
+          me.promoCode(localStorage.getItem('code'));
+          me.checkPromoCode();
+        }
       } else {
         me.noSubscription(true);
       }
@@ -90,6 +94,7 @@ var FirstSubscriptionVM = function () {
           $('.js-long').toggle(data.subscriptionType != 1);
           $('.js-month').toggle(data.subscriptionType == 1);
           $('#successModal').modal();
+          localStorage.removeItem('code');
         } else {
           me.subscriptionIsCancelled(true);
         }
@@ -103,7 +108,6 @@ var FirstSubscriptionVM = function () {
     me.userSelectedSubscription(name);
     var subType = $(ev.currentTarget).parent().find('#stype').val();
     me.subscriptionType(subType);
-    // console.log(subType);
   }
 
   me.getBoxClass = function (name) {
@@ -169,6 +173,7 @@ var FirstSubscriptionVM = function () {
       me.cvv('');
     });
   };
+
   me._init();
 };
 

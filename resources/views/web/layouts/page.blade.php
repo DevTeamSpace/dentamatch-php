@@ -65,5 +65,7 @@
 
 @yield('js')
 
+@include('landing._promo')
+
 </body>
 </html>

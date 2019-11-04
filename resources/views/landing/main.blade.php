@@ -302,6 +302,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
+@include('landing._promo')
+
 <script>
   $(function(){
     $('.professional-slider__slides').slick({

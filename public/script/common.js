@@ -10,6 +10,36 @@ $(document).ajaxError(function (e, request, settings, exception) {
     });
 $(function () {
 
+  function copyToClipboard(text) {
+    if (window.clipboardData && window.clipboardData.setData) {
+      // Internet Explorer-specific code path to prevent textarea being shown while dialog is visible.
+      return clipboardData.setData("Text", text);
+
+    }
+    else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+      var textarea = document.createElement("textarea");
+      textarea.textContent = text;
+      textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in Microsoft Edge.
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+      }
+      catch (ex) {
+        console.warn("Copy to clipboard failed.", ex);
+        return false;
+      }
+      finally {
+        document.body.removeChild(textarea);
+      }
+    }
+  }
+
+  $('#promocodes_list').on('click', '.js-copy-url', function(ev){
+    ev.preventDefault();
+    copyToClipboard(document.location.origin + '/signup?promo=' + this.previousElementSibling.textContent);
+  })
+
   function makeDataTable(selector, entityUrl, columns, active, noAction ) {
     if (active) {
       columns.push( {data: 'active', name: 'active',searchable:false,render: function (data, type, row) {
@@ -27,7 +57,8 @@ $(function () {
     $(selector).DataTable({
       processing: true,
       serverSide: true,
-      //responsive: true,
+      scrollX: true,
+      responsive: false,
       //autoWidth: false,
       ajax: public_path + entityUrl + '/list',
       ordering:false,
@@ -106,9 +137,12 @@ $(function () {
   ], true);
 
   makeDataTable('#promocodes_list', 'promocode', [
-    {data: 'code', name: 'code', searchable:true},
+    {data: 'code', name: 'code', searchable:true, render: function (data, type, row) {
+        return '<div>' + data + '</div><a class="btn btn-link js-copy-url" style="padding: 0">Copy Link</a>';
+      }},
     {data: 'name', name: 'name', searchable:false},
     {data: 'valid_until', name: 'valid_until', searchable:true},
+    {data: 'access_until', name: 'access_until', searchable:true},
     {data: 'valid_days_from_sign_up', name: 'valid_days_from_sign_up', searchable:true},
     {data: 'free_days', name: 'free_days', searchable:false},
     {data: 'discount_on_subscription', name: 'discount_on_subscription', searchable:false},
