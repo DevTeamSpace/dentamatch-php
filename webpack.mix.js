@@ -13,3 +13,5 @@ const mix = require('laravel-mix');
 
 mix//.js('resources/js/app.js', 'public/js')
    .sass('resources/landing/styles/landing.scss', 'public/css');
+
+mix.browserSync('denta.local');
