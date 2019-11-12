@@ -874,6 +874,57 @@ border-top-width: 0;
     left: 5px;
 }
 
+@media screen and (min-width: 970px) {
+    .subscription-box {
+        max-width: 948px;
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .frm-cred-access-box {
+        margin-bottom: 110px;
+    }
+    .subscription-box {
+        padding: 20px;
+    }
+    .subs-holder {
+        flex-direction: column;
+        align-items: center;
+    }
+    .subscription-box > .frm-title {
+        font-size: 30px;
+        line-height: 1.2;
+    }
+
+    .subscription-inr-box {
+        width: 100%;
+        max-width: 450px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    .subscription-inr-box:last-child {
+        margin-bottom: 0;
+    }
+    .subscription-inr-box.box--selected {
+        width: 100%;
+    }
+    .promo-code-form {
+        flex-direction: column;
+        padding: 15px;
+    }
+    .subscription-box .btn--gradient {
+        margin-bottom: 30px;
+    }
+    .promo-code-form .form-control {
+        width: 100%;
+    }
+    .promo-code-form label,
+    .promo-code-form input {
+       margin-bottom: 15px;
+    }
+}
+
 /*-----------calendar part-------------*/
 
 .custom-modal .modal-content {
@@ -1834,11 +1885,6 @@ a.cir-blue:hover {
         height: 342px;
     }
 
-    .subscription-box {
-        max-width: 948px;
-        width: 80%;
-    }
-
     .popup-wd522 {
         width: 522px !important;
     }
@@ -1899,10 +1945,6 @@ a.cir-blue:hover {
 }
 
 @media only screen and (max-width: 520px) {
-    .subscription-inr-box + .subscription-inr-box {
-        margin: 15px 0 0;
-    }
-
     .sec-mob [class*="col-xs"] {
         width: 100%;
     }
