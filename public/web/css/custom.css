@@ -882,8 +882,8 @@ border-top-width: 0;
 }
 
 @media screen and (max-width: 700px) {
-    .frm-cred-access-box {
-        margin-bottom: 110px;
+    .frm-cred-access-box.subscription-box {
+        margin: 30px 0
     }
     .subscription-box {
         padding: 20px;

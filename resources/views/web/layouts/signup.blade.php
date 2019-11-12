@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="{{asset('web/css/bootstrap-custom-theme.css')}}">
 
   <link rel="stylesheet" href="{{asset('web/plugins/parsley/css/parsley.css')}}">
-  <link rel="stylesheet" href="{{asset('web/css/custom.css?v=1.3')}}">
+  <link rel="stylesheet" href="{{asset('web/css/custom.css?v=1.4')}}">
 
   @yield('css')
 
