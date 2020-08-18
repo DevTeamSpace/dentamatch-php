@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="{{asset('web/plugins/parsley/css/parsley.css')}}">
   <link rel="stylesheet" href="{{asset('web/css/custom.css?v=1.1')}}">
 
-  <link rel="stylesheet" href="{{asset('/css/landing.css?v=3')}}">
+  <link rel="stylesheet" href="{{asset('/css/landing.css?v=4')}}">
 
   <title>DentaMatch</title>
 
