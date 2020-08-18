@@ -67,7 +67,8 @@ class SubscriptionController extends Controller
         $subscription = [
             'cardExist'     => false,
             'isNewCustomer' => $recruiter->subscriptions->isEmpty(),
-            'supported'     => $offices->isNotEmpty()
+            'supported'     => $offices->isNotEmpty(),
+            'forcePromo'    => Carbon::now() < Carbon::create(2021, 02, 01, 0, 0, 0),
         ];
 
         if ($recruiter->hasStripeId()) {

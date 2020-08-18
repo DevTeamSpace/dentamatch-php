@@ -8,9 +8,13 @@
       <a class="back-to-profile" href="/edit-profile"><span class="fa fa-arrow-left"></span> Back to profile</a>
       <h1 class="frm-title">Our Subscription Plans</h1>
       <div class="subscription-terms">
-        <p><span>NO</span> Daily Temp Fees.&nbsp;&nbsp;</p>
-        <p><span>NO</span> Finders Fees.&nbsp;&nbsp;</p>
-        <p>Use DentaMatch as much as you need for a low subscription price</p>
+        <p>We want everyone to enjoy the DentaMatch experience.</p>
+        <p>  Becoming an integral part of your dental team is our goal.</p>
+        <p>  For that reason, joining is absolutely free. Yep, 100% FREE with no contracts or commitments.</p>
+        <p>  Our approach gives you all the benefits without the pressure. Everybody wins so sign up today.</p>
+{{--        <p><span>NO</span> Daily Temp Fees.&nbsp;&nbsp;</p>--}}
+{{--        <p><span>NO</span> Finders Fees.&nbsp;&nbsp;</p>--}}
+{{--        <p>Use DentaMatch as much as you need for a low subscription price</p>--}}
       </div>
       <form class="form-inline11111 promo-code-form mr-b-40" id="promo-code-form" data-bind="submit: checkPromoCode">
         <label for="promo-code-input">Promo Code</label>
@@ -18,11 +22,11 @@
                data-bind="value: promoCode, disable: codeSubmitting() || selectedSubscription(), valueUpdate: 'input'"
                placeholder="Enter Code">
         <button type="submit" class="btn btn--outline" data-bind="disable: codeSubmitting() || !promoCode(), hidden: selectedSubscription()">Apply</button>
-        <button type="button" class="btn btn--outline" data-bind="visible: selectedSubscription(), click: clearCode">Remove</button>
+        <button type="button" class="btn btn--outline" data-bind="visible: selectedSubscription() && !forcePromo(), click: clearCode">Remove</button>
         <div class="text-danger promo-code-error" data-bind="text: codeMessage"></div>
       </form>
 
-      <div class="subs-holder mr-b-35">
+      <div class="subs-holder mr-b-35" style="display: none;" data-bind="visible: subscriptionVisible()">
         <!--ko foreach: subscriptionDetails-->
         <div class="subscription-inr-box" data-bind="class: $root.monthlyClass()">
           <div class="subscription-type">

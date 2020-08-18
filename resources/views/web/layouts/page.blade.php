@@ -47,7 +47,7 @@
     </ul>
 
     <p class="copyright">
-      © DentaMatch 2019
+      © DentaMatch <?= date('Y') ?>
     </p>
   </div>
 </footer>

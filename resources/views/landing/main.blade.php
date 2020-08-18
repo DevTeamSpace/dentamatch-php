@@ -30,6 +30,8 @@
             <b class="lead-text">You work hard enough. <br> We make it easier. </b>
             <span class="center-sub-title">Matching dental professionals with temp, part-time, and full-time work </span>
 
+            <strong class="center__promo-text">Sign up now free of charge!</strong>
+
             <div class="full-width">
               <img src="/assets/img/center/bg-mini.jpg" alt="" class="main-img--mobile">
             </div>
@@ -294,7 +296,7 @@
         </ul>
 
         <p class="copyright">
-            © DentaMatch 2019
+            © DentaMatch <?= date('Y') ?>
         </p>
     </div>
 </footer>

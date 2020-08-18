@@ -1,6 +1,7 @@
 var FirstSubscriptionVM = function () {
   var me = this;
   me.subscriptionAvailable = ko.observable(false);
+  me.subscriptionVisible = ko.observable(false);
   me.subscriptionDetails = ko.observableArray([]);
   me.noSubscription = ko.observable(false);
   me.cardNumber = ko.observable('');
@@ -22,18 +23,27 @@ var FirstSubscriptionVM = function () {
   me.codeMessage = ko.observable('');
   me.couponText = ko.observable('');
   me.noPayment = ko.observable(false);
+  me.forcePromo = ko.observable(false);
 
 
   me.getSubscriptionList = function () {
     $.get('get-subscription-list').then(function (d) {
       if (d.supported) {
-        me.subscriptionAvailable(true);
+        me.subscriptionAvailable(true)
         me.subscriptionDetails.push({monthlyPrice: 129, halfYearPrice: 99, fullYearPrice: 79});
         me.cardExist(d.cardExist);
         me.isNewCustomer(d.isNewCustomer);
-        if (localStorage.getItem('code')) {
-          me.promoCode(localStorage.getItem('code'));
+        me.forcePromo(d.forcePromo);
+
+        if (d.forcePromo) {
+          me.promoCode('free2020');
           me.checkPromoCode();
+        } else {
+          me.subscriptionVisible(true)
+          if (localStorage.getItem('code')) {
+            me.promoCode(localStorage.getItem('code'));
+            me.checkPromoCode();
+          }
         }
       } else {
         me.noSubscription(true);
@@ -116,17 +126,17 @@ var FirstSubscriptionVM = function () {
 
     if (!me.selectedSubscription())
       return null;
-    return me.selectedSubscription() === name? 'box--selected' : 'box--disabled';
+    return me.selectedSubscription() === name ? 'box--selected' : 'box--disabled';
   }
-  me.monthlyClass = ko.pureComputed(function() {
+  me.monthlyClass = ko.pureComputed(function () {
     return me.getBoxClass('Monthly');
   }, me);
 
-  me.semiAnnualClass = ko.pureComputed(function() {
+  me.semiAnnualClass = ko.pureComputed(function () {
     return me.getBoxClass('Semi-Annual');
   }, me);
 
-  me.annualClass = ko.pureComputed(function() {
+  me.annualClass = ko.pureComputed(function () {
     return me.getBoxClass('Annual');
   }, me);
 
@@ -140,7 +150,7 @@ var FirstSubscriptionVM = function () {
 
   me.checkPromoCode = function () {
     me.codeSubmitting(true);
-    $.post('/check-promo-code', {promoCode: me.promoCode()}).then(function(response){
+    $.post('/check-promo-code', {promoCode: me.promoCode()}).then(function (response) {
       me.codeSubmitting(false);
       if (response.success) {
         var st = {
@@ -154,6 +164,7 @@ var FirstSubscriptionVM = function () {
         me.subscriptionType(st[response.data.subscription]);
         me.couponText(response.data.text)
         me.noPayment(response.data.noPayment)
+        me.subscriptionVisible(true)
       } else {
         me.clearCode();
       }
